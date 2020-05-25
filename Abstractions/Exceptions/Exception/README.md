@@ -2,8 +2,6 @@
 
 Hereda de std::exception y agrega mensajes de error personalizados.
 
-## Librerías necesarias
+## Abstracciones necesarias
 
-Se utilizan las siguientes librerías necesarias:
-
--
+No se utilizan otras abstracciones.

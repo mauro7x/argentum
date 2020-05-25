@@ -2,8 +2,6 @@
 
 Protege un recurso compartido utilizando mutex y lock.
 
-## Librerías necesarias
+## Abstracciones necesarias
 
-Se utilizan las siguientes librerías necesarias:
-
--
+No se utilizan otras abstracciones.

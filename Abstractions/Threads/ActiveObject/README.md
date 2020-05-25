@@ -2,8 +2,8 @@
 
 Objeto activo que corre en su propio hilo de ejecución heredando de `Thread`. Incluye un método para saber si termino.
 
-## Librerías necesarias
+## Abstracciones necesarias
 
-Se utilizan las siguientes librerías necesarias:
+Se utilizan las siguientes abstracciones necesarias:
 
 * Thread
