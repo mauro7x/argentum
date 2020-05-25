@@ -115,6 +115,8 @@ void Socket::_closeFdIfValid() {
 }
 
 //-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
 // API Pública
 
 Socket::Socket(const std::string& port, const int max_queued_clients) {

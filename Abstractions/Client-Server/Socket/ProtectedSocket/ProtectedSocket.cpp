@@ -115,6 +115,8 @@ void ProtectedSocket::_closeFdIfValid() {
 }
 
 //-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
 // API Pública
 
 ProtectedSocket::ProtectedSocket(const std::string& port,
