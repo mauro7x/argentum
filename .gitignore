@@ -23,4 +23,7 @@ cpplint.py
 execute.sh
 filter_options
 
+# Dejamos archivos específicos ------------------------------------------------
+!convenciones.txt
+
 # -----------------------------------------------------------------------------
