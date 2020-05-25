@@ -6,12 +6,12 @@ Se incluyen en este directorio varias de las abstracciones diseñadas en anterio
 
 * **Cliente/Servidor**
     * [Socket](./Client-Server/Socket/) - *método de comunicación entre procesos mediante protocolo TCP*
-    * [Accepter]() - *hilo del server-side que acepta clientes*
+    * [Accepter](./Client-Server/Accepter/) - *hilo del server-side que acepta clientes*
 * **Threads**
-    * [Thread]() - *clase abstracta de la que heredan los objetos activos.*
-    * [Monitor]() - *recursos compartidos protegidos entre hilos.*
-    * [ActiveObject]() - *objeto que corre en su propio hilo.*
-    * [BlockingQueue]() - *cola bloqueante que utiliza condition variables.*
+    * [Thread](./Threads/Thread/) - *clase abstracta de la que heredan los objetos activos.*
+    * [Monitor](./Threads/Monitor/) - *recursos compartidos protegidos entre hilos.*
+    * [ActiveObject](./Threads/ActiveObject/) - *objeto que corre en su propio hilo.*
+    * [BlockingQueue](./Threads/BlockingQueue/) - *cola bloqueante que utiliza condition variables.*
 * **Exceptions**
-    * [Exception]() - *hereda de std::exception, agrega mensajes de error y códigos de error*
-        * [ParticularException]() - *para devolver excepciones particulares*
+    * [Exception](./Exceptions/Exception/) - *hereda de std::exception, agrega mensajes de error y códigos de error*
+        * [ParticularException](./Exceptions/ParticularException/) - *para devolver excepciones particulares*
