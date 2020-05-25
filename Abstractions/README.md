@@ -5,7 +5,7 @@ Se incluyen en este directorio varias de las abstracciones diseñadas en anterio
 ## Abstracciones integradas
 
 * **Cliente/Servidor**
-    * [Socket](./Client-Server/Socket/README.md) - *método de comunicación entre procesos mediante protocolo TCP*
+    * [Socket](./Client-Server/Socket/) - *método de comunicación entre procesos mediante protocolo TCP*
     * [Accepter]() - *hilo del server-side que acepta clientes*
 * **Threads**
     * [Thread]() - *clase abstracta de la que heredan los objetos activos.*
