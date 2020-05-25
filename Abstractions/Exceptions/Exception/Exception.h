@@ -14,16 +14,16 @@ class Exception : public std::exception {
 
    public:
     /**
-     * Descripcion: constructor.
+     * Descripción: constructor.
      *
-     * Parametros: mensaje de error.
+     * Parámetros: mensaje de error.
      */
     explicit Exception(const std::string msg_error) noexcept;
 
     /**
-     * Descripcion: devuelve el mensaje de error.
+     * Descripción: devuelve el mensaje de error.
      *
-     * Parametros: -
+     * Parámetros: -
      *
      * Retorno: mensaje de error.
      *
@@ -32,7 +32,7 @@ class Exception : public std::exception {
     virtual const char* what() const noexcept;
 
     /**
-     * Descripcion: destructor.
+     * Descripción: destructor.
      */
     virtual ~Exception() noexcept;
 };
