@@ -37,7 +37,7 @@ class Template {
     Template& operator=(Template&& other) = delete;
 
     /**
-     * Descripción: destructor.
+     * Descripción: -
      *
      * Parámetros: -
      *
