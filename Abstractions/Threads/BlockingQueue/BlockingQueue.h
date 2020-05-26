@@ -6,6 +6,8 @@
 #include <exception>
 #include <mutex>
 #include <queue>
+
+#include "ClosedQueueException.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -65,7 +67,7 @@ class BlockingQueue {
         std::unique_lock<std::mutex> l(m);
         while (queue.empty()) {
             if (permanently_closed) {
-                throw std::exception;
+                throw ClosedQueueException("Queue is closed.");
             }
 
             cv.wait(l);
