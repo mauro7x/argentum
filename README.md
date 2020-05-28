@@ -11,7 +11,7 @@
 | Nombre y apellido | Padrón | Mail | GitHub |
 |-------------------|--------|------|--------|
 | Mauro Parafati | 102749 | mparafati@fi.uba.ar | [mauro7x](https://github.com/mauro7x) |
-| Santiago Klein | completar | completar | [sankle](https://github.com/sankle) |
+| Santiago Klein | 102192 | sklein@fi.uba.ar | [sankle](https://github.com/sankle) |
 | Yuhong Huang | completar | completar | [tonyhuang07](https://github.com/tonyhuang07) |
 
 ## Enlaces de interés
