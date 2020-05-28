@@ -6,6 +6,7 @@
 #include <string>
 
 #include "../../Common/includes/Exception.h"
+#include "../includes/Client.h"
 #include "../includes/defs.h"
 // ----------------------------------------------------------------------------
 
@@ -21,7 +22,8 @@ int main(int argc, char* argv[]) {
     std::string port = argv[PORT];
 
     try {
-        // Código de ejecución
+        Client client(hostname, port);
+        client.run();
 
     } catch (const Exception& e) {
         fprintf(stderr, "%s\n", e.what());
