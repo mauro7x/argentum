@@ -19,8 +19,29 @@
 
 <!-- ###################################################################### -->
 
-# Tabla de contenidos
+# Compilar con CMake
 
+Para compilar, se deben ejecutar desde la raíz del repositorio las siguientes líneas:
+
+```
+mkdir build && cd build
+cmake ..
+```
+
+Una vez hecho esto y si no hubieron errores, obtendremos el *Makefile* generado por **CMake**. Ahora podemos:
+
+* Para compilar el **servidor**:
+    ```
+    make server
+    ```
+* Para compilar el **cliente**:
+    ```
+    make client
+    ```
+* Para compilar todo:
+    ```
+    make
+    ```
 
 <!-- ###################################################################### -->
 
