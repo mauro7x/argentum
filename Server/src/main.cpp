@@ -5,7 +5,7 @@
 
 #include <string>
 
-#include "../../Common/includes/Exception.h"
+#include "../../Common/includes/Exceptions/Exception.h"
 #include "../includes/Server.h"
 #include "../includes/defs.h"
 // ----------------------------------------------------------------------------
