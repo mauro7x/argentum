@@ -25,5 +25,5 @@ filter_options
 
 # Dejamos archivos específicos ------------------------------------------------
 !convenciones.txt
-
+!CMakeLists.txt
 # -----------------------------------------------------------------------------
