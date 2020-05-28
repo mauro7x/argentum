@@ -10,8 +10,8 @@
 #include <cstdint>
 #include <string>
 
-#include "ClosedSocketException.h"
-#include "Exception.h"
+#include "Exceptions/ClosedSocketException.h"
+#include "Exceptions/Exception.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
