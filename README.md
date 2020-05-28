@@ -28,7 +28,7 @@ mkdir build && cd build
 cmake ..
 ```
 
-Una vez hecho esto y si no hubieron errores, obtendremos el *Makefile* generado por **CMake**. Ahora podemos:
+Una vez hecho esto y si no hubieron errores, obtendremos el `Makefile` generado por **CMake**. Ahora podemos:
 
 * Para compilar el **servidor**:
     ```
