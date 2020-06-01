@@ -7,6 +7,7 @@ Implementación básica de un aceptador que corre en su propio hilo.
 Se utilizan las siguientes abstracciones necesarias:
 
 * Socket
+* SocketWrapper
 * Thread
 * Exception
     * ClosedSocketException

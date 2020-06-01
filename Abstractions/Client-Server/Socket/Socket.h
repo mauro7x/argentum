@@ -3,6 +3,7 @@
 
 //-----------------------------------------------------------------------------
 #include <netdb.h>
+#include <string.h>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -10,37 +11,28 @@
 #include <cstdint>
 #include <string>
 
-#include "Exceptions/ClosedSocketException.h"
-#include "Exceptions/Exception.h"
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
-// Mensajes de error
-
-#define SET_SERVER_ADDRESS_ERROR "Error in function: Socket::_setServerAddres()"
-#define SET_CLIENT_ADDRESSES_ERROR \
-    "Error in function: Socket::_setClientAddresses()"
-#define SET_FD_ERROR "Error in function: Socket::_setFd()"
-#define FIX_TIMEWAIT_ERROR "Error in function: Socket::_fixTimeWait()"
-#define BIND_ERROR "Error in function: Socket::_bind()"
-#define LISTEN_ERROR "Error in function: Socket::_listen()"
-#define CLIENT_OUT_OF_ADDRESSES                                        \
-    "Error in function: Socket::_tryToConnectTo(). Client ran out of " \
-    "addresses to try."
-#define ACCEPT_CLOSED_ERROR "Error in function: Socket::accept()"
-#define SEND_ERROR "Error in function: Socket::send()"
-#define RECV_ERROR "Error in function: Socket::recv()"
-#define SHUTDOWN_ERROR "Error in function: Socket::shutdown()"
-#define CLOSE_ERROR "Error in function: Socket::_closeFdIfValid()"
+#include "ClosedSocketException.h"
+#include "Exception.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 
 class Socket {
-   private:
+   protected:
     int fd;
     bool fd_valid;
 
+    /**
+     * Diseñado para crear las instancias de socket peer.
+     *
+     * Descripción: constructor con fd.
+     *
+     * Parámetros: file descriptor valido correctamente inicializado.
+     *
+     */
+    explicit Socket(const int fd);
+
+   private:
     /** (SERVER-SIDE)
      * Descripción: obtiene la dirección donde se abrira el servidor a la
      * escucha de conexiones remotas.
@@ -155,18 +147,6 @@ class Socket {
      */
     Socket(const std::string& port, const int max_queued_clients);
 
-    /** (SERVER-SIDE)
-     * Diseñado para ser utilizado por el SERVIDOR para crear los
-     * socket peer con los que se comunica con sus clientes.
-     *
-     * Descripción: constructor con fd.
-     *
-     * Parámetros: file descriptor valido correctamente inicializado.
-     *
-     * Se toma la responsabilidad del cierre del fd.
-     */
-    explicit Socket(const int fd);
-
     /** (CLIENT-SIDE)
      * Diseñado para ser utilizado por el CLIENTE para conectarse
      * a un determinado servidor.
@@ -179,16 +159,16 @@ class Socket {
      */
     Socket(const std::string& hostname, const std::string& port);
 
-    /* Deshabilitamos el constructor por copia. */
+    /**
+     * Deshabilitamos el constructor por copia y su operador.
+     */
     Socket(const Socket&) = delete;
-
-    /* Deshabilitamos el operador= para copia.*/
     Socket& operator=(const Socket&) = delete;
 
-    /* Habilitamos el constructor por movimiento. */
+    /**
+     * Habilitamos el constructor por movimiento y su operador.
+     */
     Socket(Socket&& other);
-
-    /* Habilitamos el operador= para movimiento. */
     Socket& operator=(Socket&& other);
 
     /** (SERVER-SIDE)
@@ -196,12 +176,11 @@ class Socket {
      *
      * Parámetros: -
      *
-     * Retorno: file descriptor del socket aceptado.
+     * Retorno: socket peer por movimiento.
      *
-     * No toma la responsabilidad de cerrar el fd devuelto.
      * >THROW EXPLICITO DE EXCEPTION.
      */
-    int accept() const;
+    Socket accept() const;
 
     /**
      * Descripción: envia len bytes de source a través del socket.
@@ -227,22 +206,6 @@ class Socket {
      */
     ssize_t recv(char* buffer, const ssize_t len) const;
 
-    //---------------------------------------------------------------------
-    // Sobrecarga de operadores >> << para envio y recepción de distintos
-    // tipos de datos específicos. Aplica la misma documentación para
-    // >> que para recv, y para << que para send.
-
-    ssize_t operator<<(uint16_t n) const;
-    ssize_t operator>>(uint16_t& n) const;
-
-    ssize_t operator<<(const std::string& msg) const;
-    // Para poder recibir un string necesitamos utilizar un protocolo
-
-    ssize_t operator<<(char c) const;
-    ssize_t operator>>(char& c) const;
-
-    //---------------------------------------------------------------------
-
     /**
      * Descripción: desconecta uno o ambos canales del socket.
      *
@@ -263,11 +226,9 @@ class Socket {
     void close();
 
     /**
-     * Descripción: destructor.
-     *
-     * Cierra el file descriptor asociado al socket.
+     * Descripción: destructor. Si el socket es válido lo cierra.
      */
-    ~Socket();
+    virtual ~Socket();
 };
 
 //-----------------------------------------------------------------------------

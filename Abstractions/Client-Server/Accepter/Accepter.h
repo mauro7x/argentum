@@ -6,7 +6,7 @@
 
 #include "ClosedSocketException.h"
 #include "Exception.h"
-#include "Socket.h"
+#include "SocketWrapper.h"
 #include "Thread.h"
 //-----------------------------------------------------------------------------
 
@@ -15,7 +15,7 @@
 class Accepter : public Thread {
    private:
     // Atributos del objeto activo.
-    Socket socket;
+    SocketWrapper socket;
     std::atomic_bool keep_listening;
     std::atomic_bool is_running;
 

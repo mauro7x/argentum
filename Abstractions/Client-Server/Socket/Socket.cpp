@@ -1,4 +1,11 @@
-#include "../includes/Socket.h"
+#include "Socket.h"
+
+//-----------------------------------------------------------------------------
+// Métodos protegidos
+
+Socket::Socket(const int fd) : fd(fd), fd_valid(true) {}
+
+//-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 // Métodos privados
@@ -6,6 +13,7 @@
 void Socket::_setServerAddress(const std::string& port,
                                addrinfo** address) const {
     addrinfo hints;
+    memset(&hints, 0, sizeof(addrinfo));
 
     // Filtros que nos interesan:
     hints.ai_family = AF_INET;        // IPv4
@@ -13,14 +21,8 @@ void Socket::_setServerAddress(const std::string& port,
     hints.ai_flags = AI_PASSIVE;      // Servidor
     hints.ai_protocol = 0;
 
-    // Inicializamos en 0 el resto de los valores:
-    hints.ai_addr = NULL;
-    hints.ai_addrlen = 0;
-    hints.ai_canonname = NULL;
-    hints.ai_next = NULL;
-
     if (::getaddrinfo(0, &port[0], &hints, address)) {
-        throw Exception(SET_SERVER_ADDRESS_ERROR);
+        throw Exception("Error in function: Socket::_setServerAddres()");
     }
 }
 
@@ -28,6 +30,7 @@ void Socket::_setClientAddresses(const std::string& hostname,
                                  const std::string& port,
                                  addrinfo** addresses) const {
     addrinfo hints;
+    memset(&hints, 0, sizeof(addrinfo));
 
     // Filtros que nos interesan:
     hints.ai_family = AF_INET;        // IPv4
@@ -35,14 +38,8 @@ void Socket::_setClientAddresses(const std::string& hostname,
     hints.ai_flags = 0;               // Cliente
     hints.ai_protocol = 0;
 
-    // Inicializamos en 0 el resto de los valores:
-    hints.ai_addr = NULL;
-    hints.ai_addrlen = 0;
-    hints.ai_canonname = NULL;
-    hints.ai_next = NULL;
-
     if (::getaddrinfo(&hostname[0], &port[0], &hints, addresses)) {
-        throw Exception(SET_CLIENT_ADDRESSES_ERROR);
+        throw Exception("Error in function: Socket::_setClientAddresses()");
     }
 }
 
@@ -52,7 +49,7 @@ void Socket::_setFd(addrinfo* address, addrinfo* all_addresses) {
 
     if (fd == -1) {
         ::freeaddrinfo(all_addresses);
-        throw Exception(SET_FD_ERROR);
+        throw Exception("Error in function: Socket::_setFd()");
     } else {
         fd_valid = true;
     }
@@ -62,7 +59,7 @@ void Socket::_fixTimeWait(addrinfo* address) const {
     int val = 1;
     if (::setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &val, sizeof(val))) {
         ::freeaddrinfo(address);
-        throw Exception(FIX_TIMEWAIT_ERROR);
+        throw Exception("Error in function: Socket::_fixTimeWait()");
     }
 }
 
@@ -72,13 +69,13 @@ void Socket::_bind(addrinfo* address) const {
     ::freeaddrinfo(address);
 
     if (s == -1) {
-        throw Exception(BIND_ERROR);
+        throw Exception("Error in function: Socket::_bind()");
     }
 }
 
 void Socket::_listen(const int max_queued_clients) const {
     if (listen(fd, max_queued_clients)) {
-        throw Exception(LISTEN_ERROR);
+        throw Exception("Error in function: Socket::_listen()");
     }
 }
 
@@ -98,7 +95,9 @@ void Socket::_tryToConnectTo(addrinfo* addresses) {
 
         ::freeaddrinfo(addresses);
         if (!connected) {
-            throw Exception(CLIENT_OUT_OF_ADDRESSES);
+            throw Exception(
+                "Error in function: Socket::_tryToConnectTo(). "
+                "Client ran out of addresses to try.");
         }
     } catch (const Exception& e) {
         throw e;
@@ -108,9 +107,7 @@ void Socket::_tryToConnectTo(addrinfo* addresses) {
 void Socket::_closeFdIfValid() {
     if (fd_valid) {
         fd_valid = false;
-        if (::close(fd)) {
-            throw Exception(CLOSE_ERROR);
-        }
+        ::close(fd);
     }
 }
 
@@ -120,6 +117,7 @@ void Socket::_closeFdIfValid() {
 // API Pública
 
 Socket::Socket(const std::string& port, const int max_queued_clients) {
+    // Método para el servidor. Abrir servidor.
     fd_valid = false;
     addrinfo* address;
     try {
@@ -133,9 +131,8 @@ Socket::Socket(const std::string& port, const int max_queued_clients) {
     }
 }
 
-Socket::Socket(const int fd) : fd(fd), fd_valid(true) {}
-
 Socket::Socket(const std::string& hostname, const std::string& port) {
+    // Método para el cliente. Conectarse a un servidor.
     addrinfo* addresses;
     try {
         _setClientAddresses(hostname, port, &addresses);
@@ -148,23 +145,24 @@ Socket::Socket(const std::string& hostname, const std::string& port) {
 Socket::Socket(Socket&& other) {
     this->fd = std::move(other.fd);
     this->fd_valid = std::move(other.fd_valid);
+    other.fd_valid = false;
+    other.fd = -1;
 }
 
 Socket& Socket::operator=(Socket&& other) {
     this->fd = std::move(other.fd);
     this->fd_valid = std::move(other.fd_valid);
+    other.fd_valid = false;
+    other.fd = -1;
     return *this;
 }
 
-int Socket::accept() const {
+Socket Socket::accept() const {
     int peer_socket = ::accept(fd, NULL, NULL);
     if (peer_socket == -1) {
-        // lo ideal sería devolver Exception si se trata de un
-        // error cualquiera, y ClosedSocketException si el socket
-        // efectivamente se cerró
-        throw ClosedSocketException(ACCEPT_CLOSED_ERROR);
+        throw ClosedSocketException("Error in function: Socket::accept()");
     }
-    return peer_socket;
+    return std::move(Socket(peer_socket));
 }
 
 ssize_t Socket::send(const char* source, const ssize_t len) const {
@@ -176,9 +174,9 @@ ssize_t Socket::send(const char* source, const ssize_t len) const {
             ::send(fd, &source[total_sent], len - total_sent, MSG_NOSIGNAL);
 
         if (last_sent == -1) {
-            throw Exception(SEND_ERROR);
+            throw Exception("Error in function: Socket::send()");
         } else if (last_sent == 0) {
-            return 0;
+            return total_sent;
         } else {
             total_sent += last_sent;
         }
@@ -196,9 +194,9 @@ ssize_t Socket::recv(char* buffer, const ssize_t len) const {
             ::recv(fd, &buffer[total_received], len - total_received, 0);
 
         if (last_received == -1) {
-            throw Exception(RECV_ERROR);
+            throw Exception("Error in function: Socket::recv()");
         } else if (last_received == 0) {
-            return 0;
+            return total_received;
         } else {
             total_received += last_received;
         }
@@ -207,38 +205,10 @@ ssize_t Socket::recv(char* buffer, const ssize_t len) const {
     return total_received;
 }
 
-//-----------------------------------------------------------------------------
-
-ssize_t Socket::operator<<(uint16_t n) const {
-    return send((char*)&n, sizeof(n));
-}
-
-ssize_t Socket::operator>>(uint16_t& n) const {
-    uint16_t received;
-    ssize_t n_received;
-    n_received = recv((char*)&received, sizeof(received));
-    n = received;
-    return n_received;
-}
-
-ssize_t Socket::operator<<(const std::string& msg) const {
-    return send(msg.data(), msg.size());
-}
-
-ssize_t Socket::operator<<(char c) const {
-    return send(&c, sizeof(c));
-}
-
-ssize_t Socket::operator>>(char& c) const {
-    return recv(&c, sizeof(c));
-}
-
-//-----------------------------------------------------------------------------
-
 void Socket::shutdown(const int& channel) const {
     if (fd_valid) {
         if (::shutdown(fd, channel)) {
-            throw Exception(SHUTDOWN_ERROR);
+            throw Exception("Error in function: Socket::shutdown()");
         }
     }
 }
