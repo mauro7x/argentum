@@ -48,10 +48,6 @@ void View::_init() {
 
 void View::_createEntities() {
     // Crear entidades
-    Entity* new_entity;
-
-    new_entity = new FooDos(mRenderer, 0, 0);
-    mEntities.add(new_entity);
 }
 
 void View::_loadMedia() const {
