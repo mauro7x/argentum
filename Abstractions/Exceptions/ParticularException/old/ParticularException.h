@@ -2,6 +2,8 @@
 #define __PARTICULAR_EXCEPTION_H__
 
 //-----------------------------------------------------------------------------
+#include <string>
+
 #include "Exception.h"
 //-----------------------------------------------------------------------------
 
@@ -9,9 +11,8 @@
 
 class ParticularException : public Exception {
    public:
-    template <typename... Args>
-    explicit ParticularException(const char* fmt, Args&&... args) noexcept
-        : Exception(fmt, std::forward<Args>(args)...) {}
+    explicit ParticularException(const std::string msg_error) noexcept
+        : Exception(msg_error) {}
 };
 
 //-----------------------------------------------------------------------------

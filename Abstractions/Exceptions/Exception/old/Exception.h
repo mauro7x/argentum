@@ -2,32 +2,38 @@
 #define __EXCEPTION_H__
 
 //-----------------------------------------------------------------------------
-#include <cerrno>
-#include <cstdarg>
-#include <cstdio>
-#include <cstring>
 #include <exception>
-#include <typeinfo>
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
-#define BUF_LEN 256
+#include <string>
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 
 class Exception : public std::exception {
    private:
-    char msg_error[BUF_LEN];
+    std::string msg_error;
 
    public:
-    /* Constructor */
-    explicit Exception(const char* fmt, ...) noexcept;
+    /**
+     * Descripción: constructor.
+     *
+     * Parámetros: mensaje de error.
+     */
+    explicit Exception(const std::string msg_error) noexcept;
 
-    /* Mensaje de error */
+    /**
+     * Descripción: devuelve el mensaje de error.
+     *
+     * Parámetros: -
+     *
+     * Retorno: mensaje de error.
+     *
+     * No hay que ocuparse del puntero recibido.
+     */
     virtual const char* what() const noexcept;
 
-    /* Destructor */
+    /**
+     * Descripción: destructor.
+     */
     virtual ~Exception() noexcept;
 };
 

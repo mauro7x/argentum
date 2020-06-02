@@ -2,8 +2,6 @@
 #define __CLOSED_QUEUE_EXCEPTION_H__
 
 //-----------------------------------------------------------------------------
-#include <string>
-
 #include "Exception.h"
 //-----------------------------------------------------------------------------
 
@@ -11,8 +9,9 @@
 
 class ClosedQueueException : public Exception {
    public:
-    explicit ClosedQueueException(const std::string msg_error) noexcept
-        : Exception(msg_error) {}
+    template <typename... Args>
+    explicit ClosedQueueException(const char* fmt, Args&&... args) noexcept
+        : Exception(fmt, std::forward<Args>(args)...) {}
 };
 
 //-----------------------------------------------------------------------------

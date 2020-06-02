@@ -1,18 +1,19 @@
-#ifndef __PARTICULAR_EXCEPTION_H__
-#define __PARTICULAR_EXCEPTION_H__
+#ifndef __CLOSED_SOCKET_EXCEPTION_H__
+#define __CLOSED_SOCKET_EXCEPTION_H__
 
 //-----------------------------------------------------------------------------
+#include <string>
+
 #include "Exception.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 
-class ParticularException : public Exception {
+class ClosedSocketException : public Exception {
    public:
-    template <typename... Args>
-    explicit ParticularException(const char* fmt, Args&&... args) noexcept
-        : Exception(fmt, std::forward<Args>(args)...) {}
+    explicit ClosedSocketException(const std::string msg_error) noexcept
+        : Exception(msg_error) {}
 };
 
 //-----------------------------------------------------------------------------
-#endif  // __PARTICULAR_EXCEPTION_H__
+#endif  // __CLOSED_SOCKET_EXCEPTION_H__

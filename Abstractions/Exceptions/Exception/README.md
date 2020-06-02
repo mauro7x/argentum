@@ -1,6 +1,6 @@
 # Exception
 
-Hereda de std::exception y agrega mensajes de error personalizados.
+Wrapper para excepciones generales, permite formateo del mensaje de error. Imprime el errno al final del error.
 
 ## Abstracciones necesarias
 
