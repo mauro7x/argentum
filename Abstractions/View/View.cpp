@@ -48,6 +48,7 @@ void View::_init() {
 
 void View::_createEntities() {
     // Crear entidades
+    mEntities.add(new Foo(mRenderer, WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2));
 }
 
 void View::_loadMedia() const {
