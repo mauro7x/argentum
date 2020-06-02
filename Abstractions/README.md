@@ -13,5 +13,5 @@ Se incluyen en este directorio varias de las abstracciones diseñadas en anterio
     * [ActiveObject](./Threads/ActiveObject/) - *objeto que corre en su propio hilo.*
     * [BlockingQueue](./Threads/BlockingQueue/) - *cola bloqueante que utiliza condition variables.*
 * **Exceptions**
-    * [Exception](./Exceptions/Exception/) - *hereda de std::exception, agrega mensajes de error*
+    * [Exception](./Exceptions/Exception/) - *hereda de std::exception, agrega mensajes de error formateados e información de errno*
         * [ParticularException](./Exceptions/ParticularException/) - *para devolver excepciones particulares*
