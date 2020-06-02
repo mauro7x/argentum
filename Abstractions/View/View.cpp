@@ -5,7 +5,8 @@
 
 void View::_init() {
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-        throw SDLException("Error in init: SDL_Init()", SDL_GetError());
+        throw SDLException("Error in function SDL_Init()\nSDL_Error: %s",
+                           SDL_GetError());
     }
 
     // Set texture filtering to linear
@@ -18,8 +19,9 @@ void View::_init() {
     mWindow = SDL_CreateWindow(WINDOW_TITLE, WINDOW_POS_X, WINDOW_POS_Y,
                                WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
     if (mWindow == NULL) {
-        throw SDLException("Error in window init: SDL_CreateWindow()",
-                           SDL_GetError());
+        throw SDLException(
+            "Error in function SDL_CreateWindow()\nSDL_Error: %s",
+            SDL_GetError());
     }
 
     // Renderer
@@ -30,19 +32,22 @@ void View::_init() {
 
     mRenderer = SDL_CreateRenderer(mWindow, -1, renderer_flags);
     if (mRenderer == NULL) {
-        throw SDLException("Error in window init: SDL_CreateRenderer()",
-                           SDL_GetError());
+        throw SDLException(
+            "Error in function SDL_CreateRenderer()\nSDL_Error: %s",
+            SDL_GetError());
     }
 
     if (SDL_SetRenderDrawColor(mRenderer, 0xFF, 0xFF, 0xFF, 0xFF)) {
-        throw SDLException("Error in window init: SDL_SetRenderDrawColor()",
-                           SDL_GetError());
+        throw SDLException(
+            "Error in function SDL_SetRenderDrawColor()\nSDL_Error: %s",
+            SDL_GetError());
     }
 
     // PNG Loading
     int imgFlags = IMG_INIT_PNG;
     if (!(IMG_Init(imgFlags) & imgFlags)) {
-        throw SDLException("Error in window init: IMG_Init()", SDL_GetError());
+        throw SDLException("Error in function IMG_Init()\nSDL_Error: %s",
+                           SDL_GetError());
     }
 }
 
@@ -61,12 +66,13 @@ void View::_handleEvent(const SDL_Event& e) {
 
 void View::_clear() const {
     if (SDL_SetRenderDrawColor(mRenderer, 0xFF, 0xFF, 0xFF, 0xFF)) {
-        throw SDLException("Error in window clear: SDL_SetRenderDrawColor()",
-                           SDL_GetError());
+        throw SDLException(
+            "Error in function SDL_SetRenderDrawColor()\nSDL_Error: %s",
+            SDL_GetError());
     }
 
     if (SDL_RenderClear(mRenderer)) {
-        throw SDLException("Error in window clear: SDL_RenderClear()",
+        throw SDLException("Error in function SDL_RenderClear()\nSDL_Error: %s",
                            SDL_GetError());
     }
 }

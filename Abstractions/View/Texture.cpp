@@ -42,15 +42,17 @@ void Texture::loadFromFile(std::string filepath, int r, int g, int b) {
 
     SDL_Surface* loadedSurface = IMG_Load(filepath.c_str());
     if (loadedSurface == NULL) {
-        throw SDLException("Error in texture load: IMG_Load()", SDL_GetError());
+        throw SDLException("Error in function IMG_Load()\nSDL_Error: %s",
+                           SDL_GetError());
     }
 
     // Color key image (transparentar el fondo)
     if (r >= 0 && g >= 0 && b >= 0) {
         if (SDL_SetColorKey(loadedSurface, SDL_TRUE,
                             SDL_MapRGB(loadedSurface->format, r, g, b))) {
-            throw SDLException("Error in texture load: SDL_SetColorKey()",
-                               SDL_GetError());
+            throw SDLException(
+                "Error in function SDL_SetColorKey()\nSDL_Error: %s",
+                SDL_GetError());
         }
     }
 
@@ -58,7 +60,7 @@ void Texture::loadFromFile(std::string filepath, int r, int g, int b) {
     newTexture = SDL_CreateTextureFromSurface(mRenderer, loadedSurface);
     if (newTexture == NULL) {
         throw SDLException(
-            "Error in texture load: SDL_CreateTextureFromSurface()",
+            "Error in function SDL_CreateTextureFromSurface()\nSDL_Error: %s",
             SDL_GetError());
     }
 
@@ -74,19 +76,19 @@ void Texture::loadFromFile(std::string filepath, int r, int g, int b) {
 
 void Texture::setColor(Uint8 red, Uint8 green, Uint8 blue) const {
     if (SDL_SetTextureColorMod(mTexture, red, green, blue)) {
-        fprintf(stderr, "Warning: Color modulation error!\n");
+        fprintf(stderr, "SDL Warning: Color modulation error!\n");
     }
 }
 
 void Texture::setBlendMode(SDL_BlendMode blending) const {
     if (SDL_SetTextureBlendMode(mTexture, blending)) {
-        fprintf(stderr, "Warning: Blend mode error!\n");
+        fprintf(stderr, "SDL Warning: Blend mode error!\n");
     }
 }
 
 void Texture::setAlpha(Uint8 alpha) const {
     if (SDL_SetTextureAlphaMod(mTexture, alpha)) {
-        fprintf(stderr, "Warning: Alpha modulation error!\n");
+        fprintf(stderr, "SDL Warning: Alpha modulation error!\n");
     }
 }
 
@@ -104,8 +106,9 @@ void Texture::render(int x, int y, SDL_Rect* clip, double angle,
     // Render to screen
     if (SDL_RenderCopyEx(mRenderer, mTexture, clip, &renderQuad, angle, center,
                          flip)) {
-        throw SDLException("Error in texture render: SDL_RenderCopy()",
-                           SDL_GetError());
+        throw SDLException(
+            "Error in function SDL_RenderCopyEx()\nSDL_Error: %s",
+            SDL_GetError());
     }
 }
 
