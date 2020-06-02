@@ -28,7 +28,7 @@ int main(int argc, char* argv[]) {
         fprintf(stderr, "%s\n", e.what());
         return ERROR;
     } catch (...) {
-        fprintf(stderr, "Unknown error\n");
+        fprintf(stderr, "Unknown error.\n");
         return ERROR;
     }
 

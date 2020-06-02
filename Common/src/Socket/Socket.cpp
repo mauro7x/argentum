@@ -1,4 +1,4 @@
-#include "../../includes/Socket/Socket.h"
+#include "Socket.h"
 
 //-----------------------------------------------------------------------------
 // Métodos protegidos

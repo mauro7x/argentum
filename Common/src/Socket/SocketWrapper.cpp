@@ -1,4 +1,4 @@
-#include "../../includes/Socket/SocketWrapper.h"
+#include "SocketWrapper.h"
 
 //-----------------------------------------------------------------------------
 // Métodos privados
