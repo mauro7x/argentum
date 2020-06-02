@@ -56,10 +56,6 @@ void View::_loadMedia() const {
 }
 
 void View::_handleEvent(const SDL_Event& e) {
-    if (e.type == SDL_QUIT) {
-        quit = true;
-    }
-
     mEntities.handleEvent(e);
 }
 
@@ -96,19 +92,23 @@ void View::_free() {
 //-----------------------------------------------------------------------------
 // API Pública
 
-View::View() : mWindow(NULL), mRenderer(NULL), quit(false) {}
+View::View() : mWindow(NULL), mRenderer(NULL) {}
 
 void View::operator()() {
     _init();
     _createEntities();
     _loadMedia();
 
-    quit = false;
+    bool quit = false;
     SDL_Event e;
 
     while (!quit) {
         // Handle events on queue
         while (SDL_PollEvent(&e) != 0) {
+            if (e.type == SDL_QUIT) {
+                quit = true;
+            }
+
             _handleEvent(e);
         }
 

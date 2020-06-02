@@ -18,7 +18,6 @@ class View {
     SDL_Window* mWindow;
     SDL_Renderer* mRenderer;
     EntitiesContainer mEntities;
-    bool quit;
 
     /* Inicializa recursos */
     void _init();
