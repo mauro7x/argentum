@@ -91,6 +91,16 @@ void View::_present() const {
 
 void View::_free() {
     mEntities.free();
+
+    if (mRenderer) {
+        SDL_DestroyRenderer(mRenderer);
+        mRenderer = NULL;
+    }
+
+    if (mWindow) {
+        SDL_DestroyWindow(mWindow);
+        mWindow = NULL;
+    }
 }
 
 //-----------------------------------------------------------------------------
