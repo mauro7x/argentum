@@ -2,7 +2,7 @@ Algunas convenciones para el desarrollo:
 
 En cuanto al case utilizado:
     - Nombres de las clases: PascalCase, ej. class UnaClase {};
-    - Nombres de los métodos: definir lo que prefieran entre snake_case y camelCase.
+    - Nombres de los métodos: definir lo que prefieran entre camelCase.
     - Nombres de las variables: snake_case, ej. UnaClase una_clase;
 
 Configuración del estilizador de VS Code:
