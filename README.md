@@ -4,7 +4,7 @@
 
 * **Materia:** Taller de Programación I
 * **Año y cuatrimestre:** 1°C 2020
-* **Tutor:** completar
+* **Tutor:** Martín Di Paola
 
 ## Integrantes
 
