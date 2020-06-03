@@ -3,26 +3,21 @@
 // ----------------------------------------------------------------------------
 #include <stdio.h>
 
-#include <string>
-
-#include "../../Common/includes/Exceptions/Exception.h"
-#include "../includes/Client.h"
-#include "../includes/defs.h"
+#include "../../../Common/includes/Exceptions/Exception.h"
+#include "../../includes/Model/Client.h"
+#include "../../includes/Model/defs.h"
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
 
 int main(int argc, char* argv[]) {
     if (argc != EXPECTED_ARGC) {
-        fprintf(stderr, "Usage: %s <hostname> <port>\n", argv[NAME]);
+        fprintf(stderr, "Usage: %s\n", argv[NAME]);
         return USAGE_ERROR;
     }
 
-    std::string hostname = argv[HOSTNAME];
-    std::string port = argv[PORT];
-
     try {
-        Client client(hostname, port);
+        Client client;
         client.run();
 
     } catch (const Exception& e) {

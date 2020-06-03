@@ -4,6 +4,8 @@
 //-----------------------------------------------------------------------------
 #include <iostream>
 #include <string>
+
+#include "../View/GameView.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -22,9 +24,9 @@ class Client {
     /**
      * Descripción: constructor.
      *
-     * Parámetros: hostname y puerto al que conectarse.
+     * Parámetros: -
      */
-    Client(const std::string& hostname, const std::string& port);
+    Client();
 
     /* Deshabilitamos el constructor por copia. */
     Client(const Client&) = delete;

@@ -47,7 +47,7 @@ add_library(common SHARED ${common_src})
 # CLIENTE
 
 add_executable(client ${client_src})
-target_link_libraries(client common)
+target_link_libraries(client common SDL2 SDL2_image SDL2_ttf SDL2_mixer)
 #------------------------------------------------------------------------------
 
 #------------------------------------------------------------------------------
