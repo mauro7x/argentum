@@ -13,6 +13,7 @@
 | Mauro Parafati | 102749 | mparafati@fi.uba.ar | [mauro7x](https://github.com/mauro7x) |
 | Santiago Klein | 102192 | sklein@fi.uba.ar | [sankle](https://github.com/sankle) |
 | Yuhong Huang | 102146 | yhuang@fi.uba.ar | [tonyhuang07](https://github.com/tonyhuang07) |
+| Francisco Gauna | 100563 | fgauna@fi.uba.ar | [FranciscoGauna](https://github.com/FranciscoGauna) |
 
 ## Enlaces de interés
 * [**Repositorio en GitHub**](https://github.com/mauro7x/taller_final)
