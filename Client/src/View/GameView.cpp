@@ -51,8 +51,6 @@ void GameView::_init() {
     }
 }
 
-void GameView::_loadMedia() {}
-
 void GameView::_handleEvent(const SDL_Event& e) {}
 
 void GameView::_clear() const {
@@ -67,8 +65,6 @@ void GameView::_clear() const {
                            SDL_GetError());
     }
 }
-
-void GameView::_act() const {}
 
 void GameView::_present() const {
     SDL_RenderPresent(renderer);
@@ -102,22 +98,30 @@ void GameView::_free() {
 // API Pública
 
 GameView::GameView()
-    : window(NULL), renderer(NULL), sdl_running(false), img_running(false) {}
+    : window(NULL),
+      renderer(NULL),
+      sdl_running(false),
+      img_running(false),
+      camera({0, 0, SCREEN_WIDTH, SCREEN_HEIGHT}) {}
 
 void GameView::operator()() {
+    /* Iniciamos subsistemas necesarios para SDL */
     _init();
+
+    //-------------------------------------------------------------------------
     // Manejar el primer paquete recibido, crear unidades dinamicas necesarias
-    _loadMedia();
+    //-------------------------------------------------------------------------
 
     //-------------------------------------------------------------------------
     // Instancio objetos estáticos
 
-    SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
+    /* Iniciamos la interfaz HUD (versión Proxy) */
+    HUDProxy hud(renderer);
+    hud.loadMedia();
 
-    Texture hud(renderer);
-    hud.loadFromFile("../Assets/hud.png");
-
+    /* Iniciamos el mapa (versión Proxy) */
     MapProxy map(renderer);
+    map.loadMedia();
 
     //-------------------------------------------------------------------------
 
@@ -186,14 +190,13 @@ void GameView::operator()() {
         //---------------------------------------------------------------------
         // Acciones previas al renderizado
 
-        _act();
         //---------------------------------------------------------------------
 
         //---------------------------------------------------------------------
         // Renderizamos
 
         map.render(camera);
-        hud.render(0, 0);
+        hud.render();
         //---------------------------------------------------------------------
 
         _present();

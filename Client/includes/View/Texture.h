@@ -13,7 +13,6 @@
 
 //-----------------------------------------------------------------------------
 
-/* Wrapper para textura SDL. */
 class Texture {
    private:
     SDL_Texture* texture;

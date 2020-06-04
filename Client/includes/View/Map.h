@@ -2,12 +2,13 @@
 #define __MAP_H__
 
 //-----------------------------------------------------------------------------
+#include <SDL2/SDL.h>
+
 #include <fstream>
 #include <string>
 #include <vector>
 
 #include "../../../Common/includes/Exceptions/SDLException.h"
-#include "SDL2/SDL.h"
 #include "Texture.h"
 #include "Tile.h"
 //-----------------------------------------------------------------------------
@@ -43,7 +44,7 @@ class MapProxy {
     void _loadTextures();
 
     /* Crea los tiles con sus tipos (parsea el mapa) */
-    void _createTiles();
+    void _loadTiles();
 
    public:
     /* Constructor */
@@ -63,7 +64,10 @@ class MapProxy {
 
     //-------------------------------------------------------------------------
 
-    /* Metodo */
+    /* Carga los archivos necesarios */
+    void loadMedia();
+
+    /* Renderiza el mapa dentro de la cámara */
     void render(const SDL_Rect& camera) const;
 
     //-------------------------------------------------------------------------

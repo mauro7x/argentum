@@ -6,14 +6,13 @@
 #include <SDL2/SDL_image.h>
 
 #include "../../../Common/includes/Exceptions/SDLException.h"
+#include "HUD.h"
 #include "Map.h"
-#include "Texture.h"
 #include "config.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 
-/* Wrapper para una vista generada con SDL. */
 class GameView {
    private:
     SDL_Window* window;
@@ -21,21 +20,17 @@ class GameView {
     bool sdl_running;
     bool img_running;
 
-    //-------------------------------------------------------------------------
-    // OBJETOS QUE COMPONEN LA VISTA
+    /* Camara que se renderiza y que sigue al jugador */
+    SDL_Rect camera;
 
     //-------------------------------------------------------------------------
-    // PROXY PARA EL MAPA.
+    // OBJETOS QUE COMPONEN LA VISTA
 
     // Contenedor de mapas inicializados
 
     // Puntero a mapa actual (un mapa solo tiene los tiles estáticos, no se
     // incluyen acá los NPC, jugadores, o objetos sueltos en el mapa, eso será
     // extra)
-
-    // Map map;
-
-    //-------------------------------------------------------------------------
 
     // Contenedor de entidades NPC
 
@@ -52,17 +47,11 @@ class GameView {
     /* Inicializa recursos */
     void _init();
 
-    /* Carga archivos media necesarios */
-    void _loadMedia();
-
     /* Maneja un evento */
     void _handleEvent(const SDL_Event& e);
 
     /* Limpia la pantalla */
     void _clear() const;
-
-    /* Acciones previas al renderizado */
-    void _act() const;
 
     /* Actualiza la pantalla */
     void _present() const;
