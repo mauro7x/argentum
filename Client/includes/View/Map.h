@@ -32,9 +32,9 @@
 
 class MapProxy {
    private:
-    SDL_Renderer* gRenderer;
-    std::vector<Texture> mTileTextures;
-    std::vector<Tile> mTiles;
+    SDL_Renderer* g_renderer;
+    std::vector<Texture> tile_textures;
+    std::vector<Tile> tiles;
 
     /* Crea las texturas */
     void _createTextures(SDL_Renderer* renderer);

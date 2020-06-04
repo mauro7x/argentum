@@ -16,9 +16,9 @@
 
 class Tile {
    private:
-    Texture* gTexture;
-    SDL_Renderer* gRenderer;
-    SDL_Rect mBox;
+    Texture* g_texture;
+    SDL_Renderer* g_renderer;
+    SDL_Rect dim;
 
     /* Chequea si está dentro de la región dada */
     bool _checkCollision(const SDL_Rect& box) const;

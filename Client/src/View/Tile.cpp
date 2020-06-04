@@ -10,10 +10,10 @@ bool Tile::_checkCollision(const SDL_Rect& box) const {
     int bottom_me, bottom_box;
 
     // Calculate the sides of rect A
-    left_me = mBox.x;
-    right_me = mBox.x + mBox.w;
-    top_me = mBox.y;
-    bottom_me = mBox.y + mBox.h;
+    left_me = dim.x;
+    right_me = dim.x + dim.w;
+    top_me = dim.y;
+    bottom_me = dim.y + dim.h;
 
     // Calculate the sides of rect B
     left_box = box.x;
@@ -47,47 +47,47 @@ bool Tile::_checkCollision(const SDL_Rect& box) const {
 // API Pública
 
 Tile::Tile(int x, int y, Texture* texture, SDL_Renderer* renderer)
-    : gTexture(texture), gRenderer(renderer) {
-    mBox.x = x;
-    mBox.y = y;
-    mBox.w = TILE_WIDTH;
-    mBox.h = TILE_HEIGHT;
+    : g_texture(texture), g_renderer(renderer) {
+    dim.x = x;
+    dim.y = y;
+    dim.w = TILE_WIDTH;
+    dim.h = TILE_HEIGHT;
 }
 
 Tile::Tile(Tile&& other) {
-    this->gTexture = std::move(other.gTexture);
-    this->gRenderer = std::move(other.gRenderer);
-    this->mBox = std::move(other.mBox);
-    other.gTexture = NULL;
-    other.gRenderer = NULL;
+    this->g_texture = std::move(other.g_texture);
+    this->g_renderer = std::move(other.g_renderer);
+    this->dim = std::move(other.dim);
+    other.g_texture = NULL;
+    other.g_renderer = NULL;
 }
 
 Tile& Tile::operator=(Tile&& other) {
-    this->gTexture = std::move(other.gTexture);
-    this->gRenderer = std::move(other.gRenderer);
-    this->mBox = std::move(other.mBox);
-    other.gTexture = NULL;
-    other.gRenderer = NULL;
+    this->g_texture = std::move(other.g_texture);
+    this->g_renderer = std::move(other.g_renderer);
+    this->dim = std::move(other.dim);
+    other.g_texture = NULL;
+    other.g_renderer = NULL;
     return *this;
 }
 
 void Tile::render(const SDL_Rect& camera) const {
     if (_checkCollision(camera)) {
         SDL_Rect scale = {0, 0, TILE_WIDTH, TILE_HEIGHT};
-        gTexture->render(mBox.x - camera.x + SCREEN_X_OFFSET,
-                         mBox.y - camera.y + SCREEN_Y_OFFSET, NULL, &scale);
+        g_texture->render(dim.x - camera.x + SCREEN_X_OFFSET,
+                          dim.y - camera.y + SCREEN_Y_OFFSET, NULL, &scale);
 
         /* Implementación vieja para sacar el exceso. Ahora lo escondemos.
-        int x = mBox.x - camera.x + SCREEN_X_OFFSET;
-        int y = mBox.y - camera.y + SCREEN_Y_OFFSET;
-        int max_x = x + mBox.w;
+        int x = dim.x - camera.x + SCREEN_X_OFFSET;
+        int y = dim.y - camera.y + SCREEN_Y_OFFSET;
+        int max_x = x + dim.w;
 
         if (max_x > SCREEN_WIDTH) {
             int excess = max_x - SCREEN_WIDTH;
-            SDL_Rect clip = {0, 0, mBox.w - excess, mBox.h};
-            gTexture->render(x, y, &clip, &scale);
+            SDL_Rect clip = {0, 0, dim.w - excess, dim.h};
+            g_texture->render(x, y, &clip, &scale);
         } else {
-            gTexture->render(x, y, NULL, &scale);
+            g_texture->render(x, y, NULL, &scale);
         }
         */
     }

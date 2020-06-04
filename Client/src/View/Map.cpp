@@ -4,23 +4,23 @@
 // Métodos privados
 
 void MapProxy::_createTextures(SDL_Renderer* renderer) {
-    mTileTextures.reserve(TILE_TEXTURES);
+    tile_textures.reserve(TILE_TEXTURES);
     for (int i = 0; i < TILE_TEXTURES; i++) {
-        mTileTextures.push_back(Texture(renderer));
+        tile_textures.push_back(Texture(renderer));
     }
-    mTileTextures.shrink_to_fit();
+    tile_textures.shrink_to_fit();
 }
 
 void MapProxy::_loadTextures() {
     std::string filepath;
     for (int i = 0; i < TILE_TEXTURES; i++) {
         filepath = "../Assets/Tiles/" + std::to_string(i) + ".png";
-        mTileTextures[i].loadFromFile(filepath);
+        tile_textures[i].loadFromFile(filepath);
     }
 }
 
 void MapProxy::_createTiles() {
-    mTiles.reserve(MAP_TOTAL_TILES);
+    tiles.reserve(MAP_TOTAL_TILES);
 
     std::ifstream map("../Assets/Maps/test.map");
     if (map.fail()) {
@@ -52,7 +52,7 @@ void MapProxy::_createTiles() {
                 SDL_GetError());
         }
 
-        mTiles.push_back(Tile(x, y, &mTileTextures[tile_type], gRenderer));
+        tiles.push_back(Tile(x, y, &tile_textures[tile_type], g_renderer));
 
         x += TILE_WIDTH;
 
@@ -62,7 +62,7 @@ void MapProxy::_createTiles() {
         }
     }
 
-    mTiles.shrink_to_fit();
+    tiles.shrink_to_fit();
 }
 
 //-----------------------------------------------------------------------------
@@ -70,7 +70,7 @@ void MapProxy::_createTiles() {
 //-----------------------------------------------------------------------------
 // API Pública
 
-MapProxy::MapProxy(SDL_Renderer* renderer) : gRenderer(renderer) {
+MapProxy::MapProxy(SDL_Renderer* renderer) : g_renderer(renderer) {
     _createTextures(renderer);
     _loadTextures();
     _createTiles();
@@ -78,7 +78,7 @@ MapProxy::MapProxy(SDL_Renderer* renderer) : gRenderer(renderer) {
 
 void MapProxy::render(const SDL_Rect& camera) const {
     for (int i = 0; i < MAP_TOTAL_TILES; i++) {
-        mTiles[i].render(camera);
+        tiles[i].render(camera);
     }
 }
 

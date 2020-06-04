@@ -16,12 +16,12 @@
 /* Wrapper para textura SDL. */
 class Texture {
    private:
-    SDL_Texture* mTexture;
-    SDL_Renderer* mRenderer;
+    SDL_Texture* texture;
+    SDL_Renderer* g_renderer;
 
     // Dimensiones
-    int mWidth;
-    int mHeight;
+    int width;
+    int height;
 
    public:
     /* Constructor */

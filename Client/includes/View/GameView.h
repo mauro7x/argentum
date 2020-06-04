@@ -16,8 +16,8 @@
 /* Wrapper para una vista generada con SDL. */
 class GameView {
    private:
-    SDL_Window* mWindow;
-    SDL_Renderer* mRenderer;
+    SDL_Window* window;
+    SDL_Renderer* renderer;
     bool sdl_running;
     bool img_running;
 

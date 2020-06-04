@@ -16,9 +16,9 @@ void GameView::_init() {
 
     // Window
 
-    mWindow = SDL_CreateWindow(WINDOW_TITLE, WINDOW_POS_X, WINDOW_POS_Y,
-                               WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
-    if (mWindow == NULL) {
+    window = SDL_CreateWindow(WINDOW_TITLE, WINDOW_POS_X, WINDOW_POS_Y,
+                              WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
+    if (window == NULL) {
         throw SDLException(
             "Error in function SDL_CreateWindow()\nSDL_Error: %s",
             SDL_GetError());
@@ -30,14 +30,14 @@ void GameView::_init() {
         VSYNC_ENABLED ? (SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC)
                       : (SDL_RENDERER_ACCELERATED);
 
-    mRenderer = SDL_CreateRenderer(mWindow, -1, renderer_flags);
-    if (mRenderer == NULL) {
+    renderer = SDL_CreateRenderer(window, -1, renderer_flags);
+    if (renderer == NULL) {
         throw SDLException(
             "Error in function SDL_CreateRenderer()\nSDL_Error: %s",
             SDL_GetError());
     }
 
-    if (SDL_SetRenderDrawColor(mRenderer, 0xFF, 0xFF, 0xFF, 0xFF)) {
+    if (SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF)) {
         throw SDLException(
             "Error in function SDL_SetRenderDrawColor()\nSDL_Error: %s",
             SDL_GetError());
@@ -56,13 +56,13 @@ void GameView::_loadMedia() {}
 void GameView::_handleEvent(const SDL_Event& e) {}
 
 void GameView::_clear() const {
-    if (SDL_SetRenderDrawColor(mRenderer, 0xFF, 0xFF, 0xFF, 0xFF)) {
+    if (SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF)) {
         throw SDLException(
             "Error in function SDL_SetRenderDrawColor()\nSDL_Error: %s",
             SDL_GetError());
     }
 
-    if (SDL_RenderClear(mRenderer)) {
+    if (SDL_RenderClear(renderer)) {
         throw SDLException("Error in function SDL_RenderClear()\nSDL_Error: %s",
                            SDL_GetError());
     }
@@ -71,18 +71,18 @@ void GameView::_clear() const {
 void GameView::_act() const {}
 
 void GameView::_present() const {
-    SDL_RenderPresent(mRenderer);
+    SDL_RenderPresent(renderer);
 }
 
 void GameView::_free() {
-    if (mRenderer) {
-        SDL_DestroyRenderer(mRenderer);
-        mRenderer = NULL;
+    if (renderer) {
+        SDL_DestroyRenderer(renderer);
+        renderer = NULL;
     }
 
-    if (mWindow) {
-        SDL_DestroyWindow(mWindow);
-        mWindow = NULL;
+    if (window) {
+        SDL_DestroyWindow(window);
+        window = NULL;
     }
 
     if (img_running) {
@@ -102,7 +102,7 @@ void GameView::_free() {
 // API Pública
 
 GameView::GameView()
-    : mWindow(NULL), mRenderer(NULL), sdl_running(false), img_running(false) {}
+    : window(NULL), renderer(NULL), sdl_running(false), img_running(false) {}
 
 void GameView::operator()() {
     _init();
@@ -114,10 +114,10 @@ void GameView::operator()() {
 
     SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 
-    Texture hud(mRenderer);
+    Texture hud(renderer);
     hud.loadFromFile("../Assets/hud.png");
 
-    MapProxy map(mRenderer);
+    MapProxy map(renderer);
 
     //-------------------------------------------------------------------------
 
