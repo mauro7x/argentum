@@ -110,6 +110,7 @@ GameView::GameView()
 
 void GameView::operator()() {
     _init();
+    // Handle first package received
     _createEntities();
     _loadMedia();
 
@@ -117,7 +118,7 @@ void GameView::operator()() {
     SDL_Event e;
 
     while (!quit) {
-        // Handle events on queue
+        // Handle user-events on queue
         while (SDL_PollEvent(&e) != 0) {
             if (e.type == SDL_QUIT) {
                 quit = true;
@@ -126,12 +127,23 @@ void GameView::operator()() {
             _handleEvent(e);
         }
 
+        /*
+        // Handle server-updates on queue
+        while (hayan updates que realizar) {
+            realizar update en mis entidades
+        }
+        */
+
         // Game loop
         _clear();
         _act();
         _render();
         _present();
+
+        // Delay para controlar el frame rate?
     }
+
+    // Avisarle al server que nos desconectamos?
 
     _free();
 }

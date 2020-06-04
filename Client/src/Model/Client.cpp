@@ -40,7 +40,7 @@ void Client::run() {
      * renderizar lo que el server nos mande. */
 
     /* 3. Game view */
-    GameView view;
+    GameView view();
     view();
 
     fprintf(stderr, "DEBUG: Termina la ejecución del cliente\n");

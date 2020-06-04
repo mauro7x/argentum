@@ -19,6 +19,34 @@ class GameView {
     bool sdl_running;
     bool img_running;
 
+    //-------------------------------------------------------------------------
+    // OBJETOS QUE COMPONEN LA VISTA
+
+    //-------------------------------------------------------------------------
+    // PROXY PARA EL MAPA.
+
+    // Contenedor de mapas inicializados
+
+    // Puntero a mapa actual (un mapa solo tiene los tiles estáticos, no se
+    // incluyen acá los NPC, jugadores, o objetos sueltos en el mapa, eso será
+    // extra)
+
+    // Map map;
+
+    //-------------------------------------------------------------------------
+
+    // Contenedor de entidades NPC
+
+    // Contenedor de entidades jugadores
+
+    // Contenedor de entidades objetos sueltos
+
+    // Un SDL_Rect que sea la camara?
+
+    // Una unidad que represente al jugador (Player?)
+
+    //-------------------------------------------------------------------------
+
     /* Inicializa recursos */
     void _init();
 
