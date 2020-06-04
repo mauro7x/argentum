@@ -123,6 +123,10 @@ void GameView::operator()() {
     MapProxy map(renderer);
     map.loadMedia();
 
+    /* Iniciamos al jugador principal */
+    Player player(renderer);
+    player.loadMedia();
+
     //-------------------------------------------------------------------------
 
     bool quit = false;
@@ -158,9 +162,6 @@ void GameView::operator()() {
                         break;
                 }
 
-                fprintf(stderr, "CAMERA STATUS: x = %i, y = %i\n", camera.x,
-                        camera.y);
-
                 // Arreglamos la camara por si la rompimo
                 if (camera.x < 0) {
                     camera.x = 0;
@@ -174,6 +175,9 @@ void GameView::operator()() {
                 if (camera.y > MAP_HEIGHT - camera.h) {
                     camera.y = MAP_HEIGHT - camera.h;
                 }
+
+                fprintf(stderr, "CAMERA STATUS: x = %i, y = %i\n", camera.x,
+                        camera.y);
             }
         }
 

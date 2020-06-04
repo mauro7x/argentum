@@ -10,6 +10,10 @@
 
 Player::Player(SDL_Renderer* renderer) : g_renderer(renderer) {}
 
+void Player::loadMedia() {
+    // cargar media
+}
+
 Player::~Player() {}
 
 //-----------------------------------------------------------------------------

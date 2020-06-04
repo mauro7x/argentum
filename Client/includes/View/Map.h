@@ -22,8 +22,8 @@
 //-----------------------------------------------------------------------------
 // Harcodeo el mapa. Esto se deberá procesar de algún archivo.
 
-#define MAP_WIDTH 1200
-#define MAP_HEIGHT 1200
+#define MAP_WIDTH 1536
+#define MAP_HEIGHT 1536
 #define MAP_X_TILES (MAP_WIDTH) / (TILE_WIDTH)
 #define MAP_Y_TILES (MAP_HEIGHT) / (TILE_HEIGHT)
 #define MAP_TOTAL_TILES (MAP_X_TILES) * (MAP_Y_TILES)
