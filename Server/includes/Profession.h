@@ -1,6 +1,11 @@
 #ifndef PROFESSION_H
 #define PROFESSION_H
 
+/**************************************
+ * Dudas:
+ * - Nombre como atributo?
+ *************************************/ 
+
 /*
  * Clase:
  *     Mago, clerigo, paladin, guerrero
@@ -17,7 +22,9 @@ class Profession {
         const unsigned int manna;
 
     public:
-        Profession();
+        Profession(const unsigned int life,
+                   const unsigned int meditation,
+                   const unsigned int manna);
         ~Profession();
 
         Profession(const Profession&) = delete;

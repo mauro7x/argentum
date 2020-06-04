@@ -1,6 +1,11 @@
 #ifndef RACE_H
 #define RACE_H
 
+/**************************************
+ * Dudas:
+ * - Nombre como atributo?
+ *************************************/ 
+
 /*
  * Raza:
  *      Humanos, elfos, enanos, gnomos.
