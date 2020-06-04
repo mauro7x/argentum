@@ -6,6 +6,8 @@
 #include <SDL2/SDL_image.h>
 
 #include "../../../Common/includes/Exceptions/SDLException.h"
+#include "Map.h"
+#include "Texture.h"
 #include "config.h"
 //-----------------------------------------------------------------------------
 
@@ -50,11 +52,8 @@ class GameView {
     /* Inicializa recursos */
     void _init();
 
-    /* Crea entidades a utilizar */
-    void _createEntities();
-
     /* Carga archivos media necesarios */
-    void _loadMedia() const;
+    void _loadMedia();
 
     /* Maneja un evento */
     void _handleEvent(const SDL_Event& e);
@@ -64,9 +63,6 @@ class GameView {
 
     /* Acciones previas al renderizado */
     void _act() const;
-
-    /* Renderiza la pantalla */
-    void _render() const;
 
     /* Actualiza la pantalla */
     void _present() const;

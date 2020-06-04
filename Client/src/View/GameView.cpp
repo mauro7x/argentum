@@ -51,9 +51,7 @@ void GameView::_init() {
     }
 }
 
-void GameView::_createEntities() {}
-
-void GameView::_loadMedia() const {}
+void GameView::_loadMedia() {}
 
 void GameView::_handleEvent(const SDL_Event& e) {}
 
@@ -71,8 +69,6 @@ void GameView::_clear() const {
 }
 
 void GameView::_act() const {}
-
-void GameView::_render() const {}
 
 void GameView::_present() const {
     SDL_RenderPresent(mRenderer);
@@ -110,9 +106,20 @@ GameView::GameView()
 
 void GameView::operator()() {
     _init();
-    // Handle first package received
-    _createEntities();
+    // Manejar el primer paquete recibido, crear unidades dinamicas necesarias
     _loadMedia();
+
+    //-------------------------------------------------------------------------
+    // Instancio objetos estáticos
+
+    SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
+
+    Texture bg(mRenderer);
+    bg.loadFromFile("../Assets/game-view.png");
+
+    MapProxy map(mRenderer);
+
+    //-------------------------------------------------------------------------
 
     bool quit = false;
     SDL_Event e;
@@ -136,8 +143,20 @@ void GameView::operator()() {
 
         // Game loop
         _clear();
+
+        //---------------------------------------------------------------------
+        // Acciones previas al renderizado
+
         _act();
-        _render();
+        //---------------------------------------------------------------------
+
+        //---------------------------------------------------------------------
+        // Renderizamos
+
+        bg.render(0, 0);
+        map.render(camera);
+        //---------------------------------------------------------------------
+
         _present();
 
         // Delay para controlar el frame rate?
