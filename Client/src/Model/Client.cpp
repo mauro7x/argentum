@@ -29,8 +29,15 @@ void Client::run() {
      */
 
     /* 1. ServerConnectionView */
+    /* Una vez pasada esta view, contaremos con una conexión establecida. En
+     * este momento, lanzamos los distintos hilos de comunicación con el
+     * servidor: Sender, Receiver. Estos se pueden encapsular en una clase
+     * Server. Por ahora, será un server proxy que no tendrá sender y receiver,
+     * pero luego se cambiará manteniendo el código escrito en el gameview. */
 
     /* 2. LogInView */
+    /* Pasada esta etapa, el juego comienza, y lo que debemos hacer es
+     * renderizar lo que el server nos mande. */
 
     /* 3. Game view */
     GameView view;
