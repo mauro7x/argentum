@@ -114,8 +114,8 @@ void GameView::operator()() {
 
     SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 
-    Texture bg(mRenderer);
-    bg.loadFromFile("../Assets/game-view.png");
+    Texture hud(mRenderer);
+    hud.loadFromFile("../Assets/hud.png");
 
     MapProxy map(mRenderer);
 
@@ -132,6 +132,45 @@ void GameView::operator()() {
             }
 
             _handleEvent(e);
+
+            // Camara move
+            if (e.type == SDL_KEYDOWN) {
+                // Adjust the velocity
+                switch (e.key.keysym.sym) {
+                    case SDLK_UP:
+                        camera.y -= 5;
+                        break;
+
+                    case SDLK_DOWN:
+                        camera.y += 5;
+                        break;
+
+                    case SDLK_LEFT:
+                        camera.x -= 5;
+                        break;
+
+                    case SDLK_RIGHT:
+                        camera.x += 5;
+                        break;
+                }
+
+                fprintf(stderr, "CAMERA STATUS: x = %i, y = %i\n", camera.x,
+                        camera.y);
+
+                // Arreglamos la camara por si la rompimo
+                if (camera.x < 0) {
+                    camera.x = 0;
+                }
+                if (camera.y < 0) {
+                    camera.y = 0;
+                }
+                if (camera.x > MAP_WIDTH - camera.w) {
+                    camera.x = MAP_WIDTH - camera.w;
+                }
+                if (camera.y > MAP_HEIGHT - camera.h) {
+                    camera.y = MAP_HEIGHT - camera.h;
+                }
+            }
         }
 
         /*
@@ -153,8 +192,8 @@ void GameView::operator()() {
         //---------------------------------------------------------------------
         // Renderizamos
 
-        bg.render(0, 0);
         map.render(camera);
+        hud.render(0, 0);
         //---------------------------------------------------------------------
 
         _present();

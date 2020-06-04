@@ -98,7 +98,7 @@ void Texture::render(int x, int y, SDL_Rect* clip, SDL_Rect* scale,
     // Set rendering space and render to screen
     SDL_Rect renderQuad = {x, y, mWidth, mHeight};
 
-    // Scaling
+    // Scaling /* usar scaling y clip al mismo tiempo se buggea, ojo */
     if (scale) {
         renderQuad.w = scale->w;
         renderQuad.h = scale->h;

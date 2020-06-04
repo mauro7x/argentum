@@ -74,7 +74,10 @@ Tile& Tile::operator=(Tile&& other) {
 void Tile::render(const SDL_Rect& camera) const {
     if (_checkCollision(camera)) {
         SDL_Rect scale = {0, 0, TILE_WIDTH, TILE_HEIGHT};
+        gTexture->render(mBox.x - camera.x + SCREEN_X_OFFSET,
+                         mBox.y - camera.y + SCREEN_Y_OFFSET, NULL, &scale);
 
+        /* Implementación vieja para sacar el exceso. Ahora lo escondemos.
         int x = mBox.x - camera.x + SCREEN_X_OFFSET;
         int y = mBox.y - camera.y + SCREEN_Y_OFFSET;
         int max_x = x + mBox.w;
@@ -86,9 +89,6 @@ void Tile::render(const SDL_Rect& camera) const {
         } else {
             gTexture->render(x, y, NULL, &scale);
         }
-        /*
-        gTexture->render(mBox.x - camera.x + SCREEN_X_OFFSET,
-                             mBox.y - camera.y + SCREEN_Y_OFFSET, NULL, &scale);
         */
     }
 }

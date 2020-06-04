@@ -9,7 +9,7 @@
 //-----------------------------------------------------------------------------
 // Configuración de la ventana
 
-#define WINDOW_TITLE "Ventana creada con SDL"
+#define WINDOW_TITLE "Argentum Online"
 
 #define WINDOW_WIDTH 960
 #define WINDOW_HEIGHT 600
