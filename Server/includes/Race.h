@@ -10,13 +10,13 @@
  * de las ecuaciones de mana y vida.
  */
 struct Race {
-        unsigned int life;
-        unsigned int recovery;
-        unsigned int manna;
+        const unsigned int life;
+        const unsigned int recovery;
+        const unsigned int manna;
 
-        Race(unsigned int life,
-             unsigned int recovery,
-             unsigned int manna);
+        Race(const unsigned int life,
+             const unsigned int recovery,
+             const unsigned int manna);
         ~Race();
 
         Race(const Race&) = delete;
