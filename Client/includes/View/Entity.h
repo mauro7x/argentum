@@ -3,13 +3,16 @@
 
 //-----------------------------------------------------------------------------
 #include <SDL2/SDL.h>
+
+#include "Map.h"
+#include "Renderer.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 
 class Entity {
    protected:
-    SDL_Renderer* g_renderer;
+    const Renderer* g_renderer;
 
     // Posicion en la grilla
     int x_tile;
@@ -17,7 +20,7 @@ class Entity {
 
    public:
     /* Constructor */
-    Entity(SDL_Renderer* renderer, int x_tile = 0, int y_tile = 0);
+    Entity(const Renderer* renderer, int x_tile = 0, int y_tile = 0);
 
     /* Deshabilitamos el constructor por copia. */
     Entity(const Entity&) = delete;
@@ -39,6 +42,9 @@ class Entity {
 
     /* Carga los archivos necesarios */
     virtual void loadMedia();
+
+    /* Manejar un evento de I/O del usuario */
+    virtual void handleEvent(const SDL_Event& e);
 
     /* Renderizarse si se encuentra dentro de la cámara */
     virtual void render() const = 0;

@@ -73,14 +73,14 @@ class Renderer {
 
     /* Renderiza una textura */
     void render(SDL_Texture* texture, SDL_Rect* render_quad,
-                SDL_Rect* clip = NULL, double angle = 0.0,
+                const SDL_Rect* clip = NULL, double angle = 0.0,
                 SDL_Point* center = NULL,
                 SDL_RendererFlip flip = SDL_FLIP_NONE) const;
 
     /* Renderiza una textura si la misma está dentro de la camara, en cuyo caso
      * le agrega el offset de la misma */
     void renderIfVisible(SDL_Texture* texture, SDL_Rect* render_quad,
-                         SDL_Rect* clip = NULL, double angle = 0.0,
+                         const SDL_Rect* clip = NULL, double angle = 0.0,
                          SDL_Point* center = NULL,
                          SDL_RendererFlip flip = SDL_FLIP_NONE) const;
 

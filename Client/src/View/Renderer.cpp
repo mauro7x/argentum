@@ -100,7 +100,7 @@ SDL_Texture* Renderer::createTextureFromSurface(SDL_Surface* surface) const {
 }
 
 void Renderer::render(SDL_Texture* texture, SDL_Rect* render_quad,
-                      SDL_Rect* clip, double angle, SDL_Point* center,
+                      const SDL_Rect* clip, double angle, SDL_Point* center,
                       SDL_RendererFlip flip) const {
     // Set clip rendering dimensions
     if (clip) {
@@ -118,8 +118,8 @@ void Renderer::render(SDL_Texture* texture, SDL_Rect* render_quad,
 }
 
 void Renderer::renderIfVisible(SDL_Texture* texture, SDL_Rect* render_quad,
-                               SDL_Rect* clip, double angle, SDL_Point* center,
-                               SDL_RendererFlip flip) const {
+                               const SDL_Rect* clip, double angle,
+                               SDL_Point* center, SDL_RendererFlip flip) const {
     if (_checkIfVisible(*render_quad)) {
         render_quad->x += SCREEN_X_OFFSET - camera.x;
         render_quad->y += SCREEN_Y_OFFSET - camera.y;

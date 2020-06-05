@@ -68,11 +68,13 @@ void GameView::operator()() {
     map.loadMedia();
 
     /* Iniciamos al jugador principal */
-
+    Player player(&renderer, 5, 5);
+    player.loadMedia();
     //-------------------------------------------------------------------------
 
     //-------------------------------------------------------------------------
-    // Manejar el primer paquete recibido, crear unidades dinamicas necesarias
+    // Manejar el primer paquete recibido, crear unidades dinamicas
+    // necesarias
     //-------------------------------------------------------------------------
 
     bool quit = false;
@@ -86,6 +88,9 @@ void GameView::operator()() {
             }
 
             _handleEvent(e);
+
+            // Pasamos el evento a nuestras entidades
+            player.handleEvent(e);
 
             // Camara move
             /*
@@ -148,12 +153,13 @@ void GameView::operator()() {
         // Renderizamos
 
         map.render();
+        player.render();
         hud.render();
         //---------------------------------------------------------------------
 
         renderer.presentScreen();
 
-        // Delay para controlar el frame rate?
+        // Delay para controlar el frame rate? por ahora usamos vsync
     }
 
     // Avisarle al server que nos desconectamos?

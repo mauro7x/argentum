@@ -11,6 +11,7 @@
 #define MAPS_PATH "../Assets/Maps/"
 #define TILES_PATH "../Assets/Tiles/"
 #define HUD_PATH "../Assets/HUD/"
+#define SPRITES_PATH "../Assets/Sprites/"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
