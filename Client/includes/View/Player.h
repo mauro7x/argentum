@@ -10,6 +10,12 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+// Estados del jugador
+
+enum PlayerState { STANDING, MOVING, PLAYER_STATES };
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
 // Hardcodeamos la información sobre los sprites, después será un json
 
 #define PLAYER_SPRITE_BG_R 0
@@ -27,6 +33,9 @@
 #define PLAYER_LEFT_SPRITES 5
 #define PLAYER_RIGHT_ROW 3
 #define PLAYER_RIGHT_SPRITES 5
+
+#define PLAYER_FRAMES_BEFORE_CHANGE 4 /* regula velocidad de animacion */
+#define PLAYER_MOVEMENT_SPEED 200     /* en pixeles/s */
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -34,6 +43,28 @@
 class Player : Entity {
    private:
     Texture sprite_sheet;
+    PlayerState state;
+
+    /* Para controlar los distintos frames en cada animacion */
+    SDL_Rect frame_clip;
+    int current_frame;
+    int max_frames_current_animation;
+    int row_current_animation;
+
+    /* Mueve el jugador un tile para arriba */
+    void _moveUp();
+
+    /* Mueve el jugador un tile para abajo */
+    void _moveDown();
+
+    /* Mueve el jugador un tile para la izquierda */
+    void _moveLeft();
+
+    /* Mueve el jugador un tile para la derecha */
+    void _moveRight();
+
+    /* Verifica si el movimiento terminó */
+    bool _isMovementCompleted();
 
    public:
     /* Constructor */
@@ -48,8 +79,11 @@ class Player : Entity {
     /* Maneja un evento del usuario */
     void handleEvent(const SDL_Event& e) override;
 
-    /* Se mueve */
-    void move();
+    /* Se overridea este metodo ya que la corrección debe ser brusca */
+    void updatePosition(int corrected_x_tile, int corrected_y_tile) override;
+
+    /* Se mueve si es necesario */
+    void move() override;
 
     /* Renderizarse si está dentro de la cámara */
     void render() const override;

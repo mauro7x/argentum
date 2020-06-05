@@ -14,15 +14,20 @@ class Entity {
    protected:
     const Renderer* g_renderer;
 
-    // Posicion en la grilla
-    int x_tile;
-    int y_tile;
-
-    // Box de la entidad
-    SDL_Rect box;
+    int x_tile, y_tile; /* posición en la grilla en Tiles */
+    SDL_Rect box;       /* posición y dimensión en pixeles */
+    int x_vel, y_vel;   /* velocidad de movimiento actual */
+    int next_x, next_y; /* valores a los que debemos llegar si nos movemos */
+    Uint32 last_moved;  /* para trackear el tiempo entre movimientos */
 
     /* Centra la box de la entidad en el tile */
     void _centerBoxOnTile();
+
+    /* Calcula valor de X al que hay que llegar para completar el movimiento */
+    int _xValueToReach() const;
+
+    /* Calcula valor de Y al que hay que llegar para completar el movimiento */
+    int _yValueToReach() const;
 
    public:
     /* Constructor */
@@ -43,8 +48,11 @@ class Entity {
     //-------------------------------------------------------------------------
     // Lo que debe poder hacer una entidad:
 
-    /* Corregir su posición según información del servidor */
-    void correctPosition(int corrected_x_tile, int corrected_y_tile);
+    /* Actualizar su posición según información del servidor */
+    virtual void updatePosition(int corrected_x_tile, int corrected_y_tile);
+
+    /* Moverse si debe hacerlo */
+    virtual void move();
 
     /* Carga los archivos necesarios */
     virtual void loadMedia();
