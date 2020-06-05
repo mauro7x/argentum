@@ -4,7 +4,7 @@
 #include "CharacterClass.h"
 #include "Race.h"
 #include "Inventory.h"
-#include "State.h"
+#include "States.h"
 #include "Equipment.h"
 
 /*
