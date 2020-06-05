@@ -24,9 +24,6 @@ class GameView {
     bool sdl_running;
     bool img_running;
 
-    /* Camara que se renderiza y que sigue al jugador */
-    SDL_Rect camera;
-
     //-------------------------------------------------------------------------
     // OBJETOS QUE COMPONEN LA VISTA
 

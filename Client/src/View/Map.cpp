@@ -64,46 +64,6 @@ void MapProxy::_loadTiles() {
     tiles.shrink_to_fit();
 }
 
-bool MapProxy::_checkCollision(const SDL_Rect& a, const SDL_Rect& b) const {
-    // The sides of the rectangles
-    int leftA, leftB;
-    int rightA, rightB;
-    int topA, topB;
-    int bottomA, bottomB;
-
-    // Calculate the sides of rect A
-    leftA = a.x;
-    rightA = a.x + a.w;
-    topA = a.y;
-    bottomA = a.y + a.h;
-
-    // Calculate the sides of rect B
-    leftB = b.x;
-    rightB = b.x + b.w;
-    topB = b.y;
-    bottomB = b.y + b.h;
-
-    // If any of the sides from A are outside of B
-    if (bottomA <= topB) {
-        return false;
-    }
-
-    if (topA >= bottomB) {
-        return false;
-    }
-
-    if (rightA <= leftB) {
-        return false;
-    }
-
-    if (leftA >= rightB) {
-        return false;
-    }
-
-    // If none of the sides from A are outside B
-    return true;
-}
-
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -119,16 +79,12 @@ void MapProxy::loadMedia() {
     _loadTiles();
 }
 
-void MapProxy::render(const SDL_Rect& camera) const {
+void MapProxy::render() const {
     for (int i = 0; i < MAP_TOTAL_TILES; i++) {
         SDL_Rect render_quad = tiles[i].dim;
+        SDL_Texture* texture = (tiles[i].texture)->getTexture();
 
-        if (_checkCollision(render_quad, camera)) {
-            render_quad.x += SCREEN_X_OFFSET - camera.x;
-            render_quad.y += SCREEN_Y_OFFSET - camera.y;
-            SDL_Texture* texture = (tiles[i].texture)->getTexture();
-            g_renderer->render(texture, &render_quad);
-        }
+        g_renderer->renderIfVisible(texture, &render_quad);
     }
 }
 

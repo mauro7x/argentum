@@ -50,10 +50,7 @@ void GameView::_free() {
 // API Pública
 
 GameView::GameView()
-    : renderer(window),
-      sdl_running(false),
-      img_running(false),
-      camera({0, 0, SCREEN_WIDTH, SCREEN_HEIGHT}) {}
+    : renderer(window), sdl_running(false), img_running(false) {}
 
 void GameView::operator()() {
     /* Iniciamos subsistemas necesarios para SDL */
@@ -91,6 +88,7 @@ void GameView::operator()() {
             _handleEvent(e);
 
             // Camara move
+            /*
             if (e.type == SDL_KEYDOWN) {
                 // Adjust the velocity
                 switch (e.key.keysym.sym) {
@@ -128,6 +126,7 @@ void GameView::operator()() {
                 fprintf(stderr, "CAMERA STATUS: x = %i, y = %i\n", camera.x,
                         camera.y);
             }
+            */
         }
 
         /*
@@ -148,7 +147,7 @@ void GameView::operator()() {
         //---------------------------------------------------------------------
         // Renderizamos
 
-        map.render(camera);
+        map.render();
         hud.render();
         //---------------------------------------------------------------------
 

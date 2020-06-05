@@ -47,9 +47,6 @@ class MapProxy {
     /* Crea los tiles con sus tipos (parsea el mapa) */
     void _loadTiles();
 
-    /* Chequea colision con la camara (este metodo se va al mapa) */
-    bool _checkCollision(const SDL_Rect& a, const SDL_Rect& b) const;
-
    public:
     /* Constructor */
     MapProxy(const Renderer* renderer);
@@ -72,7 +69,7 @@ class MapProxy {
     void loadMedia();
 
     /* Renderiza el mapa dentro de la cámara */
-    void render(const SDL_Rect& camera) const;
+    void render() const;
 
     //-------------------------------------------------------------------------
 
