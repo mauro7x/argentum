@@ -1,5 +1,5 @@
-#ifndef PROFESSION_H
-#define PROFESSION_H
+#ifndef __CHARACTER_CLASS_H__
+#define __CHARACTER_CLASS_H__
 
 /**************************************
  * Dudas:
@@ -15,26 +15,26 @@
  * meditar y/o hacer magia, y esto ultimo se ve reflejado
  * en si puede hacer hechizos o no.
  */
-class Profession {
+class CharacterClass {
     private:
         const unsigned int life;
         const unsigned int meditation;
         const unsigned int manna;
 
     public:
-        Profession(const unsigned int life,
+        CharacterClass(const unsigned int life,
                    const unsigned int meditation,
                    const unsigned int manna);
-        ~Profession();
+        ~CharacterClass();
 
-        Profession(const Profession&) = delete;
-        Profession& operator=(const Profession&) = delete;
-        Profession(Profession&&) = delete;
-        Profession& operator=(Profession&&) = delete;
+        CharacterClass(const CharacterClass&) = delete;
+        CharacterClass& operator=(const CharacterClass&) = delete;
+        CharacterClass(CharacterClass&&) = delete;
+        CharacterClass& operator=(CharacterClass&&) = delete;
 
         // Establecer que reciben y que devuelven.
         void canEquip();
-        void canMeditate(); 
+        void canMeditate();
 };
 
 #endif

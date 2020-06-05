@@ -1,5 +1,5 @@
-#ifndef RACE_H
-#define RACE_H
+#ifndef __RACE_H__
+#define __RACE_H__
 
 /**************************************
  * Dudas:
@@ -18,17 +18,6 @@ struct Race {
         const unsigned int life;
         const unsigned int recovery;
         const unsigned int manna;
-
-        Race(const unsigned int life,
-             const unsigned int recovery,
-             const unsigned int manna);
-        ~Race();
-
-        Race(const Race&) = delete;
-        Race& operator=(const Race&) = delete;
-        Race(Race&&) = delete;
-        Race& operator=(Race&&) = delete;
-
         // A priori no tienen comportamiento.
 };
 
