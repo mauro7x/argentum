@@ -1,6 +1,8 @@
 #ifndef __INVENTORY_H__
 #define __INVENTORY_H__
 
+#define N_INVENTORY_ITEMS 10
+
 #include <vector>
 #include "Item.h"
 
@@ -26,8 +28,17 @@ class Inventory {
         Inventory(Inventory&&) = delete;
         Inventory& operator=(Inventory&&) = delete;
 
-        Item getItem();
-        void addItem();
+        /*
+         * Obtiene el item en la posicion especificada.
+         * En caso de no haber, retorna nullptr.
+         */
+        Item* gatherItem(const unsigned int position);
+
+        /*
+         * Agrega un item al inventario y retorna la
+         * posicion en la que se agrego.
+         */
+        const unsigned int addItem();
 };
 
 #endif

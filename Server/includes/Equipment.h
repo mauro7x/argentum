@@ -4,6 +4,8 @@
 #include <vector>
 #include "Item.h"
 
+#define N_EQUIPMENT_ITEMS 4
+
 /*
  * Contiene los items con los que el jugador
  * esta equipado.
@@ -42,7 +44,7 @@ class Equipment {
          * 
          * En caso de no tener nada que pueda causar daño, devuelve 0.
          */
-        const unsigned int getMinDamagePoints();
+        const unsigned int getMinDamagePoints() const;
 
         /*
          * Devuelve el maximo de puntos de daño que pueden causar
@@ -50,7 +52,7 @@ class Equipment {
          * 
          * En caso de no tener nada que pueda causar daño, devuelve 0.
          */
-        const unsigned int getMaxDamagePoints();
+        const unsigned int getMaxDamagePoints() const;
 
         /*
          * Devuelve los puntos de defensa que pueden absorben
@@ -59,7 +61,7 @@ class Equipment {
          * 
          * En caso de no tener nada con lo que pueda defenderse, devuelve 0.
          */
-        const unsigned int getDefensePoints();
+        const unsigned int getDefensePoints() const;
 };
 
 #endif
