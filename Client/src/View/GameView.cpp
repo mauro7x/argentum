@@ -4,82 +4,34 @@
 // Métodos privados
 
 void GameView::_init() {
+    /* Iniciamos el sistema de SDL */
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         throw SDLException("Error in function SDL_Init()\nSDL_Error: %s",
                            SDL_GetError());
     }
 
-    // Set texture filtering to linear
+    /* Hint para el renderizado de texturas */
     if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1")) {
         fprintf(stderr, "Warning: Linear texture filtering not enabled!\n");
     }
 
-    // Window
-
-    window = SDL_CreateWindow(WINDOW_TITLE, WINDOW_POS_X, WINDOW_POS_Y,
-                              WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
-    if (window == NULL) {
-        throw SDLException(
-            "Error in function SDL_CreateWindow()\nSDL_Error: %s",
-            SDL_GetError());
-    }
-
-    // Renderer
-
-    Uint32 renderer_flags =
-        VSYNC_ENABLED ? (SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC)
-                      : (SDL_RENDERER_ACCELERATED);
-
-    renderer = SDL_CreateRenderer(window, -1, renderer_flags);
-    if (renderer == NULL) {
-        throw SDLException(
-            "Error in function SDL_CreateRenderer()\nSDL_Error: %s",
-            SDL_GetError());
-    }
-
-    if (SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF)) {
-        throw SDLException(
-            "Error in function SDL_SetRenderDrawColor()\nSDL_Error: %s",
-            SDL_GetError());
-    }
-
-    // PNG Loading
+    /* Iniciamos el sistema de IMG */
     int imgFlags = IMG_INIT_PNG;
     if (!(IMG_Init(imgFlags) & imgFlags)) {
         throw SDLException("Error in function IMG_Init()\nSDL_Error: %s",
                            SDL_GetError());
     }
+
+    /* Iniciamos la ventana y su renderer */
+    window.init();
+    renderer.init();
 }
 
 void GameView::_handleEvent(const SDL_Event& e) {}
 
-void GameView::_clear() const {
-    if (SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF)) {
-        throw SDLException(
-            "Error in function SDL_SetRenderDrawColor()\nSDL_Error: %s",
-            SDL_GetError());
-    }
-
-    if (SDL_RenderClear(renderer)) {
-        throw SDLException("Error in function SDL_RenderClear()\nSDL_Error: %s",
-                           SDL_GetError());
-    }
-}
-
-void GameView::_present() const {
-    SDL_RenderPresent(renderer);
-}
-
 void GameView::_free() {
-    if (renderer) {
-        SDL_DestroyRenderer(renderer);
-        renderer = NULL;
-    }
-
-    if (window) {
-        SDL_DestroyWindow(window);
-        window = NULL;
-    }
+    renderer.free();
+    window.free();
 
     if (img_running) {
         IMG_Quit();
@@ -98,8 +50,7 @@ void GameView::_free() {
 // API Pública
 
 GameView::GameView()
-    : window(NULL),
-      renderer(NULL),
+    : renderer(window),
       sdl_running(false),
       img_running(false),
       camera({0, 0, SCREEN_WIDTH, SCREEN_HEIGHT}) {}
@@ -109,24 +60,22 @@ void GameView::operator()() {
     _init();
 
     //-------------------------------------------------------------------------
-    // Manejar el primer paquete recibido, crear unidades dinamicas necesarias
-    //-------------------------------------------------------------------------
-
-    //-------------------------------------------------------------------------
     // Instancio objetos estáticos
 
     /* Iniciamos la interfaz HUD (versión Proxy) */
-    HUDProxy hud(renderer);
+    HUDProxy hud(&renderer);
     hud.loadMedia();
 
     /* Iniciamos el mapa (versión Proxy) */
-    MapProxy map(renderer);
+    MapProxy map(&renderer);
     map.loadMedia();
 
     /* Iniciamos al jugador principal */
-    Player player(renderer);
-    player.loadMedia();
 
+    //-------------------------------------------------------------------------
+
+    //-------------------------------------------------------------------------
+    // Manejar el primer paquete recibido, crear unidades dinamicas necesarias
     //-------------------------------------------------------------------------
 
     bool quit = false;
@@ -189,7 +138,7 @@ void GameView::operator()() {
         */
 
         // Game loop
-        _clear();
+        renderer.clearScreen();
 
         //---------------------------------------------------------------------
         // Acciones previas al renderizado
@@ -203,7 +152,7 @@ void GameView::operator()() {
         hud.render();
         //---------------------------------------------------------------------
 
-        _present();
+        renderer.presentScreen();
 
         // Delay para controlar el frame rate?
     }

@@ -9,6 +9,7 @@
 #include <string>
 
 #include "../../../Common/includes/Exceptions/SDLException.h"
+#include "Renderer.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -16,7 +17,6 @@
 class Texture {
    private:
     SDL_Texture* texture;
-    SDL_Renderer* g_renderer;
 
     // Dimensiones
     int width;
@@ -24,7 +24,7 @@ class Texture {
 
    public:
     /* Constructor */
-    Texture(SDL_Renderer* renderer);
+    Texture();
 
     /* Deshabilitamos el constructor por copia. */
     Texture(const Texture&) = delete;
@@ -44,7 +44,8 @@ class Texture {
      * En caso de proporcionarse valores de RGB, se transparenta la imagen con
      * dicho color.
      */
-    void loadFromFile(std::string filepath, int r = -1, int g = -1, int b = -1);
+    void loadFromFile(const Renderer* renderer, std::string filepath,
+                      int r = -1, int g = -1, int b = -1);
 
     /* Settea la modulación de los colores */
     void setColor(Uint8 red, Uint8 green, Uint8 blue) const;
@@ -55,10 +56,14 @@ class Texture {
     /* Settea la transparencia */
     void setAlpha(Uint8 alpha) const;
 
-    /* Renderiza la textura. Se le puede pasar el área a renderizar. */
-    void render(int x, int y, SDL_Rect* clip = NULL, SDL_Rect* scale = NULL,
-                double angle = 0.0, SDL_Point* center = NULL,
-                SDL_RendererFlip flip = SDL_FLIP_NONE) const;
+    /* Devuelve la textura */
+    SDL_Texture* getTexture() const;
+
+    /* Devuelve la anchura */
+    int getWidth() const;
+
+    /* Devuelve la altura */
+    int getHeight() const;
 
     /* Libera recursos */
     void free();

@@ -9,6 +9,7 @@
 #include <vector>
 
 #include "../../../Common/includes/Exceptions/SDLException.h"
+#include "Renderer.h"
 #include "Texture.h"
 #include "Tile.h"
 //-----------------------------------------------------------------------------
@@ -33,12 +34,12 @@
 
 class MapProxy {
    private:
-    SDL_Renderer* g_renderer;
+    const Renderer* g_renderer;
     std::vector<Texture> tile_textures;
     std::vector<Tile> tiles;
 
     /* Crea las texturas */
-    void _createTextures(SDL_Renderer* renderer);
+    void _createTextures();
 
     /* Carga las texturas de los tiles */
     void _loadTextures();
@@ -46,9 +47,12 @@ class MapProxy {
     /* Crea los tiles con sus tipos (parsea el mapa) */
     void _loadTiles();
 
+    /* Chequea colision con la camara (este metodo se va al mapa) */
+    bool _checkCollision(const SDL_Rect& a, const SDL_Rect& b) const;
+
    public:
     /* Constructor */
-    MapProxy(SDL_Renderer* renderer);
+    MapProxy(const Renderer* renderer);
 
     /* Deshabilitamos el constructor por copia. */
     MapProxy(const MapProxy&) = delete;

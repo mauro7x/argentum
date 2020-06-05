@@ -7,6 +7,7 @@
 #include <string>
 
 #include "../paths.h"
+#include "Renderer.h"
 #include "Texture.h"
 //-----------------------------------------------------------------------------
 
@@ -14,14 +15,14 @@
 
 class HUDProxy {
    private:
-    SDL_Renderer* g_renderer;
+    const Renderer* g_renderer;
 
     /* Proxy stuff */
     Texture texture;
 
    public:
     /* Constructor */
-    HUDProxy(SDL_Renderer* renderer);
+    HUDProxy(const Renderer* renderer);
 
     /* Deshabilitamos el constructor por copia. */
     HUDProxy(const HUDProxy&) = delete;

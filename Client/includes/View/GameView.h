@@ -6,21 +6,21 @@
 #include <SDL2/SDL_image.h>
 
 #include "../../../Common/includes/Exceptions/SDLException.h"
-#include "config.h"
+#include "Renderer.h"
+#include "Window.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 #include "HUD.h"
 #include "Map.h"
-#include "Player.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 
 class GameView {
    private:
-    SDL_Window* window;
-    SDL_Renderer* renderer;
+    Window window;
+    Renderer renderer;
     bool sdl_running;
     bool img_running;
 
@@ -53,12 +53,6 @@ class GameView {
 
     /* Maneja un evento */
     void _handleEvent(const SDL_Event& e);
-
-    /* Limpia la pantalla */
-    void _clear() const;
-
-    /* Actualiza la pantalla */
-    void _present() const;
 
     /* Libera la memoria */
     void _free();

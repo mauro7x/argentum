@@ -3,10 +3,10 @@
 //-----------------------------------------------------------------------------
 // Métodos privados
 
-void MapProxy::_createTextures(SDL_Renderer* g_renderer) {
+void MapProxy::_createTextures() {
     tile_textures.reserve(TILE_TEXTURES);
     for (int i = 0; i < TILE_TEXTURES; i++) {
-        tile_textures.push_back(Texture(g_renderer));
+        tile_textures.push_back(Texture());
     }
     tile_textures.shrink_to_fit();
 }
@@ -15,7 +15,7 @@ void MapProxy::_loadTextures() {
     std::string filepath;
     for (int i = 0; i < TILE_TEXTURES; i++) {
         filepath = "../Assets/Tiles/" + std::to_string(i) + ".png";
-        tile_textures[i].loadFromFile(filepath);
+        tile_textures[i].loadFromFile(g_renderer, filepath);
     }
 }
 
@@ -50,7 +50,8 @@ void MapProxy::_loadTiles() {
                 SDL_GetError());
         }
 
-        tiles.push_back(Tile(x, y, &tile_textures[tile_type], g_renderer));
+        tiles.push_back(
+            Tile({{x, y, TILE_WIDTH, TILE_HEIGHT}, &tile_textures[tile_type]}));
 
         x += TILE_WIDTH;
 
@@ -63,13 +64,53 @@ void MapProxy::_loadTiles() {
     tiles.shrink_to_fit();
 }
 
+bool MapProxy::_checkCollision(const SDL_Rect& a, const SDL_Rect& b) const {
+    // The sides of the rectangles
+    int leftA, leftB;
+    int rightA, rightB;
+    int topA, topB;
+    int bottomA, bottomB;
+
+    // Calculate the sides of rect A
+    leftA = a.x;
+    rightA = a.x + a.w;
+    topA = a.y;
+    bottomA = a.y + a.h;
+
+    // Calculate the sides of rect B
+    leftB = b.x;
+    rightB = b.x + b.w;
+    topB = b.y;
+    bottomB = b.y + b.h;
+
+    // If any of the sides from A are outside of B
+    if (bottomA <= topB) {
+        return false;
+    }
+
+    if (topA >= bottomB) {
+        return false;
+    }
+
+    if (rightA <= leftB) {
+        return false;
+    }
+
+    if (leftA >= rightB) {
+        return false;
+    }
+
+    // If none of the sides from A are outside B
+    return true;
+}
+
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 // API Pública
 
-MapProxy::MapProxy(SDL_Renderer* renderer) : g_renderer(renderer) {
-    _createTextures(g_renderer);
+MapProxy::MapProxy(const Renderer* renderer) : g_renderer(renderer) {
+    _createTextures();
     tiles.reserve(MAP_TOTAL_TILES);
 }
 
@@ -80,7 +121,14 @@ void MapProxy::loadMedia() {
 
 void MapProxy::render(const SDL_Rect& camera) const {
     for (int i = 0; i < MAP_TOTAL_TILES; i++) {
-        tiles[i].render(camera);
+        SDL_Rect render_quad = tiles[i].dim;
+
+        if (_checkCollision(render_quad, camera)) {
+            render_quad.x += SCREEN_X_OFFSET - camera.x;
+            render_quad.y += SCREEN_Y_OFFSET - camera.y;
+            SDL_Texture* texture = (tiles[i].texture)->getTexture();
+            g_renderer->render(texture, &render_quad);
+        }
     }
 }
 
