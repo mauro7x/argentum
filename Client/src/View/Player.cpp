@@ -124,7 +124,7 @@ Player::Player(const Renderer* renderer, int x_tile, int y_tile)
 
 void Player::loadMedia() {
     sprite_sheet.loadFromFile(
-        g_renderer, SPRITES_PATH + std::string("4006.png"), PLAYER_SPRITE_BG_R,
+        g_renderer, SPRITES_PATH + std::string("4032.png"), PLAYER_SPRITE_BG_R,
         PLAYER_SPRITE_BG_G, PLAYER_SPRITE_BG_B);
 }
 

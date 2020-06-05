@@ -12,7 +12,7 @@
 //-----------------------------------------------------------------------------
 // Estados del jugador
 
-enum PlayerState { STANDING, MOVING, PLAYER_STATES };
+enum PlayerState { STANDING, MOVING };
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -22,17 +22,17 @@ enum PlayerState { STANDING, MOVING, PLAYER_STATES };
 #define PLAYER_SPRITE_BG_G 0
 #define PLAYER_SPRITE_BG_B 0
 
-#define PLAYER_SPRITE_W 57
-#define PLAYER_SPRITE_H 98
+#define PLAYER_SPRITE_W 52
+#define PLAYER_SPRITE_H 81
 
-#define PLAYER_UP_ROW 1
-#define PLAYER_UP_SPRITES 6
 #define PLAYER_DOWN_ROW 0
 #define PLAYER_DOWN_SPRITES 6
+#define PLAYER_UP_ROW 1
+#define PLAYER_UP_SPRITES 6
 #define PLAYER_LEFT_ROW 2
-#define PLAYER_LEFT_SPRITES 5
+#define PLAYER_LEFT_SPRITES 6
 #define PLAYER_RIGHT_ROW 3
-#define PLAYER_RIGHT_SPRITES 5
+#define PLAYER_RIGHT_SPRITES 6
 
 #define PLAYER_FRAMES_BEFORE_CHANGE 4 /* regula velocidad de animacion */
 #define PLAYER_MOVEMENT_SPEED 200     /* en pixeles/s */
