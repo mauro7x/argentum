@@ -5,6 +5,7 @@
 #include <SDL2/SDL.h>
 
 #include "../../../Common/includes/Exceptions/SDLException.h"
+#include "Camera.h"
 #include "Window.h"
 //-----------------------------------------------------------------------------
 
@@ -19,31 +20,19 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-// Configuración de la camara
-
-#define SCREEN_WIDTH 660
-#define SCREEN_HEIGHT 450
-#define SCREEN_X_OFFSET 0
-#define SCREEN_Y_OFFSET 150
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
 
 class Renderer {
    private:
-    Window& window;
+    const Window& window;
+    const Camera& camera;
     SDL_Renderer* renderer;
-    SDL_Rect camera;
 
     /* Settea el color de renderer */
     void _setDrawColor() const;
 
-    /* Verifica si el objeto es visible por la camara*/
-    bool _checkIfVisible(const SDL_Rect a) const;
-
    public:
     /* Constructor */
-    Renderer(Window& window);
+    Renderer(const Window& window, const Camera& camera);
 
     /* Deshabilitamos el constructor por copia. */
     Renderer(const Renderer&) = delete;

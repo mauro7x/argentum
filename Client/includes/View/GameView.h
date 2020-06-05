@@ -6,6 +6,7 @@
 #include <SDL2/SDL_image.h>
 
 #include "../../../Common/includes/Exceptions/SDLException.h"
+#include "Camera.h"
 #include "Renderer.h"
 #include "Window.h"
 //-----------------------------------------------------------------------------
@@ -21,6 +22,7 @@
 class GameView {
    private:
     Window window;
+    Camera camera;
     Renderer renderer;
     bool sdl_running;
     bool img_running;

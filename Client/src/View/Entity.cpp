@@ -3,13 +3,18 @@
 //-----------------------------------------------------------------------------
 // Métodos privados
 
+void Entity::_centerBoxOnTile() {
+    box.x = (x_tile * TILE_WIDTH) + ((TILE_WIDTH - box.w) / 2);
+    box.y = (y_tile * TILE_HEIGHT) + (TILE_HEIGHT * (0.8)) - box.h;
+}
+
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 // API Pública
 
-Entity::Entity(const Renderer* renderer, int x_tile, int y_tile)
-    : g_renderer(renderer), x_tile(x_tile), y_tile(y_tile) {}
+Entity::Entity(const Renderer* renderer)
+    : g_renderer(renderer), x_tile(0), y_tile(0), box({0, 0, 0, 0}) {}
 
 void Entity::correctPosition(int corrected_x_tile, int corrected_y_tile) {
     x_tile = corrected_x_tile;

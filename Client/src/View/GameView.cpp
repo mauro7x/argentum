@@ -50,7 +50,7 @@ void GameView::_free() {
 // API Pública
 
 GameView::GameView()
-    : renderer(window), sdl_running(false), img_running(false) {}
+    : renderer(window, camera), sdl_running(false), img_running(false) {}
 
 void GameView::operator()() {
     /* Iniciamos subsistemas necesarios para SDL */
@@ -147,6 +147,8 @@ void GameView::operator()() {
         //---------------------------------------------------------------------
         // Acciones previas al renderizado
 
+        player.move();
+        camera.center(player.getBox(), MAP_WIDTH, MAP_HEIGHT);
         //---------------------------------------------------------------------
 
         //---------------------------------------------------------------------

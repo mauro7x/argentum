@@ -6,7 +6,6 @@
 
 #include "../paths.h"
 #include "Entity.h"
-#include "Renderer.h"
 #include "Texture.h"
 //-----------------------------------------------------------------------------
 
@@ -49,8 +48,14 @@ class Player : Entity {
     /* Maneja un evento del usuario */
     void handleEvent(const SDL_Event& e) override;
 
+    /* Se mueve */
+    void move();
+
     /* Renderizarse si está dentro de la cámara */
     void render() const override;
+
+    /* Devuelve el box para centrar la camara */
+    const SDL_Rect* getBox() const;
 
     //-------------------------------------------------------------------------
 

@@ -18,9 +18,15 @@ class Entity {
     int x_tile;
     int y_tile;
 
+    // Box de la entidad
+    SDL_Rect box;
+
+    /* Centra la box de la entidad en el tile */
+    void _centerBoxOnTile();
+
    public:
     /* Constructor */
-    Entity(const Renderer* renderer, int x_tile = 0, int y_tile = 0);
+    Entity(const Renderer* renderer);
 
     /* Deshabilitamos el constructor por copia. */
     Entity(const Entity&) = delete;
