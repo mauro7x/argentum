@@ -43,6 +43,9 @@ void Client::run() {
     GameView view;
     view();
 
+    /* ENCAPSULAR TODO ESTO EN SCOPES, TENER EN CUENTA QUE LAS VISTAS DEBERIAN
+     * DESTRUIRSE PARA LIBERAR LOS RECURSOS QUE OCUPAN (usamos RAII) */
+
     fprintf(stderr, "DEBUG: Termina la ejecución del cliente\n");
 }
 
