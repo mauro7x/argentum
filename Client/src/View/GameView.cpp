@@ -4,6 +4,9 @@
 // Métodos privados
 
 void GameView::_init() {
+    /* Cargamos el archivo de configuración */
+    _loadConfig();
+
     /* Iniciamos el sistema de SDL */
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         throw SDLException("Error in function SDL_Init()\nSDL_Error: %s",
@@ -32,7 +35,29 @@ void GameView::_init() {
     camera.init(config["camera"]);
 }
 
-void GameView::_handleEvent(const SDL_Event& e) {}
+void GameView::_loadConfig() {
+    std::ifstream file(VIEW_CONFIG_FILEPATH);
+    if (file.fail()) {
+        throw Exception("Error opening file: %s", VIEW_CONFIG_FILEPATH);
+    }
+
+    file >> config;
+    if (file.fail()) {
+        throw Exception("Error reading configuration file.");
+    }
+
+    file.close();
+}
+
+void GameView::_loadMedia() {
+    hud.loadMedia();
+    map.loadMedia();
+    player.loadMedia();
+}
+
+void GameView::_handleEvent(const SDL_Event& e) {
+    player.handleEvent(e);
+}
 
 void GameView::_free() {
     renderer.free();
@@ -55,39 +80,16 @@ void GameView::_free() {
 // API Pública
 
 GameView::GameView()
-    : renderer(window, camera), sdl_running(false), img_running(false) {
-    std::ifstream file(VIEW_CONFIG_FILEPATH);
-    if (file.fail()) {
-        throw Exception("Error opening file: %s", VIEW_CONFIG_FILEPATH);
-    }
-
-    file >> config;
-    if (file.fail()) {
-        throw Exception("Error reading configuration file.");
-    }
-
-    file.close();
-}
+    : renderer(window, camera),
+      sdl_running(false),
+      img_running(false),
+      hud(&renderer),
+      map(&renderer),
+      player(&renderer) {}
 
 void GameView::operator()() {
-    /* Iniciamos subsistemas necesarios para SDL */
     _init();
-
-    //-------------------------------------------------------------------------
-    // Instancio objetos estáticos
-
-    /* Iniciamos la interfaz HUD (versión Proxy) */
-    HUDProxy hud(&renderer);
-    hud.loadMedia();
-
-    /* Iniciamos el mapa (versión Proxy) */
-    MapProxy map(&renderer);
-    map.loadMedia();
-
-    /* Iniciamos al jugador principal */
-    Player player(&renderer, 5, 5);
-    player.loadMedia();
-    //-------------------------------------------------------------------------
+    _loadMedia();
 
     //-------------------------------------------------------------------------
     // Manejar el primer paquete recibido, crear unidades dinamicas
@@ -105,50 +107,6 @@ void GameView::operator()() {
             }
 
             _handleEvent(e);
-
-            // Pasamos el evento a nuestras entidades
-            player.handleEvent(e);
-
-            // Camara move
-            /*
-            if (e.type == SDL_KEYDOWN) {
-                // Adjust the velocity
-                switch (e.key.keysym.sym) {
-                    case SDLK_UP:
-                        camera.y -= 5;
-                        break;
-
-                    case SDLK_DOWN:
-                        camera.y += 5;
-                        break;
-
-                    case SDLK_LEFT:
-                        camera.x -= 5;
-                        break;
-
-                    case SDLK_RIGHT:
-                        camera.x += 5;
-                        break;
-                }
-
-                // Arreglamos la camara por si la rompimo
-                if (camera.x < 0) {
-                    camera.x = 0;
-                }
-                if (camera.y < 0) {
-                    camera.y = 0;
-                }
-                if (camera.x > MAP_WIDTH - camera.w) {
-                    camera.x = MAP_WIDTH - camera.w;
-                }
-                if (camera.y > MAP_HEIGHT - camera.h) {
-                    camera.y = MAP_HEIGHT - camera.h;
-                }
-
-                fprintf(stderr, "CAMERA STATUS: x = %i, y = %i\n", camera.x,
-                        camera.y);
-            }
-            */
         }
 
         /*
