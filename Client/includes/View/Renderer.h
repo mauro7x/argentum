@@ -5,18 +5,10 @@
 #include <SDL2/SDL.h>
 
 #include "../../../Common/includes/Exceptions/SDLException.h"
+#include "../../../Common/includes/json.hpp"
 #include "Camera.h"
 #include "Window.h"
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
-// Configuración del renderer
-
-#define VSYNC_ENABLED true
-#define RENDER_DRAW_COLOR_R 0xFF
-#define RENDER_DRAW_COLOR_G 0xFF
-#define RENDER_DRAW_COLOR_B 0xFF
-#define RENDER_DRAW_COLOR_ALPHA 0xFF
+using json = nlohmann::json;
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -26,6 +18,8 @@ class Renderer {
     const Window& window;
     const Camera& camera;
     SDL_Renderer* renderer;
+
+    Uint8 draw_color_r, draw_color_g, draw_color_b, draw_color_a;
 
     /* Settea el color de renderer */
     void _setDrawColor() const;
@@ -49,7 +43,7 @@ class Renderer {
     //-------------------------------------------------------------------------
 
     /* Inicializa recursos */
-    void init();
+    void init(const json config);
 
     /* Limpia la pantalla */
     void clearScreen() const;

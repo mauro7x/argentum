@@ -1,0 +1,25 @@
+{
+    "version": 1.0,
+    "window": {
+        "title": "Argentum Online",
+        "w": 960,
+        "h": 600
+    },
+    "camera": {
+        "w": 660,
+        "h": 450,
+        "offset": {
+            "x": 0,
+            "y": 150
+        }
+    },
+    "renderer": {
+        "vsync": true,
+        "draw_color": {
+            "r": 256,
+            "g": 256,
+            "b": 256,
+            "a": 256
+        }
+    }
+}

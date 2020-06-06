@@ -10,9 +10,13 @@
 
 Window::Window() : window(NULL) {}
 
-void Window::init() {
-    window = SDL_CreateWindow(WINDOW_TITLE, WINDOW_POS_X, WINDOW_POS_Y,
-                              WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
+void Window::init(const json config) {
+    w = config["w"];
+    h = config["h"];
+    std::string title = config["title"];
+
+    window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_UNDEFINED,
+                              SDL_WINDOWPOS_UNDEFINED, w, h, SDL_WINDOW_SHOWN);
     if (window == NULL) {
         throw SDLException(
             "Error in function SDL_CreateWindow()\nSDL_Error: %s",

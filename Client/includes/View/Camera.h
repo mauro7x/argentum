@@ -3,23 +3,18 @@
 
 //-----------------------------------------------------------------------------
 #include <SDL2/SDL.h>
-//-----------------------------------------------------------------------------
 
-//-----------------------------------------------------------------------------
-// Configuración de la camara
-
-#define SCREEN_WIDTH 660
-#define SCREEN_HEIGHT 450
-#define SCREEN_X_OFFSET 0
-#define SCREEN_Y_OFFSET 150
+#include "../../../Common/includes/json.hpp"
+using json = nlohmann::json;
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 
 class Camera {
    private:
-    int x;
-    int y;
+    int x, y;
+    int w, h;
+    int offset_x, offset_y;
 
    public:
     /* Constructor */
@@ -38,6 +33,9 @@ class Camera {
     Camera& operator=(Camera&& other) = delete;
 
     //-------------------------------------------------------------------------
+
+    /* Inicializa recursos */
+    void init(const json config);
 
     /* Devuelve si el objeto es visible por la camara o no */
     bool isVisible(const SDL_Rect* object) const;

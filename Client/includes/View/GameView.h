@@ -5,7 +5,10 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
-#include "../../../Common/includes/Exceptions/SDLException.h"
+#include <fstream>
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
 #include "Camera.h"
 #include "Renderer.h"
 #include "Window.h"
@@ -18,6 +21,14 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+#include "../../../Common/includes/Exceptions/Exception.h"
+#include "../../../Common/includes/Exceptions/SDLException.h"
+#include "../../../Common/includes/json.hpp"
+#include "../../../Common/includes/paths.h"
+using json = nlohmann::json;
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
 
 class GameView {
    private:
@@ -26,6 +37,7 @@ class GameView {
     Renderer renderer;
     bool sdl_running;
     bool img_running;
+    json config;
 
     //-------------------------------------------------------------------------
     // OBJETOS QUE COMPONEN LA VISTA

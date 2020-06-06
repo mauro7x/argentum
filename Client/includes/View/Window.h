@@ -4,16 +4,11 @@
 //-----------------------------------------------------------------------------
 #include <SDL2/SDL.h>
 
+#include <string>
+
 #include "../../../Common/includes/Exceptions/SDLException.h"
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
-#define WINDOW_TITLE "Argentum Online"
-
-#define WINDOW_WIDTH 960
-#define WINDOW_HEIGHT 600
-#define WINDOW_POS_X SDL_WINDOWPOS_UNDEFINED
-#define WINDOW_POS_Y SDL_WINDOWPOS_UNDEFINED
+#include "../../../Common/includes/json.hpp"
+using json = nlohmann::json;
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -21,6 +16,8 @@
 class Window {
    private:
     SDL_Window* window;
+    int w;
+    int h;
 
    public:
     /* Constructor */
@@ -41,7 +38,7 @@ class Window {
     //-------------------------------------------------------------------------
 
     /* Inicializa recursos */
-    void init();
+    void init(const json config);
 
     /* Devuelve window */
     SDL_Window* getWindow() const;

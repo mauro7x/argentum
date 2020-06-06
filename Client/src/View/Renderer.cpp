@@ -4,9 +4,8 @@
 // Métodos privados
 
 void Renderer::_setDrawColor() const {
-    if (SDL_SetRenderDrawColor(renderer, RENDER_DRAW_COLOR_R,
-                               RENDER_DRAW_COLOR_G, RENDER_DRAW_COLOR_B,
-                               RENDER_DRAW_COLOR_ALPHA)) {
+    if (SDL_SetRenderDrawColor(renderer, draw_color_r, draw_color_g,
+                               draw_color_b, draw_color_a)) {
         throw SDLException(
             "Error in function SDL_SetRenderDrawColor()\nSDL_Error: %s",
             SDL_GetError());
@@ -21,10 +20,16 @@ void Renderer::_setDrawColor() const {
 Renderer::Renderer(const Window& window, const Camera& camera)
     : window(window), camera(camera), renderer(NULL) {}
 
-void Renderer::init() {
+void Renderer::init(const json config) {
+    draw_color_r = config["draw_color"]["r"];
+    draw_color_g = config["draw_color"]["g"];
+    draw_color_b = config["draw_color"]["b"];
+    draw_color_a = config["draw_color"]["a"];
+    bool vsync = config["vsync"];
+
     Uint32 renderer_flags =
-        VSYNC_ENABLED ? (SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC)
-                      : (SDL_RENDERER_ACCELERATED);
+        vsync ? (SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC)
+              : (SDL_RENDERER_ACCELERATED);
 
     renderer = SDL_CreateRenderer(window.getWindow(), -1, renderer_flags);
     if (renderer == NULL) {
