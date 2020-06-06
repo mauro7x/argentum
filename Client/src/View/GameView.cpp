@@ -22,9 +22,14 @@ void GameView::_init() {
                            SDL_GetError());
     }
 
-    /* Iniciamos la ventana y su renderer */
+    /* Iniciamos la ventana */
     window.init(config["window"]);
+
+    /* Iniciamos el renderer */
     renderer.init(config["renderer"]);
+
+    /* Iniciamos la cámara */
+    camera.init(config["camera"]);
 }
 
 void GameView::_handleEvent(const SDL_Event& e) {}
