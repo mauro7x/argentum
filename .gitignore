@@ -18,7 +18,8 @@
 .vscode
 build
 Tiled
-Assets
+Assets/Index
+Assets/Sprites
 
 # Cpplint ---------------------------------------------------------------------
 cpplint.py
