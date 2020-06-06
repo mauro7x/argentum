@@ -1,9 +1,8 @@
-#ifndef __CLIENT_H__
-#define __CLIENT_H__
+#ifndef __MAP_H__
+#define __MAP_H__
 
 //-----------------------------------------------------------------------------
-#include <iostream>
-#include <string>
+// INCLUDES
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -12,48 +11,38 @@
 
 //-----------------------------------------------------------------------------
 
-class Client {
+class MapProxy {
    private:
-    // atributos del cliente
-
+    // atributos
     // metodos privados
 
    public:
-    /**
-     * Descripción: constructor.
-     *
-     * Parámetros: hostname y puerto al que conectarse.
-     */
-    Client(const std::string& hostname, const std::string& port);
+    /* Constructor */
+    MapProxy();
 
     /* Deshabilitamos el constructor por copia. */
-    Client(const Client&) = delete;
+    MapProxy(const MapProxy&) = delete;
 
     /* Deshabilitamos el operador= para copia.*/
-    Client& operator=(const Client&) = delete;
+    MapProxy& operator=(const MapProxy&) = delete;
 
     /* Deshabilitamos el constructor por movimiento. */
-    Client(Client&& other) = delete;
+    MapProxy(MapProxy&& other) = delete;
 
     /* Deshabilitamos el operador= para movimiento. */
-    Client& operator=(Client&& other) = delete;
+    MapProxy& operator=(MapProxy&& other) = delete;
 
-    /**
-     * Descripción: poner a correr al cliente.
-     *
-     * Parámetros: -
-     *
-     * Retorno: -
-     *
-     */
-    void run();
+    //-------------------------------------------------------------------------
 
-    /**
-     * Descripción: destructor.
-     */
-    ~Client();
+    /* Metodo */
+    void metodo() const;
+
+    //-------------------------------------------------------------------------
+
+    /* Destructor */
+    ~MapProxy();
 };
 
 //-----------------------------------------------------------------------------
 
-#endif  // __CLIENT_H__
+#endif  // __MAP_H__

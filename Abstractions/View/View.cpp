@@ -1,4 +1,4 @@
-#include "View.h"
+#include "../../includes/View/View.h"
 
 //-----------------------------------------------------------------------------
 // Métodos privados
@@ -51,18 +51,11 @@ void View::_init() {
     }
 }
 
-void View::_createEntities() {
-    // Crear entidades
-    mEntities.add(new Foo(mRenderer, WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2));
-}
+void View::_createEntities() {}
 
-void View::_loadMedia() const {
-    mEntities.loadMedia();
-}
+void View::_loadMedia() const {}
 
-void View::_handleEvent(const SDL_Event& e) {
-    mEntities.handleEvent(e);
-}
+void View::_handleEvent(const SDL_Event& e) {}
 
 void View::_clear() const {
     if (SDL_SetRenderDrawColor(mRenderer, 0xFF, 0xFF, 0xFF, 0xFF)) {
@@ -77,21 +70,15 @@ void View::_clear() const {
     }
 }
 
-void View::_act() const {
-    mEntities.act();
-}
+void View::_act() const {}
 
-void View::_render() const {
-    mEntities.render();
-}
+void View::_render() const {}
 
 void View::_present() const {
     SDL_RenderPresent(mRenderer);
 }
 
 void View::_free() {
-    mEntities.free();
-
     if (mRenderer) {
         SDL_DestroyRenderer(mRenderer);
         mRenderer = NULL;
@@ -101,6 +88,16 @@ void View::_free() {
         SDL_DestroyWindow(mWindow);
         mWindow = NULL;
     }
+
+    if (img_running) {
+        IMG_Quit();
+        img_running = false;
+    }
+
+    if (sdl_running) {
+        SDL_Quit();
+        sdl_running = false;
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -108,7 +105,8 @@ void View::_free() {
 //-----------------------------------------------------------------------------
 // API Pública
 
-View::View() : mWindow(NULL), mRenderer(NULL) {}
+View::View()
+    : mWindow(NULL), mRenderer(NULL), sdl_running(false), img_running(false) {}
 
 void View::operator()() {
     _init();
@@ -134,13 +132,12 @@ void View::operator()() {
         _render();
         _present();
     }
+
+    _free();
 }
 
 View::~View() {
     _free();
-
-    IMG_Quit();
-    SDL_Quit();
 }
 
 //-----------------------------------------------------------------------------

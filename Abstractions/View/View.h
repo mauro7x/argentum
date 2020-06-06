@@ -5,8 +5,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
-#include "Entities.h"
-#include "SDLException.h"
+#include "../../../Common/includes/Exceptions/SDLException.h"
 #include "config.h"
 //-----------------------------------------------------------------------------
 
@@ -17,7 +16,8 @@ class View {
    private:
     SDL_Window* mWindow;
     SDL_Renderer* mRenderer;
-    EntitiesContainer mEntities;
+    bool sdl_running;
+    bool img_running;
 
     /* Inicializa recursos */
     void _init();

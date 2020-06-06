@@ -1,21 +1,24 @@
-#ifndef __CLIENT_DEFS_H__
-#define __CLIENT_DEFS_H__
+#ifndef __TILE_H__
+#define __TILE_H__
+
+//-----------------------------------------------------------------------------
+#include <SDL2/SDL.h>
+
+#include "Texture.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-// Argumentos esperados en la invocación
-
-enum ExpectedArgs { NAME, HOSTNAME, PORT, EXPECTED_ARGC };
+#define TILE_WIDTH 64
+#define TILE_HEIGHT 64
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-// Códigos de retorno
 
-#define SUCCESS 0
-#define ERROR 1
-
-#define USAGE_ERROR 100
-//-----------------------------------------------------------------------------
+struct Tile {
+    SDL_Rect dim;
+    Texture* texture;
+};
 
 //-----------------------------------------------------------------------------
-#endif  // __CLIENT_DEFS_H__
+
+#endif  // __TILE_H__

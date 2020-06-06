@@ -1,4 +1,4 @@
-#include "../includes/Client.h"
+#include "../../includes/View/Sprites.h"
 
 //-----------------------------------------------------------------------------
 // Métodos privados
@@ -8,16 +8,8 @@
 //-----------------------------------------------------------------------------
 // API Pública
 
-Client::Client(const std::string& hostname, const std::string& port) {}
+Sprites::Sprites() {}
 
-void Client::run() {
-    std::cout << "Comienza la ejecución del cliente." << std::endl;
-
-    // Ejecución del cliente
-
-    std::cout << "Termina la ejecución del cliente." << std::endl;
-}
-
-Client::~Client() {}
+Sprites::~Sprites() {}
 
 //-----------------------------------------------------------------------------
