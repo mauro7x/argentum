@@ -1,5 +1,5 @@
-#ifndef __CHARACTER_CLASS_H__
-#define __CHARACTER_CLASS_H__
+#ifndef __KIND_H__
+#define __KIND_H__
 
 /**************************************
  * Dudas:
@@ -15,22 +15,22 @@
  * meditar y/o hacer magia, y esto ultimo se ve reflejado
  * en si puede hacer hechizos o no.
  */
-class CharacterClass {
+class Kind {
     private:
-        const unsigned int life;
+        const unsigned int health;
         const unsigned int meditation;
         const unsigned int manna;
 
     public:
-        CharacterClass(const unsigned int life,
-                   const unsigned int meditation,
-                   const unsigned int manna);
-        ~CharacterClass();
+        Kind(const unsigned int health,
+             const unsigned int meditation,
+             const unsigned int manna);
+        ~Kind();
 
-        CharacterClass(const CharacterClass&) = delete;
-        CharacterClass& operator=(const CharacterClass&) = delete;
-        CharacterClass(CharacterClass&&) = delete;
-        CharacterClass& operator=(CharacterClass&&) = delete;
+        Kind(const Kind&) = delete;
+        Kind& operator=(const Kind&) = delete;
+        Kind(Kind&&) = delete;
+        Kind& operator=(Kind&&) = delete;
 
         // Establecer que reciben y que devuelven.
         void canEquip();

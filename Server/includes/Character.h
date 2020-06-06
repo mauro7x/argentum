@@ -1,11 +1,13 @@
 #ifndef __CHARACTER_H__
 #define __CHARACTER_H__
 
-#include "CharacterClass.h"
+#include "Kind.h"
 #include "Race.h"
 #include "Inventory.h"
 #include "States.h"
 #include "Equipment.h"
+#include "Weapon.h"
+#include "Wand.h"
 
 /*
  * Representa al ente manejado por el jugador.
@@ -21,9 +23,9 @@
  */
 class Character {
     private:
-        unsigned int life, manna;
-        Race& race;
-        CharacterClass& character_class;
+        unsigned int health, manna;
+        Race race;
+        Kind kind;
         State* state;
         Inventory inventory;
         Equipment equipment;
@@ -38,6 +40,14 @@ class Character {
         Character& operator=(Character&&) = delete;
 
         // Metodos/Acciones.
+        void equip(unsigned int inventory_position);
+        void equip(Weapon* weapon);
+        void equip(Wand* wand);
+
+        void recoverManna(unsigned int points); // Pociones
+        void recoverHealth(unsigned int points);  // Pociones
+
+        const unsigned int getMannaPoints() const; // Baculos verifican si tiene suficientes puntos antes de ser usados.
 };
 
 #endif

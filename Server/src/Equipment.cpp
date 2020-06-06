@@ -8,14 +8,14 @@ Item* add(Item* item) {
     //IMPLEMENTAR
 }
 
-const unsigned int getMinDamagePoints() const {
+const unsigned int Equipment::getMinDamagePoints() const {
     //IMPLEMENTAR
 }
 
-const unsigned int getMaxDamagePoints() const {
+const unsigned int Equipment::getMaxDamagePoints() const {
     //IMPLEMENTAR
 }
 
-const unsigned int getDefensePoints() const {
+const unsigned int Equipment::getDefensePoints() const {
     //IMPLEMENTAR
 }

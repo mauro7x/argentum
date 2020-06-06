@@ -6,14 +6,13 @@
 
 class Weapon: public Item {
     private:
-        const std::string name;
         const bool distant_attack;
-        const unsigned int damage, buy_price, sell_price;
+        const unsigned int min_damage, max_damage;
 
     public:
-        Weapon(const std::string name, const bool distant_attack, 
-               const unsigned int damage, const unsigned int buy_price,
-               const unsigned int sell_price);
+        Weapon(const unsigned int id, const unsigned int buy_price, 
+               const unsigned int sell_price, const bool distant_attack, 
+               const unsigned int min_damage, const unsigned int max_damage);
         ~Weapon();
 
         Weapon(const Weapon&) = delete;
@@ -25,6 +24,10 @@ class Weapon: public Item {
         // a los metodos definidos del Character/Inventory/Equipment.
         // Mantener abstraccion Item.
 
+        virtual void use(Character& character) override;
+
+        const unsigned int getMinDamagePoints() const;
+        const unsigned int getMaxDamagePoints() const;
 };
 
 #endif
