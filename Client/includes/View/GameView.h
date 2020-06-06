@@ -40,6 +40,14 @@ class GameView {
     json config;
 
     //-------------------------------------------------------------------------
+    // Componentes de la vista
+    HUDProxy hud;
+    MapProxy map;
+    Player player;
+
+    //-------------------------------------------------------------------------
+
+    //-------------------------------------------------------------------------
     // OBJETOS QUE COMPONEN LA VISTA
 
     // Contenedor de mapas inicializados
@@ -62,6 +70,12 @@ class GameView {
 
     /* Inicializa recursos */
     void _init();
+
+    /* Carga el archivo de configuración */
+    void _loadConfig();
+
+    /* Carga media necesaria */
+    void _loadMedia();
 
     /* Maneja un evento */
     void _handleEvent(const SDL_Event& e);
