@@ -23,8 +23,8 @@ void GameView::_init() {
     }
 
     /* Iniciamos la ventana y su renderer */
-    window.init();
-    renderer.init();
+    window.init(config["window"]);
+    renderer.init(config["renderer"]);
 }
 
 void GameView::_handleEvent(const SDL_Event& e) {}
@@ -50,7 +50,19 @@ void GameView::_free() {
 // API Pública
 
 GameView::GameView()
-    : renderer(window, camera), sdl_running(false), img_running(false) {}
+    : renderer(window, camera), sdl_running(false), img_running(false) {
+    std::ifstream file(VIEW_CONFIG_FILEPATH);
+    if (file.fail()) {
+        throw Exception("Error opening file: %s", VIEW_CONFIG_FILEPATH);
+    }
+
+    file >> config;
+    if (file.fail()) {
+        throw Exception("Error reading configuration file.");
+    }
+
+    file.close();
+}
 
 void GameView::operator()() {
     /* Iniciamos subsistemas necesarios para SDL */
