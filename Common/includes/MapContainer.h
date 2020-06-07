@@ -5,10 +5,9 @@
 #include <fstream>
 #include <string>
 #include <unordered_map>
-//-----------------------------------------------------------------------------
 
-//-----------------------------------------------------------------------------
 #include "Exceptions/Exception.h"
+#include "Map.h"
 #include "paths.h"
 //-----------------------------------------------------------------------------
 
@@ -23,9 +22,6 @@ using json = nlohmann::json;
 #define __ID__
 typedef int Id;
 #endif  // __ID__
-
-// proxy
-typedef int Map;
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -57,6 +53,9 @@ class MapContainer {
 
     /* Carga los mapas parseando los json correspondiente */
     void loadMaps();
+
+    /* Obtiene el mapa correspondiente */
+    const Map& operator[](Id id) const;
 
     //-------------------------------------------------------------------------
 

@@ -1,7 +1,5 @@
 #include "../includes/MapContainer.h"
 
-#include <iostream>
-
 //-----------------------------------------------------------------------------
 // Métodos privados
 
@@ -33,17 +31,17 @@ json MapContainer::_loadJsonFile(std::string filepath) const {
 MapContainer::MapContainer() {}
 
 void MapContainer::loadMaps() {
-    json maps_info, map;
-    maps_info = _loadJsonFile(MAPS_FILEPATH);
+    json maps, map;
+    maps = _loadJsonFile(MAPS_FILEPATH);
 
-    int size = maps_info.size();
+    int size = maps.size();
     for (int i = 0; i < size; i++) {
-        // cargar mapas
-        map = _loadJsonFile(maps_info[i]["filepath"]);
-        std::cout << "Se cargo un mapa de " << map["width"] << "x"
-                  << map["height"] << std::endl;
+        map = _loadJsonFile(maps[i]["filepath"]);
+        content[maps[i]["id"]] = std::move(Map(map));
     }
 }
+
+const Map& MapContainer::operator[](Id id) const {}
 
 MapContainer::~MapContainer() {}
 
