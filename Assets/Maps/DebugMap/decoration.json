@@ -1,0 +1,24 @@
+{ "columns":0,
+ "grid":
+    {
+     "height":1,
+     "orientation":"orthogonal",
+     "width":1
+    },
+ "margin":0,
+ "name":"decoration",
+ "spacing":0,
+ "tilecount":1,
+ "tiledversion":"2020.05.29",
+ "tileheight":256,
+ "tiles":[
+        {
+         "id":0,
+         "image":"tiles\/6080.png",
+         "imageheight":256,
+         "imagewidth":256
+        }],
+ "tilewidth":256,
+ "type":"tileset",
+ "version":1.2
+}

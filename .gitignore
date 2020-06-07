@@ -19,6 +19,7 @@
 build
 Assets/Index
 Assets/Sprites
+Testing
 
 # Cpplint ---------------------------------------------------------------------
 cpplint.py
