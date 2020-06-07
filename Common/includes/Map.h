@@ -15,6 +15,11 @@ using json = nlohmann::json;
 
 //-----------------------------------------------------------------------------
 
+#ifndef __TILE_ID__
+#define __TILE_ID__
+typedef int TileId;
+#endif  // __ID__
+
 enum MapLayer {
     GROUND,
     DECORATION,
@@ -28,9 +33,9 @@ enum MapLayer {
 
 struct Tile {
     /* Graficos */
-    int ground_id;
-    int decoration_id;
-    int roof_id;
+    TileId ground_id;
+    TileId decoration_id;
+    TileId roof_id;
 
     /* Metadata */
     bool collision;
@@ -79,13 +84,13 @@ class Map {
     //-------------------------------------------------------------------------
 
     /* Getter para el ground_id */
-    int groundId(const int x, const int y) const;
+    TileId groundId(const int x, const int y) const;
 
     /* Getter para el decoration_id */
-    int decorationId(const int x, const int y) const;
+    TileId decorationId(const int x, const int y) const;
 
     /* Getter para el roof_id */
-    int roofId(const int x, const int y) const;
+    TileId roofId(const int x, const int y) const;
 
     /* Chequea si hay colisión en una celda */
     bool collision(const int x, const int y) const;
