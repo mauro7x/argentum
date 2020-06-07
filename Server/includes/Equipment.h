@@ -1,7 +1,7 @@
 #ifndef __EQUIPMENT_H__
 #define __EQUIPMENT_H__
 
-#include <vector>
+#include <array>
 #include "Wearable.h"
 
 /*
@@ -15,7 +15,7 @@
  */
 class Equipment {
     private:
-        std::vector<Wearable*> container; //Container de 4 posiciones
+        std::array<Wearable*, N_WEARABLE_ITEMS> container; //Container de 4 posiciones
     
     public:
         Equipment();

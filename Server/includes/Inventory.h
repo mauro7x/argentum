@@ -3,7 +3,7 @@
 
 #define N_INVENTORY_ITEMS 10
 
-#include <vector>
+#include <array>
 #include <exception>
 
 #include "Item.h"
@@ -21,7 +21,7 @@ class FullInventoryException: public std::exception {
  */
 class Inventory {
     private:
-        std::vector<Item*> container;
+        std::array<Item*, N_INVENTORY_ITEMS> container;
         unsigned int items_quantity;
 
         unsigned int gold_quantity;

@@ -1,6 +1,10 @@
 #include "Equipment.h"
 
-Equipment::Equipment(): container(N_WEARABLE_ITEMS, nullptr) {}
+Equipment::Equipment() {
+    for (int i = 0; i < container.size(); ++i) {
+        container[i] = nullptr;
+    }
+}
 
 Equipment::~Equipment() {}
 
