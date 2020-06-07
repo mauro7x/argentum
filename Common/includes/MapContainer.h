@@ -3,6 +3,7 @@
 
 //-----------------------------------------------------------------------------
 #include <fstream>
+#include <string>
 #include <unordered_map>
 //-----------------------------------------------------------------------------
 
@@ -31,10 +32,10 @@ typedef int Map;
 
 class MapContainer {
    private:
-    std::unordered_map<Id, Map> maps;
+    std::unordered_map<Id, Map> content;
 
-    /* Carga el archivo json que contiene la información sobre los mapas */
-    json _loadMapsFile() const;
+    /* Lee el archivo json del filepath especificado */
+    json _loadJsonFile(std::string filepath) const;
 
    public:
     /* Constructor */
