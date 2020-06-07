@@ -24,7 +24,7 @@
 #include "../../../Common/includes/Exceptions/Exception.h"
 #include "../../../Common/includes/Exceptions/SDLException.h"
 #include "../../../Common/includes/json.hpp"
-#include "../../../Common/includes/paths.h"
+#include "../paths.h"
 using json = nlohmann::json;
 //-----------------------------------------------------------------------------
 
