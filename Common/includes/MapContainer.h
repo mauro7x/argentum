@@ -33,6 +33,9 @@ class MapContainer {
    private:
     std::unordered_map<Id, Map> maps;
 
+    /* Carga el archivo json que contiene la información sobre los mapas */
+    json _loadMapsFile() const;
+
    public:
     /* Constructor */
     MapContainer();
