@@ -37,23 +37,15 @@ class Equipment {
         Wearable* add(Wearable* item);
 
         /*
-         * Devuelve el minimo de puntos de daño que pueden causar
+         * Devuelve los puntos de daño que causan
          * los elementos de ataque que el personaje lleva.
          * 
          * En caso de no tener nada que pueda causar daño, devuelve 0.
          */
-        const unsigned int getMinDamagePoints() const;
+        const unsigned int getDamagePoints() const;
 
         /*
-         * Devuelve el maximo de puntos de daño que pueden causar
-         * los elementos de ataque que el personaje tiene puestos.
-         * 
-         * En caso de no tener nada que pueda causar daño, devuelve 0.
-         */
-        const unsigned int getMaxDamagePoints() const;
-
-        /*
-         * Devuelve los puntos de defensa que pueden absorben
+         * Devuelve los puntos de defensa que pueden absorber
          * los elementos de defensa que el personaje tiene puestos.
          * [armadura, escudo y/o casco]
          * 
