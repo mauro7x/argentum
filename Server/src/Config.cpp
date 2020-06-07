@@ -30,6 +30,9 @@ void Config<RaceCfg>::_parseFile() {
     }
 
     file.close();
+    if (file.fail()) {
+        throw Exception("Error closing file: %s", RACE_CONFIG_FILEPATH);
+    }
 }
 
 template <>
@@ -59,6 +62,9 @@ void Config<KindCfg>::_parseFile() {
     }
 
     file.close();
+    if (file.fail()) {
+        throw Exception("Error closing file: %s", KIND_CONFIG_FILEPATH);
+    }
 }
 
 template <>
@@ -84,6 +90,9 @@ void Config<NPCCfg>::_parseFile() {
     }
 
     file.close();
+    if (file.fail()) {
+        throw Exception("Error closing file: %s", NPC_CONFIG_FILEPATH);
+    }
 }
 
 template <>
@@ -114,6 +123,9 @@ void Config<WeaponCfg>::_parseFile() {
     }
 
     file.close();
+    if (file.fail()) {
+        throw Exception("Error closing file: %s", ITEMS_CONFIG_FILEPATH);
+    }
 }
 
 template <>
@@ -143,6 +155,9 @@ void Config<HelmetCfg>::_parseFile() {
     }
 
     file.close();
+    if (file.fail()) {
+        throw Exception("Error closing file: %s", ITEMS_CONFIG_FILEPATH);
+    }
 }
 
 template <>
@@ -172,6 +187,9 @@ void Config<ArmourCfg>::_parseFile() {
     }
 
     file.close();
+    if (file.fail()) {
+        throw Exception("Error closing file: %s", ITEMS_CONFIG_FILEPATH);
+    }
 }
 
 template <>
@@ -201,6 +219,9 @@ void Config<ShieldCfg>::_parseFile() {
     }
 
     file.close();
+    if (file.fail()) {
+        throw Exception("Error closing file: %s", ITEMS_CONFIG_FILEPATH);
+    }
 }
 
 /* Para cualquier clase que no sea esperada, nos quejamos */
