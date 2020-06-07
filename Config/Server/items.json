@@ -1,0 +1,55 @@
+{
+    "weapons": [
+        {
+            "id": 300,
+            "name": "Espada",
+            "type": 0,
+            "min_dmg": 10,
+            "max_dmg": 20,
+            "price": 100
+        },
+        {
+            "id": 301,
+            "name": "Arco",
+            "type": 1,
+            "min_dmg": 10,
+            "max_dmg": 20,
+            "price": 100
+        },
+        {
+            "id": 302,
+            "name": "Báculo",
+            "type": 2,
+            "min_dmg": 10,
+            "max_dmg": 20,
+            "price": 100
+        }
+    ],
+    "helmets": [
+        {
+            "id": 400,
+            "name": "Capucha",
+            "min_def": 10,
+            "max_def": 20,
+            "price": 100
+        }
+    ],
+    "armours": [
+        {
+            "id": 500,
+            "name": "Armadura",
+            "min_def": 10,
+            "max_def": 20,
+            "price": 100
+        }
+    ],
+    "shields": [
+        {
+            "id": 600,
+            "name": "Escudo",
+            "min_def": 10,
+            "max_def": 20,
+            "price": 100
+        }
+    ]
+}

@@ -1,0 +1,18 @@
+[
+    {
+        "id": 200,
+        "name": "Goblin"
+    },
+    {
+        "id": 201,
+        "name": "Esqueleto"
+    },
+    {
+        "id": 202,
+        "name": "Zombie"
+    },
+    {
+        "id": 203,
+        "name": "Araña"
+    }
+]

@@ -1,0 +1,30 @@
+[
+    {
+        "id": 100,
+        "name": "Mago",
+        "health": 10,
+        "meditation": 10,
+        "mana": 10
+    },
+    {
+        "id": 101,
+        "name": "Clérigo",
+        "health": 10,
+        "meditation": 10,
+        "mana": 10
+    },
+    {
+        "id": 102,
+        "name": "Paladín",
+        "health": 10,
+        "meditation": 10,
+        "mana": 10
+    },
+    {
+        "id": 103,
+        "name": "Guerrero",
+        "health": 10,
+        "meditation": 0,
+        "mana": 10
+    }
+]
