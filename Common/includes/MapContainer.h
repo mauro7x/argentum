@@ -1,8 +1,14 @@
-#ifndef __MAP_PARSER_H__
-#define __MAP_PARSER_H__
+#ifndef __MAP_CONTAINER_H__
+#define __MAP_CONTAINER_H__
 
 //-----------------------------------------------------------------------------
+#include <fstream>
 #include <unordered_map>
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+#include "Exceptions/Exception.h"
+#include "paths.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -16,41 +22,44 @@ using json = nlohmann::json;
 #define __ID__
 typedef int Id;
 #endif  // __ID__
+
+// proxy
+typedef int Map;
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 
-class MapParser {
+class MapContainer {
    private:
-    // metodos privados
+    std::unordered_map<Id, Map> maps;
 
    public:
     /* Constructor */
-    MapParser();
+    MapContainer();
 
     /* Deshabilitamos el constructor por copia. */
-    MapParser(const MapParser&) = delete;
+    MapContainer(const MapContainer&) = delete;
 
     /* Deshabilitamos el operador= para copia.*/
-    MapParser& operator=(const MapParser&) = delete;
+    MapContainer& operator=(const MapContainer&) = delete;
 
     /* Deshabilitamos el constructor por movimiento. */
-    MapParser(MapParser&& other) = delete;
+    MapContainer(MapContainer&& other) = delete;
 
     /* Deshabilitamos el operador= para movimiento. */
-    MapParser& operator=(MapParser&& other) = delete;
+    MapContainer& operator=(MapContainer&& other) = delete;
 
     //-------------------------------------------------------------------------
 
-    /* Metodo */
-    void loadMaps() const;
+    /* Carga los mapas parseando los json correspondiente */
+    void loadMaps();
 
     //-------------------------------------------------------------------------
 
     /* Destructor */
-    ~MapParser();
+    ~MapContainer();
 };
 
 //-----------------------------------------------------------------------------
 
-#endif  // __MAP_PARSER_H__
+#endif  // __MAP_CONTAINER_H__

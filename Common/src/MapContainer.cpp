@@ -1,4 +1,4 @@
-#include "../includes/MapParser.h"
+#include "../includes/MapContainer.h"
 
 //-----------------------------------------------------------------------------
 // Métodos privados
@@ -8,8 +8,14 @@
 //-----------------------------------------------------------------------------
 // API Pública
 
-MapParser::MapParser() {}
+MapContainer::MapContainer() {}
 
-MapParser::~MapParser() {}
+void MapContainer::loadMaps() {
+    std::ifstream file(MAPS_FILEPATH);
+    json j;
+    file >> j;
+}
+
+MapContainer::~MapContainer() {}
 
 //-----------------------------------------------------------------------------
