@@ -4,7 +4,14 @@
 #define N_INVENTORY_ITEMS 10
 
 #include <vector>
+#include <exception>
+
 #include "Item.h"
+
+class FullInventoryException: public std::exception {
+    public:
+        virtual const char *what() const noexcept;
+};
 
 /*
  * El Inventario es un contenedor que guarda Items,
@@ -32,13 +39,16 @@ class Inventory {
          * Obtiene el item en la posicion especificada.
          * En caso de no haber, retorna nullptr.
          */
-        Item* gatherItem(const unsigned int position);
+        Item* gather(const unsigned int position);
 
         /*
-         * Agrega un item al inventario y retorna la
-         * posicion en la que se agrego.
+         * Agrega un item al inventario.
+         * Retorna la posicion en la que se agrego.
+         * 
+         * Lanza FullInventoryException si el inventario esta
+         * lleno.
          */
-        const unsigned int addItem();
+        const unsigned int add(Item* item);
 };
 
 #endif

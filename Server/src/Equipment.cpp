@@ -4,9 +4,10 @@ Equipment::Equipment(): container(N_WEARABLE_ITEMS, nullptr) {}
 
 Equipment::~Equipment() {}
 
-Wearable* add(Wearable* item) {
-    // IMPLEMENTAR
-    return nullptr;
+Wearable* Equipment::add(Wearable* item) {
+    Wearable* prev_item = this->container[item->getType()];
+    this->container[item->getType()] = item;
+    return prev_item;
 }
 
 const unsigned int Equipment::getDamagePoints() const {

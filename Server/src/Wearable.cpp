@@ -10,6 +10,10 @@ Wearable::Wearable(const unsigned int id, const unsigned int price,
                         min_usage_points(min_usage_points),
                         max_usage_points(max_usage_points) {}
 
+const WearableType Wearable::getType() const {
+    return this->type;
+}
+
 const unsigned int Wearable::getUsagePoints() {
     // Obtengo numero random del HW
     std::random_device rd;
@@ -24,3 +28,4 @@ const unsigned int Wearable::getUsagePoints() {
 void Wearable::equip(Character& character) {
     character.equip(this);
 }
+

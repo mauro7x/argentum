@@ -2,10 +2,10 @@
 
 Kind::Kind(const unsigned int health,
            const unsigned int meditation,
-           const unsigned int manna): 
+           const unsigned int mana): 
                 health(health),
                 meditation(meditation),
-                manna(manna) {}
+                mana(mana) {}
             
 Kind::~Kind() {}
 

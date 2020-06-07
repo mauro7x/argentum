@@ -22,7 +22,7 @@
  */
 class Character {
     private:
-        unsigned int health, manna;
+        unsigned int health, mana;
         Race race;
         Kind kind;
         State* state;

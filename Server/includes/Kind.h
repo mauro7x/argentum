@@ -19,12 +19,12 @@ class Kind {
     private:
         const unsigned int health;
         const unsigned int meditation;
-        const unsigned int manna;
+        const unsigned int mana;
 
     public:
         Kind(const unsigned int health,
              const unsigned int meditation,
-             const unsigned int manna);
+             const unsigned int mana);
         ~Kind();
 
         Kind(const Kind&) = delete;
