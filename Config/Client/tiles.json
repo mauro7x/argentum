@@ -1,0 +1,28 @@
+{
+    "ground": {
+        "color_key": {
+            "is_needed": false,
+            "color": {
+                "r": 0,
+                "g": 0,
+                "b": 0
+            }
+        },
+        "first_gid": 1,
+        "last_gid": 2,
+        "tiles_path": "../Assets/Maps/Tiles/Ground/"
+    },
+    "decoration": {
+        "color_key": {
+            "is_needed": true,
+            "color": {
+                "r": 0,
+                "g": 0,
+                "b": 0
+            }
+        },
+        "first_gid": 3,
+        "last_gid": 3,
+        "tiles_path": "../Assets/Maps/Tiles/Decoration/"
+    }
+}
