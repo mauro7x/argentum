@@ -22,6 +22,7 @@ enum MapLayer {
     ZONES,
     SAFEZONES,
     COLLISION,
+    INDOOR,
     EXPECTED_LAYERS
 };
 
@@ -34,6 +35,7 @@ struct Tile {
     /* Metadata */
     bool collision;
     bool safe_zone;
+    bool indoor;
 };
 
 //-----------------------------------------------------------------------------
@@ -89,7 +91,10 @@ class Map {
     bool collision(const int x, const int y) const;
 
     /* Chequea si hay zona segura en una celda */
-    bool isSafeZone(const int x, const int y) const;
+    bool safeZone(const int x, const int y) const;
+
+    /* Chequea si la posición es indoor */
+    bool indoor(const int x, const int y) const;
 
     //-------------------------------------------------------------------------
 

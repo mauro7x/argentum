@@ -33,6 +33,8 @@ void Map::_fillTiles(const json map_layers) {
         tile.safe_zone = (bool)safe_zone;
         int collision = map_layers[COLLISION]["data"][i];
         tile.collision = (bool)collision;
+        int indoor = map_layers[INDOOR]["data"][i];
+        tile.indoor = (bool)indoor;
         tiles[i] = tile;
     }
 }
@@ -105,12 +107,20 @@ bool Map::collision(const int x, const int y) const {
     return tiles[tile].collision;
 }
 
-bool Map::isSafeZone(const int x, const int y) const {
+bool Map::safeZone(const int x, const int y) const {
     int tile = _tileNumber(x, y);
     if (tile > (w * x)) {
         throw Exception("Invalid coordinates to map access.");
     }
     return tiles[tile].safe_zone;
+}
+
+bool Map::indoor(const int x, const int y) const {
+    int tile = _tileNumber(x, y);
+    if (tile > (w * x)) {
+        throw Exception("Invalid coordinates to map access.");
+    }
+    return tiles[tile].indoor;
 }
 
 Map::~Map() {}
