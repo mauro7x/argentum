@@ -2,8 +2,10 @@
 #define __SERVER_H__
 
 //-----------------------------------------------------------------------------
+#include "ClientList.h"
 #include <iostream>
 #include <string>
+#include <vector>
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -15,8 +17,12 @@
 class Server {
    private:
     // atributos del servidor
+    ClientList players;
 
     // metodos privados
+    void processPlayerCommands();
+    void processNpcTurns();
+    void passTurn();
 
    public:
     /**
@@ -48,6 +54,7 @@ class Server {
      *
      */
     void run();
+    
 
     /**
      * Descripción: destructor.
