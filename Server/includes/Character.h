@@ -41,11 +41,10 @@ class Character {
 
         // Metodos/Acciones.
         void equip(unsigned int inventory_position);
-        void equip(Weapon* weapon);
-        void equip(Wand* wand);
+        void equip(Item* item);
 
-        void recoverManna(unsigned int points); // Pociones
-        void recoverHealth(unsigned int points);  // Pociones
+        void recoverMana(const unsigned int points); // Pociones
+        void recoverHealth(const unsigned int points);  // Pociones
 
         const unsigned int getMannaPoints() const; // Baculos verifican si tiene suficientes puntos antes de ser usados.
 };

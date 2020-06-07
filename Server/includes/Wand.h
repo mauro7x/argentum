@@ -1,7 +1,6 @@
 #ifndef __WAND_H__
 #define __WAND_H__
 
-#include <string>
 #include "Item.h"
 
 class Wand: public Item {
