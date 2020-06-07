@@ -6,8 +6,15 @@
 template <>
 void Config<RaceCfg>::_parseFile() {
     std::ifstream file(RACE_CONFIG_FILEPATH);
+    if (file.fail()) {
+        throw Exception("Error opening file: %s", RACE_CONFIG_FILEPATH);
+    }
+
     json j;
     file >> j;
+    if (file.fail()) {
+        throw Exception("Error reading file: %s", RACE_CONFIG_FILEPATH);
+    }
 
     int size = j.size();
     for (int i = 0; i < size; i++) {
@@ -28,8 +35,15 @@ void Config<RaceCfg>::_parseFile() {
 template <>
 void Config<KindCfg>::_parseFile() {
     std::ifstream file(KIND_CONFIG_FILEPATH);
+    if (file.fail()) {
+        throw Exception("Error opening file: %s", KIND_CONFIG_FILEPATH);
+    }
+
     json j;
     file >> j;
+    if (file.fail()) {
+        throw Exception("Error reading file: %s", KIND_CONFIG_FILEPATH);
+    }
 
     int size = j.size();
     for (int i = 0; i < size; i++) {
@@ -50,8 +64,15 @@ void Config<KindCfg>::_parseFile() {
 template <>
 void Config<NPCCfg>::_parseFile() {
     std::ifstream file(NPC_CONFIG_FILEPATH);
+    if (file.fail()) {
+        throw Exception("Error opening file: %s", NPC_CONFIG_FILEPATH);
+    }
+
     json j;
     file >> j;
+    if (file.fail()) {
+        throw Exception("Error reading file: %s", NPC_CONFIG_FILEPATH);
+    }
 
     int size = j.size();
     for (int i = 0; i < size; i++) {
@@ -68,8 +89,15 @@ void Config<NPCCfg>::_parseFile() {
 template <>
 void Config<WeaponCfg>::_parseFile() {
     std::ifstream file(ITEMS_CONFIG_FILEPATH);
+    if (file.fail()) {
+        throw Exception("Error opening file: %s", ITEMS_CONFIG_FILEPATH);
+    }
+
     json j;
     file >> j;
+    if (file.fail()) {
+        throw Exception("Error reading file: %s", ITEMS_CONFIG_FILEPATH);
+    }
 
     int size = j["weapons"].size();
     for (int i = 0; i < size; i++) {
@@ -91,8 +119,15 @@ void Config<WeaponCfg>::_parseFile() {
 template <>
 void Config<HelmetCfg>::_parseFile() {
     std::ifstream file(ITEMS_CONFIG_FILEPATH);
+    if (file.fail()) {
+        throw Exception("Error opening file: %s", ITEMS_CONFIG_FILEPATH);
+    }
+
     json j;
     file >> j;
+    if (file.fail()) {
+        throw Exception("Error reading file: %s", ITEMS_CONFIG_FILEPATH);
+    }
 
     int size = j["helmets"].size();
     for (int i = 0; i < size; i++) {
@@ -113,8 +148,15 @@ void Config<HelmetCfg>::_parseFile() {
 template <>
 void Config<ArmourCfg>::_parseFile() {
     std::ifstream file(ITEMS_CONFIG_FILEPATH);
+    if (file.fail()) {
+        throw Exception("Error opening file: %s", ITEMS_CONFIG_FILEPATH);
+    }
+
     json j;
     file >> j;
+    if (file.fail()) {
+        throw Exception("Error reading file: %s", ITEMS_CONFIG_FILEPATH);
+    }
 
     int size = j["armours"].size();
     for (int i = 0; i < size; i++) {
@@ -135,8 +177,15 @@ void Config<ArmourCfg>::_parseFile() {
 template <>
 void Config<ShieldCfg>::_parseFile() {
     std::ifstream file(ITEMS_CONFIG_FILEPATH);
+    if (file.fail()) {
+        throw Exception("Error opening file: %s", ITEMS_CONFIG_FILEPATH);
+    }
+
     json j;
     file >> j;
+    if (file.fail()) {
+        throw Exception("Error reading file: %s", ITEMS_CONFIG_FILEPATH);
+    }
 
     int size = j["shields"].size();
     for (int i = 0; i < size; i++) {
