@@ -41,7 +41,12 @@ void MapContainer::loadMaps() {
     }
 }
 
-const Map& MapContainer::operator[](Id id) const {}
+const Map& MapContainer::operator[](Id id) const {
+    if (content.count(id) == 0) {
+        throw Exception("Unknown map id.");
+    }
+    return content.at(id);
+}
 
 MapContainer::~MapContainer() {}
 

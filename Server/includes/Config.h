@@ -56,7 +56,7 @@ class Config {
     Config& operator=(Config&& other) = delete;
 
     /* Operador para lectura de configuración */
-    T operator[](const Id id) const {
+    const T& operator[](const Id id) const {
         if (config.count(id) == 0) {
             throw Exception("Unknown id.");
         }
