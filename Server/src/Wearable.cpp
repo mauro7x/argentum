@@ -20,3 +20,7 @@ const unsigned int Wearable::getUsagePoints() {
                                                  max_usage_points);
     return distribution(generator);
 }
+
+void Wearable::equip(Character& character) {
+    character.equip(this);
+}

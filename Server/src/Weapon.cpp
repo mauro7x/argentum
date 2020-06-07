@@ -1,7 +1,6 @@
 #include "Weapon.h"
 
 Weapon::Weapon(const unsigned int id, const unsigned int price, 
-               WearableType type,
                const unsigned int min_damage, 
                const unsigned int max_damage,
                const bool distant_attack):

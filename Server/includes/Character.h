@@ -6,8 +6,7 @@
 #include "Inventory.h"
 #include "States.h"
 #include "Equipment.h"
-#include "Weapon.h"
-#include "Wand.h"
+#include "Wearable.h"
 
 /*
  * Representa al ente manejado por el jugador.
@@ -41,7 +40,7 @@ class Character {
 
         // Metodos/Acciones.
         void equip(unsigned int inventory_position);
-        void equip(Item* item);
+        void equip(Wearable* item);
 
         void recoverMana(const unsigned int points); // Pociones
         void recoverHealth(const unsigned int points);  // Pociones

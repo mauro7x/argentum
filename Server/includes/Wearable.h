@@ -25,7 +25,7 @@ class Wearable: public Item {
 
         // Poner las cosas que tienen en comun armas y defensas que van en Equipment.
 
-        virtual void equip(Character& character) = 0;
+        virtual void equip(Character& character);
         virtual const unsigned int use() = 0;
 };
 

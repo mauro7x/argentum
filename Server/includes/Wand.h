@@ -9,7 +9,6 @@ class Wand: public Wearable {
         
     public:
          Wand(const unsigned int id, const unsigned int price,
-              WearableType type,
               const unsigned int min_damage, 
               const unsigned int max_damage,
               const unsigned int mana_usage_cost);
