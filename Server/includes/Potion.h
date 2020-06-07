@@ -8,8 +8,8 @@ class Potion: public Item {
         const unsigned int recovery_points;
 
     public:
-        Potion(const unsigned int id, const unsigned int buy_price, 
-               const unsigned int sell_price, 
+        Potion(const unsigned int id, 
+               const unsigned int price,
                const unsigned int recovery_points);
         virtual ~Potion();
 
@@ -18,28 +18,27 @@ class Potion: public Item {
         Potion(Potion&&) = delete;
         Potion& operator=(Potion&&) = delete;
 
-        virtual void equip(Character& character);
-        virtual void use(Character& character) = 0;
+        virtual void equip(Character& character) = 0;
 };
 
 class HealthPotion: public Potion {
     public:
-        HealthPotion(const unsigned int id, const unsigned int buy_price, 
-                        const unsigned int sell_price, 
-                        const unsigned int recovery_points);
+        HealthPotion(const unsigned int id, 
+                     const unsigned int price,
+                     const unsigned int recovery_points);
         ~HealthPotion();
 
-        virtual void use(Character& character) override;
+        virtual void equip(Character& character) override;
 };
 
 class ManaPotion: public Potion {
     public:
-        ManaPotion(const unsigned int id, const unsigned int buy_price, 
-                        const unsigned int sell_price, 
-                        const unsigned int recovery_points);
+        ManaPotion(const unsigned int id,
+                   const unsigned int price,
+                   const unsigned int recovery_points);
         ~ManaPotion();
 
-        virtual void use(Character& character) override;
+        virtual void equip(Character& character) override;
 };
 
 #endif

@@ -1,17 +1,18 @@
 #ifndef __WEAPON_H__
 #define __WEAPON_H__
 
-#include "Item.h"
+#include "Wearable.h"
 
-class Weapon: public Item {
+class Weapon: public Wearable {
     private:
         const bool distant_attack;
-        const unsigned int min_damage, max_damage;
 
     public:
-        Weapon(const unsigned int id, const unsigned int buy_price, 
-               const unsigned int sell_price, const bool distant_attack, 
-               const unsigned int min_damage, const unsigned int max_damage);
+        Weapon(const unsigned int id, const unsigned int price, 
+               WearableType type,
+               const unsigned int min_damage, 
+               const unsigned int max_damage,
+               const bool distant_attack);
         ~Weapon();
 
         Weapon(const Weapon&) = delete;
@@ -21,12 +22,10 @@ class Weapon: public Item {
 
         // IMPLEMENTAR Metodos comodamente en base
         // a los metodos definidos del Character/Inventory/Equipment.
-        // Mantener abstraccion Item.
-
-        virtual void use(Character& character) override;
-
-        const unsigned int getMinDamagePoints() const;
-        const unsigned int getMaxDamagePoints() const;
+        // Mantener abstraccion Item y Wearable.
+        
+        virtual void equip(Character& character) override;
+        virtual const unsigned int use() override;
 };
 
 #endif
