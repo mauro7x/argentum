@@ -1,5 +1,5 @@
-#ifndef __PATHS_H__
-#define __PATHS_H__
+#ifndef __SERVER_PATHS_H__
+#define __SERVER_PATHS_H__
 //-----------------------------------------------------------------------------
 
 /* Se incluyen los paths desde la carpeta ~build/, siendo ~ la raíz del TP. */
@@ -15,4 +15,4 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-#endif  // __PATHS_H__
+#endif  // __SERVER_PATHS_H__
