@@ -2,9 +2,7 @@
 #define __EQUIPMENT_H__
 
 #include <vector>
-#include "Item.h"
-
-#define N_EQUIPMENT_ITEMS 4
+#include "Wearable.h"
 
 /*
  * Contiene los items con los que el jugador
@@ -17,7 +15,7 @@
  */
 class Equipment {
     private:
-        std::vector<Item*> container; //Container de 4 posiciones
+        std::vector<Wearable*> container; //Container de 4 posiciones
     
     public:
         Equipment();
@@ -36,7 +34,7 @@ class Equipment {
          * lo pisa y retorna el anterior. Caso contrario,
          * devuelve nullptr.
          */
-        Item* add(Item* item);
+        Wearable* add(Wearable* item);
 
         /*
          * Devuelve el minimo de puntos de daño que pueden causar

@@ -2,7 +2,7 @@
 #define __WEARABLE_H__
 
 #include "Character.h"
-enum WearableType {HELMET, ARMOUR, SHIELD, WEAPON};
+enum WearableType {HELMET, ARMOUR, SHIELD, WEAPON, N_WEARABLE_ITEMS};
 
 /*
  * Define la abstraccion Wearable.
