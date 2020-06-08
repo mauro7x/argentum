@@ -3,7 +3,7 @@
 //-----------------------------------------------------------------------------
 // Métodos privados
 
-void Map::_checkIfValid(const json map_layers) const {
+void Map::_checkIfValid(const json& map_layers) const {
     if (map_layers.size() != EXPECTED_LAYERS) {
         throw Exception(
             "Invalid map file. File must contain six map layers: ground, "
@@ -19,7 +19,7 @@ void Map::_checkIfValid(const json map_layers) const {
     }
 }
 
-void Map::_fillTiles(const json map_layers) {
+void Map::_fillTiles(const json& map_layers) {
     _checkIfValid(map_layers);
 
     int total_tiles = w * h;
@@ -35,11 +35,14 @@ void Map::_fillTiles(const json map_layers) {
         tile.collision = (bool)collision;
         int indoor = map_layers[INDOOR]["data"][i];
         tile.indoor = (bool)indoor;
-        tiles[i] = tile;
+        tiles.push_back(tile);
     }
 }
 
 int Map::_tileNumber(const int x, const int y) const {
+    if ((x >= w) || (x < 0) || (y >= h) || (y < 0)) {
+        throw Exception("Invalid map coordinates.");
+    }
     return (y * w + x);
 }
 
@@ -50,11 +53,17 @@ int Map::_tileNumber(const int x, const int y) const {
 
 Map::Map() : w(0), h(0), tile_w(0), tile_h(0) {}
 
-Map::Map(const json j_map) {
+void Map::init(const json& j_map, const int tile_w, const int tile_h) {
     w = j_map["width"];
     h = j_map["height"];
-    tile_w = j_map["tilewidth"];
-    tile_h = j_map["tileheight"];
+    this->tile_w = tile_w;
+    this->tile_h = tile_h;
+
+    if ((tile_w != j_map["tilewidth"]) || (tile_h != j_map["tileheight"])) {
+        throw Exception("Invalid map file. Tiles must be %i x %i.", tile_w,
+                        tile_h);
+    }
+
     _fillTiles(j_map["layers"]);
 }
 
@@ -75,52 +84,25 @@ Map& Map::operator=(Map&& other) {
     return *this;
 }
 
-int Map::groundId(const int x, const int y) const {
-    int tile = _tileNumber(x, y);
-    if (tile > (w * x)) {
-        throw Exception("Invalid coordinates to map access.");
-    }
-    return tiles[tile].ground_id;
+int Map::getWidthTiles() const {
+    return w;
 }
 
-int Map::decorationId(const int x, const int y) const {
-    int tile = _tileNumber(x, y);
-    if (tile > (w * x)) {
-        throw Exception("Invalid coordinates to map access.");
-    }
-    return tiles[tile].decoration_id;
+int Map::getHeightTiles() const {
+    return h;
 }
 
-int Map::roofId(const int x, const int y) const {
-    int tile = _tileNumber(x, y);
-    if (tile > (w * x)) {
-        throw Exception("Invalid coordinates to map access.");
-    }
-    return tiles[tile].roof_id;
+int Map::getTileWidth() const {
+    return tile_w;
 }
 
-bool Map::collision(const int x, const int y) const {
-    int tile = _tileNumber(x, y);
-    if (tile > (w * x)) {
-        throw Exception("Invalid coordinates to map access.");
-    }
-    return tiles[tile].collision;
+int Map::getTileHeight() const {
+    return tile_h;
 }
 
-bool Map::safeZone(const int x, const int y) const {
+const Tile& Map::getTile(const int x, const int y) const {
     int tile = _tileNumber(x, y);
-    if (tile > (w * x)) {
-        throw Exception("Invalid coordinates to map access.");
-    }
-    return tiles[tile].safe_zone;
-}
-
-bool Map::indoor(const int x, const int y) const {
-    int tile = _tileNumber(x, y);
-    if (tile > (w * x)) {
-        throw Exception("Invalid coordinates to map access.");
-    }
-    return tiles[tile].indoor;
+    return tiles.at(tile);
 }
 
 Map::~Map() {}

@@ -16,16 +16,15 @@
 
 //-----------------------------------------------------------------------------
 #include "HUD.h"
-#include "Map.h"
+#include "MapView.h"
 #include "Player.h"
+#include "Predictor.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 #include "../../../Common/includes/Exceptions/Exception.h"
 #include "../../../Common/includes/Exceptions/SDLException.h"
-#include "../../../Common/includes/json.hpp"
 #include "../paths.h"
-using json = nlohmann::json;
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -37,42 +36,21 @@ class GameView {
     Renderer renderer;
     bool sdl_running;
     bool img_running;
-    json config;
 
     //-------------------------------------------------------------------------
     // Componentes de la vista
+
     HUDProxy hud;
-    MapProxy map;
+    MapView map;
+    Predictor predictor;
     Player player;
-
-    //-------------------------------------------------------------------------
-
-    //-------------------------------------------------------------------------
-    // OBJETOS QUE COMPONEN LA VISTA
-
-    // Contenedor de mapas inicializados
-
-    // Puntero a mapa actual (un mapa solo tiene los tiles estáticos, no se
-    // incluyen acá los NPC, jugadores, o objetos sueltos en el mapa, eso será
-    // extra)
-
-    // Contenedor de entidades NPC
-
-    // Contenedor de entidades jugadores
-
-    // Contenedor de entidades objetos sueltos
-
-    // Un SDL_Rect que sea la camara?
-
-    // Una unidad que represente al jugador (Player?)
-
     //-------------------------------------------------------------------------
 
     /* Inicializa recursos */
     void _init();
 
-    /* Carga el archivo de configuración */
-    void _loadConfig();
+    /* Carga un json */
+    json _loadJsonFile(std::string filepath) const;
 
     /* Carga media necesaria */
     void _loadMedia();

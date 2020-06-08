@@ -4,15 +4,8 @@
 // Métodos privados
 
 void Player::_moveUp() {
-    y_tile--;
-    /* Aca debemos realizar un chequeo local de si podemos o no movernos, además
-     * de enviar la accion al servidor. Por ahora, el chequeo será simplemente
-     * si existe el tile superior. Después incluiremos un colisionador con
-     * información sobre colisiones. */
-    bool verificacion_proxy = (y_tile < 0);
-    if (verificacion_proxy) {
-        y_tile++;
-    } else {
+    if (predictor.canMoveTo(x_tile, y_tile - 1)) {
+        y_tile--;
         state = MOVING;
         last_moved = SDL_GetTicks();
         next_x = box.x;
@@ -25,15 +18,8 @@ void Player::_moveUp() {
 }
 
 void Player::_moveDown() {
-    y_tile++;
-    /* Aca debemos realizar un chequeo local de si podemos o no movernos, además
-     * de enviar la accion al servidor. Por ahora, el chequeo será simplemente
-     * si existe el tile superior. Después incluiremos un colisionador con
-     * información sobre colisiones. */
-    bool verificacion_proxy = (y_tile == MAP_Y_TILES);
-    if (verificacion_proxy) {
-        y_tile--;
-    } else {
+    if (predictor.canMoveTo(x_tile, y_tile + 1)) {
+        y_tile++;
         state = MOVING;
         last_moved = SDL_GetTicks();
         next_x = box.x;
@@ -46,15 +32,8 @@ void Player::_moveDown() {
 }
 
 void Player::_moveLeft() {
-    x_tile--;
-    /* Aca debemos realizar un chequeo local de si podemos o no movernos, además
-     * de enviar la accion al servidor. Por ahora, el chequeo será simplemente
-     * si existe el tile superior. Después incluiremos un colisionador con
-     * información sobre colisiones. */
-    bool verificacion_proxy = (x_tile < 0);
-    if (verificacion_proxy) {
-        x_tile++;
-    } else {
+    if (predictor.canMoveTo(x_tile - 1, y_tile)) {
+        x_tile--;
         state = MOVING;
         last_moved = SDL_GetTicks();
         next_x = _xValueToReach();
@@ -67,15 +46,8 @@ void Player::_moveLeft() {
 }
 
 void Player::_moveRight() {
-    x_tile++;
-    /* Aca debemos realizar un chequeo local de si podemos o no movernos, además
-     * de enviar la accion al servidor. Por ahora, el chequeo será simplemente
-     * si existe el tile superior. Después incluiremos un colisionador con
-     * información sobre colisiones. */
-    bool verificacion_proxy = (x_tile == MAP_X_TILES);
-    if (verificacion_proxy) {
-        x_tile--;
-    } else {
+    if (predictor.canMoveTo(x_tile + 1, y_tile)) {
+        x_tile++;
         state = MOVING;
         last_moved = SDL_GetTicks();
         next_x = _xValueToReach();
@@ -108,8 +80,10 @@ bool Player::_isMovementCompleted() {
 //-----------------------------------------------------------------------------
 // API Pública
 
-Player::Player(const Renderer* renderer, int x_tile, int y_tile)
+Player::Player(const Renderer* renderer, const Predictor& predictor, int x_tile,
+               int y_tile)
     : Entity(renderer),
+      predictor(predictor),
       state(STANDING),
       frame_clip({0, 0, PLAYER_SPRITE_W, PLAYER_SPRITE_H}),
       current_frame(0),

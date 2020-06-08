@@ -12,6 +12,13 @@ void Renderer::_setDrawColor() const {
     }
 }
 
+void Renderer::_free() {
+    if (renderer) {
+        SDL_DestroyRenderer(renderer);
+        renderer = NULL;
+    }
+}
+
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -20,7 +27,7 @@ void Renderer::_setDrawColor() const {
 Renderer::Renderer(const Window& window, const Camera& camera)
     : window(window), camera(camera), renderer(NULL) {}
 
-void Renderer::init(const json config) {
+void Renderer::init(const json& config) {
     draw_color_r = config["draw_color"]["r"];
     draw_color_g = config["draw_color"]["g"];
     draw_color_b = config["draw_color"]["b"];
@@ -90,15 +97,8 @@ void Renderer::renderIfVisible(SDL_Texture* texture, SDL_Rect* render_quad,
     }
 }
 
-void Renderer::free() {
-    if (renderer) {
-        SDL_DestroyRenderer(renderer);
-        renderer = NULL;
-    }
-}
-
 Renderer::~Renderer() {
-    free();
+    _free();
 }
 
 //-----------------------------------------------------------------------------

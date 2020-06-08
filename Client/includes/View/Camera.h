@@ -35,7 +35,7 @@ class Camera {
     //-------------------------------------------------------------------------
 
     /* Inicializa recursos */
-    void init(const json config);
+    void init(const json& config);
 
     /* Devuelve si el objeto es visible por la camara o no */
     bool isVisible(const SDL_Rect* object) const;

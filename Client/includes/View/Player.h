@@ -6,6 +6,7 @@
 
 #include "../paths.h"
 #include "Entity.h"
+#include "Predictor.h"
 #include "Texture.h"
 //-----------------------------------------------------------------------------
 
@@ -13,6 +14,7 @@
 // Estados del jugador
 
 enum PlayerState { STANDING, MOVING };
+
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -42,6 +44,7 @@ enum PlayerState { STANDING, MOVING };
 
 class Player : Entity {
    private:
+    const Predictor& predictor;
     Texture sprite_sheet;
     PlayerState state;
 
@@ -68,7 +71,8 @@ class Player : Entity {
 
    public:
     /* Constructor */
-    Player(const Renderer* renderer, int x_tile = 0, int y_tile = 0);
+    Player(const Renderer* renderer, const Predictor& predictor, int x_tile = 0,
+           int y_tile = 0);
 
     //-------------------------------------------------------------------------
     // Lo que debe poder hacer una entidad:

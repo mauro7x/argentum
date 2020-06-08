@@ -10,7 +10,7 @@
 
 Camera::Camera() : x(0), y(0) {}
 
-void Camera::init(const json config) {
+void Camera::init(const json& config) {
     w = config["w"];
     h = config["h"];
     offset_x = config["offset"]["x"];

@@ -1,7 +1,11 @@
-[
-    {
-        "id": 1000,
-        "name": "DebugMap",
-        "filepath": "../Assets/Maps/DebugMap/map.json"
-    }
-]
+{
+    "tilewidth": 64,
+    "tileheight": 64,
+    "data": [
+        {
+            "id": 1000,
+            "name": "DebugMap",
+            "filepath": "../Assets/Maps/DebugMap/map.json"
+        }
+    ]
+}
