@@ -26,7 +26,8 @@
             "type": 3,
             "price": 100,
             "min_damage": 10,
-            "max_damage": 20
+            "max_damage": 20,
+            "mana_usage_cost": 10
         }
     ],
     "defences": [

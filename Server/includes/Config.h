@@ -33,6 +33,9 @@ class Config {
    private:
     std::unordered_map<Id, T> config;
 
+    /* Lee el archivo json del filepath especificado */
+    json _loadJsonFile(std::string filepath) const;
+
     /* Parsea el json correspondiente y llena la estructura. Se define
      * polimórficamente para los distintos config_structs */
     void _parseFile();

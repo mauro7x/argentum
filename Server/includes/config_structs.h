@@ -11,10 +11,14 @@
 typedef int Id;
 #endif  // __ID__
 //-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
 #ifndef __WEARABLE_TYPE_H__
 #define __WEARABLE_TYPE_H__
-enum WearableType {HELMET, ARMOUR, SHIELD, WEAPON, N_WEARABLE_ITEMS};
+enum WearableType { HELMET, ARMOUR, SHIELD, WEAPON, N_WEARABLE_ITEMS };
 #endif
+//-----------------------------------------------------------------------------
+
 //-----------------------------------------------------------------------------
 // Objetos
 
