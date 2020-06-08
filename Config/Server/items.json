@@ -3,53 +3,56 @@
         {
             "id": 300,
             "name": "Espada",
-            "type": 0,
-            "min_dmg": 10,
-            "max_dmg": 20,
-            "price": 100
+            "type": 3,
+            "price": 100,
+            "min_damage": 10,
+            "max_damage": 20,
+            "distant_attack": false
         },
         {
             "id": 301,
             "name": "Arco",
-            "type": 1,
-            "min_dmg": 10,
-            "max_dmg": 20,
-            "price": 100
-        },
+            "type": 3,
+            "price": 100,
+            "min_damage": 10,
+            "max_damage": 20,
+            "distant_attack": true
+        }
+    ],
+    "wands": [
         {
             "id": 302,
             "name": "Báculo",
-            "type": 2,
-            "min_dmg": 10,
-            "max_dmg": 20,
-            "price": 100
+            "type": 3,
+            "price": 100,
+            "min_damage": 10,
+            "max_damage": 20
         }
     ],
-    "helmets": [
+    "defences": [
         {
             "id": 400,
             "name": "Capucha",
-            "min_def": 10,
-            "max_def": 20,
-            "price": 100
-        }
-    ],
-    "armours": [
+            "type": 0,
+            "price": 100,
+            "min_defence": 10,
+            "max_defence": 20
+        },
         {
             "id": 500,
             "name": "Armadura",
-            "min_def": 10,
-            "max_def": 20,
-            "price": 100
-        }
-    ],
-    "shields": [
+            "type": 1,
+            "price": 100,
+            "min_defence": 10,
+            "max_defence": 20
+        },
         {
             "id": 600,
             "name": "Escudo",
-            "min_def": 10,
-            "max_def": 20,
-            "price": 100
+            "type": 2,
+            "price": 100,
+            "min_defence": 10,
+            "max_defence": 20
         }
     ]
 }
