@@ -12,6 +12,13 @@ void Renderer::_setDrawColor() const {
     }
 }
 
+void Renderer::_free() {
+    if (renderer) {
+        SDL_DestroyRenderer(renderer);
+        renderer = NULL;
+    }
+}
+
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -20,7 +27,7 @@ void Renderer::_setDrawColor() const {
 Renderer::Renderer(const Window& window, const Camera& camera)
     : window(window), camera(camera), renderer(NULL) {}
 
-void Renderer::init(const json config) {
+void Renderer::init(const json& config) {
     draw_color_r = config["draw_color"]["r"];
     draw_color_g = config["draw_color"]["g"];
     draw_color_b = config["draw_color"]["b"];
@@ -35,6 +42,12 @@ void Renderer::init(const json config) {
     if (renderer == NULL) {
         throw SDLException(
             "Error in function SDL_CreateRenderer()\nSDL_Error: %s",
+            SDL_GetError());
+    }
+
+    if (SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND)) {
+        throw SDLException(
+            "Error in function SDL_SetRenderDrawBlendMode()\nSDL_Error: %s",
             SDL_GetError());
     }
 
@@ -90,15 +103,24 @@ void Renderer::renderIfVisible(SDL_Texture* texture, SDL_Rect* render_quad,
     }
 }
 
-void Renderer::free() {
-    if (renderer) {
-        SDL_DestroyRenderer(renderer);
-        renderer = NULL;
+void Renderer::fillQuadIfVisible(SDL_Rect* quad, int r, int g, int b,
+                                 int a) const {
+    if (camera.isVisible(quad)) {
+        if (SDL_SetRenderDrawColor(renderer, r, g, b, a)) {
+            throw SDLException(
+                "Error in function SDL_SetRenderDrawColor() while filling "
+                "quad.\nSDL_Error: %s",
+                SDL_GetError());
+        }
+
+        quad->x += camera.xOffset();
+        quad->y += camera.yOffset();
+        SDL_RenderFillRect(renderer, quad);
     }
 }
 
 Renderer::~Renderer() {
-    free();
+    _free();
 }
 
 //-----------------------------------------------------------------------------

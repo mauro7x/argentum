@@ -5,7 +5,7 @@
 
 void GameView::_init() {
     /* Cargamos el archivo de configuración */
-    _loadConfig();
+    json config = _loadJsonFile(GUI_CONFIG_FILEPATH);
 
     /* Iniciamos el sistema de SDL */
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -35,18 +35,24 @@ void GameView::_init() {
     camera.init(config["camera"]);
 }
 
-void GameView::_loadConfig() {
-    std::ifstream file(VIEW_CONFIG_FILEPATH);
+json GameView::_loadJsonFile(std::string filepath) const {
+    std::ifstream file(filepath);
     if (file.fail()) {
-        throw Exception("Error opening file: %s", VIEW_CONFIG_FILEPATH);
+        throw Exception("Error opening file: %s", filepath);
     }
 
-    file >> config;
+    json j;
+    file >> j;
     if (file.fail()) {
-        throw Exception("Error reading configuration file.");
+        throw Exception("Error reading file: %s", filepath);
     }
 
     file.close();
+    if (file.fail()) {
+        throw Exception("Error closing file: %s", filepath);
+    }
+
+    return j;
 }
 
 void GameView::_loadMedia() {
@@ -57,12 +63,10 @@ void GameView::_loadMedia() {
 
 void GameView::_handleEvent(const SDL_Event& e) {
     player.handleEvent(e);
+    units.handleEvent(e);
 }
 
 void GameView::_free() {
-    renderer.free();
-    window.free();
-
     if (img_running) {
         IMG_Quit();
         img_running = false;
@@ -85,7 +89,9 @@ GameView::GameView()
       img_running(false),
       hud(&renderer),
       map(&renderer),
-      player(&renderer) {}
+      predictor(map),
+      player(&renderer, predictor),
+      stage(hud, map, player, units) {}
 
 void GameView::operator()() {
     _init();
@@ -120,20 +126,14 @@ void GameView::operator()() {
         renderer.clearScreen();
 
         //---------------------------------------------------------------------
-        // Acciones previas al renderizado
+        // ACCIONES
 
+        map.select(0); /* el id del mapa x ahora hardcodeado */
         player.move();
-        camera.center(player.getBox(), MAP_WIDTH, MAP_HEIGHT);
+        camera.center(player.getBox(), map.widthInPx(), map.heightInPx());
         //---------------------------------------------------------------------
 
-        //---------------------------------------------------------------------
-        // Renderizamos
-
-        map.render();
-        player.render();
-        hud.render();
-        //---------------------------------------------------------------------
-
+        stage.render();
         renderer.presentScreen();
 
         // Delay para controlar el frame rate? por ahora usamos vsync

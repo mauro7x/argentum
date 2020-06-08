@@ -1,0 +1,11 @@
+{
+    "tilewidth": 64,
+    "tileheight": 64,
+    "data": [
+        {
+            "id": 0,
+            "name": "DebugMap",
+            "filepath": "../Assets/Maps/DebugMap.json"
+        }
+    ]
+}
