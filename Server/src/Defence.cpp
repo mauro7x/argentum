@@ -1,4 +1,4 @@
-#include "Defence.h"
+#include "../includes/Defence.h"
 
 Defence::Defence(const unsigned int id, const unsigned int price, 
                  WearableType type,

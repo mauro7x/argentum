@@ -1,4 +1,4 @@
-#include "Inventory.h"
+#include "../includes/Inventory.h"
 
 Inventory::Inventory(): items_quantity(0),
                         gold_quantity(0) {

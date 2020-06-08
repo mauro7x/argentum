@@ -1,5 +1,3 @@
-#include "Character.h"
+#include "../includes/Character.h"
 
-Character::Character() {} //IMPLEMENTAR
-
-Character::~Character() {} //IMPLEMENTAR
+//IMPLEMENTAR

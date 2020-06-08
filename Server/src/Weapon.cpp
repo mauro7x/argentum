@@ -1,4 +1,4 @@
-#include "Weapon.h"
+#include "../includes/Weapon.h"
 
 Weapon::Weapon(const unsigned int id, const unsigned int price, 
                const unsigned int min_damage, 

@@ -1,4 +1,4 @@
-#include "Wand.h"
+#include "../includes/Wand.h"
 
 Wand::Wand(const unsigned int id, const unsigned int price,
            const unsigned int min_damage, 

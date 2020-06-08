@@ -1,4 +1,4 @@
-#include "Equipment.h"
+#include "../includes/Equipment.h"
 
 Equipment::Equipment() {
     // Inicializo array de wearables con nullptr.

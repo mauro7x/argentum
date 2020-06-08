@@ -1,8 +1,10 @@
-#include "Kind.h"
+#include "../includes/Kind.h"
 
-Kind::Kind(const unsigned int health,
+Kind::Kind(const std::string name, 
+           const unsigned int health,
            const unsigned int meditation,
            const unsigned int mana): 
+                name(name),
                 health(health),
                 meditation(meditation),
                 mana(mana) {}

@@ -1,4 +1,4 @@
-#include "Potion.h"
+#include "../includes/Potion.h"
 
 Potion::Potion(const unsigned int id,
                const unsigned int price,

@@ -1,5 +1,5 @@
 #include <random>
-#include "Wearable.h"
+#include "../includes/Wearable.h"
 
 Wearable::Wearable(const unsigned int id, const unsigned int price,
                    WearableType type,
