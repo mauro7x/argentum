@@ -11,50 +11,47 @@
 typedef int Id;
 #endif  // __ID__
 //-----------------------------------------------------------------------------
-
+#ifndef __WEARABLE_TYPE_H__
+#define __WEARABLE_TYPE_H__
+enum WearableType {HELMET, ARMOUR, SHIELD, WEAPON, N_WEARABLE_ITEMS};
+#endif
 //-----------------------------------------------------------------------------
 // Objetos
 
-enum WeaponType { MELEE = 0, RANGED, MAGIC };
 struct WeaponCfg {
     int id;
     std::string name;
-    WeaponType type;
-    int min_dmg;
-    int max_dmg;
-    int price;
+    WearableType type;
+    unsigned int price;
+    unsigned int min_damage;
+    unsigned int max_damage;
+    bool distant_attack;
 };
 
-struct DefenceItem {
+struct WandCfg {
     int id;
     std::string name;
-    int min_def;
-    int max_def;
-    int price;
+    WearableType type;
+    unsigned int price;
+    unsigned int min_damage;
+    unsigned int max_damage;
+    unsigned int mana_usage_cost;
 };
 
-struct HelmetCfg {
+struct DefenceCfg {
     int id;
     std::string name;
-    int min_def;
-    int max_def;
+    WearableType type;
     int price;
+    int min_defence;
+    int max_defence;
 };
 
-struct ArmourCfg {
-    int id;
+struct PotionCfg {
+    unsigned int id;
     std::string name;
-    int min_def;
-    int max_def;
-    int price;
-};
-
-struct ShieldCfg {
-    int id;
-    std::string name;
-    int min_def;
-    int max_def;
-    int price;
+    unsigned int price;
+    unsigned int recovery_points;
 };
 
 //-----------------------------------------------------------------------------
