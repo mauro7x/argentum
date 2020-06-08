@@ -1,19 +1,15 @@
 #ifndef __WAND_H__
 #define __WAND_H__
 
-#include "Item.h"
+#include "Wearable.h"
+#include "config_structs.h"
 
-class Wand: public Item {
+class Wand: public Wearable {
     private:
-        const bool distant_attack;
-        const unsigned int min_damage, max_damage;
         const unsigned int mana_usage_cost;
         
     public:
-         Wand(const unsigned int id, const unsigned int buy_price, 
-              const unsigned int sell_price, const bool distant_attack, 
-              const unsigned int min_damage, const unsigned int max_damage,
-              const unsigned int mana_usage_cost);
+         Wand(WandCfg& data);
         ~Wand();
 
         Wand(const Wand&) = delete;
@@ -23,12 +19,9 @@ class Wand: public Item {
 
         // IMPLEMENTAR Metodos comodamente en base
         // a los metodos definidos del Character/Inventory/Equipment.
-        // Mantener abstraccion item.
+        // Mantener abstraccion item y Wearable.
 
-        virtual void use(Character& character) override;
-        
-        const unsigned int getMinDamagePoints() const;
-        const unsigned int getMaxDamagePoints() const;
+        virtual const unsigned int use() override;
 };
 
 #endif

@@ -1,10 +1,8 @@
 #ifndef __EQUIPMENT_H__
 #define __EQUIPMENT_H__
 
-#include <vector>
-#include "Item.h"
-
-#define N_EQUIPMENT_ITEMS 4
+#include <array>
+#include "Wearable.h"
 
 /*
  * Contiene los items con los que el jugador
@@ -17,7 +15,7 @@
  */
 class Equipment {
     private:
-        std::vector<Item*> container; //Container de 4 posiciones
+        std::array<Wearable*, N_WEARABLE_ITEMS> container; //Container de 4 posiciones
     
     public:
         Equipment();
@@ -36,26 +34,18 @@ class Equipment {
          * lo pisa y retorna el anterior. Caso contrario,
          * devuelve nullptr.
          */
-        Item* add(Item* item);
+        Wearable* add(Wearable* item);
 
         /*
-         * Devuelve el minimo de puntos de daño que pueden causar
+         * Devuelve los puntos de daño que causan
          * los elementos de ataque que el personaje lleva.
          * 
          * En caso de no tener nada que pueda causar daño, devuelve 0.
          */
-        const unsigned int getMinDamagePoints() const;
+        const unsigned int getDamagePoints() const;
 
         /*
-         * Devuelve el maximo de puntos de daño que pueden causar
-         * los elementos de ataque que el personaje tiene puestos.
-         * 
-         * En caso de no tener nada que pueda causar daño, devuelve 0.
-         */
-        const unsigned int getMaxDamagePoints() const;
-
-        /*
-         * Devuelve los puntos de defensa que pueden absorben
+         * Devuelve los puntos de defensa que pueden absorber
          * los elementos de defensa que el personaje tiene puestos.
          * [armadura, escudo y/o casco]
          * 

@@ -3,8 +3,20 @@
 
 #define N_INVENTORY_ITEMS 10
 
-#include <vector>
+#include <array>
+#include <exception>
+
 #include "Item.h"
+
+class FullInventoryException: public std::exception {
+    public:
+        virtual const char *what() const noexcept;
+};
+
+class InvalidPositionException: public std::exception {
+    public:
+        virtual const char *what() const noexcept;
+};
 
 /*
  * El Inventario es un contenedor que guarda Items,
@@ -14,10 +26,15 @@
  */
 class Inventory {
     private:
-        std::vector<Item*> container;
+        std::array<Item*, N_INVENTORY_ITEMS> container;
         unsigned int items_quantity;
-
         unsigned int gold_quantity;
+
+        /*
+         * Devuelve la el indice del menor slot libre del
+         * container del inventario.
+         */
+        const unsigned int getNextFreeSlot() const;
 
     public:
         Inventory();
@@ -31,14 +48,20 @@ class Inventory {
         /*
          * Obtiene el item en la posicion especificada.
          * En caso de no haber, retorna nullptr.
+         * 
+         * Lanza InvalidPositionException si la posicion
+         * especificada es invalida (fuera de rango).
          */
-        Item* gatherItem(const unsigned int position);
+        Item* gather(const unsigned int position);
 
         /*
-         * Agrega un item al inventario y retorna la
-         * posicion en la que se agrego.
+         * Agrega un item al inventario.
+         * Retorna la posicion en la que se agrego.
+         * 
+         * Lanza FullInventoryException si el inventario esta
+         * lleno.
          */
-        const unsigned int addItem();
+        const unsigned int add(Item* item);
 };
 
 #endif

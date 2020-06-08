@@ -115,9 +115,10 @@ void Config<WeaponCfg>::_parseFile() {
         weapon.id = j["weapons"][i]["id"];
         weapon.name = j["weapons"][i]["name"];
         weapon.type = j["weapons"][i]["type"];
-        weapon.min_dmg = j["weapons"][i]["min_dmg"];
-        weapon.max_dmg = j["weapons"][i]["max_dmg"];
+        weapon.min_damage = j["weapons"][i]["min_damage"];
+        weapon.max_damage = j["weapons"][i]["max_damage"];
         weapon.price = j["weapons"][i]["price"];
+        weapon.distant_attack = j["weapons"][i]["distant_attack"];
 
         config[weapon.id] = weapon;
     }
@@ -129,7 +130,7 @@ void Config<WeaponCfg>::_parseFile() {
 }
 
 template <>
-void Config<HelmetCfg>::_parseFile() {
+void Config<WandCfg>::_parseFile() {
     std::ifstream file(ITEMS_CONFIG_FILEPATH);
     if (file.fail()) {
         throw Exception("Error opening file: %s", ITEMS_CONFIG_FILEPATH);
@@ -141,17 +142,19 @@ void Config<HelmetCfg>::_parseFile() {
         throw Exception("Error reading file: %s", ITEMS_CONFIG_FILEPATH);
     }
 
-    int size = j["helmets"].size();
+    int size = j["wands"].size();
     for (int i = 0; i < size; i++) {
-        HelmetCfg helmet;
+        WandCfg wand;
 
-        helmet.id = j["helmets"][i]["id"];
-        helmet.name = j["helmets"][i]["name"];
-        helmet.min_def = j["helmets"][i]["min_def"];
-        helmet.max_def = j["helmets"][i]["max_def"];
-        helmet.price = j["helmets"][i]["price"];
+        wand.id = j["wands"][i]["id"];
+        wand.name = j["wands"][i]["name"];
+        wand.type = j["wands"][i]["type"];
+        wand.min_damage = j["wands"][i]["min_damage"];
+        wand.max_damage = j["wands"][i]["max_damage"];
+        wand.price = j["wands"][i]["price"];
+        wand.mana_usage_cost = j["wands"][i]["mana_usage_cost"];
 
-        config[helmet.id] = helmet;
+        config[wand.id] = wand;
     }
 
     file.close();
@@ -161,7 +164,7 @@ void Config<HelmetCfg>::_parseFile() {
 }
 
 template <>
-void Config<ArmourCfg>::_parseFile() {
+void Config<DefenceCfg>::_parseFile() {
     std::ifstream file(ITEMS_CONFIG_FILEPATH);
     if (file.fail()) {
         throw Exception("Error opening file: %s", ITEMS_CONFIG_FILEPATH);
@@ -173,17 +176,17 @@ void Config<ArmourCfg>::_parseFile() {
         throw Exception("Error reading file: %s", ITEMS_CONFIG_FILEPATH);
     }
 
-    int size = j["armours"].size();
+    int size = j["defences"].size();
     for (int i = 0; i < size; i++) {
-        ArmourCfg armour;
+        DefenceCfg defence;
 
-        armour.id = j["armours"][i]["id"];
-        armour.name = j["armours"][i]["name"];
-        armour.min_def = j["armours"][i]["min_def"];
-        armour.max_def = j["armours"][i]["max_def"];
-        armour.price = j["armours"][i]["price"];
+        defence.id = j["defences"][i]["id"];
+        defence.name = j["defences"][i]["name"];
+        defence.min_defence = j["defences"][i]["min_defence"];
+        defence.max_defence = j["defences"][i]["max_defence"];
+        defence.price = j["defences"][i]["price"];
 
-        config[armour.id] = armour;
+        config[defence.id] = defence;
     }
 
     file.close();
@@ -192,37 +195,6 @@ void Config<ArmourCfg>::_parseFile() {
     }
 }
 
-template <>
-void Config<ShieldCfg>::_parseFile() {
-    std::ifstream file(ITEMS_CONFIG_FILEPATH);
-    if (file.fail()) {
-        throw Exception("Error opening file: %s", ITEMS_CONFIG_FILEPATH);
-    }
-
-    json j;
-    file >> j;
-    if (file.fail()) {
-        throw Exception("Error reading file: %s", ITEMS_CONFIG_FILEPATH);
-    }
-
-    int size = j["shields"].size();
-    for (int i = 0; i < size; i++) {
-        ShieldCfg shield;
-
-        shield.id = j["shields"][i]["id"];
-        shield.name = j["shields"][i]["name"];
-        shield.min_def = j["shields"][i]["min_def"];
-        shield.max_def = j["shields"][i]["max_def"];
-        shield.price = j["shields"][i]["price"];
-
-        config[shield.id] = shield;
-    }
-
-    file.close();
-    if (file.fail()) {
-        throw Exception("Error closing file: %s", ITEMS_CONFIG_FILEPATH);
-    }
-}
 
 /* Para cualquier clase que no sea esperada, nos quejamos */
 template <class T>

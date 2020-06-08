@@ -1,35 +1,33 @@
-#include "Potion.h"
+#include "../includes/Potion.h"
+#include "../includes/Character.h"
 
-Potion::Potion(const unsigned int id, const unsigned int buy_price, 
-               const unsigned int sell_price, 
+Potion::Potion(const unsigned int id,
+               std::string name,
+               const unsigned int price,
                const unsigned int recovery_points):
-                    Item(id, buy_price, sell_price),
+                    Item(id, name, price),
                     recovery_points(recovery_points) {}
 
-void Potion::equip(Character& character) {
-    this->use(character);
-}
+Potion::~Potion() {}
 
-HealthPotion::HealthPotion(const unsigned int id, const unsigned int buy_price, 
-                           const unsigned int sell_price, 
+HealthPotion::HealthPotion(const unsigned int id,
+                           const std::string name,
+                           const unsigned int price,
                            const unsigned int recovery_points):
-                                Potion(id, buy_price, 
-                                       sell_price, 
-                                       recovery_points) {}
+                                Potion(id, name, price, recovery_points) {}
 HealthPotion::~HealthPotion() {}
 
-void HealthPotion::use(Character& character) {
+void HealthPotion::equip(Character& character) {
     character.recoverHealth(this->recovery_points);
 }
 
-ManaPotion::ManaPotion(const unsigned int id, const unsigned int buy_price, 
-                           const unsigned int sell_price, 
-                           const unsigned int recovery_points):
-                                Potion(id, buy_price, 
-                                       sell_price, 
-                                       recovery_points) {}
+ManaPotion::ManaPotion(const unsigned int id, 
+                       const std::string name,
+                       const unsigned int price,
+                       const unsigned int recovery_points):
+                            Potion(id, name, price, recovery_points) {}
 ManaPotion::~ManaPotion() {}
 
-void ManaPotion::use(Character& character) {
+void ManaPotion::equip(Character& character) {
     character.recoverMana(this->recovery_points);
 }
