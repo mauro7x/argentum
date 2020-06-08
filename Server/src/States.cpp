@@ -1,6 +1,7 @@
 #include "../includes/States.h"
 
 State::State() {}
+State::~State() {}
 
 Alive::Alive() {}
 Alive::~Alive() {}

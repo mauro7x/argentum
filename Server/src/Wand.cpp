@@ -1,11 +1,10 @@
 #include "../includes/Wand.h"
 
-Wand::Wand(const unsigned int id, const unsigned int price,
-           const unsigned int min_damage, 
-           const unsigned int max_damage,
-           const unsigned int mana_usage_cost):
-                    Wearable(id, price, WEAPON, min_damage, max_damage),
-                    mana_usage_cost(mana_usage_cost) {}
+
+Wand::Wand(WandCfg& data): Wearable(data.id, data.name, data.price, 
+                                   data.type, data.min_damage, 
+                                   data.max_damage),
+                                   mana_usage_cost(data.mana_usage_cost) {}
 Wand::~Wand() {}
 
 const unsigned int Wand::use() {

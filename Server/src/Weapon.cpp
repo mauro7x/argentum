@@ -1,11 +1,10 @@
 #include "../includes/Weapon.h"
 
-Weapon::Weapon(const unsigned int id, const unsigned int price, 
-               const unsigned int min_damage, 
-               const unsigned int max_damage,
-               const bool distant_attack):
-                    Wearable(id, price, WEAPON, min_damage, max_damage),
-                    distant_attack(distant_attack) {}
+Weapon::Weapon(WeaponCfg& data):
+                    Wearable(data.id, data.name, data.price, 
+                             data.type, data.min_damage, 
+                             data.max_damage),
+                             distant_attack(data.distant_attack) {}
 Weapon::~Weapon() {}
 
 const unsigned int Weapon::use() {

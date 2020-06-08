@@ -1,13 +1,11 @@
 #include "../includes/Kind.h"
 
-Kind::Kind(const std::string name, 
-           const unsigned int health,
-           const unsigned int meditation,
-           const unsigned int mana): 
-                name(name),
-                health(health),
-                meditation(meditation),
-                mana(mana) {}
+Kind::Kind(KindCfg& data):
+                id(data.id),
+                name(data.name),
+                health(data.health),
+                meditation(data.meditation),
+                mana(data.mana) {}
             
 Kind::~Kind() {}
 

@@ -10,16 +10,17 @@ Inventory::Inventory(): items_quantity(0),
 Inventory::~Inventory() {}
 
 Item* Inventory::gather(const unsigned int position) {
-    if (position >= N_INVENTORY_ITEMS)
+    if (position >= N_INVENTORY_ITEMS) {
         throw InvalidPositionException();
-        Item* item = this->container[position];
-        this->container[position] = nullptr;
-        return item;
+    }
+    Item* item = this->container[position];
+    this->container[position] = nullptr;
+    return item;
 }
 
 const unsigned int Inventory::getNextFreeSlot() const {
     unsigned int pos = 0;
-    for (pos; pos < this->container.size(); ++pos) {
+    for (; pos < this->container.size(); ++pos) {
         if (!container[pos])
             break;
     }

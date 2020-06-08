@@ -1,11 +1,8 @@
 #include "../includes/Defence.h"
 
-Defence::Defence(const unsigned int id, const unsigned int price, 
-                 WearableType type,
-                 const unsigned int min_defence, 
-                 const unsigned int max_defence):
-                    Wearable(id, price, type,
-                             min_defence, max_defence) {}
+Defence::Defence(DefenceCfg& data):
+                    Wearable(data.id, data.name, data.price, data.type,
+                             data.min_defence, data.max_defence) {}
 Defence::~Defence() {}
 
 const unsigned int Defence::use() {

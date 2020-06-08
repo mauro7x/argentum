@@ -1,14 +1,18 @@
 #include <random>
 #include "../includes/Wearable.h"
+#include "../includes/Character.h"
 
-Wearable::Wearable(const unsigned int id, const unsigned int price,
+Wearable::Wearable(const unsigned int id, const std::string name,
+                   const unsigned int price,
                    WearableType type,
                    const unsigned int min_usage_points,
                    const unsigned int max_usage_points):
-                        Item(id, price),
+                        Item(id, name, price),
                         type(type),
                         min_usage_points(min_usage_points),
                         max_usage_points(max_usage_points) {}
+
+Wearable::~Wearable() {}
 
 const WearableType Wearable::getType() const {
     return this->type;

@@ -2,7 +2,7 @@
 
 Equipment::Equipment() {
     // Inicializo array de wearables con nullptr.
-    for (int i = 0; i < container.size(); ++i) {
+    for (unsigned int i = 0; i < container.size(); ++i) {
         container[i] = nullptr;
     }
 }
@@ -24,7 +24,7 @@ const unsigned int Equipment::getDamagePoints() const {
 
 const unsigned int Equipment::getDefensePoints() const {
     unsigned int defense_points = 0;
-    for (int type = 0; type < N_WEARABLE_ITEMS; ++type) {
+    for (unsigned int type = 0; type < N_WEARABLE_ITEMS; ++type) {
         if (type == WEAPON)
             continue;
         if (this->container[type])
