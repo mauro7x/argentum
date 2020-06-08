@@ -4,8 +4,8 @@
     "data": [
         {
             "id": 0,
-            "name": "DebugMap",
-            "filepath": "../Assets/Maps/DebugMap.json"
+            "name": "TestMap",
+            "filepath": "../Assets/Maps/MapTest.json"
         }
     ]
 }
