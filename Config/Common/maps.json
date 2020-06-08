@@ -6,11 +6,6 @@
             "id": 0,
             "name": "DebugMap",
             "filepath": "../Assets/Maps/DebugMap.json"
-        },
-        {
-            "id": 1,
-            "name": "OtroMap",
-            "filepath": "../Assets/Maps/OtroMap.json"
         }
     ]
 }

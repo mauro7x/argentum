@@ -16,7 +16,7 @@
  "margin":0,
  "name":"decoration",
  "spacing":0,
- "tilecount":17,
+ "tilecount":20,
  "tiledversion":"2020.05.29",
  "tileheight":512,
  "tiles":[
@@ -119,6 +119,24 @@
         {
          "id":16,
          "image":"..\/..\/Tiles\/Decoration\/16.png",
+         "imageheight":512,
+         "imagewidth":512
+        }, 
+        {
+         "id":17,
+         "image":"..\/..\/Tiles\/Decoration\/17.png",
+         "imageheight":256,
+         "imagewidth":256
+        }, 
+        {
+         "id":18,
+         "image":"..\/..\/Tiles\/Decoration\/18.png",
+         "imageheight":256,
+         "imagewidth":256
+        }, 
+        {
+         "id":19,
+         "image":"..\/..\/Tiles\/Decoration\/19.png",
          "imageheight":512,
          "imagewidth":512
         }],

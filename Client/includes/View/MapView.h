@@ -64,6 +64,9 @@ class MapView {
     /* Renderiza los techos completos */
     void renderRoofs() const;
 
+    /* Oscurece el mapa fuera de las construcciones */
+    void renderShadowOutdoor() const;
+
     //-------------------------------------------------------------------------
 
     /* Devuelve si es un tile válido que forma parte del mapa */

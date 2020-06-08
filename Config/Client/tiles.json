@@ -9,7 +9,7 @@
             }
         },
         "first_gid": 1,
-        "next_first_gid": 3,
+        "next_first_gid": 4,
         "dirpath": "../Assets/Tiles/Ground/"
     },
     "decoration": {
@@ -21,8 +21,8 @@
                 "b": 0
             }
         },
-        "first_gid": 3,
-        "next_first_gid": 20,
+        "first_gid": 4,
+        "next_first_gid": 24,
         "dirpath": "../Assets/Tiles/Decoration/"
     }
 }

@@ -21,19 +21,21 @@ typedef int TileId;
 #endif  // __ID__
 
 enum MapLayer {
-    GROUND,
+    GROUND1,
+    GROUND2,
     DECORATION,
     ROOF,
-    ZONES,
-    SAFEZONES,
+    SAFEZONE,
     COLLISION,
     INDOOR,
+    PORTAL,
     EXPECTED_LAYERS
 };
 
 struct Tile {
     /* Graficos */
-    TileId ground_id;
+    TileId ground_1_id;
+    TileId ground_2_id;
     TileId decoration_id;
     TileId roof_id;
 
@@ -41,6 +43,7 @@ struct Tile {
     bool collision;
     bool safe_zone;
     bool indoor;
+    bool portal;
 };
 
 //-----------------------------------------------------------------------------

@@ -6,15 +6,15 @@
 void Map::_checkIfValid(const json& map_layers) const {
     if (map_layers.size() != EXPECTED_LAYERS) {
         throw Exception(
-            "Invalid map file. File must contain six map layers: ground, "
-            "decoration, roof, zones, safezones, and collision layer.");
+            "Invalid map file. File must contain these map layers: ground1, "
+            "ground2, decoration, roof, safezones, collision, indoor, and "
+            "portal layer.");
     }
 
     for (int i = 0; i < EXPECTED_LAYERS; i++) {
         if ((map_layers[i]["width"] != w) || (map_layers[i]["height"] != h)) {
             throw Exception(
-                "Invalid map file. File must contain six map layers: ground, "
-                "decoration, roof, zones, safezones, and collision layer.");
+                "Invalid map file. All layers must have the same dimensions.");
         }
     }
 }
@@ -26,15 +26,18 @@ void Map::_fillTiles(const json& map_layers) {
     tiles.reserve(total_tiles);
     Tile tile;
     for (int i = 0; i < total_tiles; i++) {
-        tile.ground_id = map_layers[GROUND]["data"][i];
+        tile.ground_1_id = map_layers[GROUND1]["data"][i];
+        tile.ground_2_id = map_layers[GROUND2]["data"][i];
         tile.decoration_id = map_layers[DECORATION]["data"][i];
         tile.roof_id = map_layers[ROOF]["data"][i];
-        int safe_zone = map_layers[SAFEZONES]["data"][i];
+        int safe_zone = map_layers[SAFEZONE]["data"][i];
         tile.safe_zone = (bool)safe_zone;
         int collision = map_layers[COLLISION]["data"][i];
         tile.collision = (bool)collision;
         int indoor = map_layers[INDOOR]["data"][i];
         tile.indoor = (bool)indoor;
+        int portal = map_layers[PORTAL]["data"][i];
+        tile.portal = (bool)portal;
         tiles.push_back(tile);
     }
 }
