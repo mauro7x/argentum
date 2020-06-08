@@ -2,16 +2,14 @@
 #define __WEAPON_H__
 
 #include "Wearable.h"
+#include "config_structs.h"
 
 class Weapon: public Wearable {
     private:
         const bool distant_attack;
 
     public:
-        Weapon(const unsigned int id, const unsigned int price, 
-               const unsigned int min_damage, 
-               const unsigned int max_damage,
-               const bool distant_attack);
+        Weapon(WeaponCfg& data);
         ~Weapon();
 
         Weapon(const Weapon&) = delete;
@@ -23,7 +21,6 @@ class Weapon: public Wearable {
         // a los metodos definidos del Character/Inventory/Equipment.
         // Mantener abstraccion Item y Wearable.
         
-        virtual void equip(Character& character) override;
         virtual const unsigned int use() override;
 };
 

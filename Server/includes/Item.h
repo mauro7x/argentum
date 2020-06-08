@@ -1,7 +1,9 @@
 #ifndef __ITEM_H__
 #define __ITEM_H__
 
-#include "Character.h"
+#include <string>
+
+class Character; // Evito dependencias circulares debido a double dispatch
 
 /*
  * Define la abstraccion Item.
@@ -11,10 +13,12 @@
 class Item {
     protected:
         const unsigned int id;
+        const std::string name;
         const unsigned int price;
 
     public:
-        Item(const unsigned int id, const unsigned int price);
+        Item(const unsigned int id, const std::string name,
+             const unsigned int price);
         virtual ~Item();
 
         // Poner las cosas que tienen en comun armas, hechizos y pociones.

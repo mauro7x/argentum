@@ -16,7 +16,7 @@ class FullInventoryException: public std::exception {
 class InvalidPositionException: public std::exception {
     public:
         virtual const char *what() const noexcept;
-}
+};
 
 /*
  * El Inventario es un contenedor que guarda Items,

@@ -1,10 +1,9 @@
 #ifndef __RACE_H__
 #define __RACE_H__
 
-/**************************************
- * Dudas:
- * - Nombre como atributo?
- *************************************/ 
+#include <string>
+
+#include "config_structs.h"
 
 /*
  * Raza:
@@ -15,10 +14,14 @@
  * de las ecuaciones de mana y vida.
  */
 struct Race {
-        const unsigned int life;
+        const unsigned int id;
+        const std::string name;
+        const unsigned int health;
         const unsigned int recovery;
-        const unsigned int manna;
-        // A priori no tienen comportamiento.
+        const unsigned int mana;
+
+        Race(RaceCfg& data);
+        ~Race();
 };
 
 #endif

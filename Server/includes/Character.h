@@ -8,6 +8,8 @@
 #include "Equipment.h"
 #include "Wearable.h"
 
+#include "config_structs.h"
+
 /*
  * Representa al ente manejado por el jugador.
  * 
@@ -30,7 +32,7 @@ class Character {
         Equipment equipment;
 
     public:
-        Character(); // Como especifico race y kind?
+        Character(RaceCfg& race, KindCfg& kind);
         ~Character();
 
         Character(const Character&) = delete;

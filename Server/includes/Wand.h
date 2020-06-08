@@ -2,16 +2,14 @@
 #define __WAND_H__
 
 #include "Wearable.h"
+#include "config_structs.h"
 
 class Wand: public Wearable {
     private:
         const unsigned int mana_usage_cost;
         
     public:
-         Wand(const unsigned int id, const unsigned int price,
-              const unsigned int min_damage, 
-              const unsigned int max_damage,
-              const unsigned int mana_usage_cost);
+         Wand(WandCfg& data);
         ~Wand();
 
         Wand(const Wand&) = delete;
@@ -23,7 +21,6 @@ class Wand: public Wearable {
         // a los metodos definidos del Character/Inventory/Equipment.
         // Mantener abstraccion item y Wearable.
 
-        virtual void equip(Character& character) override;
         virtual const unsigned int use() override;
 };
 

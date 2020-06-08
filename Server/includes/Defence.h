@@ -2,13 +2,11 @@
 #define __DEFENCE_H__
 
 #include "Wearable.h"
+#include "config_structs.h"
 
 class Defence: public Wearable {
     public:
-        Defence(const unsigned int id, const unsigned int price, 
-               WearableType type,
-               const unsigned int min_defence, 
-               const unsigned int max_defence);
+        Defence(DefenceCfg& data);
         ~Defence();
 
         Defence(const Defence&) = delete;
@@ -19,8 +17,7 @@ class Defence: public Wearable {
         // IMPLEMENTAR Metodos comodamente en base
         // a los metodos definidos del Character/Inventory/Equipment.
         // Mantener abstraccion Item y Wearable.
-        
-        virtual void equip(Character& character) override;
+
         virtual const unsigned int use() override;
 };
 

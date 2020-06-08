@@ -1,6 +1,8 @@
 #ifndef __POTION_H__
 #define __POTION_H__
 
+#include <string>
+
 #include "Item.h"
 
 class Potion: public Item {
@@ -9,6 +11,7 @@ class Potion: public Item {
 
     public:
         Potion(const unsigned int id, 
+               const std::string name,
                const unsigned int price,
                const unsigned int recovery_points);
         virtual ~Potion();
@@ -24,6 +27,7 @@ class Potion: public Item {
 class HealthPotion: public Potion {
     public:
         HealthPotion(const unsigned int id, 
+                     const std::string name,
                      const unsigned int price,
                      const unsigned int recovery_points);
         ~HealthPotion();
@@ -34,6 +38,7 @@ class HealthPotion: public Potion {
 class ManaPotion: public Potion {
     public:
         ManaPotion(const unsigned int id,
+                   const std::string name,
                    const unsigned int price,
                    const unsigned int recovery_points);
         ~ManaPotion();
