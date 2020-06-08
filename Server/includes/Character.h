@@ -30,7 +30,7 @@ class Character {
         Equipment equipment;
 
     public:
-        Character();
+        Character(); // Como especifico race y kind?
         ~Character();
 
         Character(const Character&) = delete;
@@ -38,12 +38,20 @@ class Character {
         Character(Character&&) = delete;
         Character& operator=(Character&&) = delete;
 
-        // Metodos/Acciones.
         void equip(unsigned int inventory_position);
         void equip(Wearable* item);
 
-        void recoverMana(const unsigned int points); // Pociones
-        void recoverHealth(const unsigned int points);  // Pociones
+        /*
+         * Efectua la accion curativa de las pociones de mana.
+         * Aumenta los puntos de mana en los points especificados.
+         */
+        void recoverMana(const unsigned int points);
+
+        /*
+         * Efectua la accion curativa de las pociones de vida.
+         * Aumenta los puntos de vida en los points especificados.
+         */
+        void recoverHealth(const unsigned int points);
 
         const unsigned int getMannaPoints() const; // Baculos verifican si tiene suficientes puntos antes de ser usados.
 };
