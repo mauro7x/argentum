@@ -1,6 +1,7 @@
 #include "Equipment.h"
 
 Equipment::Equipment() {
+    // Inicializo array de wearables con nullptr.
     for (int i = 0; i < container.size(); ++i) {
         container[i] = nullptr;
     }
@@ -9,8 +10,9 @@ Equipment::Equipment() {
 Equipment::~Equipment() {}
 
 Wearable* Equipment::add(Wearable* item) {
-    Wearable* prev_item = this->container[item->getType()];
-    this->container[item->getType()] = item;
+    WearableType type = item->getType();
+    Wearable* prev_item = this->container[type];
+    this->container[type] = item;
     return prev_item;
 }
 
@@ -22,11 +24,11 @@ const unsigned int Equipment::getDamagePoints() const {
 
 const unsigned int Equipment::getDefensePoints() const {
     unsigned int defense_points = 0;
-    for (int i = 0; i < N_WEARABLE_ITEMS; ++i) {
-        if (i == WEAPON)
+    for (int type = 0; type < N_WEARABLE_ITEMS; ++type) {
+        if (type == WEAPON)
             continue;
-        if (this->container[i])
-            defense_points += this->container[i]->use();
+        if (this->container[type])
+            defense_points += this->container[type]->use();
     }
     return defense_points;
 }
