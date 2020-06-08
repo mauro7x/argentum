@@ -133,33 +133,7 @@ void GameView::operator()() {
         camera.center(player.getBox(), map.widthInPx(), map.heightInPx());
         //---------------------------------------------------------------------
 
-        //---------------------------------------------------------------------
-        // RENDERIZADO
-
-        /* Necesitamos la posición en tiles para el renderizado por partes del
-         * mapa. Esto es necesario para que nuestro personaje pase por detras de
-         * los objetos... Ahora, como lo extrapolamos a N personajes? Pensar...
-         * Un primer approach podría ser hacer esto de forma metódica por cada
-         * PJ a renderizar, de arriba para abajo. Pero esto requeriría tener los
-         * pjs ordenados por posición vertical.*/
-        // SDL_Rect player_pos = player.getPos();
-
-        /* Este debería ser el único método que se llame aquí. Debería
-         * encapsular el órden del renderizado. */
         stage.render();
-
-        /* Renderizamos el mapa hasta la fila del jugador */
-        // map.renderBack(player_pos.x, player_pos.y);
-
-        /* Renderizamos el jugador encima del mapa */
-        // player.render();
-
-        /* Renderizamos el resto del mapa por encima del jugador */
-        // map.renderFront(player_pos.x, player_pos.y); /**/
-
-        // hud.render();
-        //---------------------------------------------------------------------
-
         renderer.presentScreen();
 
         // Delay para controlar el frame rate? por ahora usamos vsync
