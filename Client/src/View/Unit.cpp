@@ -1,18 +1,18 @@
-#include "../../includes/View/Entity.h"
+#include "../../includes/View/Unit.h"
 
 //-----------------------------------------------------------------------------
 // Métodos privados
 
-void Entity::_centerBoxOnTile() {
+void Unit::_centerBoxOnTile() {
     box.x = (x_tile * TILE_WIDTH) + ((TILE_WIDTH - box.w) / 2);
     box.y = (y_tile * TILE_HEIGHT) + (TILE_HEIGHT * (0.8)) - box.h;
 }
 
-int Entity::_xValueToReach() const {
+int Unit::_xValueToReach() const {
     return (x_tile * TILE_WIDTH) + ((TILE_WIDTH - box.w) / 2);
 }
 
-int Entity::_yValueToReach() const {
+int Unit::_yValueToReach() const {
     return (y_tile * TILE_HEIGHT) + (TILE_HEIGHT * (0.8)) - box.h;
 }
 
@@ -21,10 +21,10 @@ int Entity::_yValueToReach() const {
 //-----------------------------------------------------------------------------
 // API Pública
 
-Entity::Entity(const Renderer* renderer)
+Unit::Unit(const Renderer* renderer, const int x_tile, const int y_tile)
     : g_renderer(renderer),
-      x_tile(0),
-      y_tile(0),
+      x_tile(x_tile),
+      y_tile(y_tile),
       box({0, 0, 0, 0}),
       x_vel(0),
       y_vel(0),
@@ -32,19 +32,19 @@ Entity::Entity(const Renderer* renderer)
       next_y(0),
       last_moved(0) {}
 
-void Entity::updatePosition(int corrected_x_tile, int corrected_y_tile) {
+void Unit::updatePosition(int corrected_x_tile, int corrected_y_tile) {
     x_tile = corrected_x_tile;
     y_tile = corrected_y_tile;
     // aca probablemente tenemos que poner a la entidad a moverse, poniendo
     // next_tiles en vez de xy_tiles
 }
 
-void Entity::move() {}
+void Unit::move() {}
 
-void Entity::loadMedia() {}
+void Unit::loadMedia() {}
 
-void Entity::handleEvent(const SDL_Event& e) {}
+void Unit::handleEvent(const SDL_Event& e) {}
 
-Entity::~Entity() {}
+Unit::~Unit() {}
 
 //-----------------------------------------------------------------------------

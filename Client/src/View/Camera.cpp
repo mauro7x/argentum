@@ -65,9 +65,10 @@ int Camera::yOffset() const {
     return offset_y - y;
 }
 
-void Camera::center(const SDL_Rect* object, int map_width, int map_height) {
-    x = (object->x + object->w / 2) - w / 2;
-    y = (object->y + object->h / 2) - h / 2;
+void Camera::center(const SDL_Rect object, const int map_width,
+                    const int map_height) {
+    x = (object.x + object.w / 2) - w / 2;
+    y = (object.y + object.h / 2) - h / 2;
 
     if (x < 0) {
         x = 0;

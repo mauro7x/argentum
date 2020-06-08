@@ -47,7 +47,8 @@ class Camera {
     int yOffset() const;
 
     /* Centra la camara en torno al objeto */
-    void center(const SDL_Rect* object, int map_width, int map_height);
+    void center(const SDL_Rect object, const int map_width,
+                const int map_height);
 
     //-------------------------------------------------------------------------
 

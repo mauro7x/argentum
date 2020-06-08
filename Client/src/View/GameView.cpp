@@ -63,6 +63,7 @@ void GameView::_loadMedia() {
 
 void GameView::_handleEvent(const SDL_Event& e) {
     player.handleEvent(e);
+    units.handleEvent(e);
 }
 
 void GameView::_free() {
@@ -89,7 +90,8 @@ GameView::GameView()
       hud(&renderer),
       map(&renderer),
       predictor(map),
-      player(&renderer, predictor) {}
+      player(&renderer, predictor),
+      stage(hud, map, player, units) {}
 
 void GameView::operator()() {
     _init();
@@ -124,19 +126,38 @@ void GameView::operator()() {
         renderer.clearScreen();
 
         //---------------------------------------------------------------------
-        // Acciones previas al renderizado
-        map.select(1); /* el id del mapa x ahora hardcodeado */
+        // ACCIONES
 
+        map.select(0); /* el id del mapa x ahora hardcodeado */
         player.move();
-        camera.center(player.getBox(), map.getWidth(), map.getHeight());
+        camera.center(player.getBox(), map.widthInPx(), map.heightInPx());
         //---------------------------------------------------------------------
 
         //---------------------------------------------------------------------
-        // Renderizamos
+        // RENDERIZADO
 
-        map.render(10, 10);
-        player.render();
-        hud.render();
+        /* Necesitamos la posición en tiles para el renderizado por partes del
+         * mapa. Esto es necesario para que nuestro personaje pase por detras de
+         * los objetos... Ahora, como lo extrapolamos a N personajes? Pensar...
+         * Un primer approach podría ser hacer esto de forma metódica por cada
+         * PJ a renderizar, de arriba para abajo. Pero esto requeriría tener los
+         * pjs ordenados por posición vertical.*/
+        // SDL_Rect player_pos = player.getPos();
+
+        /* Este debería ser el único método que se llame aquí. Debería
+         * encapsular el órden del renderizado. */
+        stage.render();
+
+        /* Renderizamos el mapa hasta la fila del jugador */
+        // map.renderBack(player_pos.x, player_pos.y);
+
+        /* Renderizamos el jugador encima del mapa */
+        // player.render();
+
+        /* Renderizamos el resto del mapa por encima del jugador */
+        // map.renderFront(player_pos.x, player_pos.y); /**/
+
+        // hud.render();
         //---------------------------------------------------------------------
 
         renderer.presentScreen();

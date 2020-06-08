@@ -1,5 +1,5 @@
-#ifndef __ENTITY_H__
-#define __ENTITY_H__
+#ifndef __UNIT_H__
+#define __UNIT_H__
 
 //-----------------------------------------------------------------------------
 #include <SDL2/SDL.h>
@@ -12,7 +12,7 @@
 
 //-----------------------------------------------------------------------------
 
-class Entity {
+class Unit {
    protected:
     const Renderer* g_renderer;
 
@@ -33,19 +33,19 @@ class Entity {
 
    public:
     /* Constructor */
-    Entity(const Renderer* renderer);
+    Unit(const Renderer* renderer, const int x_tile = 0, const int y_tile = 0);
 
     /* Deshabilitamos el constructor por copia. */
-    Entity(const Entity&) = delete;
+    Unit(const Unit&) = delete;
 
     /* Deshabilitamos el operador= para copia.*/
-    Entity& operator=(const Entity&) = delete;
+    Unit& operator=(const Unit&) = delete;
 
     /* Deshabilitamos el constructor por movimiento. */
-    Entity(Entity&& other) = delete;
+    Unit(Unit&& other) = delete;
 
     /* Deshabilitamos el operador= para movimiento. */
-    Entity& operator=(Entity&& other) = delete;
+    Unit& operator=(Unit&& other) = delete;
 
     //-------------------------------------------------------------------------
     // Lo que debe poder hacer una entidad:
@@ -68,9 +68,9 @@ class Entity {
     //-------------------------------------------------------------------------
 
     /* Destructor */
-    virtual ~Entity();
+    virtual ~Unit();
 };
 
 //-----------------------------------------------------------------------------
 
-#endif  // __ENTITY_H__
+#endif  // __UNIT_H__

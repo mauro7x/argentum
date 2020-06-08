@@ -82,15 +82,13 @@ bool Player::_isMovementCompleted() {
 
 Player::Player(const Renderer* renderer, const Predictor& predictor, int x_tile,
                int y_tile)
-    : Entity(renderer),
+    : Unit(renderer, x_tile, y_tile),
       predictor(predictor),
       state(STANDING),
       frame_clip({0, 0, PLAYER_SPRITE_W, PLAYER_SPRITE_H}),
       current_frame(0),
       max_frames_current_animation(0),
       row_current_animation(0) {
-    this->x_tile = x_tile;
-    this->y_tile = y_tile;
     box.w = PLAYER_SPRITE_W;
     box.h = PLAYER_SPRITE_H;
     _centerBoxOnTile();
@@ -175,8 +173,12 @@ void Player::render() const {
                                 &frame_clip);
 }
 
-const SDL_Rect* Player::getBox() const {
-    return &box;
+SDL_Rect Player::getBox() const {
+    return box;
+}
+
+SDL_Rect Player::getPos() const {
+    return SDL_Rect({x_tile, y_tile, box.w, box.h});
 }
 
 Player::~Player() {}

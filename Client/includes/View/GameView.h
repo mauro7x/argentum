@@ -11,6 +11,7 @@
 //-----------------------------------------------------------------------------
 #include "Camera.h"
 #include "Renderer.h"
+#include "Stage.h"
 #include "Window.h"
 //-----------------------------------------------------------------------------
 
@@ -19,6 +20,7 @@
 #include "MapView.h"
 #include "Player.h"
 #include "Predictor.h"
+#include "UnitContainer.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -31,20 +33,24 @@
 
 class GameView {
    private:
+    /* Componentes SDL principales */
     Window window;
     Camera camera;
     Renderer renderer;
+
+    /* Flags internos */
     bool sdl_running;
     bool img_running;
 
-    //-------------------------------------------------------------------------
-    // Componentes de la vista
-
+    /* Componentes de la vista */
     HUDProxy hud;
     MapView map;
     Predictor predictor;
     Player player;
-    //-------------------------------------------------------------------------
+    UnitContainer units;
+
+    /* La escena que se renderizará en cada frame */
+    Stage stage;
 
     /* Inicializa recursos */
     void _init();
