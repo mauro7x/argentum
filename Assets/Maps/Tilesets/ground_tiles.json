@@ -1,4 +1,12 @@
 { "columns":0,
+ "editorsettings":
+    {
+     "export":
+        {
+         "format":"",
+         "target":"."
+        }
+    },
  "grid":
     {
      "height":1,
@@ -14,13 +22,13 @@
  "tiles":[
         {
          "id":0,
-         "image":"tiles\/12022.png",
+         "image":"..\/..\/Tiles\/Ground\/0.png",
          "imageheight":128,
          "imagewidth":128
         }, 
         {
          "id":1,
-         "image":"tiles\/12021.png",
+         "image":"..\/..\/Tiles\/Ground\/1.png",
          "imageheight":128,
          "imagewidth":128
         }],

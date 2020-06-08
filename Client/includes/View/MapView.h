@@ -57,6 +57,9 @@ class MapView {
     /* Selecciona el mapa indicado por el id */
     void select(Id id);
 
+    /* Devuelve si es un tile válido que forma parte del mapa */
+    bool isValid(const int x, const int y) const;
+
     /* Devuelve si hay collision en la celda dada */
     bool collision(const int x, const int y) const;
 

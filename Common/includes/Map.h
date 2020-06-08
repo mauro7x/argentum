@@ -96,6 +96,9 @@ class Map {
     /* Devuelve la altura de un tile */
     int getTileHeight() const;
 
+    /* Devuelve si el tile es válido y es parte del mapa */
+    bool isValid(const int x, const int y) const;
+
     /* Obtiene un Tile de solo lectura */
     const Tile& getTile(const int x, const int y) const;
 

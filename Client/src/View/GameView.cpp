@@ -125,7 +125,7 @@ void GameView::operator()() {
 
         //---------------------------------------------------------------------
         // Acciones previas al renderizado
-        map.select(1000); /* el id del mapa x ahora hardcodeado */
+        map.select(1); /* el id del mapa x ahora hardcodeado */
 
         player.move();
         camera.center(player.getBox(), map.getWidth(), map.getHeight());

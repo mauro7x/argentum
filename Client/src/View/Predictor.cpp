@@ -11,6 +11,10 @@
 Predictor::Predictor(const MapView& map) : map(map) {}
 
 bool Predictor::canMoveTo(const int x, const int y) const {
+    if (!map.isValid(x, y)) {
+        return false;
+    }
+
     if (map.collision(x, y)) {
         return false;
     }

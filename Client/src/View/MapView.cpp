@@ -115,6 +115,11 @@ bool MapView::collision(const int x, const int y) const {
     return current_tile.collision;
 }
 
+bool MapView::isValid(const int x, const int y) const {
+    const Map& current_map = maps[current_map_id];
+    return current_map.isValid(x, y);
+}
+
 int MapView::getWidth() const {
     const Map& current_map = maps[current_map_id];
     return (current_map.getTileWidth()) * (current_map.getWidthTiles());

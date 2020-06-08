@@ -10,7 +10,7 @@
         },
         "first_gid": 1,
         "next_first_gid": 3,
-        "dirpath": "../Assets/Maps/Tiles/Ground/"
+        "dirpath": "../Assets/Tiles/Ground/"
     },
     "decoration": {
         "color_key": {
@@ -22,7 +22,7 @@
             }
         },
         "first_gid": 3,
-        "next_first_gid": 4,
-        "dirpath": "../Assets/Maps/Tiles/Decoration/"
+        "next_first_gid": 20,
+        "dirpath": "../Assets/Tiles/Decoration/"
     }
 }

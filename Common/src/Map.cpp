@@ -100,6 +100,14 @@ int Map::getTileHeight() const {
     return tile_h;
 }
 
+bool Map::isValid(const int x, const int y) const {
+    if ((x >= w) || (x < 0) || (y >= h) || (y < 0)) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
 const Tile& Map::getTile(const int x, const int y) const {
     int tile = _tileNumber(x, y);
     return tiles.at(tile);
