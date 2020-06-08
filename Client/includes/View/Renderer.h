@@ -70,6 +70,10 @@ class Renderer {
                          SDL_Point* center = NULL,
                          SDL_RendererFlip flip = SDL_FLIP_NONE) const;
 
+    /* Rellena el rectangulo si es visible por la camara */
+    void fillQuadIfVisible(SDL_Rect* quad, int r = 0, int g = 0, int b = 0,
+                           int a = 0xFF) const;
+
     //-------------------------------------------------------------------------
 
     /* Destructor */

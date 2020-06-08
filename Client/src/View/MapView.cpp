@@ -114,7 +114,22 @@ void MapView::renderRoofs() const {
 }
 
 void MapView::renderShadowOutdoor() const {
-    /* hacer esta funcion */
+    const Map& current_map = maps[current_map_id];
+    SDL_Rect render_quad = {0};
+
+    for (int y = 0; y < h_tiles; y++) {
+        for (int x = 0; x < w_tiles; x++) {
+            const Tile& current_tile = current_map.getTile(x, y);
+
+            if (!(current_tile.indoor)) {
+                /* Renderizar una textura negra */
+                render_quad = {(x * tile_w), (y * tile_h), tile_w, tile_h};
+                float alpha = 0.7;
+                g_renderer->fillQuadIfVisible(&render_quad, 0, 0, 0,
+                                              alpha * 256);
+            }
+        }
+    }
 }
 
 bool MapView::isValid(const int x, const int y) const {

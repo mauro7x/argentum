@@ -45,6 +45,12 @@ void Renderer::init(const json& config) {
             SDL_GetError());
     }
 
+    if (SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND)) {
+        throw SDLException(
+            "Error in function SDL_SetRenderDrawBlendMode()\nSDL_Error: %s",
+            SDL_GetError());
+    }
+
     _setDrawColor();
 }
 
@@ -94,6 +100,22 @@ void Renderer::renderIfVisible(SDL_Texture* texture, SDL_Rect* render_quad,
         render_quad->x += camera.xOffset();
         render_quad->y += camera.yOffset();
         render(texture, render_quad, clip, angle, center, flip);
+    }
+}
+
+void Renderer::fillQuadIfVisible(SDL_Rect* quad, int r, int g, int b,
+                                 int a) const {
+    if (camera.isVisible(quad)) {
+        if (SDL_SetRenderDrawColor(renderer, r, g, b, a)) {
+            throw SDLException(
+                "Error in function SDL_SetRenderDrawColor() while filling "
+                "quad.\nSDL_Error: %s",
+                SDL_GetError());
+        }
+
+        quad->x += camera.xOffset();
+        quad->y += camera.yOffset();
+        SDL_RenderFillRect(renderer, quad);
     }
 }
 
