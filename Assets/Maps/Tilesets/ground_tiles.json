@@ -14,9 +14,9 @@
      "width":1
     },
  "margin":0,
- "name":"ground_tiles",
+ "name":"pisos",
  "spacing":0,
- "tilecount":3,
+ "tilecount":8,
  "tiledversion":"2020.05.29",
  "tileheight":128,
  "tiles":[
@@ -35,6 +35,36 @@
         {
          "id":2,
          "image":"..\/..\/Tiles\/Ground\/2.png",
+         "imageheight":64,
+         "imagewidth":64
+        }, 
+        {
+         "id":3,
+         "image":"..\/..\/Tiles\/Ground\/3.png",
+         "imageheight":64,
+         "imagewidth":64
+        }, 
+        {
+         "id":4,
+         "image":"..\/..\/Tiles\/Ground\/4.png",
+         "imageheight":64,
+         "imagewidth":64
+        }, 
+        {
+         "id":5,
+         "image":"..\/..\/Tiles\/Ground\/5.png",
+         "imageheight":64,
+         "imagewidth":64
+        }, 
+        {
+         "id":6,
+         "image":"..\/..\/Tiles\/Ground\/6.png",
+         "imageheight":64,
+         "imagewidth":64
+        }, 
+        {
+         "id":7,
+         "image":"..\/..\/Tiles\/Ground\/7.png",
          "imageheight":64,
          "imagewidth":64
         }],

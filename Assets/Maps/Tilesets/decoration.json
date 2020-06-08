@@ -4,7 +4,7 @@
      "export":
         {
          "format":"",
-         "target":"."
+         "target":"..\/..\/..\/..\/..\/..\/Assets\/Maps\/Tilesets"
         }
     },
  "grid":
@@ -16,7 +16,7 @@
  "margin":0,
  "name":"decoration",
  "spacing":0,
- "tilecount":20,
+ "tilecount":12,
  "tiledversion":"2020.05.29",
  "tileheight":512,
  "tiles":[
@@ -41,14 +41,14 @@
         {
          "id":3,
          "image":"..\/..\/Tiles\/Decoration\/3.png",
-         "imageheight":512,
-         "imagewidth":512
+         "imageheight":128,
+         "imagewidth":128
         }, 
         {
          "id":4,
          "image":"..\/..\/Tiles\/Decoration\/4.png",
-         "imageheight":512,
-         "imagewidth":512
+         "imageheight":128,
+         "imagewidth":128
         }, 
         {
          "id":5,
@@ -59,14 +59,14 @@
         {
          "id":6,
          "image":"..\/..\/Tiles\/Decoration\/6.png",
-         "imageheight":512,
-         "imagewidth":512
+         "imageheight":256,
+         "imagewidth":256
         }, 
         {
          "id":7,
          "image":"..\/..\/Tiles\/Decoration\/7.png",
-         "imageheight":512,
-         "imagewidth":512
+         "imageheight":192,
+         "imagewidth":128
         }, 
         {
          "id":8,
@@ -77,68 +77,20 @@
         {
          "id":9,
          "image":"..\/..\/Tiles\/Decoration\/9.png",
-         "imageheight":512,
-         "imagewidth":512
+         "imageheight":256,
+         "imagewidth":256
         }, 
         {
          "id":10,
          "image":"..\/..\/Tiles\/Decoration\/10.png",
-         "imageheight":128,
-         "imagewidth":128
+         "imageheight":256,
+         "imagewidth":256
         }, 
         {
          "id":11,
          "image":"..\/..\/Tiles\/Decoration\/11.png",
-         "imageheight":128,
-         "imagewidth":128
-        }, 
-        {
-         "id":12,
-         "image":"..\/..\/Tiles\/Decoration\/12.png",
-         "imageheight":512,
-         "imagewidth":512
-        }, 
-        {
-         "id":13,
-         "image":"..\/..\/Tiles\/Decoration\/13.png",
-         "imageheight":512,
-         "imagewidth":512
-        }, 
-        {
-         "id":14,
-         "image":"..\/..\/Tiles\/Decoration\/14.png",
-         "imageheight":512,
-         "imagewidth":512
-        }, 
-        {
-         "id":15,
-         "image":"..\/..\/Tiles\/Decoration\/15.png",
-         "imageheight":512,
-         "imagewidth":512
-        }, 
-        {
-         "id":16,
-         "image":"..\/..\/Tiles\/Decoration\/16.png",
-         "imageheight":512,
-         "imagewidth":512
-        }, 
-        {
-         "id":17,
-         "image":"..\/..\/Tiles\/Decoration\/17.png",
          "imageheight":256,
          "imagewidth":256
-        }, 
-        {
-         "id":18,
-         "image":"..\/..\/Tiles\/Decoration\/18.png",
-         "imageheight":256,
-         "imagewidth":256
-        }, 
-        {
-         "id":19,
-         "image":"..\/..\/Tiles\/Decoration\/19.png",
-         "imageheight":512,
-         "imagewidth":512
         }],
  "tilewidth":512,
  "type":"tileset",
