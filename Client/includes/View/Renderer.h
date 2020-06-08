@@ -24,6 +24,9 @@ class Renderer {
     /* Settea el color de renderer */
     void _setDrawColor() const;
 
+    /* Libera recursos */
+    void _free();
+
    public:
     /* Constructor */
     Renderer(const Window& window, const Camera& camera);
@@ -43,7 +46,7 @@ class Renderer {
     //-------------------------------------------------------------------------
 
     /* Inicializa recursos */
-    void init(const json config);
+    void init(const json& config);
 
     /* Limpia la pantalla */
     void clearScreen() const;
@@ -67,8 +70,9 @@ class Renderer {
                          SDL_Point* center = NULL,
                          SDL_RendererFlip flip = SDL_FLIP_NONE) const;
 
-    /* Libera recursos */
-    void free();
+    /* Rellena el rectangulo si es visible por la camara */
+    void fillQuadIfVisible(SDL_Rect* quad, int r = 0, int g = 0, int b = 0,
+                           int a = 0xFF) const;
 
     //-------------------------------------------------------------------------
 

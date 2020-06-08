@@ -3,7 +3,8 @@
 // ----------------------------------------------------------------------------
 #include <stdio.h>
 
-#include "../../../Common/includes/Exceptions/Exception.h"
+#include <exception>
+
 #include "../../includes/Model/Client.h"
 #include "../../includes/Model/defs.h"
 // ----------------------------------------------------------------------------
@@ -19,8 +20,7 @@ int main(int argc, char* argv[]) {
     try {
         Client client;
         client.run();
-
-    } catch (const Exception& e) {
+    } catch (const std::exception& e) {
         fprintf(stderr, "%s\n", e.what());
         return ERROR;
     } catch (...) {

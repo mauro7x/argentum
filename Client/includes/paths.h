@@ -18,7 +18,8 @@
 // Config paths
 
 #define CONFIG_PATH "../Config/Client/"
-#define VIEW_CONFIG_FILEPATH "../Config/Client/view_config.json"
+#define GUI_CONFIG_FILEPATH "../Config/Client/gui_config.json"
+#define TILES_FILEPATH "../Config/Client/tiles.json"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------

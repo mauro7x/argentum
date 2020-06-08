@@ -35,7 +35,7 @@ class Texture {
     /* Habilitamos el constructor por movimiento. */
     Texture(Texture&& other);
 
-    /* habilitamos el operador= para movimiento. */
+    /* Habilitamos el operador= para movimiento. */
     Texture& operator=(Texture&& other);
 
     /**

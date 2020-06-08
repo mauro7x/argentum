@@ -35,7 +35,7 @@ class Camera {
     //-------------------------------------------------------------------------
 
     /* Inicializa recursos */
-    void init(const json config);
+    void init(const json& config);
 
     /* Devuelve si el objeto es visible por la camara o no */
     bool isVisible(const SDL_Rect* object) const;
@@ -47,7 +47,8 @@ class Camera {
     int yOffset() const;
 
     /* Centra la camara en torno al objeto */
-    void center(const SDL_Rect* object, int map_width, int map_height);
+    void center(const SDL_Rect object, const int map_width,
+                const int map_height);
 
     //-------------------------------------------------------------------------
 

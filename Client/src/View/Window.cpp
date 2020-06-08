@@ -3,6 +3,13 @@
 //-----------------------------------------------------------------------------
 // Métodos privados
 
+void Window::_free() {
+    if (window) {
+        SDL_DestroyWindow(window);
+        window = NULL;
+    }
+}
+
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -10,7 +17,7 @@
 
 Window::Window() : window(NULL) {}
 
-void Window::init(const json config) {
+void Window::init(const json& config) {
     w = config["w"];
     h = config["h"];
     std::string title = config["title"];
@@ -28,15 +35,8 @@ SDL_Window* Window::getWindow() const {
     return window;
 }
 
-void Window::free() {
-    if (window) {
-        SDL_DestroyWindow(window);
-        window = NULL;
-    }
-}
-
 Window::~Window() {
-    free();
+    _free();
 }
 
 //-----------------------------------------------------------------------------

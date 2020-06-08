@@ -5,14 +5,16 @@
 #include <SDL2/SDL.h>
 
 #include "../paths.h"
-#include "Entity.h"
+#include "Predictor.h"
 #include "Texture.h"
+#include "Unit.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 // Estados del jugador
 
 enum PlayerState { STANDING, MOVING };
+
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -40,8 +42,9 @@ enum PlayerState { STANDING, MOVING };
 
 //-----------------------------------------------------------------------------
 
-class Player : Entity {
+class Player : public Unit {
    private:
+    const Predictor& predictor;
     Texture sprite_sheet;
     PlayerState state;
 
@@ -68,7 +71,8 @@ class Player : Entity {
 
    public:
     /* Constructor */
-    Player(const Renderer* renderer, int x_tile = 0, int y_tile = 0);
+    Player(const Renderer* renderer, const Predictor& predictor, int x_tile = 0,
+           int y_tile = 0);
 
     //-------------------------------------------------------------------------
     // Lo que debe poder hacer una entidad:
@@ -89,7 +93,10 @@ class Player : Entity {
     void render() const override;
 
     /* Devuelve el box para centrar la camara */
-    const SDL_Rect* getBox() const;
+    SDL_Rect getBox() const;
+
+    /* Devuelve la posicion del jugador en tiles */
+    SDL_Rect getPos() const;
 
     //-------------------------------------------------------------------------
 
