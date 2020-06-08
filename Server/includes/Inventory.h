@@ -13,6 +13,11 @@ class FullInventoryException: public std::exception {
         virtual const char *what() const noexcept;
 };
 
+class InvalidPositionException: public std::exception {
+    public:
+        virtual const char *what() const noexcept;
+}
+
 /*
  * El Inventario es un contenedor que guarda Items,
  * que pueden ser armas, hechizos o pociones.
@@ -23,8 +28,13 @@ class Inventory {
     private:
         std::array<Item*, N_INVENTORY_ITEMS> container;
         unsigned int items_quantity;
-
         unsigned int gold_quantity;
+
+        /*
+         * Devuelve la el indice del menor slot libre del
+         * container del inventario.
+         */
+        const unsigned int getNextFreeSlot() const;
 
     public:
         Inventory();
@@ -38,6 +48,9 @@ class Inventory {
         /*
          * Obtiene el item en la posicion especificada.
          * En caso de no haber, retorna nullptr.
+         * 
+         * Lanza InvalidPositionException si la posicion
+         * especificada es invalida (fuera de rango).
          */
         Item* gather(const unsigned int position);
 
