@@ -9,14 +9,9 @@
 
 //-----------------------------------------------------------------------------
 #include "../../Common/includes/Exceptions/Exception.h"
+#include "../../Common/includes/JSON.h"
 #include "config_structs.h"
 #include "paths.h"
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
-// Librería de json a utilizar (https://github.com/nlohmann/json).
-#include "../../Common/includes/json.hpp"
-using json = nlohmann::json;
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -32,9 +27,6 @@ template <class T>
 class Config {
    private:
     std::unordered_map<Id, T> config;
-
-    /* Lee el archivo json del filepath especificado */
-    json _loadJsonFile(std::string filepath) const;
 
     /* Parsea el json correspondiente y llena la estructura. Se define
      * polimórficamente para los distintos config_structs */
