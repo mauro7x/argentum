@@ -18,6 +18,11 @@ class InvalidPositionException: public std::exception {
         virtual const char *what() const noexcept;
 };
 
+class InsufficientGoldException: public std::exception {
+    public:
+        virtual const char *what() const noexcept;
+};
+
 /*
  * El Inventario es un contenedor que guarda Items,
  * que pueden ser armas, hechizos o pociones.
@@ -52,16 +57,29 @@ class Inventory {
          * Lanza InvalidPositionException si la posicion
          * especificada es invalida (fuera de rango).
          */
-        Item* gather(const unsigned int position);
+        Item* gatherItem(const unsigned int position);
+
+        /*
+         * Obtiene amount de gold del inventario.
+         * 
+         * Lanza InsufficientGoldException si la cantidad de oro
+         * presente en el inventario es menor a amount.
+         */
+        void gatherGold(const unsigned int amount);
 
         /*
          * Agrega un item al inventario.
          * Retorna la posicion en la que se agrego.
          * 
          * Lanza FullInventoryException si el inventario esta
-         * lleno.
+         * lleno y no se puede agregar.
          */
-        const unsigned int add(Item* item);
+        const unsigned int addItem(Item* item);
+
+        /*
+         * Agrega amount de gold al inventario.
+         */
+        void addGold(const unsigned int amount);
 };
 
 #endif
