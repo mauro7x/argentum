@@ -68,7 +68,9 @@ GameView::GameView()
       img_running(false),
       hud(&renderer),
       map(&renderer),
-      // predictor(map),
+
+      server(map), /* proxy server*/
+
       unit_sprites(&renderer),
       player(&renderer, &unit_sprites),
       stage(hud, map, player) {}

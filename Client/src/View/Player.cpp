@@ -73,8 +73,10 @@ Player::Player(Player&& other) {
     /* Nos apropiamos de los punteros */
     g_renderer = other.g_renderer;
     g_sprites = other.g_sprites;
+    server = other.server;
     other.g_renderer = NULL;
     other.g_sprites = NULL;
+    other.server = NULL;
 
     /* Copiamos el resto de atributos */
     data = other.data;
@@ -87,8 +89,10 @@ Player& Player::operator=(Player&& other) {
     /* Nos apropiamos de los punteros */
     g_renderer = other.g_renderer;
     g_sprites = other.g_sprites;
+    server = other.server;
     other.g_renderer = NULL;
     other.g_sprites = NULL;
+    other.server = NULL;
 
     /* Copiamos el resto de atributos */
     data = other.data;

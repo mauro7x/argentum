@@ -14,6 +14,12 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+// Proxy del server, esto luego se reemplaza con la lógica del modelo
+
+#include "ServerProxy.h"
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
 
 /* Data que irá cambiando durante la ejecución */
 struct PlayerData {
@@ -32,6 +38,7 @@ class Player {
     /* Componentes para renderizar */
     Renderer* g_renderer;
     UnitSpriteContainer* g_sprites;
+    ServerProxy* server; /* proxy del server */
     int tile_w, tile_h;
 
     /* Data del personaje */
@@ -82,11 +89,11 @@ class Player {
     /* Deshabilitamos el operador= para copia.*/
     Player& operator=(const Player&) = delete;
 
-    /* Habilitamos el constructor por movimiento. */
-    Player(Player&& other);
+    /* Deshabilitamos el constructor por movimiento. */
+    Player(Player&& other) = delete;
 
-    /* Habilitamos el operador= para movimiento. */
-    Player& operator=(Player&& other);
+    /* Deshabilitamos el operador= para movimiento. */
+    Player& operator=(Player&& other) = delete;
 
     //-------------------------------------------------------------------------
 
