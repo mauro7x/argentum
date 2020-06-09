@@ -1,7 +1,33 @@
 {
+    "defences": [
+        {
+            "id": 3000,
+            "name": "Capucha",
+            "type": 0,
+            "price": 100,
+            "min_defence": 10,
+            "max_defence": 20
+        },
+        {
+            "id": 4000,
+            "name": "Armadura",
+            "type": 1,
+            "price": 100,
+            "min_defence": 10,
+            "max_defence": 20
+        },
+        {
+            "id": 5000,
+            "name": "Escudo",
+            "type": 2,
+            "price": 100,
+            "min_defence": 10,
+            "max_defence": 20
+        }
+    ],
     "weapons": [
         {
-            "id": 300,
+            "id": 6000,
             "name": "Espada",
             "type": 3,
             "price": 100,
@@ -10,7 +36,7 @@
             "distant_attack": false
         },
         {
-            "id": 301,
+            "id": 6001,
             "name": "Arco",
             "type": 3,
             "price": 100,
@@ -21,39 +47,13 @@
     ],
     "wands": [
         {
-            "id": 302,
+            "id": 6002,
             "name": "Báculo",
             "type": 3,
             "price": 100,
             "min_damage": 10,
             "max_damage": 20,
             "mana_usage_cost": 10
-        }
-    ],
-    "defences": [
-        {
-            "id": 400,
-            "name": "Capucha",
-            "type": 0,
-            "price": 100,
-            "min_defence": 10,
-            "max_defence": 20
-        },
-        {
-            "id": 500,
-            "name": "Armadura",
-            "type": 1,
-            "price": 100,
-            "min_defence": 10,
-            "max_defence": 20
-        },
-        {
-            "id": 600,
-            "name": "Escudo",
-            "type": 2,
-            "price": 100,
-            "min_defence": 10,
-            "max_defence": 20
         }
     ]
 }
