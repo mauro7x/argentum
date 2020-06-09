@@ -18,7 +18,7 @@ class Defence: public Wearable {
         // a los metodos definidos del Character/Inventory/Equipment.
         // Mantener abstraccion Item y Wearable.
 
-        virtual const unsigned int use() override;
+        virtual const unsigned int use(Character& user) override;
 };
 
 #endif
