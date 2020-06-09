@@ -20,7 +20,6 @@
 #include "MapView.h"
 #include "Player.h"
 #include "Predictor.h"
-#include "UnitContainer.h"
 #include "UnitSpriteContainer.h"
 //-----------------------------------------------------------------------------
 
@@ -50,7 +49,6 @@ class GameView {
     Predictor predictor;
     UnitSpriteContainer unit_sprites;
     Player player;
-    UnitContainer units;
 
     /* La escena que se renderizará en cada frame */
     Stage stage;

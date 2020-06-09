@@ -38,7 +38,6 @@ void GameView::_init() {
 
     /* Iniciamos el unit container */
     player.init(map_config["tilewidth"], map_config["tileheight"]);
-    units.init(map_config["tilewidth"], map_config["tileheight"]);
 }
 
 json GameView::_loadJsonFile(std::string filepath) const {
@@ -69,7 +68,6 @@ void GameView::_loadMedia() {
 
 void GameView::_handleEvent(const SDL_Event& e) {
     player.handleEvent(e);
-    units.handleEvent(e);
 }
 
 void GameView::_free() {
@@ -98,8 +96,7 @@ GameView::GameView()
       predictor(map),
       unit_sprites(&renderer),
       player(&renderer, unit_sprites, predictor),
-      units(&renderer, unit_sprites),
-      stage(hud, map, player, units) {}
+      stage(hud, map, player) {}
 
 void GameView::operator()() {
     _init();

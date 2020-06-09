@@ -8,9 +8,8 @@
 //-----------------------------------------------------------------------------
 // API Pública
 
-Stage::Stage(const HUDProxy& hud, const MapView& map, const Player& player,
-             const UnitContainer& units)
-    : g_hud(hud), g_map(map), g_player(player), g_units(units) {}
+Stage::Stage(const HUDProxy& hud, const MapView& map, const Player& player)
+    : g_hud(hud), g_map(map), g_player(player) {}
 
 void Stage::render() const {
     SDL_Rect player_pos = g_player.getPos();
