@@ -6,12 +6,12 @@ Potion::Potion(const unsigned int id,
                std::string name,
                const unsigned int price,
                const unsigned int recovery_points):
-                    Item(id, name, price),
-                    recovery_points(recovery_points) {}
+    Item(id, name, price),
+    recovery_points(recovery_points) {}
 
 Potion::~Potion() {}
 
-Potion* PotionFactory::newPotion(PotionCfg data) {
+Potion* PotionFactory::newPotion(const PotionCfg& data) {
     if (data.type == HEALTH) {
         return new HealthPotion(data);
     } else if (data.type == MANA) {
@@ -21,20 +21,18 @@ Potion* PotionFactory::newPotion(PotionCfg data) {
     }
 }
 
-HealthPotion::HealthPotion(PotionCfg data): Potion(data.id, 
-                                                   data.name, 
-                                                   data.price, 
-                                                   data.recovery_points) {}
+HealthPotion::HealthPotion(const PotionCfg& data): 
+    Potion(data.id, data.name, 
+           data.price, data.recovery_points) {}
 HealthPotion::~HealthPotion() {}
 
 void HealthPotion::equip(Character& equipper) {
     equipper.recoverHealth(this->recovery_points);
 }
 
-ManaPotion::ManaPotion(PotionCfg data): Potion(data.id, 
-                                               data.name, 
-                                               data.price, 
-                                               data.recovery_points) {}
+ManaPotion::ManaPotion(const PotionCfg& data): 
+    Potion(data.id, data.name, 
+           data.price, data.recovery_points) {}
 ManaPotion::~ManaPotion() {}
 
 void ManaPotion::equip(Character& equipper) {

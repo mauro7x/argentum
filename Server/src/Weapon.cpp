@@ -2,7 +2,7 @@
 #include "../includes/Character.h" // Evito dependencias circulares.
 #include "../includes/RandomNumberGenerator.h"
 
-Weapon::Weapon(WeaponCfg& data):
+Weapon::Weapon(const WeaponCfg& data):
                     Wearable(data.id, data.name, data.price, WEAPON),
                              attack_distance(data.attack_distance),
                              min_damage(data.min_damage),

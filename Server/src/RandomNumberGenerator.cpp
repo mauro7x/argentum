@@ -5,7 +5,8 @@
 RandomNumberGenerator::RandomNumberGenerator() {}
 RandomNumberGenerator::~RandomNumberGenerator() {}
 
-int RandomNumberGenerator::operator()(int min, int max) {
+unsigned int RandomNumberGenerator::operator()(unsigned int min, 
+                                               unsigned int max) {
     // Obtengo numero random del HW
     std::random_device rd;
     // Agrego seed al generador

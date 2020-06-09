@@ -1,5 +1,7 @@
 #include "../includes/Inventory.h"
 
+#include <iostream> // Para testear
+
 Inventory::Inventory(): items_quantity(0),
                         gold_quantity(0) {
     for (unsigned int i = 0; i < container.size(); ++i) {
@@ -31,6 +33,7 @@ Item* Inventory::gatherItem(const unsigned int position) {
     }
     Item* item = this->container[position];
     this->container[position] = nullptr;
+    --this->items_quantity;
     return item;
 }
 
@@ -47,6 +50,7 @@ const unsigned int Inventory::addItem(Item* item) {
     
     unsigned int position = getNextFreeSlot();
     this->container[position] = item;
+    ++this->items_quantity;
     return position;
 }
 
@@ -64,4 +68,14 @@ const char* InvalidPositionException::what() const noexcept {
 
 const char* InsufficientGoldException::what() const noexcept {
     return "No tienes suficiente oro en el inventario.";
+}
+
+void Inventory::debug() const {
+    std::cout << "Inventory: [" << this->items_quantity << " elements]" << std::endl;
+    for (unsigned int i = 0; i < this->container.size(); ++i) {
+        if (this->container[i]) {
+            std::cout << "Posicion " << i << ": ";
+            std::cout << this->container[i]->what() << std::endl;
+        }
+    }
 }

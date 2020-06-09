@@ -1,6 +1,8 @@
 #include "../includes/Equipment.h"
 #include "../includes/Character.h"
 
+#include <iostream> // Para testear
+
 Equipment::Equipment() {
     // Inicializo array de wearables con nullptr.
     for (unsigned int i = 0; i < container.size(); ++i) {
@@ -44,4 +46,14 @@ const unsigned int Equipment::getDefensePoints(Character& defender) {
         }
     }
     return defense_points;
+}
+
+void Equipment::debug() const {
+    std::cout << "Equipment:" << std::endl;
+    for (unsigned int i = 0; i < this->container.size(); ++i) {
+        if (this->container[i]) {
+            std::cout << "Posicion " << i << ": ";
+            std::cout << this->container[i]->what() << std::endl;
+        }
+    }
 }

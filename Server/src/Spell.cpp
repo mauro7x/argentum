@@ -10,7 +10,7 @@ Spell::Spell(const int id,
                 mana_usage_cost(mana_usage_cost) {}
 Spell::~Spell() {}
 
-Spell* SpellFactory::newSpell(SpellCfg& data) {
+Spell* SpellFactory::newSpell(const SpellCfg& data) {
     if (data.type == ATTACKING) {
         return new AttackingSpell(data);
     } else if (data.type == HEALING) {
@@ -20,7 +20,7 @@ Spell* SpellFactory::newSpell(SpellCfg& data) {
     }
 }
 
-AttackingSpell::AttackingSpell(SpellCfg& data): Spell(data.id, 
+AttackingSpell::AttackingSpell(const SpellCfg& data): Spell(data.id, 
                                                       data.name, 
                                                       data.mana_usage_cost),
                                                 attack_distance(data.attack_distance), 
@@ -37,7 +37,7 @@ const unsigned int AttackingSpell::cast(Character& caster) {
     return random_number_generator(min_damage, max_damage);
 }
 
-HealingSpell::HealingSpell(SpellCfg& data): Spell(data.id, 
+HealingSpell::HealingSpell(const SpellCfg& data): Spell(data.id, 
                                                   data.name, 
                                                   data.mana_usage_cost),
                                             recovery_points(data.recovery_points) {}

@@ -1,6 +1,6 @@
 #include "../includes/Kind.h"
 
-Kind::Kind(KindCfg& data):
+Kind::Kind(const KindCfg& data):
                 id(data.id),
                 name(data.name),
                 health(data.health),

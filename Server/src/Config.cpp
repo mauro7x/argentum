@@ -1,5 +1,6 @@
-#include "../includes/Config.h"
+#include <array>
 
+#include "../includes/Config.h"
 //-----------------------------------------------------------------------------
 // API Pública
 
@@ -114,11 +115,10 @@ void Config<WeaponCfg>::_parseFile() {
 
         weapon.id = j["weapons"][i]["id"];
         weapon.name = j["weapons"][i]["name"];
-        weapon.type = j["weapons"][i]["type"];
+        weapon.price = j["weapons"][i]["price"];
+        weapon.attack_distance = j["weapons"][i]["attack_distance"];
         weapon.min_damage = j["weapons"][i]["min_damage"];
         weapon.max_damage = j["weapons"][i]["max_damage"];
-        weapon.price = j["weapons"][i]["price"];
-        weapon.distant_attack = j["weapons"][i]["distant_attack"];
 
         config[weapon.id] = weapon;
     }
@@ -148,13 +148,45 @@ void Config<WandCfg>::_parseFile() {
 
         wand.id = j["wands"][i]["id"];
         wand.name = j["wands"][i]["name"];
-        wand.type = j["wands"][i]["type"];
-        wand.min_damage = j["wands"][i]["min_damage"];
-        wand.max_damage = j["wands"][i]["max_damage"];
+        wand.spell_id = j["wands"][i]["spell_id"];
         wand.price = j["wands"][i]["price"];
-        wand.mana_usage_cost = j["wands"][i]["mana_usage_cost"];
 
         config[wand.id] = wand;
+    }
+
+    file.close();
+    if (file.fail()) {
+        throw Exception("Error closing file: %s", ITEMS_CONFIG_FILEPATH);
+    }
+}
+
+template <>
+void Config<SpellCfg>::_parseFile() {
+    std::ifstream file(ITEMS_CONFIG_FILEPATH);
+    if (file.fail()) {
+        throw Exception("Error opening file: %s", ITEMS_CONFIG_FILEPATH);
+    }
+
+    json j;
+    file >> j;
+    if (file.fail()) {
+        throw Exception("Error reading file: %s", ITEMS_CONFIG_FILEPATH);
+    }
+
+    int size = j["spells"].size();
+    for (int i = 0; i < size; i++) {
+        SpellCfg spell;
+
+        spell.id = j["spells"][i]["id"];
+        spell.name = j["spells"][i]["name"];
+        spell.type = j["spells"][i]["spell_type"];
+        spell.mana_usage_cost = j["spells"][i]["mana_usage_cost"];
+        spell.attack_distance = j["spells"][i]["attack_distance"];
+        spell.min_damage = j["spells"][i]["min_damage"];
+        spell.max_damage = j["spells"][i]["max_damage"];
+        spell.recovery_points = j["spells"][i]["recovery_points"];
+
+        config[spell.id] = spell;
     }
 
     file.close();
@@ -176,17 +208,25 @@ void Config<DefenceCfg>::_parseFile() {
         throw Exception("Error reading file: %s", ITEMS_CONFIG_FILEPATH);
     }
 
-    int size = j["defences"].size();
-    for (int i = 0; i < size; i++) {
-        DefenceCfg defence;
+    std::array<std::string, AMOUNT_OF_DEFFENCE_TYPES> defences = 
+        {"helmets", "armours", "shields"}; 
 
-        defence.id = j["defences"][i]["id"];
-        defence.name = j["defences"][i]["name"];
-        defence.min_defence = j["defences"][i]["min_defence"];
-        defence.max_defence = j["defences"][i]["max_defence"];
-        defence.price = j["defences"][i]["price"];
+    for (int k = 0; k < AMOUNT_OF_DEFFENCE_TYPES;
+         ++k) {
+        int size = j[defences[k]].size();
 
-        config[defence.id] = defence;
+        for (int i = 0; i < size; i++) {
+            DefenceCfg defence;
+
+            defence.id = j[defences[k]][i]["id"];
+            defence.name = j[defences[k]][i]["name"];
+            defence.type = j[defences[k]][i]["wearable_type"];
+            defence.min_defence = j[defences[k]][i]["min_defence"];
+            defence.max_defence = j[defences[k]][i]["max_defence"];
+            defence.price = j[defences[k]][i]["price"];
+
+            config[defence.id] = defence;
+        }
     }
 
     file.close();
@@ -194,6 +234,39 @@ void Config<DefenceCfg>::_parseFile() {
         throw Exception("Error closing file: %s", ITEMS_CONFIG_FILEPATH);
     }
 }
+
+template <>
+void Config<PotionCfg>::_parseFile() {
+    std::ifstream file(ITEMS_CONFIG_FILEPATH);
+    if (file.fail()) {
+        throw Exception("Error opening file: %s", ITEMS_CONFIG_FILEPATH);
+    }
+
+    json j;
+    file >> j;
+    if (file.fail()) {
+        throw Exception("Error reading file: %s", ITEMS_CONFIG_FILEPATH);
+    }
+
+    int size = j["potions"].size();
+    for (int i = 0; i < size; i++) {
+        PotionCfg potion;
+
+        potion.id = j["potions"][i]["id"];
+        potion.name = j["potions"][i]["name"];
+        potion.price = j["potions"][i]["price"];
+        potion.type = j["potions"][i]["potion_type"];
+        potion.recovery_points = j["potions"][i]["recovery_points"];
+
+        config[potion.id] = potion;
+    }
+
+    file.close();
+    if (file.fail()) {
+        throw Exception("Error closing file: %s", ITEMS_CONFIG_FILEPATH);
+    }
+}
+
 
 
 /* Para cualquier clase que no sea esperada, nos quejamos */

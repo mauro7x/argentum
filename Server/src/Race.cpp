@@ -1,6 +1,6 @@
 #include "../includes/Race.h"
 
-Race::Race(RaceCfg& data): id(data.id), name(data.name),
+Race::Race(const RaceCfg& data): id(data.id), name(data.name),
                            health(data.health), recovery(data.recovery),
                            mana(data.mana) {}
 
