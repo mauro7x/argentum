@@ -7,15 +7,10 @@
 #include <unordered_map>
 
 #include "../../../Common/includes/Exceptions/Exception.h"
+#include "../../../Common/includes/JSON.h"
 #include "../paths.h"
 #include "Renderer.h"
 #include "Texture.h"
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
-// Librería de json a utilizar (https://github.com/nlohmann/json).
-#include "../../../Common/includes/json.hpp"
-using json = nlohmann::json;
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -31,9 +26,6 @@ class TileContainer {
    private:
     const Renderer* g_renderer;
     std::unordered_map<TileId, Texture> content;
-
-    /* Lee el archivo json del filepath especificado */
-    json _loadJsonFile(std::string filepath) const;
 
     /* Carga texturas para un tileset específico */
     void _loadTextures(const json& tileset);

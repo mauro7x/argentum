@@ -15,8 +15,12 @@ using json = nlohmann::json;
 
 //-----------------------------------------------------------------------------
 
-/* Carga un json */
-json _loadJsonFile(const std::string& filepath);
+namespace JSON {
+
+/* Carga el json desde un archivo */
+json loadJsonFile(const std::string& filepath);
+
+}  // namespace JSON
 
 //-----------------------------------------------------------------------------
 

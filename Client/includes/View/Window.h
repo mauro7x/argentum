@@ -7,12 +7,7 @@
 #include <string>
 
 #include "../../../Common/includes/Exceptions/SDLException.h"
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
-// Librería de json a utilizar (https://github.com/nlohmann/json).
-#include "../../../Common/includes/json.hpp"
-using json = nlohmann::json;
+#include "../../../Common/includes/JSON.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------

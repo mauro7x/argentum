@@ -26,14 +26,9 @@
 //-----------------------------------------------------------------------------
 #include "../../../Common/includes/Exceptions/Exception.h"
 #include "../../../Common/includes/Exceptions/SDLException.h"
+#include "../../../Common/includes/JSON.h"
 #include "../../../Common/includes/paths.h"
 #include "../paths.h"
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
-// Librería de json a utilizar (https://github.com/nlohmann/json).
-#include "../../../Common/includes/json.hpp"
-using json = nlohmann::json;
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -61,9 +56,6 @@ class GameView {
 
     /* Inicializa recursos */
     void _init();
-
-    /* Carga un json */
-    json _loadJsonFile(std::string filepath) const;
 
     /* Carga media necesaria */
     void _loadMedia();

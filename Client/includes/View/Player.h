@@ -7,15 +7,10 @@
 #include <cstdint>
 #include <fstream>
 
+#include "../../../Common/includes/JSON.h"
 #include "../../../Common/includes/paths.h"
 #include "Renderer.h"
 #include "UnitSpriteContainer.h"
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
-// Librería de json a utilizar (https://github.com/nlohmann/json).
-#include "../../../Common/includes/json.hpp"
-using json = nlohmann::json;
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -45,9 +40,6 @@ class Player {
     /* Componentes para el renderizado gráfico */
     int x, y;           /* posición en pixeles */
     float scale_factor; /* factor para reescalar */
-
-    /* Carga un json */
-    json _loadJsonFile(std::string filepath) const;
 
     /* Verifica si el cuerpo entra en el tile, cc calcula el scale_factor */
     void _setScaleFactor();

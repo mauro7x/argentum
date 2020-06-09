@@ -7,15 +7,10 @@
 #include <unordered_map>
 
 #include "../../../Common/includes/Exceptions/Exception.h"
+#include "../../../Common/includes/JSON.h"
 #include "../paths.h"
 #include "Renderer.h"
 #include "Sprite.h"
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
-// Librería de json a utilizar (https://github.com/nlohmann/json).
-#include "../../../Common/includes/json.hpp"
-using json = nlohmann::json;
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -24,9 +19,6 @@ class UnitSpriteContainer {
    private:
     const Renderer* g_renderer;
     std::unordered_map<Id, Sprite> content;
-
-    /* Lee el archivo json del filepath especificado */
-    json _loadJsonFile(std::string filepath) const;
 
     /* Carga los sprites leyendo datos del json y la textura del dirpath */
     void _loadSpritesFromJson(const json& sprites, const std::string& dirpath);

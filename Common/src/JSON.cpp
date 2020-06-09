@@ -2,7 +2,7 @@
 
 //-----------------------------------------------------------------------------
 
-json _loadJsonFile(const std::string& filepath) {
+json JSON::loadJsonFile(const std::string& filepath) {
     std::ifstream file(filepath);
     if (file.fail()) {
         throw Exception("Error opening file: %s", filepath);

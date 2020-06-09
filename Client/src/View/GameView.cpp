@@ -5,7 +5,7 @@
 
 void GameView::_init() {
     /* Cargamos el archivo de configuración */
-    json config = _loadJsonFile(GUI_CONFIG_FILEPATH);
+    json config = JSON::loadJsonFile(GUI_CONFIG_FILEPATH);
 
     /* Iniciamos el sistema de SDL */
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -33,26 +33,6 @@ void GameView::_init() {
 
     /* Iniciamos la cámara */
     camera.init(config["camera"]);
-}
-
-json GameView::_loadJsonFile(std::string filepath) const {
-    std::ifstream file(filepath);
-    if (file.fail()) {
-        throw Exception("Error opening file: %s", filepath);
-    }
-
-    json j;
-    file >> j;
-    if (file.fail()) {
-        throw Exception("Error reading file: %s", filepath);
-    }
-
-    file.close();
-    if (file.fail()) {
-        throw Exception("Error closing file: %s", filepath);
-    }
-
-    return j;
 }
 
 void GameView::_loadMedia() {

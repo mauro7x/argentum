@@ -3,26 +3,6 @@
 //-----------------------------------------------------------------------------
 // Métodos privados
 
-json Player::_loadJsonFile(std::string filepath) const {
-    std::ifstream file(filepath);
-    if (file.fail()) {
-        throw Exception("Error opening file: %s", filepath);
-    }
-
-    json j;
-    file >> j;
-    if (file.fail()) {
-        throw Exception("Error reading file: %s", filepath);
-    }
-
-    file.close();
-    if (file.fail()) {
-        throw Exception("Error closing file: %s", filepath);
-    }
-
-    return j;
-}
-
 void Player::_setScaleFactor() {
     int body_w = g_sprites->get(data.body_id).clip_w;
     if (body_w > tile_w) {
@@ -121,7 +101,7 @@ Player& Player::operator=(Player&& other) {
 
 void Player::init(const PlayerData& init_data) {
     data = init_data;
-    json map_data = _loadJsonFile(MAPS_FILEPATH);
+    json map_data = JSON::loadJsonFile(MAPS_FILEPATH);
     tile_w = map_data["tilewidth"];
     tile_h = map_data["tileheight"];
     x = tile_w * data.x_tile;
