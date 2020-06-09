@@ -1,0 +1,63 @@
+{
+    "dirpath": "../Assets/Sprites/Inventory/",
+    "helmet": [
+        {
+            "gid": 3000,
+            "w": 52,
+            "h": 81,
+            "color_key": {
+                "is_needed": true,
+                "color": {
+                    "r": 0,
+                    "g": 0,
+                    "b": 0
+                }
+            }
+        }
+    ],
+    "armour": [
+        {
+            "gid": 4000,
+            "w": 52,
+            "h": 81,
+            "color_key": {
+                "is_needed": true,
+                "color": {
+                    "r": 0,
+                    "g": 0,
+                    "b": 0
+                }
+            }
+        }
+    ],
+    "shield": [
+        {
+            "gid": 5000,
+            "w": 52,
+            "h": 81,
+            "color_key": {
+                "is_needed": true,
+                "color": {
+                    "r": 0,
+                    "g": 0,
+                    "b": 0
+                }
+            }
+        }
+    ],
+    "weapon": [
+        {
+            "gid": 6000,
+            "w": 52,
+            "h": 81,
+            "color_key": {
+                "is_needed": true,
+                "color": {
+                    "r": 0,
+                    "g": 0,
+                    "b": 0
+                }
+            }
+        }
+    ]
+}
