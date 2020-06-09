@@ -3,26 +3,6 @@
 //-----------------------------------------------------------------------------
 // Métodos privados
 
-json MapContainer::_loadJsonFile(std::string filepath) const {
-    std::ifstream file(filepath);
-    if (file.fail()) {
-        throw Exception("Error opening file: %s", filepath);
-    }
-
-    json j;
-    file >> j;
-    if (file.fail()) {
-        throw Exception("Error reading file: %s", filepath);
-    }
-
-    file.close();
-    if (file.fail()) {
-        throw Exception("Error closing file: %s", filepath);
-    }
-
-    return j;
-}
-
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -32,7 +12,7 @@ MapContainer::MapContainer() {}
 
 void MapContainer::loadMaps() {
     json maps, map;
-    maps = _loadJsonFile(MAPS_FILEPATH);
+    maps = JSON::loadJsonFile(MAPS_FILEPATH);
 
     int tile_w, tile_h;
     tile_w = maps["tilewidth"];
@@ -40,7 +20,7 @@ void MapContainer::loadMaps() {
 
     int size = maps["data"].size();
     for (int i = 0; i < size; i++) {
-        map = _loadJsonFile(maps["data"][i]["filepath"]);
+        map = JSON::loadJsonFile(maps["data"][i]["filepath"]);
         Map tmp;
         tmp.init(map, tile_w, tile_h);
         content[maps["data"][i]["id"]] = std::move(tmp);
