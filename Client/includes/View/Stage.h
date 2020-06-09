@@ -7,7 +7,6 @@
 #include "HUD.h"
 #include "MapView.h"
 #include "Player.h"
-#include "UnitContainer.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -22,12 +21,10 @@ class Stage {
     const HUDProxy& g_hud;
     const MapView& g_map;
     const Player& g_player;
-    const UnitContainer& g_units;
 
    public:
     /* Constructor */
-    Stage(const HUDProxy& hud, const MapView& map, const Player& player,
-          const UnitContainer& units);
+    Stage(const HUDProxy& hud, const MapView& map, const Player& player);
 
     /* Deshabilitamos el constructor por copia. */
     Stage(const Stage&) = delete;

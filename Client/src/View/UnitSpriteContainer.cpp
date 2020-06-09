@@ -3,26 +3,6 @@
 //-----------------------------------------------------------------------------
 // Métodos privados
 
-json UnitSpriteContainer::_loadJsonFile(std::string filepath) const {
-    std::ifstream file(filepath);
-    if (file.fail()) {
-        throw Exception("Error opening file: %s", filepath);
-    }
-
-    json j;
-    file >> j;
-    if (file.fail()) {
-        throw Exception("Error reading file: %s", filepath);
-    }
-
-    file.close();
-    if (file.fail()) {
-        throw Exception("Error closing file: %s", filepath);
-    }
-
-    return j;
-}
-
 void UnitSpriteContainer::_loadSpritesFromJson(const json& sprites,
                                                const std::string& dirpath) {
     int size = sprites.size();
@@ -82,7 +62,7 @@ UnitSpriteContainer::UnitSpriteContainer(const Renderer* renderer)
     : g_renderer(renderer) {}
 
 void UnitSpriteContainer::loadMedia() {
-    json sprites = _loadJsonFile(UNIT_SPRITES_FILEPATH);
+    json sprites = JSON::loadJsonFile(UNIT_SPRITES_FILEPATH);
 
     std::string dirpath = sprites["dirpath"];
     _loadSpritesFromJson(sprites["pj"]["head"], dirpath);
@@ -93,12 +73,16 @@ void UnitSpriteContainer::loadMedia() {
     _loadSpritesFromJson(sprites["pj"]["weapon"], dirpath);
 }
 
-const Sprite& UnitSpriteContainer::operator[](const Id id) const {
+const Sprite& UnitSpriteContainer::get(const Id id) const {
     if (content.count(id) == 0) {
-        throw Exception("Unknown tile id.");
+        throw Exception("Unknown sprite id.");
     }
 
     return content.at(id);
+}
+
+const Sprite& UnitSpriteContainer::operator[](const Id id) const {
+    return this->get(id);
 }
 
 UnitSpriteContainer::~UnitSpriteContainer() {}

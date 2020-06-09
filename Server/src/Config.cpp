@@ -3,27 +3,6 @@
 //-----------------------------------------------------------------------------
 // Métodos privados
 
-template <class T>
-json Config<T>::_loadJsonFile(std::string filepath) const {
-    std::ifstream file(filepath);
-    if (file.fail()) {
-        throw Exception("Error opening file: %s", filepath);
-    }
-
-    json j;
-    file >> j;
-    if (file.fail()) {
-        throw Exception("Error reading file: %s", filepath);
-    }
-
-    file.close();
-    if (file.fail()) {
-        throw Exception("Error closing file: %s", filepath);
-    }
-
-    return j;
-}
-
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -31,7 +10,7 @@ json Config<T>::_loadJsonFile(std::string filepath) const {
 
 template <>
 void Config<RaceCfg>::_parseFile() {
-    json j = _loadJsonFile(RACE_CONFIG_FILEPATH);
+    json j = JSON::loadJsonFile(RACE_CONFIG_FILEPATH);
 
     int size = j.size();
     for (int i = 0; i < size; i++) {
@@ -49,7 +28,7 @@ void Config<RaceCfg>::_parseFile() {
 
 template <>
 void Config<KindCfg>::_parseFile() {
-    json j = _loadJsonFile(KIND_CONFIG_FILEPATH);
+    json j = JSON::loadJsonFile(KIND_CONFIG_FILEPATH);
 
     int size = j.size();
     for (int i = 0; i < size; i++) {
@@ -67,7 +46,7 @@ void Config<KindCfg>::_parseFile() {
 
 template <>
 void Config<NPCCfg>::_parseFile() {
-    json j = _loadJsonFile(NPC_CONFIG_FILEPATH);
+    json j = JSON::loadJsonFile(NPC_CONFIG_FILEPATH);
 
     int size = j.size();
     for (int i = 0; i < size; i++) {
@@ -81,7 +60,7 @@ void Config<NPCCfg>::_parseFile() {
 
 template <>
 void Config<WeaponCfg>::_parseFile() {
-    json j = _loadJsonFile(ITEMS_CONFIG_FILEPATH);
+    json j = JSON::loadJsonFile(ITEMS_CONFIG_FILEPATH);
 
     int size = j["weapons"].size();
     for (int i = 0; i < size; i++) {
@@ -102,7 +81,7 @@ void Config<WeaponCfg>::_parseFile() {
 
 template <>
 void Config<DefenceCfg>::_parseFile() {
-    json j = _loadJsonFile(ITEMS_CONFIG_FILEPATH);
+    json j = JSON::loadJsonFile(ITEMS_CONFIG_FILEPATH);
 
     /* Cascos */
     int size = j["helmets"].size();

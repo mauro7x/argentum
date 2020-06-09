@@ -5,7 +5,7 @@
 
 void GameView::_init() {
     /* Cargamos el archivo de configuración */
-    json config = _loadJsonFile(GUI_CONFIG_FILEPATH);
+    json config = JSON::loadJsonFile(GUI_CONFIG_FILEPATH);
 
     /* Iniciamos el sistema de SDL */
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -35,36 +35,14 @@ void GameView::_init() {
     camera.init(config["camera"]);
 }
 
-json GameView::_loadJsonFile(std::string filepath) const {
-    std::ifstream file(filepath);
-    if (file.fail()) {
-        throw Exception("Error opening file: %s", filepath);
-    }
-
-    json j;
-    file >> j;
-    if (file.fail()) {
-        throw Exception("Error reading file: %s", filepath);
-    }
-
-    file.close();
-    if (file.fail()) {
-        throw Exception("Error closing file: %s", filepath);
-    }
-
-    return j;
-}
-
 void GameView::_loadMedia() {
     hud.loadMedia();
     map.loadMedia();
     unit_sprites.loadMedia();
-    player.loadMedia();
 }
 
 void GameView::_handleEvent(const SDL_Event& e) {
-    player.handleEvent(e);
-    units.handleEvent(e);
+    // player.handleEvent(e);
 }
 
 void GameView::_free() {
@@ -90,18 +68,23 @@ GameView::GameView()
       img_running(false),
       hud(&renderer),
       map(&renderer),
-      predictor(map),
+
+      server(map), /* proxy server*/
+
       unit_sprites(&renderer),
-      player(&renderer, predictor),
-      stage(hud, map, player, units) {}
+      player(&renderer, &unit_sprites),
+      stage(hud, map, player) {}
 
 void GameView::operator()() {
     _init();
     _loadMedia();
 
     //-------------------------------------------------------------------------
-    // Manejar el primer paquete recibido, crear unidades dinamicas
-    // necesarias
+    // Manejar el primer paquete recibido, crear unidades necesarias
+
+    // Hardcodeamos el primer paquete
+    PlayerData init_data = {3, 3, 100, 100, 1000, 2000, 3000, 4000, 5000, 6000};
+    player.init(init_data);
     //-------------------------------------------------------------------------
 
     bool quit = false;
@@ -131,11 +114,14 @@ void GameView::operator()() {
         // ACCIONES
 
         map.select(0); /* el id del mapa x ahora hardcodeado */
-        player.move();
-        camera.center(player.getBox(), map.widthInPx(), map.heightInPx());
+        player.act();
+        // camera.center(player.getBox(), map.widthInPx(), map.heightInPx());
+        camera.center(SDL_Rect({192, 192, 25, 50}), map.widthInPx(),
+                      map.heightInPx());
         //---------------------------------------------------------------------
 
         stage.render();
+
         renderer.presentScreen();
 
         // Delay para controlar el frame rate? por ahora usamos vsync
