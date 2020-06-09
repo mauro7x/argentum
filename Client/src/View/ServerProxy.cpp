@@ -1,4 +1,4 @@
-#include "../../includes/View/Predictor.h"
+#include "../../includes/View/ServerProxy.h"
 
 //-----------------------------------------------------------------------------
 // Métodos privados
@@ -8,9 +8,10 @@
 //-----------------------------------------------------------------------------
 // API Pública
 
-Predictor::Predictor(const MapView& map) : map(map) {}
+ServerProxy::ServerProxy(const MapView& map) : map(map) {}
 
-bool Predictor::canMoveTo(const int x, const int y) const {
+/*
+bool ServerProxy::canMoveTo(const int x, const int y) const {
     if (!map.isValid(x, y)) {
         return false;
     }
@@ -19,11 +20,10 @@ bool Predictor::canMoveTo(const int x, const int y) const {
         return false;
     }
 
-    /* Hay que agregar chequeo de colisiones con NPCs y con otros PJ */
-
-    return true;
+return true;
 }
+*/
 
-Predictor::~Predictor() {}
+ServerProxy::~ServerProxy() {}
 
 //-----------------------------------------------------------------------------

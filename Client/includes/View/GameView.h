@@ -9,6 +9,14 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+#include "../../../Common/includes/Exceptions/Exception.h"
+#include "../../../Common/includes/Exceptions/SDLException.h"
+#include "../../../Common/includes/JSON.h"
+#include "../../../Common/includes/paths.h"
+#include "../paths.h"
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
 #include "Camera.h"
 #include "Renderer.h"
 #include "Stage.h"
@@ -19,16 +27,13 @@
 #include "HUD.h"
 #include "MapView.h"
 #include "Player.h"
-// #include "Predictor.h"
 #include "UnitSpriteContainer.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-#include "../../../Common/includes/Exceptions/Exception.h"
-#include "../../../Common/includes/Exceptions/SDLException.h"
-#include "../../../Common/includes/JSON.h"
-#include "../../../Common/includes/paths.h"
-#include "../paths.h"
+// Proxy del server, esto luego se reemplaza con la lógica del modelo
+
+#include "ServerProxy.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -47,7 +52,9 @@ class GameView {
     /* Componentes de la vista */
     HUDProxy hud;
     MapView map;
-    // Predictor predictor;
+
+    ServerProxy server; /* proxy, luego se reemplaza con la lógica del cliente*/
+
     UnitSpriteContainer unit_sprites;
     Player player;
 
