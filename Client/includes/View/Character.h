@@ -1,30 +1,18 @@
-#ifndef __PLAYER_H__
-#define __PLAYER_H__
+#ifndef __CHARACTER_H__
+#define __CHARACTER_H__
 
 //-----------------------------------------------------------------------------
 #include <SDL2/SDL.h>
 
-#include <cstdint>
-#include <fstream>
-
-#include "../../../Common/includes/JSON.h"
-#include "../../../Common/includes/paths.h"
 #include "Renderer.h"
 #include "UnitSpriteContainer.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-// Proxy del server, esto luego se reemplaza con la lógica del modelo
-
-#include "ServerProxy.h"
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
 
 /* Data que irá cambiando durante la ejecución */
-struct PlayerData {
+struct CharacterData {
     int x_tile, y_tile;                            /* coordenadas en tiles */
-    uint16_t health, mana;                         /* stats */
     Id head_id, body_id;                           /* cuerpo básico */
     Id helmet_id, armour_id, shield_id, weapon_id; /* vestimenta */
 };
@@ -33,16 +21,15 @@ struct PlayerData {
 
 //-----------------------------------------------------------------------------
 
-class Player {
+class Character {
    protected:
     /* Componentes para renderizar */
     Renderer* g_renderer;
     UnitSpriteContainer* g_sprites;
-    ServerProxy* server; /* proxy del server */
     int tile_w, tile_h;
 
     /* Data del personaje */
-    PlayerData data;
+    CharacterData data;
 
     /* Componentes para el renderizado gráfico */
     int x, y;           /* posición en pixeles */
@@ -81,27 +68,26 @@ class Player {
 
    public:
     /* Constructor */
-    Player(Renderer* renderer, UnitSpriteContainer* sprites);
+    Character(Renderer* renderer, UnitSpriteContainer* sprites,
+              const CharacterData& init_data, const int tile_w,
+              const int tile_h);
 
     /* Deshabilitamos el constructor por copia. */
-    Player(const Player&) = delete;
+    Character(const Character&) = delete;
 
     /* Deshabilitamos el operador= para copia.*/
-    Player& operator=(const Player&) = delete;
+    Character& operator=(const Character&) = delete;
 
-    /* Deshabilitamos el constructor por movimiento. */
-    Player(Player&& other) = delete;
+    /* Habilitamos el constructor por movimiento. */
+    Character(Character&& other);
 
-    /* Deshabilitamos el operador= para movimiento. */
-    Player& operator=(Player&& other) = delete;
+    /* Habilitamos el operador= para movimiento. */
+    Character& operator=(Character&& other);
 
     //-------------------------------------------------------------------------
 
-    /* Se inicializa con el primer paquete del server */
-    void init(const PlayerData& init_data);
-
     /* Actualizar información según lo que diga el servidor */
-    void update(const PlayerData& updated_data);
+    void update(const CharacterData& updated_data);
 
     /* Acción que realiza en cada frame */
     void act();
@@ -112,9 +98,9 @@ class Player {
     //-------------------------------------------------------------------------
 
     /* Destructor */
-    ~Player();
+    ~Character();
 };
 
 //-----------------------------------------------------------------------------
 
-#endif  // __PLAYER_H__
+#endif  // __CHARACTER_H__

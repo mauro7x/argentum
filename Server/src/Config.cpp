@@ -3,27 +3,6 @@
 //-----------------------------------------------------------------------------
 // Métodos privados
 
-template <class T>
-json Config<T>::_loadJsonFile(std::string filepath) const {
-    std::ifstream file(filepath);
-    if (file.fail()) {
-        throw Exception("Error opening file: %s", filepath);
-    }
-
-    json j;
-    file >> j;
-    if (file.fail()) {
-        throw Exception("Error reading file: %s", filepath);
-    }
-
-    file.close();
-    if (file.fail()) {
-        throw Exception("Error closing file: %s", filepath);
-    }
-
-    return j;
-}
-
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -31,7 +10,7 @@ json Config<T>::_loadJsonFile(std::string filepath) const {
 
 template <>
 void Config<RaceCfg>::_parseFile() {
-    json j = _loadJsonFile(RACE_CONFIG_FILEPATH);
+    json j = JSON::loadJsonFile(RACE_CONFIG_FILEPATH);
 
     int size = j.size();
     for (int i = 0; i < size; i++) {
@@ -49,7 +28,7 @@ void Config<RaceCfg>::_parseFile() {
 
 template <>
 void Config<KindCfg>::_parseFile() {
-    json j = _loadJsonFile(KIND_CONFIG_FILEPATH);
+    json j = JSON::loadJsonFile(KIND_CONFIG_FILEPATH);
 
     int size = j.size();
     for (int i = 0; i < size; i++) {
@@ -67,7 +46,7 @@ void Config<KindCfg>::_parseFile() {
 
 template <>
 void Config<NPCCfg>::_parseFile() {
-    json j = _loadJsonFile(NPC_CONFIG_FILEPATH);
+    json j = JSON::loadJsonFile(NPC_CONFIG_FILEPATH);
 
     int size = j.size();
     for (int i = 0; i < size; i++) {
@@ -81,7 +60,7 @@ void Config<NPCCfg>::_parseFile() {
 
 template <>
 void Config<WeaponCfg>::_parseFile() {
-    json j = _loadJsonFile(ITEMS_CONFIG_FILEPATH);
+    json j = JSON::loadJsonFile(ITEMS_CONFIG_FILEPATH);
 
     int size = j["weapons"].size();
     for (int i = 0; i < size; i++) {
@@ -89,51 +68,64 @@ void Config<WeaponCfg>::_parseFile() {
 
         weapon.id = j["weapons"][i]["id"];
         weapon.name = j["weapons"][i]["name"];
-        weapon.type = j["weapons"][i]["type"];
+        weapon.type = WEAPON;
         weapon.price = j["weapons"][i]["price"];
         weapon.min_damage = j["weapons"][i]["min_damage"];
         weapon.max_damage = j["weapons"][i]["max_damage"];
-        weapon.distant_attack = j["weapons"][i]["distant_attack"];
+        weapon.attack_distance = j["weapons"][i]["attack_distance"];
+        weapon.mana_usage_cost = j["weapons"][i]["mana_usage_cost"];
 
         config[weapon.id] = weapon;
     }
 }
 
 template <>
-void Config<WandCfg>::_parseFile() {
-    json j = _loadJsonFile(ITEMS_CONFIG_FILEPATH);
-
-    int size = j["wands"].size();
-    for (int i = 0; i < size; i++) {
-        WandCfg wand;
-
-        wand.id = j["wands"][i]["id"];
-        wand.name = j["wands"][i]["name"];
-        wand.type = j["wands"][i]["type"];
-        wand.price = j["wands"][i]["price"];
-        wand.min_damage = j["wands"][i]["min_damage"];
-        wand.max_damage = j["wands"][i]["max_damage"];
-        wand.mana_usage_cost = j["wands"][i]["mana_usage_cost"];
-
-        config[wand.id] = wand;
-    }
-}
-
-template <>
 void Config<DefenceCfg>::_parseFile() {
-    json j = _loadJsonFile(ITEMS_CONFIG_FILEPATH);
+    json j = JSON::loadJsonFile(ITEMS_CONFIG_FILEPATH);
 
-    int size = j["defences"].size();
+    /* Cascos */
+    int size = j["helmets"].size();
     for (int i = 0; i < size; i++) {
-        DefenceCfg defence;
+        DefenceCfg helmet;
 
-        defence.id = j["defences"][i]["id"];
-        defence.name = j["defences"][i]["name"];
-        defence.price = j["defences"][i]["price"];
-        defence.min_defence = j["defences"][i]["min_defence"];
-        defence.max_defence = j["defences"][i]["max_defence"];
+        helmet.id = j["helmets"][i]["id"];
+        helmet.name = j["helmets"][i]["name"];
+        helmet.type = HELMET;
+        helmet.price = j["helmets"][i]["price"];
+        helmet.min_defence = j["helmets"][i]["min_defence"];
+        helmet.max_defence = j["helmets"][i]["max_defence"];
 
-        config[defence.id] = defence;
+        config[helmet.id] = helmet;
+    }
+
+    /* Armaduras */
+    size = j["armours"].size();
+    for (int i = 0; i < size; i++) {
+        DefenceCfg armour;
+
+        armour.id = j["armours"][i]["id"];
+        armour.name = j["armours"][i]["name"];
+        armour.type = ARMOUR;
+        armour.price = j["armours"][i]["price"];
+        armour.min_defence = j["armours"][i]["min_defence"];
+        armour.max_defence = j["armours"][i]["max_defence"];
+
+        config[armour.id] = armour;
+    }
+
+    /* Escudos */
+    size = j["shields"].size();
+    for (int i = 0; i < size; i++) {
+        DefenceCfg shield;
+
+        shield.id = j["shields"][i]["id"];
+        shield.name = j["shields"][i]["name"];
+        shield.type = SHIELD;
+        shield.price = j["shields"][i]["price"];
+        shield.min_defence = j["shields"][i]["min_defence"];
+        shield.max_defence = j["shields"][i]["max_defence"];
+
+        config[shield.id] = shield;
     }
 }
 

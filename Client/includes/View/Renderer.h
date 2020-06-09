@@ -5,10 +5,9 @@
 #include <SDL2/SDL.h>
 
 #include "../../../Common/includes/Exceptions/SDLException.h"
-#include "../../../Common/includes/json.hpp"
+#include "../../../Common/includes/JSON.h"
 #include "Camera.h"
 #include "Window.h"
-using json = nlohmann::json;
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------

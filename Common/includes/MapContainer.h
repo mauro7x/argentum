@@ -7,14 +7,9 @@
 #include <unordered_map>
 
 #include "Exceptions/Exception.h"
+#include "JSON.h"
 #include "Map.h"
 #include "paths.h"
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
-// Librería de json a utilizar (https://github.com/nlohmann/json).
-#include "json.hpp"
-using json = nlohmann::json;
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -29,9 +24,6 @@ typedef int Id;
 class MapContainer {
    private:
     std::unordered_map<Id, Map> content;
-
-    /* Lee el archivo json del filepath especificado */
-    json _loadJsonFile(std::string filepath) const;
 
    public:
     /* Constructor */

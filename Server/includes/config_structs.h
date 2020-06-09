@@ -2,6 +2,7 @@
 #define __CONFIG_STRUCTS_H__
 
 //-----------------------------------------------------------------------------
+#include <cstdint>
 #include <string>
 //-----------------------------------------------------------------------------
 
@@ -23,39 +24,30 @@ enum WearableType { HELMET, ARMOUR, SHIELD, WEAPON, N_WEARABLE_ITEMS };
 // Objetos
 
 struct WeaponCfg {
-    int id;
+    Id id;
     std::string name;
     WearableType type;
-    unsigned int price;
-    unsigned int min_damage;
-    unsigned int max_damage;
-    bool distant_attack;
-};
-
-struct WandCfg {
-    int id;
-    std::string name;
-    WearableType type;
-    unsigned int price;
-    unsigned int min_damage;
-    unsigned int max_damage;
-    unsigned int mana_usage_cost;
+    uint16_t price;
+    uint16_t min_damage;
+    uint16_t max_damage;
+    uint8_t attack_distance;
+    uint8_t mana_usage_cost;
 };
 
 struct DefenceCfg {
-    int id;
+    Id id;
     std::string name;
     WearableType type;
-    int price;
-    int min_defence;
-    int max_defence;
+    uint16_t price;
+    uint16_t min_defence;
+    uint16_t max_defence;
 };
 
 struct PotionCfg {
-    unsigned int id;
+    Id id;
     std::string name;
-    unsigned int price;
-    unsigned int recovery_points;
+    uint16_t price;
+    uint16_t recovery_points;
 };
 
 //-----------------------------------------------------------------------------
@@ -64,11 +56,11 @@ struct PotionCfg {
 // Razas
 
 struct RaceCfg {
-    int id;
+    Id id;
     std::string name;
-    int health;
-    int recovery;
-    int mana;
+    uint8_t health;
+    uint8_t recovery;
+    uint8_t mana;
 };
 
 //-----------------------------------------------------------------------------
@@ -77,11 +69,11 @@ struct RaceCfg {
 // Clases
 
 struct KindCfg {
-    int id;
+    Id id;
     std::string name;
-    int health;
-    int meditation;
-    int mana;
+    uint8_t health;
+    uint8_t meditation;
+    uint8_t mana;
 };
 
 //-----------------------------------------------------------------------------
@@ -90,7 +82,7 @@ struct KindCfg {
 // NPCs
 
 struct NPCCfg {
-    int id;
+    Id id;
     std::string name;
 };
 

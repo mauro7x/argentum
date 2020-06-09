@@ -8,18 +8,15 @@
 //-----------------------------------------------------------------------------
 // API Pública
 
-Stage::Stage(const HUDProxy& hud, const MapView& map, const Player& player,
-             const UnitContainer& units)
-    : g_hud(hud), g_map(map), g_player(player), g_units(units) {}
+Stage::Stage(const HUDProxy& hud, const MapView& map, const Player& player)
+    : g_hud(hud), g_map(map), g_player(player) {}
 
 void Stage::render() const {
-    SDL_Rect player_pos = g_player.getPos();
+    // SDL_Rect player_pos = g_player.getPos();
+    SDL_Rect player_pos = {3, 3, 25, 50};
 
     /* Renderizamos el piso */
     g_map.renderGround();
-
-    /* Implementar algoritmo de renderizado de decoración entrelazada con el
-     * jugador */
 
     {  // Algoritmo de renderización por partes
         int map_rows = g_map.heightInTiles();

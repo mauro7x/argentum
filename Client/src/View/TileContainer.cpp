@@ -3,26 +3,6 @@
 //-----------------------------------------------------------------------------
 // Métodos privados
 
-json TileContainer::_loadJsonFile(std::string filepath) const {
-    std::ifstream file(filepath);
-    if (file.fail()) {
-        throw Exception("Error opening file: %s", filepath);
-    }
-
-    json j;
-    file >> j;
-    if (file.fail()) {
-        throw Exception("Error reading file: %s", filepath);
-    }
-
-    file.close();
-    if (file.fail()) {
-        throw Exception("Error closing file: %s", filepath);
-    }
-
-    return j;
-}
-
 void TileContainer::_loadTextures(const json& tileset) {
     TileId first_gid, next_first_gid, id;
     std::string dirpath, filepath;
@@ -62,9 +42,9 @@ void TileContainer::_loadTextures(const json& tileset) {
 
 TileContainer::TileContainer(const Renderer* renderer) : g_renderer(renderer) {}
 
-void TileContainer::loadTiles() {
+void TileContainer::loadMedia() {
     json tiles;
-    tiles = _loadJsonFile(TILES_FILEPATH);
+    tiles = JSON::loadJsonFile(TILES_FILEPATH);
     _loadTextures(tiles["ground"]);
     _loadTextures(tiles["decoration"]);
 }
