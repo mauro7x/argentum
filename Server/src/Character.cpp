@@ -26,3 +26,13 @@ void Character::recoverHealth(const unsigned int points) {
 void Character::recoverMana(const unsigned int points) {
     // IMPLEMENTAR
 }
+
+void Character::consumeMana(const unsigned int points) {
+    if (this->mana < points)
+        throw InsufficientManaException();
+    this->mana -= points;
+}
+
+const char* InsufficientManaException::what() const noexcept {
+    return "No tienes suficiente maná.";
+}
