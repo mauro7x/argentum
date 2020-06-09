@@ -8,6 +8,7 @@
 
 #include "../../../Common/includes/Exceptions/Exception.h"
 #include "../paths.h"
+#include "Renderer.h"
 #include "Texture.h"
 //-----------------------------------------------------------------------------
 
