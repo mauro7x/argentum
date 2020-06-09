@@ -5,6 +5,9 @@
 #include <exception>
 
 #include "Item.h"
+#include "config_structs.h"
+
+class Character; // Forward declaration p/ evitar circular dependencies
 
 class UnknownPotionTypeException: public std::exception {
     public:
@@ -32,12 +35,12 @@ class Potion: public Item {
 
 class PotionFactory {
     public:
-        static Potion* newPotion(PotionCfg data);
+        static Potion* newPotion(const PotionCfg& data);
 };
 
 class HealthPotion: public Potion {
     public:
-        HealthPotion(PotionCfg data);
+        HealthPotion(const PotionCfg& data);
         ~HealthPotion();
 
         virtual void equip(Character& equipper) override;
@@ -45,7 +48,7 @@ class HealthPotion: public Potion {
 
 class ManaPotion: public Potion {
     public:
-        ManaPotion(PotionCfg data);
+        ManaPotion(const PotionCfg& data);
         ~ManaPotion();
 
         virtual void equip(Character& equipper) override;

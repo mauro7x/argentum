@@ -59,6 +59,8 @@ class Equipment {
          * En caso de no tener nada con lo que pueda defenderse, devuelve 0.
          */
         const unsigned int getDefensePoints(Character& defender);
+
+        void debug() const; // Para testear
 };
 
 #endif

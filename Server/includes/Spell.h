@@ -30,7 +30,7 @@ class Spell {
 
 class SpellFactory {
     public:
-        static Spell* newSpell(SpellCfg& spell);
+        static Spell* newSpell(const SpellCfg& spell);
 };
 
 class AttackingSpell: public Spell {
@@ -39,7 +39,7 @@ class AttackingSpell: public Spell {
         const unsigned int min_damage, max_damage;
 
     public:
-        AttackingSpell(SpellCfg& data);
+        AttackingSpell(const SpellCfg& data);
         ~AttackingSpell();
 
         virtual const unsigned int cast(Character& caster) override;
@@ -50,7 +50,7 @@ class HealingSpell: public Spell {
         const unsigned int recovery_points;
 
     public:
-        HealingSpell(SpellCfg& data);
+        HealingSpell(const SpellCfg& data);
         ~HealingSpell();
 
         virtual const unsigned int cast(Character& caster) override;

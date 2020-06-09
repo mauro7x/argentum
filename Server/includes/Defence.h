@@ -5,8 +5,11 @@
 #include "config_structs.h"
 
 class Defence: public Wearable {
+    private:
+        unsigned int min_defence, max_defence;
+        
     public:
-        Defence(DefenceCfg& data);
+        Defence(const DefenceCfg& data);
         ~Defence();
 
         Defence(const Defence&) = delete;

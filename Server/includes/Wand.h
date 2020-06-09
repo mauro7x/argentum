@@ -10,7 +10,8 @@ class Wand: public Wearable {
         Spell* spell;
         
     public:
-         Wand(WandCfg& wand_data, SpellCfg& spell_data);
+         Wand(const WandCfg& wand_data, 
+              const SpellCfg& spell_data);
         ~Wand();
 
         Wand(const Wand&) = delete;

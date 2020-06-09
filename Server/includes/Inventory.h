@@ -80,6 +80,8 @@ class Inventory {
          * Agrega amount de gold al inventario.
          */
         void addGold(const unsigned int amount);
+
+        void debug() const; // Para testear.
 };
 
 #endif

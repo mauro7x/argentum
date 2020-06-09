@@ -11,7 +11,7 @@ class Weapon: public Wearable {
         const unsigned int max_damage;
 
     public:
-        Weapon(WeaponCfg& data);
+        Weapon(const WeaponCfg& data);
         ~Weapon();
 
         Weapon(const Weapon&) = delete;

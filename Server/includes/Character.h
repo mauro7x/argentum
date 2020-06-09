@@ -34,7 +34,7 @@ class Character {
         Equipment equipment;
 
     public:
-        Character(RaceCfg& race, KindCfg& kind);
+        Character(const RaceCfg& race, const KindCfg& kind);
         ~Character();
 
         Character(const Character&) = delete;
@@ -44,6 +44,9 @@ class Character {
 
         void equip(unsigned int inventory_position);
         void equip(Wearable* item);
+
+        const unsigned int takeItem(Item* item);
+        Item* dropItem(const unsigned int inventory_position);
 
         /*
          * Efectua la accion curativa de las pociones de mana.
@@ -59,7 +62,7 @@ class Character {
 
         void consumeMana(const unsigned int mana_points);
 
-        const unsigned int getMannaPoints() const; // Baculos verifican si tiene suficientes puntos antes de ser usados.
+        void debug();
 };
 
 class InsufficientManaException: std::exception {

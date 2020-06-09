@@ -9,4 +9,4 @@ class RandomNumberGenerator {
         unsigned int operator()(unsigned int min, unsigned int max);
 };
 
-#endif __RANDOM_NUMBER_GENERATOR_H__
+#endif
