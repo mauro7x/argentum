@@ -1,13 +1,15 @@
 #include "../includes/Weapon.h"
+#include "../includes/Character.h" // Evito dependencias circulares.
+#include "../includes/RandomNumberGenerator.h"
 
 Weapon::Weapon(WeaponCfg& data):
-                    Wearable(data.id, data.name, data.price, 
-                             data.type, data.min_damage, 
-                             data.max_damage),
-                             distant_attack(data.distant_attack) {}
+                    Wearable(data.id, data.name, data.price, WEAPON),
+                             attack_distance(data.attack_distance),
+                             min_damage(data.min_damage),
+                             max_damage(data.max_damage) {}
 Weapon::~Weapon() {}
 
-const unsigned int Weapon::use() {
-    // IMPLEMENTAR LOGICA DE ATAQUE.
-    return getUsagePoints();
+const unsigned int Weapon::use(Character& user) {
+    RandomNumberGenerator random_number_generator;
+    return random_number_generator(this->min_damage, this->max_damage);
 }

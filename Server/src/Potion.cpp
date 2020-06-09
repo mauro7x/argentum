@@ -1,5 +1,6 @@
 #include "../includes/Potion.h"
-#include "../includes/Character.h"
+#include "../includes/Character.h" // Se incluye aca para evitar dependencias 
+                                   // circulares.
 
 Potion::Potion(const unsigned int id,
                std::string name,
@@ -10,24 +11,36 @@ Potion::Potion(const unsigned int id,
 
 Potion::~Potion() {}
 
-HealthPotion::HealthPotion(const unsigned int id,
-                           const std::string name,
-                           const unsigned int price,
-                           const unsigned int recovery_points):
-                                Potion(id, name, price, recovery_points) {}
-HealthPotion::~HealthPotion() {}
-
-void HealthPotion::equip(Character& character) {
-    character.recoverHealth(this->recovery_points);
+Potion* PotionFactory::newPotion(PotionCfg data) {
+    if (data.type == HEALTH) {
+        return new HealthPotion(data);
+    } else if (data.type == MANA) {
+        return new ManaPotion(data);
+    } else {
+        throw UnknownPotionTypeException();
+    }
 }
 
-ManaPotion::ManaPotion(const unsigned int id, 
-                       const std::string name,
-                       const unsigned int price,
-                       const unsigned int recovery_points):
-                            Potion(id, name, price, recovery_points) {}
+HealthPotion::HealthPotion(PotionCfg data): Potion(data.id, 
+                                                   data.name, 
+                                                   data.price, 
+                                                   data.recovery_points) {}
+HealthPotion::~HealthPotion() {}
+
+void HealthPotion::equip(Character& equipper) {
+    equipper.recoverHealth(this->recovery_points);
+}
+
+ManaPotion::ManaPotion(PotionCfg data): Potion(data.id, 
+                                               data.name, 
+                                               data.price, 
+                                               data.recovery_points) {}
 ManaPotion::~ManaPotion() {}
 
-void ManaPotion::equip(Character& character) {
-    character.recoverMana(this->recovery_points);
+void ManaPotion::equip(Character& equipper) {
+    equipper.recoverMana(this->recovery_points);
+}
+
+const char* UnknownPotionTypeException::what() const noexcept {
+    return "El tipo de poción especificado en PotionCfg es inválido.";
 }
