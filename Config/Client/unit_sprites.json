@@ -4,17 +4,29 @@
         "head": [
             {
                 "gid": 1000,
-                "clip_w": 52,
-                "clip_h": 81,
-                "up_row": 1,
-                "up_clips": 6,
-                "down_row": 0,
-                "down_clips": 6,
-                "left_row": 2,
-                "left_clips": 6,
-                "right_row": 3,
-                "right_clips": 6,
-                "change_every_n_frames": 4,
+                "clip_w": 17,
+                "clip_h": 50,
+                "up_row_col_clips": [
+                    0,
+                    3,
+                    1
+                ],
+                "down_row_col_clips": [
+                    0,
+                    0,
+                    1
+                ],
+                "left_row_col_clips": [
+                    0,
+                    2,
+                    1
+                ],
+                "right_row_col_clips": [
+                    0,
+                    1,
+                    1
+                ],
+                "change_every_n_frames": 1,
                 "color_key": {
                     "is_needed": true,
                     "color": {
@@ -28,16 +40,28 @@
         "body": [
             {
                 "gid": 2000,
-                "clip_w": 52,
-                "clip_h": 81,
-                "up_row": 1,
-                "up_clips": 6,
-                "down_row": 0,
-                "down_clips": 6,
-                "left_row": 2,
-                "left_clips": 6,
-                "right_row": 3,
-                "right_clips": 6,
+                "clip_w": 25,
+                "clip_h": 45,
+                "up_row_col_clips": [
+                    1,
+                    0,
+                    6
+                ],
+                "down_row_col_clips": [
+                    0,
+                    0,
+                    6
+                ],
+                "left_row_col_clips": [
+                    2,
+                    0,
+                    5
+                ],
+                "right_row_col_clips": [
+                    3,
+                    0,
+                    5
+                ],
                 "change_every_n_frames": 4,
                 "color_key": {
                     "is_needed": true,
@@ -52,17 +76,29 @@
         "helmet": [
             {
                 "gid": 3000,
-                "clip_w": 52,
-                "clip_h": 81,
-                "up_row": 1,
-                "up_clips": 6,
-                "down_row": 0,
-                "down_clips": 6,
-                "left_row": 2,
-                "left_clips": 6,
-                "right_row": 3,
-                "right_clips": 6,
-                "change_every_n_frames": 4,
+                "clip_w": 17,
+                "clip_h": 16,
+                "up_row_col_clips": [
+                    0,
+                    3,
+                    1
+                ],
+                "down_row_col_clips": [
+                    0,
+                    0,
+                    1
+                ],
+                "left_row_col_clips": [
+                    0,
+                    2,
+                    1
+                ],
+                "right_row_col_clips": [
+                    0,
+                    1,
+                    1
+                ],
+                "change_every_n_frames": 1,
                 "color_key": {
                     "is_needed": true,
                     "color": {
@@ -76,16 +112,28 @@
         "armour": [
             {
                 "gid": 4000,
-                "clip_w": 52,
-                "clip_h": 81,
-                "up_row": 1,
-                "up_clips": 6,
-                "down_row": 0,
-                "down_clips": 6,
-                "left_row": 2,
-                "left_clips": 6,
-                "right_row": 3,
-                "right_clips": 6,
+                "clip_w": 25,
+                "clip_h": 45,
+                "up_row_col_clips": [
+                    1,
+                    0,
+                    6
+                ],
+                "down_row_col_clips": [
+                    0,
+                    0,
+                    6
+                ],
+                "left_row_col_clips": [
+                    2,
+                    0,
+                    5
+                ],
+                "right_row_col_clips": [
+                    3,
+                    0,
+                    5
+                ],
                 "change_every_n_frames": 4,
                 "color_key": {
                     "is_needed": true,
@@ -100,16 +148,28 @@
         "shield": [
             {
                 "gid": 5000,
-                "clip_w": 52,
-                "clip_h": 81,
-                "up_row": 1,
-                "up_clips": 6,
-                "down_row": 0,
-                "down_clips": 6,
-                "left_row": 2,
-                "left_clips": 6,
-                "right_row": 3,
-                "right_clips": 6,
+                "clip_w": 25,
+                "clip_h": 45,
+                "up_row_col_clips": [
+                    1,
+                    0,
+                    6
+                ],
+                "down_row_col_clips": [
+                    0,
+                    0,
+                    6
+                ],
+                "left_row_col_clips": [
+                    2,
+                    0,
+                    5
+                ],
+                "right_row_col_clips": [
+                    3,
+                    0,
+                    5
+                ],
                 "change_every_n_frames": 4,
                 "color_key": {
                     "is_needed": true,
@@ -124,16 +184,28 @@
         "weapon": [
             {
                 "gid": 6000,
-                "clip_w": 52,
-                "clip_h": 81,
-                "up_row": 1,
-                "up_clips": 6,
-                "down_row": 0,
-                "down_clips": 6,
-                "left_row": 2,
-                "left_clips": 6,
-                "right_row": 3,
-                "right_clips": 6,
+                "clip_w": 25,
+                "clip_h": 45,
+                "up_row_col_clips": [
+                    1,
+                    0,
+                    6
+                ],
+                "down_row_col_clips": [
+                    0,
+                    0,
+                    6
+                ],
+                "left_row_col_clips": [
+                    2,
+                    0,
+                    5
+                ],
+                "right_row_col_clips": [
+                    3,
+                    0,
+                    5
+                ],
                 "change_every_n_frames": 4,
                 "color_key": {
                     "is_needed": true,
@@ -149,16 +221,28 @@
     "npc": [
         {
             "gid": 10000,
-            "clip_w": 52,
-            "clip_h": 81,
-            "up_row": 1,
-            "up_clips": 6,
-            "down_row": 0,
-            "down_clips": 6,
-            "left_row": 2,
-            "left_clips": 6,
-            "right_row": 3,
-            "right_clips": 6,
+            "clip_w": 57,
+            "clip_h": 100,
+            "up_row_col_clips": [
+                1,
+                0,
+                6
+            ],
+            "down_row_col_clips": [
+                0,
+                0,
+                6
+            ],
+            "left_row_col_clips": [
+                2,
+                0,
+                5
+            ],
+            "right_row_col_clips": [
+                3,
+                0,
+                5
+            ],
             "change_every_n_frames": 4,
             "color_key": {
                 "is_needed": true,

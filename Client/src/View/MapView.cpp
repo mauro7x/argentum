@@ -35,7 +35,7 @@ MapView::MapView(const Renderer* renderer)
       tile_h(0) {}
 
 void MapView::loadMedia() {
-    tiles.loadTiles();
+    tiles.loadMedia();
     maps.loadMaps();
 }
 

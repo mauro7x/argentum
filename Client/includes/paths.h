@@ -5,7 +5,7 @@
 /* Se incluyen los paths desde la carpeta ~build/, siendo ~ la raíz del TP. */
 
 //-----------------------------------------------------------------------------
-// Assets paths
+// Assets paths // esto deberia volar
 
 #define ASSETS_PATH "../Assets/"
 #define MAPS_PATH "../Assets/Maps/"
@@ -20,6 +20,8 @@
 #define CONFIG_PATH "../Config/Client/"
 #define GUI_CONFIG_FILEPATH "../Config/Client/gui_config.json"
 #define TILES_FILEPATH "../Config/Client/tiles.json"
+#define UNIT_SPRITES_FILEPATH "../Config/Client/unit_sprites.json"
+#define INVENTORY_SPRITES_FILEPATH "../Config/Client/inventory_sprites.json"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------

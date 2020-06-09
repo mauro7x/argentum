@@ -62,7 +62,7 @@ void TileContainer::_loadTextures(const json& tileset) {
 
 TileContainer::TileContainer(const Renderer* renderer) : g_renderer(renderer) {}
 
-void TileContainer::loadTiles() {
+void TileContainer::loadMedia() {
     json tiles;
     tiles = _loadJsonFile(TILES_FILEPATH);
     _loadTextures(tiles["ground"]);

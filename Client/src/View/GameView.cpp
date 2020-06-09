@@ -58,6 +58,7 @@ json GameView::_loadJsonFile(std::string filepath) const {
 void GameView::_loadMedia() {
     hud.loadMedia();
     map.loadMedia();
+    unit_sprites.loadMedia();
     player.loadMedia();
 }
 
@@ -90,6 +91,7 @@ GameView::GameView()
       hud(&renderer),
       map(&renderer),
       predictor(map),
+      unit_sprites(&renderer),
       player(&renderer, predictor),
       stage(hud, map, player, units) {}
 

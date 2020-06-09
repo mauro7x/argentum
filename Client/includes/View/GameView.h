@@ -21,6 +21,7 @@
 #include "Player.h"
 #include "Predictor.h"
 #include "UnitContainer.h"
+#include "UnitSpriteContainer.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -46,6 +47,7 @@ class GameView {
     HUDProxy hud;
     MapView map;
     Predictor predictor;
+    UnitSpriteContainer unit_sprites;
     Player player;
     UnitContainer units;
 
