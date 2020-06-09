@@ -19,7 +19,7 @@
 #include "HUD.h"
 #include "MapView.h"
 #include "Player.h"
-#include "Predictor.h"
+// #include "Predictor.h"
 #include "UnitSpriteContainer.h"
 //-----------------------------------------------------------------------------
 
@@ -28,6 +28,12 @@
 #include "../../../Common/includes/Exceptions/SDLException.h"
 #include "../../../Common/includes/paths.h"
 #include "../paths.h"
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+// Librería de json a utilizar (https://github.com/nlohmann/json).
+#include "../../../Common/includes/json.hpp"
+using json = nlohmann::json;
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -46,7 +52,7 @@ class GameView {
     /* Componentes de la vista */
     HUDProxy hud;
     MapView map;
-    Predictor predictor;
+    // Predictor predictor;
     UnitSpriteContainer unit_sprites;
     Player player;
 

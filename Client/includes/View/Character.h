@@ -28,17 +28,12 @@ class Character {
     UnitSpriteContainer* g_sprites;
     int tile_w, tile_h;
 
-    /* Componentes geográficos del personaje */
-    int x_tile, y_tile; /* posición en tiles */
-    int x, y;           /* posicion en pixeles */
-    float scale_factor; /* por si no entramos en el tile a lo ancho */
+    /* Data del personaje */
+    CharacterData data;
 
-    /* Componentes gráficos del personaje */
-    Id head_id, body_id;                           /* cuerpo */
-    Id helmet_id, armour_id, shield_id, weapon_id; /* vestimenta */
-
-    /* Copia la data recibida en sus atributos */
-    void _copyData(const CharacterData& data);
+    /* Componentes para el renderizado gráfico */
+    int x, y;           /* posición en pixeles */
+    float scale_factor; /* factor para reescalar */
 
     /* Verifica si el cuerpo entra en el tile, cc calcula el scale_factor */
     void _setScaleFactor();
@@ -74,7 +69,8 @@ class Character {
    public:
     /* Constructor */
     Character(Renderer* renderer, UnitSpriteContainer* sprites,
-              const CharacterData& data, const int tile_w, const int tile_h);
+              const CharacterData& init_data, const int tile_w,
+              const int tile_h);
 
     /* Deshabilitamos el constructor por copia. */
     Character(const Character&) = delete;

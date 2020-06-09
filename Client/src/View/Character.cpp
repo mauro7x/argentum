@@ -3,19 +3,8 @@
 //-----------------------------------------------------------------------------
 // Métodos privados
 
-void Character::_copyData(const CharacterData& data) {
-    x_tile = data.x_tile;
-    y_tile = data.y_tile;
-    head_id = data.head_id;
-    body_id = data.body_id;
-    helmet_id = data.helmet_id;
-    armour_id = data.armour_id;
-    shield_id = data.shield_id;
-    weapon_id = data.shield_id;
-}
-
 void Character::_setScaleFactor() {
-    int body_w = g_sprites->get(body_id).clip_w;
+    int body_w = g_sprites->get(data.body_id).clip_w;
     if (body_w > tile_w) {
         scale_factor = tile_w / body_w;
     } else {
@@ -44,31 +33,31 @@ void Character::_render(const Sprite& sprite) const {
     // paso 3
     SDL_Rect render_quad, render_clip;
     SDL_Texture* texture;
-    render_quad = {x, y, (sprite.clip_w * scale_factor),
-                   (sprite.clip_h * scale_factor)};
+    render_quad = {x, y, (int)(sprite.clip_w * scale_factor),
+                   (int)(sprite.clip_h * scale_factor)};
     render_clip = {0, 0, sprite.clip_w, sprite.clip_h};
     texture = sprite.texture.getTexture();
     g_renderer->renderIfVisible(texture, &render_quad, &render_clip);
 }
 
 void Character::_startMovementIfNeeded() {
-    /* si el x no concuerda con x_tile * tile_w, o lo mismo con y, mover */
+    /* si el x no concuerda con data.x_tile * tile_w, o lo mismo con y, mover */
 }
 
 // OLD API --------------------------------------------------------------------
 
 /*
 void Character::_centerOnTile() {
-    // x = (x_tile * tile_w) + ((tile_w - w) / 2);
-    // y = (y_tile * tile_h) + (tile_h * (0.8)) - h;
+    // x = (data.x_tile * tile_w) + ((tile_w - w) / 2);
+    // y = (data.y_tile * tile_h) + (tile_h * (0.8)) - h;
 }
 
 int Character::_xValueToReach() const {
-    return (x_tile * tile_w) + ((tile_w - box.w) / 2);
+    return (data.x_tile * tile_w) + ((tile_w - box.w) / 2);
 }
 
 int Character::_yValueToReach() const {
-    return (y_tile * tile_h) + (tile_h * (0.8)) - box.h;
+    return (data.y_tile * tile_h) + (tile_h * (0.8)) - box.h;
 }
 */
 
@@ -78,12 +67,12 @@ int Character::_yValueToReach() const {
 // API Pública
 
 Character::Character(Renderer* renderer, UnitSpriteContainer* sprites,
-                     const CharacterData& data, const int tile_w,
+                     const CharacterData& init_data, const int tile_w,
                      const int tile_h)
     : g_renderer(renderer), g_sprites(sprites), tile_w(tile_w), tile_h(tile_h) {
-    _copyData(data);
-    x = tile_w * x_tile;
-    y = tile_h * y_tile;
+    data = init_data;
+    x = tile_w * data.x_tile;
+    y = tile_h * data.y_tile;
     _setScaleFactor();
 }
 
@@ -95,16 +84,10 @@ Character::Character(Character&& other) {
     other.g_sprites = NULL;
 
     /* Copiamos el resto de atributos */
-    tile_w = other.tile_w;
-    tile_h = other.tile_h;
-    x_tile = other.x_tile;
-    y_tile = other.y_tile;
-    head_id = other.head_id;
-    body_id = other.body_id;
-    helmet_id = other.helmet_id;
-    armour_id = other.armour_id;
-    shield_id = other.shield_id;
-    weapon_id = other.weapon_id;
+    data = other.data;
+    x = other.x;
+    y = other.y;
+    scale_factor = other.scale_factor;
 }
 
 Character& Character::operator=(Character&& other) {
@@ -115,22 +98,16 @@ Character& Character::operator=(Character&& other) {
     other.g_sprites = NULL;
 
     /* Copiamos el resto de atributos */
-    tile_w = other.tile_w;
-    tile_h = other.tile_h;
-    x_tile = other.x_tile;
-    y_tile = other.y_tile;
-    head_id = other.head_id;
-    body_id = other.body_id;
-    helmet_id = other.helmet_id;
-    armour_id = other.armour_id;
-    shield_id = other.shield_id;
-    weapon_id = other.weapon_id;
+    data = other.data;
+    x = other.x;
+    y = other.y;
+    scale_factor = other.scale_factor;
 
     return *this;
 }
 
 void Character::update(const CharacterData& updated_data) {
-    _copyData(updated_data);
+    data = updated_data;
     _setScaleFactor();
     _startMovementIfNeeded();
 }
@@ -138,8 +115,7 @@ void Character::update(const CharacterData& updated_data) {
 void Character::act() {}
 
 void Character::render() const {
-    // Cuerpo
-    _render(g_sprites->get(body_id));
+    /* Renderizar */
 }
 
 Character::~Character() {}

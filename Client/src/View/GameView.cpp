@@ -33,11 +33,6 @@ void GameView::_init() {
 
     /* Iniciamos la cámara */
     camera.init(config["camera"]);
-
-    json map_config = _loadJsonFile(MAPS_FILEPATH);
-
-    /* Iniciamos el unit container */
-    player.init(map_config["tilewidth"], map_config["tileheight"]);
 }
 
 json GameView::_loadJsonFile(std::string filepath) const {
@@ -67,7 +62,7 @@ void GameView::_loadMedia() {
 }
 
 void GameView::_handleEvent(const SDL_Event& e) {
-    player.handleEvent(e);
+    // player.handleEvent(e);
 }
 
 void GameView::_free() {
@@ -93,9 +88,9 @@ GameView::GameView()
       img_running(false),
       hud(&renderer),
       map(&renderer),
-      predictor(map),
+      // predictor(map),
       unit_sprites(&renderer),
-      player(&renderer, unit_sprites, predictor),
+      player(&renderer, &unit_sprites),
       stage(hud, map, player) {}
 
 void GameView::operator()() {
@@ -103,10 +98,11 @@ void GameView::operator()() {
     _loadMedia();
 
     //-------------------------------------------------------------------------
-    // Manejar el primer paquete recibido, crear unidades dinamicas
-    // necesarias
+    // Manejar el primer paquete recibido, crear unidades necesarias
 
-    player.update(10, 10);
+    // Hardcodeamos el primer paquete
+    PlayerData init_data = {3, 3, 100, 100, 1000, 2000, 3000, 4000, 5000, 6000};
+    player.init(init_data);
     //-------------------------------------------------------------------------
 
     bool quit = false;
@@ -137,10 +133,13 @@ void GameView::operator()() {
 
         map.select(0); /* el id del mapa x ahora hardcodeado */
         player.act();
-        camera.center(player.getBox(), map.widthInPx(), map.heightInPx());
+        // camera.center(player.getBox(), map.widthInPx(), map.heightInPx());
+        camera.center(SDL_Rect({192, 192, 25, 50}), map.widthInPx(),
+                      map.heightInPx());
         //---------------------------------------------------------------------
 
         stage.render();
+
         renderer.presentScreen();
 
         // Delay para controlar el frame rate? por ahora usamos vsync

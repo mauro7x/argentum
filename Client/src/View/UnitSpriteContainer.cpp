@@ -95,7 +95,7 @@ void UnitSpriteContainer::loadMedia() {
 
 const Sprite& UnitSpriteContainer::get(const Id id) const {
     if (content.count(id) == 0) {
-        throw Exception("Unknown tile id.");
+        throw Exception("Unknown sprite id.");
     }
 
     return content.at(id);
