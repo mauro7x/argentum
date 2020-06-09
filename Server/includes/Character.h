@@ -1,6 +1,8 @@
 #ifndef __CHARACTER_H__
 #define __CHARACTER_H__
 
+#include <exception>
+
 #include "Kind.h"
 #include "Race.h"
 #include "Inventory.h"
@@ -55,7 +57,14 @@ class Character {
          */
         void recoverHealth(const unsigned int points);
 
+        void consumeMana(const unsigned int mana_points);
+
         const unsigned int getMannaPoints() const; // Baculos verifican si tiene suficientes puntos antes de ser usados.
+};
+
+class InsufficientManaException: std::exception {
+    public:
+        virtual const char* what() const noexcept;
 };
 
 #endif
