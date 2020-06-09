@@ -4,16 +4,16 @@
 // Métodos privados
 
 void Unit::_centerBoxOnTile() {
-    box.x = (x_tile * TILE_WIDTH) + ((TILE_WIDTH - box.w) / 2);
-    box.y = (y_tile * TILE_HEIGHT) + (TILE_HEIGHT * (0.8)) - box.h;
+    box.x = (x_tile * tile_w) + ((tile_w - box.w) / 2);
+    box.y = (y_tile * tile_h) + (tile_h * (0.8)) - box.h;
 }
 
 int Unit::_xValueToReach() const {
-    return (x_tile * TILE_WIDTH) + ((TILE_WIDTH - box.w) / 2);
+    return (x_tile * tile_w) + ((tile_w - box.w) / 2);
 }
 
 int Unit::_yValueToReach() const {
-    return (y_tile * TILE_HEIGHT) + (TILE_HEIGHT * (0.8)) - box.h;
+    return (y_tile * tile_h) + (tile_h * (0.8)) - box.h;
 }
 
 //-----------------------------------------------------------------------------
@@ -21,10 +21,13 @@ int Unit::_yValueToReach() const {
 //-----------------------------------------------------------------------------
 // API Pública
 
-Unit::Unit(const Renderer* renderer, const int x_tile, const int y_tile)
+Unit::Unit(const Renderer* renderer, const UnitSpriteContainer& sprites)
     : g_renderer(renderer),
-      x_tile(x_tile),
-      y_tile(y_tile),
+      g_sprites(sprites),
+      tile_w(0),
+      tile_h(0),
+      x_tile(0),
+      y_tile(0),
       box({0, 0, 0, 0}),
       x_vel(0),
       y_vel(0),
@@ -32,18 +35,19 @@ Unit::Unit(const Renderer* renderer, const int x_tile, const int y_tile)
       next_y(0),
       last_moved(0) {}
 
-void Unit::updatePosition(int corrected_x_tile, int corrected_y_tile) {
-    x_tile = corrected_x_tile;
-    y_tile = corrected_y_tile;
-    // aca probablemente tenemos que poner a la entidad a moverse, poniendo
-    // next_tiles en vez de xy_tiles
+void Unit::init(const int tile_w, const int tile_h) {
+    this->tile_w = tile_w;
+    this->tile_h = tile_h;
 }
 
-void Unit::move() {}
+void Unit::update(int corrected_x_tile, int corrected_y_tile) {
+    /* Actualizar información según el servidor */
+    /* Si es necesario, iniciar movimiento*/
+}
 
-void Unit::loadMedia() {}
+void Unit::act() {}
 
-void Unit::handleEvent(const SDL_Event& e) {}
+void Unit::render() const {}
 
 Unit::~Unit() {}
 

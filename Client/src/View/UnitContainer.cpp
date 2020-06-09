@@ -19,11 +19,17 @@ void UnitContainer::_free() {
 //-----------------------------------------------------------------------------
 // API Pública
 
-UnitContainer::UnitContainer() {}
+UnitContainer::UnitContainer(const Renderer* renderer,
+                             const UnitSpriteContainer& unit_sprites)
+    : g_renderer(renderer), g_unit_sprites(unit_sprites) {}
 
-void UnitContainer::add(Unit* new_unit) {
-    content.push_back(new_unit);
-    content.shrink_to_fit();
+void UnitContainer::init(const int tile_w, const int tile_h) {
+    this->tile_w = tile_w;
+    this->tile_h = tile_h;
+}
+
+void UnitContainer::create() {
+    /* por ahora, hardcodear la creación de una unidad */
 }
 
 void UnitContainer::handleEvent(const SDL_Event& e) const {

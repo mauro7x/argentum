@@ -33,6 +33,12 @@ void GameView::_init() {
 
     /* Iniciamos la cámara */
     camera.init(config["camera"]);
+
+    json map_config = _loadJsonFile(MAPS_FILEPATH);
+
+    /* Iniciamos el unit container */
+    player.init(map_config["tilewidth"], map_config["tileheight"]);
+    units.init(map_config["tilewidth"], map_config["tileheight"]);
 }
 
 json GameView::_loadJsonFile(std::string filepath) const {
@@ -59,7 +65,6 @@ void GameView::_loadMedia() {
     hud.loadMedia();
     map.loadMedia();
     unit_sprites.loadMedia();
-    player.loadMedia();
 }
 
 void GameView::_handleEvent(const SDL_Event& e) {
@@ -92,7 +97,8 @@ GameView::GameView()
       map(&renderer),
       predictor(map),
       unit_sprites(&renderer),
-      player(&renderer, predictor),
+      player(&renderer, unit_sprites, predictor),
+      units(&renderer, unit_sprites),
       stage(hud, map, player, units) {}
 
 void GameView::operator()() {
@@ -102,6 +108,8 @@ void GameView::operator()() {
     //-------------------------------------------------------------------------
     // Manejar el primer paquete recibido, crear unidades dinamicas
     // necesarias
+
+    player.update(10, 10);
     //-------------------------------------------------------------------------
 
     bool quit = false;
@@ -131,7 +139,7 @@ void GameView::operator()() {
         // ACCIONES
 
         map.select(0); /* el id del mapa x ahora hardcodeado */
-        player.move();
+        player.act();
         camera.center(player.getBox(), map.widthInPx(), map.heightInPx());
         //---------------------------------------------------------------------
 
