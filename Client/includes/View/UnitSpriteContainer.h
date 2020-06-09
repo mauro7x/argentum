@@ -53,6 +53,7 @@ class UnitSpriteContainer {
     void loadMedia();
 
     /* Obtiene el sprite correspondiente */
+    const Sprite& get(const Id id) const;
     const Sprite& operator[](const Id id) const;
 
     //-------------------------------------------------------------------------

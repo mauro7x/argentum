@@ -93,12 +93,16 @@ void UnitSpriteContainer::loadMedia() {
     _loadSpritesFromJson(sprites["pj"]["weapon"], dirpath);
 }
 
-const Sprite& UnitSpriteContainer::operator[](const Id id) const {
+const Sprite& UnitSpriteContainer::get(const Id id) const {
     if (content.count(id) == 0) {
         throw Exception("Unknown tile id.");
     }
 
     return content.at(id);
+}
+
+const Sprite& UnitSpriteContainer::operator[](const Id id) const {
+    return this->get(id);
 }
 
 UnitSpriteContainer::~UnitSpriteContainer() {}
