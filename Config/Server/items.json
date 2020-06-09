@@ -3,56 +3,104 @@
         {
             "id": 300,
             "name": "Espada",
-            "type": 3,
             "price": 100,
+            "attack_distance": 1,
             "min_damage": 10,
-            "max_damage": 20,
-            "distant_attack": false
+            "max_damage": 20
         },
         {
             "id": 301,
             "name": "Arco",
-            "type": 3,
             "price": 100,
+            "attack_distance": 5,
             "min_damage": 10,
-            "max_damage": 20,
-            "distant_attack": true
+            "max_damage": 20
         }
     ],
     "wands": [
         {
             "id": 302,
-            "name": "Báculo",
-            "type": 3,
-            "price": 100,
-            "min_damage": 10,
-            "max_damage": 20
+            "name": "Báculo nudoso",
+            "spell_id": 400,
+            "price": 100
+        },
+        {
+            "id": 303,
+            "name": "Flauta élfica",
+            "spell_id": 401,
+            "price": 100
         }
     ],
-    "defences": [
+    "spells": [
         {
             "id": 400,
-            "name": "Capucha",
-            "type": 0,
-            "price": 100,
-            "min_defence": 10,
-            "max_defence": 20
+            "name": "misil",
+            "spell_type": 0,
+            "mana_usage_cost": 15,
+        
+            "attack_distance": 5,
+            "min_damage": 4,
+            "max_damage": 8,
+        
+            "recovery_points": 0
         },
+        {
+            "id": 401,
+            "name": "curar",
+            "spell_type": 1,
+            "mana_usage_cost": 100,
+        
+            "attack_distance": 0,
+            "min_damage": 0,
+            "max_damage": 0,
+        
+            "recovery_points": 100
+        }
+    ],
+    "helmets": [
         {
             "id": 500,
-            "name": "Armadura",
-            "type": 1,
+            "name": "Capucha",
+            "wearable_type": 0,
             "price": 100,
             "min_defence": 10,
             "max_defence": 20
-        },
+        }
+    ],
+    "armours": [
         {
             "id": 600,
-            "name": "Escudo",
-            "type": 2,
+            "name": "Armadura",
+            "wearable_type": 1,
             "price": 100,
             "min_defence": 10,
             "max_defence": 20
+        }
+    ],
+    "shields": [
+        {
+            "id": 700,
+            "name": "Escudo",
+            "wearable_type": 2,
+            "price": 100,
+            "min_defence": 10,
+            "max_defence": 20
+        }
+    ],
+    "potions": [
+        {
+            "id": 800,
+            "name": "Poción de vida",
+            "potion_type": 0,
+            "price": 50,
+            "recovery_points": 100 
+        },
+        {
+            "id": 801,
+            "name": "Poción de maná",
+            "potion_type": 1,
+            "price": 50,
+            "recovery_points": 100 
         }
     ]
 }
