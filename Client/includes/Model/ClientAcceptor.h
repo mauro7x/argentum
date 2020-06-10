@@ -11,10 +11,13 @@
 //-----------------------------------------------------------------------------
 
 class ClientAcceptor {
+    // atributos del clienttalker
    private:
     Socket acceptor_skt;
     bool is_running;
-    // atributos del clientaceptador
+    //una cola o dos ?
+    //cola 1: respuesta
+    //cola 2: abstracto update
 
     // metodos privados
 

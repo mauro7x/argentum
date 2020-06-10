@@ -13,11 +13,12 @@
 //-----------------------------------------------------------------------------
 
 class ClientTalker {
+    // atributos del clienttalker
    private:
     Socket talker_skt;
     bool is_running;
     std::queue<std::string> queue_commands;
-    // atributos del clienttalker
+    
 
     // metodos privados
 
@@ -28,7 +29,7 @@ class ClientTalker {
      * Parámetros: hostname, portname.
      */
     ClientTalker(const std::string& hostname, const std::string& port,
-                 std::queue<std::string> queue);
+                 std::queue<std::string>& queue);
 
     /* Deshabilitamos el constructor por copia. */
     ClientTalker(const ClientTalker&) = delete;
