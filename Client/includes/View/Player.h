@@ -7,28 +7,16 @@
 #include <cstdint>
 #include <fstream>
 
+#include "../../../Common/includes/Exceptions/Exception.h"
 #include "../../../Common/includes/JSON.h"
+#include "../../../Common/includes/UnitData.h"
 #include "../../../Common/includes/paths.h"
 #include "Renderer.h"
 #include "UnitSpriteContainer.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-// Proxy del server, esto luego se reemplaza con la lógica del modelo
-
-#include "ServerProxy.h"
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
-
-/* Data que irá cambiando durante la ejecución */
-struct PlayerData {
-    int x_tile, y_tile;                            /* coordenadas en tiles */
-    uint16_t health, mana;                         /* stats */
-    Id head_id, body_id;                           /* cuerpo básico */
-    Id helmet_id, armour_id, shield_id, weapon_id; /* vestimenta */
-};
-
+enum PlayerState { NOT_INIT, READY, MOVING };
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -36,17 +24,21 @@ struct PlayerData {
 class Player {
    protected:
     /* Componentes para renderizar */
-    Renderer* g_renderer;
-    UnitSpriteContainer* g_sprites;
-    ServerProxy* server; /* proxy del server */
+    const Renderer* g_renderer;
+    const UnitSpriteContainer& g_sprites;
     int tile_w, tile_h;
 
     /* Data del personaje */
     PlayerData data;
+    PlayerState state;
 
     /* Componentes para el renderizado gráfico */
     int x, y;           /* posición en pixeles */
+    int x_vel, y_vel;   /* velocidades en cada componente*/
     float scale_factor; /* factor para reescalar */
+
+    /* Verifica si hay que iniciar un movimiento nuevo */
+    bool _movementNeeded() const;
 
     /* Verifica si el cuerpo entra en el tile, cc calcula el scale_factor */
     void _setScaleFactor();
@@ -54,8 +46,8 @@ class Player {
     /* Renderiza un sprite agregando el offset necesario */
     void _render(const Sprite& sprite) const;
 
-    /* Verifica si tras el update hay que iniciar un movimiento */
-    void _startMovementIfNeeded();
+    /* Actualiza el movimiento si es necesario */
+    void _updateMovement();
 
     // OLD API ----------------------------------------------------------------
 
@@ -81,7 +73,7 @@ class Player {
 
    public:
     /* Constructor */
-    Player(Renderer* renderer, UnitSpriteContainer* sprites);
+    Player(const Renderer* renderer, const UnitSpriteContainer& sprites);
 
     /* Deshabilitamos el constructor por copia. */
     Player(const Player&) = delete;
@@ -108,6 +100,12 @@ class Player {
 
     /* Renderizarse si se encuentra dentro de la cámara */
     void render() const;
+
+    /* Obtiene la posición en tiles (SOLO X e Y SON VÁLIDOS) */
+    SDL_Rect getPos() const;
+
+    /* Obtiene la posición y dimensiones en pixeles */
+    SDL_Rect getBox() const;
 
     //-------------------------------------------------------------------------
 

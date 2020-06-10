@@ -3,8 +3,12 @@
 //-----------------------------------------------------------------------------
 // Métodos privados
 
+bool Player::_movementNeeded() const {
+    return (x != (data.x_tile * tile_w)) || (y != (data.y_tile * tile_h));
+}
+
 void Player::_setScaleFactor() {
-    int body_w = g_sprites->get(data.body_id).clip_w;
+    int body_w = g_sprites[data.body_id].clip_w;
     if (body_w > tile_w) {
         scale_factor = tile_w / body_w;
     } else {
@@ -40,8 +44,11 @@ void Player::_render(const Sprite& sprite) const {
     g_renderer->renderIfVisible(texture, &render_quad, &render_clip);
 }
 
-void Player::_startMovementIfNeeded() {
-    /* si el x no concuerda con data.x_tile * tile_w, o lo mismo con y, mover */
+void Player::_updateMovement() {
+    if (_movementNeeded()) {
+        x = data.x_tile * tile_w;
+        y = data.y_tile * tile_h;
+    }
 }
 
 // OLD API --------------------------------------------------------------------
@@ -66,10 +73,20 @@ int Player::_yValueToReach() const {
 //-----------------------------------------------------------------------------
 // API Pública
 
-Player::Player(Renderer* renderer, UnitSpriteContainer* sprites)
-    : g_renderer(renderer), g_sprites(sprites) {}
+Player::Player(const Renderer* renderer, const UnitSpriteContainer& sprites)
+    : g_renderer(renderer),
+      g_sprites(sprites),
+      state(NOT_INIT),
+      x(0),
+      y(0),
+      x_vel(0),
+      y_vel(0) {}
 
 void Player::init(const PlayerData& init_data) {
+    if (state) {
+        throw Exception("Player has already been initialized.");
+    }
+
     data = init_data;
     json map_data = JSON::loadJsonFile(MAPS_FILEPATH);
     tile_w = map_data["tilewidth"];
@@ -77,25 +94,80 @@ void Player::init(const PlayerData& init_data) {
     x = tile_w * data.x_tile;
     y = tile_h * data.y_tile;
     _setScaleFactor();
+    state = READY;
 }
 
 void Player::update(const PlayerData& updated_data) {
+    if (!state) {
+        throw Exception("Player has not been initialized (update requested).");
+    }
+
     data = updated_data;
     _setScaleFactor();
-    _startMovementIfNeeded();
+    state = READY;
+
+    _updateMovement();
 }
 
-void Player::act() {}
+void Player::act() {
+    if (!state) {
+        throw Exception("Player has not been initialized (act requested).");
+    }
+}
 
 void Player::render() const {
-    fprintf(stderr, "x_tile = %i, y_tile = %i, x = %i, y = %i\n", data.x_tile,
-            data.y_tile, x, y);
+    if (!state) {
+        throw Exception("Player has not been initialized (render requested).");
+    }
 
     // Cuerpo
-    _render(g_sprites->get(data.body_id));
+    if (data.body_id) {
+        _render(g_sprites[data.body_id]);
+    }
+
+    // Armadura
+    if (data.armour_id) {
+        _render(g_sprites[data.armour_id]);
+    }
+
+    // Escudo
+    if (data.shield_id) {
+        _render(g_sprites[data.shield_id]);
+    }
+
+    // Espada
+    if (data.weapon_id) {
+        _render(g_sprites[data.weapon_id]);
+    }
 
     // Cabeza
-    _render(g_sprites->get(data.head_id));
+    if (data.head_id) {
+        _render(g_sprites[data.head_id]);
+    }
+
+    // Casco
+    if (data.helmet_id) {
+        _render(g_sprites[data.helmet_id]);
+    }
+}
+
+SDL_Rect Player::getPos() const {
+    if (!state) {
+        throw Exception("Player has not been initialized (pos requested).");
+    }
+
+    return SDL_Rect({data.x_tile, data.y_tile, 0, 0});
+}
+
+SDL_Rect Player::getBox() const {
+    if (!state) {
+        throw Exception("Player has not been initialized (box requested).");
+    }
+
+    int body_w = g_sprites[data.body_id].clip_w;
+    int head_h = g_sprites[data.head_id].clip_h;
+    return SDL_Rect(
+        {x, y, (int)(body_w * scale_factor), (int)(head_h * scale_factor)});
 }
 
 Player::~Player() {}
