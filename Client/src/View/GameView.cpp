@@ -42,7 +42,46 @@ void GameView::_loadMedia() {
 }
 
 void GameView::_handleEvent(const SDL_Event& e) {
-    // player.handleEvent(e);
+    /* Movimiento */
+    if (e.type == SDL_KEYDOWN) {
+        switch (e.key.keysym.sym) {
+            case SDLK_w:
+                if (server.moveUp()) {
+                    SDL_Rect pos = player.getPos();
+                    PlayerData update_data = {pos.x, --pos.y, 100,  100,  2000,
+                                              2100,  1300,    1400, 1500, 1000};
+                    player.update(update_data);
+                }
+                break;
+
+            case SDLK_s:
+                if (server.moveDown()) {
+                    SDL_Rect pos = player.getPos();
+                    PlayerData update_data = {pos.x, ++pos.y, 100,  100,  2000,
+                                              2100,  1300,    1400, 1500, 1000};
+                    player.update(update_data);
+                }
+                break;
+
+            case SDLK_a:
+                if (server.moveLeft()) {
+                    SDL_Rect pos = player.getPos();
+                    PlayerData update_data = {--pos.x, pos.y, 100,  100,  2000,
+                                              2100,    1300,  1400, 1500, 1000};
+                    player.update(update_data);
+                }
+                break;
+
+            case SDLK_d:
+                if (server.moveRight()) {
+                    SDL_Rect pos = player.getPos();
+                    PlayerData update_data = {++pos.x, pos.y, 100,  100,  2000,
+                                              2100,    1300,  1400, 1500, 1000};
+                    player.update(update_data);
+                }
+                break;
+        }
+    }
 }
 
 void GameView::_free() {
@@ -72,7 +111,7 @@ GameView::GameView()
       server(map), /* proxy server*/
 
       unit_sprites(&renderer),
-      player(&renderer, &unit_sprites),
+      player(&renderer, unit_sprites),
       stage(hud, map, player) {}
 
 void GameView::operator()() {
@@ -83,7 +122,7 @@ void GameView::operator()() {
     // Manejar el primer paquete recibido, crear unidades necesarias
 
     // Hardcodeamos el primer paquete
-    PlayerData init_data = {3, 3, 100, 100, 2000, 2100, 1300, 1400, 1500, 1000};
+    PlayerData init_data = {0, 0, 100, 100, 2000, 2100, 1300, 1400, 1500, 1000};
     player.init(init_data);
     //-------------------------------------------------------------------------
 
@@ -115,9 +154,7 @@ void GameView::operator()() {
 
         map.select(0); /* el id del mapa x ahora hardcodeado */
         player.act();
-        // camera.center(player.getBox(), map.widthInPx(), map.heightInPx());
-        camera.center(SDL_Rect({192, 192, 25, 50}), map.widthInPx(),
-                      map.heightInPx());
+        camera.center(player.getBox(), map.widthInPx(), map.heightInPx());
         //---------------------------------------------------------------------
 
         stage.render();

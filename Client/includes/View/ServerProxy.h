@@ -10,6 +10,10 @@
 class ServerProxy {
    private:
     const MapView& map;
+    int x, y;
+
+    /* Se fija si se puede mover */
+    bool _move(const int x, const int y);
 
    public:
     /* Constructor */
@@ -29,6 +33,12 @@ class ServerProxy {
 
     //-------------------------------------------------------------------------
     // Métodos proxy
+
+    /* Contesta si se puede mover */
+    bool moveUp();
+    bool moveDown();
+    bool moveLeft();
+    bool moveRight();
 
     //-------------------------------------------------------------------------
 

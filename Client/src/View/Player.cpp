@@ -4,7 +4,7 @@
 // Métodos privados
 
 void Player::_setScaleFactor() {
-    int body_w = g_sprites->get(data.body_id).clip_w;
+    int body_w = g_sprites[data.body_id].clip_w;
     if (body_w > tile_w) {
         scale_factor = tile_w / body_w;
     } else {
@@ -42,6 +42,10 @@ void Player::_render(const Sprite& sprite) const {
 
 void Player::_startMovementIfNeeded() {
     /* si el x no concuerda con data.x_tile * tile_w, o lo mismo con y, mover */
+    if ((x != (data.x_tile * tile_w)) || (y != (data.y_tile * tile_h))) {
+        x = data.x_tile * tile_w;
+        y = data.y_tile * tile_h;
+    }
 }
 
 // OLD API --------------------------------------------------------------------
@@ -66,7 +70,7 @@ int Player::_yValueToReach() const {
 //-----------------------------------------------------------------------------
 // API Pública
 
-Player::Player(Renderer* renderer, UnitSpriteContainer* sprites)
+Player::Player(const Renderer* renderer, const UnitSpriteContainer& sprites)
     : g_renderer(renderer), g_sprites(sprites) {}
 
 void Player::init(const PlayerData& init_data) {
@@ -88,14 +92,34 @@ void Player::update(const PlayerData& updated_data) {
 void Player::act() {}
 
 void Player::render() const {
-    fprintf(stderr, "x_tile = %i, y_tile = %i, x = %i, y = %i\n", data.x_tile,
-            data.y_tile, x, y);
-
     // Cuerpo
-    _render(g_sprites->get(data.body_id));
+    _render(g_sprites[data.body_id]);
+
+    // Armadura
+    // _render(g_sprites[data.armour_id]);
+
+    // Escudo
+    // _render(g_sprites[data.shield_id]);
+
+    // Espada
+    _render(g_sprites[data.weapon_id]);
 
     // Cabeza
-    _render(g_sprites->get(data.head_id));
+    _render(g_sprites[data.head_id]);
+
+    // Casco
+    _render(g_sprites[data.helmet_id]);
+}
+
+SDL_Rect Player::getPos() const {
+    return SDL_Rect({data.x_tile, data.y_tile, 0, 0});
+}
+
+SDL_Rect Player::getBox() const {
+    int body_w = g_sprites[data.body_id].clip_w;
+    int head_h = g_sprites[data.head_id].clip_h;
+    return SDL_Rect(
+        {x, y, (int)(body_w * scale_factor), (int)(head_h * scale_factor)});
 }
 
 Player::~Player() {}

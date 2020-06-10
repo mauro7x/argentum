@@ -36,9 +36,8 @@ struct PlayerData {
 class Player {
    protected:
     /* Componentes para renderizar */
-    Renderer* g_renderer;
-    UnitSpriteContainer* g_sprites;
-    ServerProxy* server; /* proxy del server */
+    const Renderer* g_renderer;
+    const UnitSpriteContainer& g_sprites;
     int tile_w, tile_h;
 
     /* Data del personaje */
@@ -81,7 +80,7 @@ class Player {
 
    public:
     /* Constructor */
-    Player(Renderer* renderer, UnitSpriteContainer* sprites);
+    Player(const Renderer* renderer, const UnitSpriteContainer& sprites);
 
     /* Deshabilitamos el constructor por copia. */
     Player(const Player&) = delete;
@@ -108,6 +107,12 @@ class Player {
 
     /* Renderizarse si se encuentra dentro de la cámara */
     void render() const;
+
+    /* Obtiene la posición en tiles (SOLO X e Y SON VÁLIDOS) */
+    SDL_Rect getPos() const;
+
+    /* Obtiene la posición y dimensiones en pixeles */
+    SDL_Rect getBox() const;
 
     //-------------------------------------------------------------------------
 
