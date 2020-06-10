@@ -82,16 +82,28 @@ void ServerProxy::run() {
         time = SDL_GetTicks();
 
         if ((moving) && ((time - last_moved + delta) >= TIME_TO_MOVE_A_TILE)) {
-            player.x_tile += x_step;
-            player.y_tile += y_step;
-            if (set_delta) {
-                delta = (time - last_moved + delta) - TIME_TO_MOVE_A_TILE;
-            } else {
-                delta = 0;
-            }
+            if ((player.x_tile + x_step) < 0 ||
+                (player.x_tile + x_step) == MAP_W_TILES ||
+                (player.y_tile + y_step) < 0 ||
+                (player.y_tile + y_step) == MAP_H_TILES) {
+                /* avisar que no se puede mover xq hay colision */
+                fprintf(stderr, "No se puede mover ahi\n");
+                x_step = 0;
+                y_step = 0;
+                moving = false;
+                set_delta = false;
 
-            last_moved = SDL_GetTicks();
-            broadcastear = true;
+            } else {
+                player.x_tile += x_step;
+                player.y_tile += y_step;
+                if (set_delta) {
+                    delta = (time - last_moved + delta) - TIME_TO_MOVE_A_TILE;
+                } else {
+                    delta = 0;
+                }
+                last_moved = SDL_GetTicks();
+                broadcastear = true;
+            }
         }
 
         // broadcastear
