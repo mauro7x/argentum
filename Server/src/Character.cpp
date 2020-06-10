@@ -10,7 +10,7 @@ Character::Character(const RaceCfg& race,
                         kind(kind),
                         state(new Alive()) {
     this->mana = 100;
-    this->health = 100;
+    this->health = 20;
 }
 Character::~Character() {
     delete state;

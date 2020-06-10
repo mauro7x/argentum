@@ -12,3 +12,7 @@ Wand::~Wand() {
 const unsigned int Wand::use(Character& user) {
     return spell->cast(user);
 }
+
+const unsigned int Wand::getRange() const {
+    return this->spell->getRange();
+}
