@@ -9,8 +9,8 @@ Character::Character(const RaceCfg& race,
                         race(race),
                         kind(kind),
                         state(new Alive()) {
-    this->mana = 100;
-    this->health = 100;
+    this->mana = 100; // Pasar a JSON!
+    this->health = 100; // Pasar a JSON!
 }
 Character::~Character() {
     delete state;
@@ -28,17 +28,18 @@ void Character::equip(unsigned int inventory_position) {
 void Character::equip(Wearable* item) {
     Wearable* prev_equipped_item = this->equipment.add(item);
     if (prev_equipped_item) {
+        // Agrego lo que tenia equipado al inventario.
         takeItem(prev_equipped_item);
     }
 }
 
 void Character::recoverHealth(const unsigned int points) {
-    // IMPLEMENTAR LOGICA RAZA/CLASE
+    // IMPLEMENTAR LOGICA RAZA/CLASE MAX_HEALTH
     this->health += points;
 }
 
 void Character::recoverMana(const unsigned int points) {
-    // IMPLEMENTAR LOGICA RAZA/CLASE
+    // IMPLEMENTAR LOGICA RAZA/CLASE MAX_MANA
     this->mana += points;
 }
 
@@ -50,8 +51,6 @@ void Character::consumeMana(const unsigned int points) {
 
 const unsigned int Character::takeItem(Item* item) {
     return this->inventory.addItem(item);
-    //unsigned int pos_item = this->inventory.addItem(item);
-    // Manejar logica si el inventario esta lleno.
 }
 
 Item* Character::dropItem(unsigned int position) {
