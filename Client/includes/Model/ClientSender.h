@@ -1,8 +1,10 @@
-#ifndef __CLIENTACCEPTOR_H__
-#define __CLIENTACCEPTOR_H__
+#ifndef __CLIENTSENDER_H__
+#define __CLIENTSENDER_H__
 
 //-----------------------------------------------------------------------------
 
+#include <queue>
+#include <atomic>
 #include "../../../Common/includes/Socket/Socket.h"
 //-----------------------------------------------------------------------------
 // DEFINES
@@ -10,14 +12,13 @@
 
 //-----------------------------------------------------------------------------
 
-class ClientAcceptor {
-    // atributos del clienttalker
+class ClientSender {
+    // atributos del clientSender
    private:
-    Socket acceptor_skt;
-    bool is_running;
-    //una cola o dos ?
-    //cola 1: respuesta
-    //cola 2: abstracto update
+    Socket sender_skt;
+    std::atomic_bool keep_running;
+    std::queue<std::string> queue_commands;
+    
 
     // metodos privados
 
@@ -27,22 +28,23 @@ class ClientAcceptor {
      *
      * Parámetros: hostname, portname.
      */
-    ClientAcceptor(const std::string& hostname, const std::string& port);
+    ClientSender(const std::string& hostname, const std::string& port,
+                 std::queue<std::string>& queue);
 
     /* Deshabilitamos el constructor por copia. */
-    ClientAcceptor(const ClientAcceptor&) = delete;
+    ClientSender(const ClientSender&) = delete;
 
     /* Deshabilitamos el operador= para copia.*/
-    ClientAcceptor& operator=(const ClientAcceptor&) = delete;
+    ClientSender& operator=(const ClientSender&) = delete;
 
     /* Deshabilitamos el constructor por movimiento. */
-    ClientAcceptor(ClientAcceptor&& other) = delete;
+    ClientSender(ClientSender&& other) = delete;
 
     /* Deshabilitamos el operador= para movimiento. */
-    ClientAcceptor& operator=(ClientAcceptor&& other) = delete;
+    ClientSender& operator=(ClientSender&& other) = delete;
 
     /**
-     * Descripción: poner a correr al clientaceptador
+     * Descripción: poner a correr al clientSender.
      *
      * Parámetros: -
      *
@@ -52,21 +54,20 @@ class ClientAcceptor {
     void run();
 
     /**
-     * Descripción: checkar estado del clientaceptador.
+     * Descripción: frenar el sender.
      *
      * Parámetros: -
      *
-     * Retorno: true si el clientaceptador sigue corriendo, si no false.
+     * Retorno: -
      *
      */
-    bool isRunning();
-
+    void stopRunning();
 
     /**
      * Descripción: destructor.
      */
-    ~ClientAcceptor();
+    ~ClientSender();
 };
 
 //-----------------------------------------------------------------------------
-#endif //__CLIENTACCEPTOR_H__
+#endif  //__CLIENTSENDER_H__
