@@ -75,9 +75,6 @@ class MapView {
     /* Devuelve si hay collision en la celda dada */
     bool indoor(const int x, const int y) const;
 
-    /* Devuelve si hay collision en la celda dada */
-    bool collision(const int x, const int y) const;
-
     /* Obtiene la anchura en tiles del mapa actual */
     int widthInTiles() const;
 
