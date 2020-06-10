@@ -83,7 +83,7 @@ void GameView::operator()() {
     // Manejar el primer paquete recibido, crear unidades necesarias
 
     // Hardcodeamos el primer paquete
-    PlayerData init_data = {3, 3, 100, 100, 1000, 2000, 3000, 4000, 5000, 6000};
+    PlayerData init_data = {3, 3, 100, 100, 2000, 2100, 1300, 1400, 1500, 1000};
     player.init(init_data);
     //-------------------------------------------------------------------------
 

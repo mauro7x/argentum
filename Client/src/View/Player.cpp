@@ -69,40 +69,6 @@ int Player::_yValueToReach() const {
 Player::Player(Renderer* renderer, UnitSpriteContainer* sprites)
     : g_renderer(renderer), g_sprites(sprites) {}
 
-Player::Player(Player&& other) {
-    /* Nos apropiamos de los punteros */
-    g_renderer = other.g_renderer;
-    g_sprites = other.g_sprites;
-    server = other.server;
-    other.g_renderer = NULL;
-    other.g_sprites = NULL;
-    other.server = NULL;
-
-    /* Copiamos el resto de atributos */
-    data = other.data;
-    x = other.x;
-    y = other.y;
-    scale_factor = other.scale_factor;
-}
-
-Player& Player::operator=(Player&& other) {
-    /* Nos apropiamos de los punteros */
-    g_renderer = other.g_renderer;
-    g_sprites = other.g_sprites;
-    server = other.server;
-    other.g_renderer = NULL;
-    other.g_sprites = NULL;
-    other.server = NULL;
-
-    /* Copiamos el resto de atributos */
-    data = other.data;
-    x = other.x;
-    y = other.y;
-    scale_factor = other.scale_factor;
-
-    return *this;
-}
-
 void Player::init(const PlayerData& init_data) {
     data = init_data;
     json map_data = JSON::loadJsonFile(MAPS_FILEPATH);

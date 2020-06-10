@@ -1,7 +1,7 @@
 {
     "weapons": [
         {
-            "id": 300,
+            "id": 1000,
             "name": "Espada",
             "price": 100,
             "attack_distance": 1,
@@ -9,7 +9,7 @@
             "max_damage": 20
         },
         {
-            "id": 301,
+            "id": 1001,
             "name": "Arco",
             "price": 100,
             "attack_distance": 5,
@@ -19,13 +19,13 @@
     ],
     "wands": [
         {
-            "id": 302,
+            "id": 1100,
             "name": "Báculo nudoso",
             "spell_id": 400,
             "price": 100
         },
         {
-            "id": 303,
+            "id": 1101,
             "name": "Flauta élfica",
             "spell_id": 401,
             "price": 100
@@ -33,33 +33,29 @@
     ],
     "spells": [
         {
-            "id": 400,
+            "id": 1200,
             "name": "misil",
             "spell_type": 0,
             "mana_usage_cost": 15,
-        
             "attack_distance": 5,
             "min_damage": 4,
             "max_damage": 8,
-        
             "recovery_points": 0
         },
         {
-            "id": 401,
+            "id": 1201,
             "name": "curar",
             "spell_type": 1,
             "mana_usage_cost": 100,
-        
             "attack_distance": 0,
             "min_damage": 0,
             "max_damage": 0,
-        
             "recovery_points": 100
         }
     ],
     "helmets": [
         {
-            "id": 500,
+            "id": 1300,
             "name": "Capucha",
             "price": 100,
             "min_defence": 10,
@@ -68,7 +64,7 @@
     ],
     "armours": [
         {
-            "id": 600,
+            "id": 1400,
             "name": "Armadura",
             "price": 100,
             "min_defence": 10,
@@ -77,7 +73,7 @@
     ],
     "shields": [
         {
-            "id": 700,
+            "id": 1500,
             "name": "Escudo",
             "price": 100,
             "min_defence": 10,
@@ -86,18 +82,18 @@
     ],
     "potions": [
         {
-            "id": 800,
+            "id": 1600,
             "name": "Poción de vida",
             "potion_type": 0,
             "price": 50,
-            "recovery_points": 100 
+            "recovery_points": 100
         },
         {
-            "id": 801,
+            "id": 1601,
             "name": "Poción de maná",
             "potion_type": 1,
             "price": 50,
-            "recovery_points": 100 
+            "recovery_points": 100
         }
     ]
 }

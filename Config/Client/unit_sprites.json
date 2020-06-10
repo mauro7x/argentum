@@ -3,7 +3,7 @@
     "pj": {
         "head": [
             {
-                "gid": 1000,
+                "gid": 2000,
                 "clip_w": 17,
                 "clip_h": 50,
                 "up_row_col_clips": [
@@ -39,7 +39,7 @@
         ],
         "body": [
             {
-                "gid": 2000,
+                "gid": 2100,
                 "clip_w": 25,
                 "clip_h": 45,
                 "up_row_col_clips": [
@@ -75,7 +75,7 @@
         ],
         "helmet": [
             {
-                "gid": 3000,
+                "gid": 1300,
                 "clip_w": 17,
                 "clip_h": 16,
                 "up_row_col_clips": [
@@ -111,7 +111,7 @@
         ],
         "armour": [
             {
-                "gid": 4000,
+                "gid": 1400,
                 "clip_w": 25,
                 "clip_h": 45,
                 "up_row_col_clips": [
@@ -147,7 +147,7 @@
         ],
         "shield": [
             {
-                "gid": 5000,
+                "gid": 1500,
                 "clip_w": 25,
                 "clip_h": 45,
                 "up_row_col_clips": [
@@ -183,7 +183,7 @@
         ],
         "weapon": [
             {
-                "gid": 6000,
+                "gid": 1000,
                 "clip_w": 25,
                 "clip_h": 45,
                 "up_row_col_clips": [
@@ -220,7 +220,7 @@
     },
     "npc": [
         {
-            "gid": 10000,
+            "gid": 300,
             "clip_w": 57,
             "clip_h": 100,
             "up_row_col_clips": [

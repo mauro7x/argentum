@@ -1,27 +1,27 @@
 [
     {
-        "id": 500,
+        "id": 200,
         "name": "Mago",
         "health": 10,
         "meditation": 10,
         "mana": 10
     },
     {
-        "id": 501,
+        "id": 201,
         "name": "Clérigo",
         "health": 10,
         "meditation": 10,
         "mana": 10
     },
     {
-        "id": 502,
+        "id": 202,
         "name": "Paladín",
         "health": 10,
         "meditation": 10,
         "mana": 10
     },
     {
-        "id": 503,
+        "id": 203,
         "name": "Guerrero",
         "health": 10,
         "meditation": 0,
