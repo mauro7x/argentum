@@ -38,6 +38,8 @@ void Map::_fillTiles(const json& map_layers) {
         tile.indoor = (bool)indoor;
         int portal = map_layers[PORTAL]["data"][i];
         tile.portal = (bool)portal;
+        tile.npc_id = map_layers[NPC]["data"][i];
+
         tiles.push_back(tile);
     }
 }
@@ -71,18 +73,18 @@ void Map::init(const json& j_map, const int tile_w, const int tile_h) {
 }
 
 Map::Map(Map&& other) {
-    this->w = std::move(other.w);
-    this->h = std::move(other.h);
-    this->tile_w = std::move(other.tile_w);
-    this->tile_h = std::move(other.tile_h);
+    this->w = other.w;
+    this->h = other.h;
+    this->tile_w = other.tile_w;
+    this->tile_h = other.tile_h;
     this->tiles = std::move(other.tiles);
 }
 
 Map& Map::operator=(Map&& other) {
-    this->w = std::move(other.w);
-    this->h = std::move(other.h);
-    this->tile_w = std::move(other.tile_w);
-    this->tile_h = std::move(other.tile_h);
+    this->w = other.w;
+    this->h = other.h;
+    this->tile_w = other.tile_w;
+    this->tile_h = other.tile_h;
     this->tiles = std::move(other.tiles);
     return *this;
 }
