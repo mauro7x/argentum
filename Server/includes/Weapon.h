@@ -6,10 +6,12 @@
 
 class Weapon: public Wearable {
     private:
-        const bool distant_attack;
+        const unsigned int attack_distance;
+        const unsigned int min_damage;
+        const unsigned int max_damage;
 
     public:
-        Weapon(WeaponCfg& data);
+        Weapon(const WeaponCfg& data);
         ~Weapon();
 
         Weapon(const Weapon&) = delete;
@@ -21,7 +23,7 @@ class Weapon: public Wearable {
         // a los metodos definidos del Character/Inventory/Equipment.
         // Mantener abstraccion Item y Wearable.
         
-        virtual const unsigned int use() override;
+        virtual const unsigned int use(Character& user) override;
 };
 
 #endif

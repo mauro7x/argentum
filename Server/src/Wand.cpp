@@ -1,13 +1,14 @@
 #include "../includes/Wand.h"
 
 
-Wand::Wand(WandCfg& data): Wearable(data.id, data.name, data.price, 
-                                   data.type, data.min_damage, 
-                                   data.max_damage),
-                                   mana_usage_cost(data.mana_usage_cost) {}
-Wand::~Wand() {}
+Wand::Wand(const WandCfg& wand_data, const SpellCfg& spell_data): 
+    Wearable(wand_data.id, wand_data.name, 
+            wand_data.price, WEAPON),
+    spell(SpellFactory::newSpell(spell_data)) {}
+Wand::~Wand() {
+    delete spell;
+}
 
-const unsigned int Wand::use() {
-    // IMPLEMENTAR LOGICA DE ATAQUE
-    return getUsagePoints();
+const unsigned int Wand::use(Character& user) {
+    return spell->cast(user);
 }

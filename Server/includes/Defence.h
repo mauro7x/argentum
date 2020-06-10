@@ -5,8 +5,11 @@
 #include "config_structs.h"
 
 class Defence: public Wearable {
+    private:
+        unsigned int min_defence, max_defence;
+        
     public:
-        Defence(DefenceCfg& data);
+        Defence(const DefenceCfg& data);
         ~Defence();
 
         Defence(const Defence&) = delete;
@@ -18,7 +21,7 @@ class Defence: public Wearable {
         // a los metodos definidos del Character/Inventory/Equipment.
         // Mantener abstraccion Item y Wearable.
 
-        virtual const unsigned int use() override;
+        virtual const unsigned int use(Character& user) override;
 };
 
 #endif

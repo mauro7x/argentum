@@ -26,7 +26,9 @@ class Item {
 
         // Cada item tiene que tener algun TIPO.
 
-        virtual void equip(Character& character) = 0;
+        virtual void equip(Character& equipper) = 0;
+        
+        virtual const std::string what() const;
 };
 
 #endif

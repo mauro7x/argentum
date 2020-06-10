@@ -4,6 +4,8 @@
 #include <array>
 #include "Wearable.h"
 
+class Character; // Forward declaration p/evitar circular dependences.
+
 /*
  * Contiene los items con los que el jugador
  * esta equipado.
@@ -19,6 +21,11 @@ class Equipment {
     
     public:
         Equipment();
+
+        /*
+         * Cuando se destruye el Equipment, se deletean
+         * los Wearables que tenga el mismo.
+         */
         ~Equipment();
 
         Equipment(const Equipment&) = delete;
@@ -42,7 +49,7 @@ class Equipment {
          * 
          * En caso de no tener nada que pueda causar daño, devuelve 0.
          */
-        const unsigned int getDamagePoints() const;
+        const unsigned int getAttackPoints(Character& attacker);
 
         /*
          * Devuelve los puntos de defensa que pueden absorber
@@ -51,7 +58,9 @@ class Equipment {
          * 
          * En caso de no tener nada con lo que pueda defenderse, devuelve 0.
          */
-        const unsigned int getDefensePoints() const;
+        const unsigned int getDefensePoints(Character& defender);
+
+        void debug() const; // Para testear
 };
 
 #endif

@@ -20,7 +20,7 @@ struct Race {
         const unsigned int recovery;
         const unsigned int mana;
 
-        Race(RaceCfg& data);
+        Race(const RaceCfg& data);
         ~Race();
 };
 

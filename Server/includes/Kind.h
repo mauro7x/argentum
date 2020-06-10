@@ -23,7 +23,7 @@ class Kind {
         const unsigned int mana;
 
     public:
-        Kind(KindCfg& data);
+        Kind(const KindCfg& data);
         ~Kind();
 
         Kind(const Kind&) = delete;

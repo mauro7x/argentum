@@ -2,14 +2,16 @@
 #define __WAND_H__
 
 #include "Wearable.h"
+#include "Spell.h"
 #include "config_structs.h"
 
 class Wand: public Wearable {
     private:
-        const unsigned int mana_usage_cost;
+        Spell* spell;
         
     public:
-         Wand(WandCfg& data);
+         Wand(const WandCfg& wand_data, 
+              const SpellCfg& spell_data);
         ~Wand();
 
         Wand(const Wand&) = delete;
@@ -21,7 +23,7 @@ class Wand: public Wearable {
         // a los metodos definidos del Character/Inventory/Equipment.
         // Mantener abstraccion item y Wearable.
 
-        virtual const unsigned int use() override;
+        virtual const unsigned int use(Character& user) override;
 };
 
 #endif

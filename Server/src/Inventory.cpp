@@ -1,5 +1,7 @@
 #include "../includes/Inventory.h"
 
+#include <iostream> // Para testear
+
 Inventory::Inventory(): items_quantity(0),
                         gold_quantity(0) {
     for (unsigned int i = 0; i < container.size(); ++i) {
@@ -7,15 +9,13 @@ Inventory::Inventory(): items_quantity(0),
     }
  }
 
-Inventory::~Inventory() {}
-
-Item* Inventory::gather(const unsigned int position) {
-    if (position >= N_INVENTORY_ITEMS) {
-        throw InvalidPositionException();
+Inventory::~Inventory() {
+    // Elimino los items restantes.
+    for (unsigned int i = 0; i < container.size(); ++i) {
+        if (container[i]) {
+            delete container[i];
+        }
     }
-    Item* item = this->container[position];
-    this->container[position] = nullptr;
-    return item;
 }
 
 const unsigned int Inventory::getNextFreeSlot() const {
@@ -27,13 +27,35 @@ const unsigned int Inventory::getNextFreeSlot() const {
     return pos;
 }
 
-const unsigned int Inventory::add(Item* item) {
+Item* Inventory::gatherItem(const unsigned int position) {
+    if (position >= N_INVENTORY_ITEMS) {
+        throw InvalidPositionException();
+    }
+    Item* item = this->container[position];
+    this->container[position] = nullptr;
+    --this->items_quantity;
+    return item;
+}
+
+void Inventory::gatherGold(const unsigned int amount) {
+    if (this->gold_quantity < amount) {
+        throw InsufficientGoldException();
+    }
+    this->gold_quantity -= amount;
+}
+
+const unsigned int Inventory::addItem(Item* item) {
     if (this->items_quantity >= N_INVENTORY_ITEMS)
         throw FullInventoryException();
     
     unsigned int position = getNextFreeSlot();
     this->container[position] = item;
+    ++this->items_quantity;
     return position;
+}
+
+void Inventory::addGold(const unsigned int amount) {
+    this->gold_quantity += amount;
 }
 
 const char* FullInventoryException::what() const noexcept {
@@ -42,4 +64,18 @@ const char* FullInventoryException::what() const noexcept {
 
 const char* InvalidPositionException::what() const noexcept {
     return "La posición del inventario especificada es inválida.";
+}
+
+const char* InsufficientGoldException::what() const noexcept {
+    return "No tienes suficiente oro en el inventario.";
+}
+
+void Inventory::debug() const {
+    std::cout << "Inventory: [" << this->items_quantity << " elements]" << std::endl;
+    for (unsigned int i = 0; i < this->container.size(); ++i) {
+        if (this->container[i]) {
+            std::cout << "Posicion " << i << ": ";
+            std::cout << this->container[i]->what() << std::endl;
+        }
+    }
 }

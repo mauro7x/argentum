@@ -1,10 +1,6 @@
+#include <array>
+
 #include "../includes/Config.h"
-
-//-----------------------------------------------------------------------------
-// Métodos privados
-
-//-----------------------------------------------------------------------------
-
 //-----------------------------------------------------------------------------
 // API Pública
 
@@ -68,14 +64,50 @@ void Config<WeaponCfg>::_parseFile() {
 
         weapon.id = j["weapons"][i]["id"];
         weapon.name = j["weapons"][i]["name"];
-        weapon.type = WEAPON;
         weapon.price = j["weapons"][i]["price"];
+        weapon.attack_distance = j["weapons"][i]["attack_distance"];
         weapon.min_damage = j["weapons"][i]["min_damage"];
         weapon.max_damage = j["weapons"][i]["max_damage"];
-        weapon.attack_distance = j["weapons"][i]["attack_distance"];
-        weapon.mana_usage_cost = j["weapons"][i]["mana_usage_cost"];
 
         config[weapon.id] = weapon;
+    }
+}
+
+template <>
+void Config<WandCfg>::_parseFile() {
+    json j = JSON::loadJsonFile(ITEMS_CONFIG_FILEPATH);
+
+    int size = j["wands"].size();
+    for (int i = 0; i < size; i++) {
+        WandCfg wand;
+
+        wand.id = j["wands"][i]["id"];
+        wand.name = j["wands"][i]["name"];
+        wand.spell_id = j["wands"][i]["spell_id"];
+        wand.price = j["wands"][i]["price"];
+
+        config[wand.id] = wand;
+    }
+}
+
+template <>
+void Config<SpellCfg>::_parseFile() {
+    json j = JSON::loadJsonFile(ITEMS_CONFIG_FILEPATH);
+
+    int size = j["spells"].size();
+    for (int i = 0; i < size; i++) {
+        SpellCfg spell;
+
+        spell.id = j["spells"][i]["id"];
+        spell.name = j["spells"][i]["name"];
+        spell.type = j["spells"][i]["spell_type"];
+        spell.mana_usage_cost = j["spells"][i]["mana_usage_cost"];
+        spell.attack_distance = j["spells"][i]["attack_distance"];
+        spell.min_damage = j["spells"][i]["min_damage"];
+        spell.max_damage = j["spells"][i]["max_damage"];
+        spell.recovery_points = j["spells"][i]["recovery_points"];
+
+        config[spell.id] = spell;
     }
 }
 
@@ -83,51 +115,50 @@ template <>
 void Config<DefenceCfg>::_parseFile() {
     json j = JSON::loadJsonFile(ITEMS_CONFIG_FILEPATH);
 
-    /* Cascos */
-    int size = j["helmets"].size();
-    for (int i = 0; i < size; i++) {
-        DefenceCfg helmet;
+    std::array<std::string, AMOUNT_OF_DEFFENCE_TYPES> defences = 
+        {"helmets", "armours", "shields"};
+    
+    std::array<WearableType, AMOUNT_OF_DEFFENCE_TYPES> defence_types =
+        {HELMET, ARMOUR, SHIELD};
 
-        helmet.id = j["helmets"][i]["id"];
-        helmet.name = j["helmets"][i]["name"];
-        helmet.type = HELMET;
-        helmet.price = j["helmets"][i]["price"];
-        helmet.min_defence = j["helmets"][i]["min_defence"];
-        helmet.max_defence = j["helmets"][i]["max_defence"];
+    for (int k = 0; k < AMOUNT_OF_DEFFENCE_TYPES;
+         ++k) {
+        int size = j[defences[k]].size();
 
-        config[helmet.id] = helmet;
-    }
+        for (int i = 0; i < size; i++) {
+            DefenceCfg defence;
 
-    /* Armaduras */
-    size = j["armours"].size();
-    for (int i = 0; i < size; i++) {
-        DefenceCfg armour;
+            defence.id = j[defences[k]][i]["id"];
+            defence.name = j[defences[k]][i]["name"];
+            defence.type = defence_types[k];
+            defence.min_defence = j[defences[k]][i]["min_defence"];
+            defence.max_defence = j[defences[k]][i]["max_defence"];
+            defence.price = j[defences[k]][i]["price"];
 
-        armour.id = j["armours"][i]["id"];
-        armour.name = j["armours"][i]["name"];
-        armour.type = ARMOUR;
-        armour.price = j["armours"][i]["price"];
-        armour.min_defence = j["armours"][i]["min_defence"];
-        armour.max_defence = j["armours"][i]["max_defence"];
-
-        config[armour.id] = armour;
-    }
-
-    /* Escudos */
-    size = j["shields"].size();
-    for (int i = 0; i < size; i++) {
-        DefenceCfg shield;
-
-        shield.id = j["shields"][i]["id"];
-        shield.name = j["shields"][i]["name"];
-        shield.type = SHIELD;
-        shield.price = j["shields"][i]["price"];
-        shield.min_defence = j["shields"][i]["min_defence"];
-        shield.max_defence = j["shields"][i]["max_defence"];
-
-        config[shield.id] = shield;
+            config[defence.id] = defence;
+        }
     }
 }
+
+template <>
+void Config<PotionCfg>::_parseFile() {
+    json j = JSON::loadJsonFile(ITEMS_CONFIG_FILEPATH);
+
+    int size = j["potions"].size();
+    for (int i = 0; i < size; i++) {
+        PotionCfg potion;
+
+        potion.id = j["potions"][i]["id"];
+        potion.name = j["potions"][i]["name"];
+        potion.price = j["potions"][i]["price"];
+        potion.type = j["potions"][i]["potion_type"];
+        potion.recovery_points = j["potions"][i]["recovery_points"];
+
+        config[potion.id] = potion;
+    }
+}
+
+
 
 /* Para cualquier clase que no sea esperada, nos quejamos */
 template <class T>

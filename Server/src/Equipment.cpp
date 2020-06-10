@@ -1,4 +1,7 @@
 #include "../includes/Equipment.h"
+#include "../includes/Character.h"
+
+#include <iostream> // Para testear
 
 Equipment::Equipment() {
     // Inicializo array de wearables con nullptr.
@@ -7,7 +10,14 @@ Equipment::Equipment() {
     }
 }
 
-Equipment::~Equipment() {}
+Equipment::~Equipment() {
+    // Elimino los items restantes.
+    for (unsigned int i = 0; i < container.size(); ++i) {
+        if (container[i]) {
+            delete container[i];
+        }
+    }
+}
 
 Wearable* Equipment::add(Wearable* item) {
     WearableType type = item->getType();
@@ -16,19 +26,34 @@ Wearable* Equipment::add(Wearable* item) {
     return prev_item;
 }
 
-const unsigned int Equipment::getDamagePoints() const {
-    if (!this->container[WEAPON])
+const unsigned int Equipment::getAttackPoints(Character& attacker) {
+    if (!this->container[WEAPON]) {
         return 0;
-    return this->container[WEAPON]->use();
+    }
+    return this->container[WEAPON]->use(attacker);
 }
 
-const unsigned int Equipment::getDefensePoints() const {
+const unsigned int Equipment::getDefensePoints(Character& defender) {
     unsigned int defense_points = 0;
+    // Sumo los puntos de defensa de cada wearables de defensa que lleva puesto,
+    // que resultan ser todos menos WEAPON.
     for (unsigned int type = 0; type < N_WEARABLE_ITEMS; ++type) {
-        if (type == WEAPON)
+        if (type == WEAPON) {
             continue;
-        if (this->container[type])
-            defense_points += this->container[type]->use();
+        }
+        if (this->container[type]) {
+            defense_points += this->container[type]->use(defender);
+        }
     }
     return defense_points;
+}
+
+void Equipment::debug() const {
+    std::cout << "Equipment:" << std::endl;
+    for (unsigned int i = 0; i < this->container.size(); ++i) {
+        if (this->container[i]) {
+            std::cout << "Posicion " << i << ": ";
+            std::cout << this->container[i]->what() << std::endl;
+        }
+    }
 }

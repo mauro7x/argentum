@@ -19,19 +19,51 @@ typedef int Id;
 enum WearableType { HELMET, ARMOUR, SHIELD, WEAPON, N_WEARABLE_ITEMS };
 #endif
 //-----------------------------------------------------------------------------
+#ifndef __SPELL_TYPE_H__
+#define __SPELL_TYPE_H__
+enum SpellType {ATTACKING, HEALING};
+#endif
+//-----------------------------------------------------------------------------
+#ifndef __POTION_TYPE_H__
+#define __POTION_TYPE_H__
+enum PotionType {HEALTH, MANA};
+#endif
+//-----------------------------------------------------------------------------
+
+#define AMOUNT_OF_DEFFENCE_TYPES 3
 
 //-----------------------------------------------------------------------------
 // Objetos
 
 struct WeaponCfg {
-    Id id;
+    int id;
     std::string name;
-    WearableType type;
-    uint16_t price;
-    uint16_t min_damage;
-    uint16_t max_damage;
-    uint8_t attack_distance;
-    uint8_t mana_usage_cost;
+    unsigned int price;
+    unsigned int attack_distance;
+    unsigned int min_damage;
+    unsigned int max_damage;
+};
+
+struct WandCfg {
+    int id;
+    std::string name;
+    int spell_id;
+    unsigned int price;
+};
+
+struct SpellCfg {
+    int id;
+    std::string name;
+    SpellType type;
+    unsigned int mana_usage_cost;
+
+    // ATTACK SPELL ONLY
+    unsigned int attack_distance;
+    unsigned int min_damage;
+    unsigned int max_damage;
+
+    // HEALING SPELL ONLY
+    unsigned int recovery_points;
 };
 
 struct DefenceCfg {
@@ -46,8 +78,9 @@ struct DefenceCfg {
 struct PotionCfg {
     Id id;
     std::string name;
-    uint16_t price;
-    uint16_t recovery_points;
+    PotionType type;
+    unsigned int price;
+    unsigned int recovery_points;
 };
 
 //-----------------------------------------------------------------------------

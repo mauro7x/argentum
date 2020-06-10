@@ -1,6 +1,8 @@
 #ifndef __CHARACTER_H__
 #define __CHARACTER_H__
 
+#include <exception>
+
 #include "Kind.h"
 #include "Race.h"
 #include "Inventory.h"
@@ -32,7 +34,7 @@ class Character {
         Equipment equipment;
 
     public:
-        Character(RaceCfg& race, KindCfg& kind);
+        Character(const RaceCfg& race, const KindCfg& kind);
         ~Character();
 
         Character(const Character&) = delete;
@@ -42,6 +44,9 @@ class Character {
 
         void equip(unsigned int inventory_position);
         void equip(Wearable* item);
+
+        const unsigned int takeItem(Item* item);
+        Item* dropItem(const unsigned int inventory_position);
 
         /*
          * Efectua la accion curativa de las pociones de mana.
@@ -55,7 +60,14 @@ class Character {
          */
         void recoverHealth(const unsigned int points);
 
-        const unsigned int getMannaPoints() const; // Baculos verifican si tiene suficientes puntos antes de ser usados.
+        void consumeMana(const unsigned int mana_points);
+
+        void debug();
+};
+
+class InsufficientManaException: std::exception {
+    public:
+        virtual const char* what() const noexcept;
 };
 
 #endif
