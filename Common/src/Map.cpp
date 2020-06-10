@@ -45,7 +45,7 @@ void Map::_fillTiles(const json& map_layers) {
 }
 
 int Map::_tileNumber(const int x, const int y) const {
-    if ((x >= w) || (x < 0) || (y >= h) || (y < 0)) {
+    if (!isValid(x, y)) {
         throw Exception("Invalid map coordinates.");
     }
     return (y * w + x);
