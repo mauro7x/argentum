@@ -8,13 +8,22 @@
 //-----------------------------------------------------------------------------
 // API Pública
 
-ClientTalker::ClientTalker(const std::string& hostname, const std::string& port)
-    : talker_skt(Socket(hostname, port)), is_running(true) {}
+ClientTalker::ClientTalker(const std::string& hostname, const std::string& port,
+                           std::queue<std::string>& queue)
+    : talker_skt(Socket(hostname, port)),
+      is_running(true),
+      queue_commands(queue) {}
 
 void ClientTalker::run() {
     /* creando el protocolo */
+    // Protocol protocol;
     while (this->is_running) {
-        /* procesa los comandos y mandar al sercidor */
+        std::string command;
+        if (this->queue_commands.empty()){continue;}
+        command = this->queue_commands.front();
+        this->queue_commands.pop();
+        /* procesa los comandos y mandar al servidor */
+        //protocol.send(this->talker_skt, command);
     }
 }
 

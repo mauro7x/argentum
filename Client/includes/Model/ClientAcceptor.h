@@ -39,7 +39,7 @@ class ClientAcceptor {
     ClientAcceptor& operator=(ClientAcceptor&& other) = delete;
 
     /**
-     * Descripción: poner a correr al clienttalker.
+     * Descripción: poner a correr al clientaceptador
      *
      * Parámetros: -
      *
@@ -49,11 +49,11 @@ class ClientAcceptor {
     void run();
 
     /**
-     * Descripción: checkar estado del clienttalker.
+     * Descripción: checkar estado del clientaceptador.
      *
      * Parámetros: -
      *
-     * Retorno: true si el clienttalker sigue corriendo, si no false.
+     * Retorno: true si el clientaceptador sigue corriendo, si no false.
      *
      */
     bool isRunning();

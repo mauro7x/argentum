@@ -3,6 +3,8 @@
 
 //-----------------------------------------------------------------------------
 
+#include <queue>
+
 #include "../../../Common/includes/Socket/Socket.h"
 //-----------------------------------------------------------------------------
 // DEFINES
@@ -14,6 +16,7 @@ class ClientTalker {
    private:
     Socket talker_skt;
     bool is_running;
+    std::queue<std::string> queue_commands;
     // atributos del clienttalker
 
     // metodos privados
@@ -24,7 +27,8 @@ class ClientTalker {
      *
      * Parámetros: hostname, portname.
      */
-    ClientTalker(const std::string& hostname, const std::string& port);
+    ClientTalker(const std::string& hostname, const std::string& port,
+                 std::queue<std::string> queue);
 
     /* Deshabilitamos el constructor por copia. */
     ClientTalker(const ClientTalker&) = delete;
@@ -58,7 +62,6 @@ class ClientTalker {
      */
     bool isRunning();
 
-
     /**
      * Descripción: destructor.
      */
@@ -66,4 +69,4 @@ class ClientTalker {
 };
 
 //-----------------------------------------------------------------------------
-#endif //__CLIENTTALKER_H__
+#endif  //__CLIENTTALKER_H__

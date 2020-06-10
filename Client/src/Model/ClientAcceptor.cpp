@@ -14,7 +14,7 @@ ClientAcceptor::ClientAcceptor(const std::string& hostname, const std::string& p
 void ClientAcceptor::run() {
     /* creando el protocolo */
     while (this->is_running) {
-        /* procesa los comandos y mandar al sercidor */
+        /* recibir respuesta */
     }
 }
 
