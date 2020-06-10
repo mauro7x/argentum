@@ -81,10 +81,6 @@ void ServerProxy::run() {
 
         time = SDL_GetTicks();
 
-        if (moving) {
-        } else {
-        }
-
         if ((moving) && ((time - last_moved + delta) >= TIME_TO_MOVE_A_TILE)) {
             player.x_tile += x_step;
             player.y_tile += y_step;
