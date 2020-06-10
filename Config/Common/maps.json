@@ -6,6 +6,11 @@
             "id": 0,
             "name": "DebugMap",
             "filepath": "../Assets/Maps/DebugMap.json"
+        },
+        {
+            "id": 1,
+            "name": "Proxy",
+            "filepath": "../Assets/Maps/Proxy.json"
         }
     ]
 }
