@@ -10,7 +10,7 @@ Character::Character(const RaceCfg& race,
                         kind(kind),
                         state(new Alive()) {
     this->mana = 100;
-    this->health = 20;
+    this->health = 100;
 }
 Character::~Character() {
     delete state;
@@ -56,6 +56,10 @@ const unsigned int Character::takeItem(Item* item) {
 
 Item* Character::dropItem(unsigned int position) {
     return this->inventory.gatherItem(position);
+}
+
+void Character::doMagic() {
+    this->kind.doMagic();
 }
 
 const char* InsufficientManaException::what() const noexcept {

@@ -1,3 +1,5 @@
+#include <string>
+
 #include "../includes/Kind.h"
 
 Kind::Kind(const KindCfg& data):
@@ -9,4 +11,14 @@ Kind::Kind(const KindCfg& data):
             
 Kind::~Kind() {}
 
-//IMPLEMENTAR METODOS.
+void Kind::doMagic() {
+    if (!mana) {
+        throw Exception("La clase ", this->name, " no puede hacer magia.");
+    }
+}
+
+void Kind::meditate() {
+    if (!meditation) {
+        throw Exception("La clase ", this->name, " no puede meditar.");
+    }
+}

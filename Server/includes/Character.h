@@ -62,6 +62,8 @@ class Character {
 
         void consumeMana(const unsigned int mana_points);
 
+        void doMagic();
+
         void debug();
 };
 
