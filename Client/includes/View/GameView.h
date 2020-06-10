@@ -48,6 +48,7 @@ class GameView {
     /* Flags internos */
     bool sdl_running;
     bool img_running;
+    bool fullscreen;
 
     /* Componentes de la vista */
     HUDProxy hud;

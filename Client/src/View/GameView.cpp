@@ -80,6 +80,18 @@ void GameView::_handleEvent(const SDL_Event& e) {
                     player.update(update_data);
                 }
                 break;
+
+                /*
+                case SDLK_RETURN:
+                    if (fullscreen) {
+                        SDL_SetWindowFullscreen(window.getWindow(), SDL_FALSE);
+                        fullscreen = false;
+                    } else {
+                        SDL_SetWindowFullscreen(window.getWindow(), SDL_TRUE);
+                        fullscreen = true;
+                    }
+                    break;
+                */
         }
     }
 }
@@ -105,6 +117,7 @@ GameView::GameView()
     : renderer(window, camera),
       sdl_running(false),
       img_running(false),
+      fullscreen(false),
       hud(&renderer),
       map(&renderer),
 
