@@ -43,55 +43,50 @@ void GameView::_loadMedia() {
 
 void GameView::_handleEvent(const SDL_Event& e) {
     /* Movimiento */
-    if (e.type == SDL_KEYDOWN) {
+
+    int* cmd = NULL;
+
+    // If a key was pressed
+    if (e.type == SDL_KEYDOWN && e.key.repeat == 0) {
+        // Adjust the velocity
         switch (e.key.keysym.sym) {
             case SDLK_w:
-                if (server.moveUp()) {
-                    SDL_Rect pos = player.getPos();
-                    PlayerData update_data = {pos.x, --pos.y, 100,  100,  2000,
-                                              2100,  1300,    1400, 1500, 1000};
-                    player.update(update_data);
-                }
+                cmd = new int(0);
+                fprintf(stderr, "Soy el cliente. Enviamos un %i.\n", *cmd);
+                requests.push(cmd);
                 break;
 
             case SDLK_s:
-                if (server.moveDown()) {
-                    SDL_Rect pos = player.getPos();
-                    PlayerData update_data = {pos.x, ++pos.y, 100,  100,  2000,
-                                              2100,  1300,    1400, 1500, 1000};
-                    player.update(update_data);
-                }
+                cmd = new int(1);
+                fprintf(stderr, "Soy el cliente. Enviamos un %i.\n", *cmd);
+                requests.push(cmd);
                 break;
 
             case SDLK_a:
-                if (server.moveLeft()) {
-                    SDL_Rect pos = player.getPos();
-                    PlayerData update_data = {--pos.x, pos.y, 100,  100,  2000,
-                                              2100,    1300,  1400, 1500, 1000};
-                    player.update(update_data);
-                }
+                cmd = new int(2);
+                fprintf(stderr, "Soy el cliente. Enviamos un %i.\n", *cmd);
+                requests.push(cmd);
                 break;
 
             case SDLK_d:
-                if (server.moveRight()) {
-                    SDL_Rect pos = player.getPos();
-                    PlayerData update_data = {++pos.x, pos.y, 100,  100,  2000,
-                                              2100,    1300,  1400, 1500, 1000};
-                    player.update(update_data);
-                }
+                cmd = new int(3);
+                fprintf(stderr, "Soy el cliente. Enviamos un %i.\n", *cmd);
+                requests.push(cmd);
                 break;
-
-                /*
-                case SDLK_RETURN:
-                    if (fullscreen) {
-                        SDL_SetWindowFullscreen(window.getWindow(), SDL_FALSE);
-                        fullscreen = false;
-                    } else {
-                        SDL_SetWindowFullscreen(window.getWindow(), SDL_TRUE);
-                        fullscreen = true;
-                    }
-                    break;
-                */
+        }
+    }
+    // If a key was released
+    else if (e.type == SDL_KEYUP && e.key.repeat == 0) {
+        // Adjust the velocity
+        switch (e.key.keysym.sym) {
+            case SDLK_w:
+            case SDLK_s:
+            case SDLK_a:
+            case SDLK_d:
+                cmd = new int(4);
+                fprintf(stderr, "Soy el cliente. Enviamos un %i.\n", *cmd);
+                requests.push(cmd);
+                break;
         }
     }
 }
@@ -120,27 +115,32 @@ GameView::GameView()
       fullscreen(false),
       hud(&renderer),
       map(&renderer),
-
-      server(map), /* proxy server*/
-
       unit_sprites(&renderer),
       player(&renderer, unit_sprites),
+
+      server(requests, broadcast),
+
       stage(hud, map, player) {}
 
 void GameView::operator()() {
     _init();
     _loadMedia();
+    server.start();
 
     //-------------------------------------------------------------------------
-    // Manejar el primer paquete recibido, crear unidades necesarias
+    // Manejar el primer paquete recibido, crear unidades
+    // necesarias
 
     // Hardcodeamos el primer paquete
-    PlayerData init_data = {0, 0, 100, 100, 2000, 2100, 1300, 1400, 1500, 1000};
+    PlayerData init_data = {0,    0,    DOWN, 100,  100, 2000,
+                            2100, 1300, 1400, 1500, 1000};
     player.init(init_data);
+    map.select(1); /* el id del mapa x ahora hardcodeado */
     //-------------------------------------------------------------------------
 
     bool quit = false;
     SDL_Event e;
+    PlayerData* update = NULL;
 
     while (!quit) {
         // Handle user-events on queue
@@ -152,12 +152,11 @@ void GameView::operator()() {
             _handleEvent(e);
         }
 
-        /*
-        // Handle server-updates on queue
-        while (hayan updates que realizar) {
-            realizar update en mis entidades
+        while ((update = broadcast.pop())) {
+            fprintf(stderr, "Soy el cliente. Recibimos un update.\n");
+            player.update(*update);
+            delete update;
         }
-        */
 
         // Game loop
         renderer.clearScreen();
@@ -165,7 +164,6 @@ void GameView::operator()() {
         //---------------------------------------------------------------------
         // ACCIONES
 
-        map.select(0); /* el id del mapa x ahora hardcodeado */
         player.act();
         camera.center(player.getBox(), map.widthInPx(), map.heightInPx());
         //---------------------------------------------------------------------
@@ -174,11 +172,14 @@ void GameView::operator()() {
 
         renderer.presentScreen();
 
-        // Delay para controlar el frame rate? por ahora usamos vsync
+        // Delay para controlar el frame rate? por ahora usamos
+        // vsync
     }
 
     // Avisarle al server que nos desconectamos?
 
+    server.kill();
+    server.join();
     _free();
 }
 

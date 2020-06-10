@@ -31,9 +31,10 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-// Proxy del server, esto luego se reemplaza con la lógica del modelo
+// Proxies para simular el server, después se cambia
 
-#include "ServerProxy.h"
+#include "../../../Common/includes/Queue.h"
+#include "../Model/ServerProxy.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -53,11 +54,13 @@ class GameView {
     /* Componentes de la vista */
     HUDProxy hud;
     MapView map;
-
-    ServerProxy server; /* proxy, luego se reemplaza con la lógica del cliente*/
-
     UnitSpriteContainer unit_sprites;
     Player player;
+
+    /* Proxies */
+    Queue<int*> requests;
+    Queue<PlayerData*> broadcast;
+    ServerProxy server; /* proxy, luego se reemplaza con la lógica del cliente*/
 
     /* La escena que se renderizará en cada frame */
     Stage stage;
