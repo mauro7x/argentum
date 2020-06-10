@@ -8,7 +8,7 @@
 //-----------------------------------------------------------------------------
 #ifndef __ID__
 #define __ID__
-typedef uint16_t Id;
+typedef int Id;
 #endif  // __ID__
 //-----------------------------------------------------------------------------
 
@@ -21,7 +21,7 @@ enum PlayerOrientation { UP, DOWN, LEFT, RIGHT };
 
 struct PlayerData {
     // Posición y orientación
-    uint16_t x_tile, y_tile; /* coordenadas en tiles */
+    int x_tile, y_tile;      /* coordenadas en tiles */
     Orientation orientation; /* orientación del personaje */
 
     // Stats y atributos
@@ -34,7 +34,7 @@ struct PlayerData {
 
 struct CharacterData {
     // Posición y orientación
-    uint16_t x_tile, y_tile; /* coordenadas en tiles */
+    int x_tile, y_tile;      /* coordenadas en tiles */
     Orientation orientation; /* orientación del personaje */
 
     // Cuerpo y vestimenta
