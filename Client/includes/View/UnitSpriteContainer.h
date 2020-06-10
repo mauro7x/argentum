@@ -1,5 +1,5 @@
-#ifndef __TILE_CONTAINER_H__
-#define __TILE_CONTAINER_H__
+#ifndef __UNIT_SPRITE_CONTAINER_H__
+#define __UNIT_SPRITE_CONTAINER_H__
 
 //-----------------------------------------------------------------------------
 #include <fstream>
@@ -10,56 +10,49 @@
 #include "../../../Common/includes/JSON.h"
 #include "../paths.h"
 #include "Renderer.h"
-#include "Texture.h"
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
-#ifndef __TILE_ID__
-#define __TILE_ID__
-typedef int TileId;
-#endif  // __TILE_ID__
+#include "Sprite.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 
-class TileContainer {
+class UnitSpriteContainer {
    private:
     const Renderer* g_renderer;
-    std::unordered_map<TileId, Texture> content;
+    std::unordered_map<Id, Sprite> content;
 
-    /* Carga texturas para un tileset específico */
-    void _loadTextures(const json& tileset);
+    /* Carga los sprites leyendo datos del json y la textura del dirpath */
+    void _loadSpritesFromJson(const json& sprites, const std::string& dirpath);
 
    public:
     /* Constructor */
-    TileContainer(const Renderer* renderer);
+    UnitSpriteContainer(const Renderer* renderer);
 
     /* Deshabilitamos el constructor por copia. */
-    TileContainer(const TileContainer&) = delete;
+    UnitSpriteContainer(const UnitSpriteContainer&) = delete;
 
     /* Deshabilitamos el operador= para copia.*/
-    TileContainer& operator=(const TileContainer&) = delete;
+    UnitSpriteContainer& operator=(const UnitSpriteContainer&) = delete;
 
     /* Deshabilitamos el constructor por movimiento. */
-    TileContainer(TileContainer&& other) = delete;
+    UnitSpriteContainer(UnitSpriteContainer&& other) = delete;
 
     /* Deshabilitamos el operador= para movimiento. */
-    TileContainer& operator=(TileContainer&& other) = delete;
+    UnitSpriteContainer& operator=(UnitSpriteContainer&& other) = delete;
 
     //-------------------------------------------------------------------------
 
     /* Carga las texturas de los tiles */
     void loadMedia();
 
-    /* Obtiene la textura correspondiente */
-    const Texture& operator[](const TileId id) const;
+    /* Obtiene el sprite correspondiente */
+    const Sprite& get(const Id id) const;
+    const Sprite& operator[](const Id id) const;
 
     //-------------------------------------------------------------------------
 
     /* Destructor */
-    ~TileContainer();
+    ~UnitSpriteContainer();
 };
 
 //-----------------------------------------------------------------------------
-
-#endif  // __TILE_CONTAINER_H__
+#endif  // __UNIT_SPRITE_CONTAINER_H__

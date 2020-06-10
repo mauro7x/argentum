@@ -2,6 +2,7 @@
 #define __CONFIG_STRUCTS_H__
 
 //-----------------------------------------------------------------------------
+#include <cstdint>
 #include <string>
 //-----------------------------------------------------------------------------
 
@@ -11,9 +12,11 @@
 typedef int Id;
 #endif  // __ID__
 //-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
 #ifndef __WEARABLE_TYPE_H__
 #define __WEARABLE_TYPE_H__
-enum WearableType {HELMET, ARMOUR, SHIELD, WEAPON, N_WEARABLE_ITEMS};
+enum WearableType { HELMET, ARMOUR, SHIELD, WEAPON, N_WEARABLE_ITEMS };
 #endif
 //-----------------------------------------------------------------------------
 #ifndef __SPELL_TYPE_H__
@@ -64,16 +67,16 @@ struct SpellCfg {
 };
 
 struct DefenceCfg {
-    int id;
+    Id id;
     std::string name;
     WearableType type;
-    int price;
-    int min_defence;
-    int max_defence;
+    uint16_t price;
+    uint16_t min_defence;
+    uint16_t max_defence;
 };
 
 struct PotionCfg {
-    unsigned int id;
+    Id id;
     std::string name;
     PotionType type;
     unsigned int price;
@@ -86,11 +89,11 @@ struct PotionCfg {
 // Razas
 
 struct RaceCfg {
-    int id;
+    Id id;
     std::string name;
-    int health;
-    int recovery;
-    int mana;
+    uint8_t health;
+    uint8_t recovery;
+    uint8_t mana;
 };
 
 //-----------------------------------------------------------------------------
@@ -99,11 +102,11 @@ struct RaceCfg {
 // Clases
 
 struct KindCfg {
-    int id;
+    Id id;
     std::string name;
-    int health;
-    int meditation;
-    int mana;
+    uint8_t health;
+    uint8_t meditation;
+    uint8_t mana;
 };
 
 //-----------------------------------------------------------------------------
@@ -112,7 +115,7 @@ struct KindCfg {
 // NPCs
 
 struct NPCCfg {
-    int id;
+    Id id;
     std::string name;
 };
 

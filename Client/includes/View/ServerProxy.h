@@ -1,5 +1,5 @@
-#ifndef __PREDICTOR_H__
-#define __PREDICTOR_H__
+#ifndef __SERVER_PROXY_H__
+#define __SERVER_PROXY_H__
 
 //-----------------------------------------------------------------------------
 #include "MapView.h"
@@ -7,37 +7,35 @@
 
 //-----------------------------------------------------------------------------
 
-class Predictor {
+class ServerProxy {
    private:
     const MapView& map;
 
    public:
     /* Constructor */
-    Predictor(const MapView& map);
+    ServerProxy(const MapView& map);
 
     /* Deshabilitamos el constructor por copia. */
-    Predictor(const Predictor&) = delete;
+    ServerProxy(const ServerProxy&) = delete;
 
     /* Deshabilitamos el operador= para copia.*/
-    Predictor& operator=(const Predictor&) = delete;
+    ServerProxy& operator=(const ServerProxy&) = delete;
 
     /* Deshabilitamos el constructor por movimiento. */
-    Predictor(Predictor&& other) = delete;
+    ServerProxy(ServerProxy&& other) = delete;
 
     /* Deshabilitamos el operador= para movimiento. */
-    Predictor& operator=(Predictor&& other) = delete;
+    ServerProxy& operator=(ServerProxy&& other) = delete;
 
     //-------------------------------------------------------------------------
-
-    /* Predice si el jugador se puede mover a una posición */
-    bool canMoveTo(const int x, const int y) const;
+    // Métodos proxy
 
     //-------------------------------------------------------------------------
 
     /* Destructor */
-    ~Predictor();
+    ~ServerProxy();
 };
 
 //-----------------------------------------------------------------------------
 
-#endif  // __PREDICTOR_H__
+#endif  // __SERVER_PROXY_H__

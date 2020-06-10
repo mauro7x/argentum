@@ -6,16 +6,7 @@
 
 template <>
 void Config<RaceCfg>::_parseFile() {
-    std::ifstream file(RACE_CONFIG_FILEPATH);
-    if (file.fail()) {
-        throw Exception("Error opening file: %s", RACE_CONFIG_FILEPATH);
-    }
-
-    json j;
-    file >> j;
-    if (file.fail()) {
-        throw Exception("Error reading file: %s", RACE_CONFIG_FILEPATH);
-    }
+    json j = JSON::loadJsonFile(RACE_CONFIG_FILEPATH);
 
     int size = j.size();
     for (int i = 0; i < size; i++) {
@@ -29,25 +20,11 @@ void Config<RaceCfg>::_parseFile() {
 
         config[race.id] = race;
     }
-
-    file.close();
-    if (file.fail()) {
-        throw Exception("Error closing file: %s", RACE_CONFIG_FILEPATH);
-    }
 }
 
 template <>
 void Config<KindCfg>::_parseFile() {
-    std::ifstream file(KIND_CONFIG_FILEPATH);
-    if (file.fail()) {
-        throw Exception("Error opening file: %s", KIND_CONFIG_FILEPATH);
-    }
-
-    json j;
-    file >> j;
-    if (file.fail()) {
-        throw Exception("Error reading file: %s", KIND_CONFIG_FILEPATH);
-    }
+    json j = JSON::loadJsonFile(KIND_CONFIG_FILEPATH);
 
     int size = j.size();
     for (int i = 0; i < size; i++) {
@@ -61,25 +38,11 @@ void Config<KindCfg>::_parseFile() {
 
         config[kind.id] = kind;
     }
-
-    file.close();
-    if (file.fail()) {
-        throw Exception("Error closing file: %s", KIND_CONFIG_FILEPATH);
-    }
 }
 
 template <>
 void Config<NPCCfg>::_parseFile() {
-    std::ifstream file(NPC_CONFIG_FILEPATH);
-    if (file.fail()) {
-        throw Exception("Error opening file: %s", NPC_CONFIG_FILEPATH);
-    }
-
-    json j;
-    file >> j;
-    if (file.fail()) {
-        throw Exception("Error reading file: %s", NPC_CONFIG_FILEPATH);
-    }
+    json j = JSON::loadJsonFile(NPC_CONFIG_FILEPATH);
 
     int size = j.size();
     for (int i = 0; i < size; i++) {
@@ -89,25 +52,11 @@ void Config<NPCCfg>::_parseFile() {
         npc.name = j[i]["name"];
         config[npc.id] = npc;
     }
-
-    file.close();
-    if (file.fail()) {
-        throw Exception("Error closing file: %s", NPC_CONFIG_FILEPATH);
-    }
 }
 
 template <>
 void Config<WeaponCfg>::_parseFile() {
-    std::ifstream file(ITEMS_CONFIG_FILEPATH);
-    if (file.fail()) {
-        throw Exception("Error opening file: %s", ITEMS_CONFIG_FILEPATH);
-    }
-
-    json j;
-    file >> j;
-    if (file.fail()) {
-        throw Exception("Error reading file: %s", ITEMS_CONFIG_FILEPATH);
-    }
+    json j = JSON::loadJsonFile(ITEMS_CONFIG_FILEPATH);
 
     int size = j["weapons"].size();
     for (int i = 0; i < size; i++) {
@@ -122,25 +71,11 @@ void Config<WeaponCfg>::_parseFile() {
 
         config[weapon.id] = weapon;
     }
-
-    file.close();
-    if (file.fail()) {
-        throw Exception("Error closing file: %s", ITEMS_CONFIG_FILEPATH);
-    }
 }
 
 template <>
 void Config<WandCfg>::_parseFile() {
-    std::ifstream file(ITEMS_CONFIG_FILEPATH);
-    if (file.fail()) {
-        throw Exception("Error opening file: %s", ITEMS_CONFIG_FILEPATH);
-    }
-
-    json j;
-    file >> j;
-    if (file.fail()) {
-        throw Exception("Error reading file: %s", ITEMS_CONFIG_FILEPATH);
-    }
+    json j = JSON::loadJsonFile(ITEMS_CONFIG_FILEPATH);
 
     int size = j["wands"].size();
     for (int i = 0; i < size; i++) {
@@ -153,25 +88,11 @@ void Config<WandCfg>::_parseFile() {
 
         config[wand.id] = wand;
     }
-
-    file.close();
-    if (file.fail()) {
-        throw Exception("Error closing file: %s", ITEMS_CONFIG_FILEPATH);
-    }
 }
 
 template <>
 void Config<SpellCfg>::_parseFile() {
-    std::ifstream file(ITEMS_CONFIG_FILEPATH);
-    if (file.fail()) {
-        throw Exception("Error opening file: %s", ITEMS_CONFIG_FILEPATH);
-    }
-
-    json j;
-    file >> j;
-    if (file.fail()) {
-        throw Exception("Error reading file: %s", ITEMS_CONFIG_FILEPATH);
-    }
+    json j = JSON::loadJsonFile(ITEMS_CONFIG_FILEPATH);
 
     int size = j["spells"].size();
     for (int i = 0; i < size; i++) {
@@ -188,28 +109,17 @@ void Config<SpellCfg>::_parseFile() {
 
         config[spell.id] = spell;
     }
-
-    file.close();
-    if (file.fail()) {
-        throw Exception("Error closing file: %s", ITEMS_CONFIG_FILEPATH);
-    }
 }
 
 template <>
 void Config<DefenceCfg>::_parseFile() {
-    std::ifstream file(ITEMS_CONFIG_FILEPATH);
-    if (file.fail()) {
-        throw Exception("Error opening file: %s", ITEMS_CONFIG_FILEPATH);
-    }
-
-    json j;
-    file >> j;
-    if (file.fail()) {
-        throw Exception("Error reading file: %s", ITEMS_CONFIG_FILEPATH);
-    }
+    json j = JSON::loadJsonFile(ITEMS_CONFIG_FILEPATH);
 
     std::array<std::string, AMOUNT_OF_DEFFENCE_TYPES> defences = 
-        {"helmets", "armours", "shields"}; 
+        {"helmets", "armours", "shields"};
+    
+    std::array<WearableType, AMOUNT_OF_DEFFENCE_TYPES> defence_types =
+        {HELMET, ARMOUR, SHIELD};
 
     for (int k = 0; k < AMOUNT_OF_DEFFENCE_TYPES;
          ++k) {
@@ -220,7 +130,7 @@ void Config<DefenceCfg>::_parseFile() {
 
             defence.id = j[defences[k]][i]["id"];
             defence.name = j[defences[k]][i]["name"];
-            defence.type = j[defences[k]][i]["wearable_type"];
+            defence.type = defence_types[k];
             defence.min_defence = j[defences[k]][i]["min_defence"];
             defence.max_defence = j[defences[k]][i]["max_defence"];
             defence.price = j[defences[k]][i]["price"];
@@ -228,25 +138,11 @@ void Config<DefenceCfg>::_parseFile() {
             config[defence.id] = defence;
         }
     }
-
-    file.close();
-    if (file.fail()) {
-        throw Exception("Error closing file: %s", ITEMS_CONFIG_FILEPATH);
-    }
 }
 
 template <>
 void Config<PotionCfg>::_parseFile() {
-    std::ifstream file(ITEMS_CONFIG_FILEPATH);
-    if (file.fail()) {
-        throw Exception("Error opening file: %s", ITEMS_CONFIG_FILEPATH);
-    }
-
-    json j;
-    file >> j;
-    if (file.fail()) {
-        throw Exception("Error reading file: %s", ITEMS_CONFIG_FILEPATH);
-    }
+    json j = JSON::loadJsonFile(ITEMS_CONFIG_FILEPATH);
 
     int size = j["potions"].size();
     for (int i = 0; i < size; i++) {
@@ -259,11 +155,6 @@ void Config<PotionCfg>::_parseFile() {
         potion.recovery_points = j["potions"][i]["recovery_points"];
 
         config[potion.id] = potion;
-    }
-
-    file.close();
-    if (file.fail()) {
-        throw Exception("Error closing file: %s", ITEMS_CONFIG_FILEPATH);
     }
 }
 

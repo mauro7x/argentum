@@ -1,0 +1,257 @@
+{
+    "dirpath": "../Assets/Sprites/Unit/",
+    "pj": {
+        "head": [
+            {
+                "gid": 1000,
+                "clip_w": 17,
+                "clip_h": 50,
+                "up_row_col_clips": [
+                    0,
+                    3,
+                    1
+                ],
+                "down_row_col_clips": [
+                    0,
+                    0,
+                    1
+                ],
+                "left_row_col_clips": [
+                    0,
+                    2,
+                    1
+                ],
+                "right_row_col_clips": [
+                    0,
+                    1,
+                    1
+                ],
+                "change_every_n_frames": 1,
+                "color_key": {
+                    "is_needed": true,
+                    "color": {
+                        "r": 0,
+                        "g": 0,
+                        "b": 0
+                    }
+                }
+            }
+        ],
+        "body": [
+            {
+                "gid": 2000,
+                "clip_w": 25,
+                "clip_h": 45,
+                "up_row_col_clips": [
+                    1,
+                    0,
+                    6
+                ],
+                "down_row_col_clips": [
+                    0,
+                    0,
+                    6
+                ],
+                "left_row_col_clips": [
+                    2,
+                    0,
+                    5
+                ],
+                "right_row_col_clips": [
+                    3,
+                    0,
+                    5
+                ],
+                "change_every_n_frames": 4,
+                "color_key": {
+                    "is_needed": true,
+                    "color": {
+                        "r": 0,
+                        "g": 0,
+                        "b": 0
+                    }
+                }
+            }
+        ],
+        "helmet": [
+            {
+                "gid": 3000,
+                "clip_w": 17,
+                "clip_h": 16,
+                "up_row_col_clips": [
+                    0,
+                    3,
+                    1
+                ],
+                "down_row_col_clips": [
+                    0,
+                    0,
+                    1
+                ],
+                "left_row_col_clips": [
+                    0,
+                    2,
+                    1
+                ],
+                "right_row_col_clips": [
+                    0,
+                    1,
+                    1
+                ],
+                "change_every_n_frames": 1,
+                "color_key": {
+                    "is_needed": true,
+                    "color": {
+                        "r": 0,
+                        "g": 0,
+                        "b": 0
+                    }
+                }
+            }
+        ],
+        "armour": [
+            {
+                "gid": 4000,
+                "clip_w": 25,
+                "clip_h": 45,
+                "up_row_col_clips": [
+                    1,
+                    0,
+                    6
+                ],
+                "down_row_col_clips": [
+                    0,
+                    0,
+                    6
+                ],
+                "left_row_col_clips": [
+                    2,
+                    0,
+                    5
+                ],
+                "right_row_col_clips": [
+                    3,
+                    0,
+                    5
+                ],
+                "change_every_n_frames": 4,
+                "color_key": {
+                    "is_needed": true,
+                    "color": {
+                        "r": 0,
+                        "g": 0,
+                        "b": 0
+                    }
+                }
+            }
+        ],
+        "shield": [
+            {
+                "gid": 5000,
+                "clip_w": 25,
+                "clip_h": 45,
+                "up_row_col_clips": [
+                    1,
+                    0,
+                    6
+                ],
+                "down_row_col_clips": [
+                    0,
+                    0,
+                    6
+                ],
+                "left_row_col_clips": [
+                    2,
+                    0,
+                    5
+                ],
+                "right_row_col_clips": [
+                    3,
+                    0,
+                    5
+                ],
+                "change_every_n_frames": 4,
+                "color_key": {
+                    "is_needed": true,
+                    "color": {
+                        "r": 0,
+                        "g": 0,
+                        "b": 0
+                    }
+                }
+            }
+        ],
+        "weapon": [
+            {
+                "gid": 6000,
+                "clip_w": 25,
+                "clip_h": 45,
+                "up_row_col_clips": [
+                    1,
+                    0,
+                    6
+                ],
+                "down_row_col_clips": [
+                    0,
+                    0,
+                    6
+                ],
+                "left_row_col_clips": [
+                    2,
+                    0,
+                    5
+                ],
+                "right_row_col_clips": [
+                    3,
+                    0,
+                    5
+                ],
+                "change_every_n_frames": 4,
+                "color_key": {
+                    "is_needed": true,
+                    "color": {
+                        "r": 0,
+                        "g": 0,
+                        "b": 0
+                    }
+                }
+            }
+        ]
+    },
+    "npc": [
+        {
+            "gid": 10000,
+            "clip_w": 57,
+            "clip_h": 100,
+            "up_row_col_clips": [
+                1,
+                0,
+                6
+            ],
+            "down_row_col_clips": [
+                0,
+                0,
+                6
+            ],
+            "left_row_col_clips": [
+                2,
+                0,
+                5
+            ],
+            "right_row_col_clips": [
+                3,
+                0,
+                5
+            ],
+            "change_every_n_frames": 4,
+            "color_key": {
+                "is_needed": true,
+                "color": {
+                    "r": 0,
+                    "g": 0,
+                    "b": 0
+                }
+            }
+        }
+    ]
+}

@@ -61,7 +61,6 @@
         {
             "id": 500,
             "name": "Capucha",
-            "wearable_type": 0,
             "price": 100,
             "min_defence": 10,
             "max_defence": 20
@@ -71,7 +70,6 @@
         {
             "id": 600,
             "name": "Armadura",
-            "wearable_type": 1,
             "price": 100,
             "min_defence": 10,
             "max_defence": 20
@@ -81,7 +79,6 @@
         {
             "id": 700,
             "name": "Escudo",
-            "wearable_type": 2,
             "price": 100,
             "min_defence": 10,
             "max_defence": 20

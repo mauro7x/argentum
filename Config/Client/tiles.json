@@ -1,5 +1,8 @@
 {
     "ground": {
+        "first_gid": 1,
+        "next_first_gid": 9,
+        "dirpath": "../Assets/Tiles/Ground/",
         "color_key": {
             "is_needed": false,
             "color": {
@@ -7,12 +10,12 @@
                 "g": 0,
                 "b": 0
             }
-        },
-        "first_gid": 1,
-        "next_first_gid": 4,
-        "dirpath": "../Assets/Tiles/Ground/"
+        }
     },
     "decoration": {
+        "first_gid": 9,
+        "next_first_gid": 21,
+        "dirpath": "../Assets/Tiles/Decoration/",
         "color_key": {
             "is_needed": true,
             "color": {
@@ -20,9 +23,6 @@
                 "g": 0,
                 "b": 0
             }
-        },
-        "first_gid": 4,
-        "next_first_gid": 24,
-        "dirpath": "../Assets/Tiles/Decoration/"
+        }
     }
 }
