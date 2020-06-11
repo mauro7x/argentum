@@ -14,9 +14,13 @@ void Config<RaceCfg>::_parseFile() {
 
         race.id = j[i]["id"];
         race.name = j[i]["name"];
-        race.health = j[i]["health"];
-        race.recovery = j[i]["recovery"];
-        race.mana = j[i]["mana"];
+        race.max_health_factor = j[i]["health"];
+        race.health_recovery_factor = j[i]["recovery"];
+        race.max_mana_factor = j[i]["mana"];
+        race.intelligence = j[i]["intelligence"];
+        race.constitution = j[i]["constitution"];
+        race.strength = j[i]["strength"];
+        race.agility = j[i]["agility"];
 
         config[race.id] = race;
     }

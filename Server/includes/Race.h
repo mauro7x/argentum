@@ -16,12 +16,20 @@
 struct Race {
         const unsigned int id;
         const std::string name;
-        const unsigned int health;
-        const unsigned int recovery;
-        const unsigned int mana;
+
+        const unsigned int max_health_factor;
+        const unsigned int health_recovery_factor;
+        const unsigned int max_mana_factor;
+        
+        // Modificadores
+        const float intelligence;
+        const float constitution;
+        const float strength;
+        const float agility;
 
         Race(const RaceCfg& data);
         ~Race();
 };
 
 #endif
+// CONSTITUCION, INTELIGENCIA, FUERZA, AGILIDAD

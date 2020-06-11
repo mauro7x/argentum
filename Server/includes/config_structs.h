@@ -91,9 +91,14 @@ struct PotionCfg {
 struct RaceCfg {
     Id id;
     std::string name;
-    uint8_t health;
-    uint8_t recovery;
-    uint8_t mana;
+    uint8_t max_health_factor;
+    uint8_t health_recovery_factor;
+    uint8_t max_mana_factor;
+    // Modificadores
+    float intelligence;
+    float constitution;
+    float strength;
+    float agility;
 };
 
 //-----------------------------------------------------------------------------
