@@ -5,6 +5,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
+#include <chrono>
 #include <fstream>
 //-----------------------------------------------------------------------------
 
@@ -45,6 +46,7 @@ class GameView {
     Window window;
     Camera camera;
     Renderer renderer;
+    uint32_t rate;
 
     /* Flags internos */
     bool sdl_running;

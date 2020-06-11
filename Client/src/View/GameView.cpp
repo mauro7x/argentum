@@ -25,6 +25,10 @@ void GameView::_init() {
                            SDL_GetError());
     }
 
+    /* Setteamos el frame-rate */
+    int fps = config["fps"];
+    rate = 1000 / fps;
+
     /* Iniciamos la ventana */
     window.init(config["window"]);
 
@@ -109,6 +113,7 @@ void GameView::_free() {
 
 GameView::GameView()
     : renderer(window, camera),
+      rate(0),
       sdl_running(false),
       img_running(false),
       fullscreen(false),
@@ -141,8 +146,13 @@ void GameView::operator()() {
     SDL_Event e;
     PlayerData* update = NULL;
 
+    /* Variables para el control del frame-rate */
+    uint32_t t1 = SDL_GetTicks(), t2 = 0, behind = 0, lost = 0;
+    int rest = 0;
+    uint32_t it = 0;
+
     while (!quit) {
-        // Handle user-events on queue
+        /* Manejamos eventos del usuario */
         while (SDL_PollEvent(&e) != 0) {
             if (e.type == SDL_QUIT) {
                 quit = true;
@@ -151,28 +161,41 @@ void GameView::operator()() {
             _handleEvent(e);
         }
 
+        /* Manejamos updates del servidor */
         while ((update = broadcast.pop())) {
             fprintf(stderr, "Soy el cliente. Recibimos un update.\n");
             player.update(*update);
             delete update;
         }
 
-        // Game loop
+        /* Limpiamos la pantalla */
         renderer.clearScreen();
 
-        //---------------------------------------------------------------------
-        // ACCIONES
-
-        player.act();
+        /* Acciones previas al renderizado*/
+        player.act(it);
         camera.center(player.getBox(), map.widthInPx(), map.heightInPx());
-        //---------------------------------------------------------------------
 
+        /* Renderizamos y presentamos la pantalla */
         stage.render();
-
         renderer.presentScreen();
 
-        // Delay para controlar el frame rate? por ahora usamos
-        // vsync
+        /* Controlamos el frame-rate */
+        t2 = SDL_GetTicks();
+        rest = rate - (t2 - t1);
+
+        if (rest < 0) {
+            behind = -rest;
+            lost = (behind - behind % rate);
+            rest = rate - behind % rate;
+            t1 += lost;
+            it += (lost / rate);
+        }
+
+        // fprintf(stderr, "Me duermo por %i ms. Iteracion: %i\n", rest, it +
+        // 1);
+        std::this_thread::sleep_for(std::chrono::milliseconds(rest));
+        t1 += rate;
+        it++;
     }
 
     // Avisarle al server que nos desconectamos?

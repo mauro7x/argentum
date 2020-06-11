@@ -35,7 +35,7 @@ void Player::_setMovementSpeed() {
     }
 }
 
-void Player::_checkIfMovementHasFinished() {
+void Player::_movementFinished() {
     int next_x = data.x_tile * tile_w;
     int next_y = data.y_tile * tile_h;
 
@@ -51,7 +51,52 @@ void Player::_checkIfMovementHasFinished() {
 
     if ((x == next_x) && (y == next_y)) {
         state = READY;
+        last_tick = 0;
     }
+}
+
+int Player::_calculateSpriteX(const Sprite& sprite) const {
+    switch (data.orientation) {
+        case UP:
+            return (sprite.up_col +
+                    ((last_tick / sprite.change_every_n_frames) %
+                     sprite.up_clips)) *
+                   sprite.clip_w;
+        case DOWN:
+            return (sprite.down_col +
+                    ((last_tick / sprite.change_every_n_frames) %
+                     sprite.down_clips)) *
+                   sprite.clip_w;
+        case LEFT:
+            return (sprite.left_col +
+                    ((last_tick / sprite.change_every_n_frames) %
+                     sprite.left_clips)) *
+                   sprite.clip_w;
+        case RIGHT:
+            return (sprite.right_col +
+                    ((last_tick / sprite.change_every_n_frames) %
+                     sprite.right_clips)) *
+                   sprite.clip_w;
+    }
+
+    throw Exception(
+        "Orientation invalid (trying to calculate sprite x-position).");
+}
+
+int Player::_calculateSpriteY(const Sprite& sprite) const {
+    switch (data.orientation) {
+        case UP:
+            return sprite.up_row * sprite.clip_h;
+        case DOWN:
+            return sprite.down_row * sprite.clip_h;
+        case LEFT:
+            return sprite.left_row * sprite.clip_h;
+        case RIGHT:
+            return sprite.right_row * sprite.clip_h;
+    }
+
+    throw Exception(
+        "Orientation invalid (trying to calculate sprite y-position).");
 }
 
 void Player::_setScaleFactor() {
@@ -87,28 +132,11 @@ void Player::_render(const Sprite& sprite) const {
     render_quad = {x, y, (int)(sprite.clip_w * scale_factor),
                    (int)(sprite.clip_h * scale_factor)};
     render_clip = {0, 0, sprite.clip_w, sprite.clip_h};
+    render_clip.x = _calculateSpriteX(sprite);
+    render_clip.y = _calculateSpriteY(sprite);
     texture = sprite.texture.getTexture();
     g_renderer->renderIfVisible(texture, &render_quad, &render_clip);
 }
-
-// OLD API --------------------------------------------------------------------
-
-/*
-void Player::_centerOnTile() {
-    // x = (data.x_tile * tile_w) + ((tile_w - w) / 2);
-    // y = (data.y_tile * tile_h) + (tile_h * (0.8)) - h;
-}
-
-int Player::_xValueToReach() const {
-    return (data.x_tile * tile_w) + ((tile_w - box.w) / 2);
-}
-
-int Player::_yValueToReach() const {
-    return (data.y_tile * tile_h) + (tile_h * (0.8)) - box.h;
-}
-*/
-
-//-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 // API Pública
@@ -121,7 +149,8 @@ Player::Player(const Renderer* renderer, const UnitSpriteContainer& sprites)
       y(0),
       x_vel(0),
       y_vel(0),
-      last_moved(0) {}
+      last_moved(0),
+      last_tick(0) {}
 
 void Player::init(const PlayerData& init_data) {
     if (state) {
@@ -129,12 +158,20 @@ void Player::init(const PlayerData& init_data) {
     }
 
     data = init_data;
+
+    /* Cargamos dimensiones del tile */
     json map_data = JSON::loadJsonFile(MAPS_FILEPATH);
     tile_w = map_data["tilewidth"];
     tile_h = map_data["tileheight"];
+
+    /* Con ellas, seteamos nuestra posición en pixeles para el renderizado */
     x = tile_w * data.x_tile;
     y = tile_h * data.y_tile;
+
+    /* Nos fijamos si somos demasiado grandes para el tile */
     _setScaleFactor();
+
+    /* Completamos la inicialización */
     state = READY;
 }
 
@@ -148,7 +185,7 @@ void Player::update(const PlayerData& updated_data) {
     _setMovementSpeed();
 }
 
-void Player::act() {
+void Player::act(const int tick) {
     if (!state) {
         throw Exception("Player has not been initialized (act requested).");
     }
@@ -158,16 +195,14 @@ void Player::act() {
         time = SDL_GetTicks();
         time_step = time - last_moved;
 
-        fprintf(stderr,
-                "ANTES: x = %i, y = %i, x_vel = %f, y_vel = %f, mov_x "
-                "= %f, mov_y = %f\n",
-                (int)x, (int)y, x_vel, y_vel, (x_vel * time_step),
-                (y_vel * time_step));
+        /* Movemos al personaje */
         x += x_vel * time_step;
         y += y_vel * time_step;
-        fprintf(stderr, "x= %i, y= %i\n", (int)x, (int)y);
         last_moved = time;
-        _checkIfMovementHasFinished();
+        last_tick = tick;
+
+        /* Chequeamos si terminó */
+        _movementFinished();
     }
 }
 

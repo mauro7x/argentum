@@ -40,38 +40,25 @@ class Player {
     float scale_factor; /* factor para reescalar */
     float x_vel, y_vel; /* velocidades en cada componente*/
     Uint32 last_moved;  /* ultimo movimiento */
+    int last_tick;      /* ultimo tick recibido */
 
     /* Settea la velocidad de movimiento en caso de ser necesario */
     void _setMovementSpeed();
 
     /* Verifica si el movimiento ya terminó (si nos pasamos) */
-    void _checkIfMovementHasFinished();
+    void _movementFinished();
+
+    /* Calcula la posición x del clip a renderizar */
+    int _calculateSpriteX(const Sprite& sprite) const;
+
+    /* Calcula la posición y del clip a renderizar */
+    int _calculateSpriteY(const Sprite& sprite) const;
 
     /* Verifica si el cuerpo entra en el tile, cc calcula el scale_factor */
     void _setScaleFactor();
 
     /* Renderiza un sprite agregando el offset necesario */
     void _render(const Sprite& sprite) const;
-
-    // OLD API ----------------------------------------------------------------
-
-    /*
-    int tile_w, tile_h;
-    int x_tile, y_tile;
-    SDL_Rect box;
-    int x_vel, y_vel;
-    int next_x, next_y;
-    Uint32 last_moved;
-
-    // Centra su posición en pixeles en el tile
-    void _centerOnTile();
-
-    // Calcula valor de X al que hay que llegar para completar el movimiento
-    int _xValueToReach() const;
-
-    /// Calcula valor de Y al que hay que llegar para completar el movimiento
-    int _yValueToReach() const;
-    */
 
     //-------------------------------------------------------------------------
 
@@ -100,7 +87,7 @@ class Player {
     void update(const PlayerData& updated_data);
 
     /* Acción que realiza en cada frame */
-    void act();
+    void act(const int tick);
 
     /* Renderizarse si se encuentra dentro de la cámara */
     void render() const;
