@@ -1,18 +1,16 @@
 #include "../includes/Character.h"
-#include "../includes/initial_configs.h"
 
 #include <iostream> //sacar
 
 //IMPLEMENTAR
 
 Character::Character(const RaceCfg& race, 
-                     const KindCfg& kind): 
-                        race(race),
-                        kind(kind),
-                        state(new Alive()) {
-    this->mana = CHARACTER_BASE_MANA; // Pasar a JSON!
-    this->health = CHARACTER_BASE_HEALTH; // Pasar a JSON!
-}
+                     const KindCfg& kind):
+    health(kind.initial_health),
+    mana(kind.initial_mana),
+    race(race),
+    kind(kind),
+    state(new Alive()) {}
 Character::~Character() {
     delete state;
 }

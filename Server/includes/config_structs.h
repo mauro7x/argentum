@@ -112,6 +112,8 @@ struct KindCfg {
     uint8_t max_health_factor;
     uint8_t meditation_factor;
     uint8_t max_mana_factor;
+    uint8_t initial_mana;
+    uint8_t initial_health;
 };
 
 //-----------------------------------------------------------------------------

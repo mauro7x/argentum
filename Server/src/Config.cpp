@@ -39,6 +39,8 @@ void Config<KindCfg>::_parseFile() {
         kind.max_health_factor = j[i]["max_health_factor"];
         kind.meditation_factor = j[i]["meditation_factor"];
         kind.max_mana_factor = j[i]["max_mana_factor"];
+        kind.initial_mana = j[i]["initial_mana"];
+        kind.initial_health = j[i]["initial_health"];
 
         config[kind.id] = kind;
     }
