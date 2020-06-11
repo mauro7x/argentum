@@ -25,8 +25,6 @@ void Player::_setMovementSpeed() {
         y_vel = 0;
     }
 
-    fprintf(stderr, "x_vel = %f, y_vel = %f\n", x_vel, y_vel);
-
     /* Si ya nos estabamos moviendo NO es necesario actualizar el last_moved */
     if ((state != MOVING) && ((x_vel != 0) || (y_vel != 0))) {
         /* Seteamos el estado y el last_moved */
