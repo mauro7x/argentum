@@ -7,7 +7,11 @@ Kind::Kind(const KindCfg& data):
                 name(data.name),
                 max_health_factor(data.max_health_factor),
                 meditation_factor(data.meditation_factor),
-                max_mana_factor(data.max_mana_factor) {}
+                max_mana_factor(data.max_mana_factor),
+                intelligence(data.intelligence),
+                constitution(data.constitution),
+                strength(data.strength),
+                agility(data.agility) {}
             
 Kind::~Kind() {}
 

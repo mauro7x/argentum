@@ -94,11 +94,16 @@ struct RaceCfg {
     uint8_t max_health_factor;
     uint8_t health_recovery_factor;
     uint8_t max_mana_factor;
+    
+    // Atributos iniciales
+    uint8_t initial_mana;
+    uint8_t initial_health;
+    
     // Modificadores
-    float intelligence;
-    float constitution;
-    float strength;
-    float agility;
+    int intelligence;
+    int constitution;
+    int strength;
+    int agility;
 };
 
 //-----------------------------------------------------------------------------
@@ -112,8 +117,16 @@ struct KindCfg {
     uint8_t max_health_factor;
     uint8_t meditation_factor;
     uint8_t max_mana_factor;
+
+    // Atributos iniciales
     uint8_t initial_mana;
     uint8_t initial_health;
+
+    // Modificadores
+    int intelligence;
+    int constitution;
+    int strength;
+    int agility;
 };
 
 //-----------------------------------------------------------------------------

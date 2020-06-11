@@ -6,8 +6,8 @@
 
 Character::Character(const RaceCfg& race, 
                      const KindCfg& kind):
-    health(kind.initial_health),
-    mana(kind.initial_mana),
+    health(kind.initial_health + race.initial_health),
+    mana(kind.initial_mana + race.initial_mana),
     race(race),
     kind(kind),
     state(new Alive()) {}

@@ -23,10 +23,10 @@ struct Race {
         const unsigned int max_mana_factor;
 
         // Modificadores
-        const float intelligence;
-        const float constitution;
-        const float strength;
-        const float agility;
+        const int intelligence;
+        const int constitution;
+        const int strength;
+        const int agility;
 
         Race(const RaceCfg& data);
         ~Race();

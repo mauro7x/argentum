@@ -18,15 +18,20 @@ class CantDoMagicException: public Exception {};
  * en si puede hacer hechizos o no.
  */
 class Kind {
-    private:
+    public:
         const unsigned int id;
         const std::string name;
 
         const unsigned int max_health_factor;
         const unsigned int meditation_factor;
         const unsigned int max_mana_factor;
+        
+        // Modificadores
+        const int intelligence;
+        const int constitution;
+        const int strength;
+        const int agility;
 
-    public:
         Kind(const KindCfg& data);
         ~Kind();
 

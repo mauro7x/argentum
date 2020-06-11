@@ -27,6 +27,7 @@
 class Character {
     private:
         unsigned int health, mana;
+        unsigned int max_health, max_mana;
         Race race;
         Kind kind;
         State* state;
