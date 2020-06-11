@@ -4,19 +4,12 @@
 //-----------------------------------------------------------------------------
 #include <SDL2/SDL.h>
 
+#include <cstdint>
+
+// #include "../../../Common/includes/Exceptions/Exception.h"
+#include "../../../Common/includes/UnitData.h"
 #include "Renderer.h"
 #include "UnitSpriteContainer.h"
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
-
-/* Data que irá cambiando durante la ejecución */
-struct CharacterData {
-    int x_tile, y_tile;                            /* coordenadas en tiles */
-    Id head_id, body_id;                           /* cuerpo básico */
-    Id helmet_id, armour_id, shield_id, weapon_id; /* vestimenta */
-};
-
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------

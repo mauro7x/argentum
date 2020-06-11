@@ -7,28 +7,16 @@
 #include <cstdint>
 #include <fstream>
 
+#include "../../../Common/includes/Exceptions/Exception.h"
 #include "../../../Common/includes/JSON.h"
+#include "../../../Common/includes/UnitData.h"
 #include "../../../Common/includes/paths.h"
 #include "Renderer.h"
 #include "UnitSpriteContainer.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-// Proxy del server, esto luego se reemplaza con la lógica del modelo
-
-#include "ServerProxy.h"
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
-
-/* Data que irá cambiando durante la ejecución */
-struct PlayerData {
-    int x_tile, y_tile;                            /* coordenadas en tiles */
-    uint16_t health, mana;                         /* stats */
-    Id head_id, body_id;                           /* cuerpo básico */
-    Id helmet_id, armour_id, shield_id, weapon_id; /* vestimenta */
-};
-
+enum PlayerState { NOT_INIT, READY, MOVING };
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -36,17 +24,33 @@ struct PlayerData {
 class Player {
    protected:
     /* Componentes para renderizar */
-    Renderer* g_renderer;
-    UnitSpriteContainer* g_sprites;
-    ServerProxy* server; /* proxy del server */
+    const Renderer* g_renderer;
+    const UnitSpriteContainer& g_sprites;
     int tile_w, tile_h;
 
     /* Data del personaje */
     PlayerData data;
+    PlayerState state;
 
     /* Componentes para el renderizado gráfico */
-    int x, y;           /* posición en pixeles */
-    float scale_factor; /* factor para reescalar */
+    float x, y;               /* posición en pixeles */
+    float tile_movement_time; /* tiempo necesario para mover un tile */
+    float scale_factor;       /* factor para reescalar */
+    float x_vel, y_vel;       /* velocidades en cada componente*/
+    Uint32 last_moved;        /* ultimo movimiento */
+    int last_tick;            /* ultimo tick recibido */
+
+    /* Settea la velocidad de movimiento en caso de ser necesario */
+    void _setMovementSpeed();
+
+    /* Verifica si el movimiento ya terminó (si nos pasamos) */
+    void _movementFinished();
+
+    /* Calcula la posición x del clip a renderizar */
+    int _calculateSpriteX(const Sprite& sprite) const;
+
+    /* Calcula la posición y del clip a renderizar */
+    int _calculateSpriteY(const Sprite& sprite) const;
 
     /* Verifica si el cuerpo entra en el tile, cc calcula el scale_factor */
     void _setScaleFactor();
@@ -54,34 +58,11 @@ class Player {
     /* Renderiza un sprite agregando el offset necesario */
     void _render(const Sprite& sprite) const;
 
-    /* Verifica si tras el update hay que iniciar un movimiento */
-    void _startMovementIfNeeded();
-
-    // OLD API ----------------------------------------------------------------
-
-    /*
-    int tile_w, tile_h;
-    int x_tile, y_tile;
-    SDL_Rect box;
-    int x_vel, y_vel;
-    int next_x, next_y;
-    Uint32 last_moved;
-
-    // Centra su posición en pixeles en el tile
-    void _centerOnTile();
-
-    // Calcula valor de X al que hay que llegar para completar el movimiento
-    int _xValueToReach() const;
-
-    /// Calcula valor de Y al que hay que llegar para completar el movimiento
-    int _yValueToReach() const;
-    */
-
     //-------------------------------------------------------------------------
 
    public:
     /* Constructor */
-    Player(Renderer* renderer, UnitSpriteContainer* sprites);
+    Player(const Renderer* renderer, const UnitSpriteContainer& sprites);
 
     /* Deshabilitamos el constructor por copia. */
     Player(const Player&) = delete;
@@ -104,10 +85,16 @@ class Player {
     void update(const PlayerData& updated_data);
 
     /* Acción que realiza en cada frame */
-    void act();
+    void act(const int tick);
 
     /* Renderizarse si se encuentra dentro de la cámara */
     void render() const;
+
+    /* Obtiene la posición en tiles (SOLO X e Y SON VÁLIDOS) */
+    SDL_Rect getPos() const;
+
+    /* Obtiene la posición y dimensiones en pixeles */
+    SDL_Rect getBox() const;
 
     //-------------------------------------------------------------------------
 

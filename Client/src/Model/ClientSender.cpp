@@ -1,4 +1,4 @@
-#include "../../includes/Model/ClientTalker.h"
+#include "../../includes/Model/ClientSender.h"
 
 //-----------------------------------------------------------------------------
 // Métodos privados
@@ -8,16 +8,16 @@
 //-----------------------------------------------------------------------------
 // API Pública
 
-ClientTalker::ClientTalker(const std::string& hostname, const std::string& port,
+ClientSender::ClientSender(const std::string& hostname, const std::string& port,
                            std::queue<std::string>& queue)
-    : talker_skt(Socket(hostname, port)),
-      is_running(true),
+    : sender_skt(std::move(SocketWrapper(hostname, port))),
+      keep_running(true),
       queue_commands(queue) {}
 
-void ClientTalker::run() {
+void ClientSender::run() {
     /* creando el protocolo */
     // Protocol protocol;
-    while (this->is_running) {
+    while (this->keep_running) {
         std::string command;
         if (this->queue_commands.empty()){continue;}
         command = this->queue_commands.front();
@@ -27,10 +27,10 @@ void ClientTalker::run() {
     }
 }
 
-bool ClientTalker::isRunning() {
-    return this->is_running;
+void ClientSender::stopRunning() {
+    this->keep_running = false;
 }
 
-ClientTalker::~ClientTalker() {
-    this->talker_skt.close();
+ClientSender::~ClientSender() {
+    this->sender_skt.close();
 }
