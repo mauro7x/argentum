@@ -42,6 +42,15 @@ struct CharacterData {
     Id helmet_id, armour_id, shield_id, weapon_id; /* vestimenta */
 };
 
+struct CreatureData {
+    // Posición y orientación
+    int x_tile, y_tile;      /* coordenadas en tiles */
+    Orientation orientation; /* orientación del personaje */
+
+    // Cuerpo
+    Id creature_id; /* creature body */
+};
+
 //-----------------------------------------------------------------------------
 
 #endif  // __UNIT_DATA_H__
