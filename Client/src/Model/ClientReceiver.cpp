@@ -9,7 +9,7 @@
 // API Pública
 
 ClientReceiver::ClientReceiver(const std::string& hostname, const std::string& port)
-    : receiver_skt(std::move(Socket(hostname, port))), keep_running(true) {}
+    : receiver_skt(std::move(SocketWrapper(hostname, port))), keep_running(true) {}
 
 void ClientReceiver::run() {
     /* creando el protocolo */

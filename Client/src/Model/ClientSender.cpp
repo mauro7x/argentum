@@ -10,7 +10,7 @@
 
 ClientSender::ClientSender(const std::string& hostname, const std::string& port,
                            std::queue<std::string>& queue)
-    : sender_skt(std::move(Socket(hostname, port))),
+    : sender_skt(std::move(SocketWrapper(hostname, port))),
       keep_running(true),
       queue_commands(queue) {}
 

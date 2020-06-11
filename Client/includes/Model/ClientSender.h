@@ -5,7 +5,7 @@
 
 #include <queue>
 #include <atomic>
-#include "../../../Common/includes/Socket/Socket.h"
+#include "../../../Common/includes/Socket/SocketWrapper.h"
 //-----------------------------------------------------------------------------
 // DEFINES
 //-----------------------------------------------------------------------------
@@ -15,7 +15,7 @@
 class ClientSender {
     // atributos del clientSender
    private:
-    Socket sender_skt;
+    SocketWrapper sender_skt;
     std::atomic_bool keep_running;
     std::queue<std::string> queue_commands;
     

@@ -3,7 +3,7 @@
 
 //-----------------------------------------------------------------------------
 
-#include "../../../Common/includes/Socket/Socket.h"
+#include "../../../Common/includes/Socket/SocketWrapper.h"
 #include <atomic>
 //-----------------------------------------------------------------------------
 // DEFINES
@@ -14,7 +14,7 @@
 class ClientReceiver{
     // atributos del clientreceiver
    private:
-    Socket receiver_skt;
+    SocketWrapper receiver_skt;
     std::atomic_bool keep_running;
     //una cola o dos ?
     //cola 1: respuesta
