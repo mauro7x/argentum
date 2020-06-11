@@ -13,7 +13,7 @@ project(skeleton)
 # FLAGS DE COMPILACIÓN
 
 # Estándar a utilizar
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pthread")
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Flags para el manejo de errores
@@ -31,6 +31,10 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ggdb -DDEBUG -fno-inline")
 
 FILE(GLOB_RECURSE common_src "Common/src/*.cpp")
 FILE(GLOB_RECURSE client_src "Client/src/*.cpp")
+
+FILE(GLOB_RECURSE socket_src "Abstractions/Client-Server/Socket/*.cpp")
+FILE(GLOB_RECURSE accepter_src "Abstractions/Client-Server/Accepter/*.cpp")
+FILE(GLOB_RECURSE thread_src "Abstractions/Threads/Thread/*.cpp")
 FILE(GLOB_RECURSE server_src "Server/src/*.cpp")
 #------------------------------------------------------------------------------
 
@@ -52,7 +56,6 @@ target_link_libraries(client common SDL2 SDL2_image SDL2_ttf SDL2_mixer)
 
 #------------------------------------------------------------------------------
 # SERVIDOR
-
-add_executable(server ${server_src})
+add_executable(server ${server_src} ${socket_src} ${accepter_src} ${thread_src})
 target_link_libraries(server common)
 #------------------------------------------------------------------------------

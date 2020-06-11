@@ -4,22 +4,22 @@
 //-----------------------------------------------------------------------------
 #include <atomic>
 
-#include "ClosedSocketException.h"
-#include "Exception.h"
-#include "SocketWrapper.h"
-#include "Thread.h"
+#include "LoginValidator.h"
+#include "../Socket/SocketWrapper.h"
+#include "../../Threads/Thread/Thread.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 
 class Accepter : public Thread {
-   private:
+    private:
     // Atributos del objeto activo.
+    LoginValidator log_val;
     SocketWrapper socket;
     std::atomic_bool keep_listening;
     std::atomic_bool is_running;
 
-   public:
+    public:
     /**
      * Descripción: constuctor.
      *

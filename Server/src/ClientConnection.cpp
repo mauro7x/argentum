@@ -1,6 +1,6 @@
 #include "../includes/ClientConnection.h"
 
-ClientConnection::ClientConnection(int player_id) {
+ClientConnection::ClientConnection(int player_id, Socket&& sock) {
 	id = player_id;
 }
 

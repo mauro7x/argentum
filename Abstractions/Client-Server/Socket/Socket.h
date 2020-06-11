@@ -11,8 +11,8 @@
 #include <cstdint>
 #include <string>
 
-#include "ClosedSocketException.h"
-#include "Exception.h"
+#include "../../Exceptions/ParticularException/ClosedSocketException.h"
+#include "../../Exceptions/Exception/Exception.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------

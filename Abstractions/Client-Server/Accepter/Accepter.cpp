@@ -19,6 +19,7 @@ void Accepter::run() {
     try {
         while (keep_listening) {
             // aceptar clientes
+            SocketWrapper new_sock = socket.accept();
             // implementar garbage collector
         }
     } catch (const ClosedSocketException& e) {

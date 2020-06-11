@@ -1,15 +1,17 @@
-#ifndef __ClientConnection_H__
-#define __ClientConnection_H__
+#ifndef __CLIENTCONNECTION_H__
+#define __CLIENTCONNECTION_H__
 
 #include "Command.h"
+#include "CommandQueue.h"
+#include "../../Abstractions/Threads/Thread/Thread.h"
 #include <queue>
 #include <mutex>
 
-class ClientConnection {
+class ClientConnection : Thread {
 private:
     // atributos del ClientConnection
     int id;
-    std::queue<Command*> command_queue;
+    CommandQueue command_queue;
     std::mutex m;
 
 public:
@@ -18,7 +20,7 @@ public:
      *
      * Parámetros: id del player que usa la connexion
      */
-    ClientConnection(int player_id);
+    ClientConnection(int player_id, Socket&& sock);
 
     /* Deshabilitamos el constructor por copia. */
     ClientConnection(const ClientConnection&) = delete;
@@ -32,8 +34,7 @@ public:
     /* Deshabilitamos el operador= para movimiento. */
     ClientConnection& operator=(ClientConnection&& other) = delete;
 
-    
-    void execute_command();
+    void run();
 
     /**
      * Descripción: destructor.

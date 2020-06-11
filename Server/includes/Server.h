@@ -3,6 +3,7 @@
 
 //-----------------------------------------------------------------------------
 #include "ClientList.h"
+#include "../../Abstractions/Client-Server/Accepter/Accepter.h"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -18,6 +19,7 @@ class Server {
    private:
     // atributos del servidor
     ClientList players;
+    Accepter accepter;
 
     // metodos privados
     void processPlayerCommands();

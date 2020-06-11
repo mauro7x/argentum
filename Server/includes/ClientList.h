@@ -31,7 +31,7 @@ public:
     /* Deshabilitamos el operador= para movimiento. */
     ClientList& operator=(ClientList&& other) = delete;
 
-    void executeCommand();
+    void addPlayer(int player_id, Socket&& sock);
     /**
      * Descripción: destructor.
      */
