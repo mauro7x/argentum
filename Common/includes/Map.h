@@ -41,6 +41,7 @@ struct Tile {
     bool safe_zone;
     bool indoor;
     bool portal;
+    // agregar metadata de NPC
 };
 
 //-----------------------------------------------------------------------------
