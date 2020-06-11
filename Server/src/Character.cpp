@@ -1,4 +1,5 @@
 #include "../includes/Character.h"
+#include "../includes/initial_configs.h"
 
 #include <iostream> //sacar
 
@@ -9,8 +10,8 @@ Character::Character(const RaceCfg& race,
                         race(race),
                         kind(kind),
                         state(new Alive()) {
-    this->mana = 100; // Pasar a JSON!
-    this->health = 100; // Pasar a JSON!
+    this->mana = CHARACTER_BASE_MANA; // Pasar a JSON!
+    this->health = CHARACTER_BASE_HEALTH; // Pasar a JSON!
 }
 Character::~Character() {
     delete state;
