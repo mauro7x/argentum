@@ -28,6 +28,8 @@ void ServerProxy::run() {
     Uint32 last_moved = 0;
     Uint32 delta = 0;
 
+    Uint32 t1 = SDL_GetTicks(), t2 = 0;
+
     int x_step = 0, y_step = 0;
 
     int it = 0;
@@ -104,6 +106,7 @@ void ServerProxy::run() {
                     delta = 0;
                 }
                 last_moved = SDL_GetTicks();
+
                 broadcastear = true;
             }
         }
@@ -112,6 +115,9 @@ void ServerProxy::run() {
         if (broadcastear) {
             broadcast = new PlayerData(player);
             fprintf(stderr, "Soy el server. Voy a enviar un update.\n");
+            t2 = SDL_GetTicks();
+            fprintf(stderr, "Server. Envio paquete tras: %d ms\n", t2 - t1);
+            t1 = SDL_GetTicks();
             this->broadcast.push(broadcast);
         }
 
@@ -128,7 +134,6 @@ void ServerProxy::run() {
         }
 
         std::this_thread::sleep_for(std::chrono::milliseconds(rest));
-        fprintf(stderr, "me duermo por %i ms.\n", rest);
         start += PERIOD;
         it += 1;
     }

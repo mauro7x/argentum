@@ -3,8 +3,55 @@
 //-----------------------------------------------------------------------------
 // Métodos privados
 
-bool Player::_movementNeeded() const {
-    return (x != (data.x_tile * tile_w)) || (y != (data.y_tile * tile_h));
+void Player::_setMovementSpeed() {
+    int next_x = data.x_tile * tile_w;
+    int next_y = data.y_tile * tile_h;
+
+    /* Velocidad en X */
+    if (next_x > x) {
+        x_vel = ((float)(next_x - x) / TIME_TO_MOVE);
+    } else if (next_x < x) {
+        x_vel = -((float)(x - next_x) / TIME_TO_MOVE);
+    } else {
+        x_vel = 0;
+    }
+
+    /* Velocidad en Y */
+    if (next_y > y) {
+        y_vel = ((float)(next_y - y) / TIME_TO_MOVE);
+    } else if (next_y < y) {
+        y_vel = -((float)(y - next_y) / TIME_TO_MOVE);
+    } else {
+        y_vel = 0;
+    }
+
+    fprintf(stderr, "x_vel = %f, y_vel = %f\n", x_vel, y_vel);
+
+    /* Si ya nos estabamos moviendo NO es necesario actualizar el last_moved */
+    if ((state != MOVING) && ((x_vel != 0) || (y_vel != 0))) {
+        /* Seteamos el estado y el last_moved */
+        state = MOVING;
+        last_moved = SDL_GetTicks();
+    }
+}
+
+void Player::_checkIfMovementHasFinished() {
+    int next_x = data.x_tile * tile_w;
+    int next_y = data.y_tile * tile_h;
+
+    if (((x_vel > 0) && (x > next_x)) || ((x_vel < 0) && (x < next_x))) {
+        x = next_x;
+        x_vel = 0;
+    }
+
+    if (((y_vel > 0) && (y > next_y)) || ((y_vel < 0) && (y < next_y))) {
+        y = next_y;
+        y_vel = 0;
+    }
+
+    if ((x == next_x) && (y == next_y)) {
+        state = READY;
+    }
 }
 
 void Player::_setScaleFactor() {
@@ -31,8 +78,8 @@ void Player::_render(const Sprite& sprite) const {
     y = (tile_h * (0.8)) - (sprite.clip_h * scale_factor);
 
     // paso 2
-    x += this->x;
-    y += this->y;
+    x += (int)this->x;
+    y += (int)this->y;
 
     // paso 3
     SDL_Rect render_quad, render_clip;
@@ -42,13 +89,6 @@ void Player::_render(const Sprite& sprite) const {
     render_clip = {0, 0, sprite.clip_w, sprite.clip_h};
     texture = sprite.texture.getTexture();
     g_renderer->renderIfVisible(texture, &render_quad, &render_clip);
-}
-
-void Player::_updateMovement() {
-    if (_movementNeeded()) {
-        x = data.x_tile * tile_w;
-        y = data.y_tile * tile_h;
-    }
 }
 
 // OLD API --------------------------------------------------------------------
@@ -80,7 +120,8 @@ Player::Player(const Renderer* renderer, const UnitSpriteContainer& sprites)
       x(0),
       y(0),
       x_vel(0),
-      y_vel(0) {}
+      y_vel(0),
+      last_moved(0) {}
 
 void Player::init(const PlayerData& init_data) {
     if (state) {
@@ -104,14 +145,29 @@ void Player::update(const PlayerData& updated_data) {
 
     data = updated_data;
     _setScaleFactor();
-    state = READY;
-
-    _updateMovement();
+    _setMovementSpeed();
 }
 
 void Player::act() {
     if (!state) {
         throw Exception("Player has not been initialized (act requested).");
+    }
+
+    if (state == MOVING) {
+        Uint32 time, time_step;
+        time = SDL_GetTicks();
+        time_step = time - last_moved;
+
+        fprintf(stderr,
+                "ANTES: x = %i, y = %i, x_vel = %f, y_vel = %f, mov_x "
+                "= %f, mov_y = %f\n",
+                (int)x, (int)y, x_vel, y_vel, (x_vel * time_step),
+                (y_vel * time_step));
+        x += x_vel * time_step;
+        y += y_vel * time_step;
+        fprintf(stderr, "x= %i, y= %i\n", (int)x, (int)y);
+        last_moved = time;
+        _checkIfMovementHasFinished();
     }
 }
 
@@ -166,8 +222,8 @@ SDL_Rect Player::getBox() const {
 
     int body_w = g_sprites[data.body_id].clip_w;
     int head_h = g_sprites[data.head_id].clip_h;
-    return SDL_Rect(
-        {x, y, (int)(body_w * scale_factor), (int)(head_h * scale_factor)});
+    return SDL_Rect({(int)x, (int)y, (int)(body_w * scale_factor),
+                     (int)(head_h * scale_factor)});
 }
 
 Player::~Player() {}

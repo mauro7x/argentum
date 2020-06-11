@@ -43,7 +43,6 @@ void GameView::_loadMedia() {
 
 void GameView::_handleEvent(const SDL_Event& e) {
     /* Movimiento */
-
     int* cmd = NULL;
 
     // If a key was pressed

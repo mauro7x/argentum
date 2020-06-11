@@ -17,6 +17,9 @@
 
 //-----------------------------------------------------------------------------
 enum PlayerState { NOT_INIT, READY, MOVING };
+
+#define TIME_TO_MOVE 200
+
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -33,21 +36,22 @@ class Player {
     PlayerState state;
 
     /* Componentes para el renderizado gráfico */
-    int x, y;           /* posición en pixeles */
-    int x_vel, y_vel;   /* velocidades en cada componente*/
+    float x, y;         /* posición en pixeles */
     float scale_factor; /* factor para reescalar */
+    float x_vel, y_vel; /* velocidades en cada componente*/
+    Uint32 last_moved;  /* ultimo movimiento */
 
-    /* Verifica si hay que iniciar un movimiento nuevo */
-    bool _movementNeeded() const;
+    /* Settea la velocidad de movimiento en caso de ser necesario */
+    void _setMovementSpeed();
+
+    /* Verifica si el movimiento ya terminó (si nos pasamos) */
+    void _checkIfMovementHasFinished();
 
     /* Verifica si el cuerpo entra en el tile, cc calcula el scale_factor */
     void _setScaleFactor();
 
     /* Renderiza un sprite agregando el offset necesario */
     void _render(const Sprite& sprite) const;
-
-    /* Actualiza el movimiento si es necesario */
-    void _updateMovement();
 
     // OLD API ----------------------------------------------------------------
 

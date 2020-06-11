@@ -17,8 +17,7 @@
 #define MAP_W_TILES 40
 #define MAP_H_TILES 40
 
-#define SPEED 5                            /* tiles x sec */
-#define TIME_TO_MOVE_A_TILE (1000 / SPEED) /* timepo en ms */
+#define TIME_TO_MOVE_A_TILE 200 /* timepo en ms */
 
 #define PERIOD 33
 
