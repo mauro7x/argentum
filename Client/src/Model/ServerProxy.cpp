@@ -27,9 +27,11 @@ void ServerProxy::run() {
     Uint32 time = 0;
     Uint32 last_moved = 0;
     Uint32 delta = 0;
-    Uint32 start = 0, stop = 0, sleep_for = 0;
 
     int x_step = 0, y_step = 0;
+
+    int it = 0;
+    int start = 0, stop = 0, rest = 0, behind = 0, lost = 0;
     start = SDL_GetTicks();
 
     while (keep_running) {
@@ -115,10 +117,20 @@ void ServerProxy::run() {
 
         // control del frame rate
         stop = SDL_GetTicks();
-        sleep_for = (start - stop) % (1000 / TPS);
-        std::this_thread::sleep_for(std::chrono::milliseconds(sleep_for));
+        rest = PERIOD - (stop - start);
 
-        start += (1000 / TPS);
+        if (rest < 0) {
+            behind = -rest;
+            lost = (behind - (behind % PERIOD));
+            rest = PERIOD - (behind % PERIOD);
+            start += lost;
+            it += (int)(lost / PERIOD);
+        }
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(rest));
+        fprintf(stderr, "me duermo por %i ms.\n", rest);
+        start += PERIOD;
+        it += 1;
     }
 
     is_running = false;

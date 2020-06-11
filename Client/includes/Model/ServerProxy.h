@@ -17,10 +17,10 @@
 #define MAP_W_TILES 40
 #define MAP_H_TILES 40
 
-#define SPEED 10                           /* tiles x sec */
+#define SPEED 5                            /* tiles x sec */
 #define TIME_TO_MOVE_A_TILE (1000 / SPEED) /* timepo en ms */
 
-#define TPS 20 /* ticks x sec */
+#define PERIOD 33
 
 //-----------------------------------------------------------------------------
 
