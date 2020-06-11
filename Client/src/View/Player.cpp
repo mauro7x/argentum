@@ -9,18 +9,18 @@ void Player::_setMovementSpeed() {
 
     /* Velocidad en X */
     if (next_x > x) {
-        x_vel = ((float)(next_x - x) / TIME_TO_MOVE);
+        x_vel = ((float)(next_x - x) / tile_movement_time);
     } else if (next_x < x) {
-        x_vel = -((float)(x - next_x) / TIME_TO_MOVE);
+        x_vel = -((float)(x - next_x) / tile_movement_time);
     } else {
         x_vel = 0;
     }
 
     /* Velocidad en Y */
     if (next_y > y) {
-        y_vel = ((float)(next_y - y) / TIME_TO_MOVE);
+        y_vel = ((float)(next_y - y) / tile_movement_time);
     } else if (next_y < y) {
-        y_vel = -((float)(y - next_y) / TIME_TO_MOVE);
+        y_vel = -((float)(y - next_y) / tile_movement_time);
     } else {
         y_vel = 0;
     }
@@ -145,6 +145,7 @@ Player::Player(const Renderer* renderer, const UnitSpriteContainer& sprites)
       state(NOT_INIT),
       x(0),
       y(0),
+      tile_movement_time(0),
       x_vel(0),
       y_vel(0),
       last_moved(0),
@@ -165,6 +166,11 @@ void Player::init(const PlayerData& init_data) {
     /* Con ellas, seteamos nuestra posición en pixeles para el renderizado */
     x = tile_w * data.x_tile;
     y = tile_h * data.y_tile;
+
+    /* Cargamos velocidad */
+    json common_config = JSON::loadJsonFile(COMMON_CONFIG_FILEPATH);
+    int speed = common_config["tiles_per_sec"]["character_speed"]; /* tiles/s */
+    tile_movement_time = 1000 / speed;                             /* ms */
 
     /* Nos fijamos si somos demasiado grandes para el tile */
     _setScaleFactor();

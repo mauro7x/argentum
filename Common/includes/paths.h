@@ -8,6 +8,7 @@
 // Map paths
 
 #define MAPS_FILEPATH "../Config/Common/maps.json"
+#define COMMON_CONFIG_FILEPATH "../Config/Common/common_config.json"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------

@@ -17,9 +17,6 @@
 
 //-----------------------------------------------------------------------------
 enum PlayerState { NOT_INIT, READY, MOVING };
-
-#define TIME_TO_MOVE 200
-
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -36,11 +33,12 @@ class Player {
     PlayerState state;
 
     /* Componentes para el renderizado gráfico */
-    float x, y;         /* posición en pixeles */
-    float scale_factor; /* factor para reescalar */
-    float x_vel, y_vel; /* velocidades en cada componente*/
-    Uint32 last_moved;  /* ultimo movimiento */
-    int last_tick;      /* ultimo tick recibido */
+    float x, y;               /* posición en pixeles */
+    float tile_movement_time; /* tiempo necesario para mover un tile */
+    float scale_factor;       /* factor para reescalar */
+    float x_vel, y_vel;       /* velocidades en cada componente*/
+    Uint32 last_moved;        /* ultimo movimiento */
+    int last_tick;            /* ultimo tick recibido */
 
     /* Settea la velocidad de movimiento en caso de ser necesario */
     void _setMovementSpeed();
