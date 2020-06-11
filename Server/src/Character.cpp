@@ -1,6 +1,8 @@
 #include <algorithm>
+#include <math.h>
 
 #include "../includes/Character.h"
+#include "../includes/RandomNumberGenerator.h"
 
 #include <iostream> //sacar
 
@@ -14,7 +16,8 @@ Character::Character(const RaceCfg& race,
         agility(kind.agility + race.agility),
         race(race),
         kind(kind),
-        state(new Alive()) {
+        state(new Alive()),
+        inventory(this->level) {
     this->updateStatus(0); // Set max_health, max_mana
 }
 
@@ -33,6 +36,9 @@ void Character::updateStatus(const unsigned int seconds_elapsed) {
 
     this->health = std::min(this->health + health_update, this->max_health);
     this->mana = std::min(this->mana + mana_update, this->max_mana);
+
+    // Cuando sube de nivel [llevar a otra funcion]
+    this->inventory.updateMaxAmountsOfGold();
 }
 
 void Character::equip(unsigned int inventory_position) {
@@ -78,6 +84,39 @@ Item* Character::dropItem(unsigned int position) {
 
 void Character::doMagic() {
     this->kind.doMagic();
+}
+
+const unsigned int Character::attack() {
+    return this->equipment.getAttackPoints(*this);
+}
+
+const unsigned int Character::receiveAttack(const unsigned int damage, 
+                                            const bool eludible) {
+    unsigned int damage_received = 0;
+
+    if (eludible) {
+        RandomNumberGenerator random_number_generator;
+        if (std::pow(random_number_generator(0, 1), 
+                     this->agility) < 0.001) {
+            // El ataque es esquivado, no se recibe daño
+            return damage_received;
+        }
+    }
+
+    const unsigned int defense_points = this->equipment.getDefensePoints(*this);
+    damage_received = std::max((unsigned int) 0, damage - defense_points);
+
+    this->health = std::max((unsigned int) 0, this->health - damage_received);
+
+    // MORIR
+    // Falta sumarle la experiencia al atacante.
+
+    return damage_received;
+}
+
+void Character::die() {
+    delete this->state;
+    this->state = new Dead();
 }
 
 const char* InsufficientManaException::what() const noexcept {

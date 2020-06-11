@@ -34,9 +34,11 @@ class Character {
         Race race;
         Kind kind;
         State* state;
+        Level level;
         Inventory inventory;
         Equipment equipment;
-        Level level;
+
+        void die();
 
     public:
         Character(const RaceCfg& race, const KindCfg& kind);
@@ -46,7 +48,12 @@ class Character {
         Character& operator=(const Character&) = delete;
         Character(Character&&) = delete;
         Character& operator=(Character&&) = delete;
-
+        
+        /*
+         * Actualiza health y mana segun el paso del tiempo,
+         * asi como sus valores maximos en funcion del nivel
+         * [si cambio].
+         */
         void updateStatus(const unsigned int seconds_elapsed);
 
         /*
@@ -103,8 +110,33 @@ class Character {
 
         /*
          * Lanza Exception si el Kind no puede hacer magia.
+         * Metodo llamado al usar baculos.
          */
         void doMagic();
+        
+        /*
+         * Recibe los puntos de daño lanzados y si se trata de un
+         * ataque eludible o no. Si es eludible, puede esquivarlo
+         * y no recibir daño alguno (retornar 0).
+         * Si no lo puede esquivar, absorbe lo que puede con su defensa.
+         * 
+         * Retorna los puntos de daño que efectivamente recibe.
+         */
+        const unsigned int receiveAttack(const unsigned int damage, 
+                                         const bool eludible);
+
+        /* IMPORTANTE: 
+            - Al llamar a este metodo desde Game, se deben hacer
+            verificaciones de nivel (newbie, diferencia), verificacion de rango
+            (se consume el mana si el rango no es suficiente igual? y el danio es 0?),
+            y si el rango es 0 es curativo a si mismo, asi que tener en cuenta.
+            
+            - El juego debe verificar si muere, y llamar al metodo die. */
+        /*
+         * Usa el arma que tiene equipada y retorna los puntos de daño
+         * que genera. Si no tiene arma equipada, retorna 0.
+         */
+        const unsigned int attack();
 
         void debug();
 };
