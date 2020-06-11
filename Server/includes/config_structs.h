@@ -109,9 +109,9 @@ struct RaceCfg {
 struct KindCfg {
     Id id;
     std::string name;
-    uint8_t health;
-    uint8_t meditation;
-    uint8_t mana;
+    uint8_t max_health_factor;
+    uint8_t meditation_factor;
+    uint8_t max_mana_factor;
 };
 
 //-----------------------------------------------------------------------------

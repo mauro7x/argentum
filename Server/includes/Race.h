@@ -10,8 +10,9 @@
  *      Humanos, elfos, enanos, gnomos.
  * 
  * No tienen comportamiento alguno, simplemente
- * aportan factores a tener en cuenta en el calculo
- * de las ecuaciones de mana y vida.
+ * aportan, por un lado, factores a tener en cuenta en el calculo
+ * de las ecuaciones de mana y vida, y por otro lado, modificadores
+ * que intervienen en el calculo de atributos.
  */
 struct Race {
         const unsigned int id;
@@ -20,7 +21,7 @@ struct Race {
         const unsigned int max_health_factor;
         const unsigned int health_recovery_factor;
         const unsigned int max_mana_factor;
-        
+
         // Modificadores
         const float intelligence;
         const float constitution;

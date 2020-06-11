@@ -21,9 +21,10 @@ class Kind {
     private:
         const unsigned int id;
         const std::string name;
-        const unsigned int health;
-        const unsigned int meditation;
-        const unsigned int mana;
+
+        const unsigned int max_health_factor;
+        const unsigned int meditation_factor;
+        const unsigned int max_mana_factor;
 
     public:
         Kind(const KindCfg& data);

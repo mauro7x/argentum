@@ -2,29 +2,29 @@
     {
         "id": 200,
         "name": "Mago",
-        "health": 10,
-        "meditation": 10,
-        "mana": 10
+        "max_health_factor": 10,
+        "meditation_factor": 10,
+        "max_mana_factor": 10
     },
     {
         "id": 201,
         "name": "Clérigo",
-        "health": 10,
-        "meditation": 10,
-        "mana": 10
+        "max_health_factor": 10,
+        "meditation_factor": 10,
+        "max_mana_factor": 10
     },
     {
         "id": 202,
         "name": "Paladín",
-        "health": 10,
-        "meditation": 10,
-        "mana": 10
+        "max_health_factor": 10,
+        "meditation_factor": 10,
+        "max_mana_factor": 10
     },
     {
         "id": 203,
         "name": "Guerrero",
-        "health": 10,
-        "meditation": 0,
-        "mana": 10
+        "max_health_factor": 10,
+        "meditation_factor": 0,
+        "max_mana_factor": 10
     }
 ]
