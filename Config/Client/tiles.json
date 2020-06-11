@@ -1,7 +1,7 @@
 {
     "ground": {
         "first_gid": 1,
-        "next_first_gid": 9,
+        "next_first_gid": 17,
         "dirpath": "../Assets/Tiles/Ground/",
         "color_key": {
             "is_needed": false,
@@ -13,8 +13,8 @@
         }
     },
     "decoration": {
-        "first_gid": 9,
-        "next_first_gid": 21,
+        "first_gid": 17,
+        "next_first_gid": 44,
         "dirpath": "../Assets/Tiles/Decoration/",
         "color_key": {
             "is_needed": true,

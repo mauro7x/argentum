@@ -1,24 +1,24 @@
-#ifndef __CLIENTTALKER_H__
-#define __CLIENTTALKER_H__
+#ifndef __CLIENTRECEIVER_H__
+#define __CLIENTRECEIVER_H__
 
 //-----------------------------------------------------------------------------
 
-#include <queue>
-
-#include "../../../Common/includes/Socket/Socket.h"
+#include "../../../Common/includes/Socket/SocketWrapper.h"
+#include <atomic>
 //-----------------------------------------------------------------------------
 // DEFINES
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 
-class ClientTalker {
-    // atributos del clienttalker
+class ClientReceiver{
+    // atributos del clientreceiver
    private:
-    Socket talker_skt;
-    bool is_running;
-    std::queue<std::string> queue_commands;
-    
+    SocketWrapper receiver_skt;
+    std::atomic_bool keep_running;
+    //una cola o dos ?
+    //cola 1: respuesta
+    //cola 2: abstracto update
 
     // metodos privados
 
@@ -28,23 +28,22 @@ class ClientTalker {
      *
      * Parámetros: hostname, portname.
      */
-    ClientTalker(const std::string& hostname, const std::string& port,
-                 std::queue<std::string>& queue);
+    ClientReceiver(const std::string& hostname, const std::string& port);
 
     /* Deshabilitamos el constructor por copia. */
-    ClientTalker(const ClientTalker&) = delete;
+    ClientReceiver(const ClientReceiver&) = delete;
 
     /* Deshabilitamos el operador= para copia.*/
-    ClientTalker& operator=(const ClientTalker&) = delete;
+    ClientReceiver& operator=(const ClientReceiver&) = delete;
 
     /* Deshabilitamos el constructor por movimiento. */
-    ClientTalker(ClientTalker&& other) = delete;
+    ClientReceiver(ClientReceiver&& other) = delete;
 
     /* Deshabilitamos el operador= para movimiento. */
-    ClientTalker& operator=(ClientTalker&& other) = delete;
+    ClientReceiver& operator=(ClientReceiver&& other) = delete;
 
     /**
-     * Descripción: poner a correr al clienttalker.
+     * Descripción: poner a correr al clientareceiver
      *
      * Parámetros: -
      *
@@ -54,20 +53,21 @@ class ClientTalker {
     void run();
 
     /**
-     * Descripción: checkar estado del clienttalker.
+     * Descripción: frenar el receiver.
      *
      * Parámetros: -
      *
-     * Retorno: true si el clienttalker sigue corriendo, si no false.
+     * Retorno: -
      *
      */
-    bool isRunning();
+    void stopRunning();
+
 
     /**
      * Descripción: destructor.
      */
-    ~ClientTalker();
+    ~ClientReceiver();
 };
 
 //-----------------------------------------------------------------------------
-#endif  //__CLIENTTALKER_H__
+#endif //__CLIENTRECEIVER_H__

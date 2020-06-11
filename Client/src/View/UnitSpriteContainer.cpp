@@ -36,6 +36,7 @@ void UnitSpriteContainer::_loadSpritesFromJson(const json& sprites,
         tmp.right_clips = sprites[i]["right_row_col_clips"][2];
 
         tmp.change_every_n_frames = sprites[i]["change_every_n_frames"];
+
         Texture texture;
 
         need_color_keying = sprites[i]["color_key"]["is_needed"];

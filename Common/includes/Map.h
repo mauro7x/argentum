@@ -24,6 +24,7 @@ enum MapLayer {
     COLLISION,
     INDOOR,
     PORTAL,
+    NPC,
     EXPECTED_LAYERS
 };
 
@@ -33,6 +34,7 @@ struct Tile {
     TileId ground_2_id;
     TileId decoration_id;
     TileId roof_id;
+    TileId npc_id;
 
     /* Metadata */
     bool collision;

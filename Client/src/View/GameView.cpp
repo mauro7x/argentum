@@ -25,6 +25,10 @@ void GameView::_init() {
                            SDL_GetError());
     }
 
+    /* Setteamos el frame-rate */
+    int fps = config["fps"];
+    rate = 1000 / fps;
+
     /* Iniciamos la ventana */
     window.init(config["window"]);
 
@@ -42,7 +46,52 @@ void GameView::_loadMedia() {
 }
 
 void GameView::_handleEvent(const SDL_Event& e) {
-    // player.handleEvent(e);
+    /* Movimiento */
+    int* cmd = NULL;
+
+    // If a key was pressed
+    if (e.type == SDL_KEYDOWN && e.key.repeat == 0) {
+        // Adjust the velocity
+        switch (e.key.keysym.sym) {
+            case SDLK_w:
+                cmd = new int(0);
+                fprintf(stderr, "Soy el cliente. Enviamos un %i.\n", *cmd);
+                requests.push(cmd);
+                break;
+
+            case SDLK_s:
+                cmd = new int(1);
+                fprintf(stderr, "Soy el cliente. Enviamos un %i.\n", *cmd);
+                requests.push(cmd);
+                break;
+
+            case SDLK_a:
+                cmd = new int(2);
+                fprintf(stderr, "Soy el cliente. Enviamos un %i.\n", *cmd);
+                requests.push(cmd);
+                break;
+
+            case SDLK_d:
+                cmd = new int(3);
+                fprintf(stderr, "Soy el cliente. Enviamos un %i.\n", *cmd);
+                requests.push(cmd);
+                break;
+        }
+    }
+    // If a key was released
+    else if (e.type == SDL_KEYUP && e.key.repeat == 0) {
+        // Adjust the velocity
+        switch (e.key.keysym.sym) {
+            case SDLK_w:
+            case SDLK_s:
+            case SDLK_a:
+            case SDLK_d:
+                cmd = new int(4);
+                fprintf(stderr, "Soy el cliente. Enviamos un %i.\n", *cmd);
+                requests.push(cmd);
+                break;
+        }
+    }
 }
 
 void GameView::_free() {
@@ -64,34 +113,46 @@ void GameView::_free() {
 
 GameView::GameView()
     : renderer(window, camera),
+      rate(0),
       sdl_running(false),
       img_running(false),
+      fullscreen(false),
       hud(&renderer),
       map(&renderer),
-
-      server(map), /* proxy server*/
-
       unit_sprites(&renderer),
-      player(&renderer, &unit_sprites),
+      player(&renderer, unit_sprites),
+
+      server(requests, broadcast),
+
       stage(hud, map, player) {}
 
 void GameView::operator()() {
     _init();
     _loadMedia();
+    server.start();
 
     //-------------------------------------------------------------------------
-    // Manejar el primer paquete recibido, crear unidades necesarias
+    // Manejar el primer paquete recibido, crear unidades
+    // necesarias
 
     // Hardcodeamos el primer paquete
-    PlayerData init_data = {3, 3, 100, 100, 2000, 2100, 1300, 1400, 1500, 1000};
+    PlayerData init_data = {0,    0,    DOWN, 100,  100, 2000,
+                            2100, 1300, 1400, 1500, 1000};
     player.init(init_data);
+    map.select(1); /* el id del mapa x ahora hardcodeado */
     //-------------------------------------------------------------------------
 
     bool quit = false;
     SDL_Event e;
+    PlayerData* update = NULL;
+
+    /* Variables para el control del frame-rate */
+    uint32_t t1 = SDL_GetTicks(), t2 = 0, behind = 0, lost = 0;
+    int rest = 0;
+    uint32_t it = 0;
 
     while (!quit) {
-        // Handle user-events on queue
+        /* Manejamos eventos del usuario */
         while (SDL_PollEvent(&e) != 0) {
             if (e.type == SDL_QUIT) {
                 quit = true;
@@ -100,35 +161,47 @@ void GameView::operator()() {
             _handleEvent(e);
         }
 
-        /*
-        // Handle server-updates on queue
-        while (hayan updates que realizar) {
-            realizar update en mis entidades
+        /* Manejamos updates del servidor */
+        while ((update = broadcast.pop())) {
+            fprintf(stderr, "Soy el cliente. Recibimos un update.\n");
+            player.update(*update);
+            delete update;
         }
-        */
 
-        // Game loop
+        /* Limpiamos la pantalla */
         renderer.clearScreen();
 
-        //---------------------------------------------------------------------
-        // ACCIONES
+        /* Acciones previas al renderizado*/
+        player.act(it);
+        camera.center(player.getBox(), map.widthInPx(), map.heightInPx());
 
-        map.select(0); /* el id del mapa x ahora hardcodeado */
-        player.act();
-        // camera.center(player.getBox(), map.widthInPx(), map.heightInPx());
-        camera.center(SDL_Rect({192, 192, 25, 50}), map.widthInPx(),
-                      map.heightInPx());
-        //---------------------------------------------------------------------
-
+        /* Renderizamos y presentamos la pantalla */
         stage.render();
-
         renderer.presentScreen();
 
-        // Delay para controlar el frame rate? por ahora usamos vsync
+        /* Controlamos el frame-rate */
+        t2 = SDL_GetTicks();
+        rest = rate - (t2 - t1);
+
+        if (rest < 0) {
+            behind = -rest;
+            lost = (behind - behind % rate);
+            rest = rate - behind % rate;
+            t1 += lost;
+            it += (lost / rate);
+        }
+
+        // fprintf(stderr, "Me duermo por %i ms. Iteracion: %i\n", rest, it +
+        // 1);
+        std::this_thread::sleep_for(std::chrono::milliseconds(rest));
+        t1 += rate;
+        it++;
     }
 
     // Avisarle al server que nos desconectamos?
 
+    server.kill();
+    server.join();
     _free();
 }
 

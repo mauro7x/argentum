@@ -1,4 +1,5 @@
 {
+    "fps": 60,
     "window": {
         "title": "Argentum Online",
         "w": 960,
@@ -13,7 +14,7 @@
         }
     },
     "renderer": {
-        "vsync": true,
+        "vsync": false,
         "draw_color": {
             "r": 256,
             "g": 256,
