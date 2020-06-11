@@ -3,8 +3,10 @@
 
 //-----------------------------------------------------------------------------
 #include <atomic>
+#include <list>
 
 #include "LoginValidator.h"
+#include "ClientLogin.h"
 #include "../Socket/SocketWrapper.h"
 #include "../../Threads/Thread/Thread.h"
 //-----------------------------------------------------------------------------
@@ -18,6 +20,7 @@ class Accepter : public Thread {
     SocketWrapper socket;
     std::atomic_bool keep_listening;
     std::atomic_bool is_running;
+    std::list<ClientLogin> active_login;
 
     public:
     /**

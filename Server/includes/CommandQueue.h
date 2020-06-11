@@ -16,7 +16,7 @@ public:
      *
      * Parámetros: id del player que usa la connexion
      */
-    CommandQueue(int player_id, Socket&& sock);
+    CommandQueue();
 
     /* Deshabilitamos el constructor por copia. */
     CommandQueue(const CommandQueue&) = delete;

@@ -5,3 +5,11 @@ ClientLogin::ClientLogin(ClientList& cli_list, LoginValidator& login_val, Socket
 	log_val = login_val;
 	client_list = cli_list;
 }
+
+void ClientLogin::run() {
+	if (login_val.)
+}
+
+ClientLogin::~ClientLogin() {
+	join();
+}

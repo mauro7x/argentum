@@ -8,6 +8,10 @@
 //-----------------------------------------------------------------------------
 // API Pública
 
+void Accepter::_joinAndFreeLoggedConnections() {
+    active_logins.remove_if();
+}
+
 Accepter::Accepter(const std::string& port, unsigned int max_clients_queued)
     : socket(port, max_clients_queued),
       keep_listening(true),

@@ -4,6 +4,7 @@
 #include "Command.h"
 #include "CommandQueue.h"
 #include "../../Abstractions/Threads/Thread/Thread.h"
+#include "../../Abstractions/Client-Server/Socket/SocketWrapper.h"
 #include <queue>
 #include <mutex>
 
@@ -20,7 +21,7 @@ public:
      *
      * Parámetros: id del player que usa la connexion
      */
-    ClientConnection(int player_id, Socket&& sock);
+    ClientConnection(int player_id, SocketWrapper&& sock);
 
     /* Deshabilitamos el constructor por copia. */
     ClientConnection(const ClientConnection&) = delete;

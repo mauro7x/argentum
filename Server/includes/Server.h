@@ -22,9 +22,9 @@ class Server {
     Accepter accepter;
 
     // metodos privados
+    void processPlayerTurns(int time_delta);
     void processPlayerCommands();
-    void processNpcTurns();
-    void passTurn();
+    void processNpcTurns(int time_delta);
 
    public:
     /**
