@@ -5,9 +5,11 @@
 
 #include "Kind.h"
 #include "Race.h"
-#include "Inventory.h"
 #include "States.h"
+#include "Inventory.h"
 #include "Equipment.h"
+#include "Level.h"
+#include "Item.h"
 #include "Wearable.h"
 
 #include "config_structs.h"
@@ -16,23 +18,25 @@
  * Representa al ente manejado por el jugador.
  * 
  *  -Se caracteriza mediante una Raza y Clase.
- *  -Tiene vida y mana.
+ *  -Tiene vida y mana, y sus respectivos limites.
  *  -Tiene un Estado [Vivo/Muerto], segun el cual
  * puede o no realizar ciertas acciones.
  *  -Tiene un Inventario en el cual almacena Items,
  * ya sea armas, baculos, pociones, o elementos de defensa.
- *  -Tiene un equipamiento con los elementos de ataque y defensa que
+ *  -Tiene un Equipamiento con los elementos de ataque y defensa que
  * porta.
  */
 class Character {
     private:
         unsigned int health, mana;
+        const unsigned int intelligence, constitution, strength, agility;
         unsigned int max_health, max_mana;
         Race race;
         Kind kind;
         State* state;
         Inventory inventory;
         Equipment equipment;
+        Level level;
 
     public:
         Character(const RaceCfg& race, const KindCfg& kind);
@@ -42,6 +46,8 @@ class Character {
         Character& operator=(const Character&) = delete;
         Character(Character&&) = delete;
         Character& operator=(Character&&) = delete;
+
+        void updateStatus(const unsigned int seconds_elapsed);
 
         /*
          * Recibe la posicion del item en el inventario

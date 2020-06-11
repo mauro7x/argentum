@@ -43,3 +43,7 @@ void Level::onKillUpdate(const unsigned int attacked_max_health,
                                       (unsigned int) 0);
     this->sumXP(gained_xp);
 }
+
+const unsigned int Level::getLevel() const {
+    return this->level;
+}

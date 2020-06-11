@@ -25,6 +25,8 @@ class Level {
         
         void onKillUpdate(const unsigned int attacked_max_health,
                           const unsigned int attacked_level);
+
+        const unsigned int getLevel() const;
 };
 
 #endif

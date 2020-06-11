@@ -25,12 +25,6 @@ class Kind {
         const unsigned int max_health_factor;
         const unsigned int meditation_factor;
         const unsigned int max_mana_factor;
-        
-        // Modificadores
-        const int intelligence;
-        const int constitution;
-        const int strength;
-        const int agility;
 
         Kind(const KindCfg& data);
         ~Kind();

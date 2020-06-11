@@ -92,8 +92,9 @@ struct RaceCfg {
     Id id;
     std::string name;
     uint8_t max_health_factor;
-    uint8_t health_recovery_factor;
     uint8_t max_mana_factor;
+    uint8_t health_recovery_factor;
+    uint8_t mana_recovery_factor;
     
     // Atributos iniciales
     uint8_t initial_mana;

@@ -1,18 +1,38 @@
+#include <algorithm>
+
 #include "../includes/Character.h"
 
 #include <iostream> //sacar
 
-//IMPLEMENTAR
-
 Character::Character(const RaceCfg& race, 
                      const KindCfg& kind):
-    health(kind.initial_health + race.initial_health),
-    mana(kind.initial_mana + race.initial_mana),
-    race(race),
-    kind(kind),
-    state(new Alive()) {}
+        health(kind.initial_health + race.initial_health),
+        mana(kind.initial_mana + race.initial_mana),
+        intelligence(kind.intelligence + race.intelligence),
+        constitution(kind.constitution + race.constitution),
+        strength(kind.strength + race.strength),
+        agility(kind.agility + race.agility),
+        race(race),
+        kind(kind),
+        state(new Alive()) {
+    this->updateStatus(0); // Set max_health, max_mana
+}
+
 Character::~Character() {
     delete state;
+}
+
+void Character::updateStatus(const unsigned int seconds_elapsed) {
+    this->max_health = this->constitution * this->kind.max_health_factor * 
+                       this->race.max_health_factor * this->level.getLevel();
+    this->max_mana = this->intelligence * this->kind.max_mana_factor * 
+                     this->race.max_mana_factor * this->level.getLevel();
+    
+    unsigned int health_update = this->race.health_recovery_factor * seconds_elapsed;
+    unsigned int mana_update = this->race.mana_recovery_factor * seconds_elapsed;
+
+    this->health = std::min(this->health + health_update, this->max_health);
+    this->mana = std::min(this->mana + mana_update, this->max_mana);
 }
 
 void Character::equip(unsigned int inventory_position) {
