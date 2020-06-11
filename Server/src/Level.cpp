@@ -1,6 +1,8 @@
 #include <math.h>
+#include <algorithm>
 
 #include "../includes/Level.h"
+#include "../includes/RandomNumberGenerator.h"
 
 #define INITIAL_LEVEL 1
 #define INITIAL_XP 0
@@ -22,4 +24,22 @@ void Level::sumXP(const unsigned int points) {
         level += 1;
         this->level_up_xp = calculateLevelUpXP();
     }
+}
+
+void Level::onAttackUpdate(const unsigned int damage, 
+                           const unsigned int attacked_level) {
+    unsigned int gained_xp = damage * 
+                             std::max(attacked_level - this->level + 10,
+                                      (unsigned int) 0);
+    this->sumXP(gained_xp);
+}
+
+void Level::onKillUpdate(const unsigned int attacked_max_health,
+                         const unsigned int attacked_level) {
+    RandomNumberGenerator random_number_generator;
+    unsigned int gained_xp = random_number_generator(0, 0.1) *
+                             attacked_max_health *
+                             std::max(attacked_level - this->level + 10,
+                                      (unsigned int) 0);
+    this->sumXP(gained_xp);
 }
