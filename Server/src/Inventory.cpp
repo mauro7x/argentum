@@ -1,6 +1,5 @@
-#include <math.h>
-
 #include "../includes/Inventory.h"
+#include "../includes/Formulas.h"
 
 #include <iostream> // Para testear
 
@@ -25,8 +24,10 @@ Inventory::~Inventory() {
 }
 
 void Inventory::updateMaxAmountsOfGold() {
-    this->max_safe_gold = 100 * pow(this->character_level.getLevel(), 1.1);
-    this->max_excess_gold = max_safe_gold * 0.5;
+    this->max_safe_gold = Formulas::calculateMaxSafeGold(
+                            this->character_level.getLevel());
+    this->max_excess_gold = Formulas::calculateMaxExcessGold(
+                                this->max_safe_gold);
 }
 
 const unsigned int Inventory::getNextFreeSlot() const {

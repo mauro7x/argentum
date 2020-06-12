@@ -34,6 +34,12 @@ class Formulas {
 
         static const bool calculateAttackEluding(
             const unsigned int agility);
+        
+        // Inventory
+        static const unsigned int calculateMaxSafeGold(
+            const unsigned int level);
+        static const unsigned int calculateMaxExcessGold(
+            const unsigned int max_safe_gold);
 };
 
 #endif

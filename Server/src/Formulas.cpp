@@ -59,3 +59,13 @@ const bool Formulas::calculateAttackEluding(
     RandomNumberGenerator random_number_generator;
     return (std::pow(random_number_generator(0, 1), agility) < 0.001);
 }
+
+const unsigned int Formulas::calculateMaxSafeGold(
+        const unsigned int level) {
+    return 100 * pow(level, 1.1);
+}
+
+const unsigned int Formulas::calculateMaxExcessGold(
+            const unsigned int max_safe_gold) {
+    return max_safe_gold * 0.5;
+}
