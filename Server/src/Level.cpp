@@ -2,13 +2,13 @@
 #include <algorithm>
 
 #include "../includes/Level.h"
-#include "../includes/RandomNumberGenerator.h"
+#include "../includes/Formulas.h"
 
 #define INITIAL_LEVEL 1
 #define INITIAL_XP 0
 
 const unsigned int Level::calculateLevelUpXP() const {
-    return 1000 * pow(this->level, 1.8);
+    return Formulas::calculateLevelUpXP(this->level);
 }
 
 Level::Level():
@@ -20,6 +20,8 @@ Level::~Level() {}
 
 void Level::sumXP(const unsigned int points) {
     this->xp += points;
+
+    // Subo de nivel si alcanzo el umbral
     while (this->xp >= this->level_up_xp) {
         level += 1;
         this->level_up_xp = calculateLevelUpXP();
@@ -28,19 +30,17 @@ void Level::sumXP(const unsigned int points) {
 
 void Level::onAttackUpdate(const unsigned int damage, 
                            const unsigned int attacked_level) {
-    unsigned int gained_xp = damage * 
-                             std::max(attacked_level - this->level + 10,
-                                      (unsigned int) 0);
+    unsigned int gained_xp = Formulas::calculateAttackXPGain(damage, 
+                                attacked_level, this->level);
+
     this->sumXP(gained_xp);
 }
 
 void Level::onKillUpdate(const unsigned int attacked_max_health,
                          const unsigned int attacked_level) {
-    RandomNumberGenerator random_number_generator;
-    unsigned int gained_xp = random_number_generator(0, 0.1) *
-                             attacked_max_health *
-                             std::max(attacked_level - this->level + 10,
-                                      (unsigned int) 0);
+    unsigned int gained_xp = Formulas::calculateKillXPGain(attacked_max_health,
+                                attacked_level, this->level);
+
     this->sumXP(gained_xp);
 }
 
