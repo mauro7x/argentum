@@ -120,7 +120,7 @@ GameView::GameView()
       hud(&renderer),
       map(&renderer),
       unit_sprites(&renderer),
-      player(&renderer, unit_sprites),
+      player(&renderer, &unit_sprites),
 
       server(requests, broadcast),
 
@@ -136,8 +136,8 @@ void GameView::operator()() {
     // necesarias
 
     // Hardcodeamos el primer paquete
-    PlayerData init_data = {0,    0,    DOWN, 100,  100, 2000,
-                            2100, 1300, 1400, 1500, 1000};
+    PlayerData init_data = {
+        {1, 0, 0, DOWN}, 100, 100, 100, 2000, 2100, 1300, 1400, 1500, 1000};
     player.init(init_data);
     map.select(1); /* el id del mapa x ahora hardcodeado */
     //-------------------------------------------------------------------------
