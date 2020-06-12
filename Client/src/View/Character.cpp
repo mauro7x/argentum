@@ -43,13 +43,13 @@ Character::Character(Character&& other) : Unit(std::move(other)) {
 
 Character& Character::operator=(Character&& other) {
     Unit::operator=(std::move(other));
-
     head_id = other.head_id;
     body_id = other.body_id;
     helmet_id = other.helmet_id;
     armour_id = other.armour_id;
     shield_id = other.shield_id;
     weapon_id = other.weapon_id;
+
     return *this;
 }
 
