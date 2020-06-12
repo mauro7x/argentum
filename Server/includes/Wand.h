@@ -24,6 +24,7 @@ class Wand: public Wearable {
         // Mantener abstraccion item y Wearable.
 
         virtual const unsigned int use(Character& user) override;
+        const unsigned int getRange() const override;
 };
 
 #endif

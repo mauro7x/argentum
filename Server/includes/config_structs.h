@@ -91,9 +91,20 @@ struct PotionCfg {
 struct RaceCfg {
     Id id;
     std::string name;
-    uint8_t health;
-    uint8_t recovery;
-    uint8_t mana;
+    uint8_t max_health_factor;
+    uint8_t max_mana_factor;
+    uint8_t health_recovery_factor;
+    uint8_t mana_recovery_factor;
+    
+    // Atributos iniciales
+    uint8_t initial_mana;
+    uint8_t initial_health;
+    
+    // Modificadores
+    int intelligence;
+    int constitution;
+    int strength;
+    int agility;
 };
 
 //-----------------------------------------------------------------------------
@@ -104,9 +115,19 @@ struct RaceCfg {
 struct KindCfg {
     Id id;
     std::string name;
-    uint8_t health;
-    uint8_t meditation;
-    uint8_t mana;
+    uint8_t max_health_factor;
+    uint8_t meditation_factor;
+    uint8_t max_mana_factor;
+
+    // Atributos iniciales
+    uint8_t initial_mana;
+    uint8_t initial_health;
+
+    // Modificadores
+    int intelligence;
+    int constitution;
+    int strength;
+    int agility;
 };
 
 //-----------------------------------------------------------------------------

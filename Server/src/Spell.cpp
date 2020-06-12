@@ -20,12 +20,11 @@ Spell* SpellFactory::newSpell(const SpellCfg& data) {
     }
 }
 
-AttackingSpell::AttackingSpell(const SpellCfg& data): Spell(data.id, 
-                                                      data.name, 
-                                                      data.mana_usage_cost),
-                                                attack_distance(data.attack_distance), 
-                                                min_damage(data.min_damage),
-                                                max_damage(data.max_damage) {}
+AttackingSpell::AttackingSpell(const SpellCfg& data): 
+    Spell(data.id, data.name, data.mana_usage_cost),
+    attack_distance(data.attack_distance), 
+    min_damage(data.min_damage),
+    max_damage(data.max_damage) {}
 AttackingSpell::~AttackingSpell() {}
 
 const unsigned int AttackingSpell::cast(Character& caster) {
@@ -37,10 +36,13 @@ const unsigned int AttackingSpell::cast(Character& caster) {
     return random_number_generator(min_damage, max_damage);
 }
 
-HealingSpell::HealingSpell(const SpellCfg& data): Spell(data.id, 
-                                                  data.name, 
-                                                  data.mana_usage_cost),
-                                            recovery_points(data.recovery_points) {}
+const unsigned int AttackingSpell::getRange() const {
+    return this->attack_distance;
+}
+
+HealingSpell::HealingSpell(const SpellCfg& data): 
+    Spell(data.id, data.name, data.mana_usage_cost),
+    recovery_points(data.recovery_points) {}
 HealingSpell::~HealingSpell() {}
 
 const unsigned int HealingSpell::cast(Character& caster) {
@@ -49,7 +51,12 @@ const unsigned int HealingSpell::cast(Character& caster) {
     caster.consumeMana(this->mana_usage_cost);
 
     caster.recoverHealth(this->recovery_points);
+
     return 0; // No hace daño otro jugador.
+}
+
+const unsigned int HealingSpell::getRange() const {
+    return 0; // Se lanza sobre si mismo.
 }
 
 const char* UnknownSpellTypeException::what() const noexcept {

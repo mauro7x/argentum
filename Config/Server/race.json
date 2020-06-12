@@ -2,29 +2,57 @@
     {
         "id": 100,
         "name": "Humano",
-        "health": 10,
-        "recovery": 10,
-        "mana": 10
+        "max_health_factor": 10,
+        "max_mana_factor": 10,
+        "health_recovery_factor": 10,
+        "mana_recovery_factor": 10,
+        "initial_mana": 100,
+        "initial_health": 100,
+        "intelligence": 0,
+        "constitution": 2,
+        "strength": 1,
+        "agility": 1
     },
     {
         "id": 101,
         "name": "Elfos",
-        "health": 10,
-        "recovery": 10,
-        "mana": 10
+        "max_health_factor": 10,
+        "max_mana_factor": 10,
+        "health_recovery_factor": 10,
+        "mana_recovery_factor": 10,
+        "initial_mana": 100,
+        "initial_health": 100,
+        "intelligence": 2,
+        "constitution": 1,
+        "strength": 1,
+        "agility": 3
     },
     {
         "id": 102,
         "name": "Enanos",
-        "health": 10,
-        "recovery": 10,
-        "mana": 10
+        "max_health_factor": 10,
+        "max_mana_factor": 10,
+        "health_recovery_factor": 10,
+        "mana_recovery_factor": 10,
+        "initial_mana": 100,
+        "initial_health": 100,
+        "intelligence": 1,
+        "constitution": 3,
+        "strength": 3,
+        "agility": 0
     },
     {
         "id": 103,
         "name": "Gnomos",
-        "health": 10,
-        "recovery": 10,
-        "mana": 10
+        "max_health_factor": 10,
+        "max_mana_factor": 10,
+        "health_recovery_factor": 10,
+        "mana_recovery_factor": 10,
+        "initial_mana": 100,
+        "initial_health": 100,
+        "intelligence": 4,
+        "constitution": 1,
+        "strength": 1,
+        "agility": 3
     }
 ]
