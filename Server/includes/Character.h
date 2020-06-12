@@ -38,8 +38,6 @@ class Character {
         Inventory inventory;
         Equipment equipment;
 
-        void die();
-
     public:
         Character(const RaceCfg& race, const KindCfg& kind);
         ~Character();
@@ -137,6 +135,8 @@ class Character {
          * que genera. Si no tiene arma equipada, retorna 0.
          */
         const unsigned int attack();
+
+        void die();
 
         void debug();
 };
