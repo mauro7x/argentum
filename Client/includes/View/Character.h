@@ -22,7 +22,8 @@ class Character : public Unit {
    public:
     /* Constructor */
     Character(Renderer* renderer, UnitSpriteContainer* sprites,
-              const int tile_w, const int tile_h, const int tile_movement_time);
+              const int tile_w, const int tile_h,
+              const float tile_movement_time);
 
     /* Deshabilitamos el constructor por copia. */
     Character(const Character&) = delete;

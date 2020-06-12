@@ -23,7 +23,7 @@ void Character::_copyData(const CharacterData& init_data) {
 
 Character::Character(Renderer* renderer, UnitSpriteContainer* sprites,
                      const int tile_w, const int tile_h,
-                     const int tile_movement_time)
+                     const float tile_movement_time)
     : Unit(renderer, sprites, tile_w, tile_h, tile_movement_time),
       head_id(0),
       body_id(0),
@@ -65,10 +65,6 @@ void Character::init(const CharacterData& init_data) {
     x = tile_w * data.x_tile;
     y = tile_h * data.y_tile;
 
-    /* Nos fijamos si somos demasiado grandes para el tile. */
-    /* Usamos el cuerpo como el sprite más ancho. */
-    _setScaleFactor(g_sprites->get(body_id));
-
     /* Completamos la inicialización */
     state = READY;
 }
@@ -81,9 +77,6 @@ void Character::update(const CharacterData& updated_data) {
 
     /* Actualizamos la data */
     _copyData(updated_data);
-
-    /* Chequeamos si tras el update nos tenemos que acomodar al tile */
-    _setScaleFactor(g_sprites->get(body_id));
 
     /* Iniciamos el movimiento si nuestra posición en pixeles no coincide*/
     _setMovementSpeed();

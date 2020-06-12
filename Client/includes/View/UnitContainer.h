@@ -26,11 +26,17 @@ class UnitContainer {
     std::unordered_map<Id, ConcreteUnit> content;
     int tile_w, tile_h;
     float tile_movement_time;
+    bool initialized;
 
    public:
     /* Constructor */
     UnitContainer(Renderer* renderer, UnitSpriteContainer* sprites)
-        : g_renderer(renderer), g_sprites(sprites) {}
+        : g_renderer(renderer),
+          g_sprites(sprites),
+          tile_w(0),
+          tile_h(0),
+          tile_movement_time(0),
+          initialized(false) {}
 
     /* Deshabilitamos el constructor por copia. */
     UnitContainer(const UnitContainer&) = delete;
@@ -52,10 +58,15 @@ class UnitContainer {
         this->tile_w = tile_w;
         this->tile_h = tile_h;
         this->tile_movement_time = tile_movement_time;
+        this->initialized = true;
     }
 
     /* Agrega una nueva unidad con el id y la data recibida. */
     void add(const Id id, const Data& init_data) {
+        if (!initialized) {
+            throw Exception("Container has not been initialized.");
+        }
+
         if (content.count(id) > 0) {
             throw Exception("ID already taken by another unit (id repeated).");
         }
@@ -69,6 +80,10 @@ class UnitContainer {
     /* Actualiza la unidad con la data recibida. */
     /* Si el id es inválido lanza una excepción informándolo. */
     void update(const Id id, const Data& updated_data) {
+        if (!initialized) {
+            throw Exception("Container has not been initialized.");
+        }
+
         if (content.count(id) == 0) {
             throw Exception("Attempt to update unknown unit (id is invalid).");
         }
@@ -76,9 +91,27 @@ class UnitContainer {
         content.at(id).update(updated_data);
     }
 
+    /* Renderiza la unidad. */
+    /* Si el id es inválido lanza una excepción informándolo. */
+    void render(const Id id) {
+        if (!initialized) {
+            throw Exception("Container has not been initialized.");
+        }
+
+        if (content.count(id) == 0) {
+            throw Exception("Attempt to render unknown unit (id is invalid).");
+        }
+
+        content.at(id).render();
+    }
+
     /* Elimina la unidad. */
     /* Si el id es inválido lanza una excepción informándolo. */
     void remove(const Id id) {
+        if (!initialized) {
+            throw Exception("Container has not been initialized.");
+        }
+
         if (content.count(id) == 0) {
             throw Exception("Attempt to remove unknown unit (id is invalid).");
         }
@@ -88,6 +121,10 @@ class UnitContainer {
 
     /* Elimina todas las unidades. */
     void clear() {
+        if (!initialized) {
+            throw Exception("Container has not been initialized.");
+        }
+
         content.clear();
     }
 

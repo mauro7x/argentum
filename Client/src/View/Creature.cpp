@@ -18,7 +18,7 @@ void Creature::_copyData(const CreatureData& init_data) {
 
 Creature::Creature(Renderer* renderer, UnitSpriteContainer* sprites,
                    const int tile_w, const int tile_h,
-                   const int tile_movement_time)
+                   const float tile_movement_time)
     : Unit(renderer, sprites, tile_w, tile_h, tile_movement_time),
       creature_id(0) {}
 
@@ -45,9 +45,6 @@ void Creature::init(const CreatureData& init_data) {
     x = tile_w * data.x_tile;
     y = tile_h * data.y_tile;
 
-    /* Nos fijamos si somos demasiado grandes para el tile. */
-    _setScaleFactor(g_sprites->get(creature_id));
-
     /* Completamos la inicialización */
     state = READY;
 }
@@ -61,9 +58,6 @@ void Creature::update(const CreatureData& updated_data) {
     /* Actualizamos la data */
     _copyData(updated_data);
 
-    /* Chequeamos si tras el update nos tenemos que acomodar al tile */
-    _setScaleFactor(g_sprites->get(creature_id));
-
     /* Iniciamos el movimiento si nuestra posición en pixeles no coincide*/
     _setMovementSpeed();
 }
@@ -73,6 +67,8 @@ void Creature::render() const {
         throw Exception(
             "Creature has not been initialized (render requested).");
     }
+
+    // printInfo();
 
     // Cuerpo
     _render(g_sprites->get(creature_id));

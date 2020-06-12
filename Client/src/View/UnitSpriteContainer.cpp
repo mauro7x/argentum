@@ -76,17 +76,9 @@ void UnitSpriteContainer::loadMedia() {
 }
 
 const Sprite& UnitSpriteContainer::get(const Id id) const {
-    fprintf(stderr, "Entrada 1\n");
-    content.count(200);
-    fprintf(stderr, "Entrada 2\n");
-    content.count(400);
-    fprintf(stderr, "Entrada 3\n");
-
     if (content.count(id) == 0) {
         throw Exception("Unknown sprite id.");
     }
-
-    fprintf(stderr, "Entrada 4\n");
 
     return content.at(id);
 }

@@ -4,12 +4,6 @@
 //-----------------------------------------------------------------------------
 #include <SDL2/SDL.h>
 
-//#include <cstdint>
-//#include <fstream>
-
-//#include "../../../Common/includes/paths.h"
-//#include "../../../Common/includes/JSON.h"
-
 #include "../../../Common/includes/Exceptions/Exception.h"
 #include "../../../Common/includes/UnitData.h"
 #include "Renderer.h"
@@ -44,7 +38,6 @@ class Unit {
     /* Componentes para el renderizado gráfico */
     float x, y;               /* posición en pixeles */
     float tile_movement_time; /* tiempo necesario para mover un tile */
-    float scale_factor;       /* factor para reescalar */
     float x_vel, y_vel;       /* velocidades en cada componente*/
     Uint32 last_moved;        /* ultimo movimiento */
     int last_tick;            /* ultimo tick recibido */
@@ -61,14 +54,13 @@ class Unit {
     /* Calcula la posición y del clip a renderizar */
     int _calculateSpriteY(const Sprite& sprite) const;
 
-    /* Settea el scale factor para fittear el sprite dado en el tile (a lo
-     * ancho) */
-    void _setScaleFactor(const Sprite& sprite);
-
     /* Renderiza un sprite agregando el offset necesario */
     void _render(const Sprite& sprite) const;
 
    public:
+    /* Constructor por defecto para poder almacenarlas en maps */
+    Unit();
+
     /* Constructor */
     Unit(Renderer* renderer, UnitSpriteContainer* sprites, const int tile_w = 0,
          const int tile_h = 0, const int tile_movement_time = 0);

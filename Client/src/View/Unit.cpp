@@ -97,19 +97,10 @@ int Unit::_calculateSpriteY(const Sprite& sprite) const {
         "Orientation invalid (trying to calculate sprite y-position).");
 }
 
-void Unit::_setScaleFactor(const Sprite& sprite) {
-    int body_w = sprite.clip_w;
-    if (body_w > tile_w) {
-        scale_factor = tile_w / body_w;
-    } else {
-        scale_factor = 1.0;
-    }
-}
-
 void Unit::_render(const Sprite& sprite) const {
     // Paso 1: centramos el sprite en el tile
-    int x = (tile_w - (sprite.clip_w * scale_factor)) / 2;
-    int y = (tile_h * (0.8)) - (sprite.clip_h * scale_factor);
+    int x = (tile_w - (sprite.clip_w)) / 2;
+    int y = (tile_h * (0.8)) - (sprite.clip_h);
 
     // Paso 2: agregamos el offset de la unidad en el mapa
     x += (int)this->x;
@@ -118,8 +109,7 @@ void Unit::_render(const Sprite& sprite) const {
     // Paso 3: armamos los SDL_Rect de renderizado
     SDL_Rect render_quad, render_clip;
     SDL_Texture* texture;
-    render_quad = {x, y, (int)(sprite.clip_w * scale_factor),
-                   (int)(sprite.clip_h * scale_factor)};
+    render_quad = {x, y, (int)(sprite.clip_w), (int)(sprite.clip_h)};
     render_clip = {0, 0, sprite.clip_w, sprite.clip_h};
     render_clip.x = _calculateSpriteX(sprite);
     render_clip.y = _calculateSpriteY(sprite);
@@ -131,6 +121,8 @@ void Unit::_render(const Sprite& sprite) const {
 
 //-----------------------------------------------------------------------------
 // API Pública
+
+Unit::Unit() {}
 
 Unit::Unit(Renderer* renderer, UnitSpriteContainer* sprites, const int tile_w,
            const int tile_h, const int tile_movement_time)
@@ -152,7 +144,7 @@ Unit::Unit(Unit&& other) {
     g_renderer = other.g_renderer;
     other.g_renderer = NULL;
     g_sprites = other.g_sprites;
-    g_sprites = NULL;
+    other.g_sprites = NULL;
     tile_w = other.tile_w;
     tile_h = other.tile_h;
     data = other.data;
@@ -160,7 +152,6 @@ Unit::Unit(Unit&& other) {
     x = other.x;
     y = other.y;
     tile_movement_time = other.tile_movement_time;
-    scale_factor = other.scale_factor;
     x_vel = other.x_vel;
     y_vel = other.y_vel;
     last_moved = other.last_moved;
@@ -179,7 +170,6 @@ Unit& Unit::operator=(Unit&& other) {
     x = other.x;
     y = other.y;
     tile_movement_time = other.tile_movement_time;
-    scale_factor = other.scale_factor;
     x_vel = other.x_vel;
     y_vel = other.y_vel;
     last_moved = other.last_moved;

@@ -4,8 +4,10 @@
 // Métodos privados
 
 void GameView::_init() {
-    /* Cargamos el archivo de configuración */
-    json config = JSON::loadJsonFile(GUI_CONFIG_FILEPATH);
+    /* Cargamos los archivos de configuración */
+    json gui_config = JSON::loadJsonFile(GUI_CONFIG_FILEPATH);
+    json map_config = JSON::loadJsonFile(MAPS_FILEPATH);
+    json common_config = JSON::loadJsonFile(COMMON_CONFIG_FILEPATH);
 
     /* Iniciamos el sistema de SDL */
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -26,17 +28,26 @@ void GameView::_init() {
     }
 
     /* Setteamos el frame-rate */
-    int fps = config["fps"];
+    int fps = gui_config["fps"];
     rate = 1000 / fps;
 
     /* Iniciamos la ventana */
-    window.init(config["window"]);
+    window.init(gui_config["window"]);
 
     /* Iniciamos el renderer */
-    renderer.init(config["renderer"]);
+    renderer.init(gui_config["renderer"]);
 
     /* Iniciamos la cámara */
-    camera.init(config["camera"]);
+    camera.init(gui_config["camera"]);
+
+    /* Iniciamos los contenedores */
+    int tile_w = map_config["tilewidth"];
+    int tile_h = map_config["tileheight"];
+    int speed = common_config["tiles_per_sec"]["character_speed"];
+    float tile_movement_time = 1000 / speed;
+
+    characters.init(tile_w, tile_h, tile_movement_time);
+    creatures.init(tile_w, tile_h, tile_movement_time);
 }
 
 void GameView::_loadMedia() {
@@ -116,11 +127,13 @@ GameView::GameView()
       rate(0),
       sdl_running(false),
       img_running(false),
-      fullscreen(false),
       hud(&renderer),
       map(&renderer),
       unit_sprites(&renderer),
       player(&renderer, &unit_sprites),
+
+      characters(&renderer, &unit_sprites),
+      creatures(&renderer, &unit_sprites),
 
       server(requests, broadcast),
 
@@ -137,9 +150,13 @@ void GameView::operator()() {
 
     // Hardcodeamos el primer paquete
     PlayerData init_data = {
-        {1, 0, 0, DOWN}, 100, 100, 100, 2000, 2100, 1300, 1400, 1500, 1000};
+        {1, 0, 0, DOWN}, 100, 100, 100, 2000, 2100, 1300, 1400, 1500, 0};
     player.init(init_data);
     map.select(1); /* el id del mapa x ahora hardcodeado */
+
+    CreatureData data = {{10, 3, 3, DOWN}, 300};
+    creatures.add(data.basic_data.gid, data);
+
     //-------------------------------------------------------------------------
 
     bool quit = false;
@@ -150,6 +167,8 @@ void GameView::operator()() {
     uint32_t t1 = SDL_GetTicks(), t2 = 0, behind = 0, lost = 0;
     int rest = 0;
     uint32_t it = 0;
+
+    // const Creature& monstruo = creatures.getCreature(95);
 
     while (!quit) {
         /* Manejamos eventos del usuario */
@@ -177,6 +196,7 @@ void GameView::operator()() {
 
         /* Renderizamos y presentamos la pantalla */
         stage.render();
+        creatures.render(10);
         renderer.presentScreen();
 
         /* Controlamos el frame-rate */

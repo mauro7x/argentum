@@ -58,10 +58,6 @@ void Player::init(const PlayerData& init_data) {
     int speed = common_config["tiles_per_sec"]["character_speed"]; /* tiles/s */
     tile_movement_time = 1000 / speed;                             /* ms */
 
-    /* Nos fijamos si somos demasiado grandes para el tile. */
-    /* Usamos el cuerpo como el sprite más ancho. */
-    _setScaleFactor(g_sprites->get(body_id));
-
     /* Completamos la inicialización */
     state = READY;
 }
@@ -73,9 +69,6 @@ void Player::update(const PlayerData& updated_data) {
 
     /* Actualizamos la data */
     _copyData(updated_data);
-
-    /* Chequeamos si tras el update nos tenemos que acomodar al tile */
-    _setScaleFactor(g_sprites->get(body_id));
 
     /* Iniciamos el movimiento si nuestra posición en pixeles no coincide*/
     _setMovementSpeed();
@@ -132,8 +125,7 @@ SDL_Rect Player::getBox() const {
 
     int body_w = g_sprites->get(body_id).clip_w;
     int head_h = g_sprites->get(head_id).clip_h;
-    return SDL_Rect({(int)x, (int)y, (int)(body_w * scale_factor),
-                     (int)(head_h * scale_factor)});
+    return SDL_Rect({(int)x, (int)y, body_w, head_h});
 }
 
 Player::~Player() {}
