@@ -3,9 +3,9 @@
 // ----------------------------------------------------------------------------
 #include <stdio.h>
 
+#include <exception>
 #include <string>
 
-#include "../../Common/includes/Exceptions/Exception.h"
 #include "../includes/Server.h"
 #include "../includes/defs.h"
 // ----------------------------------------------------------------------------
@@ -24,7 +24,7 @@ int main(int argc, char* argv[]) {
         Server server(port, MAX_CLIENTS_QUEUED);
         server.run();
 
-    } catch (const Exception& e) {
+    } catch (const std::exception& e) {
         fprintf(stderr, "%s\n", e.what());
         return ERROR;
     } catch (...) {
