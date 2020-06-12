@@ -32,10 +32,12 @@ void Inventory::updateMaxAmountsOfGold() {
 
 const unsigned int Inventory::getNextFreeSlot() const {
     unsigned int pos = 0;
+
     for (; pos < this->container.size(); ++pos) {
         if (!container[pos])
             break;
     }
+
     return pos;
 }
 
@@ -46,6 +48,7 @@ const unsigned int Inventory::addItem(Item* item) {
     unsigned int position = getNextFreeSlot();
     this->container[position] = item;
     ++this->items_quantity;
+
     return position;
 }
 
@@ -53,9 +56,11 @@ Item* Inventory::gatherItem(const unsigned int position) {
     if (position >= N_INVENTORY_ITEMS) {
         throw InvalidPositionException();
     }
+
     Item* item = this->container[position];
     this->container[position] = nullptr;
     --this->items_quantity;
+
     return item;
 }
 
@@ -66,6 +71,7 @@ unsigned int Inventory::addGold(const unsigned int amount,
 
     if (slot_gold < slot_max_gold) {
         unsigned int slot_gold_capacity = slot_max_gold - slot_gold;
+
         if (slot_gold_capacity >= amount) {
             slot_gold += amount;
             added_gold = amount;
@@ -81,6 +87,7 @@ unsigned int Inventory::addGold(const unsigned int amount,
 unsigned int Inventory::gatherGold(const unsigned int amount,
                                    unsigned int& slot_gold) {
     unsigned int gathered_gold = 0;
+
     if (slot_gold >= amount) {
         gathered_gold = amount;
         slot_gold -= amount;
@@ -106,8 +113,10 @@ void Inventory::gatherGold(const unsigned int amount) {
     if ((this->safe_gold + this->excess_gold) < amount) {
         throw InsufficientGoldException();
     }
+
     unsigned int gathered = gatherGold(amount, this->excess_gold);
     unsigned int remaining = amount - gathered;
+    
     if (remaining) {
         gatherGold(amount - gathered, this->safe_gold);
     }
