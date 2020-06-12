@@ -2,7 +2,7 @@
 #include <math.h>
 
 #include "../includes/Character.h"
-#include "../includes/RandomNumberGenerator.h"
+#include "../includes/Formulas.h"
 
 #include <iostream> //sacar
 
@@ -26,13 +26,21 @@ Character::~Character() {
 }
 
 void Character::updateStatus(const unsigned int seconds_elapsed) {
-    this->max_health = this->constitution * this->kind.max_health_factor * 
-                       this->race.max_health_factor * this->level.getLevel();
-    this->max_mana = this->intelligence * this->kind.max_mana_factor * 
-                     this->race.max_mana_factor * this->level.getLevel();
+    this->max_health = Formulas::calculateMaxHealth(this->constitution,
+                        this->kind.max_health_factor, 
+                        this->race.max_health_factor, 
+                        this->level.getLevel());
+    this->max_mana = Formulas::calculateMaxMana(this->intelligence,
+                        this->kind.max_mana_factor,
+                        this->race.max_mana_factor,
+                        this->level.getLevel());
     
-    unsigned int health_update = this->race.health_recovery_factor * seconds_elapsed;
-    unsigned int mana_update = this->race.mana_recovery_factor * seconds_elapsed;
+    unsigned int health_update = Formulas::calculateHealthTimeRecovery(
+                                    this->race.health_recovery_factor,
+                                    seconds_elapsed);
+    unsigned int mana_update = Formulas::calculateManaTimeRecovery(
+                                    this->race.mana_recovery_factor,
+                                    seconds_elapsed);
 
     this->health = std::min(this->health + health_update, this->max_health);
     this->mana = std::min(this->mana + mana_update, this->max_mana);
@@ -69,8 +77,10 @@ void Character::recoverMana(const unsigned int points) {
 }
 
 void Character::consumeMana(const unsigned int points) {
-    if (this->mana < points)
+    if (this->mana < points) {
         throw InsufficientManaException();
+    }
+
     this->mana -= points;
 }
 
@@ -95,9 +105,8 @@ const unsigned int Character::receiveAttack(const unsigned int damage,
     unsigned int damage_received = 0;
 
     if (eludible) {
-        RandomNumberGenerator random_number_generator;
-        if (std::pow(random_number_generator(0, 1), 
-                     this->agility) < 0.001) {
+        const bool is_eluded = Formulas::calculateAttackEluding(this->agility);
+        if (is_eluded) {
             // El ataque es esquivado, no se recibe daño
             return damage_received;
         }
@@ -117,6 +126,7 @@ const unsigned int Character::receiveAttack(const unsigned int damage,
 void Character::die() {
     delete this->state;
     this->state = new Dead();
+    // DROPEAR ORO EN EXCESO E ITEMS DEL INVENTARIO
 }
 
 const char* InsufficientManaException::what() const noexcept {
