@@ -24,6 +24,7 @@ class Weapon: public Wearable {
         // Mantener abstraccion Item y Wearable.
         
         virtual const unsigned int use(Character& user) override;
+        virtual const unsigned int getRange() const override;
 };
 
 #endif

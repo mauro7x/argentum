@@ -27,6 +27,7 @@ class Wearable: public Item {
         virtual const unsigned int use(Character& user) = 0;
         
         const WearableType getType() const;
+        virtual const unsigned int getRange() const;
 };
 
 #endif
