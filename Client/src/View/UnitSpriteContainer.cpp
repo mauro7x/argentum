@@ -50,7 +50,7 @@ void UnitSpriteContainer::_loadSpritesFromJson(const json& sprites,
         }
 
         tmp.texture = std::move(texture);
-        content[id] = std::move(tmp);
+        content.emplace(id, std::move(tmp));
     }
 }
 
@@ -72,12 +72,21 @@ void UnitSpriteContainer::loadMedia() {
     _loadSpritesFromJson(sprites["pj"]["armour"], dirpath);
     _loadSpritesFromJson(sprites["pj"]["shield"], dirpath);
     _loadSpritesFromJson(sprites["pj"]["weapon"], dirpath);
+    _loadSpritesFromJson(sprites["npc"], dirpath);
 }
 
 const Sprite& UnitSpriteContainer::get(const Id id) const {
+    fprintf(stderr, "Entrada 1\n");
+    content.count(200);
+    fprintf(stderr, "Entrada 2\n");
+    content.count(400);
+    fprintf(stderr, "Entrada 3\n");
+
     if (content.count(id) == 0) {
         throw Exception("Unknown sprite id.");
     }
+
+    fprintf(stderr, "Entrada 4\n");
 
     return content.at(id);
 }
