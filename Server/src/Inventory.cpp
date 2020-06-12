@@ -4,10 +4,10 @@
 #include <iostream> // Para testear
 
 Inventory::Inventory(Level& character_level): 
-                        character_level(character_level),
                         items_quantity(0),
                         safe_gold(0),
-                        excess_gold(0) {
+                        excess_gold(0),
+                        character_level(character_level) {
     for (unsigned int i = 0; i < container.size(); ++i) {
         container[i] = nullptr;
     }
