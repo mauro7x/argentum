@@ -117,6 +117,8 @@ class Character {
          * Metodo llamado al usar baculos.
          */
         void doMagic();
+
+        void beAttacked();
         
         /*
          * Recibe los puntos de daño lanzados y si se trata de un
@@ -174,5 +176,10 @@ class TooHighLevelDifferenceOnAttackException: std::exception {
     public:
         virtual const char* what() const noexcept;
 };
+
+class StateOfCharacterCantBeAttackedException: std::exception {
+    public:
+        virtual const char* what() const noexcept;
+}ñ
 
 #endif

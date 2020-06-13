@@ -102,6 +102,12 @@ void Character::doMagic() {
     this->kind.doMagic();
 }
 
+void Character::beAttacked() {
+    if (!this->state->canBeAttacked()) {
+        throw StateOfCharacterCantBeAttackedException();
+    }
+}
+
 /*
  * Efectua un ataque a otro jugador.
  * 
@@ -116,7 +122,9 @@ void Character::doMagic() {
  *       TooHighLevelDifferenceOnAttackException si la diferencia de niveles es más
  * alta de la permitida para un ataque.
  *       NewbiesCantBeAttackedException si el jugador al que se quiere atacar es Newbie.
- *       InsufficientManaException
+ *       InsufficientManaException si no puede usar el hechizo debido a déficit de maná.
+ *       StateOfCharacterCantBeAttackedException si el jugador al que se quiere atacar
+ * tiene un estado en el que no puede ser atacado.
  */
 const unsigned int Character::attack(Character& attacked) {
     const unsigned int weapon_range = this->equipment.getAttackRange();
@@ -125,13 +133,17 @@ const unsigned int Character::attack(Character& attacked) {
         return this->equipment.useAttackItem(*this);
     }
 
+    // Notifico al estado del otro jugador que va a ser atacado.
+    // Si no esta vivo, lanza excepción StateOfCharacterCantBeAttackedException
+    attacked.beAttacked();
+
     // Verificacion de diferencia de niveles entre jugadores y newbie.
     if (attacked.isNewbie()) {
         throw NewbiesCantBeAttackedException();
     }
 
-    if (!Formulas::canAttackByLevel(this->level.getLevel(), 
-            attacked.getLevel())) {
+    if (!(Formulas::canAttackByLevel(this->level.getLevel(), 
+            attacked.getLevel()))) {
         throw TooHighLevelDifferenceOnAttackException();
     }
 
@@ -225,6 +237,10 @@ const char* NewbiesCantBeAttackedException::what() const noexcept {
 
 const char* TooHighLevelDifferenceOnAttackException::what() const noexcept {
     return "No puedes atacar. La diferencia de niveles es mayor a 12.";
+}
+
+const char* StateOfCharacterCantBeAttackedException::what() const noexcept {
+    return "El jugador no puede ser atacado debido a su estado.";
 }
 
 void Character::debug() {
