@@ -1,39 +1,73 @@
 #ifndef __GAME_H__
 #define __GAME_H__
-
-/**
- * Esta clase implementa el patron de codigo de comand
- * El metodo execute se usa con override para ejecutar un comando
- */
+//-----------------------------------------------------------------------------
+#include <unordered_map>
+//-----------------------------------------------------------------------------
+#include "../../../Common/includes/MapContainer.h"
+//-----------------------------------------------------------------------------
+#include "Character.h"
+#include "config_structs.h"
+#include "Config.h"
+//-----------------------------------------------------------------------------
 class Game {
-private:
-    // Atributos del Comando
-    int player_id;
+    private:
+        //-----------------------------------------------------------------------------
+        // Game components configuration files:
+        //-----------------------------------------------------------------------------
+        Config<RaceCfg> races;
+        Config<KindCfg> kinds;
+        Config<WeaponCfg> weapons;
+        Config<WandCfg> wands;
+        Config<SpellCfg> spells;
+        Config<DefenceCfg> defences;
+        Config<PotionCfg> potions;
+        //-----------------------------------------------------------------------------
 
-public:
-    /**
-     * Descripción: constructor.
-     *
-     * 
-     */
-    Game();
+        //-----------------------------------------------------------------------------
+        // Game entities
+        //-----------------------------------------------------------------------------
+        MapContainer map_container;
+        std::unordered_map<int, Character> characters;
+        std::unordered_map<int, Item*> items;
+        // std::unordered_map<int, Creatures> creatures; Falta implementar
+        //-----------------------------------------------------------------------------
+        int next_instance_id;
 
-    /* Deshabilitamos el constructor por copia. */
-    Game(const Game&) = delete;
+    public:
+        //-----------------------------------------------------------------------------
+        Game();
+        ~Game();
 
-    /* Deshabilitamos el operador= para copia.*/
-    Game& operator=(const Game&) = delete;
+        Game(const Game&) = delete;
+        Game& operator=(const Game&) = delete;
+        Game(Game&& other) = delete;
+        Game& operator=(Game&& other) = delete;
+        //-----------------------------------------------------------------------------
 
-    /* Deshabilitamos el constructor por movimiento. */
-    Game(Game&& other) = delete;
+        //-----------------------------------------------------------------------------
+        /*
+        * Recibe id_race e id_kind para crear un character de la raza
+        * y clase establecidos.
+        * 
+        * Retorna el id Ãºnico de instancia de dicho character.
+        * 
+        * Lanza Exception si alguno de los id no mapea a ninguna raza/clase.
+        */
+        const int newCharacter(const int id_race, const int id_kind);
 
-    /* Deshabilitamos el operador= para movimiento. */
-    Game& operator=(Game&& other) = delete;
+        /*
+        * Llamar a este metodo ante la desconexiÃ³n de un character.
+        * 
+        * Recibe el id de instancia del character a eliminar.
+        * Lo persiste, y luego lo elimina del juego.
+        * 
+        * Lanza Exception si el id especificado no corresponde a ningÃºn
+        * character en el juego.
+        */
+        void deleteCharacter(const int id);
+        //-----------------------------------------------------------------------------
 
-    /**
-     * Descripción: destructor.
-     */
-    ~Game();
+        
 };
-
+//-----------------------------------------------------------------------------
 #endif  // __GAME_H__
