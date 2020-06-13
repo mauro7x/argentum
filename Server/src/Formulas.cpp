@@ -1,5 +1,6 @@
 #include <math.h>
 #include <algorithm>
+#include <cstdlib>
 
 #include "../includes/Formulas.h"
 #include "../includes/RandomNumberGenerator.h"
@@ -69,6 +70,12 @@ const bool Formulas::isCriticalAttack() {
     return (random_number_generator(0, 1) < 0.1);
 }
 
+const bool canAttackByLevel(
+        const unsigned int attacker_level,
+        const unsigned int attacked_level) {
+    return (abs((int) attacker_level - (int) attacked_level) <= 10);
+}
+
 // Inventory
 const unsigned int Formulas::calculateMaxSafeGold(
         const unsigned int level) {
@@ -76,6 +83,6 @@ const unsigned int Formulas::calculateMaxSafeGold(
 }
 
 const unsigned int Formulas::calculateMaxExcessGold(
-            const unsigned int max_safe_gold) {
+        const unsigned int max_safe_gold) {
     return max_safe_gold * 0.5;
 }

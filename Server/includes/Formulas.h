@@ -37,6 +37,9 @@ class Formulas {
         static const bool isAttackEluded(
             const unsigned int agility);
         static const bool isCriticalAttack();
+        static const bool canAttackByLevel(
+            const unsigned int attacker_level,
+            const unsigned int attacked_level);
         
         // Inventory
         static const unsigned int calculateMaxSafeGold(
