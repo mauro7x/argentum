@@ -3,7 +3,7 @@
 
 //-----------------------------------------------------------------------------
 #include <atomic>
-#include <list>
+#include <vector>
 
 #include "LoginValidator.h"
 #include "ClientLogin.h"
@@ -16,11 +16,16 @@
 class Accepter : public Thread {
     private:
     // Atributos del objeto activo.
-    LoginValidator log_val;
+    ClientList* clients;
+    CommandQueue* c_q;
     SocketWrapper socket;
     std::atomic_bool keep_listening;
     std::atomic_bool is_running;
-    std::list<ClientLogin> active_login;
+
+    std::vector<ClientLogin> active_logins;
+    LoginValidator log_val;
+
+    void _joinAndFreeLoggedConnections();
 
     public:
     /**
@@ -28,7 +33,8 @@ class Accepter : public Thread {
      *
      * Parámetros: -
      */
-    Accepter(const std::string& port, unsigned int max_clients_queued);
+    Accepter(const std::string& port, unsigned int max_clients_queued, 
+             ClientList* cli, CommandQueue* command_queue);
 
     /**
      * Descripción: código que se ejecutará al correr el hilo.
@@ -57,6 +63,7 @@ class Accepter : public Thread {
      * Retorno: -
      */
     void close();
+
 
     /**
      * Descripción: destructor.

@@ -1,6 +1,7 @@
 #ifndef __ClientConnection_H__
 #define __ClientConnection_H__
 
+#include "Command.h"
 #include <queue>
 #include <mutex>
 
@@ -26,8 +27,6 @@ public:
     CommandQueue(CommandQueue&& other) = delete;
     /* Deshabilitamos el operador= para movimiento. */
     CommandQueue& operator=(CommandQueue&& other) = delete;
-
-    void run();
 
     /**
      * Descripción: destructor.

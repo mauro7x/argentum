@@ -15,9 +15,9 @@
 class ClientLogin : public Thread {
 private:
     // Atributos del objeto activo.
-    ClientList& client_list;
-    LoginValidator& log_val;
     SocketWrapper socket;
+    LoginValidator* log_val;
+    ClientList* client_list;
     std::atomic_bool is_running;
 
 public:
@@ -26,7 +26,15 @@ public:
      *
      * Parámetros: -
      */
-    ClientLogin(ClientList& cli_list, LoginValidator& login_val, SocketWrapper&& sock);
+    ClientLogin(ClientList* cli_list, LoginValidator* login_val, SocketWrapper&& sock);
+
+
+    /**
+     * Descripción: constuctor por movimiento.
+     *
+     * Parámetros: -
+     */
+    ClientLogin(ClientLogin&& other);
 
     /**
      * Descripción: código que se ejecutará al correr el hilo.

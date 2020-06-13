@@ -1,6 +1,7 @@
 #ifndef __LOGINVALIDATOR_H__
 #define __LOGINVALIDATOR_H__
 
+#include "../Socket/SocketWrapper.h"
 
 class LoginValidator {
 private:
@@ -15,7 +16,7 @@ public:
 	 *
 	 * Retorno: Id del Jugador
 	 */
-	int loginConnection(SocketWrapper socket) {
+	int loginConnection(SocketWrapper* socket) {
 		return player++;
 	}
 };

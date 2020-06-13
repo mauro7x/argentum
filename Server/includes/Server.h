@@ -19,7 +19,9 @@ class Server {
    private:
     // atributos del servidor
     ClientList players;
+    CommandQueue c_q;
     Accepter accepter;
+    bool ended = false;
 
     // metodos privados
     void processPlayerTurns(int time_delta);

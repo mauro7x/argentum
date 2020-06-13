@@ -8,11 +8,12 @@
 #include <queue>
 #include <mutex>
 
-class ClientConnection : Thread {
+class ClientConnection : public Thread {
 private:
     // atributos del ClientConnection
     int id;
-    CommandQueue command_queue;
+    SocketWrapper socket;
+    CommandQueue* command_queue;
     std::mutex m;
 
 public:
@@ -29,11 +30,11 @@ public:
     /* Deshabilitamos el operador= para copia.*/
     ClientConnection& operator=(const ClientConnection&) = delete;
 
-    /* Deshabilitamos el constructor por movimiento. */
-    ClientConnection(ClientConnection&& other) = delete;
+    /* Habilitamo el constructor por movimiento. */
+    ClientConnection(ClientConnection&& other);
 
     /* Deshabilitamos el operador= para movimiento. */
-    ClientConnection& operator=(ClientConnection&& other) = delete;
+    ClientConnection& operator=(ClientConnection&& other);
 
     void run();
 

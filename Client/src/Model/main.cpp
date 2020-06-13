@@ -6,6 +6,7 @@
 #include <exception>
 
 #include "../../includes/Model/Client.h"
+#include "../../../Abstractions/Client-Server/Socket/SocketWrapper.h"
 #include "../../includes/Model/defs.h"
 // ----------------------------------------------------------------------------
 
@@ -17,9 +18,14 @@ int main(int argc, char* argv[]) {
         return USAGE_ERROR;
     }
 
+
     try {
+        SocketWrapper sock("0", "11460");
+        sock << "Test";
+        /*
         Client client;
         client.run();
+        */
     } catch (const std::exception& e) {
         fprintf(stderr, "%s\n", e.what());
         return ERROR;

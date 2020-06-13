@@ -13,7 +13,7 @@
 // API Pública
 
 Server::Server(const std::string& port, unsigned int max_clients_queued):
-    accepter(port, max_clients_queued, players){
+    accepter(port, max_clients_queued, &players, &c_q){
 }
 
 void Server::run() {
@@ -22,7 +22,7 @@ void Server::run() {
 
     // Esto define el framerate
     using Framerate = duration<steady_clock::rep, std::ratio<1, 30>>;
-    auto next = steady_clock::now();
+    auto next = steady_clock::now() + Framerate{ 0 };
     int time_delta = 0;
     while (!ended) {
         time_delta = 1;
@@ -33,13 +33,15 @@ void Server::run() {
         }
         std::this_thread::sleep_until(next);
 
+        processPlayerTurns(time_delta);
         processPlayerCommands();
-        processNpcTurns();
+        processNpcTurns(time_delta);
 
         // Habria que implementar una situacion donde se guarda
 
     }
 
+    accepter.join();
     // Guardar estado una vez mas 
 }
 
