@@ -8,9 +8,9 @@
 
 /*
  * Define la abstraccion Wearable.
- * Un Wearable es un Item que tiene puntos de uso
- * minimos y maximos, con un determinado fin (ataque/defensa)
- * y se puede portar en un Equipment.
+ * Un Wearable es un Item que puede ser portado en
+ * Equipment, y tiene un uso específico, que puede
+ * ser tanto de ataque, defensa o curación.
  */
 class Wearable: public Item {
     protected:
@@ -21,9 +21,9 @@ class Wearable: public Item {
                  const unsigned int price,
                  WearableType type);
         virtual ~Wearable();
-        // Poner las cosas que tienen en comun armas y defensas que van en Equipment.
 
         virtual void equip(Character& equipper);
+        
         virtual const unsigned int use(Character& user) = 0;
         
         const WearableType getType() const;
