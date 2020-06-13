@@ -96,6 +96,21 @@ void MapView::renderDecoration(const int row) const {
     }
 }
 
+void MapView::renderNPCs(const int row) const {
+    const Map& current_map = maps[current_map_id];
+    SDL_Rect render_quad = {0};
+
+    for (int x = 0; x < w_tiles; x++) {
+        const Tile& current_tile = current_map.getTile(x, row);
+
+        if (current_tile.npc_id) {
+            const Texture& texture = tiles[current_tile.npc_id];
+            render_quad = _getRenderQuad(texture, x, row, tile_w, tile_h);
+            g_renderer->renderIfVisible(texture.getTexture(), &render_quad);
+        }
+    }
+}
+
 void MapView::renderRoofs() const {
     const Map& current_map = maps[current_map_id];
     SDL_Rect render_quad = {0};

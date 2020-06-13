@@ -21,6 +21,7 @@ void Stage::render() const {
         int map_rows = g_map.heightInTiles();
         for (int row = 0; row < map_rows; row++) {
             g_map.renderDecoration(row);
+            g_map.renderNPCs(row);
 
             /* renderizar unidades que estén en esta misma fila */
 

@@ -144,81 +144,88 @@ void GameView::operator()() {
     _loadMedia();
     server.start();
 
-    //-------------------------------------------------------------------------
-    // Manejar el primer paquete recibido, crear unidades
-    // necesarias
+    try {
+        //-------------------------------------------------------------------------
+        // Manejar el primer paquete recibido, crear unidades
+        // necesarias
 
-    // Hardcodeamos el primer paquete
-    PlayerData init_data = {
-        {1, 0, 0, DOWN}, 100, 100, 100, 2000, 2100, 1300, 1400, 1500, 0};
-    player.init(init_data);
-    map.select(1); /* el id del mapa x ahora hardcodeado */
+        // Hardcodeamos el primer paquete
+        PlayerData init_data = {
+            {1, 0, 0, DOWN}, 100, 100, 100, 2000, 2100, 1300, 1400, 1500, 0};
+        player.init(init_data);
+        map.select(0); /* el id del mapa x ahora hardcodeado */
 
-    CreatureData data = {{10, 3, 3, DOWN}, 300};
-    creatures.add(data.basic_data.gid, data);
+        CreatureData data = {{10, 3, 3, DOWN}, 300};
+        creatures.add(data.basic_data.gid, data);
 
-    //-------------------------------------------------------------------------
+        //-------------------------------------------------------------------------
 
-    bool quit = false;
-    SDL_Event e;
-    PlayerData* update = NULL;
+        bool quit = false;
+        SDL_Event e;
+        PlayerData* update = NULL;
 
-    /* Variables para el control del frame-rate */
-    uint32_t t1 = SDL_GetTicks(), t2 = 0, behind = 0, lost = 0;
-    int rest = 0;
-    uint32_t it = 0;
+        /* Variables para el control del frame-rate */
+        uint32_t t1 = SDL_GetTicks(), t2 = 0, behind = 0, lost = 0;
+        int rest = 0;
+        uint32_t it = 0;
 
-    // const Creature& monstruo = creatures.getCreature(95);
+        // const Creature& monstruo = creatures.getCreature(95);
 
-    while (!quit) {
-        /* Manejamos eventos del usuario */
-        while (SDL_PollEvent(&e) != 0) {
-            if (e.type == SDL_QUIT) {
-                quit = true;
+        while (!quit) {
+            /* Manejamos eventos del usuario */
+            while (SDL_PollEvent(&e) != 0) {
+                if (e.type == SDL_QUIT) {
+                    quit = true;
+                }
+
+                _handleEvent(e);
             }
 
-            _handleEvent(e);
+            /* Manejamos updates del servidor */
+            while ((update = broadcast.pop())) {
+                fprintf(stderr, "Soy el cliente. Recibimos un update.\n");
+                player.update(*update);
+                delete update;
+            }
+
+            /* Limpiamos la pantalla */
+            renderer.clearScreen();
+
+            /* Acciones previas al renderizado*/
+            player.act(it);
+            camera.center(player.getBox(), map.widthInPx(), map.heightInPx());
+
+            /* Renderizamos y presentamos la pantalla */
+            stage.render();
+            creatures.render(10);
+            renderer.presentScreen();
+
+            /* Controlamos el frame-rate */
+            t2 = SDL_GetTicks();
+            rest = rate - (t2 - t1);
+
+            if (rest < 0) {
+                fprintf(stderr, "\n\n\nPERDIMOS UN FRAME\n\n\n");
+                behind = -rest;
+                lost = (behind - behind % rate);
+                rest = rate - behind % rate;
+                t1 += lost;
+                it += (lost / rate);
+            }
+
+            // fprintf(stderr, "Me duermo por %i ms. Iteracion: %i\n", rest, it
+            // + 1);
+            std::this_thread::sleep_for(std::chrono::milliseconds(rest));
+            t1 += rate;
+            it++;
         }
 
-        /* Manejamos updates del servidor */
-        while ((update = broadcast.pop())) {
-            fprintf(stderr, "Soy el cliente. Recibimos un update.\n");
-            player.update(*update);
-            delete update;
-        }
-
-        /* Limpiamos la pantalla */
-        renderer.clearScreen();
-
-        /* Acciones previas al renderizado*/
-        player.act(it);
-        camera.center(player.getBox(), map.widthInPx(), map.heightInPx());
-
-        /* Renderizamos y presentamos la pantalla */
-        stage.render();
-        creatures.render(10);
-        renderer.presentScreen();
-
-        /* Controlamos el frame-rate */
-        t2 = SDL_GetTicks();
-        rest = rate - (t2 - t1);
-
-        if (rest < 0) {
-            behind = -rest;
-            lost = (behind - behind % rate);
-            rest = rate - behind % rate;
-            t1 += lost;
-            it += (lost / rate);
-        }
-
-        // fprintf(stderr, "Me duermo por %i ms. Iteracion: %i\n", rest, it +
-        // 1);
-        std::this_thread::sleep_for(std::chrono::milliseconds(rest));
-        t1 += rate;
-        it++;
+        // Avisarle al server que nos desconectamos?
+    } catch (const Exception& e) {
+        server.kill();
+        server.join();
+        throw e;
     }
-
-    // Avisarle al server que nos desconectamos?
 
     server.kill();
     server.join();

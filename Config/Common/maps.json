@@ -4,13 +4,73 @@
     "data": [
         {
             "id": 0,
-            "name": "DebugMap",
-            "filepath": "../Assets/Maps/DebugMap.json"
-        },
-        {
-            "id": 1,
-            "name": "Proxy",
-            "filepath": "../Assets/Maps/Proxy.json"
+            "filepath": "../Assets/Maps/TestMap.json"
         }
-    ]
+    ],
+    "tilesets": {
+        "ground": {
+            "first_gid": 1,
+            "next_first_gid": 17,
+            "filepath": "../Assets/Maps/Tilesets/01-ground_tiles.json",
+            "src": {
+                "dirpath": "../Assets/Tiles/Ground/",
+                "color_key": {
+                    "is_needed": false,
+                    "color": {
+                        "r": 0,
+                        "g": 0,
+                        "b": 0
+                    }
+                }
+            }
+        },
+        "decoration": {
+            "first_gid": 17,
+            "next_first_gid": 44,
+            "filepath": "../Assets/Maps/Tilesets/02-decoration.json",
+            "src": {
+                "dirpath": "../Assets/Tiles/Decoration/",
+                "color_key": {
+                    "is_needed": true,
+                    "color": {
+                        "r": 0,
+                        "g": 0,
+                        "b": 0
+                    }
+                }
+            }
+        },
+        "npcs": {
+            "first_gid": 44,
+            "next_first_gid": 47,
+            "filepath": "../Assets/Maps/Tilesets/03-npcs.json",
+            "src": {
+                "dirpath": "../Assets/Tiles/NPCs/",
+                "color_key": {
+                    "is_needed": false,
+                    "color": {
+                        "r": 0,
+                        "g": 0,
+                        "b": 0
+                    }
+                }
+            }
+        },
+        "metadata": {
+            "first_gid": 47,
+            "next_first_gid": 50,
+            "filepath": "../Assets/Maps/Tilesets/04-metadata.json",
+            "src": {
+                "dirpath": "../Assets/Tiles/Metadata/",
+                "color_key": {
+                    "is_needed": false,
+                    "color": {
+                        "r": 0,
+                        "g": 0,
+                        "b": 0
+                    }
+                }
+            }
+        }
+    }
 }

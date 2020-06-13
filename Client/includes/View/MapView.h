@@ -61,6 +61,9 @@ class MapView {
     /* Renderiza una fila determinada de decoración */
     void renderDecoration(const int row) const;
 
+    /* Renderiza una fila determinada de NPCs */
+    void renderNPCs(const int row) const;
+
     /* Renderiza los techos completos */
     void renderRoofs() const;
 
