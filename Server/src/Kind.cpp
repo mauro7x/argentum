@@ -11,14 +11,16 @@ Kind::Kind(const KindCfg& data):
             
 Kind::~Kind() {}
 
-void Kind::doMagic() {
+const bool Kind::canDoMagic() const {
     if (!max_mana_factor) {
-        throw Exception("La clase ", this->name, " no puede hacer magia.");
+        return false;
     }
+    return true;
 }
 
-void Kind::meditate() {
+const bool Kind::canMeditate() const {
     if (!meditation_factor) {
-        throw Exception("La clase ", this->name, " no puede meditar.");
+        return false;
     }
+    return true;
 }

@@ -112,12 +112,14 @@ Item* Character::dropItem(unsigned int position) {
 //-----------------------------------------------------------------------------
 void Character::beAttacked() {
     if (!this->state->canBeAttacked()) {
-        throw StateOfCharacterCantBeAttackedException();
+        throw ActualStateCantBeAttackedException();
     }
 }
 
 void Character::doMagic() {
-    this->kind.doMagic();
+    if (!this->kind.canDoMagic()) {
+        throw KindCantDoMagicException();
+    }
 }
 
 const unsigned int Character::attack(Character& attacked) {
@@ -127,8 +129,7 @@ const unsigned int Character::attack(Character& attacked) {
         return this->equipment.useAttackItem(*this);
     }
 
-    // Notifico al estado del otro jugador que va a ser atacado.
-    // Si no esta vivo, lanza excepción StateOfCharacterCantBeAttackedException
+    // Verifico si dado el estado del otro jugador puedo atacarlo.
     attacked.beAttacked();
 
     // Verificacion de diferencia de niveles entre jugadores y newbie.
@@ -244,8 +245,12 @@ const char* TooHighLevelDifferenceOnAttackException::what() const noexcept {
     return "No puedes atacar. La diferencia de niveles es mayor a 12.";
 }
 
-const char* StateOfCharacterCantBeAttackedException::what() const noexcept {
+const char* ActualStateCantBeAttackedException::what() const noexcept {
     return "El jugador no puede ser atacado debido a su estado.";
+}
+
+const char* KindCantDoMagicException::what() const noexcept {
+    return "Tu clase no puede lanzar hechizos.";
 }
 //-----------------------------------------------------------------------------
 

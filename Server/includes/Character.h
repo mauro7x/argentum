@@ -132,7 +132,7 @@ class Character {
         /*
          * Metodo llamado al usar báculos.        
          * 
-         * Lanza Exception si el Kind no puede hacer magia.
+         * Lanza KindCantDoMagicException si el Kind no puede hacer magia.
          */
         void doMagic();
 
@@ -174,7 +174,10 @@ class Character {
          * de daño.
          * 
          * Lanza:
-         *      OutOfRangeAttackException si el otro jugador está fuera del rango del arma.
+         *       OutOfRangeAttackException si el otro jugador está fuera del rango del arma.
+         * 
+         *       KindCantDoMagicException si la clase del character no puede hacer magia
+         * e intenta usar un hechizo.
          * 
          *       TooHighLevelDifferenceOnAttackException si la diferencia de niveles es más
          * alta de la permitida para un ataque.
@@ -183,7 +186,7 @@ class Character {
          * 
          *       InsufficientManaException si no puede usar el hechizo debido a déficit de maná.
          * 
-         *       StateOfCharacterCantBeAttackedException si el jugador al que se quiere atacar
+         *       ActualStateCantBeAttackedException si el jugador al que se quiere atacar
          * tiene un estado en el que no puede ser atacado.
          */
         const unsigned int attack(Character& attacked);
@@ -237,7 +240,12 @@ class TooHighLevelDifferenceOnAttackException: std::exception {
         virtual const char* what() const noexcept;
 };
 
-class StateOfCharacterCantBeAttackedException: std::exception {
+class ActualStateCantBeAttackedException: std::exception {
+    public:
+        virtual const char* what() const noexcept;
+};
+
+class KindCantDoMagicException: std::exception {
     public:
         virtual const char* what() const noexcept;
 };
