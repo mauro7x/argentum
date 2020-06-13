@@ -3,10 +3,13 @@
 
 #include "../../../Common/includes/MapContainer.h"
 
+enum Orientation { UP, DOWN, LEFT, RIGHT };
+
 class Position {
     private:
         int id_map;
         int x, y;
+        Orientation orientation;
         MapContainer& map_container;
     
     public:
