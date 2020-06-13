@@ -20,6 +20,13 @@ class SocketWrapper : public Socket {
     explicit SocketWrapper(const int fd);
 
    public:
+    /**
+     * Descripción: constructor default para el socketwrapper
+     * 
+     * Parámetros: - 
+     */
+    SocketWrapper() = default;
+    
     /** (SERVER-SIDE)
      * Diseñado para ser utilizado por el SERVIDOR para ponerse a la
      * escucha de conexiones entrantes.

@@ -18,13 +18,15 @@ void Client::run() {
     fprintf(stderr, "DEBUG: Comienza la ejecución del cliente\n");
     std::string host, port;
     bool connect = false;
+    SocketWrapper socket;
     while(!connect){
         std::cout << "ingrese host: " << std::endl;
         std::cin >> host;
         std::cout << "ingrese port: " << std::endl;
         std::cin >> port;
         try {
-            SocketWrapper socket(host, port);
+            socket = std::move(SocketWrapper(host, port));
+
         } catch (const Exception& e) {
             std::cout << "host o/y port ingresado invalido " << std::endl;
             continue;
