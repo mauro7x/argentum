@@ -1,7 +1,7 @@
 #ifndef __COMMAND_H__
 #define __COMMAND_H__
 
-#include "Game.h"
+#include "../../Model/includes/Game.h"
 
 /**
  * Esta clase implementa el patron de codigo de comand

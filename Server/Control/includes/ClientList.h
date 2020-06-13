@@ -1,9 +1,11 @@
 #ifndef __ClientList_H__
 #define __ClientList_H__
 
-#include "ClientConnection.h"
 #include <unordered_map>
 #include <mutex>
+
+#include "../includes/ClientConnection.h"
+#include "../../../Common/includes/Socket/SocketWrapper.h"
 
 class ClientList {
 private:

@@ -7,8 +7,8 @@
 
 #include "LoginValidator.h"
 #include "ClientLogin.h"
-#include "../Socket/SocketWrapper.h"
 #include "../../../Common/includes/Thread.h"
+#include "../../../Common/includes/Socket/SocketWrapper.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------

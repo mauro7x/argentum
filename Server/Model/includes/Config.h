@@ -8,8 +8,8 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-#include "../../Common/includes/Exceptions/Exception.h"
-#include "../../Common/includes/JSON.h"
+#include "../../../Common/includes/Exceptions/Exception.h"
+#include "../../../Common/includes/JSON.h"
 #include "config_structs.h"
 #include "paths.h"
 //-----------------------------------------------------------------------------

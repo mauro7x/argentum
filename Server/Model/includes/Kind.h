@@ -4,7 +4,7 @@
 #include <string>
 
 #include "config_structs.h"
-#include "../../Common/includes/Exceptions/Exception.h"
+#include "../../../Common/includes/Exceptions/Exception.h"
 
 class CantDoMagicException: public Exception {};
 

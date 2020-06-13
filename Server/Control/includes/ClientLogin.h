@@ -5,9 +5,9 @@
 #include <atomic>
 
 #include "LoginValidator.h"
-#include "../Socket/SocketWrapper.h"
+#include "ClientList.h"
 #include "../../../Common/includes/Thread.h"
-#include "../../../Server/includes/ClientList.h"
+#include "../../../Common/includes/Socket/SocketWrapper.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------

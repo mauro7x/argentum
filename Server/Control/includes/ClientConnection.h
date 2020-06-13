@@ -3,8 +3,8 @@
 
 #include "Command.h"
 #include "CommandQueue.h"
-#include "../../Abstractions/Threads/Thread/Thread.h"
-#include "../../Abstractions/Client-Server/Socket/SocketWrapper.h"
+#include "../../../Common/includes/Thread.h"
+#include "../../../Common/includes/Socket/SocketWrapper.h"
 #include <queue>
 #include <mutex>
 

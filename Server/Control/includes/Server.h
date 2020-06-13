@@ -3,7 +3,7 @@
 
 //-----------------------------------------------------------------------------
 #include "ClientList.h"
-#include "../../Abstractions/Client-Server/Accepter/Accepter.h"
+#include "Accepter.h"
 #include <iostream>
 #include <string>
 #include <vector>
