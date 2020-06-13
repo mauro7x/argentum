@@ -6,7 +6,7 @@ class RandomNumberGenerator {
         RandomNumberGenerator();
         ~RandomNumberGenerator();
 
-        unsigned int operator()(unsigned int min, unsigned int max);
+        float operator()(float min, float max);
 };
 
 #endif
