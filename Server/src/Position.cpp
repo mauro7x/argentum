@@ -21,7 +21,7 @@ const int Position::getY() const {
     return this->y;
 }
 
-const unsigned int Position::getDistance(Position& other) const {
+const unsigned int Position::getDistance(const Position& other) const {
     return abs(this->x - other.getX()) + abs(this->y - other.getY());
 }
 
