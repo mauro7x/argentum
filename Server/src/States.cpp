@@ -21,7 +21,7 @@ const bool Dead::canAttack() const {
     return false;
 }
 
-const bool Alive::canBeAttacked() const {
+const bool Dead::canBeAttacked() const {
     return false;
 }
 

@@ -223,6 +223,10 @@ const unsigned int Character::getMaxHealth() const {
     return this->max_health;
 }
 
+const bool Character::isNewbie() const {
+    return this->level.isNewbie();
+}
+
 const char* InsufficientManaException::what() const noexcept {
     return "No tienes suficiente maná.";
 }

@@ -26,7 +26,7 @@ const unsigned int Formulas::calculateKillXPGain(
            std::max(attacked_level - attacker_level + 10, (unsigned int) 0);
 }
 
-const bool isNewbie(const unsigned int level) {
+const bool Formulas::isNewbie(const unsigned int level) {
     return (level <= 12);
 }
 
@@ -70,7 +70,7 @@ const bool Formulas::isCriticalAttack() {
     return (random_number_generator(0, 1) < 0.1);
 }
 
-const bool canAttackByLevel(
+const bool Formulas::canAttackByLevel(
         const unsigned int attacker_level,
         const unsigned int attacked_level) {
     return (abs((int) attacker_level - (int) attacked_level) <= 10);

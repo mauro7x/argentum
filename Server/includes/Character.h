@@ -180,6 +180,6 @@ class TooHighLevelDifferenceOnAttackException: std::exception {
 class StateOfCharacterCantBeAttackedException: std::exception {
     public:
         virtual const char* what() const noexcept;
-}ñ
+};
 
 #endif
