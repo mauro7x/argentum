@@ -191,7 +191,7 @@ const unsigned int Character::receiveAttack(const unsigned int damage,
 
     this->health = std::max((unsigned int) 0, this->health - damage_received);
 
-    if (this->health = 0) {
+    if (this->health == 0) {
         // MORIR
         this->die();
     }
