@@ -142,7 +142,13 @@ class Character {
          * Usa el arma que tiene equipada y retorna los puntos de daño
          * que genera. Si no tiene arma equipada, retorna 0.
          */
-        const unsigned int attack();
+        const unsigned int attack(Character& attacked);
+
+        const bool isNewbie() const;
+        const Position& getPosition() const;
+        const unsigned int getLevel() const;
+        const unsigned int getHealth() const;
+        const unsigned int getMaxHealth() const;
 
         void die();
 
@@ -150,6 +156,21 @@ class Character {
 };
 
 class InsufficientManaException: std::exception {
+    public:
+        virtual const char* what() const noexcept;
+};
+
+class OutOfRangeAttackException: std::exception {
+    public:
+        virtual const char* what() const noexcept;
+};
+
+class NewbiesCantBeAttackedException: std::exception {
+    public:
+        virtual const char* what() const noexcept;
+};
+
+class TooHighLevelDifferenceOnAttackException: std::exception {
     public:
         virtual const char* what() const noexcept;
 };

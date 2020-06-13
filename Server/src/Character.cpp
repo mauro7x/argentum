@@ -6,6 +6,8 @@
 
 #include <iostream> //sacar
 
+#define CRITICAL_ATTACKE_DAMAGE_MODIFIER 2
+
 Character::Character(const RaceCfg& race, const KindCfg& kind,
                      const int id_map, const int init_x_coord, 
                      const int init_y_coord, MapContainer& map_container):
@@ -37,6 +39,8 @@ void Character::updateStatus(const unsigned int seconds_elapsed) {
                         this->race.max_mana_factor,
                         this->level.getLevel());
     
+    // ACTUALIZACIONES QUE DEPENDEN DEL TIEMPO -> MOVER A OTRA FUNCION
+    // CUANDO ESTE IMPLEMENTADO EL FRAMERATE.
     unsigned int health_update = Formulas::calculateHealthTimeRecovery(
                                     this->race.health_recovery_factor,
                                     seconds_elapsed);
@@ -98,8 +102,69 @@ void Character::doMagic() {
     this->kind.doMagic();
 }
 
-const unsigned int Character::attack() {
-    return this->equipment.getAttackPoints(*this);
+/*
+ * Efectua un ataque a otro jugador.
+ * 
+ * Si el arma tiene efecto sobre el jugador [e.g: es un baculo curativo],
+ * i.e tiene rango cero, se usa inmediatamente.
+ * 
+ * Si el arma es de daño, se verifica si el otro jugador está dentro del
+ * rango de dicha arma, y se efectua el ataque al recibir el atacado los puntos
+ * de daño.
+ * 
+ * Lanza OutOfRangeAttackException si el otro jugador está fuera del rango del arma.
+ *       TooHighLevelDifferenceOnAttackException si la diferencia de niveles es más
+ * alta de la permitida para un ataque.
+ *       NewbiesCantBeAttackedException si el jugador al que se quiere atacar es Newbie.
+ *       InsufficientManaException
+ */
+const unsigned int Character::attack(Character& attacked) {
+    const unsigned int weapon_range = this->equipment.getAttackRange();
+    // Si el arma no es de ataque, es curativa [range 0].
+    if (weapon_range == 0) {
+        return this->equipment.useAttackItem(*this);
+    }
+
+    // Verificacion de diferencia de niveles entre jugadores y newbie.
+    if (attacked.isNewbie()) {
+        throw NewbiesCantBeAttackedException();
+    }
+
+    if (!Formulas::canAttackByLevel(this->level.getLevel(), 
+            attacked.getLevel())) {
+        throw TooHighLevelDifferenceOnAttackException();
+    }
+
+    // Se trata de un ataque de daño.
+    // Nos fijamos si el atacado está en el rango del arma.
+    // Si no lo está, lanzamos excepción.
+    const unsigned int distance = this->position.getDistance(
+                                    attacked.getPosition());
+    if (distance > weapon_range) {
+        throw OutOfRangeAttackException();
+    }
+
+    // Está dentro del rango. Se define si el ataque es critico y se obtienen
+    // los correspondientes puntos de daño. 
+    bool critical_attack = Formulas::isCriticalAttack();
+    unsigned int potential_damage = this->equipment.useAttackItem(*this);
+    if (critical_attack) {
+        potential_damage = potential_damage * CRITICAL_ATTACKE_DAMAGE_MODIFIER;
+    }
+
+    // El atacado recibe el daño del ataque.
+    const unsigned int effective_damage = attacked.receiveAttack(
+                                            potential_damage, critical_attack);
+    
+    // Actualizo exp.
+    this->level.onAttackUpdate(effective_damage, attacked.getLevel());
+
+    // Si murio, sumamos la exp. necesaria
+    if (!attacked.getHealth()) {
+        this->level.onKillUpdate(attacked.getMaxHealth(), attacked.getLevel());
+    }
+
+    return effective_damage;
 }
 
 const unsigned int Character::receiveAttack(const unsigned int damage, 
@@ -107,7 +172,7 @@ const unsigned int Character::receiveAttack(const unsigned int damage,
     unsigned int damage_received = 0;
 
     if (eludible) {
-        const bool is_eluded = Formulas::calculateAttackEluding(this->agility);
+        const bool is_eluded = Formulas::isAttackEluded(this->agility);
         if (is_eluded) {
             // El ataque es esquivado, no se recibe daño
             return damage_received;
@@ -120,7 +185,6 @@ const unsigned int Character::receiveAttack(const unsigned int damage,
     this->health = std::max((unsigned int) 0, this->health - damage_received);
 
     // MORIR
-    // Falta sumarle la experiencia al atacante.
 
     return damage_received;
 }
@@ -131,17 +195,42 @@ void Character::die() {
     // DROPEAR ORO EN EXCESO E ITEMS DEL INVENTARIO
 }
 
+const Position& Character::getPosition() const {
+    return this->position;
+}
+
+const unsigned int Character::getLevel() const {
+    return this->level.getLevel();
+}
+
+const unsigned int Character::getHealth() const {
+    return this->health;
+}
+
+const unsigned int Character::getMaxHealth() const {
+    return this->max_health;
+}
+
 const char* InsufficientManaException::what() const noexcept {
     return "No tienes suficiente maná.";
+}
+
+const char* OutOfRangeAttackException::what() const noexcept {
+    return "El jugador al que quieres atacar está fuera del rango de tu arma.";
+}
+
+const char* NewbiesCantBeAttackedException::what() const noexcept {
+    return "No puedes atacar a jugador newbie.";
+}
+
+const char* TooHighLevelDifferenceOnAttackException::what() const noexcept {
+    return "No puedes atacar. La diferencia de niveles es mayor a 12.";
 }
 
 void Character::debug() {
     std::cout << "**Character debug:**" << std::endl;
     this->inventory.debug();
     this->equipment.debug();
-    std::cout << "mana: " << this->mana << std::endl;
-    std::cout << "Defense points: " << this->equipment.getDefensePoints(*this) << std::endl;
-    std::cout << "Attack points: " << this->equipment.getAttackPoints(*this) << std::endl;
     std::cout << "health: " << this->health << std::endl;
     std::cout << "mana: " << this->mana << std::endl;
 }
