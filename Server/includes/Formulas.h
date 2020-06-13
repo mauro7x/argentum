@@ -14,6 +14,8 @@ class Formulas {
             const unsigned int attacked_level,
             const unsigned int attacker_level);
 
+        static const bool isNewbie(const unsigned int level);
+
         // Character
         static const unsigned int calculateMaxHealth(
             const unsigned int constitution,
@@ -32,8 +34,12 @@ class Formulas {
             const unsigned int race_factor,
             const unsigned int seconds_elapsed);
 
-        static const bool calculateAttackEluding(
+        static const bool isAttackEluded(
             const unsigned int agility);
+        static const bool isCriticalAttack();
+        static const bool canAttackByLevel(
+            const unsigned int attacker_level,
+            const unsigned int attacked_level);
         
         // Inventory
         static const unsigned int calculateMaxSafeGold(

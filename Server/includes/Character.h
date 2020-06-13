@@ -1,8 +1,8 @@
 #ifndef __CHARACTER_H__
 #define __CHARACTER_H__
-
+//-----------------------------------------------------------------------------
 #include <exception>
-
+//-----------------------------------------------------------------------------
 #include "Kind.h"
 #include "Race.h"
 #include "States.h"
@@ -11,9 +11,12 @@
 #include "Level.h"
 #include "Item.h"
 #include "Wearable.h"
-
+#include "Position.h"
+//-----------------------------------------------------------------------------
+#include "../../Common/includes/MapContainer.h"
+//-----------------------------------------------------------------------------
 #include "config_structs.h"
-
+//-----------------------------------------------------------------------------
 /*
  * Representa al ente manejado por el jugador.
  * 
@@ -28,6 +31,7 @@
  */
 class Character {
     private:
+        //-----------------------------------------------------------------------------
         unsigned int health, mana;
         const unsigned int intelligence, constitution, strength, agility;
         unsigned int max_health, max_mana;
@@ -37,23 +41,38 @@ class Character {
         Level level;
         Inventory inventory;
         Equipment equipment;
+        Position position;
+        //-----------------------------------------------------------------------------
 
     public:
-        Character(const RaceCfg& race, const KindCfg& kind);
+        //-----------------------------------------------------------------------------
+        Character(const RaceCfg& race, const KindCfg& kind, 
+                  const int id_map, const int init_x_coord, 
+                  const int init_y_coord, MapContainer& map_container);
         ~Character();
 
         Character(const Character&) = delete;
         Character& operator=(const Character&) = delete;
         Character(Character&&) = delete;
         Character& operator=(Character&&) = delete;
-        
-        /*
-         * Actualiza health y mana segun el paso del tiempo,
-         * asi como sus valores maximos en funcion del nivel
-         * [si cambio].
-         */
-        void updateStatus(const unsigned int seconds_elapsed);
+        //-----------------------------------------------------------------------------
 
+        //-----------------------------------------------------------------------------
+        /*
+         * Actualiza health y mana segun el paso del tiempo.
+         */
+        void updateTimeDependantAttributes(const unsigned int seconds_elapsed);
+
+        /*
+         * Actualiza max_health, max_mana, y los limites de oro de los slots
+         * en el inventario.
+         * 
+         * Esta función es llamada cada vez que el character sube de nivel.
+         */
+        void updateLevelDependantAttributes();
+        //-----------------------------------------------------------------------------
+
+        //-----------------------------------------------------------------------------
         /*
          * Recibe la posicion del item en el inventario
          * que se quiere equipar, y lo equipa.
@@ -84,7 +103,9 @@ class Character {
          * especificada es invalida (fuera de rango).
          */
         Item* dropItem(const unsigned int inventory_position);
+        //-----------------------------------------------------------------------------
 
+        //-----------------------------------------------------------------------------
         /*
          * Efectua la accion curativa de las pociones de mana.
          * Aumenta los puntos de mana en los points especificados,
@@ -105,45 +126,129 @@ class Character {
          * Lanza InsufficientManaException si no hay suficiente mana.
          */
         void consumeMana(const unsigned int mana_points);
+        //-----------------------------------------------------------------------------
 
+        //-----------------------------------------------------------------------------
         /*
-         * Lanza Exception si el Kind no puede hacer magia.
-         * Metodo llamado al usar baculos.
+         * Metodo llamado al usar báculos.        
+         * 
+         * Lanza KindCantDoMagicException si el Kind no puede hacer magia.
          */
         void doMagic();
+
+        /*
+         * Verifica si dado el estado actual, el character puede
+         * ser atacado.
+         * 
+         * Lanza StateOfCharacterCantBeAttackedException si el estado
+         * actual no permite al character ser atacado.
+         */
+        void beAttacked();
         
         /*
-         * Recibe los puntos de daño lanzados y si se trata de un
-         * ataque eludible o no. Si es eludible, puede esquivarlo
-         * y no recibir daño alguno (retornar 0).
-         * Si no lo puede esquivar, absorbe lo que puede con su defensa.
+         * Efectúa la recepción del ataque de otro jugador.
          * 
          * Retorna los puntos de daño que efectivamente recibe.
+         * 
+         * Si el ataque es eludible, puede esquivarlo y no recibir daño alguno,
+         * por lo que retorna 0.
+         * 
+         * Si no lo puede esquivar, absorbe lo que puede con su defensa, siendo
+         * el daño efectivo el causado menos el absorbido por la defensa.
+         * 
          */
         const unsigned int receiveAttack(const unsigned int damage, 
                                          const bool eludible);
 
-        /* IMPORTANTE: 
-            - Al llamar a este metodo desde Game, se deben hacer
-            verificaciones de nivel (newbie, diferencia), verificacion de rango
-            (se consume el mana si el rango no es suficiente igual? y el danio es 0?),
-            y si el rango es 0 es curativo a si mismo, asi que tener en cuenta.
-            
-            - El juego debe verificar si muere, y llamar al metodo die. */
         /*
-         * Usa el arma que tiene equipada y retorna los puntos de daño
-         * que genera. Si no tiene arma equipada, retorna 0.
+         * Efectua un ataque a otro jugador, usando el arma que tiene equipada.
+         * 
+         * Retorna los puntos de daño efectivos que generó. Si no tiene arma equipada,
+         * o el arma es curativa, retorna 0.
+         * 
+         * Si el arma tiene efecto sobre el jugador [e.g: es un baculo curativo],
+         * i.e tiene rango cero, se usa inmediatamente.
+         * 
+         * Si el arma es de daño, se verifica si el otro jugador está dentro del
+         * rango de dicha arma, y se efectúa el ataque al recibir el atacado los puntos
+         * de daño.
+         * 
+         * Lanza:
+         *       OutOfRangeAttackException si el otro jugador está fuera del rango del arma.
+         * 
+         *       KindCantDoMagicException si la clase del character no puede hacer magia
+         * e intenta usar un hechizo.
+         * 
+         *       TooHighLevelDifferenceOnAttackException si la diferencia de niveles es más
+         * alta de la permitida para un ataque.
+         * 
+         *       NewbiesCantBeAttackedException si el jugador al que se quiere atacar es Newbie.
+         * 
+         *       InsufficientManaException si no puede usar el hechizo debido a déficit de maná.
+         * 
+         *       ActualStateCantBeAttackedException si el jugador al que se quiere atacar
+         * tiene un estado en el que no puede ser atacado.
          */
-        const unsigned int attack();
+        const unsigned int attack(Character& attacked);
 
+        /*
+         * Cuando health es cero, se llama a este método. Cambia el estado del jugador
+         * a Dead.
+         */
         void die();
+        //-----------------------------------------------------------------------------
+
+        //-----------------------------------------------------------------------------
+        /* Retorna si el character es newbie o no. */
+        const bool isNewbie() const;
+
+        /* Retorna la posición del character. */
+        const Position& getPosition() const;
+
+        /* Retorna el nivel del character. */
+        const unsigned int getLevel() const;
+
+        /* Retorna la health del character. */
+        const unsigned int getHealth() const;
+
+        /* Retorna el health máxima del character. */
+        const unsigned int getMaxHealth() const;
+        //-----------------------------------------------------------------------------
 
         void debug();
 };
+//-----------------------------------------------------------------------------
 
+//-----------------------------------------------------------------------------
 class InsufficientManaException: std::exception {
     public:
         virtual const char* what() const noexcept;
 };
 
+class OutOfRangeAttackException: std::exception {
+    public:
+        virtual const char* what() const noexcept;
+};
+
+class NewbiesCantBeAttackedException: std::exception {
+    public:
+        virtual const char* what() const noexcept;
+};
+
+class TooHighLevelDifferenceOnAttackException: std::exception {
+    public:
+        virtual const char* what() const noexcept;
+};
+
+class ActualStateCantBeAttackedException: std::exception {
+    public:
+        virtual const char* what() const noexcept;
+};
+
+class KindCantDoMagicException: std::exception {
+    public:
+        virtual const char* what() const noexcept;
+};
+//-----------------------------------------------------------------------------
 #endif
+//-----------------------------------------------------------------------------

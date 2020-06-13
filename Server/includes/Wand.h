@@ -5,6 +5,16 @@
 #include "Spell.h"
 #include "config_structs.h"
 
+/*
+ * Representa un báculo/vara.
+ * 
+ * Se caracteriza por lanzar un spell (hechizo) que puede
+ * ser de ataque (dañino) o curativo.
+ * 
+ * Es menester contar con suficiente maná para lanzar el hechizo.
+ * 
+ * Cada hechizo tiene su propio rango.
+ */
 class Wand: public Wearable {
     private:
         Spell* spell;
@@ -18,12 +28,24 @@ class Wand: public Wearable {
         Wand& operator=(const Wand&) = delete;
         Wand(Wand&&) = delete;
         Wand& operator=(Wand&&) = delete;
-
-        // IMPLEMENTAR Metodos comodamente en base
-        // a los metodos definidos del Character/Inventory/Equipment.
-        // Mantener abstraccion item y Wearable.
-
+        
+        /*
+         * Castea el spell.
+         * 
+         * Retorna los puntos de ataque que provoca el hechizo.
+         * Si es un hechizo curativo, retorna 0.
+         * 
+         * Lanza InsufficientManaException si el user no tiene
+         * suficiente mana para castearlo.
+         */
         virtual const unsigned int use(Character& user) override;
+
+        /*
+         * Devuelve el rango del hechizo.
+         * 
+         * Si es un hechizo curativo, el rango es 0, dado que se
+         * castea sobre si mismo.
+         */
         const unsigned int getRange() const override;
 };
 

@@ -1,5 +1,6 @@
 #include <math.h>
 #include <algorithm>
+#include <cstdlib>
 
 #include "../includes/Formulas.h"
 #include "../includes/RandomNumberGenerator.h"
@@ -23,6 +24,10 @@ const unsigned int Formulas::calculateKillXPGain(
     RandomNumberGenerator random_number_generator;
     return random_number_generator(0, 0.1) * attacked_max_health *
            std::max(attacked_level - attacker_level + 10, (unsigned int) 0);
+}
+
+const bool Formulas::isNewbie(const unsigned int level) {
+    return (level <= 12);
 }
 
 // Character
@@ -54,18 +59,30 @@ const unsigned int Formulas::calculateManaTimeRecovery(
     return race_factor * seconds_elapsed;
 }
 
-const bool Formulas::calculateAttackEluding(
+const bool Formulas::isAttackEluded(
         const unsigned int agility) {
     RandomNumberGenerator random_number_generator;
     return (std::pow(random_number_generator(0, 1), agility) < 0.001);
 }
 
+const bool Formulas::isCriticalAttack() {
+    RandomNumberGenerator random_number_generator;
+    return (random_number_generator(0, 1) < 0.1);
+}
+
+const bool Formulas::canAttackByLevel(
+        const unsigned int attacker_level,
+        const unsigned int attacked_level) {
+    return (abs((int) attacker_level - (int) attacked_level) <= 10);
+}
+
+// Inventory
 const unsigned int Formulas::calculateMaxSafeGold(
         const unsigned int level) {
     return 100 * pow(level, 1.1);
 }
 
 const unsigned int Formulas::calculateMaxExcessGold(
-            const unsigned int max_safe_gold) {
+        const unsigned int max_safe_gold) {
     return max_safe_gold * 0.5;
 }

@@ -26,7 +26,7 @@ Wearable* Equipment::add(Wearable* item) {
     return prev_item;
 }
 
-const unsigned int Equipment::getAttackPoints(Character& attacker) {
+const unsigned int Equipment::useAttackItem(Character& attacker) {
     if (!this->container[WEAPON]) {
         return 0;
     }
