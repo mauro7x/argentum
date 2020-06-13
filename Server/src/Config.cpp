@@ -6,7 +6,7 @@
 
 template <>
 void Config<RaceCfg>::_parseFile() {
-    json j = JSON::loadJsonFile(RACE_CONFIG_FILEPATH);
+    json j = JSON::loadJsonFile(RACES_CONFIG_FILEPATH);
 
     int size = j.size();
     for (int i = 0; i < size; i++) {
@@ -28,7 +28,7 @@ void Config<RaceCfg>::_parseFile() {
 
 template <>
 void Config<KindCfg>::_parseFile() {
-    json j = JSON::loadJsonFile(KIND_CONFIG_FILEPATH);
+    json j = JSON::loadJsonFile(KINDS_CONFIG_FILEPATH);
 
     int size = j.size();
     for (int i = 0; i < size; i++) {
@@ -48,7 +48,7 @@ void Config<KindCfg>::_parseFile() {
 
 template <>
 void Config<NPCCfg>::_parseFile() {
-    json j = JSON::loadJsonFile(NPC_CONFIG_FILEPATH);
+    json j = JSON::loadJsonFile(CREATURES_CONFIG_FILEPATH);
 
     int size = j.size();
     for (int i = 0; i < size; i++) {
