@@ -105,41 +105,50 @@ void GameView::operator()() {
     server.start();  // proxy
     event_handler.start();
 
-    //-------------------------------------------------------------------------
-    // PROXY PARA EL MANEJO DEL PRIMER PAQUETE DEL SERVER (hardcodeado).
+    try {
+        //-------------------------------------------------------------------------
+        // PROXY PARA EL MANEJO DEL PRIMER PAQUETE DEL SERVER (hardcodeado).
 
-    PlayerData init_data = {
-        {1, 0, 0, DOWN}, 100, 100, 100, 2000, 2100, 1300, 1400, 1500, 0};
-    player.init(init_data);
-    map.select(0); /* el id del mapa x ahora hardcodeado */
-    //-------------------------------------------------------------------------
+        PlayerData init_data = {
+            {1, 0, 0, DOWN}, 100, 100, 100, 2000, 2100, 1300, 1400, 1500, 0};
+        player.init(init_data);
+        map.select(0); /* el id del mapa x ahora hardcodeado */
+        //-------------------------------------------------------------------------
 
-    /* Variables para el control del frame-rate */
-    uint32_t t1 = SDL_GetTicks(), t2 = 0, behind = 0, lost = 0, it = 0;
-    int rest = 0;
+        /* Variables para el control del frame-rate */
+        uint32_t t1 = SDL_GetTicks(), t2 = 0, behind = 0, lost = 0, it = 0;
+        int rest = 0;
 
-    /* Loop principal del juego (acciones y renderizado) */
-    while (view_running) {
-        /* Ejecución de la iteración del juego */
-        _gameIteration(it);
+        /* Loop principal del juego (acciones y renderizado) */
+        while (view_running) {
+            /* Ejecución de la iteración del juego */
+            _gameIteration(it);
 
-        /* Control del frame-rate */
-        t2 = SDL_GetTicks();
-        rest = rate - (t2 - t1);
+            /* Control del frame-rate */
+            t2 = SDL_GetTicks();
+            rest = rate - (t2 - t1);
 
-        if (rest < 0) {
-            fprintf(stderr, "\n\n== PERDIDA DE FRAME/S ==\n\n\n");
-            behind = -rest;
-            lost = (behind - behind % rate);
-            rest = rate - behind % rate;
-            t1 += lost;
-            it += (lost / rate);
+            if (rest < 0) {
+                fprintf(stderr, "\n\n== PERDIDA DE FRAME/S ==\n\n\n");
+                behind = -rest;
+                lost = (behind - behind % rate);
+                rest = rate - behind % rate;
+                t1 += lost;
+                it += (lost / rate);
+            }
+
+            fprintf(stderr, "MAIN-LOOP | It: %i | Sleep: %i ms\n", it + 1,
+                    rest);
+            std::this_thread::sleep_for(std::chrono::milliseconds(rest));
+            t1 += rate;
+            it++;
         }
-
-        fprintf(stderr, "MAIN-LOOP | It: %i | Sleep: %i ms\n", it + 1, rest);
-        std::this_thread::sleep_for(std::chrono::milliseconds(rest));
-        t1 += rate;
-        it++;
+    } catch (const Exception& e) {
+        view_running = false;
+        event_handler.join();
+        server.kill();
+        server.join();
+        throw e;
     }
 
     // Avisarle al server que nos desconectamos?
