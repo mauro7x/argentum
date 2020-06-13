@@ -27,6 +27,7 @@ class Level {
                           const unsigned int attacked_level);
 
         const unsigned int getLevel() const;
+        const unsigned int isNewbie() const;
 };
 
 #endif

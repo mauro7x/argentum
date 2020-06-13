@@ -14,6 +14,8 @@ class Formulas {
             const unsigned int attacked_level,
             const unsigned int attacker_level);
 
+        static const bool isNewbie(const unsigned int level);
+
         // Character
         static const unsigned int calculateMaxHealth(
             const unsigned int constitution,

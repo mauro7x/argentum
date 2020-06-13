@@ -25,6 +25,10 @@ const unsigned int Formulas::calculateKillXPGain(
            std::max(attacked_level - attacker_level + 10, (unsigned int) 0);
 }
 
+const bool isNewbie(const unsigned int level) {
+    return (level <= 12);
+}
+
 // Character
 const unsigned int Formulas::calculateMaxHealth(
         const unsigned int constitution,

@@ -33,7 +33,7 @@ void Level::onAttackUpdate(const unsigned int damage,
     if (!damage) {
         return;
     }
-    
+
     unsigned int gained_xp = Formulas::calculateAttackXPGain(damage, 
                                 attacked_level, this->level);
 
@@ -50,4 +50,8 @@ void Level::onKillUpdate(const unsigned int attacked_max_health,
 
 const unsigned int Level::getLevel() const {
     return this->level;
+}
+
+const unsigned int Level::isNewbie() const {
+    return Formulas::isNewbie(this->level);
 }
