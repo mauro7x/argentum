@@ -32,8 +32,9 @@ class Formulas {
             const unsigned int race_factor,
             const unsigned int seconds_elapsed);
 
-        static const bool calculateAttackEluding(
+        static const bool isAttackEluded(
             const unsigned int agility);
+        static const bool isCriticalAttack();
         
         // Inventory
         static const unsigned int calculateMaxSafeGold(

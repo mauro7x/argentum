@@ -54,12 +54,18 @@ const unsigned int Formulas::calculateManaTimeRecovery(
     return race_factor * seconds_elapsed;
 }
 
-const bool Formulas::calculateAttackEluding(
+const bool Formulas::isAttackEluded(
         const unsigned int agility) {
     RandomNumberGenerator random_number_generator;
     return (std::pow(random_number_generator(0, 1), agility) < 0.001);
 }
 
+const bool Formulas::isCriticalAttack() {
+    RandomNumberGenerator random_number_generator;
+    return (random_number_generator(0, 1) < 0.1);
+}
+
+// Inventory
 const unsigned int Formulas::calculateMaxSafeGold(
         const unsigned int level) {
     return 100 * pow(level, 1.1);
