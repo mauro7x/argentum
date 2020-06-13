@@ -1,13 +1,15 @@
 #include <algorithm>
 #include <math.h>
-
+//-----------------------------------------------------------------------------
 #include "../includes/Character.h"
 #include "../includes/Formulas.h"
-
+//-----------------------------------------------------------------------------
 #include <iostream> //sacar
-
+//-----------------------------------------------------------------------------
 #define CRITICAL_ATTACKE_DAMAGE_MODIFIER 2
+//-----------------------------------------------------------------------------
 
+//-----------------------------------------------------------------------------
 Character::Character(const RaceCfg& race, const KindCfg& kind,
                      const int id_map, const int init_x_coord, 
                      const int init_y_coord, MapContainer& map_container):
@@ -22,14 +24,17 @@ Character::Character(const RaceCfg& race, const KindCfg& kind,
         state(new Alive()),
         inventory(this->level),
         position(id_map, init_x_coord, init_y_coord, map_container) {
-    this->updateStatus(0); // Set max_health, max_mana
+    this->updateLevelDependantAttributes(); // Set max_health, max_mana,
+                                            // max_inventory_gold.
 }
 
 Character::~Character() {
     delete state;
 }
+//-----------------------------------------------------------------------------
 
-void Character::updateStatus(const unsigned int seconds_elapsed) {
+//-----------------------------------------------------------------------------
+void Character::updateLevelDependantAttributes() {
     this->max_health = Formulas::calculateMaxHealth(this->constitution,
                         this->kind.max_health_factor, 
                         this->race.max_health_factor, 
@@ -38,9 +43,13 @@ void Character::updateStatus(const unsigned int seconds_elapsed) {
                         this->kind.max_mana_factor,
                         this->race.max_mana_factor,
                         this->level.getLevel());
-    
-    // ACTUALIZACIONES QUE DEPENDEN DEL TIEMPO -> MOVER A OTRA FUNCION
-    // CUANDO ESTE IMPLEMENTADO EL FRAMERATE.
+
+    this->inventory.updateMaxAmountsOfGold();
+
+}
+
+void Character::updateTimeDependantAttributes(const unsigned int seconds_elapsed) {
+    // ACTUALIZACIONES QUE DEPENDEN DEL TIEMPO
     unsigned int health_update = Formulas::calculateHealthTimeRecovery(
                                     this->race.health_recovery_factor,
                                     seconds_elapsed);
@@ -48,13 +57,32 @@ void Character::updateStatus(const unsigned int seconds_elapsed) {
                                     this->race.mana_recovery_factor,
                                     seconds_elapsed);
 
-    this->health = std::min(this->health + health_update, this->max_health);
-    this->mana = std::min(this->mana + mana_update, this->max_mana);
+    this->recoverHealth(health_update);
+    this->recoverMana(mana_update);
 
-    // Cuando sube de nivel [llevar a otra funcion]
-    this->inventory.updateMaxAmountsOfGold();
+    // IMPLEMENTAR LOGICA DE MOVIMIENTO, QUE DEPENDE DEL TIEMPO.
+}
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+void Character::recoverHealth(const unsigned int points) {
+    this->health = std::min(this->health + points, max_health);
 }
 
+void Character::recoverMana(const unsigned int points) {
+    this->mana = std::min(this->mana + points, max_mana);
+}
+
+void Character::consumeMana(const unsigned int points) {
+    if (this->mana < points) {
+        throw InsufficientManaException();
+    }
+
+    this->mana -= points;
+}
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
 void Character::equip(unsigned int inventory_position) {
     Item* item_to_equip = this->inventory.gatherItem(inventory_position);
 
@@ -72,24 +100,6 @@ void Character::equip(Wearable* item) {
     }
 }
 
-void Character::recoverHealth(const unsigned int points) {
-    // IMPLEMENTAR LOGICA RAZA/CLASE MAX_HEALTH
-    this->health += points;
-}
-
-void Character::recoverMana(const unsigned int points) {
-    // IMPLEMENTAR LOGICA RAZA/CLASE MAX_MANA
-    this->mana += points;
-}
-
-void Character::consumeMana(const unsigned int points) {
-    if (this->mana < points) {
-        throw InsufficientManaException();
-    }
-
-    this->mana -= points;
-}
-
 const unsigned int Character::takeItem(Item* item) {
     return this->inventory.addItem(item);
 }
@@ -97,35 +107,19 @@ const unsigned int Character::takeItem(Item* item) {
 Item* Character::dropItem(unsigned int position) {
     return this->inventory.gatherItem(position);
 }
+//-----------------------------------------------------------------------------
 
-void Character::doMagic() {
-    this->kind.doMagic();
-}
-
+//-----------------------------------------------------------------------------
 void Character::beAttacked() {
     if (!this->state->canBeAttacked()) {
         throw StateOfCharacterCantBeAttackedException();
     }
 }
 
-/*
- * Efectua un ataque a otro jugador.
- * 
- * Si el arma tiene efecto sobre el jugador [e.g: es un baculo curativo],
- * i.e tiene rango cero, se usa inmediatamente.
- * 
- * Si el arma es de daño, se verifica si el otro jugador está dentro del
- * rango de dicha arma, y se efectua el ataque al recibir el atacado los puntos
- * de daño.
- * 
- * Lanza OutOfRangeAttackException si el otro jugador está fuera del rango del arma.
- *       TooHighLevelDifferenceOnAttackException si la diferencia de niveles es más
- * alta de la permitida para un ataque.
- *       NewbiesCantBeAttackedException si el jugador al que se quiere atacar es Newbie.
- *       InsufficientManaException si no puede usar el hechizo debido a déficit de maná.
- *       StateOfCharacterCantBeAttackedException si el jugador al que se quiere atacar
- * tiene un estado en el que no puede ser atacado.
- */
+void Character::doMagic() {
+    this->kind.doMagic();
+}
+
 const unsigned int Character::attack(Character& attacked) {
     const unsigned int weapon_range = this->equipment.getAttackRange();
     // Si el arma no es de ataque, es curativa [range 0].
@@ -169,11 +163,11 @@ const unsigned int Character::attack(Character& attacked) {
                                             potential_damage, critical_attack);
     
     // Actualizo exp.
-    this->level.onAttackUpdate(effective_damage, attacked.getLevel());
+    this->level.onAttackUpdate(*this, effective_damage, attacked.getLevel());
 
     // Si murio, sumamos la exp. necesaria
     if (!attacked.getHealth()) {
-        this->level.onKillUpdate(attacked.getMaxHealth(), attacked.getLevel());
+        this->level.onKillUpdate(*this, attacked.getMaxHealth(), attacked.getLevel());
     }
 
     return effective_damage;
@@ -196,7 +190,10 @@ const unsigned int Character::receiveAttack(const unsigned int damage,
 
     this->health = std::max((unsigned int) 0, this->health - damage_received);
 
-    // MORIR
+    if (this->health = 0) {
+        // MORIR
+        this->die();
+    }
 
     return damage_received;
 }
@@ -206,7 +203,9 @@ void Character::die() {
     this->state = new Dead();
     // DROPEAR ORO EN EXCESO E ITEMS DEL INVENTARIO
 }
+//-----------------------------------------------------------------------------
 
+//-----------------------------------------------------------------------------
 const Position& Character::getPosition() const {
     return this->position;
 }
@@ -226,7 +225,9 @@ const unsigned int Character::getMaxHealth() const {
 const bool Character::isNewbie() const {
     return this->level.isNewbie();
 }
+//-----------------------------------------------------------------------------
 
+//-----------------------------------------------------------------------------
 const char* InsufficientManaException::what() const noexcept {
     return "No tienes suficiente maná.";
 }
@@ -246,7 +247,9 @@ const char* TooHighLevelDifferenceOnAttackException::what() const noexcept {
 const char* StateOfCharacterCantBeAttackedException::what() const noexcept {
     return "El jugador no puede ser atacado debido a su estado.";
 }
+//-----------------------------------------------------------------------------
 
+//-----------------------------------------------------------------------------
 void Character::debug() {
     std::cout << "**Character debug:**" << std::endl;
     this->inventory.debug();
@@ -254,3 +257,4 @@ void Character::debug() {
     std::cout << "health: " << this->health << std::endl;
     std::cout << "mana: " << this->mana << std::endl;
 }
+//-----------------------------------------------------------------------------
