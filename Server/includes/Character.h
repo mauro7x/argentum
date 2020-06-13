@@ -11,6 +11,9 @@
 #include "Level.h"
 #include "Item.h"
 #include "Wearable.h"
+#include "Position.h"
+
+#include "../../Common/includes/MapContainer.h"
 
 #include "config_structs.h"
 
@@ -37,9 +40,12 @@ class Character {
         Level level;
         Inventory inventory;
         Equipment equipment;
+        Position position;
 
     public:
-        Character(const RaceCfg& race, const KindCfg& kind);
+        Character(const RaceCfg& race, const KindCfg& kind, 
+                  const int id_map, const int init_x_coord, 
+                  const int init_y_coord, MapContainer& map_container);
         ~Character();
 
         Character(const Character&) = delete;
@@ -129,7 +135,9 @@ class Character {
             (se consume el mana si el rango no es suficiente igual? y el danio es 0?),
             y si el rango es 0 es curativo a si mismo, asi que tener en cuenta.
             
-            - El juego debe verificar si muere, y llamar al metodo die. */
+            - El juego debe verificar si muere, y llamar al metodo die.
+            
+            - Actualizar nivel onAttack y onKill */
         /*
          * Usa el arma que tiene equipada y retorna los puntos de daño
          * que genera. Si no tiene arma equipada, retorna 0.

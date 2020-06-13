@@ -6,8 +6,9 @@
 
 #include <iostream> //sacar
 
-Character::Character(const RaceCfg& race, 
-                     const KindCfg& kind):
+Character::Character(const RaceCfg& race, const KindCfg& kind,
+                     const int id_map, const int init_x_coord, 
+                     const int init_y_coord, MapContainer& map_container):
         health(kind.initial_health + race.initial_health),
         mana(kind.initial_mana + race.initial_mana),
         intelligence(kind.intelligence + race.intelligence),
@@ -17,7 +18,8 @@ Character::Character(const RaceCfg& race,
         race(race),
         kind(kind),
         state(new Alive()),
-        inventory(this->level) {
+        inventory(this->level),
+        position(id_map, init_x_coord, init_y_coord, map_container) {
     this->updateStatus(0); // Set max_health, max_mana
 }
 
