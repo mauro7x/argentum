@@ -72,6 +72,9 @@ class MapView {
 
     //-------------------------------------------------------------------------
 
+    /* Devuelve el ID de la unidad ocupante de una celda */
+    int getOccupant(const int x, const int y) const;
+
     /* Devuelve si es un tile válido que forma parte del mapa */
     bool isValid(const int x, const int y) const;
 

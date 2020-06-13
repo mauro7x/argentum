@@ -5,6 +5,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
+#include <atomic>
 #include <chrono>
 #include <cstdint>
 #include <fstream>
@@ -21,6 +22,7 @@
 
 //-----------------------------------------------------------------------------
 #include "Camera.h"
+#include "EventHandler.h"
 #include "Renderer.h"
 #include "Stage.h"
 #include "Window.h"
@@ -28,6 +30,7 @@
 
 //-----------------------------------------------------------------------------
 #include "Character.h"
+#include "Creature.h"
 #include "HUD.h"
 #include "MapView.h"
 #include "Player.h"
@@ -56,9 +59,8 @@ class GameView {
     Renderer renderer;
     uint32_t rate;
 
-    /* Flags internos */
-    bool sdl_running;
-    bool img_running;
+    /* Flag de ejecución */
+    std::atomic_bool view_running;
 
     /* Componentes de la vista */
     HUDProxy hud;
@@ -78,17 +80,17 @@ class GameView {
     /* La escena que se renderizará en cada frame */
     Stage stage;
 
+    /* Objetos activo que handlea eventos */
+    EventHandler event_handler;
+
     /* Inicializa recursos */
     void _init();
 
     /* Carga media necesaria */
     void _loadMedia();
 
-    /* Maneja un evento */
-    void _handleEvent(const SDL_Event& e);
-
-    /* Libera la memoria */
-    void _free();
+    /* Ejecuta una iteración del game */
+    void _gameIteration(uint32_t it);
 
    public:
     /* Constructor */

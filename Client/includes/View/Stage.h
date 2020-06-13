@@ -4,9 +4,13 @@
 //-----------------------------------------------------------------------------
 #include <SDL2/SDL.h>
 
+#include "../../../Common/includes/UnitData.h"
+#include "Character.h"
+#include "Creature.h"
 #include "HUD.h"
 #include "MapView.h"
 #include "Player.h"
+#include "UnitContainer.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -20,11 +24,17 @@ class Stage {
    private:
     const HUDProxy& g_hud;
     const MapView& g_map;
+
+    /* Unidades a renderizar */
     const Player& g_player;
+    const UnitContainer<Character, CharacterData>& g_characters;
+    const UnitContainer<Creature, CreatureData>& g_creatures;
 
    public:
     /* Constructor */
-    Stage(const HUDProxy& hud, const MapView& map, const Player& player);
+    Stage(const HUDProxy& hud, const MapView& map, const Player& player,
+          const UnitContainer<Character, CharacterData>& characters,
+          const UnitContainer<Creature, CreatureData>& creatures);
 
     /* Deshabilitamos el constructor por copia. */
     Stage(const Stage&) = delete;
