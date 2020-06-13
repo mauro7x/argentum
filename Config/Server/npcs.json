@@ -1,0 +1,14 @@
+[
+    {
+        "id": 400,
+        "name": "Banquero"
+    },
+    {
+        "id": 401,
+        "name": "Comerciante"
+    },
+    {
+        "id": 402,
+        "name": "Sacerdote"
+    }
+]
