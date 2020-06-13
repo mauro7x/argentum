@@ -30,6 +30,10 @@ void Level::sumXP(const unsigned int points) {
 
 void Level::onAttackUpdate(const unsigned int damage, 
                            const unsigned int attacked_level) {
+    if (!damage) {
+        return;
+    }
+    
     unsigned int gained_xp = Formulas::calculateAttackXPGain(damage, 
                                 attacked_level, this->level);
 
