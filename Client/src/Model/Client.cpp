@@ -1,4 +1,8 @@
 #include "../../includes/Model/Client.h"
+#include "../../../Common/includes/Socket/SocketWrapper.h"
+#include <iostream>
+#include <string>
+
 
 //-----------------------------------------------------------------------------
 // Métodos privados
@@ -12,6 +16,24 @@ Client::Client() {}
 
 void Client::run() {
     fprintf(stderr, "DEBUG: Comienza la ejecución del cliente\n");
+    std::string host, port;
+    bool connect = false;
+    while(!connect){
+        std::cout << "ingrese host: " << std::endl;
+        std::cin >> host;
+        std::cout << "ingrese port: " << std::endl;
+        std::cin >> port;
+        try {
+            SocketWrapper socket(host, port);
+        } catch (const Exception& e) {
+            std::cout << "host o/y port ingresado invalido " << std::endl;
+            continue;
+        }
+        connect = true;
+        std::cout << "conexion establicida!" << std::endl;
+    }
+
+    
 
     /**
      * La idea es la siguiente: vamos a presentar 3 pantallas independientes al
