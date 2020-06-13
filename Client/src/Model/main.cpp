@@ -20,12 +20,12 @@ int main(int argc, char* argv[]) {
 
 
     try {
+        /* Use este codigo para testear cosas del server
         SocketWrapper sock("0", "11460");
         sock << "Test";
-        /*
+        */
         Client client;
         client.run();
-        */
     } catch (const std::exception& e) {
         fprintf(stderr, "%s\n", e.what());
         return ERROR;
