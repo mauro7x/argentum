@@ -1,13 +1,13 @@
 #ifndef __LEVEL_H__
 #define __LEVEL_H__
 
+class Character; // Forward declaration para evitar circular dependences.
+
 class Level {
     private:
         unsigned int level;
         unsigned int xp;
         unsigned int level_up_xp;
-
-        const unsigned int calculateLevelUpXP() const;
 
     public:
         Level();
@@ -18,15 +18,18 @@ class Level {
         Level(Level&&) = delete;
         Level& operator=(Level&&) = delete;
 
-        void sumXP(const unsigned int points);
+        void sumXP(Character& character, const unsigned int points);
 
-        void onAttackUpdate(const unsigned int damage, 
+        void onAttackUpdate(Character& character,
+                            const unsigned int damage, 
                             const unsigned int attacked_level);
         
-        void onKillUpdate(const unsigned int attacked_max_health,
+        void onKillUpdate(Character& character,
+                          const unsigned int attacked_max_health,
                           const unsigned int attacked_level);
 
         const unsigned int getLevel() const;
+        const unsigned int isNewbie() const;
 };
 
 #endif

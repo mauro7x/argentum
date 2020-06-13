@@ -8,7 +8,7 @@
 
 #include "../../../Common/includes/Exceptions/Exception.h"
 #include "../../../Common/includes/JSON.h"
-#include "../paths.h"
+#include "../../../Common/includes/paths.h"
 #include "Renderer.h"
 #include "Texture.h"
 //-----------------------------------------------------------------------------

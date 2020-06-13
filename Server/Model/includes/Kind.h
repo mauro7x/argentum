@@ -4,9 +4,6 @@
 #include <string>
 
 #include "config_structs.h"
-#include "../../../Common/includes/Exceptions/Exception.h"
-
-class CantDoMagicException: public Exception {};
 
 /*
  * Clase:
@@ -34,9 +31,8 @@ class Kind {
         Kind(Kind&&) = delete;
         Kind& operator=(Kind&&) = delete;
 
-        // Establecer que reciben y que devuelven.
-        void doMagic();
-        void meditate();
+        const bool canDoMagic() const;
+        const bool canMeditate() const;
 };
 
 #endif

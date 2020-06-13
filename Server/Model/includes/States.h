@@ -18,6 +18,7 @@ class State {
 
         // Definir interfaz comun a Alive/Dead.
         virtual const bool canAttack() const = 0;
+        virtual const bool canBeAttacked() const = 0;
 };
 
 /*
@@ -36,6 +37,7 @@ class Alive: public State {
         Alive& operator=(Alive&&) = delete;
 
         virtual const bool canAttack() const override;
+        virtual const bool canBeAttacked() const override;
 };
 
 /*
@@ -54,6 +56,7 @@ class Dead: public State {
         Dead& operator=(Dead&&) = delete;
 
         virtual const bool canAttack() const override;
+        virtual const bool canBeAttacked() const override;
 };
 
 #endif

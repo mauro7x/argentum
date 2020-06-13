@@ -48,8 +48,11 @@ class Equipment {
          * los elementos de ataque que el personaje lleva.
          * 
          * En caso de no tener nada que pueda causar daño, devuelve 0.
+         * 
+         * Lanza InsufficientManaException si el arma es un hechizo y
+         * el jugador no tiene suficiente maná como para usarlo.
          */
-        const unsigned int getAttackPoints(Character& attacker);
+        const unsigned int useAttackItem(Character& attacker);
 
         const unsigned int getAttackRange() const;
 

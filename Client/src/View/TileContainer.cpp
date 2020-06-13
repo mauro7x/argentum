@@ -11,13 +11,13 @@ void TileContainer::_loadTextures(const json& tileset) {
 
     first_gid = tileset["first_gid"];
     next_first_gid = tileset["next_first_gid"];
-    dirpath = tileset["dirpath"];
-    need_color_keying = tileset["color_key"]["is_needed"];
+    dirpath = tileset["src"]["dirpath"];
+    need_color_keying = tileset["src"]["color_key"]["is_needed"];
 
     if (need_color_keying) {
-        r = tileset["color_key"]["color"]["r"];
-        g = tileset["color_key"]["color"]["g"];
-        b = tileset["color_key"]["color"]["b"];
+        r = tileset["src"]["color_key"]["color"]["r"];
+        g = tileset["src"]["color_key"]["color"]["g"];
+        b = tileset["src"]["color_key"]["color"]["b"];
     }
 
     int total_textures = next_first_gid - first_gid;
@@ -28,9 +28,9 @@ void TileContainer::_loadTextures(const json& tileset) {
 
         /* Cargamos la textura desde el archivo */
         if (need_color_keying) {
-            content[id].loadFromFile(g_renderer, filepath, r, g, b);
+            content.at(id).loadFromFile(g_renderer, filepath, r, g, b);
         } else {
-            content[id].loadFromFile(g_renderer, filepath);
+            content.at(id).loadFromFile(g_renderer, filepath);
         }
     }
 }
@@ -44,9 +44,10 @@ TileContainer::TileContainer(const Renderer* renderer) : g_renderer(renderer) {}
 
 void TileContainer::loadMedia() {
     json tiles;
-    tiles = JSON::loadJsonFile(TILES_FILEPATH);
+    tiles = JSON::loadJsonFile(MAPS_FILEPATH)["tilesets"];
     _loadTextures(tiles["ground"]);
     _loadTextures(tiles["decoration"]);
+    _loadTextures(tiles["npcs"]);
 }
 
 const Texture& TileContainer::operator[](const TileId id) const {
