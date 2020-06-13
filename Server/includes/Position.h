@@ -21,7 +21,7 @@ class Position {
         Position(Position&&) = delete;
         Position& operator=(Position&&) = delete;
 
-        const unsigned int getDistance(Position& other) const;
+        const unsigned int getDistance(const Position& other) const;
 
         const int getX() const;
         const int getY() const;
