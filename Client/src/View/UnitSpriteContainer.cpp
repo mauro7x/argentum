@@ -72,7 +72,7 @@ void UnitSpriteContainer::loadMedia() {
     _loadSpritesFromJson(sprites["pj"]["armour"], dirpath);
     _loadSpritesFromJson(sprites["pj"]["shield"], dirpath);
     _loadSpritesFromJson(sprites["pj"]["weapon"], dirpath);
-    _loadSpritesFromJson(sprites["npc"], dirpath);
+    _loadSpritesFromJson(sprites["creature"], dirpath);
 }
 
 const Sprite& UnitSpriteContainer::get(const Id id) const {
