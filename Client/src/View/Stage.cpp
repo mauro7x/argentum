@@ -8,8 +8,14 @@
 //-----------------------------------------------------------------------------
 // API Pública
 
-Stage::Stage(const HUDProxy& hud, const MapView& map, const Player& player)
-    : g_hud(hud), g_map(map), g_player(player) {}
+Stage::Stage(const HUDProxy& hud, const MapView& map, const Player& player,
+             const UnitContainer<Character, CharacterData>& characters,
+             const UnitContainer<Creature, CreatureData>& creatures)
+    : g_hud(hud),
+      g_map(map),
+      g_player(player),
+      g_characters(characters),
+      g_creatures(creatures) {}
 
 void Stage::render() const {
     SDL_Rect player_pos = g_player.getPos();
@@ -17,20 +23,25 @@ void Stage::render() const {
     /* Renderizamos el piso */
     g_map.renderGround();
 
-    {  // Algoritmo de renderización por partes
+    {  // Algoritmo de renderización por filas
+        int map_cols = g_map.widthInTiles();
         int map_rows = g_map.heightInTiles();
+        int unit_id;
+
         for (int row = 0; row < map_rows; row++) {
             g_map.renderDecoration(row);
+            g_map.renderNPCs(row);
 
-            /* renderizar unidades que estén en esta misma fila */
+            for (int col = 0; col < map_cols; col++) {
+                unit_id = g_map.getOccupant(col, row);
+                if (unit_id) {
+                    g_characters.render(unit_id);
+                    g_creatures.render(unit_id);
+                }
 
-            /* esto se puede hacer mucho mas eficientemente si en vez de tener
-             * que preguntarle a las unidades si estan en una determinada fila,
-             * lo sabemos de antes. haciendo que el mapa tenga una capa de ids
-             * mapeados a posiciones matamos esto también*/
-
-            if (player_pos.y == row) {
-                g_player.render();
+                if (player_pos.x == col && player_pos.y == row) {
+                    g_player.render();
+                }
             }
         }
     }

@@ -91,18 +91,15 @@ class UnitContainer {
         content.at(id).update(updated_data);
     }
 
-    /* Renderiza la unidad. */
-    /* Si el id es inválido lanza una excepción informándolo. */
-    void render(const Id id) {
+    /* Renderiza la unidad si el id es válido */
+    void render(const Id id) const {
         if (!initialized) {
             throw Exception("Container has not been initialized.");
         }
 
-        if (content.count(id) == 0) {
-            throw Exception("Attempt to render unknown unit (id is invalid).");
+        if (content.count(id) > 0) {
+            content.at(id).render();
         }
-
-        content.at(id).render();
     }
 
     /* Elimina la unidad. */

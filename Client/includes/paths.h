@@ -19,7 +19,6 @@
 
 #define CONFIG_PATH "../Config/Client/"
 #define GUI_CONFIG_FILEPATH "../Config/Client/gui_config.json"
-#define TILES_FILEPATH "../Config/Client/tiles.json"
 #define UNIT_SPRITES_FILEPATH "../Config/Client/unit_sprites.json"
 #define INVENTORY_SPRITES_FILEPATH "../Config/Client/inventory_sprites.json"
 //-----------------------------------------------------------------------------

@@ -13,18 +13,23 @@
 #ifndef __TILE_ID__
 #define __TILE_ID__
 typedef int TileId;
+#endif  // __TILE_ID__
+
+#ifndef __ID__
+#define __ID__
+typedef int Id;
 #endif  // __ID__
 
 enum MapLayer {
-    GROUND1,
-    GROUND2,
-    DECORATION,
-    ROOF,
-    SAFEZONE,
-    COLLISION,
-    INDOOR,
-    PORTAL,
-    NPC,
+    GROUND1_LAYER,
+    GROUND2_LAYER,
+    DECORATION_LAYER,
+    ROOF_LAYER,
+    SAFEZONE_LAYER,
+    COLLISION_LAYER,
+    INDOOR_LAYER,
+    PORTAL_LAYER,
+    NPC_LAYER,
     EXPECTED_LAYERS
 };
 
@@ -41,7 +46,11 @@ struct Tile {
     bool safe_zone;
     bool indoor;
     bool portal;
-    // agregar metadata de NPC
+    Id npc; /* completar esto (mau) */
+
+    /* Ocupantes */
+    int occupant_id;
+    int item_id;
 };
 
 //-----------------------------------------------------------------------------
@@ -54,11 +63,11 @@ class Map {
     int tile_w, tile_h;
     std::vector<Tile> tiles;
 
-    /* Chequea si las layers del mapa son válidas. Lanza exepción si no. */
-    void _checkIfValid(const json& map_layers) const;
+    /* Chequea si el mapa es válido. Lanza exepción si no. */
+    void _checkIfValid(const json& map) const;
 
-    /* Llena los tiles desde las layers json */
-    void _fillTiles(const json& map_layers);
+    /* Llena los tiles desde el json del mapa y desde los tilesets */
+    void _fillTiles(const json& map, const json& tilesets);
 
     /* Pasa de una posición dada por (x,y) a el número de tile en 1D */
     int _tileNumber(const int x, const int y) const;
@@ -81,9 +90,10 @@ class Map {
 
     //-------------------------------------------------------------------------
 
-    /* Inicializa sus datos desde el json recibido, recibiendo las medidas que
-     * se esperan de cada tile */
-    void init(const json& j_map, const int tile_w, const int tile_h);
+    /* Inicializa sus datos leyendo el json de la dirección recibida, recibiendo
+     * las medidas que se esperan de cada tile */
+    void init(const json& map, const json& tilesets, const int tile_w,
+              const int tile_h);
 
     /* Devuelve la anchura en tiles */
     int getWidthTiles() const;
