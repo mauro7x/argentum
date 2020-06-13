@@ -24,7 +24,7 @@ void TileContainer::_loadTextures(const json& tileset) {
     for (int i = 0; i < total_textures; i++) {
         filepath = dirpath + std::to_string(i) + ".png";
         id = first_gid + i;
-        content[id] = std::move(Texture());
+        content.emplace(id, std::move(Texture()));
 
         /* Cargamos la textura desde el archivo */
         if (need_color_keying) {

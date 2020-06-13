@@ -36,7 +36,7 @@ class Queue {
         queue.push(t);
     }
 
-    /* Pop */
+    /* Pop. En caso de estar vacía, devuelve NULL. */
     T pop() {
         std::unique_lock<std::mutex> l(m);
 

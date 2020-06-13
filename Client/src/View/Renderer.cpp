@@ -79,10 +79,12 @@ void Renderer::render(SDL_Texture* texture, SDL_Rect* render_quad,
                       const SDL_Rect* clip, double angle, SDL_Point* center,
                       SDL_RendererFlip flip) const {
     // Set clip rendering dimensions
+    /*
     if (clip) {
         render_quad->w = clip->w;
         render_quad->h = clip->h;
     }
+    */
 
     // Render to screen
     if (SDL_RenderCopyEx(renderer, texture, clip, render_quad, angle, center,

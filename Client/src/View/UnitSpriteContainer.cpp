@@ -50,7 +50,7 @@ void UnitSpriteContainer::_loadSpritesFromJson(const json& sprites,
         }
 
         tmp.texture = std::move(texture);
-        content[id] = std::move(tmp);
+        content.emplace(id, std::move(tmp));
     }
 }
 
@@ -72,6 +72,7 @@ void UnitSpriteContainer::loadMedia() {
     _loadSpritesFromJson(sprites["pj"]["armour"], dirpath);
     _loadSpritesFromJson(sprites["pj"]["shield"], dirpath);
     _loadSpritesFromJson(sprites["pj"]["weapon"], dirpath);
+    _loadSpritesFromJson(sprites["creature"], dirpath);
 }
 
 const Sprite& UnitSpriteContainer::get(const Id id) const {

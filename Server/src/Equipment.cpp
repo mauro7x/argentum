@@ -33,6 +33,13 @@ const unsigned int Equipment::getAttackPoints(Character& attacker) {
     return this->container[WEAPON]->use(attacker);
 }
 
+const unsigned int Equipment::getAttackRange() const {
+    if (!this->container[WEAPON]) {
+        return 0;
+    }
+    return this->container[WEAPON]->getRange();
+}
+
 const unsigned int Equipment::getDefensePoints(Character& defender) {
     unsigned int defense_points = 0;
     // Sumo los puntos de defensa de cada wearables de defensa que lleva puesto,

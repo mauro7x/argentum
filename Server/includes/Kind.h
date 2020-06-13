@@ -4,6 +4,9 @@
 #include <string>
 
 #include "config_structs.h"
+#include "../../Common/includes/Exceptions/Exception.h"
+
+class CantDoMagicException: public Exception {};
 
 /*
  * Clase:
@@ -15,14 +18,14 @@
  * en si puede hacer hechizos o no.
  */
 class Kind {
-    private:
+    public:
         const unsigned int id;
         const std::string name;
-        const unsigned int health;
-        const unsigned int meditation;
-        const unsigned int mana;
 
-    public:
+        const unsigned int max_health_factor;
+        const unsigned int meditation_factor;
+        const unsigned int max_mana_factor;
+
         Kind(const KindCfg& data);
         ~Kind();
 
@@ -32,8 +35,8 @@ class Kind {
         Kind& operator=(Kind&&) = delete;
 
         // Establecer que reciben y que devuelven.
-        void canEquip();
-        void canMeditate();
+        void doMagic();
+        void meditate();
 };
 
 #endif

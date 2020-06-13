@@ -51,6 +51,8 @@ class Equipment {
          */
         const unsigned int getAttackPoints(Character& attacker);
 
+        const unsigned int getAttackRange() const;
+
         /*
          * Devuelve los puntos de defensa que pueden absorber
          * los elementos de defensa que el personaje tiene puestos.

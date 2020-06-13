@@ -23,7 +23,7 @@ void MapContainer::loadMaps() {
         map = JSON::loadJsonFile(maps["data"][i]["filepath"]);
         Map tmp;
         tmp.init(map, tile_w, tile_h);
-        content[maps["data"][i]["id"]] = std::move(tmp);
+        content.emplace(maps["data"][i]["id"], std::move(tmp));
     }
 }
 

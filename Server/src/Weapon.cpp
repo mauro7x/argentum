@@ -13,3 +13,7 @@ const unsigned int Weapon::use(Character& user) {
     RandomNumberGenerator random_number_generator;
     return random_number_generator(this->min_damage, this->max_damage);
 }
+
+const unsigned int Weapon::getRange() const {
+    return this->attack_distance;
+}

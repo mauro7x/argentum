@@ -1,0 +1,54 @@
+[
+    {
+        "id": 200,
+        "name": "Mago",
+        "max_health_factor": 10,
+        "meditation_factor": 10,
+        "max_mana_factor": 10,
+        "initial_mana": 100,
+        "initial_health": 100,
+        "intelligence": 4,
+        "constitution": 1,
+        "strength": 1,
+        "agility": 3
+    },
+    {
+        "id": 201,
+        "name": "Clérigo",
+        "max_health_factor": 10,
+        "meditation_factor": 10,
+        "max_mana_factor": 10,
+        "initial_mana": 70,
+        "initial_health": 100,
+        "intelligence": 4,
+        "constitution": 1,
+        "strength": 1,
+        "agility": 3
+    },
+    {
+        "id": 202,
+        "name": "Paladín",
+        "max_health_factor": 10,
+        "meditation_factor": 10,
+        "max_mana_factor": 10,
+        "initial_mana": 50,
+        "initial_health": 100,
+        "intelligence": 4,
+        "constitution": 1,
+        "strength": 1,
+        "agility": 3
+    },
+    {
+        "id": 203,
+        "name": "Guerrero",
+        "max_health_factor": 10,
+        "meditation_factor": 0,
+        "max_mana_factor": 10,
+        "initial_mana": 0,
+        "initial_health": 100,
+        "intelligence": 4,
+        "constitution": 1,
+        "strength": 1,
+        "agility": 3
+    }
+]

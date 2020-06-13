@@ -11,7 +11,8 @@
 ServerProxy::ServerProxy(Queue<int*>& requests, Queue<PlayerData*>& broadcast)
     : requests(requests),
       broadcast(broadcast),
-      player({0, 0, DOWN, 100, 100, 2000, 2100, 1300, 1400, 1500, 1000}),
+      player(
+          {{1, 0, 0, DOWN}, 100, 100, 100, 2000, 2100, 1300, 1400, 1500, 1000}),
       is_running(false),
       keep_running(true) {}
 
@@ -47,28 +48,28 @@ void ServerProxy::run() {
                 case 0:
                     x_step = 0;
                     y_step = -1;
-                    player.orientation = UP;
+                    player.basic_data.orientation = UP;
                     moving = true;
                     break;
 
                 case 1:
                     x_step = 0;
                     y_step = 1;
-                    player.orientation = DOWN;
+                    player.basic_data.orientation = DOWN;
                     moving = true;
                     break;
 
                 case 2:
                     x_step = -1;
                     y_step = 0;
-                    player.orientation = LEFT;
+                    player.basic_data.orientation = LEFT;
                     moving = true;
                     break;
 
                 case 3:
                     x_step = 1;
                     y_step = 0;
-                    player.orientation = RIGHT;
+                    player.basic_data.orientation = RIGHT;
                     moving = true;
                     break;
 
@@ -86,10 +87,10 @@ void ServerProxy::run() {
         time = SDL_GetTicks();
 
         if ((moving) && ((time - last_moved + delta) >= TIME_TO_MOVE_A_TILE)) {
-            if ((player.x_tile + x_step) < 0 ||
-                (player.x_tile + x_step) == MAP_W_TILES ||
-                (player.y_tile + y_step) < 0 ||
-                (player.y_tile + y_step) == MAP_H_TILES) {
+            if ((player.basic_data.x_tile + x_step) < 0 ||
+                (player.basic_data.x_tile + x_step) == MAP_W_TILES ||
+                (player.basic_data.y_tile + y_step) < 0 ||
+                (player.basic_data.y_tile + y_step) == MAP_H_TILES) {
                 /* avisar que no se puede mover xq hay colision */
                 fprintf(stderr, "No se puede mover ahi\n");
                 x_step = 0;
@@ -98,8 +99,8 @@ void ServerProxy::run() {
                 set_delta = false;
 
             } else {
-                player.x_tile += x_step;
-                player.y_tile += y_step;
+                player.basic_data.x_tile += x_step;
+                player.basic_data.y_tile += y_step;
                 if (set_delta) {
                     delta = (time - last_moved + delta) - TIME_TO_MOVE_A_TILE;
                 } else {

@@ -3,63 +3,18 @@
 //-----------------------------------------------------------------------------
 // Métodos privados
 
-void Character::_setScaleFactor() {
-    int body_w = g_sprites->get(data.body_id).clip_w;
-    if (body_w > tile_w) {
-        scale_factor = tile_w / body_w;
-    } else {
-        scale_factor = 1.0;
-    }
+void Character::_copyData(const CharacterData& init_data) {
+    // Data básica
+    data = init_data.basic_data;
+
+    // Ids gráficos
+    head_id = init_data.head_id;
+    body_id = init_data.body_id;
+    helmet_id = init_data.helmet_id;
+    armour_id = init_data.armour_id;
+    shield_id = init_data.shield_id;
+    weapon_id = init_data.weapon_id;
 }
-
-void Character::_render(const Sprite& sprite) const {
-    /** Pasos para renderizar cada componente:
-     *
-     * 1. Obtener (x, y) centrado en el tile aplicando scale_factor.
-     * 2. Agregar el offset (x, y) del character.
-     * 3. Renderizar aplicando scale_factor.
-     */
-
-    int x, y;
-
-    // paso 1
-    x = (tile_w - (sprite.clip_w * scale_factor)) / 2;
-    y = (tile_h * (0.8)) - (sprite.clip_h * scale_factor);
-
-    // paso 2
-    x += this->x;
-    y += this->y;
-
-    // paso 3
-    SDL_Rect render_quad, render_clip;
-    SDL_Texture* texture;
-    render_quad = {x, y, (int)(sprite.clip_w * scale_factor),
-                   (int)(sprite.clip_h * scale_factor)};
-    render_clip = {0, 0, sprite.clip_w, sprite.clip_h};
-    texture = sprite.texture.getTexture();
-    g_renderer->renderIfVisible(texture, &render_quad, &render_clip);
-}
-
-void Character::_startMovementIfNeeded() {
-    /* si el x no concuerda con data.x_tile * tile_w, o lo mismo con y, mover */
-}
-
-// OLD API --------------------------------------------------------------------
-
-/*
-void Character::_centerOnTile() {
-    // x = (data.x_tile * tile_w) + ((tile_w - w) / 2);
-    // y = (data.y_tile * tile_h) + (tile_h * (0.8)) - h;
-}
-
-int Character::_xValueToReach() const {
-    return (data.x_tile * tile_w) + ((tile_w - box.w) / 2);
-}
-
-int Character::_yValueToReach() const {
-    return (data.y_tile * tile_h) + (tile_h * (0.8)) - box.h;
-}
-*/
 
 //-----------------------------------------------------------------------------
 
@@ -67,55 +22,101 @@ int Character::_yValueToReach() const {
 // API Pública
 
 Character::Character(Renderer* renderer, UnitSpriteContainer* sprites,
-                     const CharacterData& init_data, const int tile_w,
-                     const int tile_h)
-    : g_renderer(renderer), g_sprites(sprites), tile_w(tile_w), tile_h(tile_h) {
-    data = init_data;
-    x = tile_w * data.x_tile;
-    y = tile_h * data.y_tile;
-    _setScaleFactor();
-}
+                     const int tile_w, const int tile_h,
+                     const float tile_movement_time)
+    : Unit(renderer, sprites, tile_w, tile_h, tile_movement_time),
+      head_id(0),
+      body_id(0),
+      helmet_id(0),
+      armour_id(0),
+      shield_id(0),
+      weapon_id(0) {}
 
-Character::Character(Character&& other) {
-    /* Nos apropiamos de los punteros */
-    g_renderer = other.g_renderer;
-    g_sprites = other.g_sprites;
-    other.g_renderer = NULL;
-    other.g_sprites = NULL;
-
-    /* Copiamos el resto de atributos */
-    data = other.data;
-    x = other.x;
-    y = other.y;
-    scale_factor = other.scale_factor;
+Character::Character(Character&& other) : Unit(std::move(other)) {
+    head_id = other.head_id;
+    body_id = other.body_id;
+    helmet_id = other.helmet_id;
+    armour_id = other.armour_id;
+    shield_id = other.shield_id;
+    weapon_id = other.weapon_id;
 }
 
 Character& Character::operator=(Character&& other) {
-    /* Nos apropiamos de los punteros */
-    g_renderer = other.g_renderer;
-    g_sprites = other.g_sprites;
-    other.g_renderer = NULL;
-    other.g_sprites = NULL;
-
-    /* Copiamos el resto de atributos */
-    data = other.data;
-    x = other.x;
-    y = other.y;
-    scale_factor = other.scale_factor;
+    Unit::operator=(std::move(other));
+    head_id = other.head_id;
+    body_id = other.body_id;
+    helmet_id = other.helmet_id;
+    armour_id = other.armour_id;
+    shield_id = other.shield_id;
+    weapon_id = other.weapon_id;
 
     return *this;
 }
 
-void Character::update(const CharacterData& updated_data) {
-    data = updated_data;
-    _setScaleFactor();
-    _startMovementIfNeeded();
+void Character::init(const CharacterData& init_data) {
+    if (state) {
+        throw Exception("Character has already been initialized.");
+    }
+
+    /* Copiamos la data inicial */
+    _copyData(init_data);
+
+    /* Seteamos nuestra posición en pixeles para el renderizado */
+    x = tile_w * data.x_tile;
+    y = tile_h * data.y_tile;
+
+    /* Completamos la inicialización */
+    state = READY;
 }
 
-void Character::act() {}
+void Character::update(const CharacterData& updated_data) {
+    if (!state) {
+        throw Exception(
+            "Character has not been initialized (update requested).");
+    }
+
+    /* Actualizamos la data */
+    _copyData(updated_data);
+
+    /* Iniciamos el movimiento si nuestra posición en pixeles no coincide*/
+    _setMovementSpeed();
+}
 
 void Character::render() const {
-    /* Renderizar */
+    if (!state) {
+        throw Exception(
+            "Character has not been initialized (render requested).");
+    }
+
+    // Cuerpo
+    if (body_id) {
+        _render(g_sprites->get(body_id));
+    }
+
+    // Armadura
+    if (armour_id) {
+        _render(g_sprites->get(armour_id));
+    }
+
+    // Escudo
+    if (shield_id) {
+        _render(g_sprites->get(shield_id));
+    }
+
+    // Espada
+    if (weapon_id) {
+        _render(g_sprites->get(weapon_id));
+    }
+
+    // Cabeza
+    if (head_id) {
+        _render(g_sprites->get(head_id));
+    }
+
+    // Casco
+    if (helmet_id) {
+        _render(g_sprites->get(helmet_id));
+    }
 }
 
 Character::~Character() {}

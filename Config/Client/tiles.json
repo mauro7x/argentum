@@ -24,5 +24,18 @@
                 "b": 0
             }
         }
+    },
+    "npcs": {
+        "first_gid": 44,
+        "next_first_gid": 47,
+        "dirpath": "../Assets/Tiles/NPCs/",
+        "color_key": {
+            "is_needed": false,
+            "color": {
+                "r": 0,
+                "g": 0,
+                "b": 0
+            }
+        }
     }
 }

@@ -14,32 +14,60 @@ typedef int Id;
 
 //-----------------------------------------------------------------------------
 typedef uint8_t Orientation;
-enum PlayerOrientation { UP, DOWN, LEFT, RIGHT };
+enum Orientations { UP, DOWN, LEFT, RIGHT };
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+// ESTRUCTURA BASE
 
-struct PlayerData {
-    // Posición y orientación
+/* Información básica necesaria para cualquier unidad */
+struct UnitData {
+    int gid;                 /* unit id (ingame)*/
     int x_tile, y_tile;      /* coordenadas en tiles */
-    Orientation orientation; /* orientación del personaje */
+    Orientation orientation; /* orientación de la unidad */
+};
+
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+// ESTRUCTURAS PARTICULARES
+
+/* Estructura particular para el player principal */
+struct PlayerData {
+    // Data común a todas las unidades
+    UnitData basic_data;
 
     // Stats y atributos
-    uint16_t health, mana; /* stats */
+    uint32_t health, mana, gold; /* stats */
+
+    // ver tema de como sabemos si es fantasma (el server cambia los ids de la
+    // ropa?)
 
     // Cuerpo y vestimenta
     Id head_id, body_id;                           /* cuerpo básico */
     Id helmet_id, armour_id, shield_id, weapon_id; /* vestimenta */
 };
 
+/* Estructura particular para los players controlados por terceros */
 struct CharacterData {
-    // Posición y orientación
-    int x_tile, y_tile;      /* coordenadas en tiles */
-    Orientation orientation; /* orientación del personaje */
+    /* Data común a las unidades */
+    UnitData basic_data;
+
+    // ver tema de como sabemos si es fantasma (el server cambia los ids de la
+    // ropa?)
 
     // Cuerpo y vestimenta
     Id head_id, body_id;                           /* cuerpo básico */
     Id helmet_id, armour_id, shield_id, weapon_id; /* vestimenta */
+};
+
+/* Estructura particular para los monstruos */
+struct CreatureData {
+    /* Data común a las unidades */
+    UnitData basic_data;
+
+    // Cuerpo
+    Id creature_id; /* creature body */
 };
 
 //-----------------------------------------------------------------------------

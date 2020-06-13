@@ -6,6 +6,7 @@
 #include <SDL2/SDL_image.h>
 
 #include <chrono>
+#include <cstdint>
 #include <fstream>
 //-----------------------------------------------------------------------------
 
@@ -13,6 +14,7 @@
 #include "../../../Common/includes/Exceptions/Exception.h"
 #include "../../../Common/includes/Exceptions/SDLException.h"
 #include "../../../Common/includes/JSON.h"
+#include "../../../Common/includes/UnitData.h"
 #include "../../../Common/includes/paths.h"
 #include "../paths.h"
 //-----------------------------------------------------------------------------
@@ -25,10 +27,16 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+#include "Character.h"
 #include "HUD.h"
 #include "MapView.h"
 #include "Player.h"
 #include "UnitSpriteContainer.h"
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+// Metiendo los contenedores de unidades
+#include "UnitContainer.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -51,13 +59,16 @@ class GameView {
     /* Flags internos */
     bool sdl_running;
     bool img_running;
-    bool fullscreen;
 
     /* Componentes de la vista */
     HUDProxy hud;
     MapView map;
+
+    /* Unidades */
     UnitSpriteContainer unit_sprites;
     Player player;
+    UnitContainer<Character, CharacterData> characters;
+    UnitContainer<Creature, CreatureData> creatures;
 
     /* Proxies */
     Queue<int*> requests;

@@ -24,6 +24,11 @@ void Stage::render() const {
 
             /* renderizar unidades que estén en esta misma fila */
 
+            /* esto se puede hacer mucho mas eficientemente si en vez de tener
+             * que preguntarle a las unidades si estan en una determinada fila,
+             * lo sabemos de antes. haciendo que el mapa tenga una capa de ids
+             * mapeados a posiciones matamos esto también*/
+
             if (player_pos.y == row) {
                 g_player.render();
             }

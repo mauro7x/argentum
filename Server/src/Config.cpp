@@ -6,7 +6,7 @@
 
 template <>
 void Config<RaceCfg>::_parseFile() {
-    json j = JSON::loadJsonFile(RACE_CONFIG_FILEPATH);
+    json j = JSON::loadJsonFile(RACES_CONFIG_FILEPATH);
 
     int size = j.size();
     for (int i = 0; i < size; i++) {
@@ -14,9 +14,13 @@ void Config<RaceCfg>::_parseFile() {
 
         race.id = j[i]["id"];
         race.name = j[i]["name"];
-        race.health = j[i]["health"];
-        race.recovery = j[i]["recovery"];
-        race.mana = j[i]["mana"];
+        race.max_health_factor = j[i]["health"];
+        race.health_recovery_factor = j[i]["recovery"];
+        race.max_mana_factor = j[i]["mana"];
+        race.intelligence = j[i]["intelligence"];
+        race.constitution = j[i]["constitution"];
+        race.strength = j[i]["strength"];
+        race.agility = j[i]["agility"];
 
         config[race.id] = race;
     }
@@ -24,7 +28,7 @@ void Config<RaceCfg>::_parseFile() {
 
 template <>
 void Config<KindCfg>::_parseFile() {
-    json j = JSON::loadJsonFile(KIND_CONFIG_FILEPATH);
+    json j = JSON::loadJsonFile(KINDS_CONFIG_FILEPATH);
 
     int size = j.size();
     for (int i = 0; i < size; i++) {
@@ -32,9 +36,11 @@ void Config<KindCfg>::_parseFile() {
 
         kind.id = j[i]["id"];
         kind.name = j[i]["name"];
-        kind.health = j[i]["health"];
-        kind.meditation = j[i]["meditation"];
-        kind.mana = j[i]["mana"];
+        kind.max_health_factor = j[i]["max_health_factor"];
+        kind.meditation_factor = j[i]["meditation_factor"];
+        kind.max_mana_factor = j[i]["max_mana_factor"];
+        kind.initial_mana = j[i]["initial_mana"];
+        kind.initial_health = j[i]["initial_health"];
 
         config[kind.id] = kind;
     }
@@ -42,7 +48,7 @@ void Config<KindCfg>::_parseFile() {
 
 template <>
 void Config<NPCCfg>::_parseFile() {
-    json j = JSON::loadJsonFile(NPC_CONFIG_FILEPATH);
+    json j = JSON::loadJsonFile(CREATURES_CONFIG_FILEPATH);
 
     int size = j.size();
     for (int i = 0; i < size; i++) {

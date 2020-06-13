@@ -1,5 +1,5 @@
-#ifndef __CHARACTER_H__
-#define __CHARACTER_H__
+#ifndef __CREATURE_H__
+#define __CREATURE_H__
 
 //-----------------------------------------------------------------------------
 #include <cstdint>
@@ -10,40 +10,38 @@
 
 //-----------------------------------------------------------------------------
 
-class Character : public Unit {
+class Creature : public Unit {
    private:
-    // Cuerpo y vestimenta
-    Id head_id, body_id;
-    Id helmet_id, armour_id, shield_id, weapon_id;
+    // Cuerpo
+    Id creature_id;
 
     /* Copia la data desde el paquete recibido */
-    void _copyData(const CharacterData& init_data);
+    void _copyData(const CreatureData& init_data);
 
    public:
     /* Constructor */
-    Character(Renderer* renderer, UnitSpriteContainer* sprites,
-              const int tile_w, const int tile_h,
-              const float tile_movement_time);
+    Creature(Renderer* renderer, UnitSpriteContainer* sprites, const int tile_w,
+             const int tile_h, const float tile_movement_time);
 
     /* Deshabilitamos el constructor por copia. */
-    Character(const Character&) = delete;
+    Creature(const Creature&) = delete;
 
     /* Deshabilitamos el operador= para copia.*/
-    Character& operator=(const Character&) = delete;
+    Creature& operator=(const Creature&) = delete;
 
     /* Habilitamos el constructor por movimiento. */
-    Character(Character&& other);
+    Creature(Creature&& other);
 
     /* Habilitamos el operador= para movimiento. */
-    Character& operator=(Character&& other);
+    Creature& operator=(Creature&& other);
 
     //-------------------------------------------------------------------------
 
     /* Se inicializa con el primer paquete del server */
-    void init(const CharacterData& init_data);
+    void init(const CreatureData& init_data);
 
     /* Actualizar información según lo que diga el servidor */
-    void update(const CharacterData& updated_data);
+    void update(const CreatureData& updated_data);
 
     /* Renderizarse si se encuentra dentro de la cámara */
     void render() const override;
@@ -51,9 +49,9 @@ class Character : public Unit {
     //-------------------------------------------------------------------------
 
     /* Destructor */
-    ~Character();
+    ~Creature();
 };
 
 //-----------------------------------------------------------------------------
 
-#endif  // __CHARACTER_H__
+#endif  // __CREATURE_H__
