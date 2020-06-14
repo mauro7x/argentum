@@ -12,6 +12,13 @@ void Renderer::_setDrawColor() const {
     }
 }
 
+void Renderer::_resize(SDL_Rect* render_quad) const {
+    render_quad->x *= scale_factor_w;
+    render_quad->y *= scale_factor_h;
+    render_quad->w *= scale_factor_w;
+    render_quad->h *= scale_factor_h;
+}
+
 void Renderer::_free() {
     if (renderer) {
         SDL_DestroyRenderer(renderer);
@@ -27,7 +34,10 @@ void Renderer::_free() {
 Renderer::Renderer(const Window& window, const Camera& camera)
     : window(window), camera(camera), renderer(NULL) {}
 
-void Renderer::init(const json& config) {
+void Renderer::init(const json& config, const float scale_factor_w,
+                    const float scale_factor_h) {
+    this->scale_factor_w = scale_factor_w;
+    this->scale_factor_h = scale_factor_h;
     draw_color_r = config["draw_color"]["r"];
     draw_color_g = config["draw_color"]["g"];
     draw_color_b = config["draw_color"]["b"];
@@ -86,6 +96,9 @@ void Renderer::render(SDL_Texture* texture, SDL_Rect* render_quad,
     }
     */
 
+    /* Escalamos a las dimensiones en las que estamos renderizando */
+    _resize(render_quad);
+
     // Render to screen
     if (SDL_RenderCopyEx(renderer, texture, clip, render_quad, angle, center,
                          flip)) {
@@ -117,6 +130,10 @@ void Renderer::fillQuadIfVisible(SDL_Rect* quad, int r, int g, int b,
 
         quad->x += camera.xOffset();
         quad->y += camera.yOffset();
+
+        /* Escalamos a las dimensiones en las que estamos renderizando */
+        _resize(quad);
+
         SDL_RenderFillRect(renderer, quad);
     }
 }

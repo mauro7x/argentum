@@ -35,6 +35,20 @@ void GameView::_init() {
     int tile_w = map_config["tilewidth"];
     int tile_h = map_config["tileheight"];
 
+    /* Calculamos los factores de escala */
+    float scale_factor_w, scale_factor_h;
+    int original_w, original_h, new_w, new_h;
+    original_w = gui_config["window"]["w"];
+    original_h = gui_config["window"]["h"];
+    new_w = gui_config["w"];
+    new_h = gui_config["h"];
+    scale_factor_w = (float)new_w / original_w;
+    scale_factor_h = (float)new_h / original_h;
+
+    /* Ajustamos el ancho y alto de la ventana */
+    gui_config["window"]["w"] = (int)(original_w * scale_factor_w);
+    gui_config["window"]["h"] = (int)(original_h * scale_factor_h);
+
     /* Cargamos la velocidad de movimiento de las unidades */
     int speed = common_config["tiles_per_sec"]["character_speed"];
     float tile_movement_time = 1000 / speed;
@@ -43,7 +57,7 @@ void GameView::_init() {
     window.init(gui_config["window"]);
 
     /* Iniciamos el renderer */
-    renderer.init(gui_config["renderer"]);
+    renderer.init(gui_config["renderer"], scale_factor_w, scale_factor_h);
 
     /* Iniciamos la cámara */
     camera.init(gui_config["camera"], tile_w, tile_h);

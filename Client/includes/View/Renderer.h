@@ -18,10 +18,14 @@ class Renderer {
     const Camera& camera;
     SDL_Renderer* renderer;
 
+    float scale_factor_w, scale_factor_h;
     Uint8 draw_color_r, draw_color_g, draw_color_b, draw_color_a;
 
     /* Settea el color de renderer */
     void _setDrawColor() const;
+
+    /* Resizea el render_quad con el factor de escala */
+    void _resize(SDL_Rect* render_quad) const;
 
     /* Libera recursos */
     void _free();
@@ -45,7 +49,8 @@ class Renderer {
     //-------------------------------------------------------------------------
 
     /* Inicializa recursos */
-    void init(const json& config);
+    void init(const json& config, const float scale_factor_w,
+              const float scale_factor_h);
 
     /* Limpia la pantalla */
     void clearScreen() const;
