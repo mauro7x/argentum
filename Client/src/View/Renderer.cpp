@@ -13,10 +13,10 @@ void Renderer::_setDrawColor() const {
 }
 
 void Renderer::_resize(SDL_Rect* render_quad) const {
-    render_quad->x *= scale_factor_w;
-    render_quad->y *= scale_factor_h;
-    render_quad->w *= scale_factor_w;
-    render_quad->h *= scale_factor_h;
+    render_quad->x = std::floor(render_quad->x * scale_factor_w);
+    render_quad->y = std::floor(render_quad->y * scale_factor_h);
+    render_quad->w = std::ceil(render_quad->w * scale_factor_w);
+    render_quad->h = std::ceil(render_quad->h * scale_factor_h);
 }
 
 void Renderer::_free() {

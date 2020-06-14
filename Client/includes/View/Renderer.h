@@ -4,6 +4,8 @@
 //-----------------------------------------------------------------------------
 #include <SDL2/SDL.h>
 
+#include <cmath>
+
 #include "../../../Common/includes/Exceptions/SDLException.h"
 #include "../../../Common/includes/JSON.h"
 #include "Camera.h"
