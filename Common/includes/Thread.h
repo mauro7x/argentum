@@ -31,6 +31,9 @@ class Thread {
      * overrideado por clases hijas (objetos activos) */
     void start();
 
+    /* Te dice si es joineable el hilo */
+    bool joinable();
+
     /* Joinea el hilo */
     void join();
 

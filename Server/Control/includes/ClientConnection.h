@@ -3,18 +3,30 @@
 
 #include "Command.h"
 #include "CommandQueue.h"
+#include "../../../Common/includes/JSON.h"
 #include "../../../Common/includes/Thread.h"
 #include "../../../Common/includes/Socket/SocketWrapper.h"
 #include <queue>
+#include <string>
 #include <mutex>
+#include <atomic>
+#include <condition_variable>
 
-class ClientConnection : public Thread {
+
+class ClientConnection {
 private:
     // atributos del ClientConnection
     int id;
     SocketWrapper socket;
     CommandQueue* command_queue;
-    std::mutex m;
+    std::queue<std::string> response_queue;
+    std::condition_variable send_cond_var;
+    std::mutex send_mutex;
+    std::atomic_bool socket_open;
+
+    //threads
+    std::thread t_receiver;
+    std::thread t_sender;
 
 public:
     /**
@@ -36,7 +48,14 @@ public:
     /* Deshabilitamos el operador= para movimiento. */
     ClientConnection& operator=(ClientConnection&& other);
 
-    void run();
+    void start();
+
+    void receive();
+
+    void send();
+
+    void writeResponse(bool good, std::string message);
+    void writeBroadcast(bool initial, json status);
 
     /**
      * Descripción: destructor.

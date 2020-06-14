@@ -5,12 +5,7 @@
 // Métodos privados
 
 void Accepter::_joinAndFreeLoggedConnections() {
-    /*for (auto i = active_logins.begin(); i != active_logins.end();) {
-        if (i->isRunning())
-            i = active_logins.erase(i);
-        else
-            ++i;
-    }*/
+    active_logins.remove_if([](ClientLogin& n) { return n.isRunning(); });
 }
 
 //-----------------------------------------------------------------------------

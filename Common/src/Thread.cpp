@@ -23,6 +23,10 @@ void Thread::start() {
     thread = std::thread(&Thread::run, this);
 }
 
+bool Thread::joinable() {
+    return thread.joinable();
+}
+
 void Thread::join() {
     thread.join();
 }

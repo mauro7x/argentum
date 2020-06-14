@@ -22,7 +22,7 @@ void Server::run() {
 
     // Esto define el framerate
     using Framerate = duration<steady_clock::rep, std::ratio<1, 30>>;
-    auto next = steady_clock::now() + Framerate{ 0 };
+    auto next = steady_clock::now() + Framerate{0};
     int time_delta = 0;
     while (!ended) {
         time_delta = 1;
