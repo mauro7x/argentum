@@ -1,61 +1,61 @@
-#ifndef __CAMERA_H__
-#define __CAMERA_H__
+#ifndef __CONSOLE_H__
+#define __CONSOLE_H__
 
 //-----------------------------------------------------------------------------
 #include <SDL2/SDL.h>
 
+#include <string>
+
 #include "../../../Common/includes/JSON.h"
+#include "../paths.h"
+#include "Renderer.h"
+#include "Texture.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 
-class Camera {
+class ConsoleProxy {
    private:
-    int x, y;
-    int w, h;
+    const Renderer* g_renderer;
     int offset_x, offset_y;
-    int tile_w, tile_h;
+    int w, h;
+
+    /* Proxy stuff */
+    Texture texture;
 
    public:
     /* Constructor */
-    Camera();
+    ConsoleProxy(const Renderer* renderer);
 
     /* Deshabilitamos el constructor por copia. */
-    Camera(const Camera&) = delete;
+    ConsoleProxy(const ConsoleProxy&) = delete;
 
     /* Deshabilitamos el operador= para copia.*/
-    Camera& operator=(const Camera&) = delete;
+    ConsoleProxy& operator=(const ConsoleProxy&) = delete;
 
     /* Deshabilitamos el constructor por movimiento. */
-    Camera(Camera&& other) = delete;
+    ConsoleProxy(ConsoleProxy&& other) = delete;
 
     /* Deshabilitamos el operador= para movimiento. */
-    Camera& operator=(Camera&& other) = delete;
+    ConsoleProxy& operator=(ConsoleProxy&& other) = delete;
 
     //-------------------------------------------------------------------------
 
     /* Inicializa recursos */
-    void init(const json& config, const int tile_w, const int tile_h);
+    void init(const json& config);
 
-    /* Devuelve si el objeto es visible por la camara o no */
-    bool isVisible(const SDL_Rect* object) const;
+    /* Carga los archivos necesarios */
+    void loadMedia();
 
-    /* Offset de la camara en X */
-    int xOffset() const;
-
-    /* Offset de la camara en Y */
-    int yOffset() const;
-
-    /* Centra la camara en torno al objeto */
-    void center(const SDL_Rect object, const int map_width,
-                const int map_height);
+    /* Renderiza la interfaz entera */
+    void render() const;
 
     //-------------------------------------------------------------------------
 
     /* Destructor */
-    ~Camera();
+    ~ConsoleProxy();
 };
 
 //-----------------------------------------------------------------------------
 
-#endif  // __CAMERA_H__
+#endif  // __CONSOLE_H__

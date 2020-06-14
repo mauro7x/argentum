@@ -22,7 +22,6 @@
 
 class Stage {
    private:
-    const HUDProxy& g_hud;
     const MapView& g_map;
 
     /* Unidades a renderizar */
@@ -32,7 +31,7 @@ class Stage {
 
    public:
     /* Constructor */
-    Stage(const HUDProxy& hud, const MapView& map, const Player& player,
+    Stage(const MapView& map, const Player& player,
           const UnitContainer<Character, CharacterData>& characters,
           const UnitContainer<Creature, CreatureData>& creatures);
 

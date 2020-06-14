@@ -10,11 +10,13 @@
 
 Camera::Camera() : x(0), y(0) {}
 
-void Camera::init(const json& config) {
+void Camera::init(const json& config, const int tile_w, const int tile_h) {
     w = config["w"];
     h = config["h"];
     offset_x = config["offset"]["x"];
     offset_y = config["offset"]["y"];
+    this->tile_w = tile_w;
+    this->tile_h = tile_h;
 }
 
 bool Camera::isVisible(const SDL_Rect* object) const {
@@ -67,8 +69,8 @@ int Camera::yOffset() const {
 
 void Camera::center(const SDL_Rect object, const int map_width,
                     const int map_height) {
-    x = (object.x + object.w / 2) - w / 2;
-    y = (object.y + object.h / 2) - h / 2;
+    x = (object.x + tile_w / 2) - (w / 2);
+    y = (object.y + tile_h / 2) - (h / 2);
 
     if (x < 0) {
         x = 0;

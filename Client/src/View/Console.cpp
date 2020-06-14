@@ -1,4 +1,4 @@
-#include "../../includes/View/HUD.h"
+#include "../../includes/View/Console.h"
 
 //-----------------------------------------------------------------------------
 // Métodos privados
@@ -8,24 +8,24 @@
 //-----------------------------------------------------------------------------
 // API Pública
 
-HUDProxy::HUDProxy(const Renderer* renderer) : g_renderer(renderer) {}
+ConsoleProxy::ConsoleProxy(const Renderer* renderer) : g_renderer(renderer) {}
 
-void HUDProxy::init(const json& config) {
+void ConsoleProxy::init(const json& config) {
     offset_x = config["offset"]["x"];
     offset_y = config["offset"]["y"];
     w = config["w"];
     h = config["h"];
 }
 
-void HUDProxy::loadMedia() {
-    texture.loadFromFile(g_renderer, HUD_PATH + std::string("HUD.png"));
+void ConsoleProxy::loadMedia() {
+    texture.loadFromFile(g_renderer, CONSOLE_PATH + std::string("Console.png"));
 }
 
-void HUDProxy::render() const {
+void ConsoleProxy::render() const {
     SDL_Rect render_quad = {offset_x, offset_y, w, h};
     g_renderer->render(texture.getTexture(), &render_quad);
 }
 
-HUDProxy::~HUDProxy() {}
+ConsoleProxy::~ConsoleProxy() {}
 
 //-----------------------------------------------------------------------------

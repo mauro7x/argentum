@@ -6,6 +6,7 @@
 
 #include <string>
 
+#include "../../../Common/includes/JSON.h"
 #include "../paths.h"
 #include "Renderer.h"
 #include "Texture.h"
@@ -16,6 +17,8 @@
 class HUDProxy {
    private:
     const Renderer* g_renderer;
+    int offset_x, offset_y;
+    int w, h;
 
     /* Proxy stuff */
     Texture texture;
@@ -37,6 +40,9 @@ class HUDProxy {
     HUDProxy& operator=(HUDProxy&& other) = delete;
 
     //-------------------------------------------------------------------------
+
+    /* Inicializa recursos */
+    void init(const json& config);
 
     /* Carga los archivos necesarios */
     void loadMedia();

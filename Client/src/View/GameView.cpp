@@ -31,6 +31,14 @@ void GameView::_init() {
     int fps = gui_config["fps"];
     rate = 1000 / fps;
 
+    /* Cargamos las dimensiones de los tiles */
+    int tile_w = map_config["tilewidth"];
+    int tile_h = map_config["tileheight"];
+
+    /* Cargamos la velocidad de movimiento de las unidades */
+    int speed = common_config["tiles_per_sec"]["character_speed"];
+    float tile_movement_time = 1000 / speed;
+
     /* Iniciamos la ventana */
     window.init(gui_config["window"]);
 
@@ -38,20 +46,22 @@ void GameView::_init() {
     renderer.init(gui_config["renderer"]);
 
     /* Iniciamos la cámara */
-    camera.init(gui_config["camera"]);
+    camera.init(gui_config["camera"], tile_w, tile_h);
+
+    /* Iniciamos la HUD */
+    hud.init(gui_config["hud"]);
+
+    /* Iniciamos la consola */
+    console.init(gui_config["console"]);
 
     /* Iniciamos los contenedores */
-    int tile_w = map_config["tilewidth"];
-    int tile_h = map_config["tileheight"];
-    int speed = common_config["tiles_per_sec"]["character_speed"];
-    float tile_movement_time = 1000 / speed;
-
     characters.init(tile_w, tile_h, tile_movement_time);
     creatures.init(tile_w, tile_h, tile_movement_time);
 }
 
 void GameView::_loadMedia() {
     hud.loadMedia();
+    console.loadMedia();
     map.loadMedia();
     unit_sprites.loadMedia();
 }
@@ -74,6 +84,8 @@ void GameView::_gameIteration(uint32_t it) {
 
     /* Renderizamos y presentamos la pantalla */
     stage.render();
+    hud.render();
+    console.render();
     renderer.presentScreen();
 }
 
@@ -87,6 +99,7 @@ GameView::GameView()
       rate(0),
       view_running(true),
       hud(&renderer),
+      console(&renderer),
       map(&renderer),
       unit_sprites(&renderer),
       player(&renderer, &unit_sprites),
@@ -95,7 +108,7 @@ GameView::GameView()
 
       server(requests, broadcast),
 
-      stage(hud, map, player, characters, creatures),
+      stage(map, player, characters, creatures),
       event_handler(view_running, requests) {}
 
 void GameView::operator()() {
