@@ -49,6 +49,7 @@ void ServerProxy::run() {
                     x_step = 0;
                     y_step = -1;
                     player.basic_data.orientation = UP;
+                    broadcastear = true;
                     moving = true;
                     break;
 
@@ -56,6 +57,7 @@ void ServerProxy::run() {
                     x_step = 0;
                     y_step = 1;
                     player.basic_data.orientation = DOWN;
+                    broadcastear = true;
                     moving = true;
                     break;
 
@@ -63,6 +65,7 @@ void ServerProxy::run() {
                     x_step = -1;
                     y_step = 0;
                     player.basic_data.orientation = LEFT;
+                    broadcastear = true;
                     moving = true;
                     break;
 
@@ -70,6 +73,7 @@ void ServerProxy::run() {
                     x_step = 1;
                     y_step = 0;
                     player.basic_data.orientation = RIGHT;
+                    broadcastear = true;
                     moving = true;
                     break;
 
