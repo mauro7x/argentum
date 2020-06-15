@@ -20,6 +20,11 @@ typedef int TileId;
 typedef int Id;
 #endif  // __ID__
 
+#ifndef __ORIENTATION__
+#define __ORIENTATION__
+enum Orientation { UP, DOWN, LEFT, RIGHT };
+#endif // __ORIENTATION__
+
 enum MapLayer {
     GROUND1_LAYER,
     GROUND2_LAYER,
@@ -72,6 +77,11 @@ class Map {
     /* Pasa de una posición dada por (x,y) a el número de tile en 1D */
     int _tileNumber(const int x, const int y) const;
 
+    /* Obtiene un tile modificable */
+    Tile& getTile(const int x, const int y);
+
+    const bool Map::_moveOcuppant(Tile& from_tile, Tile& to_tile);
+
    public:
     /* Constructor */
     Map();
@@ -112,6 +122,9 @@ class Map {
 
     /* Obtiene un Tile de solo lectura */
     const Tile& getTile(const int x, const int y) const;
+
+    const bool moveOcuppant(const int x, const int y, 
+                            const Orientation& orientation);
 
     //-------------------------------------------------------------------------
 

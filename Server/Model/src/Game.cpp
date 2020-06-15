@@ -37,7 +37,7 @@ const int Game::newCharacter(const int id_race, const int id_kind) {
 
 void Game::deleteCharacter(const int id) {
     if (!this->characters.count(id)) {
-        throw Exception("deleteCharacter: Unknown character id (", id, ")");
+        throw Exception("deleteCharacter: Unknown character id [", id, "]");
     }
 
     // PERSISTIR ESTADO DEL JUGADOR
@@ -45,4 +45,6 @@ void Game::deleteCharacter(const int id) {
     this->characters.erase(id);
 }
 //-----------------------------------------------------------------------------
+
+
 

@@ -140,6 +140,63 @@ const Tile& Map::getTile(const int x, const int y) const {
     return tiles.at(tile);
 }
 
+const bool Map::_moveOcuppant(Tile& from_tile, Tile& to_tile) {
+    if (to_tile.collision || 
+        to_tile.occupant_id || 
+        to_tile.npc_id) {
+        // El tile está ocupado / hay colisión.
+        return false;
+    }
+
+    // Se puede mover.
+    to_tile.occupant_id = from_tile.occupant_id;
+    to_tile.collision = true;
+
+    from_tile.occupant_id = 0;
+    from_tile.collision = false;
+    
+    return true;
+}
+
+const bool Map::moveOcuppant(const int x, const int y, 
+                             const Orientation& orientation) {
+    Tile& from_tile = this->getTile(x, y);
+
+    if (orientation == UP) {
+        if (y == 0) {
+            // Limite superior alcanzado.
+            return false;
+        }
+        Tile& to_tile = this->getTile(x, y - 1);
+        return _moveOcuppant(from_tile, to_tile);
+    }
+
+    if (orientation == DOWN) {
+        if (y == this->h) {
+            // Limite inferior alcanzado.
+            return false;
+        }
+        Tile& to_tile = this->getTile(x, y + 1);
+        return _moveOcuppant(from_tile, to_tile);
+    }
+
+    if (orientation == LEFT) {
+        if (x == 0) {
+            // Limite izquierdo alcanzado.
+            return false;
+        }
+        Tile& to_tile = this->getTile(x - 1, y);
+        return _moveOcuppant(from_tile, to_tile);
+    }
+
+    if (x == this->w) {
+        // Limite derecho alcanzado.
+        return false;
+    }
+    Tile& to_tile = this->getTile(x + 1, y);
+    return _moveOcuppant(from_tile, to_tile);
+}
+
 Map::~Map() {}
 
 //-----------------------------------------------------------------------------

@@ -28,4 +28,7 @@ const unsigned int Position::getDistance(const Position& other) const {
     return abs(this->x - other.getX()) + abs(this->y - other.getY());
 }
 
+const bool Position::move(const Orientation& orientation) {
+    // IMPLEMENTAR
+}
 

@@ -3,7 +3,10 @@
 
 #include "../../../Common/includes/MapContainer.h"
 
+#ifndef __ORIENTATION__
+#define __ORIENTATION__
 enum Orientation { UP, DOWN, LEFT, RIGHT };
+#endif // __ORIENTATION__
 
 class Position {
     private:
@@ -28,6 +31,8 @@ class Position {
 
         const int getX() const;
         const int getY() const;
+
+        const bool move(const Orientation& orientation);
 };
 
 #endif
