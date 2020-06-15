@@ -138,7 +138,7 @@ GameView::GameView()
       server(requests, broadcast),
 
       stage(map, player, characters, creatures),
-      event_handler(window, view_running, requests) {}
+      event_handler(view_running, requests) {}
 
 void GameView::operator()() {
     /* Inicializamos variables internas, hilos de ejecución y cargamos media */
@@ -179,8 +179,8 @@ void GameView::operator()() {
                 it += (lost / rate);
             }
 
-            fprintf(stderr, "MAIN-LOOP | It: %i | Sleep: %i ms\n", it + 1,
-                    rest);
+            // fprintf(stderr, "MAIN-LOOP | It: %i | Sleep: %i ms\n", it + 1,
+            //        rest);
             std::this_thread::sleep_for(std::chrono::milliseconds(rest));
             t1 += rate;
             it++;
