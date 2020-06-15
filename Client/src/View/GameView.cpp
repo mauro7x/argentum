@@ -151,8 +151,16 @@ void GameView::operator()() {
         //-------------------------------------------------------------------------
         // PROXY PARA EL MANEJO DEL PRIMER PAQUETE DEL SERVER (hardcodeado).
 
-        PlayerData init_data = {
-            {1, 0, 0, DOWN}, 100, 100, 100, 2000, 2100, 1300, 1400, 1500, 0};
+        PlayerData init_data = {{1, 0, 0, DOWN_ORIENTATION},
+                                100,
+                                100,
+                                100,
+                                2000,
+                                2100,
+                                1300,
+                                1400,
+                                1500,
+                                0};
         player.init(init_data);
         map.select(0); /* el id del mapa x ahora hardcodeado */
         //-------------------------------------------------------------------------
