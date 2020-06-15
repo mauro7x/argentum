@@ -4,7 +4,6 @@
 //-----------------------------------------------------------------------------
 #include <SDL2/SDL.h>
 
-#include <mutex>
 #include <string>
 
 #include "../../../Common/includes/Exceptions/Exception.h"
@@ -18,17 +17,14 @@ class Window {
    private:
     bool initialized;
     SDL_Window* window;
-    std::mutex m;
-    bool fullscreen_allowed;
-    bool fullscreen;
     int w;
     int h;
 
     /* Settea fullscreen mode */
-    void _fullscreenMode();
+    // void _fullscreenMode();
 
     /* Settea window mode */
-    void _windowMode();
+    // void _windowMode();
 
     /* Libera recursos */
     void _free();
@@ -55,7 +51,7 @@ class Window {
     void init(const json& config);
 
     /* Cambia el estado de la pantalla completa */
-    void fullscreenModeSwitch();
+    // void fullscreenModeSwitch();
 
     /* Devuelve window */
     SDL_Window* getWindow();
