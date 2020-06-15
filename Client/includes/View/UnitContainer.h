@@ -21,22 +21,22 @@
 template <class ConcreteUnit, class Data>
 class UnitContainer {
    private:
+    bool initialized;
     Renderer* g_renderer;
     UnitSpriteContainer* g_sprites;
     std::unordered_map<Id, ConcreteUnit> content;
     int tile_w, tile_h;
     float tile_movement_time;
-    bool initialized;
 
    public:
     /* Constructor */
     UnitContainer(Renderer* renderer, UnitSpriteContainer* sprites)
-        : g_renderer(renderer),
+        : initialized(false),
+          g_renderer(renderer),
           g_sprites(sprites),
           tile_w(0),
           tile_h(0),
-          tile_movement_time(0),
-          initialized(false) {}
+          tile_movement_time(0) {}
 
     /* Deshabilitamos el constructor por copia. */
     UnitContainer(const UnitContainer&) = delete;
@@ -55,16 +55,21 @@ class UnitContainer {
     /* Inicializa recursos */
     void init(const int tile_w, const int tile_h,
               const float tile_movement_time) {
+        if (initialized) {
+            throw Exception("Container already initialized.");
+        }
+
         this->tile_w = tile_w;
         this->tile_h = tile_h;
         this->tile_movement_time = tile_movement_time;
-        this->initialized = true;
+
+        initialized = true;
     }
 
     /* Agrega una nueva unidad con el id y la data recibida. */
     void add(const Id id, const Data& init_data) {
         if (!initialized) {
-            throw Exception("Container has not been initialized.");
+            throw Exception("Container not initialized.");
         }
 
         if (content.count(id) > 0) {
@@ -81,7 +86,7 @@ class UnitContainer {
     /* Si el id es inválido lanza una excepción informándolo. */
     void update(const Id id, const Data& updated_data) {
         if (!initialized) {
-            throw Exception("Container has not been initialized.");
+            throw Exception("Container not initialized.");
         }
 
         if (content.count(id) == 0) {
@@ -94,7 +99,7 @@ class UnitContainer {
     /* Renderiza la unidad si el id es válido */
     void render(const Id id) const {
         if (!initialized) {
-            throw Exception("Container has not been initialized.");
+            throw Exception("Container not initialized.");
         }
 
         if (content.count(id) > 0) {
@@ -106,7 +111,7 @@ class UnitContainer {
     /* Si el id es inválido lanza una excepción informándolo. */
     void remove(const Id id) {
         if (!initialized) {
-            throw Exception("Container has not been initialized.");
+            throw Exception("Container not initialized.");
         }
 
         if (content.count(id) == 0) {
@@ -119,7 +124,7 @@ class UnitContainer {
     /* Elimina todas las unidades. */
     void clear() {
         if (!initialized) {
-            throw Exception("Container has not been initialized.");
+            throw Exception("Container not initialized.");
         }
 
         content.clear();

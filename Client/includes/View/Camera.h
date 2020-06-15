@@ -11,6 +11,7 @@
 
 class Camera {
    private:
+    bool initialized;
     int x, y;
     int w, h;
     int offset_x, offset_y;

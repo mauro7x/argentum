@@ -1,9 +1,8 @@
 {
     "fps": 60,
-    "w": 960,
-    "h": 540,
     "window": {
         "title": "Argentum Online",
+        "fullscreen": false,
         "w": 960,
         "h": 540
     },

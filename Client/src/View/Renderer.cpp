@@ -31,11 +31,15 @@ void Renderer::_free() {
 //-----------------------------------------------------------------------------
 // API Pública
 
-Renderer::Renderer(const Window& window, const Camera& camera)
-    : window(window), camera(camera), renderer(NULL) {}
+Renderer::Renderer(Window& window, const Camera& camera)
+    : initialized(false), window(window), camera(camera), renderer(NULL) {}
 
 void Renderer::init(const json& config, const float scale_factor_w,
                     const float scale_factor_h) {
+    if (initialized) {
+        throw Exception("Renderer already initialized.");
+    }
+
     this->scale_factor_w = scale_factor_w;
     this->scale_factor_h = scale_factor_h;
     draw_color_r = config["draw_color"]["r"];
@@ -62,9 +66,15 @@ void Renderer::init(const json& config, const float scale_factor_w,
     }
 
     _setDrawColor();
+
+    initialized = true;
 }
 
 void Renderer::clearScreen() const {
+    if (!initialized) {
+        throw Exception("Renderer not initialized.");
+    }
+
     if (SDL_RenderClear(renderer)) {
         throw SDLException("Error in function SDL_RenderClear()\nSDL_Error: %s",
                            SDL_GetError());
@@ -72,10 +82,18 @@ void Renderer::clearScreen() const {
 }
 
 void Renderer::presentScreen() const {
+    if (!initialized) {
+        throw Exception("Renderer not initialized.");
+    }
+
     SDL_RenderPresent(renderer);
 }
 
 SDL_Texture* Renderer::createTextureFromSurface(SDL_Surface* surface) const {
+    if (!initialized) {
+        throw Exception("Renderer not initialized.");
+    }
+
     SDL_Texture* new_texture = SDL_CreateTextureFromSurface(renderer, surface);
     if (new_texture == NULL) {
         throw SDLException(
@@ -88,18 +106,13 @@ SDL_Texture* Renderer::createTextureFromSurface(SDL_Surface* surface) const {
 void Renderer::render(SDL_Texture* texture, SDL_Rect* render_quad,
                       const SDL_Rect* clip, double angle, SDL_Point* center,
                       SDL_RendererFlip flip) const {
-    // Set clip rendering dimensions
-    /*
-    if (clip) {
-        render_quad->w = clip->w;
-        render_quad->h = clip->h;
+    if (!initialized) {
+        throw Exception("Renderer not initialized.");
     }
-    */
 
     /* Escalamos a las dimensiones en las que estamos renderizando */
     _resize(render_quad);
 
-    // Render to screen
     if (SDL_RenderCopyEx(renderer, texture, clip, render_quad, angle, center,
                          flip)) {
         throw SDLException(
@@ -111,6 +124,10 @@ void Renderer::render(SDL_Texture* texture, SDL_Rect* render_quad,
 void Renderer::renderIfVisible(SDL_Texture* texture, SDL_Rect* render_quad,
                                const SDL_Rect* clip, double angle,
                                SDL_Point* center, SDL_RendererFlip flip) const {
+    if (!initialized) {
+        throw Exception("Renderer not initialized.");
+    }
+
     if (camera.isVisible(render_quad)) {
         render_quad->x += camera.xOffset();
         render_quad->y += camera.yOffset();
@@ -120,6 +137,10 @@ void Renderer::renderIfVisible(SDL_Texture* texture, SDL_Rect* render_quad,
 
 void Renderer::fillQuadIfVisible(SDL_Rect* quad, int r, int g, int b,
                                  int a) const {
+    if (!initialized) {
+        throw Exception("Renderer not initialized.");
+    }
+
     if (camera.isVisible(quad)) {
         if (SDL_SetRenderDrawColor(renderer, r, g, b, a)) {
             throw SDLException(

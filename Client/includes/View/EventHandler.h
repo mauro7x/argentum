@@ -10,20 +10,24 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+//#include "../../../Common/includes/Exceptions/Exception.h"
 #include "../../../Common/includes/Queue.h"
 #include "../../../Common/includes/Thread.h"
+#include "Window.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 
 class EventHandler : public Thread {
    private:
+    Window& g_window;
     std::atomic_bool& view_running;
     Queue<int*>& requests;
 
    public:
     /* Constructor */
-    EventHandler(std::atomic_bool& view_running, Queue<int*>& requests);
+    EventHandler(Window& window, std::atomic_bool& view_running,
+                 Queue<int*>& requests);
 
     /* Método de ejecución del hilo */
     void run() override;

@@ -16,7 +16,8 @@
 
 class Renderer {
    private:
-    const Window& window;
+    bool initialized;
+    Window& window;
     const Camera& camera;
     SDL_Renderer* renderer;
 
@@ -34,7 +35,7 @@ class Renderer {
 
    public:
     /* Constructor */
-    Renderer(const Window& window, const Camera& camera);
+    Renderer(Window& window, const Camera& camera);
 
     /* Deshabilitamos el constructor por copia. */
     Renderer(const Renderer&) = delete;

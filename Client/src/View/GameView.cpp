@@ -5,6 +5,7 @@
 
 void GameView::_init() {
     /* Cargamos los archivos de configuración */
+    json user_config = JSON::loadJsonFile(CONFIG_FILEPATH);
     json gui_config = JSON::loadJsonFile(GUI_CONFIG_FILEPATH);
     json map_config = JSON::loadJsonFile(MAPS_FILEPATH);
     json common_config = JSON::loadJsonFile(COMMON_CONFIG_FILEPATH);
@@ -40,12 +41,26 @@ void GameView::_init() {
     int original_w, original_h, new_w, new_h;
     original_w = gui_config["window"]["w"];
     original_h = gui_config["window"]["h"];
-    new_w = gui_config["w"];
-    new_h = gui_config["h"];
+    new_w = user_config["size"]["w"];
+    new_h = user_config["size"]["h"];
+
+    bool fullscreen = user_config["size"]["fullscreen"];
+    if (fullscreen) {
+        SDL_DisplayMode dm;
+        if (SDL_GetCurrentDisplayMode(0, &dm)) {
+            throw SDLException(
+                "Error in function SDL_GetCurrentDisplayMode()\nSDL_Error: %s",
+                SDL_GetError());
+        }
+        new_w = dm.w;
+        new_h = dm.h;
+    }
+
     scale_factor_w = (float)new_w / original_w;
     scale_factor_h = (float)new_h / original_h;
 
     /* Ajustamos el ancho y alto de la ventana */
+    gui_config["window"]["fullscreen"] = fullscreen;
     gui_config["window"]["w"] = (int)(original_w * scale_factor_w);
     gui_config["window"]["h"] = (int)(original_h * scale_factor_h);
 
@@ -123,7 +138,7 @@ GameView::GameView()
       server(requests, broadcast),
 
       stage(map, player, characters, creatures),
-      event_handler(view_running, requests) {}
+      event_handler(window, view_running, requests) {}
 
 void GameView::operator()() {
     /* Inicializamos variables internas, hilos de ejecución y cargamos media */

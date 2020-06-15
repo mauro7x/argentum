@@ -19,6 +19,7 @@
 // Config paths
 
 #define CONFIG_PATH "../Config/Client/"
+#define CONFIG_FILEPATH "../Config/Client/user_config.json"
 #define GUI_CONFIG_FILEPATH "../Config/Client/gui_config.json"
 #define UNIT_SPRITES_FILEPATH "../Config/Client/unit_sprites.json"
 #define INVENTORY_SPRITES_FILEPATH "../Config/Client/inventory_sprites.json"

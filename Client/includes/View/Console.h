@@ -16,6 +16,7 @@
 
 class ConsoleProxy {
    private:
+    bool initialized;
     const Renderer* g_renderer;
     int offset_x, offset_y;
     int w, h;
