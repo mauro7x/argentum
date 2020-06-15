@@ -8,16 +8,28 @@
 //-----------------------------------------------------------------------------
 // API Pública
 
-Camera::Camera() : x(0), y(0) {}
+Camera::Camera() : initialized(false), x(0), y(0) {}
 
-void Camera::init(const json& config) {
+void Camera::init(const json& config, const int tile_w, const int tile_h) {
+    if (initialized) {
+        throw Exception("Camera already initialized.");
+    }
+
     w = config["w"];
     h = config["h"];
     offset_x = config["offset"]["x"];
     offset_y = config["offset"]["y"];
+    this->tile_w = tile_w;
+    this->tile_h = tile_h;
+
+    initialized = true;
 }
 
 bool Camera::isVisible(const SDL_Rect* object) const {
+    if (!initialized) {
+        throw Exception("Camera not initialized.");
+    }
+
     // The sides of the rectangles
     int leftA, leftB;
     int rightA, rightB;
@@ -58,17 +70,29 @@ bool Camera::isVisible(const SDL_Rect* object) const {
 }
 
 int Camera::xOffset() const {
+    if (!initialized) {
+        throw Exception("Camera not initialized.");
+    }
+
     return offset_x - x;
 }
 
 int Camera::yOffset() const {
+    if (!initialized) {
+        throw Exception("Camera not initialized.");
+    }
+
     return offset_y - y;
 }
 
 void Camera::center(const SDL_Rect object, const int map_width,
                     const int map_height) {
-    x = (object.x + object.w / 2) - w / 2;
-    y = (object.y + object.h / 2) - h / 2;
+    if (!initialized) {
+        throw Exception("Camera not initialized.");
+    }
+
+    x = (object.x + tile_w / 2) - (w / 2);
+    y = (object.y + tile_h / 2) - (h / 2);
 
     if (x < 0) {
         x = 0;

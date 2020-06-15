@@ -55,22 +55,22 @@ void Unit::_movementFinished() {
 
 int Unit::_calculateSpriteX(const Sprite& sprite) const {
     switch (data.orientation) {
-        case UP:
+        case UP_ORIENTATION:
             return (sprite.up_col +
                     ((last_tick / sprite.change_every_n_frames) %
                      sprite.up_clips)) *
                    sprite.clip_w;
-        case DOWN:
+        case DOWN_ORIENTATION:
             return (sprite.down_col +
                     ((last_tick / sprite.change_every_n_frames) %
                      sprite.down_clips)) *
                    sprite.clip_w;
-        case LEFT:
+        case LEFT_ORIENTATION:
             return (sprite.left_col +
                     ((last_tick / sprite.change_every_n_frames) %
                      sprite.left_clips)) *
                    sprite.clip_w;
-        case RIGHT:
+        case RIGHT_ORIENTATION:
             return (sprite.right_col +
                     ((last_tick / sprite.change_every_n_frames) %
                      sprite.right_clips)) *
@@ -83,13 +83,13 @@ int Unit::_calculateSpriteX(const Sprite& sprite) const {
 
 int Unit::_calculateSpriteY(const Sprite& sprite) const {
     switch (data.orientation) {
-        case UP:
+        case UP_ORIENTATION:
             return sprite.up_row * sprite.clip_h;
-        case DOWN:
+        case DOWN_ORIENTATION:
             return sprite.down_row * sprite.clip_h;
-        case LEFT:
+        case LEFT_ORIENTATION:
             return sprite.left_row * sprite.clip_h;
-        case RIGHT:
+        case RIGHT_ORIENTATION:
             return sprite.right_row * sprite.clip_h;
     }
 

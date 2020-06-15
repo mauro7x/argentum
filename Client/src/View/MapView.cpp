@@ -139,9 +139,9 @@ void MapView::renderShadowOutdoor() const {
             if (!(current_tile.indoor)) {
                 /* Renderizar una textura negra */
                 render_quad = {(x * tile_w), (y * tile_h), tile_w, tile_h};
-                float alpha = 0.7;
+                float alpha = 1.0;
                 g_renderer->fillQuadIfVisible(&render_quad, 0, 0, 0,
-                                              alpha * 256);
+                                              alpha * 255);
             }
         }
     }

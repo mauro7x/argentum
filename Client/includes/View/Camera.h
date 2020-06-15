@@ -11,9 +11,11 @@
 
 class Camera {
    private:
+    bool initialized;
     int x, y;
     int w, h;
     int offset_x, offset_y;
+    int tile_w, tile_h;
 
    public:
     /* Constructor */
@@ -34,7 +36,7 @@ class Camera {
     //-------------------------------------------------------------------------
 
     /* Inicializa recursos */
-    void init(const json& config);
+    void init(const json& config, const int tile_w, const int tile_h);
 
     /* Devuelve si el objeto es visible por la camara o no */
     bool isVisible(const SDL_Rect* object) const;

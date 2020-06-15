@@ -5,6 +5,7 @@
 
 void GameView::_init() {
     /* Cargamos los archivos de configuración */
+    json user_config = JSON::loadJsonFile(CONFIG_FILEPATH);
     json gui_config = JSON::loadJsonFile(GUI_CONFIG_FILEPATH);
     json map_config = JSON::loadJsonFile(MAPS_FILEPATH);
     json common_config = JSON::loadJsonFile(COMMON_CONFIG_FILEPATH);
@@ -31,27 +32,65 @@ void GameView::_init() {
     int fps = gui_config["fps"];
     rate = 1000 / fps;
 
+    /* Cargamos las dimensiones de los tiles */
+    int tile_w = map_config["tilewidth"];
+    int tile_h = map_config["tileheight"];
+
+    /* Calculamos los factores de escala */
+    float scale_factor_w, scale_factor_h;
+    int original_w, original_h, new_w, new_h;
+    original_w = gui_config["window"]["w"];
+    original_h = gui_config["window"]["h"];
+    new_w = user_config["size"]["w"];
+    new_h = user_config["size"]["h"];
+
+    bool fullscreen = user_config["size"]["fullscreen"];
+    if (fullscreen) {
+        SDL_DisplayMode dm;
+        if (SDL_GetCurrentDisplayMode(0, &dm)) {
+            throw SDLException(
+                "Error in function SDL_GetCurrentDisplayMode()\nSDL_Error: %s",
+                SDL_GetError());
+        }
+        new_w = dm.w;
+        new_h = dm.h;
+    }
+
+    scale_factor_w = (float)new_w / original_w;
+    scale_factor_h = (float)new_h / original_h;
+
+    /* Ajustamos el ancho y alto de la ventana */
+    gui_config["window"]["fullscreen"] = fullscreen;
+    gui_config["window"]["w"] = (int)(original_w * scale_factor_w);
+    gui_config["window"]["h"] = (int)(original_h * scale_factor_h);
+
+    /* Cargamos la velocidad de movimiento de las unidades */
+    int speed = common_config["tiles_per_sec"]["character_speed"];
+    float tile_movement_time = 1000 / speed;
+
     /* Iniciamos la ventana */
     window.init(gui_config["window"]);
 
     /* Iniciamos el renderer */
-    renderer.init(gui_config["renderer"]);
+    renderer.init(gui_config["renderer"], scale_factor_w, scale_factor_h);
 
     /* Iniciamos la cámara */
-    camera.init(gui_config["camera"]);
+    camera.init(gui_config["camera"], tile_w, tile_h);
+
+    /* Iniciamos la HUD */
+    hud.init(gui_config["hud"]);
+
+    /* Iniciamos la consola */
+    console.init(gui_config["console"]);
 
     /* Iniciamos los contenedores */
-    int tile_w = map_config["tilewidth"];
-    int tile_h = map_config["tileheight"];
-    int speed = common_config["tiles_per_sec"]["character_speed"];
-    float tile_movement_time = 1000 / speed;
-
     characters.init(tile_w, tile_h, tile_movement_time);
     creatures.init(tile_w, tile_h, tile_movement_time);
 }
 
 void GameView::_loadMedia() {
     hud.loadMedia();
+    console.loadMedia();
     map.loadMedia();
     unit_sprites.loadMedia();
 }
@@ -74,6 +113,8 @@ void GameView::_gameIteration(uint32_t it) {
 
     /* Renderizamos y presentamos la pantalla */
     stage.render();
+    hud.render();
+    console.render();
     renderer.presentScreen();
 }
 
@@ -87,6 +128,7 @@ GameView::GameView()
       rate(0),
       view_running(true),
       hud(&renderer),
+      console(&renderer),
       map(&renderer),
       unit_sprites(&renderer),
       player(&renderer, &unit_sprites),
@@ -95,7 +137,7 @@ GameView::GameView()
 
       server(requests, broadcast),
 
-      stage(hud, map, player, characters, creatures),
+      stage(map, player, characters, creatures),
       event_handler(view_running, requests) {}
 
 void GameView::operator()() {
@@ -109,8 +151,16 @@ void GameView::operator()() {
         //-------------------------------------------------------------------------
         // PROXY PARA EL MANEJO DEL PRIMER PAQUETE DEL SERVER (hardcodeado).
 
-        PlayerData init_data = {
-            {1, 0, 0, DOWN}, 100, 100, 100, 2000, 2100, 1300, 1400, 1500, 0};
+        PlayerData init_data = {{1, 0, 0, DOWN_ORIENTATION},
+                                100,
+                                100,
+                                100,
+                                2000,
+                                2100,
+                                1300,
+                                1400,
+                                1500,
+                                0};
         player.init(init_data);
         map.select(0); /* el id del mapa x ahora hardcodeado */
         //-------------------------------------------------------------------------

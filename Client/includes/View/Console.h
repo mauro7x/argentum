@@ -1,5 +1,5 @@
-#ifndef __HUD_H__
-#define __HUD_H__
+#ifndef __CONSOLE_H__
+#define __CONSOLE_H__
 
 //-----------------------------------------------------------------------------
 #include <SDL2/SDL.h>
@@ -14,7 +14,7 @@
 
 //-----------------------------------------------------------------------------
 
-class HUDProxy {
+class ConsoleProxy {
    private:
     bool initialized;
     const Renderer* g_renderer;
@@ -26,19 +26,19 @@ class HUDProxy {
 
    public:
     /* Constructor */
-    HUDProxy(const Renderer* renderer);
+    ConsoleProxy(const Renderer* renderer);
 
     /* Deshabilitamos el constructor por copia. */
-    HUDProxy(const HUDProxy&) = delete;
+    ConsoleProxy(const ConsoleProxy&) = delete;
 
     /* Deshabilitamos el operador= para copia.*/
-    HUDProxy& operator=(const HUDProxy&) = delete;
+    ConsoleProxy& operator=(const ConsoleProxy&) = delete;
 
     /* Deshabilitamos el constructor por movimiento. */
-    HUDProxy(HUDProxy&& other) = delete;
+    ConsoleProxy(ConsoleProxy&& other) = delete;
 
     /* Deshabilitamos el operador= para movimiento. */
-    HUDProxy& operator=(HUDProxy&& other) = delete;
+    ConsoleProxy& operator=(ConsoleProxy&& other) = delete;
 
     //-------------------------------------------------------------------------
 
@@ -54,9 +54,9 @@ class HUDProxy {
     //-------------------------------------------------------------------------
 
     /* Destructor */
-    ~HUDProxy();
+    ~ConsoleProxy();
 };
 
 //-----------------------------------------------------------------------------
 
-#endif  // __HUD_H__
+#endif  // __CONSOLE_H__

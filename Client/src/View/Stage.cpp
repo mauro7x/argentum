@@ -8,11 +8,10 @@
 //-----------------------------------------------------------------------------
 // API Pública
 
-Stage::Stage(const HUDProxy& hud, const MapView& map, const Player& player,
+Stage::Stage(const MapView& map, const Player& player,
              const UnitContainer<Character, CharacterData>& characters,
              const UnitContainer<Creature, CreatureData>& creatures)
-    : g_hud(hud),
-      g_map(map),
+    : g_map(map),
       g_player(player),
       g_characters(characters),
       g_creatures(creatures) {}
@@ -52,8 +51,6 @@ void Stage::render() const {
     } else {
         g_map.renderRoofs(); /* estamos afuera de las construcciones */
     }
-
-    g_hud.render();
 }
 
 Stage::~Stage() {}

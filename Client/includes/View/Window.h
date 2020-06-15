@@ -6,6 +6,7 @@
 
 #include <string>
 
+#include "../../../Common/includes/Exceptions/Exception.h"
 #include "../../../Common/includes/Exceptions/SDLException.h"
 #include "../../../Common/includes/JSON.h"
 //-----------------------------------------------------------------------------
@@ -14,9 +15,16 @@
 
 class Window {
    private:
+    bool initialized;
     SDL_Window* window;
     int w;
     int h;
+
+    /* Settea fullscreen mode */
+    // void _fullscreenMode();
+
+    /* Settea window mode */
+    // void _windowMode();
 
     /* Libera recursos */
     void _free();
@@ -42,8 +50,11 @@ class Window {
     /* Inicializa recursos */
     void init(const json& config);
 
+    /* Cambia el estado de la pantalla completa */
+    // void fullscreenModeSwitch();
+
     /* Devuelve window */
-    SDL_Window* getWindow() const;
+    SDL_Window* getWindow();
 
     //-------------------------------------------------------------------------
 
