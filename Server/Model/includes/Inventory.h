@@ -1,12 +1,13 @@
 #ifndef __INVENTORY_H__
 #define __INVENTORY_H__
 
-#define N_INVENTORY_SLOTS 10
 #define EMPTY_ITEM_ID 0
 
 #include <array>
 #include <map>
 #include <exception>
+
+#include "../../../Common/includes/game_config.h"
 
 #include "Item.h"
 #include "Level.h"
