@@ -18,10 +18,12 @@ Identificas el mensaje con el primer byte recibido (opcode), y para cada caso se
 
 | OPCODE | TIPO | DIRECCIÓN | ESTRUCTURA (B) |
 |--------|------|-----------|----------------|
-| 0 | Comando | C -> S | `OPCODE_CMD (1) + ...` |
-| 1 | Respuesta | S -> C | `OPCODE_REPLY (1) + LENGTH (4) + REPLY (LENGTH)` |
-| 2 | Mensaje privado | S -> C | `SENDER_LENGTH (4) + SENDER (SENDER_LENGTH) + MSG_LENGTH (4) + MSG (MSG_LENGTH)` |
-| 3 | Broadcast | S -> C | `LENGTH (4) + BROADCAST (LENGTH)` |
+| 0 | Respuesta | S -> C | `OPCODE_REPLY (1) + LENGTH (4) + REPLY (LENGTH)` |
+| 1 | Mensaje privado | S -> C | `SENDER_LENGTH (4) + SENDER (SENDER_LENGTH) + MSG_LENGTH (4) + MSG (MSG_LENGTH)` |
+| 2 | Broadcast | S -> C | `LENGTH (4) + BROADCAST (LENGTH)` |
+| 128 | Comando | C -> S | `OPCODE_CMD (1) + ...` |
+| 129 | Sign-in | C -> S | `USER_LENGTH (4) + USERNAME (USER_LENGTH) + PASS_LENGTH (4) + PASSWORD (PASS_LENGTH)` |
+| 130 | Sign-up | C -> S | `USER_LENGTH (4) + USERNAME (USER_LENGTH) + PASS_LENGTH (4) + PASSWORD (PASS_LENGTH) + RACE (1) + KIND (1)` |
 
 ---
 

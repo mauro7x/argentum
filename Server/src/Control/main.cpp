@@ -1,25 +1,28 @@
-// Cliente
+// Servidor
 
 // ----------------------------------------------------------------------------
 #include <stdio.h>
 
 #include <exception>
+#include <string>
 
-#include "../../includes/Model/Client.h"
-#include "../../includes/Model/defs.h"
+#include "../../includes/Control/Server.h"
+#include "../../includes/Control/defs.h"
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
 
 int main(int argc, char* argv[]) {
     if (argc != EXPECTED_ARGC) {
-        fprintf(stderr, "Usage: %s\n", argv[NAME]);
+        fprintf(stderr, "Usage: %s <port>\n", argv[NAME]);
         return USAGE_ERROR;
     }
 
+    std::string port = argv[PORT];
+
     try {
-        Client client;
-        client.run();
+        Server server(port, MAX_CLIENTS_QUEUED);
+        server.run();
 
     } catch (const std::exception& e) {
         fprintf(stderr, "%s\n", e.what());

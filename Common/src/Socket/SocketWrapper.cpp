@@ -22,10 +22,7 @@ SocketWrapper::SocketWrapper(SocketWrapper&& other)
     : Socket(std::move(other)) {}
 
 SocketWrapper& SocketWrapper::operator=(SocketWrapper&& other) {
-    this->fd = std::move(other.fd);
-    this->fd_valid = std::move(other.fd_valid);
-    other.fd_valid = false;
-    other.fd = -1;
+    Socket::operator=(std::move(other));
     return *this;
 }
 
