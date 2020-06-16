@@ -46,7 +46,7 @@ struct Tile {
     bool safe_zone;
     bool indoor;
     bool portal;
-    Id npc; /* completar esto (mau) */
+    Id npc;
 
     /* Ocupantes */
     int occupant_id;
