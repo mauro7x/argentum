@@ -40,8 +40,11 @@ class MapContainer {
     /* Carga los mapas parseando los json correspondiente */
     void loadMaps();
 
-    /* Obtiene el mapa correspondiente */
-    Map& operator[](Id id);
+    /* Obtiene el mapa correspondiente modificable */
+    Map& operator[](const Id id);
+
+    /* Obtiene el mapa correspondiente para lectura */
+    const Map& operator[](const Id id) const;
 
     //-------------------------------------------------------------------------
 
