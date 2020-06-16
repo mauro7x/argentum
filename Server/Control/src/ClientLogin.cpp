@@ -27,4 +27,7 @@ bool ClientLogin::isRunning() {
 }
 
 ClientLogin::~ClientLogin() {
+	if (joinable()) {
+		join();
+	}
 }

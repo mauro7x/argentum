@@ -3,7 +3,7 @@
 
 //-----------------------------------------------------------------------------
 #include <atomic>
-#include <vector>
+#include <list>
 
 #include "LoginValidator.h"
 #include "ClientLogin.h"
@@ -22,7 +22,7 @@ class Accepter : public Thread {
     std::atomic_bool keep_listening;
     std::atomic_bool is_running;
 
-    std::vector<ClientLogin> active_logins;
+    std::list<ClientLogin> active_logins;
     LoginValidator log_val;
 
     void _joinAndFreeLoggedConnections();
