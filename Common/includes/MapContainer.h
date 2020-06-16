@@ -41,7 +41,7 @@ class MapContainer {
     void loadMaps();
 
     /* Obtiene el mapa correspondiente */
-    const Map& operator[](Id id) const;
+    Map& operator[](Id id);
 
     //-------------------------------------------------------------------------
 
