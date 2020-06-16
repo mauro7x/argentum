@@ -1,7 +1,7 @@
 #include "../includes/Wearable.h"
 #include "../includes/Character.h"
 
-Wearable::Wearable(const unsigned int id, const std::string name,
+Wearable::Wearable(const Id id, const std::string name,
                    const unsigned int price,
                    WearableType type):
                         Item(id, name, price),

@@ -4,13 +4,9 @@
 //-----------------------------------------------------------------------------
 #include <cstdint>
 #include <string>
-//-----------------------------------------------------------------------------
 
-//-----------------------------------------------------------------------------
-#ifndef __ID__
-#define __ID__
-typedef int Id;
-#endif  // __ID__
+#include "../../../Common/includes/types.h"
+#include "../../../Common/includes/Orientation.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -36,7 +32,7 @@ enum PotionType {HEALTH, MANA};
 // Objetos
 
 struct WeaponCfg {
-    int id;
+    Id id;
     std::string name;
     unsigned int price;
     unsigned int attack_distance;
@@ -45,14 +41,14 @@ struct WeaponCfg {
 };
 
 struct WandCfg {
-    int id;
+    Id id;
     std::string name;
-    int spell_id;
+    Id spell_id;
     unsigned int price;
 };
 
 struct SpellCfg {
-    int id;
+    Id id;
     std::string name;
     SpellType type;
     unsigned int mana_usage_cost;
@@ -141,6 +137,23 @@ struct NPCCfg {
 };
 
 //-----------------------------------------------------------------------------
+// PERSISTENCIA
+//-----------------------------------------------------------------------------
 
+//-----------------------------------------------------------------------------
+enum StateType {DEAD, ALIVE};
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+struct CharacterPersistenceCfg {
+    Id race;
+    Id kind;
+
+    StateType state;
+
+    Id map;
+    int x_coord, y_coord;
+    Orientation orientation;
+};
 //-----------------------------------------------------------------------------
 #endif  // __CONFIG_STRUCTS_H__

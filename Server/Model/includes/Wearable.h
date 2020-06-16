@@ -6,10 +6,13 @@
 #include "Item.h"
 #include "config_structs.h"
 
+#include "../../../Common/includes/types.h"
+
 /*
  * Define la abstraccion Wearable.
  * Un Wearable es un Item que puede ser portado en
- * Equipment, y tiene un uso específico, que puede
+ * Equipment, y tiene un uso específico sobre otro jugador
+ * (o sobre sí mismo), que puede
  * ser tanto de ataque, defensa o curación.
  */
 class Wearable: public Item {
@@ -17,7 +20,7 @@ class Wearable: public Item {
         WearableType type;
 
     public:
-        Wearable(const unsigned int id, const std::string name,
+        Wearable(const Id id, const std::string name,
                  const unsigned int price,
                  WearableType type);
         virtual ~Wearable();

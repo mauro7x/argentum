@@ -46,9 +46,9 @@ class Character {
 
     public:
         //-----------------------------------------------------------------------------
-        Character(const RaceCfg& race, const KindCfg& kind, 
-                  const int id_map, const int init_x_coord, 
-                  const int init_y_coord, MapContainer& map_container);
+        Character(const CharacterPersistenceCfg& init_data,
+                  const RaceCfg& race, const KindCfg& kind,
+                  MapContainer& map_container);
         ~Character();
 
         Character(const Character&) = delete;

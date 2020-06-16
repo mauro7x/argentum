@@ -10,14 +10,7 @@ Equipment::Equipment() {
     }
 }
 
-Equipment::~Equipment() {
-    // Elimino los items restantes.
-    for (unsigned int i = 0; i < container.size(); ++i) {
-        if (container[i]) {
-            delete container[i];
-        }
-    }
-}
+Equipment::~Equipment() {}
 
 Wearable* Equipment::add(Wearable* item) {
     WearableType type = item->getType();

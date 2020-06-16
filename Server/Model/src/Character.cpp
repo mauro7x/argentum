@@ -6,27 +6,38 @@
 //-----------------------------------------------------------------------------
 #include <iostream> //sacar
 //-----------------------------------------------------------------------------
-#define CRITICAL_ATTACKE_DAMAGE_MODIFIER 2
+#define CRITICAL_ATTACK_DAMAGE_MODIFIER 2
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-Character::Character(const RaceCfg& race, const KindCfg& kind,
-                     const int id_map, const int init_x_coord, 
-                     const int init_y_coord, MapContainer& map_container):
+Character::Character(const CharacterPersistenceCfg& init_data,
+                     const RaceCfg& race, const KindCfg& kind,
+                     MapContainer& map_container):
+        
         health(kind.initial_health + race.initial_health),
         mana(kind.initial_mana + race.initial_mana),
         intelligence(kind.intelligence + race.intelligence),
         constitution(kind.constitution + race.constitution),
         strength(kind.strength + race.strength),
         agility(kind.agility + race.agility),
+
         race(race),
         kind(kind),
+
         state(new Alive()),
+
         inventory(this->level),
-        position(id_map, init_x_coord, init_y_coord, map_container) {
+
+        position(init_data.map,
+                 init_data.x_coord,
+                 init_data.y_coord,
+                 map_container) {
+
+    // SI EL JUGADOR ESTA PERSISTIDO Y NO ES NUEVO, LLENAR TODO LO QUE SE TIENE QUE LLENAR.
+    
     this->updateLevelDependantAttributes(); // Set max_health, max_mana,
-                                            // max_inventory_gold.
-}
+}                                           // max_inventory_gold.
+
 
 Character::~Character() {
     delete state;
@@ -45,7 +56,6 @@ void Character::updateLevelDependantAttributes() {
                         this->level.getLevel());
 
     this->inventory.updateMaxAmountsOfGold();
-
 }
 
 void Character::updateTimeDependantAttributes(const unsigned int seconds_elapsed) {
@@ -124,6 +134,7 @@ void Character::doMagic() {
 
 const unsigned int Character::attack(Character& attacked) {
     const unsigned int weapon_range = this->equipment.getAttackRange();
+
     // Si el arma no es de ataque, es curativa [range 0].
     if (weapon_range == 0) {
         return this->equipment.useAttackItem(*this);
@@ -156,7 +167,7 @@ const unsigned int Character::attack(Character& attacked) {
     bool critical_attack = Formulas::isCriticalAttack();
     unsigned int potential_damage = this->equipment.useAttackItem(*this);
     if (critical_attack) {
-        potential_damage = potential_damage * CRITICAL_ATTACKE_DAMAGE_MODIFIER;
+        potential_damage = potential_damage * CRITICAL_ATTACK_DAMAGE_MODIFIER;
     }
 
     // El atacado recibe el daño del ataque.

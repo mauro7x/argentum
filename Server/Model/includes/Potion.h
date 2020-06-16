@@ -19,7 +19,7 @@ class Potion: public Item {
         const unsigned int recovery_points;
 
     public:
-        Potion(const unsigned int id, 
+        Potion(const Id id, 
                const std::string name,
                const unsigned int price,
                const unsigned int recovery_points);

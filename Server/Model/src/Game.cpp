@@ -20,16 +20,21 @@ Game::~Game() {
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-const int Game::newCharacter(const int id_race, const int id_kind) {
+const int Game::newCharacter(CharacterPersistenceCfg& init_data) {
+
+    // CONTROL DE PLAYER DATA. LLENADO DE CAMPOS FALTANTES.
+    // Establecer id del mapa y posicion en el mapa.
+    // Como viene cargada la estructura?
+    // La posicion en el mapa si es nuevo viene dada o la tengo que calcular?
+    // Y si la posicion que tenia ahora esta ocupada?
+
     this->characters.emplace(
         std::piecewise_construct,
         std::forward_as_tuple(this->next_instance_id), 
-        std::forward_as_tuple(
-            this->races[id_race], this->kinds[id_kind], 
-            ID_MAP_CHARACTER_SPAWN, INIT_X_COORD_CHARACTER_SPAWN, 
-            INIT_Y_COORD_CHARACTER_SPAWN, this->map_container));
-
-    // CAMBIAR VALORES DE POSITION HARDCODEADOS EN CREACION DE CHARACTER
+        std::forward_as_tuple(init_data, 
+                              this->races[init_data.race], 
+                              this->kinds[init_data.kind], 
+                              this->map_container));
     
     ++this->next_instance_id;
     return next_instance_id - 1;
