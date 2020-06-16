@@ -29,7 +29,24 @@ const unsigned int Position::getDistance(const Position& other) const {
 }
 
 const bool Position::move(const Orientation& orientation) {
-    // IMPLEMENTAR
-    return false;
-}
+    if (!this->map_container[id_map].moveOcuppant(this->x, this->y, orientation))
+        return false;
 
+    this->orientation = orientation;
+
+    switch (orientation) {
+        case UP_ORIENTATION:
+            this->y -= 1;
+        
+        case DOWN_ORIENTATION:
+            this->y += 1;
+
+        case RIGHT_ORIENTATION:
+            this->x += 1;
+        
+        case LEFT_ORIENTATION:
+            this->x -= 1;
+    }
+
+    return true;
+}
