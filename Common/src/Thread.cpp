@@ -31,6 +31,10 @@ void Thread::join() {
     thread.join();
 }
 
-Thread::~Thread() {}
+Thread::~Thread() {
+    if (joinable()) {
+        thread.join();
+    }
+}
 
 //-----------------------------------------------------------------------------
