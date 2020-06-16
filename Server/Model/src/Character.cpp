@@ -1,7 +1,6 @@
 #include <algorithm>
 #include <math.h>
 //-----------------------------------------------------------------------------
-#include "../../../Common/includes/UnitData.h"
 #include "../includes/Character.h"
 #include "../includes/Formulas.h"
 //-----------------------------------------------------------------------------
@@ -11,7 +10,7 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-Character::Character(const PlayerData& init_data,
+Character::Character(const CharacterPersistenceCfg& init_data,
                      const RaceCfg& race, const KindCfg& kind,
                      MapContainer& map_container):
         
@@ -29,11 +28,11 @@ Character::Character(const PlayerData& init_data,
 
         inventory(this->level),
 
-        position(init_data.basic_data.map_id,
-                 init_data.basic_data.x_tile,
-                 init_data.basic_data.y_tile,
+        position(init_data.map,
+                 init_data.x_coord,
+                 init_data.y_coord,
                  map_container) {
-                     
+
     // SI EL JUGADOR ESTA PERSISTIDO Y NO ES NUEVO, LLENAR TODO LO QUE SE TIENE QUE LLENAR.
     
     this->updateLevelDependantAttributes(); // Set max_health, max_mana,

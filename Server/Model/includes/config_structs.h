@@ -6,6 +6,7 @@
 #include <string>
 
 #include "../../../Common/includes/types.h"
+#include "../../../Common/includes/Orientation.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -136,6 +137,17 @@ struct NPCCfg {
 };
 
 //-----------------------------------------------------------------------------
+enum StateType {DEAD, ALIVE};
+//-----------------------------------------------------------------------------
+struct CharacterPersistenceCfg {
+    Id race;
+    Id kind;
 
+    StateType state;
+
+    Id map;
+    int x_coord, y_coord;
+    Orientation orientation;
+};
 //-----------------------------------------------------------------------------
 #endif  // __CONFIG_STRUCTS_H__

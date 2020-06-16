@@ -46,7 +46,7 @@ class Character {
 
     public:
         //-----------------------------------------------------------------------------
-        Character(const PlayerData& init_data,
+        Character(const CharacterPersistenceCfg& init_data,
                   const RaceCfg& race, const KindCfg& kind,
                   MapContainer& map_container);
         ~Character();

@@ -4,11 +4,10 @@
 #include <unordered_map>
 //-----------------------------------------------------------------------------
 #include "../../../Common/includes/MapContainer.h"
-#include "../../../Common/includes/UnitData.h"
 //-----------------------------------------------------------------------------
-#include "Character.h"
-#include "config_structs.h"
 #include "Config.h"
+#include "config_structs.h"
+#include "Character.h"
 #include "ItemsContainer.h"
 //-----------------------------------------------------------------------------
 class Game {
@@ -18,7 +17,6 @@ class Game {
         //-----------------------------------------------------------------------------
         Config<RaceCfg> races;
         Config<KindCfg> kinds;
-
         //-----------------------------------------------------------------------------
 
         //-----------------------------------------------------------------------------
@@ -27,7 +25,6 @@ class Game {
         MapContainer map_container;
         ItemsContainer items;
         std::unordered_map<int, Character> characters;
-        std::unordered_map<int, Item*> items;
         // std::unordered_map<int, Creatures> creatures; Falta implementar
         //-----------------------------------------------------------------------------
         int next_instance_id;
@@ -46,7 +43,7 @@ class Game {
         //-----------------------------------------------------------------------------
         // DEFINIR COMO VIENE EL PLAYERDATA SI ES NUEVO!.
         /*
-         * Recibe un struct PlayerData con toda la información persistida
+         * Recibe un struct CharacterPersistenceCfg con toda la información persistida
          * del character, o bien la información necesaria para crear un nuevo
          * character.
          * 
@@ -55,7 +52,7 @@ class Game {
          * 
          * Lanza Exception si alguno de los id no mapea a ninguna raza/clase.
          */
-        const int newCharacter(PlayerData& init_data);
+        const int newCharacter(CharacterPersistenceCfg& init_data);
 
         /*
         * Llamar a este metodo ante la desconexión de un character.

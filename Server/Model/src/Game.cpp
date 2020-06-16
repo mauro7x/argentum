@@ -20,7 +20,7 @@ Game::~Game() {
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-const int Game::newCharacter(PlayerData& init_data) {
+const int Game::newCharacter(CharacterPersistenceCfg& init_data) {
 
     // CONTROL DE PLAYER DATA. LLENADO DE CAMPOS FALTANTES.
     // Establecer id del mapa y posicion en el mapa.
@@ -32,8 +32,8 @@ const int Game::newCharacter(PlayerData& init_data) {
         std::piecewise_construct,
         std::forward_as_tuple(this->next_instance_id), 
         std::forward_as_tuple(init_data, 
-                              this->races[init_data.race_id], 
-                              this->kinds[init_data.kind_id], 
+                              this->races[init_data.race], 
+                              this->kinds[init_data.kind], 
                               this->map_container));
     
     ++this->next_instance_id;
