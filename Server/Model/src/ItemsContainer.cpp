@@ -1,12 +1,12 @@
 #include "../../../Common/includes/Exceptions/Exception.h"
 
-#include "ItemsContainer.h"
-#include "Config.h"
+#include "../includes/ItemsContainer.h"
+#include "../includes/Config.h"
 
-#include "Weapon.h"
-#include "Wand.h"
-#include "Defence.h"
-#include "Potion.h"
+#include "../includes/Weapon.h"
+#include "../includes/Wand.h"
+#include "../includes/Defence.h"
+#include "../includes/Potion.h"
 
 ItemsContainer::ItemsContainer() {
     Config<WeaponCfg> weapons;
