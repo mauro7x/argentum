@@ -1,8 +1,9 @@
 #include "../../includes/Model/Client.h"
-#include "../../../Common/includes/Socket/SocketWrapper.h"
+
 #include <iostream>
 #include <string>
 
+#include "../../../Common/includes/Socket/SocketWrapper.h"
 
 //-----------------------------------------------------------------------------
 // Métodos privados
@@ -16,6 +17,9 @@ Client::Client() {}
 
 void Client::run() {
     fprintf(stderr, "DEBUG: Comienza la ejecución del cliente\n");
+
+    /* Conexión proxy
+
     std::string host, port;
     bool connect = false;
     SocketWrapper socket;
@@ -34,8 +38,7 @@ void Client::run() {
         connect = true;
         std::cout << "conexion establicida!" << std::endl;
     }
-
-    
+    */
 
     /**
      * La idea es la siguiente: vamos a presentar 3 pantallas independientes al
