@@ -2,15 +2,13 @@
 #define __UNIT_CONTAINER_H__
 
 //-----------------------------------------------------------------------------
-//#include <cstdint>
 #include <fstream>
 #include <unordered_map>
 
 #include "../../../Common/includes/Exceptions/Exception.h"
 #include "../../../Common/includes/JSON.h"
 #include "../../../Common/includes/UnitData.h"
-#include "Character.h"
-#include "Creature.h"
+#include "../../../Common/includes/types.h"
 #include "Renderer.h"
 #include "Unit.h"
 #include "UnitSpriteContainer.h"

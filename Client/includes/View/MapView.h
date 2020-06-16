@@ -3,6 +3,7 @@
 
 //-----------------------------------------------------------------------------
 #include "../../../Common/includes/MapContainer.h"
+#include "../../../Common/includes/types.h"
 #include "Renderer.h"
 #include "TileContainer.h"
 //-----------------------------------------------------------------------------

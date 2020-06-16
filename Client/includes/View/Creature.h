@@ -2,9 +2,8 @@
 #define __CREATURE_H__
 
 //-----------------------------------------------------------------------------
-#include <cstdint>
-
 #include "../../../Common/includes/Exceptions/Exception.h"
+#include "../../../Common/includes/types.h"
 #include "Unit.h"
 //-----------------------------------------------------------------------------
 

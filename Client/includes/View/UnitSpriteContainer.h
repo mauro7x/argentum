@@ -8,6 +8,7 @@
 
 #include "../../../Common/includes/Exceptions/Exception.h"
 #include "../../../Common/includes/JSON.h"
+#include "../../../Common/includes/types.h"
 #include "../paths.h"
 #include "Renderer.h"
 #include "Sprite.h"
