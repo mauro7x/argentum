@@ -2,6 +2,7 @@
 #define __GAME_H__
 //-----------------------------------------------------------------------------
 #include <unordered_map>
+#include <cstdint>
 //-----------------------------------------------------------------------------
 #include "../../../Common/includes/MapContainer.h"
 //-----------------------------------------------------------------------------
@@ -65,7 +66,44 @@ class Game {
         */
         void deleteCharacter(const int id);
         //-----------------------------------------------------------------------------
+        void startMovingUp();
+        void startMovingDown();
+        void startMovingLeft();
+        void startMovingRight();
 
+        void stopMoving();
+
+        void useWeapon(const uint32_t x_coord, const uint32_t y_coord);
+
+        void equip(const uint8_t n_slot);
+
+        void meditate();
+
+        void resurrect();
+
+        void list(const uint32_t x_coord, const uint32_t y_coord);
+
+        void depositItemOnBank(const uint32_t x_coord, const uint32_t y_coord,
+                               const uint8_t n_slot, uint32_t amount);
+        void withdrawItemFromBank(const uint32_t x_coord, const uint32_t y_coord,
+                                  const uint32_t item_id, const uint32_t amount);
+
+        void depositGoldOnBank(const uint32_t x_coord, const uint32_t y_coord,
+                               const uint32_t amount);
+        void withdrawGoldFromBank(const uint32_t x_coord, const uint32_t y_coord,
+                                  const uint32_t amount);
+        
+        void buyItem(const uint32_t x_coord, const uint32_t y_coord,
+                     const uint32_t item_id, const uint32_t amount);
+        void sellItem(const uint32_t x_coord, const uint32_t y_coord,
+                      const uint8_t n_slot, const uint32_t amount);
+        
+        void take();
+        void drop(const uint8_t n_slot, const uint32_t amount);
+
+        void listConnectedPlayers();
+        
+        
         
 };
 //-----------------------------------------------------------------------------
