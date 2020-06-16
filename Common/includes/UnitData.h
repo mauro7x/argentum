@@ -2,14 +2,7 @@
 #define __UNIT_DATA_H__
 
 //-----------------------------------------------------------------------------
-#include <cstdint>
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
-#ifndef __ID__
-#define __ID__
-typedef int Id;
-#endif  // __ID__
+#include "types.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -26,7 +19,7 @@ enum Orientation {
 
 /* Información básica necesaria para cualquier unidad */
 struct UnitData {
-    int gid;                 /* unit id (ingame)*/
+    InstanceId gid;          /* unit id (ingame)*/
     int x_tile, y_tile;      /* coordenadas en tiles */
     Orientation orientation; /* orientación de la unidad */
 };
@@ -43,9 +36,7 @@ struct PlayerData {
 
     // Stats y atributos
     uint32_t health, mana, gold; /* stats */
-
-    // ver tema de como sabemos si es fantasma (el server cambia los ids de la
-    // ropa?)
+    // falta agregar mas cosas (slots del inventario, etc)
 
     // Cuerpo y vestimenta
     Id head_id, body_id;                           /* cuerpo básico */
@@ -56,9 +47,6 @@ struct PlayerData {
 struct CharacterData {
     /* Data común a las unidades */
     UnitData basic_data;
-
-    // ver tema de como sabemos si es fantasma (el server cambia los ids de la
-    // ropa?)
 
     // Cuerpo y vestimenta
     Id head_id, body_id;                           /* cuerpo básico */

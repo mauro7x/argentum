@@ -6,19 +6,11 @@
 
 #include "Exceptions/Exception.h"
 #include "JSON.h"
+#include "Tile.h"
+#include "types.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-
-#ifndef __TILE_ID__
-#define __TILE_ID__
-typedef int TileId;
-#endif  // __TILE_ID__
-
-#ifndef __ID__
-#define __ID__
-typedef int Id;
-#endif  // __ID__
 
 enum MapLayer {
     GROUND1_LAYER,
@@ -31,26 +23,6 @@ enum MapLayer {
     PORTAL_LAYER,
     NPC_LAYER,
     EXPECTED_LAYERS
-};
-
-struct Tile {
-    /* Graficos */
-    TileId ground_1_id;
-    TileId ground_2_id;
-    TileId decoration_id;
-    TileId roof_id;
-    TileId npc_id;
-
-    /* Metadata */
-    bool collision;
-    bool safe_zone;
-    bool indoor;
-    bool portal;
-    Id npc;
-
-    /* Ocupantes */
-    int occupant_id;
-    int item_id;
 };
 
 //-----------------------------------------------------------------------------

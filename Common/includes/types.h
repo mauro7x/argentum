@@ -20,6 +20,12 @@ typedef uint32_t Id;
 typedef uint32_t TileId;
 #endif  // __TILE_ID__
 
+/* Id de instancias */
+#ifndef __INSTANCE_ID__
+#define __INSTANCE_ID__
+typedef uint32_t InstanceId;
+#endif  // __INSTANCE_ID__
+
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
