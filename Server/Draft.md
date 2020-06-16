@@ -92,15 +92,22 @@ while (corriendo):
 
 iteracion_del_server(it):
 
+// broadcasts
+{iniciamos broadcasts vacios}
+
 // clientconnection handler
 {vaciar cola de clientes a agregar}
 {vaciar cola de clientes a eliminar}
-
-// broadcasts
-{creamos broadcasts vacios}
 
 // command handler
 {vaciar cola de comandos recibidos}
 
 // turnos de juego
 {hacemos los turnos players.act monsters.act bla bla bla}(it)
+
+// persist
+{si es necesario, persistir}
+
+// enviar broadcasts
+{push broadcast a las colas de las clientconnections}
+
