@@ -37,15 +37,19 @@ const bool Position::move(const Orientation& orientation) {
     switch (orientation) {
         case UP_ORIENTATION:
             this->y -= 1;
+            break;
         
         case DOWN_ORIENTATION:
             this->y += 1;
+            break;
 
         case RIGHT_ORIENTATION:
             this->x += 1;
-        
+            break;
+
         case LEFT_ORIENTATION:
             this->x -= 1;
+            break;
     }
 
     return true;
