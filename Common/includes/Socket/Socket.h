@@ -134,6 +134,12 @@ class Socket {
     void _closeFdIfValid();
 
    public:
+    /**
+     * Descripción: constructor default para el socket
+     * 
+     * Parámetros: - 
+     */
+    Socket() = default;
     /** (SERVER-SIDE)
      * Diseñado para ser utilizado por el SERVIDOR para ponerse a la
      * escucha de conexiones entrantes.

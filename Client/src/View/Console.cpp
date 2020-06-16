@@ -1,4 +1,4 @@
-#include "../../includes/View/HUD.h"
+#include "../../includes/View/Console.h"
 
 //-----------------------------------------------------------------------------
 // Métodos privados
@@ -8,12 +8,12 @@
 //-----------------------------------------------------------------------------
 // API Pública
 
-HUDProxy::HUDProxy(const Renderer* renderer)
+ConsoleProxy::ConsoleProxy(const Renderer* renderer)
     : initialized(false), g_renderer(renderer) {}
 
-void HUDProxy::init(const json& config) {
+void ConsoleProxy::init(const json& config) {
     if (initialized) {
-        throw Exception("HUD already initialized.");
+        throw Exception("Console already initialized.");
     }
 
     offset_x = config["offset"]["x"];
@@ -24,23 +24,23 @@ void HUDProxy::init(const json& config) {
     initialized = true;
 }
 
-void HUDProxy::loadMedia() {
+void ConsoleProxy::loadMedia() {
     if (!initialized) {
-        throw Exception("HUD not initialized.");
+        throw Exception("Console not initialized.");
     }
 
-    texture.loadFromFile(g_renderer, HUD_PATH + std::string("HUD.png"));
+    texture.loadFromFile(g_renderer, CONSOLE_PATH + std::string("Console.png"));
 }
 
-void HUDProxy::render() const {
+void ConsoleProxy::render() const {
     if (!initialized) {
-        throw Exception("HUD not initialized.");
+        throw Exception("Console not initialized.");
     }
 
     SDL_Rect render_quad = {offset_x, offset_y, w, h};
     g_renderer->render(texture.getTexture(), &render_quad);
 }
 
-HUDProxy::~HUDProxy() {}
+ConsoleProxy::~ConsoleProxy() {}
 
 //-----------------------------------------------------------------------------

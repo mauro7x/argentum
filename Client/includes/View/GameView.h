@@ -32,6 +32,7 @@
 #include "Character.h"
 #include "Creature.h"
 #include "HUD.h"
+#include "Console.h"
 #include "MapView.h"
 #include "Player.h"
 #include "UnitSpriteContainer.h"
@@ -64,6 +65,7 @@ class GameView {
 
     /* Componentes de la vista */
     HUDProxy hud;
+    ConsoleProxy console;
     MapView map;
 
     /* Unidades */

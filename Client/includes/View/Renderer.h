@@ -4,6 +4,8 @@
 //-----------------------------------------------------------------------------
 #include <SDL2/SDL.h>
 
+#include <cmath>
+
 #include "../../../Common/includes/Exceptions/SDLException.h"
 #include "../../../Common/includes/JSON.h"
 #include "Camera.h"
@@ -14,21 +16,26 @@
 
 class Renderer {
    private:
-    const Window& window;
+    bool initialized;
+    Window& window;
     const Camera& camera;
     SDL_Renderer* renderer;
 
+    float scale_factor_w, scale_factor_h;
     Uint8 draw_color_r, draw_color_g, draw_color_b, draw_color_a;
 
     /* Settea el color de renderer */
     void _setDrawColor() const;
+
+    /* Resizea el render_quad con el factor de escala */
+    void _resize(SDL_Rect* render_quad) const;
 
     /* Libera recursos */
     void _free();
 
    public:
     /* Constructor */
-    Renderer(const Window& window, const Camera& camera);
+    Renderer(Window& window, const Camera& camera);
 
     /* Deshabilitamos el constructor por copia. */
     Renderer(const Renderer&) = delete;
@@ -45,7 +52,8 @@ class Renderer {
     //-------------------------------------------------------------------------
 
     /* Inicializa recursos */
-    void init(const json& config);
+    void init(const json& config, const float scale_factor_w,
+              const float scale_factor_h);
 
     /* Limpia la pantalla */
     void clearScreen() const;

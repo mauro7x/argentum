@@ -11,8 +11,16 @@
 ServerProxy::ServerProxy(Queue<int*>& requests, Queue<PlayerData*>& broadcast)
     : requests(requests),
       broadcast(broadcast),
-      player(
-          {{1, 0, 0, DOWN}, 100, 100, 100, 2000, 2100, 1300, 1400, 1500, 1000}),
+      player({{1, 0, 0, DOWN_ORIENTATION},
+              100,
+              100,
+              100,
+              2000,
+              2100,
+              1300,
+              1400,
+              1500,
+              1000}),
       is_running(false),
       keep_running(true) {}
 
@@ -48,28 +56,32 @@ void ServerProxy::run() {
                 case 0:
                     x_step = 0;
                     y_step = -1;
-                    player.basic_data.orientation = UP;
+                    player.basic_data.orientation = UP_ORIENTATION;
+                    broadcastear = true;
                     moving = true;
                     break;
 
                 case 1:
                     x_step = 0;
                     y_step = 1;
-                    player.basic_data.orientation = DOWN;
+                    player.basic_data.orientation = DOWN_ORIENTATION;
+                    broadcastear = true;
                     moving = true;
                     break;
 
                 case 2:
                     x_step = -1;
                     y_step = 0;
-                    player.basic_data.orientation = LEFT;
+                    player.basic_data.orientation = LEFT_ORIENTATION;
+                    broadcastear = true;
                     moving = true;
                     break;
 
                 case 3:
                     x_step = 1;
                     y_step = 0;
-                    player.basic_data.orientation = RIGHT;
+                    player.basic_data.orientation = RIGHT_ORIENTATION;
+                    broadcastear = true;
                     moving = true;
                     break;
 
