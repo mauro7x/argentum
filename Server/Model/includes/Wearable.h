@@ -11,7 +11,8 @@
 /*
  * Define la abstraccion Wearable.
  * Un Wearable es un Item que puede ser portado en
- * Equipment, y tiene un uso específico, que puede
+ * Equipment, y tiene un uso específico sobre otro jugador
+ * (o sobre sí mismo), que puede
  * ser tanto de ataque, defensa o curación.
  */
 class Wearable: public Item {
