@@ -1,13 +1,16 @@
 #ifndef __INVENTORY_H__
 #define __INVENTORY_H__
 
-#define N_INVENTORY_ITEMS 10
+#define N_INVENTORY_SLOTS 10
+#define EMPTY_ITEM_ID 0
 
 #include <array>
+#include <map>
 #include <exception>
 
 #include "Item.h"
 #include "Level.h"
+#include "Slot.h"
 
 /*
  * El Inventario es un contenedor que guarda Items,
@@ -17,8 +20,9 @@
  */
 class Inventory {
     private:
-        std::array<Item*, N_INVENTORY_ITEMS> container;
-        unsigned int items_quantity;
+        std::array<Slot, N_INVENTORY_SLOTS> slots;
+        std::map<Id, unsigned int> id_slot_map;
+        unsigned int occupied_slots;
 
         unsigned int safe_gold, excess_gold;
         unsigned int max_safe_gold, max_excess_gold;
@@ -28,7 +32,7 @@ class Inventory {
          * Devuelve la el indice del menor slot libre del
          * container del inventario.
          */
-        const unsigned int getNextFreeSlot() const;
+        const unsigned int _getNextFreeSlot() const;
 
         /*
          * Agrega la cantidad de oro especificada en slot_gold,
@@ -38,7 +42,7 @@ class Inventory {
          * 
          * Retorna la cantidad de oro que no se pudo guardar.
          */
-        unsigned int addGold(const unsigned int amount, 
+        unsigned int _addGold(const unsigned int amount, 
                              unsigned int& slot_gold,
                              unsigned int& slot_max_gold);
 
@@ -49,7 +53,7 @@ class Inventory {
          * 
          * Retorna la cantidad de oro que se pudo retirar.
          */
-        unsigned int gatherGold(const unsigned int amount,
+        unsigned int _gatherGold(const unsigned int amount,
                                 unsigned int& slot_gold);
 
     public:
@@ -68,7 +72,7 @@ class Inventory {
          * Lanza InvalidPositionException si la posicion
          * especificada es invalida (fuera de rango).
          */
-        Item* gatherItem(const unsigned int position);
+        Item* gatherItem(const unsigned int n_slot);
 
         /*
          * Obtiene amount de gold del inventario.
