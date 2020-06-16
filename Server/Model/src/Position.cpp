@@ -30,5 +30,6 @@ const unsigned int Position::getDistance(const Position& other) const {
 
 const bool Position::move(const Orientation& orientation) {
     // IMPLEMENTAR
+    return false;
 }
 

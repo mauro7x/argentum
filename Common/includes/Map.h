@@ -80,7 +80,7 @@ class Map {
     /* Obtiene un tile modificable */
     Tile& getTile(const int x, const int y);
 
-    const bool Map::_moveOcuppant(Tile& from_tile, Tile& to_tile);
+    const bool _moveOcuppant(Tile& from_tile, Tile& to_tile);
 
    public:
     /* Constructor */
