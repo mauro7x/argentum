@@ -59,6 +59,11 @@ class Config {
         return config.at(id);
     }
 
+    /* Devuelve una referencia al mapa para su iteración */
+    const std::unordered_map<Id, T>& getMap() const {
+        return this->config;
+    }
+
     /* Conocer la cantidad de Ts que tenemos */
     size_t size() const {
         return config.size();
