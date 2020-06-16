@@ -66,42 +66,49 @@ class Game {
         */
         void deleteCharacter(const int id);
         //-----------------------------------------------------------------------------
-        void startMovingUp();
-        void startMovingDown();
-        void startMovingLeft();
-        void startMovingRight();
+        void startMovingUp(const Id caller);
+        void startMovingDown(const Id caller);
+        void startMovingLeft(const Id caller);
+        void startMovingRight(const Id caller);
 
-        void stopMoving();
+        void stopMoving(const Id caller);
 
-        void useWeapon(const uint32_t x_coord, const uint32_t y_coord);
+        void useWeapon(const Id caller, 
+                       const uint32_t x_coord, const uint32_t y_coord);
 
-        void equip(const uint8_t n_slot);
+        void equip(const Id caller, const uint8_t n_slot);
 
-        void meditate();
+        void meditate(const Id caller);
 
-        void resurrect();
+        void resurrect(const Id caller);
 
-        void list(const uint32_t x_coord, const uint32_t y_coord);
+        void list(const Id caller, const uint32_t x_coord, const uint32_t y_coord);
 
-        void depositItemOnBank(const uint32_t x_coord, const uint32_t y_coord,
+        void depositItemOnBank(const Id caller, 
+                               const uint32_t x_coord, const uint32_t y_coord,
                                const uint8_t n_slot, uint32_t amount);
-        void withdrawItemFromBank(const uint32_t x_coord, const uint32_t y_coord,
+        void withdrawItemFromBank(const Id caller, 
+                                  const uint32_t x_coord, const uint32_t y_coord,
                                   const uint32_t item_id, const uint32_t amount);
 
-        void depositGoldOnBank(const uint32_t x_coord, const uint32_t y_coord,
+        void depositGoldOnBank(const Id caller, 
+                               const uint32_t x_coord, const uint32_t y_coord,
                                const uint32_t amount);
-        void withdrawGoldFromBank(const uint32_t x_coord, const uint32_t y_coord,
+        void withdrawGoldFromBank(const Id caller, 
+                                  const uint32_t x_coord, const uint32_t y_coord,
                                   const uint32_t amount);
         
-        void buyItem(const uint32_t x_coord, const uint32_t y_coord,
+        void buyItem(const Id caller, 
+                     const uint32_t x_coord, const uint32_t y_coord,
                      const uint32_t item_id, const uint32_t amount);
-        void sellItem(const uint32_t x_coord, const uint32_t y_coord,
+        void sellItem(const Id caller, 
+                      const uint32_t x_coord, const uint32_t y_coord,
                       const uint8_t n_slot, const uint32_t amount);
         
-        void take();
-        void drop(const uint8_t n_slot, const uint32_t amount);
+        void take(const Id caller);
+        void drop(const Id caller, const uint8_t n_slot, const uint32_t amount);
 
-        void listConnectedPlayers();
+        void listConnectedPlayers(const Id caller);
         
         
         
