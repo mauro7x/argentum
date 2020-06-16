@@ -1,16 +1,16 @@
 #include "../includes/Slot.h"
 
 Slot::Slot():
-    item_id(0),
+    item(nullptr),
     amount(0) {}
 
 Slot::~Slot() {}
 
 Slot::Slot(Slot&& other) {
-    this->item_id = other.item_id;
+    this->item = other.item;
     this->amount = other.amount;
 
-    other.item_id = 0;
+    other.item = nullptr;
     other.amount = 0;
 }
 
@@ -18,7 +18,7 @@ Slot& Slot::operator=(Slot&& other) {
     this->item = other.item;
     this->amount = other.amount;
 
-    other.item = 0;
+    other.item = nullptr;
     other.amount = 0;
 
     return *this;
