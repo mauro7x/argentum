@@ -8,7 +8,7 @@
 //-----------------------------------------------------------------------------
 // API Pública
 
-Thread::Thread() {}
+Thread::Thread() : thread() {}
 
 Thread::Thread(Thread&& other) {
     this->thread = std::move(other.thread);
@@ -28,13 +28,13 @@ bool Thread::joinable() {
 }
 
 void Thread::join() {
-    thread.join();
+    if (thread.joinable()) {
+        thread.join();
+    }
 }
 
 Thread::~Thread() {
-    if (joinable()) {
-        thread.join();
-    }
+    join();
 }
 
 //-----------------------------------------------------------------------------

@@ -11,6 +11,7 @@ GameLoop. MAIN GAME LOOP.
     - Contenedor de jugadores conectados (PlayerConnections).
     - map<idjugador, playerconnection>
 
+{
 Accepter. ESTABLECE CONEXIÓN TCP.
 * Atributos:
     - Contenedor de PlayerLogins. 
@@ -19,6 +20,7 @@ Accepter. ESTABLECE CONEXIÓN TCP.
     - Instancia y lanza el PlayerLogin(socket peer).
     - Agrega el playerlogin al contenedor de players logins.
     - Recolector de basura de players logins.
+}
 
 PlayerLogin. OBJETO ACTIVO QUE SE ENCARGA DE METER (o no) AL JUGADOR AL JUEGO.
 * Atributos:
@@ -35,15 +37,9 @@ PlayerConnection.
 
 
 GameLoop.addPlayer(socket peer, PlayerData initial_data) {
-
-
     int id = Game.addCharacter(initial_data);
     PlayerConnection* new_player = new PlayerConnection(id, std::move(peer), coladecomandos);
     map.emplace(id, new_player);
-}
-
-Game clase {
-    main loop
 }
 
 

@@ -22,11 +22,11 @@ class SocketWrapper : public Socket {
    public:
     /**
      * Descripción: constructor default para el socketwrapper
-     * 
-     * Parámetros: - 
+     *
+     * Parámetros: -
      */
     SocketWrapper() = default;
-    
+
     /** (SERVER-SIDE)
      * Diseñado para ser utilizado por el SERVIDOR para ponerse a la
      * escucha de conexiones entrantes.
