@@ -11,3 +11,7 @@ Item::~Item() {}
 const std::string Item::what() const {
      return this->name;
 }
+
+const Id Item::getId() const {
+     return this->id;
+}

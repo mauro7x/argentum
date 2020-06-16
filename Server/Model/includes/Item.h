@@ -24,8 +24,10 @@ class Item {
         virtual ~Item();
 
         virtual void equip(Character& equipper) = 0;
-        
+
         virtual const std::string what() const;
+
+        const Id getId() const;
 };
 
 #endif
