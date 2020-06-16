@@ -1,6 +1,6 @@
 #include "../includes/Item.h"
 
-Item::Item(const unsigned int id, const std::string name,
+Item::Item(const Id id, const std::string name,
            const unsigned int price):
                 id(id),
                 name(name),

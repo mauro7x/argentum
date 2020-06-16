@@ -2,7 +2,7 @@
 #include "../includes/Character.h" // Se incluye aca para evitar dependencias 
                                    // circulares.
 
-Potion::Potion(const unsigned int id,
+Potion::Potion(const Id id,
                std::string name,
                const unsigned int price,
                const unsigned int recovery_points):

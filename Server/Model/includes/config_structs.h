@@ -4,13 +4,8 @@
 //-----------------------------------------------------------------------------
 #include <cstdint>
 #include <string>
-//-----------------------------------------------------------------------------
 
-//-----------------------------------------------------------------------------
-#ifndef __ID__
-#define __ID__
-typedef int Id;
-#endif  // __ID__
+#include "../../../Common/includes/types.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -36,7 +31,7 @@ enum PotionType {HEALTH, MANA};
 // Objetos
 
 struct WeaponCfg {
-    int id;
+    Id id;
     std::string name;
     unsigned int price;
     unsigned int attack_distance;
@@ -45,14 +40,14 @@ struct WeaponCfg {
 };
 
 struct WandCfg {
-    int id;
+    Id id;
     std::string name;
-    int spell_id;
+    Id spell_id;
     unsigned int price;
 };
 
 struct SpellCfg {
-    int id;
+    Id id;
     std::string name;
     SpellType type;
     unsigned int mana_usage_cost;
