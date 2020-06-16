@@ -12,8 +12,11 @@
 /* Información básica necesaria para cualquier unidad */
 struct UnitData {
     InstanceId gid;          /* unit id (ingame)*/
+
+    Id map_id;               /* id del mapa en el que se encuentra */
     int x_tile, y_tile;      /* coordenadas en tiles */
     Orientation orientation; /* orientación de la unidad */
+    
 };
 
 //-----------------------------------------------------------------------------
@@ -29,6 +32,9 @@ struct PlayerData {
     // Stats y atributos
     uint32_t health, mana, gold; /* stats */
     // falta agregar mas cosas (slots del inventario, etc)
+
+    Id race_id;
+    Id kind_id;
 
     // Cuerpo y vestimenta
     Id head_id, body_id;                           /* cuerpo básico */
