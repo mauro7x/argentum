@@ -2,7 +2,7 @@
 
 #include "../includes/Position.h"
 
-#define DEFAULT_ORIENTATION DOWN
+#define DEFAULT_ORIENTATION DOWN_ORIENTATION
 
 Position::Position(const int id_map, 
     const int init_x_coord,

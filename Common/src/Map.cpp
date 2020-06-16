@@ -167,7 +167,7 @@ const bool Map::moveOcuppant(const int x, const int y,
                              const Orientation& orientation) {
     Tile& from_tile = _getTile(x, y);
 
-    if (orientation == UP) {
+    if (orientation == UP_ORIENTATION) {
         if (y == 0) {
             // Limite superior alcanzado.
             return false;
@@ -176,7 +176,7 @@ const bool Map::moveOcuppant(const int x, const int y,
         return _moveOcuppant(from_tile, to_tile);
     }
 
-    if (orientation == DOWN) {
+    if (orientation == DOWN_ORIENTATION) {
         if (y == this->h) {
             // Limite inferior alcanzado.
             return false;
@@ -185,7 +185,7 @@ const bool Map::moveOcuppant(const int x, const int y,
         return _moveOcuppant(from_tile, to_tile);
     }
 
-    if (orientation == LEFT) {
+    if (orientation == LEFT_ORIENTATION) {
         if (x == 0) {
             // Limite izquierdo alcanzado.
             return false;

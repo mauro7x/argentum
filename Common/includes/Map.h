@@ -8,15 +8,10 @@
 #include "JSON.h"
 #include "Tile.h"
 #include "types.h"
+#include "Orientation.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-
-#ifndef __ORIENTATION__
-#define __ORIENTATION__
-enum Orientation { UP, DOWN, LEFT, RIGHT };
-#endif  // __ORIENTATION__
-
 enum MapLayer {
     GROUND1_LAYER,
     GROUND2_LAYER,
@@ -29,7 +24,6 @@ enum MapLayer {
     NPC_LAYER,
     EXPECTED_LAYERS
 };
-
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------

@@ -2,11 +2,7 @@
 #define __POSITION_H__
 
 #include "../../../Common/includes/MapContainer.h"
-
-#ifndef __ORIENTATION__
-#define __ORIENTATION__
-enum Orientation { UP, DOWN, LEFT, RIGHT };
-#endif // __ORIENTATION__
+#include "../../../Common/includes/Orientation.h"
 
 class Position {
     private:
