@@ -54,6 +54,12 @@ class Equipment {
          */
         const unsigned int useAttackItem(Character& attacker);
 
+        /*
+         * Devuelve el rango de ataque del arma equipada.
+         * 
+         * Si se trata de un arma curativa, su rango es 0, ya que se
+         * aplica sobre el mismo Character.
+         */
         const unsigned int getAttackRange() const;
 
         /*
