@@ -154,12 +154,12 @@ const char* GoldMaximumCapacityReachedException::what() const noexcept {
     return "No puedes recoger más oro. Límite de capacidad alcanzado.";
 }
 
-// void Inventory::debug() const {
-//     std::cout << "Inventory: [" << this->items_quantity << " elements]" << std::endl;
-//     for (unsigned int i = 0; i < this->container.size(); ++i) {
-//         if (this->container[i]) {
-//             std::cout << "Posicion " << i << ": ";
-//             std::cout << this->container[i]->what() << std::endl;
-//         }
-//     }
-// }
+void Inventory::debug() const {
+    // std::cout << "Inventory: [" << this->items_quantity << " elements]" << std::endl;
+    // for (unsigned int i = 0; i < this->container.size(); ++i) {
+    //     if (this->container[i]) {
+    //         std::cout << "Posicion " << i << ": ";
+    //         std::cout << this->container[i]->what() << std::endl;
+    //     }
+    // }
+}
