@@ -4,10 +4,12 @@
 #include <unordered_map>
 //-----------------------------------------------------------------------------
 #include "../../../Common/includes/MapContainer.h"
+#include "../../../Common/includes/UnitData.h"
 //-----------------------------------------------------------------------------
 #include "Character.h"
 #include "config_structs.h"
 #include "Config.h"
+#include "ItemsContainer.h"
 //-----------------------------------------------------------------------------
 class Game {
     private:
@@ -16,17 +18,14 @@ class Game {
         //-----------------------------------------------------------------------------
         Config<RaceCfg> races;
         Config<KindCfg> kinds;
-        Config<WeaponCfg> weapons;
-        Config<WandCfg> wands;
-        Config<SpellCfg> spells;
-        Config<DefenceCfg> defences;
-        Config<PotionCfg> potions;
+
         //-----------------------------------------------------------------------------
 
         //-----------------------------------------------------------------------------
         // Game entities
         //-----------------------------------------------------------------------------
         MapContainer map_container;
+        ItemsContainer items;
         std::unordered_map<int, Character> characters;
         std::unordered_map<int, Item*> items;
         // std::unordered_map<int, Creatures> creatures; Falta implementar
@@ -45,15 +44,18 @@ class Game {
         //-----------------------------------------------------------------------------
 
         //-----------------------------------------------------------------------------
+        // DEFINIR COMO VIENE EL PLAYERDATA SI ES NUEVO!.
         /*
-        * Recibe id_race e id_kind para crear un character de la raza
-        * y clase establecidos.
-        * 
-        * Retorna el id único de instancia de dicho character.
-        * 
-        * Lanza Exception si alguno de los id no mapea a ninguna raza/clase.
-        */
-        const int newCharacter(const int id_race, const int id_kind);
+         * Recibe un struct PlayerData con toda la información persistida
+         * del character, o bien la información necesaria para crear un nuevo
+         * character.
+         * 
+         * Retorna el id único de instancia de dicho character, mediante el cual
+         * se interactuará con el mismo.
+         * 
+         * Lanza Exception si alguno de los id no mapea a ninguna raza/clase.
+         */
+        const int newCharacter(PlayerData& init_data);
 
         /*
         * Llamar a este metodo ante la desconexión de un character.
