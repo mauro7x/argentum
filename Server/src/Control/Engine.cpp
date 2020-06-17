@@ -5,7 +5,7 @@
 
 /* PROXY QUE VA A SER Game.addPlayer() */
 InstanceId next_id_hardcoded = 100;
-InstanceId Engine::_GameAddPlayer(const PlayerData& init_data) {
+InstanceId Engine::_GameAddPlayer(const CharacterCfg& init_data) {
     return next_id_hardcoded++; /* hardcodeamos una id */
 }
 

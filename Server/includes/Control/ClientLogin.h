@@ -14,7 +14,7 @@
 #include "../../../Common/includes/Queue.h"
 #include "../../../Common/includes/Socket/SocketWrapper.h"
 #include "../../../Common/includes/Thread.h"
-#include "../../../Common/includes/UnitData.h"
+#include "../Model/config_structs.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------

@@ -15,7 +15,7 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-Character::Character(const CharacterPersistenceCfg& init_data,
+Character::Character(const CharacterCfg& init_data,
                      const RaceCfg& race, const KindCfg& kind,
                      MapContainer& map_container):
         

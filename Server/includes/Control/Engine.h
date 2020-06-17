@@ -13,9 +13,10 @@
 #include "../../../Common/includes/JSON.h"
 #include "../../../Common/includes/Queue.h"
 #include "../../../Common/includes/Thread.h"
-#include "../../../Common/includes/UnitData.h"
 #include "../../../Common/includes/types.h"
 #include "../paths.h"
+#include "../Model/config_structs.h"
+#include "../Model/Game.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -40,12 +41,13 @@ class Engine : public Thread {
     Queue<InstanceId*> finished_connections; /* conexiones que finalizaron */
     Queue<Command*> commands;                /* comandos a procesar */
     ActiveClients active_clients; /* contenedor de clientes activos */
+    Game game;
 
     //-------------------------------------------------------------------------
     // Métodos privados
 
     /* PROXY PARA LA CLASE GAME Y SU ADDPLAYER (SOLO PARA PROBAR) */
-    InstanceId _GameAddPlayer(const PlayerData& init_data);
+    InstanceId _GameAddPlayer(const CharacterCfg& init_data);
 
     /* Inicializa recursos internos */
     void _init();
