@@ -86,6 +86,9 @@ void Client::run() {
     GameView game(commands, updates);
     game();
 
+    socket.shutdown();
+    socket.close();
+
     // Joineamos los hilos
 
     // Es necesario hacer esto para que el command_dispatcher se joinee. Proxy.
