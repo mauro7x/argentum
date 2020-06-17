@@ -9,8 +9,8 @@
 // API Pública
 
 Updater::Updater(const SocketWrapper& socket,
-                 NonBlockingQueue<Update*>& updates)
-    : socket(socket), updates(updates) {}
+                 NonBlockingQueue<Update*>& updates, std::atomic_bool& exit)
+    : socket(socket), updates(updates), exit(exit) {}
 
 void Updater::run() {
     try {
@@ -26,7 +26,7 @@ void Updater::run() {
 
                     /*
                     throw Exception(
-                        "Unknown opcode received by client handler.");
+                        "Unknown opcode received by client.");
                         */
                 }
             }
@@ -36,6 +36,9 @@ void Updater::run() {
     } catch (...) {
         fprintf(stderr, "Updater // Unknown error.\n");
     }
+
+    // Avisamos que se cerró el socket y que hay que terminar
+    exit = true;
 }
 
 Updater::~Updater() {}

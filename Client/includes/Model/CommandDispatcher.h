@@ -2,6 +2,7 @@
 #define __COMMAND_DISPATCHER_H__
 
 //-----------------------------------------------------------------------------
+#include <atomic>
 #include <exception>
 //-----------------------------------------------------------------------------
 
@@ -21,6 +22,7 @@ class CommandDispatcher : public Thread {
    private:
     const SocketWrapper& socket;       /* SÓLO ESCRITURA (SEND) */
     BlockingQueue<Command*>& commands; /* Comandos a enviar */
+    std::atomic_bool& exit;            /* flag de ejecución compartido */
 
     //-----------------------------------------------------------------------------
     // Métodos privados
@@ -29,7 +31,8 @@ class CommandDispatcher : public Thread {
    public:
     /* Constructor */
     CommandDispatcher(const SocketWrapper& socket,
-                      BlockingQueue<Command*>& commands);
+                      BlockingQueue<Command*>& commands,
+                      std::atomic_bool& exit);
 
     /* Deshabilitamos el constructor por copia. */
     CommandDispatcher(const CommandDispatcher&) = delete;
@@ -47,9 +50,6 @@ class CommandDispatcher : public Thread {
 
     /* Hilo principal de ejecución */
     void run() override;
-
-    /* Detiene la ejecución cerrando la cola */
-    void stop();
 
     //-----------------------------------------------------------------------------
 

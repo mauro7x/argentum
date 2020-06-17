@@ -42,17 +42,33 @@ bool Client::_connect(SocketWrapper& socket) const {
     return true;
 }
 
+void Client::_freeQueues() {
+    {
+        Command* command = NULL;
+        while ((command = commands.pop())) {
+            delete command;
+        }
+    }
+
+    {
+        Update* update = NULL;
+        while ((update = updates.pop())) {
+            delete update;
+        }
+    }
+}
+
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 // API Pública
 
-Client::Client() {}
+Client::Client() : exit(false) {}
 
 void Client::run() {
     fprintf(stderr, "DEBUG: Comienza la ejecución del cliente.\n");
 
-    // login proxy
+    // login proxy (va a ser una vista)
     SocketWrapper socket;
     if (!_connect(socket)) {
         fprintf(stderr,
@@ -67,13 +83,9 @@ void Client::run() {
     // UNA IDEA ES TENER UN MINI LOOP HASTA RECIBIRLO, Y AHI LAUNCHEAR LA VISTA.
     // ESTE LOOP PUEDE ESTAR DENTRO O FUERA DE LA VISTA.
 
-    // Canales de comunicación entre hilos
-    BlockingQueue<Command*> commands;
-    NonBlockingQueue<Update*> updates;
-
     // Dispatcher y Updater (objetos activos)
-    CommandDispatcher command_dispatcher(socket, commands);
-    Updater updater(socket, updates);
+    CommandDispatcher command_dispatcher(socket, commands, exit);
+    Updater updater(socket, updates, exit);
 
     // Lanzamos los hilos
     command_dispatcher.start();
@@ -83,19 +95,20 @@ void Client::run() {
     // VISTA TERMINE
 
     // Lanzamos la vista del juego
-    GameView game(commands, updates);
+    GameView game(commands, updates, exit);
     game();
 
+    // Cerramos la conexión ordenadamente
     socket.shutdown();
     socket.close();
 
-    // Joineamos los hilos
-
-    // Es necesario hacer esto para que el command_dispatcher se joinee. Proxy.
-    command_dispatcher.stop();
-
+    // Cerramos la cola de comandos, y joineamos los hilos
+    commands.close();
     command_dispatcher.join();
     updater.join();
+
+    // En caso de que hayan quedado comandos o updates sin procesar.
+    _freeQueues();
 
     fprintf(stderr, "DEBUG: Termina la ejecución del cliente.\n");
 }

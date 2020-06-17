@@ -7,6 +7,7 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+#include <atomic>
 #include <chrono>
 #include <cstdint>
 #include <fstream>
@@ -55,15 +56,13 @@ class GameView {
     /* Comunicación entre hilos */
     BlockingQueue<Command*>& commands;
     NonBlockingQueue<Update*>& updates;
+    std::atomic_bool& exit;
 
     /* Componentes SDL principales */
     Window window;
     Camera camera;
     Renderer renderer;
     int rate;
-
-    /* Flag de ejecución */
-    bool view_running;
 
     /* Componentes de la vista */
     HUDProxy hud;
@@ -110,7 +109,7 @@ class GameView {
    public:
     /* Constructor */
     GameView(BlockingQueue<Command*>& commands,
-             NonBlockingQueue<Update*>& updates);
+             NonBlockingQueue<Update*>& updates, std::atomic_bool& exit);
 
     /* Deshabilitamos el constructor por copia. */
     GameView(const GameView&) = delete;

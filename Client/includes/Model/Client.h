@@ -4,6 +4,7 @@
 //-----------------------------------------------------------------------------
 #include <stdio.h>
 
+#include <atomic>
 #include <string>
 //-----------------------------------------------------------------------------
 
@@ -27,11 +28,19 @@
 
 class Client {
    private:
+    // Canales de comunicación entre hilos (thread-safe)
+    BlockingQueue<Command*> commands;
+    NonBlockingQueue<Update*> updates;
+    std::atomic_bool exit;
+
     //-------------------------------------------------------------------------
     // Métodos privados
 
     /* Interactúa con el jugador para conectarlo a un determinado servidor */
     bool _connect(SocketWrapper& socket) const;  // PROXY
+
+    /* Libera la memoria de los comandos o updates que no se hayan procesado */
+    void _freeQueues();
 
     //-------------------------------------------------------------------------
    public:

@@ -2,6 +2,7 @@
 #define __UPDATER_H__
 
 //-----------------------------------------------------------------------------
+#include <atomic>
 #include <exception>
 //-----------------------------------------------------------------------------
 
@@ -22,6 +23,7 @@ class Updater : public Thread {
    private:
     const SocketWrapper& socket;        /* SÓLO LECTURA (RECV) */
     NonBlockingQueue<Update*>& updates; /* Updates a recibir */
+    std::atomic_bool& exit;             /* flag de ejecución compartido */
 
     //-----------------------------------------------------------------------------
     // Métodos privados
@@ -29,7 +31,8 @@ class Updater : public Thread {
 
    public:
     /* Constructor */
-    Updater(const SocketWrapper& socket, NonBlockingQueue<Update*>& updates);
+    Updater(const SocketWrapper& socket, NonBlockingQueue<Update*>& updates,
+            std::atomic_bool& exit);
 
     /* Deshabilitamos el constructor por copia. */
     Updater(const Updater&) = delete;
