@@ -6,7 +6,15 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+#include <memory>
+#include <string>
+//-----------------------------------------------------------------------------
 
+//-----------------------------------------------------------------------------
+#include "NotificationBroadcast.h"
+#include "NotificationMessage.h"
+#include "NotificationReply.h"
+//-----------------------------------------------------------------------------
 /* Notificación abstracta que se sabe enviar por un socket. Tener en cuenta que
  * los atributos particulares que necesite cada notificación para enviarse deben
  * ser agregados como atributos específicos de las clases concretas que hereden
@@ -35,7 +43,7 @@ class Notification {
      * Retorno: clase Notificaction.
      *
      */
-    Notification getNotification(bool is_reply, char opcode, uint32_t length,
+    static std::unique_ptr<Notification> getNotification(bool is_reply, char opcode, uint32_t length,
                                  std::string reply, uint32_t sender_length,
                                  std::string sender);
 
