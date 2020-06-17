@@ -38,7 +38,7 @@
 //-----------------------------------------------------------------------------
 // Proxies para simular el server, después se cambia
 
-#include "../../../Common/includes/Queue.h"
+#include "../../../Common/includes/NonBlockingQueue.h"
 #include "../Model/ServerProxy.h"
 //-----------------------------------------------------------------------------
 
@@ -67,8 +67,8 @@ class GameView {
     UnitContainer<Creature, CreatureData> creatures;
 
     /* Proxies */
-    Queue<int*> requests;
-    Queue<PlayerData*> broadcast;
+    NonBlockingQueue<int*> requests;
+    NonBlockingQueue<PlayerData*> broadcast;
     ServerProxy server; /* proxy, luego se reemplaza con la lógica del cliente*/
 
     /* La escena que se renderizará en cada frame */

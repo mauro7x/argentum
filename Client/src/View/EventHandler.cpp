@@ -130,7 +130,7 @@ Event EventHandler::_getEvent(const SDL_Event& e) {
 //-----------------------------------------------------------------------------
 // API Pública
 
-EventHandler::EventHandler(bool& view_running, Queue<int*>& requests)
+EventHandler::EventHandler(bool& view_running, NonBlockingQueue<int*>& requests)
     : view_running(view_running),
       requests(requests),
       key_pressed(UNMAPPED_KEY) {

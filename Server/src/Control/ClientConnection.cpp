@@ -73,9 +73,10 @@ void ClientConnection::_receiver() {
 //-----------------------------------------------------------------------------
 // API Pública
 
-ClientConnection::ClientConnection(const InstanceId id, SocketWrapper& peer,
-                                   Queue<InstanceId*>& finished_connections,
-                                   Queue<Command*>& commands)
+ClientConnection::ClientConnection(
+    const InstanceId id, SocketWrapper& peer,
+    NonBlockingQueue<InstanceId*>& finished_connections,
+    NonBlockingQueue<Command*>& commands)
     : id(id),
       peer(std::move(peer)),
       finished_connections(finished_connections),

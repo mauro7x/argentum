@@ -11,7 +11,7 @@
 //-----------------------------------------------------------------------------
 #include "../../../Common/includes/Exceptions/Exception.h"
 #include "../../../Common/includes/Exceptions/LoginException.h"
-#include "../../../Common/includes/Queue.h"
+#include "../../../Common/includes/NonBlockingQueue.h"
 #include "../../../Common/includes/Socket/SocketWrapper.h"
 #include "../../../Common/includes/Thread.h"
 #include "../../../Common/includes/UnitData.h"
@@ -29,7 +29,7 @@ class ClientLogin : public Thread {
     std::atomic_bool is_running;
     SocketWrapper peer;
     Database& database;
-    Queue<NewConnection*>& new_connections;
+    NonBlockingQueue<NewConnection*>& new_connections;
 
     //-------------------------------------------------------------------------
     // Métodos privados
@@ -42,7 +42,7 @@ class ClientLogin : public Thread {
    public:
     /* Constructor */
     ClientLogin(SocketWrapper& peer, Database& database,
-                Queue<NewConnection*>& new_connections);
+                NonBlockingQueue<NewConnection*>& new_connections);
 
     /* Deshabilitamos el constructor por copia. */
     ClientLogin(const ClientLogin&) = delete;

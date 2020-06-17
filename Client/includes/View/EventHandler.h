@@ -12,7 +12,7 @@
 
 //-----------------------------------------------------------------------------
 //#include "../../../Common/includes/Exceptions/Exception.h"
-#include "../../../Common/includes/Queue.h"
+#include "../../../Common/includes/NonBlockingQueue.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -41,7 +41,7 @@ enum Key { UNMAPPED_KEY, UP_KEY, DOWN_KEY, LEFT_KEY, RIGHT_KEY, ESC_KEY };
 class EventHandler {
    private:
     bool& view_running;
-    Queue<int*>& requests;
+    NonBlockingQueue<int*>& requests;
     std::unordered_map<SDL_Keycode, Key> keys;
 
     /* Flags internos */
@@ -63,7 +63,7 @@ class EventHandler {
 
    public:
     /* Constructor */
-    EventHandler(bool& view_running, Queue<int*>& requests);
+    EventHandler(bool& view_running, NonBlockingQueue<int*>& requests);
 
     /* Handlea un evento de SDL */
     void handleEvent(const SDL_Event& e);

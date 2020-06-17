@@ -73,7 +73,8 @@ void Engine::_loopIteration(int it) {
 //-----------------------------------------------------------------------------
 // API Pública
 
-Engine::Engine(Database& database, Queue<NewConnection*>& new_connections)
+Engine::Engine(Database& database,
+               NonBlockingQueue<NewConnection*>& new_connections)
     : keep_executing(true),
       database(database),
       rate(0),

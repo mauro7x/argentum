@@ -22,7 +22,7 @@ void ClientLogin::_loginProxy() {
 // API Pública
 
 ClientLogin::ClientLogin(SocketWrapper& peer, Database& database,
-                         Queue<NewConnection*>& new_connections)
+                         NonBlockingQueue<NewConnection*>& new_connections)
     : is_running(false),
       peer(std::move(peer)),
       database(database),

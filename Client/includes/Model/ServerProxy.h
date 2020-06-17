@@ -8,7 +8,7 @@
 #include <atomic>
 #include <chrono>
 
-#include "../../../Common/includes/Queue.h"
+#include "../../../Common/includes/NonBlockingQueue.h"
 #include "../../../Common/includes/Thread.h"
 #include "../../../Common/includes/UnitData.h"
 //-----------------------------------------------------------------------------
@@ -27,8 +27,8 @@
 
 class ServerProxy : public Thread {
    private:
-    Queue<int*>& requests;
-    Queue<PlayerData*>& broadcast;
+    NonBlockingQueue<int*>& requests;
+    NonBlockingQueue<PlayerData*>& broadcast;
     PlayerData player;
     std::atomic_bool is_running;
     std::atomic_bool keep_running;
@@ -39,7 +39,8 @@ class ServerProxy : public Thread {
      *
      * Parámetros: -
      */
-    ServerProxy(Queue<int*>& requests, Queue<PlayerData*>& broadcast);
+    ServerProxy(NonBlockingQueue<int*>& requests,
+                NonBlockingQueue<PlayerData*>& broadcast);
 
     /**
      * Descripción: código que se ejecutará al correr el hilo.

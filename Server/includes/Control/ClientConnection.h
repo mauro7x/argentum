@@ -8,7 +8,7 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-#include "../../../Common/includes/Queue.h"
+#include "../../../Common/includes/NonBlockingQueue.h"
 #include "../../../Common/includes/Socket/SocketWrapper.h"
 #include "../../../Common/includes/types.h"
 //-----------------------------------------------------------------------------
@@ -24,7 +24,7 @@ class ClientConnection {
    private:
     InstanceId id;
     SocketWrapper peer;
-    Queue<InstanceId*>& finished_connections;
+    NonBlockingQueue<InstanceId*>& finished_connections;
 
     // Flag de control compartido entre ambos threads
     std::mutex m;
@@ -32,11 +32,11 @@ class ClientConnection {
 
     // Sender
     std::thread sender;
-    Queue<Notification*> notifications;
+    NonBlockingQueue<Notification*> notifications;
 
     // Receiver
     std::thread receiver;
-    Queue<Command*>& commands;
+    NonBlockingQueue<Command*>& commands;
 
     //-------------------------------------------------------------------------
     // Métodos privados
@@ -56,8 +56,8 @@ class ClientConnection {
    public:
     /* Constructor */
     ClientConnection(const InstanceId id, SocketWrapper& peer,
-                     Queue<InstanceId*>& finished_connections,
-                     Queue<Command*>& commands);
+                     NonBlockingQueue<InstanceId*>& finished_connections,
+                     NonBlockingQueue<Command*>& commands);
 
     /* Deshabilitamos el constructor por copia. */
     ClientConnection(const ClientConnection&) = delete;

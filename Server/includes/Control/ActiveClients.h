@@ -6,7 +6,7 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-#include "../../../Common/includes/Queue.h"
+#include "../../../Common/includes/NonBlockingQueue.h"
 #include "../../../Common/includes/Socket/SocketWrapper.h"
 #include "../../../Common/includes/types.h"
 //-----------------------------------------------------------------------------
@@ -20,8 +20,8 @@
 class ActiveClients {
    private:
     std::unordered_map<InstanceId, ClientConnection*> content;
-    Queue<Command*>& commands;
-    Queue<InstanceId*>& finished_connections;
+    NonBlockingQueue<Command*>& commands;
+    NonBlockingQueue<InstanceId*>& finished_connections;
 
     //-------------------------------------------------------------------------
     // Métodos privados
@@ -29,8 +29,8 @@ class ActiveClients {
 
    public:
     /* Constructor */
-    ActiveClients(Queue<Command*>& commands,
-                  Queue<InstanceId*>& finished_connections);
+    ActiveClients(NonBlockingQueue<Command*>& commands,
+                  NonBlockingQueue<InstanceId*>& finished_connections);
 
     /* Deshabilitamos el constructor por copia. */
     ActiveClients(const ActiveClients&) = delete;

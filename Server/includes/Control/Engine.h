@@ -11,7 +11,7 @@
 
 //-----------------------------------------------------------------------------
 #include "../../../Common/includes/JSON.h"
-#include "../../../Common/includes/Queue.h"
+#include "../../../Common/includes/NonBlockingQueue.h"
 #include "../../../Common/includes/Thread.h"
 #include "../../../Common/includes/UnitData.h"
 #include "../../../Common/includes/types.h"
@@ -36,10 +36,12 @@ class Engine : public Thread {
     int rate;
 
     // Colas a vaciar en cada iteración
-    Queue<NewConnection*>& new_connections;  /* conexiones a agregar */
-    Queue<InstanceId*> finished_connections; /* conexiones que finalizaron */
-    Queue<Command*> commands;                /* comandos a procesar */
-    ActiveClients active_clients; /* contenedor de clientes activos */
+    NonBlockingQueue<NewConnection*>&
+        new_connections; /* conexiones a agregar */
+    NonBlockingQueue<InstanceId*>
+        finished_connections;            /* conexiones que finalizaron */
+    NonBlockingQueue<Command*> commands; /* comandos a procesar */
+    ActiveClients active_clients;        /* contenedor de clientes activos */
 
     //-------------------------------------------------------------------------
     // Métodos privados
@@ -66,7 +68,8 @@ class Engine : public Thread {
 
    public:
     /* Constructor */
-    Engine(Database& database, Queue<NewConnection*>& new_connections);
+    Engine(Database& database,
+           NonBlockingQueue<NewConnection*>& new_connections);
 
     /* Deshabilitamos el constructor por copia. */
     Engine(const Engine&) = delete;

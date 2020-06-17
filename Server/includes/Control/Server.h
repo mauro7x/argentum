@@ -16,7 +16,7 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-#include "../../../Common/includes/Queue.h"
+#include "../../../Common/includes/NonBlockingQueue.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -24,7 +24,7 @@
 class Server {
    private:
     Database database;
-    Queue<NewConnection*> new_connections;
+    NonBlockingQueue<NewConnection*> new_connections;
     Accepter accepter;
     Engine engine;
 

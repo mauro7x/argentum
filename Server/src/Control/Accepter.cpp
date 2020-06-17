@@ -41,7 +41,8 @@ void Accepter::_joinLogins() {
 // API Pública
 
 Accepter::Accepter(const std::string& port, const int max_clients_queued,
-                   Database& database, Queue<NewConnection*>& new_connections)
+                   Database& database,
+                   NonBlockingQueue<NewConnection*>& new_connections)
     : socket(port, max_clients_queued),
       database(database),
       new_connections(new_connections),

@@ -1,5 +1,5 @@
-#ifndef __QUEUE_H__
-#define __QUEUE_H__
+#ifndef __NON_BLOCKING_QUEUE_H__
+#define __NON_BLOCKING_QUEUE_H__
 
 //-----------------------------------------------------------------------------
 #include <mutex>
@@ -9,26 +9,26 @@
 //-----------------------------------------------------------------------------
 
 template <class T>
-class Queue {
+class NonBlockingQueue {
    private:
     std::mutex m;
     std::queue<T> queue;
 
    public:
     /* Constructor */
-    Queue() {}
+    NonBlockingQueue() {}
 
     /* Deshabilitamos el constructor por copia. */
-    Queue(const Queue&) = delete;
+    NonBlockingQueue(const NonBlockingQueue&) = delete;
 
     /* Deshabilitamos el operador= para copia.*/
-    Queue& operator=(const Queue&) = delete;
+    NonBlockingQueue& operator=(const NonBlockingQueue&) = delete;
 
     /* Deshabilitamos el constructor por movimiento. */
-    Queue(Queue&& other) = delete;
+    NonBlockingQueue(NonBlockingQueue&& other) = delete;
 
     /* Deshabilitamos el operador= para movimiento. */
-    Queue& operator=(Queue&& other) = delete;
+    NonBlockingQueue& operator=(NonBlockingQueue&& other) = delete;
 
     /* Push */
     void push(T t) {
@@ -52,8 +52,8 @@ class Queue {
     /**
      * Descripción: destructor.
      */
-    ~Queue() {}
+    ~NonBlockingQueue() {}
 };
 
 //-----------------------------------------------------------------------------
-#endif  // __QUEUE_H__
+#endif  // __NON_BLOCKING_QUEUE_H__
