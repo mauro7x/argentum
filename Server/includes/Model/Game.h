@@ -44,7 +44,7 @@ class Game {
         //-----------------------------------------------------------------------------
         // DEFINIR COMO VIENE EL PLAYERDATA SI ES NUEVO!.
         /*
-         * Recibe un struct CharacterPersistenceCfg con toda la información persistida
+         * Recibe un struct CharacterCfg con toda la información persistida
          * del character, o bien la información necesaria para crear un nuevo
          * character.
          * 
@@ -53,7 +53,7 @@ class Game {
          * 
          * Lanza Exception si alguno de los id no mapea a ninguna raza/clase.
          */
-        const int newCharacter(CharacterPersistenceCfg& init_data);
+        const int newCharacter(CharacterCfg& init_data);
 
         /*
         * Llamar a este metodo ante la desconexión de un character.

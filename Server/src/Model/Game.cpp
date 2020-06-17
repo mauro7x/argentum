@@ -20,7 +20,7 @@ Game::~Game() {
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-const int Game::newCharacter(CharacterPersistenceCfg& init_data) {
+const int Game::newCharacter(CharacterCfg& init_data) {
 
     // CONTROL DE PLAYER DATA. LLENADO DE CAMPOS FALTANTES.
     // Establecer id del mapa y posicion en el mapa.
@@ -51,5 +51,43 @@ void Game::deleteCharacter(const int id) {
 }
 //-----------------------------------------------------------------------------
 
+void Game::startMovingUp(const Id caller) {
+    if (!this->characters.count(caller)) {
+        throw Exception("Game.cpp startMovingUp: unknown caller.");
+    }
 
+    this->characters[caller].startMovingUp();
+}
+
+void Game::startMovingDown(const Id caller) {
+    if (!this->characters.count(caller)) {
+        throw Exception("Game.cpp startMovingDown: unknown caller.");
+    }
+
+    this->characters[caller].startMovingDown();
+}
+
+void Game::startMovingLeft(const Id caller) {
+    if (!this->characters.count(caller)) {
+        throw Exception("Game.cpp startMovingLeft: unknown caller.");
+    }
+
+    this->characters[caller].startMovingLeft();
+}
+
+void Game::startMovingRight(const Id caller) {
+    if (!this->characters.count(caller)) {
+        throw Exception("Game.cpp startMovingRight: unknown caller.");
+    }
+
+    this->characters[caller].startMovingRight();
+}
+
+void Game::stopMoving(const Id caller) {
+    if (!this->characters.count(caller)) {
+        throw Exception("Game.cpp stopMoving: unknown caller.");
+    }
+    
+    this->characters[caller].stopMoving();
+}
 
