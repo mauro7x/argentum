@@ -48,6 +48,9 @@ class CommandDispatcher : public Thread {
     /* Hilo principal de ejecución */
     void run() override;
 
+    /* Detiene la ejecución cerrando la cola */
+    void stop();
+
     //-----------------------------------------------------------------------------
 
     /* Destructor */

@@ -29,6 +29,10 @@ void CommandDispatcher::run() {
     }
 }
 
+void CommandDispatcher::stop() {
+    commands.close();
+}
+
 CommandDispatcher::~CommandDispatcher() {}
 
 //-----------------------------------------------------------------------------

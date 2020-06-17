@@ -87,6 +87,10 @@ void Client::run() {
     game();
 
     // Joineamos los hilos
+
+    // Es necesario hacer esto para que el command_dispatcher se joinee. Proxy.
+    command_dispatcher.stop();
+
     command_dispatcher.join();
     updater.join();
 
