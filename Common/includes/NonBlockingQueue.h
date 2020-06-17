@@ -30,7 +30,7 @@ class NonBlockingQueue {
     /* Deshabilitamos el operador= para movimiento. */
     NonBlockingQueue& operator=(NonBlockingQueue&& other) = delete;
 
-    /* Push */
+    /* Push tradicional a la cola */
     void push(T t) {
         std::unique_lock<std::mutex> l(m);
         queue.push(t);
