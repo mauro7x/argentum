@@ -2,12 +2,18 @@
 #define __PLAYER_H__
 
 //-----------------------------------------------------------------------------
+#include <array>
 #include <fstream>
+//-----------------------------------------------------------------------------
 
+//-----------------------------------------------------------------------------
 #include "../../../Common/includes/Exceptions/Exception.h"
 #include "../../../Common/includes/JSON.h"
 #include "../../../Common/includes/paths.h"
 #include "../../../Common/includes/types.h"
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
 #include "Unit.h"
 //-----------------------------------------------------------------------------
 
@@ -15,8 +21,12 @@
 
 class Player : public Unit {
    private:
-    // Stats
-    uint32_t health, mana, gold;
+    // Stats y atributos
+    uint32_t health, mana, gold; /* stats */
+
+    // Inventario y equipameniento
+    std::array<InventorySlot, N_INVENTORY_SLOTS> inventory;
+    std::array<Id, N_WEARABLE_ITEMS> equipment;
 
     // Cuerpo y vestimenta
     Id head_id, body_id;

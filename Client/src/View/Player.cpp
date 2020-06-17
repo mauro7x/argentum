@@ -12,6 +12,9 @@ void Player::_copyData(const PlayerData& init_data) {
     mana = init_data.mana;
     gold = init_data.gold;
 
+    inventory = init_data.inventory;
+    equipment = init_data.equipment;
+
     // Ids gráficos
     head_id = init_data.head_id;
     body_id = init_data.body_id;
@@ -29,6 +32,8 @@ Player::Player(Renderer* renderer, UnitSpriteContainer* sprites)
       health(0),
       mana(0),
       gold(0),
+      inventory({0}),
+      equipment({0}),
       head_id(0),
       body_id(0),
       helmet_id(0),

@@ -30,7 +30,7 @@ void GameView::_init() {
 
     /* Setteamos el frame-rate */
     int fps = gui_config["fps"];
-    rate = 1000 / fps;
+    rate = 1000 / fps; /* ms por cada frame (floor) */
 
     /* Cargamos las dimensiones de los tiles */
     int tile_w = map_config["tilewidth"];
@@ -95,7 +95,7 @@ void GameView::_loadMedia() {
     unit_sprites.loadMedia();
 }
 
-void GameView::_gameIteration(uint32_t it) {
+void GameView::_loopIteration(const int it) {
     /* Manejamos updates del servidor */
     PlayerData* update = NULL;
     while ((update = broadcast.pop())) {
@@ -141,11 +141,12 @@ GameView::GameView()
       event_handler(view_running, requests) {}
 
 void GameView::operator()() {
-    /* Inicializamos variables internas, hilos de ejecución y cargamos media */
+    // Iniciamos recursos necesarios
     _init();
     _loadMedia();
-    server.start();  // proxy
-    event_handler.start();
+
+    server.start();         // proxy
+    event_handler.start();  // sacar
 
     try {
         //-------------------------------------------------------------------------
@@ -155,43 +156,54 @@ void GameView::operator()() {
                                 100,
                                 100,
                                 100,
+                                {InventorySlot({0, 0}), InventorySlot({0, 0}),
+                                 InventorySlot({0, 0}), InventorySlot({0, 0}),
+                                 InventorySlot({0, 0}), InventorySlot({0, 0}),
+                                 InventorySlot({0, 0}), InventorySlot({0, 0}),
+                                 InventorySlot({0, 0}), InventorySlot({0, 0})},
+                                {0, 0, 0, 0},
                                 2000,
                                 2100,
                                 1300,
                                 1400,
                                 1500,
-                                0};
+                                1000};
         player.init(init_data);
         map.select(0); /* el id del mapa x ahora hardcodeado */
         //-------------------------------------------------------------------------
 
-        /* Variables para el control del frame-rate */
-        uint32_t t1 = SDL_GetTicks(), t2 = 0, behind = 0, lost = 0, it = 0;
-        int rest = 0;
+        // Variables para controlar el frame-rate
+        auto t1 = std::chrono::steady_clock::now();
+        auto t2 = t1;
+        std::chrono::duration<float, std::milli> diff;
+        int rest = 0, behind = 0, lost = 0;
+        int it = 1;
 
-        /* Loop principal del juego (acciones y renderizado) */
+        // Loop principal
         while (view_running) {
-            /* Ejecución de la iteración del juego */
-            _gameIteration(it);
+            _loopIteration(it);
 
-            /* Control del frame-rate */
-            t2 = SDL_GetTicks();
-            rest = rate - (t2 - t1);
+            // Controlamos el rate y verificamos pérdida de frames.
+            // Idea de implementación:
+            // https://eldipa.github.io/book-of-gehn/articles/2019/10/23/Constant-Rate-Loop.html
+            it = 0;
+            t2 = std::chrono::steady_clock::now();
+            diff = t2 - t1;
+            rest = rate - std::ceil(diff.count());
 
             if (rest < 0) {
-                fprintf(stderr, "\n\n== PERDIDA DE FRAME/S ==\n\n\n");
+                fprintf(stderr, "\n\n=== PÉRDIDA DE FRAME/S ===\n\n\n");
                 behind = -rest;
-                lost = (behind - behind % rate);
+                lost = rate + (behind - behind % rate);
                 rest = rate - behind % rate;
-                t1 += lost;
-                it += (lost / rate);
+                t1 += std::chrono::milliseconds(lost);
+                it += std::floor(lost / rate);
             }
 
-            fprintf(stderr, "MAIN-LOOP | It: %i | Sleep: %i ms\n", it + 1,
-                    rest);
+            fprintf(stderr, "MAIN-LOOP: Sleeping for %i ms.\n", rest);
             std::this_thread::sleep_for(std::chrono::milliseconds(rest));
-            t1 += rate;
-            it++;
+            t1 += std::chrono::milliseconds(rate);
+            it += 1;
         }
     } catch (const Exception& e) {
         view_running = false;

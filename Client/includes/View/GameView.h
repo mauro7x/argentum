@@ -30,17 +30,13 @@
 
 //-----------------------------------------------------------------------------
 #include "Character.h"
+#include "Console.h"
 #include "Creature.h"
 #include "HUD.h"
-#include "Console.h"
 #include "MapView.h"
 #include "Player.h"
-#include "UnitSpriteContainer.h"
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
-// Metiendo los contenedores de unidades
 #include "UnitContainer.h"
+#include "UnitSpriteContainer.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -58,7 +54,7 @@ class GameView {
     Window window;
     Camera camera;
     Renderer renderer;
-    uint32_t rate;
+    int rate;
 
     /* Flag de ejecución */
     std::atomic_bool view_running;
@@ -91,8 +87,8 @@ class GameView {
     /* Carga media necesaria */
     void _loadMedia();
 
-    /* Ejecuta una iteración del game */
-    void _gameIteration(uint32_t it);
+    /* Ejecuta una iteración del loop */
+    void _loopIteration(const int it);
 
    public:
     /* Constructor */
