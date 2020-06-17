@@ -1,5 +1,5 @@
-#include "../includes/Equipment.h"
-#include "../includes/Character.h"
+#include "../../includes/Model/Equipment.h"
+#include "../../includes/Model/Character.h"
 
 #include <iostream> // Para testear
 

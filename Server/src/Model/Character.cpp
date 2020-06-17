@@ -1,12 +1,17 @@
 #include <algorithm>
 #include <math.h>
 //-----------------------------------------------------------------------------
-#include "../includes/Character.h"
-#include "../includes/Formulas.h"
+#include "../../includes/Model/Character.h"
+#include "../../includes/Model/Formulas.h"
 //-----------------------------------------------------------------------------
 #include <iostream> //sacar
 //-----------------------------------------------------------------------------
 #define CRITICAL_ATTACK_DAMAGE_MODIFIER 2
+#define RATE 1000 / 30 // ms.
+#define TIME_TO_MOVE_A_TILE 200 // ms
+#define TIME_TO_UPDATE_ATTRIBUTES 1000 // ms
+
+#define DEFAULT_MOVING_ORIENTATION DOWN_ORIENTATION
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -31,7 +36,12 @@ Character::Character(const CharacterPersistenceCfg& init_data,
         position(init_data.map,
                  init_data.x_coord,
                  init_data.y_coord,
-                 map_container) {
+                 map_container),
+        
+        moving_orientation(DEFAULT_MOVING_ORIENTATION),
+        moving(false),
+        moving_time_elapsed(0),
+        attribute_update_time_elapsed(0) {
 
     // SI EL JUGADOR ESTA PERSISTIDO Y NO ES NUEVO, LLENAR TODO LO QUE SE TIENE QUE LLENAR.
     
@@ -45,11 +55,19 @@ Character::~Character() {
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+void Character::act(const unsigned int it) {
+    if (moving) 
+        _updateMovement(it);
+
+    _updateTimeDependantAttributes(it);
+}
+
 void Character::updateLevelDependantAttributes() {
     this->max_health = Formulas::calculateMaxHealth(this->constitution,
                         this->kind.max_health_factor, 
                         this->race.max_health_factor, 
                         this->level.getLevel());
+                        
     this->max_mana = Formulas::calculateMaxMana(this->intelligence,
                         this->kind.max_mana_factor,
                         this->race.max_mana_factor,
@@ -58,20 +76,66 @@ void Character::updateLevelDependantAttributes() {
     this->inventory.updateMaxAmountsOfGold();
 }
 
-void Character::updateTimeDependantAttributes(const unsigned int seconds_elapsed) {
-    // ACTUALIZACIONES QUE DEPENDEN DEL TIEMPO
-    unsigned int health_update = Formulas::calculateHealthTimeRecovery(
-                                    this->race.health_recovery_factor,
-                                    seconds_elapsed);
-    unsigned int mana_update = Formulas::calculateManaTimeRecovery(
-                                    this->race.mana_recovery_factor,
-                                    seconds_elapsed);
+void Character::_updateTimeDependantAttributes(const unsigned int it) {
+    attribute_update_time_elapsed += it * RATE;
+    
+    while (attribute_update_time_elapsed >= TIME_TO_UPDATE_ATTRIBUTES) {
 
-    this->recoverHealth(health_update);
-    this->recoverMana(mana_update);
+        unsigned int health_update = Formulas::calculateHealthTimeRecovery(
+                                        this->race.health_recovery_factor,
+                                        TIME_TO_UPDATE_ATTRIBUTES / 1000); // en segundos
 
-    // IMPLEMENTAR LOGICA DE MOVIMIENTO, QUE DEPENDE DEL TIEMPO.
+        unsigned int mana_update = Formulas::calculateManaTimeRecovery(
+                                        this->race.mana_recovery_factor,
+                                        TIME_TO_UPDATE_ATTRIBUTES / 1000); // en segundos
+
+
+        this->recoverHealth(health_update);
+        this->recoverMana(mana_update);
+    }
 }
+
+void Character::_updateMovement(const unsigned int it) {
+    this->moving_time_elapsed += it * RATE; // Tiempo en ms acum sin moverme.
+    
+    while (this->moving_time_elapsed >= TIME_TO_MOVE_A_TILE) {
+        this->moving_time_elapsed -= TIME_TO_MOVE_A_TILE;
+        this->position.move(moving_orientation);
+        // broadcast true.
+    }
+}
+
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+//  Movimiento
+//-----------------------------------------------------------------------------
+
+void Character::startMovingUp() {
+    this->moving_orientation = UP_ORIENTATION;
+    this->moving = true;
+}
+
+void Character::startMovingDown() {
+    this->moving_orientation = DOWN_ORIENTATION;
+    this->moving = true;
+}
+
+void Character::startMovingRight() {
+    this->moving_orientation = RIGHT_ORIENTATION;
+    this->moving = true;
+}
+
+void Character::startMovingLeft() {
+    this->moving_orientation = LEFT_ORIENTATION;
+    this->moving = true;
+}
+
+void Character::stopMoving() {
+    this->moving = false;
+    this->moving_time_elapsed = 0;
+}
+
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------

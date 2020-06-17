@@ -1,6 +1,6 @@
-#include "../includes/Spell.h"
-#include "../includes/Character.h" // Evito circular dependences.
-#include "../includes/RandomNumberGenerator.h"
+#include "../../includes/Model/Spell.h"
+#include "../../includes/Model/Character.h" // Evito circular dependences.
+#include "../../includes/Model/RandomNumberGenerator.h"
 
 Spell::Spell(const int id,
              const std::string name,

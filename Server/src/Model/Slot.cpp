@@ -1,4 +1,4 @@
-#include "../includes/Slot.h"
+#include "../../includes/Model/Slot.h"
 
 Slot::Slot():
     item(nullptr),

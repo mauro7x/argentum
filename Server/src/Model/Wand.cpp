@@ -1,5 +1,5 @@
-#include "../includes/Wand.h"
-#include "../includes/Character.h"
+#include "../../includes/Model/Wand.h"
+#include "../../includes/Model/Character.h"
 
 Wand::Wand(const WandCfg& wand_data, const SpellCfg& spell_data): 
     Wearable(wand_data.id, wand_data.name, 

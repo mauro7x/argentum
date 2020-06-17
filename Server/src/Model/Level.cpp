@@ -1,9 +1,9 @@
 #include <math.h>
 #include <algorithm>
 
-#include "../includes/Level.h"
-#include "../includes/Formulas.h"
-#include "../includes/Character.h"
+#include "../../includes/Model/Level.h"
+#include "../../includes/Model/Formulas.h"
+#include "../../includes/Model/Character.h"
 
 #define INITIAL_LEVEL 1
 #define INITIAL_XP 0

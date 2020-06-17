@@ -1,6 +1,8 @@
 #ifndef __POSITION_H__
 #define __POSITION_H__
 
+#include <exception>
+
 #include "../../../Common/includes/MapContainer.h"
 #include "../../../Common/includes/Orientation.h"
 
@@ -28,7 +30,12 @@ class Position {
         const int getX() const;
         const int getY() const;
 
-        const bool move(const Orientation& orientation);
+        void move(const Orientation& orientation);
+};
+
+class CollisionWhileMovingException: std::exception {
+    public:
+        virtual const char* what() const noexcept;
 };
 
 #endif

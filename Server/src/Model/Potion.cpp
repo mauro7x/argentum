@@ -1,5 +1,5 @@
-#include "../includes/Potion.h"
-#include "../includes/Character.h" // Se incluye aca para evitar dependencias 
+#include "../../includes/Model/Potion.h"
+#include "../../includes/Model/Character.h" // Se incluye aca para evitar dependencias 
                                    // circulares.
 
 Potion::Potion(const Id id,

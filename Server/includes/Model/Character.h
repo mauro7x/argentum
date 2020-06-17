@@ -14,6 +14,7 @@
 #include "Position.h"
 //-----------------------------------------------------------------------------
 #include "../../../Common/includes/MapContainer.h"
+#include "../../../Common/includes/Orientation.h"
 //-----------------------------------------------------------------------------
 #include "config_structs.h"
 //-----------------------------------------------------------------------------
@@ -42,6 +43,11 @@ class Character {
         Inventory inventory;
         Equipment equipment;
         Position position;
+
+        Orientation moving_orientation;
+        bool moving;
+        unsigned int moving_time_elapsed;
+        unsigned int attribute_update_time_elapsed;
         //-----------------------------------------------------------------------------
 
     public:
@@ -58,10 +64,15 @@ class Character {
         //-----------------------------------------------------------------------------
 
         //-----------------------------------------------------------------------------
+        // Actualización de atributos.
+        //-----------------------------------------------------------------------------
+
+        void act(const unsigned int it);
+
         /*
          * Actualiza health y mana segun el paso del tiempo.
          */
-        void updateTimeDependantAttributes(const unsigned int seconds_elapsed);
+        void _updateTimeDependantAttributes(const unsigned int seconds_elapsed);
 
         /*
          * Actualiza max_health, max_mana, y los limites de oro de los slots
@@ -70,8 +81,25 @@ class Character {
          * Esta función es llamada cada vez que el character sube de nivel.
          */
         void updateLevelDependantAttributes();
+
+        void _updateMovement(const unsigned int it);
         //-----------------------------------------------------------------------------
 
+        //-----------------------------------------------------------------------------
+        //  Movimiento
+        //-----------------------------------------------------------------------------
+
+        void startMovingUp();
+        void startMovingDown();
+        void startMovingRight();
+        void startMovingLeft();
+
+        void stopMoving();
+
+        //-----------------------------------------------------------------------------
+
+        //-----------------------------------------------------------------------------
+        //  Manejo de items
         //-----------------------------------------------------------------------------
         /*
          * Recibe la posicion del item en el inventario
@@ -106,6 +134,8 @@ class Character {
         //-----------------------------------------------------------------------------
 
         //-----------------------------------------------------------------------------
+        // Modificación de maná y vida.
+        //-----------------------------------------------------------------------------
         /*
          * Efectua la accion curativa de las pociones de mana.
          * Aumenta los puntos de mana en los points especificados,
@@ -127,7 +157,9 @@ class Character {
          */
         void consumeMana(const unsigned int mana_points);
         //-----------------------------------------------------------------------------
-
+        
+        //-----------------------------------------------------------------------------
+        // Ataque y defensa
         //-----------------------------------------------------------------------------
         /*
          * Metodo llamado al usar báculos.        
@@ -198,6 +230,8 @@ class Character {
         void die();
         //-----------------------------------------------------------------------------
 
+        //-----------------------------------------------------------------------------
+        // Obtención de estado
         //-----------------------------------------------------------------------------
         /* Retorna si el character es newbie o no. */
         const bool isNewbie() const;

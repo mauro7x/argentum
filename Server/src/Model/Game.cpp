@@ -2,7 +2,7 @@
 
 #include "../../../Common/includes/Exceptions/Exception.h"
 //-----------------------------------------------------------------------------
-#include "../includes/Game.h"
+#include "../../includes/Model/Game.h"
 //-----------------------------------------------------------------------------
 #define FIRST_INSTANCE_ID 1
 #define ID_MAP_CHARACTER_SPAWN 1

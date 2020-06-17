@@ -109,9 +109,6 @@ class Game {
         void drop(const Id caller, const uint8_t n_slot, const uint32_t amount);
 
         void listConnectedPlayers(const Id caller);
-        
-        
-        
 };
 //-----------------------------------------------------------------------------
 #endif  // __GAME_H__

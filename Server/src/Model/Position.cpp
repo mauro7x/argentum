@@ -1,6 +1,6 @@
 #include <cstdlib>
 
-#include "../includes/Position.h"
+#include "../../includes/Model/Position.h"
 
 #define DEFAULT_ORIENTATION DOWN_ORIENTATION
 
@@ -28,9 +28,9 @@ const unsigned int Position::getDistance(const Position& other) const {
     return abs(this->x - other.getX()) + abs(this->y - other.getY());
 }
 
-const bool Position::move(const Orientation& orientation) {
+void Position::move(const Orientation& orientation) {
     if (!this->map_container[id_map].moveOcuppant(this->x, this->y, orientation))
-        return false;
+        throw CollisionWhileMovingException();
 
     this->orientation = orientation;
 
@@ -51,6 +51,8 @@ const bool Position::move(const Orientation& orientation) {
             this->x -= 1;
             break;
     }
+}
 
-    return true;
+const char* CollisionWhileMovingException::what() const noexcept {
+    return "No puedes moverte en esa dirección.";
 }

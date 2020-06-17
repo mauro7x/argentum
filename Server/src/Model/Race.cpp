@@ -1,4 +1,4 @@
-#include "../includes/Race.h"
+#include "../../includes/Model/Race.h"
 
 Race::Race(const RaceCfg& data): 
     id(data.id), name(data.name),

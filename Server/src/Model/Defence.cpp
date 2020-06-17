@@ -1,6 +1,6 @@
-#include "../includes/Defence.h"
-#include "../includes/Character.h" // Evito circular dependeces.
-#include "../includes/RandomNumberGenerator.h"
+#include "../../includes/Model/Defence.h"
+#include "../../includes/Model/Character.h" // Evito circular dependeces.
+#include "../../includes/Model/RandomNumberGenerator.h"
 
 Defence::Defence(const DefenceCfg& data):
     Wearable(data.id, data.name, data.price, data.type),
