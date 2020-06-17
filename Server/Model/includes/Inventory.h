@@ -6,6 +6,7 @@
 #include <array>
 #include <map>
 #include <exception>
+#include <cstdio>
 
 #include "../../../Common/includes/game_config.h"
 
@@ -22,8 +23,8 @@
 class Inventory {
     private:
         std::array<Slot, N_INVENTORY_SLOTS> slots;
-        std::map<Id, unsigned int> id_slot_map;
-        unsigned int occupied_slots;
+        std::map<Id, uint8_t> id_slot_map;
+        uint8_t occupied_slots;
 
         unsigned int safe_gold, excess_gold;
         unsigned int max_safe_gold, max_excess_gold;
@@ -33,7 +34,7 @@ class Inventory {
          * Devuelve la el indice del menor slot libre del
          * container del inventario.
          */
-        const unsigned int _getNextFreeSlot() const;
+        const uint8_t _getNextFreeSlot() const;
 
         /*
          * Agrega la cantidad de oro especificada en slot_gold,
@@ -43,9 +44,9 @@ class Inventory {
          * 
          * Retorna la cantidad de oro que no se pudo guardar.
          */
-        unsigned int _addGold(const unsigned int amount, 
-                             unsigned int& slot_gold,
-                             unsigned int& slot_max_gold);
+        unsigned int _addGold(const uint32_t amount, 
+                              unsigned int& slot_gold,
+                              unsigned int& slot_max_gold);
 
         /*
          * Retira la cantidad de oro especificada de slot_gold,
@@ -54,8 +55,8 @@ class Inventory {
          * 
          * Retorna la cantidad de oro que se pudo retirar.
          */
-        unsigned int _gatherGold(const unsigned int amount,
-                                unsigned int& slot_gold);
+        unsigned int _gatherGold(const uint32_t amount,
+                                 unsigned int& slot_gold);
 
     public:
         Inventory(Level& level);
@@ -73,7 +74,7 @@ class Inventory {
          * Lanza InvalidPositionException si la posicion
          * especificada es invalida (fuera de rango).
          */
-        Item* gatherItem(const unsigned int n_slot);
+        Item* gatherItem(const uint8_t n_slot);
 
         /*
          * Obtiene amount de gold del inventario.
@@ -81,7 +82,7 @@ class Inventory {
          * Lanza InsufficientGoldException si la cantidad de oro
          * presente en el inventario es menor a amount.
          */
-        void gatherGold(const unsigned int amount);
+        void gatherGold(const uint32_t amount);
 
         /*
          * Agrega un item al inventario.
@@ -90,7 +91,7 @@ class Inventory {
          * Lanza FullInventoryException si el inventario esta
          * lleno y no se puede agregar.
          */
-        const unsigned int addItem(Item* item);
+        const uint8_t addItem(Item* item);
 
         /*
          * Agrega amount de gold al inventario, llenando primero
@@ -100,7 +101,7 @@ class Inventory {
          * Lanza GoldMaximumCapacityReachedException si no se pudo
          * guardar todo el oro por llegar al limite de capacidad.
          */
-        void addGold(const unsigned int amount);
+        void addGold(const uint32_t amount);
 
         void updateMaxAmountsOfGold();
 
