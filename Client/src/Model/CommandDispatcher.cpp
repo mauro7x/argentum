@@ -16,12 +16,15 @@ CommandDispatcher::CommandDispatcher(const SocketWrapper& socket,
 void CommandDispatcher::run() {
     try {
         Command* command = NULL;
+        bool socket_valid = true;
         while ((command = commands.pop())) {
-            if (!command->send(socket)) {
+            socket_valid = command->send(socket);
+            delete command;
+
+            if (!socket_valid) {
                 // Se cerró el socket y hay que terminar
                 break;
             }
-            delete command;
         }
     } catch (const std::exception& e) {
         fprintf(stderr, "CommandDispatcher // %s\n", e.what());

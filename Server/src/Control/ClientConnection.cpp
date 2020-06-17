@@ -46,11 +46,15 @@ void ClientConnection::_sender() {
 
     try {
         Notification* notification = NULL;
+        bool socket_valid = true;
         while ((notification = notifications.pop())) {
-            if (!notification->send(peer)) {
-                notifications.close();
-            }
+            socket_valid = notification->send(peer);
             delete notification;
+
+            if (!socket_valid) {
+                // Se cerró el socket y hay que terminar
+                break;
+            }
         }
     } catch (const std::exception& e) {
         // Error inesperado
@@ -154,6 +158,8 @@ void ClientConnection::join() {
     if (receiver.joinable()) {
         receiver.join();
     }
+
+    peer.shutdown();
 }
 
 void ClientConnection::stop() {
@@ -166,8 +172,6 @@ void ClientConnection::stop() {
 }
 
 ClientConnection::~ClientConnection() {
-    peer.shutdown();
-    peer.close();
     _freeNotifications();
 }
 
