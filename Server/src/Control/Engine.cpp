@@ -76,11 +76,11 @@ void Engine::_loopIteration(int it) {
 Engine::Engine(Database& database, Queue<NewConnection*>& new_connections)
     : keep_executing(true),
       database(database),
+      rate(0),
       new_connections(new_connections),
       finished_connections(),
       commands(),
-      active_clients(commands, finished_connections),
-      rate(0) {}
+      active_clients(commands, finished_connections) {}
 
 void Engine::run() {
     fprintf(stderr, "DEBUG: Comienza la ejecución del engine.\n");

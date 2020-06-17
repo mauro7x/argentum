@@ -49,7 +49,7 @@ void Unit::_movementFinished() {
 
     if ((x == next_x) && (y == next_y)) {
         state = READY;
-        last_tick = 0;
+        current_animation_frame = 0;
     }
 }
 
@@ -57,22 +57,22 @@ int Unit::_calculateSpriteX(const Sprite& sprite) const {
     switch (data.orientation) {
         case UP_ORIENTATION:
             return (sprite.up_col +
-                    ((last_tick / sprite.change_every_n_frames) %
+                    ((current_animation_frame / sprite.change_every_n_frames) %
                      sprite.up_clips)) *
                    sprite.clip_w;
         case DOWN_ORIENTATION:
             return (sprite.down_col +
-                    ((last_tick / sprite.change_every_n_frames) %
+                    ((current_animation_frame / sprite.change_every_n_frames) %
                      sprite.down_clips)) *
                    sprite.clip_w;
         case LEFT_ORIENTATION:
             return (sprite.left_col +
-                    ((last_tick / sprite.change_every_n_frames) %
+                    ((current_animation_frame / sprite.change_every_n_frames) %
                      sprite.left_clips)) *
                    sprite.clip_w;
         case RIGHT_ORIENTATION:
             return (sprite.right_col +
-                    ((last_tick / sprite.change_every_n_frames) %
+                    ((current_animation_frame / sprite.change_every_n_frames) %
                      sprite.right_clips)) *
                    sprite.clip_w;
     }
@@ -138,7 +138,7 @@ Unit::Unit(Renderer* renderer, UnitSpriteContainer* sprites, const int tile_w,
       x_vel(0),
       y_vel(0),
       last_moved(0),
-      last_tick(0) {}
+      current_animation_frame(0) {}
 
 Unit::Unit(Unit&& other) {
     g_renderer = other.g_renderer;
@@ -155,7 +155,7 @@ Unit::Unit(Unit&& other) {
     x_vel = other.x_vel;
     y_vel = other.y_vel;
     last_moved = other.last_moved;
-    last_tick = other.last_tick;
+    current_animation_frame = other.current_animation_frame;
 }
 
 Unit& Unit::operator=(Unit&& other) {
@@ -173,12 +173,12 @@ Unit& Unit::operator=(Unit&& other) {
     x_vel = other.x_vel;
     y_vel = other.y_vel;
     last_moved = other.last_moved;
-    last_tick = other.last_tick;
+    current_animation_frame = other.current_animation_frame;
 
     return *this;
 }
 
-void Unit::act(const int tick) {
+void Unit::act(const int it) {
     if (!state) {
         throw Exception("Unit has not been initialized (act requested).");
     }
@@ -192,7 +192,7 @@ void Unit::act(const int tick) {
         x += x_vel * time_step;
         y += y_vel * time_step;
         last_moved = time;
-        last_tick = tick;
+        current_animation_frame += it;
 
         /* Chequeamos si terminó */
         _movementFinished();

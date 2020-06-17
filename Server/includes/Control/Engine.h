@@ -32,13 +32,14 @@ class Engine : public Thread {
     std::atomic_bool keep_executing;
     Database& database;
 
+    // Configuración interna
+    int rate;
+
     // Colas a vaciar en cada iteración
     Queue<NewConnection*>& new_connections;  /* conexiones a agregar */
     Queue<InstanceId*> finished_connections; /* conexiones que finalizaron */
     Queue<Command*> commands;                /* comandos a procesar */
     ActiveClients active_clients; /* contenedor de clientes activos */
-
-    int rate;
 
     //-------------------------------------------------------------------------
     // Métodos privados

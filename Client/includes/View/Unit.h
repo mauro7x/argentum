@@ -36,11 +36,11 @@ class Unit {
     UnitState state;
 
     /* Componentes para el renderizado gráfico */
-    float x, y;               /* posición en pixeles */
-    float tile_movement_time; /* tiempo necesario para mover un tile */
-    float x_vel, y_vel;       /* velocidades en cada componente*/
-    Uint32 last_moved;        /* ultimo movimiento */
-    int last_tick;            /* ultimo tick recibido */
+    float x, y;                  /* posición en pixeles */
+    float tile_movement_time;    /* tiempo necesario para mover un tile */
+    float x_vel, y_vel;          /* velocidades en cada componente*/
+    Uint32 last_moved;           /* ultimo movimiento */
+    int current_animation_frame; /* frame actual a renderizar */
 
     /* Settea la velocidad de movimiento en caso de ser necesario */
     void _setMovementSpeed();
@@ -80,7 +80,7 @@ class Unit {
     //-------------------------------------------------------------------------
 
     /* Acción que realiza en cada frame */
-    virtual void act(const int tick);
+    virtual void act(const int it);
 
     /* Renderizarse si se encuentra dentro de la cámara */
     virtual void render() const = 0;

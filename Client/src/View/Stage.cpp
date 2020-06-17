@@ -25,7 +25,7 @@ void Stage::render() const {
     {  // Algoritmo de renderización por filas
         int map_cols = g_map.widthInTiles();
         int map_rows = g_map.heightInTiles();
-        int unit_id;
+        InstanceId unit_id;
 
         for (int row = 0; row < map_rows; row++) {
             g_map.renderDecoration(row);

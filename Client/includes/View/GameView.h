@@ -5,7 +5,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
-#include <atomic>
 #include <chrono>
 #include <cstdint>
 #include <fstream>
@@ -22,25 +21,18 @@
 
 //-----------------------------------------------------------------------------
 #include "Camera.h"
-#include "EventHandler.h"
-#include "Renderer.h"
-#include "Stage.h"
-#include "Window.h"
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
 #include "Character.h"
-#include "Creature.h"
-#include "HUD.h"
 #include "Console.h"
+#include "Creature.h"
+#include "EventHandler.h"
+#include "HUD.h"
 #include "MapView.h"
 #include "Player.h"
-#include "UnitSpriteContainer.h"
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
-// Metiendo los contenedores de unidades
+#include "Renderer.h"
+#include "Stage.h"
 #include "UnitContainer.h"
+#include "UnitSpriteContainer.h"
+#include "Window.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -58,10 +50,10 @@ class GameView {
     Window window;
     Camera camera;
     Renderer renderer;
-    uint32_t rate;
+    int rate;
 
     /* Flag de ejecución */
-    std::atomic_bool view_running;
+    bool view_running;
 
     /* Componentes de la vista */
     HUDProxy hud;
@@ -91,8 +83,14 @@ class GameView {
     /* Carga media necesaria */
     void _loadMedia();
 
-    /* Ejecuta una iteración del game */
-    void _gameIteration(uint32_t it);
+    /* Vacía la cola de eventos de SDL */
+    void _processSDLEvents();
+
+    /* Vacía la cola de updates del servidor */
+    void _processServerUpdates();
+
+    /* Ejecuta una iteración del loop */
+    void _loopIteration(const int it);
 
    public:
     /* Constructor */

@@ -3,14 +3,14 @@
 //-----------------------------------------------------------------------------
 #include <array>
 //-----------------------------------------------------------------------------
-#include "types.h"
-#include "game_config.h"
 #include "Orientation.h"
+#include "game_config.h"
+#include "types.h"
 //-----------------------------------------------------------------------------
 
 #ifndef N_WEARABLE_ITEMS
 #define N_WEARABLE_ITEMS 4
-#endif // N_WEARABLE_ITEMS
+#endif  // N_WEARABLE_ITEMS
 
 //-----------------------------------------------------------------------------
 // ESTRUCTURAS AUXILIARES
@@ -29,7 +29,7 @@ struct InventorySlot {
 
 /* Información básica necesaria para cualquier unidad */
 struct UnitData {
-    InstanceId gid;          /* unit id (ingame)*/
+    InstanceId gid; /* unit id (ingame)*/
 
     int x_tile, y_tile;      /* coordenadas en tiles */
     Orientation orientation; /* orientación de la unidad */
@@ -48,6 +48,7 @@ struct PlayerData {
     // Stats y atributos
     uint32_t health, mana, gold; /* stats */
 
+    // Inventario y equipameniento
     std::array<InventorySlot, N_INVENTORY_SLOTS> inventory;
     std::array<Id, N_WEARABLE_ITEMS> equipment;
 
