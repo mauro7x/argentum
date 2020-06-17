@@ -220,20 +220,14 @@ ssize_t Socket::recv(char* buffer, const ssize_t len) const {
 }
 
 void Socket::shutdown(const int& channel) const {
-    if (!fd_valid) {
-        throw Exception("Invalid socket file descriptor.");
-    }
-
-    if (::shutdown(fd, channel)) {
-        throw Exception("Error in function: Socket::shutdown()");
+    if (fd_valid) {
+        if (::shutdown(fd, channel)) {
+            throw Exception("Error in function: Socket::shutdown()");
+        }
     }
 }
 
 void Socket::close() {
-    if (!fd_valid) {
-        throw Exception("Invalid socket file descriptor.");
-    }
-
     _closeFdIfValid();
 }
 
