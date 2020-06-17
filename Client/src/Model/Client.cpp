@@ -8,6 +8,40 @@
 //-----------------------------------------------------------------------------
 // Métodos privados
 
+bool Client::_connect(SocketWrapper& socket) const {
+    std::string hostname, port, try_again;
+    bool connected = false;
+
+    std::cout << "Bienvenido a Argentum Online.\n";
+
+    while (!connected) {
+        std::cout
+            << "\n> Ingrese los datos que se le soliciten para conectarse al "
+               "servidor.\n";
+        std::cout << "\t> Hostname: ";
+        std::getline(std::cin, hostname);
+        std::cout << "\t> Puerto: ";
+        std::getline(std::cin, port);
+
+        std::cout << "[DEBUG] Hostname ingresado: " << hostname << "\n";
+        std::cout << "[DEBUG] Puerto ingresado: " << port << "\n";
+
+        try {
+            socket = std::move(SocketWrapper(hostname, port));
+            connected = true;
+        } catch (const Exception& e) {
+            std::cout << "\n> Conexión fallida. Ingrese 'y' para volver a "
+                         "intentar, o presione enter para salir: \n";
+            std::getline(std::cin, try_again);
+            if (try_again != "y") {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -16,64 +50,47 @@
 Client::Client() {}
 
 void Client::run() {
-    fprintf(stderr, "DEBUG: Comienza la ejecución del cliente\n");
+    fprintf(stderr, "DEBUG: Comienza la ejecución del cliente.\n");
 
-    /* Conexión proxy
-
-    std::string host, port;
-    bool connect = false;
+    // login proxy
     SocketWrapper socket;
-    while(!connect){
-        std::cout << "ingrese host: " << std::endl;
-        std::cin >> host;
-        std::cout << "ingrese port: " << std::endl;
-        std::cin >> port;
-        try {
-            socket = std::move(SocketWrapper(host, port));
-
-        } catch (const Exception& e) {
-            std::cout << "host o/y port ingresado invalido " << std::endl;
-            continue;
-        }
-        connect = true;
-        std::cout << "conexion establicida!" << std::endl;
+    if (!_connect(socket)) {
+        fprintf(stderr,
+                "DEBUG: Terminamos el cliente sin habernos conectado al "
+                "servidor.\n");
+        return;
     }
-    */
 
-    /**
-     * La idea es la siguiente: vamos a presentar 3 pantallas independientes al
-     * cliente en el siguiente orden:
-     *
-     * 1. ServerConnectionView: se pedira una ip y un puerto para conectarse.
-     * Cuando se logre la conexión, se retornará el socket conectado y se
-     * cerrará la ventana.
-     *
-     * 2. LogInView: con el socket conectado, esta pantalla buscará loggear al
-     * jugador con usuario y contraseña, y le dará la opcion de crear un nuevo
-     * jugador. Selección de personaje.
-     *
-     * 3. GameView: una vez que se seleccionó el personaje, se inicia el juego.
-     */
+    // una vez que tenemos el socket, lanzamos a los 3 hilos
 
-    /* 1. ServerConnectionView */
-    /* Una vez pasada esta view, contaremos con una conexión establecida. En
-     * este momento, lanzamos los distintos hilos de comunicación con el
-     * servidor: Sender, Receiver. Estos se pueden encapsular en una clase
-     * Server. Por ahora, será un server proxy que no tendrá sender y receiver,
-     * pero luego se cambiará manteniendo el código escrito en el gameview. */
+    // FALTA VER COMO MANEJAR EL PRIMER PAQUETE (debería ser bloqueante)
+    // UNA IDEA ES TENER UN MINI LOOP HASTA RECIBIRLO, Y AHI LAUNCHEAR LA VISTA.
+    // ESTE LOOP PUEDE ESTAR DENTRO O FUERA DE LA VISTA.
 
-    /* 2. LogInView */
-    /* Pasada esta etapa, el juego comienza, y lo que debemos hacer es
-     * renderizar lo que el server nos mande. */
+    // Canales de comunicación entre hilos
+    BlockingQueue<Command*> commands;
+    NonBlockingQueue<Update*> updates;
 
-    /* 3. Game view */
-    GameView view;
-    view();
+    // Dispatcher y Updater (objetos activos)
+    CommandDispatcher command_dispatcher(socket, commands);
+    Updater updater(socket, updates);
 
-    /* ENCAPSULAR TODO ESTO EN SCOPES, TENER EN CUENTA QUE LAS VISTAS DEBERIAN
-     * DESTRUIRSE PARA LIBERAR LOS RECURSOS QUE OCUPAN (usamos RAII) */
+    // Lanzamos los hilos
+    command_dispatcher.start();
+    updater.start();
 
-    fprintf(stderr, "DEBUG: Termina la ejecución del cliente\n");
+    // FALTA VER COMO HACER QUE SI EL SOCKET SE CIERRA (DEL LADO DEL SERVER), LA
+    // VISTA TERMINE
+
+    // Lanzamos la vista del juego
+    GameView game(commands, updates);
+    game();
+
+    // Joineamos los hilos
+    command_dispatcher.join();
+    updater.join();
+
+    fprintf(stderr, "DEBUG: Termina la ejecución del cliente.\n");
 }
 
 Client::~Client() {}

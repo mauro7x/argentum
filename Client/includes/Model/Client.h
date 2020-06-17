@@ -4,27 +4,38 @@
 //-----------------------------------------------------------------------------
 #include <stdio.h>
 
+#include <string>
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+#include "../../../Common/includes/BlockingQueue.h"
+#include "../../../Common/includes/NonBlockingQueue.h"
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
 #include "../View/GameView.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-// DEFINES
+#include "Command.h"
+#include "CommandDispatcher.h"
+#include "Update.h"
+#include "Updater.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 
 class Client {
    private:
-    // atributos del cliente
+    //-------------------------------------------------------------------------
+    // Métodos privados
 
-    // metodos privados
+    /* Interactúa con el jugador para conectarlo a un determinado servidor */
+    bool _connect(SocketWrapper& socket) const;  // PROXY
 
+    //-------------------------------------------------------------------------
    public:
-    /**
-     * Descripción: constructor.
-     *
-     * Parámetros: -
-     */
+    /* Constructor */
     Client();
 
     /* Deshabilitamos el constructor por copia. */
@@ -39,19 +50,10 @@ class Client {
     /* Deshabilitamos el operador= para movimiento. */
     Client& operator=(Client&& other) = delete;
 
-    /**
-     * Descripción: poner a correr al cliente.
-     *
-     * Parámetros: -
-     *
-     * Retorno: -
-     *
-     */
+    /* Pone a correr al cliente */
     void run();
 
-    /**
-     * Descripción: destructor.
-     */
+    /* Destructor */
     ~Client();
 };
 
