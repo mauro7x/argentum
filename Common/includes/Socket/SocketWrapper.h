@@ -80,8 +80,8 @@ class SocketWrapper : public Socket {
     // tipos de datos específicos. Aplica la misma documentación para
     // >> que para recv, y para << que para send.
 
-    ssize_t operator<<(uint16_t n) const;
-    ssize_t operator>>(uint16_t& n) const;
+    ssize_t operator<<(uint32_t n) const;
+    ssize_t operator>>(uint32_t& n) const;
 
     ssize_t operator<<(const std::string& msg) const;
 

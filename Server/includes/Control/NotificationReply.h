@@ -13,6 +13,11 @@
  * respecto a los comandos recibidos*/
 
 class NotificationReply: public Notification {
+   private:
+    char opcode;
+    uint32_t length;
+    std::string reply;
+    
    public:
     /* Constructor */
     NotificationReply(char opcode, uint32_t length, std::string reply);

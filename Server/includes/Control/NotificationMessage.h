@@ -13,6 +13,12 @@
 receiver corresponde*/
 
 class NotificationMessage : public Notification {
+   private:
+    uint32_t sender_length;
+    std::string sender;
+    uint32_t message_length; 
+    std::string message;
+    
    public:
     /* Constructor */
     NotificationMessage(uint32_t sender_length, std::string sender,

@@ -43,9 +43,10 @@ class Notification {
      * Retorno: clase Notificaction.
      *
      */
-    static std::unique_ptr<Notification> getNotification(bool is_reply, char opcode, uint32_t length,
-                                 std::string reply, uint32_t sender_length,
-                                 std::string sender);
+    //pendiente------
+    // static std::unique_ptr<Notification> getNotification(bool is_reply, char opcode, uint32_t length,
+    //                              std::string reply, uint32_t sender_length,
+    //                              std::string sender);
 
     /* Deshabilitamos el constructor por copia. */
     Notification(const Notification&) = delete;

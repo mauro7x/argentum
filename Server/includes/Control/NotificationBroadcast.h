@@ -13,9 +13,13 @@
 al cliente*/
 
 class NotificationBroadcast : public Notification {
+   private:
+   uint32_t length;
+   std::string broadcast;
+   
    public:
     /* Constructor */
-    NotificationBroadcast(uint32_t Broadcast_length, std::string Broadcast);
+    NotificationBroadcast(uint32_t broadcast_length, std::string broadcast);
 
     //-----------------------------------------------------------------------------
 
