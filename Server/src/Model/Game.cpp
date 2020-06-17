@@ -1,4 +1,5 @@
-
+#include <utility>
+#include <tuple>
 
 #include "../../../Common/includes/Exceptions/Exception.h"
 //-----------------------------------------------------------------------------
@@ -30,7 +31,7 @@ const int Game::newCharacter(CharacterCfg& init_data) {
 
     this->characters.emplace(
         std::piecewise_construct,
-        std::forward_as_tuple(this->next_instance_id), 
+        std::forward_as_tuple(this->next_instance_id),
         std::forward_as_tuple(init_data, 
                               this->races[init_data.race], 
                               this->kinds[init_data.kind], 
@@ -56,7 +57,8 @@ void Game::startMovingUp(const Id caller) {
         throw Exception("Game.cpp startMovingUp: unknown caller.");
     }
 
-    this->characters[caller].startMovingUp();
+    Character& character = this->characters.at(caller);
+    character.startMovingUp();
 }
 
 void Game::startMovingDown(const Id caller) {
@@ -64,15 +66,17 @@ void Game::startMovingDown(const Id caller) {
         throw Exception("Game.cpp startMovingDown: unknown caller.");
     }
 
-    this->characters[caller].startMovingDown();
+    Character& character = this->characters.at(caller);
+    character.startMovingDown();
 }
 
 void Game::startMovingLeft(const Id caller) {
     if (!this->characters.count(caller)) {
         throw Exception("Game.cpp startMovingLeft: unknown caller.");
     }
-
-    this->characters[caller].startMovingLeft();
+    
+    Character& character = this->characters.at(caller);
+    character.startMovingLeft();
 }
 
 void Game::startMovingRight(const Id caller) {
@@ -80,7 +84,8 @@ void Game::startMovingRight(const Id caller) {
         throw Exception("Game.cpp startMovingRight: unknown caller.");
     }
 
-    this->characters[caller].startMovingRight();
+    Character& character = this->characters.at(caller);
+    character.startMovingRight();
 }
 
 void Game::stopMoving(const Id caller) {
@@ -88,6 +93,7 @@ void Game::stopMoving(const Id caller) {
         throw Exception("Game.cpp stopMoving: unknown caller.");
     }
     
-    this->characters[caller].stopMoving();
+    Character& character = this->characters.at(caller);
+    character.stopMoving();
 }
 
