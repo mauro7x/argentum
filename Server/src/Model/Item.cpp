@@ -1,4 +1,4 @@
-#include "../includes/Item.h"
+#include "../../includes/Model/Item.h"
 
 Item::Item(const Id id, const std::string name,
            const unsigned int price):

@@ -1,5 +1,5 @@
-#include "../includes/Wearable.h"
-#include "../includes/Character.h"
+#include "../../includes/Model/Wearable.h"
+#include "../../includes/Model/Character.h"
 
 Wearable::Wearable(const Id id, const std::string name,
                    const unsigned int price,

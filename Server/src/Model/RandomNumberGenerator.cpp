@@ -1,6 +1,6 @@
 #include <random>
 
-#include "../includes/RandomNumberGenerator.h"
+#include "../../includes/Model/RandomNumberGenerator.h"
 
 RandomNumberGenerator::RandomNumberGenerator() {}
 RandomNumberGenerator::~RandomNumberGenerator() {}

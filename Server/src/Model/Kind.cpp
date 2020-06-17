@@ -1,6 +1,6 @@
 #include <string>
 
-#include "../includes/Kind.h"
+#include "../../includes/Model/Kind.h"
 
 Kind::Kind(const KindCfg& data):
                 id(data.id),

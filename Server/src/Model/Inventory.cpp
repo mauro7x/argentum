@@ -1,5 +1,5 @@
-#include "../includes/Inventory.h"
-#include "../includes/Formulas.h"
+#include "../../includes/Model/Inventory.h"
+#include "../../includes/Model/Formulas.h"
 
 #include <iostream> // Para testear
 

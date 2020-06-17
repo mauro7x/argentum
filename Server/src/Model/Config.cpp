@@ -1,6 +1,6 @@
 #include <array>
 
-#include "../includes/Config.h"
+#include "../../includes/Model/Config.h"
 //-----------------------------------------------------------------------------
 // API Pública
 

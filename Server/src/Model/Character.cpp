@@ -1,8 +1,8 @@
 #include <algorithm>
 #include <math.h>
 //-----------------------------------------------------------------------------
-#include "../includes/Character.h"
-#include "../includes/Formulas.h"
+#include "../../includes/Model/Character.h"
+#include "../../includes/Model/Formulas.h"
 //-----------------------------------------------------------------------------
 #include <iostream> //sacar
 //-----------------------------------------------------------------------------
@@ -36,7 +36,12 @@ Character::Character(const CharacterPersistenceCfg& init_data,
         position(init_data.map,
                  init_data.x_coord,
                  init_data.y_coord,
-                 map_container) {
+                 map_container),
+        
+        moving_orientation(DEFAULT_MOVING_ORIENTATION),
+        moving(false),
+        moving_time_elapsed(0),
+        attribute_update_time_elapsed(0) {
 
     // SI EL JUGADOR ESTA PERSISTIDO Y NO ES NUEVO, LLENAR TODO LO QUE SE TIENE QUE LLENAR.
     
@@ -62,6 +67,7 @@ void Character::updateLevelDependantAttributes() {
                         this->kind.max_health_factor, 
                         this->race.max_health_factor, 
                         this->level.getLevel());
+                        
     this->max_mana = Formulas::calculateMaxMana(this->intelligence,
                         this->kind.max_mana_factor,
                         this->race.max_mana_factor,
@@ -78,9 +84,11 @@ void Character::_updateTimeDependantAttributes(const unsigned int it) {
         unsigned int health_update = Formulas::calculateHealthTimeRecovery(
                                         this->race.health_recovery_factor,
                                         TIME_TO_UPDATE_ATTRIBUTES / 1000); // en segundos
+
         unsigned int mana_update = Formulas::calculateManaTimeRecovery(
                                         this->race.mana_recovery_factor,
                                         TIME_TO_UPDATE_ATTRIBUTES / 1000); // en segundos
+
 
         this->recoverHealth(health_update);
         this->recoverMana(mana_update);

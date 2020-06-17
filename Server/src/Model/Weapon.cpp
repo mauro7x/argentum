@@ -1,6 +1,6 @@
-#include "../includes/Weapon.h"
-#include "../includes/Character.h" // Evito dependencias circulares.
-#include "../includes/RandomNumberGenerator.h"
+#include "../../includes/Model/Weapon.h"
+#include "../../includes/Model/Character.h" // Evito dependencias circulares.
+#include "../../includes/Model/RandomNumberGenerator.h"
 
 Weapon::Weapon(const WeaponCfg& data):
                     Wearable(data.id, data.name, data.price, WEAPON),

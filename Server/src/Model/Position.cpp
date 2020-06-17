@@ -1,6 +1,6 @@
 #include <cstdlib>
 
-#include "../includes/Position.h"
+#include "../../includes/Model/Position.h"
 
 #define DEFAULT_ORIENTATION DOWN_ORIENTATION
 

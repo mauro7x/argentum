@@ -2,8 +2,8 @@
 #include <algorithm>
 #include <cstdlib>
 
-#include "../includes/Formulas.h"
-#include "../includes/RandomNumberGenerator.h"
+#include "../../includes/Model/Formulas.h"
+#include "../../includes/Model/RandomNumberGenerator.h"
 
 // Level
 const unsigned int Formulas::calculateLevelUpXP(const unsigned int level) {
