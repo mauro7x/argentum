@@ -16,18 +16,6 @@ void Engine::_init() {
     rate = 1000 / ticks_per_second; /* ms por cada tick (floor) */
 }
 
-void Engine::_processNewConnections() {
-    NewConnection* new_connection = NULL;
-    while ((new_connection = new_connections.pop())) {
-        fprintf(stderr, "ENGINE: Procesando una nueva conexión...\n");
-
-        InstanceId id = _GameAddPlayer((*new_connection).data);
-        active_clients.add(id, (*new_connection).peer);
-
-        delete new_connection;
-    }
-}
-
 void Engine::_processFinishedConnections() {
     InstanceId* finished_connection = NULL;
     while ((finished_connection = finished_connections.pop())) {
@@ -40,17 +28,29 @@ void Engine::_processFinishedConnections() {
     }
 }
 
+void Engine::_processNewConnections() {
+    NewConnection* new_connection = NULL;
+    while ((new_connection = new_connections.pop())) {
+        fprintf(stderr, "ENGINE: Procesando una nueva conexión...\n");
+
+        InstanceId id = _GameAddPlayer((*new_connection).data);
+        active_clients.add(id, (*new_connection).peer);
+
+        delete new_connection;
+    }
+}
+
 void Engine::_freeQueues() {
     {
-        NewConnection* p = NULL;
-        while ((p = new_connections.pop())) {
+        InstanceId* p = NULL;
+        while ((p = finished_connections.pop())) {
             delete p;
         }
     }
 
     {
-        InstanceId* p = NULL;
-        while ((p = finished_connections.pop())) {
+        NewConnection* p = NULL;
+        while ((p = new_connections.pop())) {
             delete p;
         }
     }
@@ -64,8 +64,8 @@ void Engine::_freeQueues() {
 }
 
 void Engine::_loopIteration(int it) {
-    _processNewConnections();
     _processFinishedConnections();
+    _processNewConnections();
 }
 
 //-----------------------------------------------------------------------------
@@ -117,7 +117,7 @@ void Engine::run() {
             it += std::floor(lost / rate);
         }
 
-        fprintf(stderr, "ENGINE: Sleeping for %i ms.\n", rest);
+        // fprintf(stderr, "ENGINE: Sleeping for %i ms.\n", rest);
         std::this_thread::sleep_for(std::chrono::milliseconds(rest));
         t1 += std::chrono::milliseconds(rate);
         it += 1;

@@ -2,12 +2,14 @@
 #define __CLIENT_CONNECTION_H__
 
 //-----------------------------------------------------------------------------
-#include <atomic>
+#include <exception>
 #include <mutex>
 #include <thread>
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+#include "../../../Common/includes/BlockingQueue.h"
+#include "../../../Common/includes/Exceptions/Exception.h"
 #include "../../../Common/includes/NonBlockingQueue.h"
 #include "../../../Common/includes/Socket/SocketWrapper.h"
 #include "../../../Common/includes/types.h"
@@ -32,7 +34,7 @@ class ClientConnection {
 
     // Sender
     std::thread sender;
-    NonBlockingQueue<Notification*> notifications;
+    BlockingQueue<Notification*> notifications;
 
     // Receiver
     std::thread receiver;
@@ -41,9 +43,13 @@ class ClientConnection {
     //-------------------------------------------------------------------------
     // Métodos privados
 
-    /* Método que los hilos llaman cuando terminan para verificar si la conexión
-     * ya terminó y notificarlo mediante la cola finished_connections. */
+    /* Método que tanto el sender como el receiver llamarán cuando terminen.
+     * Cuando ambos lo llamen, se agrega la conexión a una lista de conexiones
+     * terminadas a ser eliminadas por el servidor. */
     void _finishThread();
+
+    /* Libera la memoria de las notificaciones que quedaron por enviar */
+    void _freeNotifications();
 
     /* Función que corre en el hilo del sender */
     void _sender();
@@ -82,7 +88,7 @@ class ClientConnection {
     /* Joinea ambos hilos: el sender y el receiver */
     void join();
 
-    /* Termina la conexión de manera forzosa */
+    /* Cierra la conexión de manera forzosa */
     void stop();
 
     //-------------------------------------------------------------------------

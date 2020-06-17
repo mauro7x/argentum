@@ -36,12 +36,10 @@ class Engine : public Thread {
     int rate;
 
     // Colas a vaciar en cada iteración
-    NonBlockingQueue<NewConnection*>&
-        new_connections; /* conexiones a agregar */
-    NonBlockingQueue<InstanceId*>
-        finished_connections;            /* conexiones que finalizaron */
-    NonBlockingQueue<Command*> commands; /* comandos a procesar */
-    ActiveClients active_clients;        /* contenedor de clientes activos */
+    NonBlockingQueue<NewConnection*>& new_connections;
+    NonBlockingQueue<InstanceId*> finished_connections;
+    NonBlockingQueue<Command*> commands;
+    ActiveClients active_clients;
 
     //-------------------------------------------------------------------------
     // Métodos privados
@@ -52,11 +50,11 @@ class Engine : public Thread {
     /* Inicializa recursos internos */
     void _init();
 
-    /* Procesa las solicitudes de nuevas conexiones */
-    void _processNewConnections();
-
     /* Elimina las conexiones que finalizaron del contenedor de clientes */
     void _processFinishedConnections();
+
+    /* Procesa las solicitudes de nuevas conexiones */
+    void _processNewConnections();
 
     /* Vacía las colas sin procesarlas para salir ordenadamente */
     void _freeQueues();
