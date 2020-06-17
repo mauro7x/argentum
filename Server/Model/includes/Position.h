@@ -30,7 +30,7 @@ class Position {
         const int getX() const;
         const int getY() const;
 
-        const bool move(const Orientation& orientation);
+        void move(const Orientation& orientation);
 };
 
 class CollisionWhileMovingException: std::exception {

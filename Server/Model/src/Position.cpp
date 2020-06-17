@@ -28,7 +28,7 @@ const unsigned int Position::getDistance(const Position& other) const {
     return abs(this->x - other.getX()) + abs(this->y - other.getY());
 }
 
-const bool Position::move(const Orientation& orientation) {
+void Position::move(const Orientation& orientation) {
     if (!this->map_container[id_map].moveOcuppant(this->x, this->y, orientation))
         throw CollisionWhileMovingException();
 
