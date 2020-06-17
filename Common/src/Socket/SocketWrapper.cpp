@@ -10,6 +10,8 @@ SocketWrapper::SocketWrapper(const int fd) : Socket(fd) {}
 //-----------------------------------------------------------------------------
 // API Pública
 
+SocketWrapper::SocketWrapper() : Socket() {}
+
 SocketWrapper::SocketWrapper(const std::string& port,
                              const int max_queued_clients)
     : Socket(port, max_queued_clients) {}
@@ -27,6 +29,10 @@ SocketWrapper& SocketWrapper::operator=(SocketWrapper&& other) {
 }
 
 SocketWrapper SocketWrapper::accept() const {
+    if (!fd_valid) {
+        throw Exception("Invalid socket file descriptor.");
+    }
+
     int peer_socket = ::accept(fd, NULL, NULL);
     if (peer_socket == -1) {
         throw ClosedSocketException("Error in function: Socket::accept()");
