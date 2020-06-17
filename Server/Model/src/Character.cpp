@@ -7,7 +7,11 @@
 #include <iostream> //sacar
 //-----------------------------------------------------------------------------
 #define CRITICAL_ATTACK_DAMAGE_MODIFIER 2
-#define RATE 1000 / 30
+#define RATE 1000 / 30 // ms.
+#define TIME_TO_MOVE_A_TILE 200 // ms
+#define TIME_TO_UPDATE_ATTRIBUTES 1000 // ms
+
+#define DEFAULT_MOVING_ORIENTATION DOWN_ORIENTATION
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -46,6 +50,13 @@ Character::~Character() {
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+void Character::act(const unsigned int it) {
+    if (moving) 
+        _updateMovement(it);
+
+    _updateTimeDependantAttributes(it);
+}
+
 void Character::updateLevelDependantAttributes() {
     this->max_health = Formulas::calculateMaxHealth(this->constitution,
                         this->kind.max_health_factor, 
@@ -59,20 +70,33 @@ void Character::updateLevelDependantAttributes() {
     this->inventory.updateMaxAmountsOfGold();
 }
 
-void Character::updateTimeDependantAttributes(const unsigned int seconds_elapsed) {
-    // ACTUALIZACIONES QUE DEPENDEN DEL TIEMPO
-    unsigned int health_update = Formulas::calculateHealthTimeRecovery(
-                                    this->race.health_recovery_factor,
-                                    seconds_elapsed);
-    unsigned int mana_update = Formulas::calculateManaTimeRecovery(
-                                    this->race.mana_recovery_factor,
-                                    seconds_elapsed);
+void Character::_updateTimeDependantAttributes(const unsigned int it) {
+    attribute_update_time_elapsed += it * RATE;
+    
+    while (attribute_update_time_elapsed >= TIME_TO_UPDATE_ATTRIBUTES) {
 
-    this->recoverHealth(health_update);
-    this->recoverMana(mana_update);
+        unsigned int health_update = Formulas::calculateHealthTimeRecovery(
+                                        this->race.health_recovery_factor,
+                                        TIME_TO_UPDATE_ATTRIBUTES / 1000); // en segundos
+        unsigned int mana_update = Formulas::calculateManaTimeRecovery(
+                                        this->race.mana_recovery_factor,
+                                        TIME_TO_UPDATE_ATTRIBUTES / 1000); // en segundos
 
-    // IMPLEMENTAR LOGICA DE MOVIMIENTO, QUE DEPENDE DEL TIEMPO.
+        this->recoverHealth(health_update);
+        this->recoverMana(mana_update);
+    }
 }
+
+void Character::_updateMovement(const unsigned int it) {
+    this->moving_time_elapsed += it * RATE; // Tiempo en ms acum sin moverme.
+    
+    while (this->moving_time_elapsed >= TIME_TO_MOVE_A_TILE) {
+        this->moving_time_elapsed -= TIME_TO_MOVE_A_TILE;
+        this->position.move(moving_orientation);
+        // broadcast true.
+    }
+}
+
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -101,6 +125,7 @@ void Character::startMovingLeft() {
 
 void Character::stopMoving() {
     this->moving = false;
+    this->moving_time_elapsed = 0;
 }
 
 //-----------------------------------------------------------------------------

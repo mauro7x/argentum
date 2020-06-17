@@ -44,8 +44,10 @@ class Character {
         Equipment equipment;
         Position position;
 
-        bool moving;
         Orientation moving_orientation;
+        bool moving;
+        unsigned int moving_time_elapsed;
+        unsigned int attribute_update_time_elapsed;
         //-----------------------------------------------------------------------------
 
     public:
@@ -62,10 +64,15 @@ class Character {
         //-----------------------------------------------------------------------------
 
         //-----------------------------------------------------------------------------
+        // Actualización de atributos.
+        //-----------------------------------------------------------------------------
+
+        void act(const unsigned int it);
+
         /*
          * Actualiza health y mana segun el paso del tiempo.
          */
-        void updateTimeDependantAttributes(const unsigned int seconds_elapsed);
+        void _updateTimeDependantAttributes(const unsigned int seconds_elapsed);
 
         /*
          * Actualiza max_health, max_mana, y los limites de oro de los slots
@@ -74,6 +81,8 @@ class Character {
          * Esta función es llamada cada vez que el character sube de nivel.
          */
         void updateLevelDependantAttributes();
+
+        void _updateMovement(const unsigned int it);
         //-----------------------------------------------------------------------------
 
         //-----------------------------------------------------------------------------
