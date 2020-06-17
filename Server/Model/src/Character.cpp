@@ -7,6 +7,7 @@
 #include <iostream> //sacar
 //-----------------------------------------------------------------------------
 #define CRITICAL_ATTACK_DAMAGE_MODIFIER 2
+#define RATE 1000 / 30
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -72,6 +73,36 @@ void Character::updateTimeDependantAttributes(const unsigned int seconds_elapsed
 
     // IMPLEMENTAR LOGICA DE MOVIMIENTO, QUE DEPENDE DEL TIEMPO.
 }
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+//  Movimiento
+//-----------------------------------------------------------------------------
+
+void Character::startMovingUp() {
+    this->moving_orientation = UP_ORIENTATION;
+    this->moving = true;
+}
+
+void Character::startMovingDown() {
+    this->moving_orientation = DOWN_ORIENTATION;
+    this->moving = true;
+}
+
+void Character::startMovingRight() {
+    this->moving_orientation = RIGHT_ORIENTATION;
+    this->moving = true;
+}
+
+void Character::startMovingLeft() {
+    this->moving_orientation = LEFT_ORIENTATION;
+    this->moving = true;
+}
+
+void Character::stopMoving() {
+    this->moving = false;
+}
+
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
