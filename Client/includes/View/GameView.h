@@ -4,18 +4,24 @@
 //-----------------------------------------------------------------------------
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+//-----------------------------------------------------------------------------
 
+//-----------------------------------------------------------------------------
 #include <chrono>
 #include <cstdint>
 #include <fstream>
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+#include "../../../Common/includes/BlockingQueue.h"
 #include "../../../Common/includes/Exceptions/Exception.h"
 #include "../../../Common/includes/Exceptions/SDLException.h"
 #include "../../../Common/includes/JSON.h"
+#include "../../../Common/includes/NonBlockingQueue.h"
 #include "../../../Common/includes/UnitData.h"
 #include "../../../Common/includes/paths.h"
+#include "../Model/Command.h"
+#include "../Model/Update.h"
 #include "../paths.h"
 //-----------------------------------------------------------------------------
 
@@ -46,6 +52,10 @@
 
 class GameView {
    private:
+    /* Comunicación entre hilos */
+    BlockingQueue<Command*>& commands;
+    NonBlockingQueue<Update*>& updates;
+
     /* Componentes SDL principales */
     Window window;
     Camera camera;
@@ -74,8 +84,11 @@ class GameView {
     /* La escena que se renderizará en cada frame */
     Stage stage;
 
-    /* Objetos activo que handlea eventos */
+    /* Objeto activo que handlea eventos */
     EventHandler event_handler;
+
+    //-------------------------------------------------------------------------
+    // Métodos privados
 
     /* Inicializa recursos */
     void _init();
@@ -92,9 +105,12 @@ class GameView {
     /* Ejecuta una iteración del loop */
     void _loopIteration(const int it);
 
+    //-------------------------------------------------------------------------
+
    public:
     /* Constructor */
-    GameView();
+    GameView(BlockingQueue<Command*>& commands,
+             NonBlockingQueue<Update*>& updates);
 
     /* Deshabilitamos el constructor por copia. */
     GameView(const GameView&) = delete;

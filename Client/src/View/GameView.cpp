@@ -141,8 +141,11 @@ void GameView::_loopIteration(const int it) {
 //-----------------------------------------------------------------------------
 // API Pública
 
-GameView::GameView()
-    : renderer(window, camera),
+GameView::GameView(BlockingQueue<Command*>& commands,
+                   NonBlockingQueue<Update*>& updates)
+    : commands(commands),
+      updates(updates),
+      renderer(window, camera),
       rate(0),
       view_running(true),
       hud(&renderer),
@@ -223,13 +226,10 @@ void GameView::operator()() {
             it += 1;
         }
     } catch (const Exception& e) {
-        view_running = false;
         server.kill();
         server.join();
         throw e;
     }
-
-    // Avisarle al server que nos desconectamos?
 
     server.kill();
     server.join();
