@@ -39,7 +39,7 @@ void MapView::loadMedia() {
     maps.loadMaps();
 }
 
-void MapView::select(Id id) {
+void MapView::select(const Id id) {
     if (current_map_id != id) {
         current_map_id = id;
         const Map& current_map = maps[current_map_id];
@@ -147,7 +147,7 @@ void MapView::renderShadowOutdoor() const {
     }
 }
 
-int MapView::getOccupant(const int x, const int y) const {
+InstanceId MapView::getOccupant(const int x, const int y) const {
     const Map& current_map = maps[current_map_id];
     const Tile& current_tile = current_map.getTile(x, y);
     return current_tile.occupant_id;

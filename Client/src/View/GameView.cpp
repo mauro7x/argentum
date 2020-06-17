@@ -95,14 +95,28 @@ void GameView::_loadMedia() {
     unit_sprites.loadMedia();
 }
 
-void GameView::_loopIteration(const int it) {
-    /* Manejamos updates del servidor */
+void GameView::_processSDLEvents() {
+    SDL_Event e;
+    while (SDL_PollEvent(&e) != 0) {
+        event_handler.handleEvent(e);
+    }
+}
+
+void GameView::_processServerUpdates() {
+    /* Proxy */
     PlayerData* update = NULL;
     while ((update = broadcast.pop())) {
         fprintf(stderr, "Soy el cliente. Recibimos un update.\n");
         player.update(*update);
         delete update;
     }
+}
+
+void GameView::_loopIteration(const int it) {
+    // auto t1 = std::chrono::steady_clock::now();
+    /* Vaciamos las colas a procesar*/
+    _processSDLEvents();
+    _processServerUpdates();
 
     /* Limpiamos la pantalla */
     renderer.clearScreen();
@@ -116,6 +130,10 @@ void GameView::_loopIteration(const int it) {
     hud.render();
     console.render();
     renderer.presentScreen();
+
+    // auto t2 = std::chrono::steady_clock::now();
+    // std::chrono::duration<float, std::micro> diff = t2 - t1;
+    // fprintf(stderr, "Iteration time: %i us.\n", (int)diff.count());
 }
 
 //-----------------------------------------------------------------------------
@@ -145,8 +163,7 @@ void GameView::operator()() {
     _init();
     _loadMedia();
 
-    server.start();         // proxy
-    event_handler.start();  // sacar
+    server.start();  // proxy
 
     try {
         //-------------------------------------------------------------------------
@@ -200,14 +217,13 @@ void GameView::operator()() {
                 it += std::floor(lost / rate);
             }
 
-            fprintf(stderr, "MAIN-LOOP: Sleeping for %i ms.\n", rest);
+            // fprintf(stderr, "MAIN-LOOP: Sleeping for %i ms.\n", rest);
             std::this_thread::sleep_for(std::chrono::milliseconds(rest));
             t1 += std::chrono::milliseconds(rate);
             it += 1;
         }
     } catch (const Exception& e) {
         view_running = false;
-        event_handler.join();
         server.kill();
         server.join();
         throw e;
@@ -215,7 +231,6 @@ void GameView::operator()() {
 
     // Avisarle al server que nos desconectamos?
 
-    event_handler.join();
     server.kill();
     server.join();
 }

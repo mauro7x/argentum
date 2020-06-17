@@ -130,95 +130,80 @@ Event EventHandler::_getEvent(const SDL_Event& e) {
 //-----------------------------------------------------------------------------
 // API Pública
 
-EventHandler::EventHandler(std::atomic_bool& view_running,
-                           Queue<int*>& requests)
+EventHandler::EventHandler(bool& view_running, Queue<int*>& requests)
     : view_running(view_running),
       requests(requests),
       key_pressed(UNMAPPED_KEY) {
     _bindKeycodes();
 }
 
-void EventHandler::run() {
-    SDL_Event e;
-    Event event;
+void EventHandler::handleEvent(const SDL_Event& e) {
+    Event event = _getEvent(e);
 
-    /* Proxy */
-    int* cmd = NULL;
+    switch (event) {
+        case INVALID: {
+            break;
+        }
 
-    while (view_running) {
-        while (SDL_PollEvent(&e) != 0) {
-            event = _getEvent(e);
+        case EXIT: {
+            view_running = false;
+            break;
+        }
 
-            switch (event) {
-                case INVALID: {
-                    break;
-                }
+        case START_MOVING_UP: {
+            /* proxy */
+            int* cmd = new int(0);
+            fprintf(stderr,
+                    "EVENT-HANDLER | START_MOVING_UP | Enviamos un %i.\n",
+                    *cmd);
+            requests.push(cmd);
 
-                case EXIT: {
-                    view_running = false;
-                    break;
-                }
+            break;
+        }
 
-                case START_MOVING_UP: {
-                    /* proxy */
-                    cmd = new int(0);
-                    fprintf(
-                        stderr,
-                        "EVENT-HANDLER | START_MOVING_UP | Enviamos un %i.\n",
-                        *cmd);
-                    requests.push(cmd);
+        case START_MOVING_DOWN: {
+            /* proxy */
+            int* cmd = new int(1);
+            fprintf(stderr,
+                    "EVENT-HANDLER | START_MOVING_DOWN | Enviamos un %i.\n",
+                    *cmd);
+            requests.push(cmd);
 
-                    break;
-                }
+            break;
+        }
 
-                case START_MOVING_DOWN: {
-                    /* proxy */
-                    cmd = new int(1);
-                    fprintf(
-                        stderr,
-                        "EVENT-HANDLER | START_MOVING_DOWN | Enviamos un %i.\n",
-                        *cmd);
-                    requests.push(cmd);
+        case START_MOVING_LEFT: {
+            int* cmd = new int(2);
+            fprintf(stderr,
+                    "EVENT-HANDLER | START_MOVING_LEFT | Enviamos un %i.\n",
+                    *cmd);
+            requests.push(cmd);
 
-                    break;
-                }
+            break;
+        }
 
-                case START_MOVING_LEFT: {
-                    cmd = new int(2);
-                    fprintf(
-                        stderr,
-                        "EVENT-HANDLER | START_MOVING_LEFT | Enviamos un %i.\n",
-                        *cmd);
-                    requests.push(cmd);
+        case START_MOVING_RIGHT: {
+            int* cmd = new int(3);
+            fprintf(stderr,
+                    "EVENT-HANDLER | START_MOVING_RIGHT | Enviamos un "
+                    "%i.\n",
+                    *cmd);
+            requests.push(cmd);
 
-                    break;
-                }
+            break;
+        }
 
-                case START_MOVING_RIGHT: {
-                    cmd = new int(3);
-                    fprintf(stderr,
-                            "EVENT-HANDLER | START_MOVING_RIGHT | Enviamos un "
-                            "%i.\n",
-                            *cmd);
-                    requests.push(cmd);
+        case STOP_MOVING: {
+            int* cmd = new int(4);
+            fprintf(stderr, "EVENT-HANDLER | STOP_MOVING | Enviamos un %i.\n",
+                    *cmd);
+            requests.push(cmd);
 
-                    break;
-                }
+            break;
+        }
 
-                case STOP_MOVING: {
-                    cmd = new int(4);
-                    fprintf(stderr,
-                            "EVENT-HANDLER | STOP_MOVING | Enviamos un %i.\n",
-                            *cmd);
-                    requests.push(cmd);
-
-                    break;
-                }
-
-                default: {
-                    break;
-                }
-            }
+        default: {
+            break;
         }
     }
 }

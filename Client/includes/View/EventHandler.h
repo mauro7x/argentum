@@ -7,14 +7,12 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-#include <atomic>
 #include <unordered_map>
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 //#include "../../../Common/includes/Exceptions/Exception.h"
 #include "../../../Common/includes/Queue.h"
-#include "../../../Common/includes/Thread.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -40,9 +38,9 @@ enum Key { UNMAPPED_KEY, UP_KEY, DOWN_KEY, LEFT_KEY, RIGHT_KEY, ESC_KEY };
 
 //-----------------------------------------------------------------------------
 
-class EventHandler : public Thread {
+class EventHandler {
    private:
-    std::atomic_bool& view_running;
+    bool& view_running;
     Queue<int*>& requests;
     std::unordered_map<SDL_Keycode, Key> keys;
 
@@ -65,10 +63,10 @@ class EventHandler : public Thread {
 
    public:
     /* Constructor */
-    EventHandler(std::atomic_bool& view_running, Queue<int*>& requests);
+    EventHandler(bool& view_running, Queue<int*>& requests);
 
-    /* Método de ejecución del hilo */
-    void run() override;
+    /* Handlea un evento de SDL */
+    void handleEvent(const SDL_Event& e);
 
     /* Destructor */
     ~EventHandler();

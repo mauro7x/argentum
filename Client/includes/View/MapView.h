@@ -4,6 +4,9 @@
 //-----------------------------------------------------------------------------
 #include "../../../Common/includes/MapContainer.h"
 #include "../../../Common/includes/types.h"
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
 #include "Renderer.h"
 #include "TileContainer.h"
 //-----------------------------------------------------------------------------
@@ -51,7 +54,7 @@ class MapView {
     void loadMedia();
 
     /* Selecciona el mapa indicado por el id */
-    void select(Id id);
+    void select(const Id id);
 
     //-------------------------------------------------------------------------
     // RENDERIZACIÓN
@@ -74,7 +77,7 @@ class MapView {
     //-------------------------------------------------------------------------
 
     /* Devuelve el ID de la unidad ocupante de una celda */
-    int getOccupant(const int x, const int y) const;
+    InstanceId getOccupant(const int x, const int y) const;
 
     /* Devuelve si es un tile válido que forma parte del mapa */
     bool isValid(const int x, const int y) const;
