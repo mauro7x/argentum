@@ -38,24 +38,28 @@ Identificas el mensaje con el primer byte recibido (opcode), y para cada caso se
 | 4 | Dejar de mover | `-` |
 | 5 | Usar arma principal | `POS` |
 | 6 | Equipar objeto | `POSICION INVENTARIO (SLOT) (1)` |
-| 7 | Meditar | `-` |
-| 8 | Resucitar | `-` |
-| 9 | Resucitar | `POS` |
-| 10 | Curar | `POS` |
-| 11 | Listar | `POS` |
-| 12 | Depositar | `POS + POSICION INVENTARIO (SLOT) (1)` |
-| 13 | Depositar | `POS + POSICION INVENTARIO (SLOT) (1) + CANTIDAD (4)` |
-| 14 | Depositar oro | `POS + CANTIDAD (4)` |
-| 15 | Retirar | `POS + ID (4)` |
-| 16 | Retirar | `POS + ID (4) + CANTIDAD (4)` |
-| 17 | Retirar oro | `POS + CANTIDAD (4)` |
-| 18 | Comprar | `POS + ID (4)` |
-| 19 | Comprar | `POS + ID (4) + CANTIDAD (4)` |
-| 20 | Vender | `POS + ID (4)` |
-| 21 | Vender | `POS + ID (4) + CANTIDAD (4)` |
-| 22 | Tomar | `-` |
-| 23 | Tirar | `POSICION INVENTARIO (SLOT) (1)` |
-| 24 | Tirar | `POSICION INVENTARIO (SLOT) (1) + CANTIDAD (4)` |
+| 7 | Tomar | `-` |
+| 8 | Tirar | `POSICION INVENTARIO (SLOT) (1)` |
+| 9 | Tirar | `POSICION INVENTARIO (SLOT) (1) + CANTIDAD (4)` |
+
+| 10 | Meditar | `-` |
+| 11 | Resucitar | `-` |
+
+| 12 | Resucitar | `POS` |
+| 13 | Curar | `POS` |
+
+| 14 | Listar | `POS` |
+| 15 | Depositar | `POS + POSICION INVENTARIO (SLOT) (1)` |
+| 16 | Depositar | `POS + POSICION INVENTARIO (SLOT) (1) + CANTIDAD (4)` |
+| 17 | Depositar oro | `POS + CANTIDAD (4)` |
+| 18 | Retirar | `POS + ID (4)` |
+| 19 | Retirar | `POS + ID (4) + CANTIDAD (4)` |
+| 20 | Retirar oro | `POS + CANTIDAD (4)` |
+| 21 | Comprar | `POS + ID (4)` |
+| 22 | Comprar | `POS + ID (4) + CANTIDAD (4)` |
+| 23 | Vender | `POS + ID (4)` |
+| 24 | Vender | `POS + ID (4) + CANTIDAD (4)` |
+
 | 25 | Listar jugadores conectados | `` |
 | 26 | Mensaje | `NICK_LENGTH (4) + NICKNAME (NICK_LENGTH)` |
 
