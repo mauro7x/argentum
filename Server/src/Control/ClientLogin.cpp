@@ -43,8 +43,7 @@ void ClientLogin::run() {
         // que agregamos la petición de crear jugador a la cola y terminamos
 
         // esta data deberia venir el login
-        PlayerData init_data = {
-            {1, 10, 10, DOWN_ORIENTATION}, 100, 100, 100, 0, 0, 0, 0, 0, 0};
+        CharacterCfg init_data = {100, 201, ALIVE, 0, 5, 5, DOWN_ORIENTATION};
         new_connections.push(new NewConnection(peer, init_data));
 
         // ACA NO SE DEBERÍA HACER NADA QUE FALLE, PORQUE EL SOCKET YA NO

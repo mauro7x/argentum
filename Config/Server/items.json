@@ -21,13 +21,13 @@
         {
             "id": 1100,
             "name": "Báculo nudoso",
-            "spell_id": 400,
+            "spell_id": 1200,
             "price": 100
         },
         {
             "id": 1101,
             "name": "Flauta élfica",
-            "spell_id": 401,
+            "spell_id": 1201,
             "price": 100
         }
     ],

@@ -52,7 +52,7 @@ class Character {
 
     public:
         //-----------------------------------------------------------------------------
-        Character(const CharacterPersistenceCfg& init_data,
+        Character(const CharacterCfg& init_data,
                   const RaceCfg& race, const KindCfg& kind,
                   MapContainer& map_container);
         ~Character();

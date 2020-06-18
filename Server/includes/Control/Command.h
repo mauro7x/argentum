@@ -2,7 +2,8 @@
 #define __COMMAND_H__
 
 //-----------------------------------------------------------------------------
-// INCLUDES
+#include "../Model/Game.h"
+#include "../../../Common/includes/types.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -13,31 +14,45 @@
  * específicos de las clases concretas que hereden de esta. */
 
 class Command {
-   public:
-    /* Constructor */
-    Command() {}
+    protected:
+        InstanceId caller;
 
-    /* Deshabilitamos el constructor por copia. */
-    Command(const Command&) = delete;
+    public:
+        /* Constructor */
+        Command(InstanceId caller);
 
-    /* Deshabilitamos el operador= para copia.*/
-    Command& operator=(const Command&) = delete;
+        /* Deshabilitamos el constructor por copia. */
+        Command(const Command&) = delete;
 
-    /* Deshabilitamos el constructor por movimiento. */
-    Command(Command&& other) = delete;
+        /* Deshabilitamos el operador= para copia.*/
+        Command& operator=(const Command&) = delete;
 
-    /* Deshabilitamos el operador= para movimiento. */
-    Command& operator=(Command&& other) = delete;
+        /* Deshabilitamos el constructor por movimiento. */
+        Command(Command&& other) = delete;
 
-    //-------------------------------------------------------------------------
+        /* Deshabilitamos el operador= para movimiento. */
+        Command& operator=(Command&& other) = delete;
 
-    /* Ejecución polimórfica del comando */
-    virtual void operator()(/* agregar parámetros comunes a todos */) = 0;
+        //-------------------------------------------------------------------------
 
-    //-------------------------------------------------------------------------
+        /* Ejecución polimórfica del comando */
+        virtual void operator()(Game& game) = 0;
 
-    /* Destructor */
-    virtual ~Command() {}
+        //-------------------------------------------------------------------------
+
+        /* Destructor */
+        virtual ~Command();
+};
+
+class CommandProxy: public Command {
+    private:
+        char cmd;
+    
+    public:
+        CommandProxy(InstanceId caller, char cmd);
+        ~CommandProxy();
+
+        virtual void operator()(Game& game) override;
 };
 
 //-----------------------------------------------------------------------------

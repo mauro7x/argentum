@@ -13,9 +13,10 @@
 #include "../../../Common/includes/JSON.h"
 #include "../../../Common/includes/NonBlockingQueue.h"
 #include "../../../Common/includes/Thread.h"
-#include "../../../Common/includes/UnitData.h"
 #include "../../../Common/includes/types.h"
 #include "../paths.h"
+#include "../Model/config_structs.h"
+#include "../Model/Game.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -40,12 +41,13 @@ class Engine : public Thread {
     NonBlockingQueue<InstanceId*> finished_connections;
     NonBlockingQueue<Command*> commands;
     ActiveClients active_clients;
+    Game game;
 
     //-------------------------------------------------------------------------
     // Métodos privados
 
     /* PROXY PARA LA CLASE GAME Y SU ADDPLAYER (SOLO PARA PROBAR) */
-    InstanceId _GameAddPlayer(const PlayerData& init_data);
+    InstanceId _GameAddPlayer(const CharacterCfg& init_data);
 
     /* Inicializa recursos internos */
     void _init();
@@ -53,8 +55,12 @@ class Engine : public Thread {
     /* Elimina las conexiones que finalizaron del contenedor de clientes */
     void _processFinishedConnections();
 
+    /* Procesa los comandos en la cola de comandos y los ejecuta */
+    void _processCommands();
+
     /* Procesa las solicitudes de nuevas conexiones */
     void _processNewConnections();
+
 
     /* Vacía las colas sin procesarlas para salir ordenadamente */
     void _freeQueues();
