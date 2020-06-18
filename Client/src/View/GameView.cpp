@@ -141,10 +141,13 @@ void GameView::_loopIteration(const int it) {
 //-----------------------------------------------------------------------------
 // API Pública
 
-GameView::GameView()
-    : renderer(window, camera),
+GameView::GameView(BlockingQueue<Command*>& commands,
+                   NonBlockingQueue<Update*>& updates, std::atomic_bool& exit)
+    : commands(commands),
+      updates(updates),
+      exit(exit),
+      renderer(window, camera),
       rate(0),
-      view_running(true),
       hud(&renderer),
       console(&renderer),
       map(&renderer),
@@ -156,7 +159,7 @@ GameView::GameView()
       server(requests, broadcast),
 
       stage(map, player, characters, creatures),
-      event_handler(view_running, requests) {}
+      event_handler(exit, requests) {}
 
 void GameView::operator()() {
     // Iniciamos recursos necesarios
@@ -197,7 +200,7 @@ void GameView::operator()() {
         int it = 1;
 
         // Loop principal
-        while (view_running) {
+        while (!exit) {
             _loopIteration(it);
 
             // Controlamos el rate y verificamos pérdida de frames.
@@ -223,13 +226,10 @@ void GameView::operator()() {
             it += 1;
         }
     } catch (const Exception& e) {
-        view_running = false;
         server.kill();
         server.join();
         throw e;
     }
-
-    // Avisarle al server que nos desconectamos?
 
     server.kill();
     server.join();

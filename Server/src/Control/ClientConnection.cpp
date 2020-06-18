@@ -12,6 +12,14 @@ void ClientConnection::_finishThread() {
     }
 }
 
+void ClientConnection::_freeNotifications() {
+    notifications.close(); /* nos aseguramos de que no sea bloqueante */
+    Notification* notification = NULL;
+    while ((notification = notifications.pop())) {
+        delete notification;
+    }
+}
+
 void ClientConnection::_sender() {
     // ejecución del sender loop
     fprintf(stderr, "SENDER DE UN CLIENTE EMPEZANDO! Id: %i\n", id);
@@ -35,7 +43,29 @@ void ClientConnection::_sender() {
      * porque fue cerrado por el server o por el cliente.
      */
 
-    // avisamos que terminamos
+    try {
+        Notification* notification = NULL;
+        bool socket_valid = true;
+        while ((notification = notifications.pop())) {
+            socket_valid = notification->send(peer);
+            delete notification;
+
+            if (!socket_valid) {
+                // Se cerró el socket y hay que terminar
+                break;
+            }
+        }
+    } catch (const std::exception& e) {
+        // Error inesperado
+        stop();
+        fprintf(stderr, "ClientConnection // _sender: %s\n", e.what());
+    } catch (...) {
+        // Error desconocido
+        stop();
+        fprintf(stderr, "ClientConnection // _sender: Unknown error.\n");
+    }
+
+    // Avisamos que terminamos
     _finishThread();
     fprintf(stderr, "SENDER DE UN CLIENTE TERMINANDO! Id: %i\n", id);
 }
@@ -75,7 +105,35 @@ void ClientConnection::_receiver() {
      * que se recibieron 0 bytes).
      */
 
-    // avisamos que terminamos
+    try {
+        char opcode;
+        while (peer >> opcode) {
+            switch (opcode) {
+                    // Identificar comando, terminar de recibirlo, crearlo e
+                    // insertarlo en la cola.
+
+                default: {
+                    // print proxy por ahora
+                    fprintf(stderr, "Se recibió el opcode: %d\n", opcode);
+
+                    /*
+                    throw Exception(
+                        "Unknown opcode received by client handler.");
+                        */
+                }
+            }
+        }
+    } catch (const std::exception& e) {
+        // Error inesperado
+        stop();
+        fprintf(stderr, "ClientConnection // _receiver: %s\n", e.what());
+    } catch (...) {
+        // Error desconocido
+        stop();
+        fprintf(stderr, "ClientConnection // _receiver: Unknown error.\n");
+    }
+
+    // Avisamos que terminamos
     _finishThread();
     fprintf(stderr, "RECEIVER DE UN CLIENTE TERMINANDO! Id: %i\n", id);
 }
@@ -85,9 +143,10 @@ void ClientConnection::_receiver() {
 //-----------------------------------------------------------------------------
 // API Pública
 
-ClientConnection::ClientConnection(const InstanceId id, SocketWrapper& peer,
-                                   Queue<InstanceId*>& finished_connections,
-                                   Queue<Command*>& commands)
+ClientConnection::ClientConnection(
+    const InstanceId id, SocketWrapper& peer,
+    NonBlockingQueue<InstanceId*>& finished_connections,
+    NonBlockingQueue<Command*>& commands)
     : id(id),
       peer(std::move(peer)),
       finished_connections(finished_connections),
@@ -111,24 +170,21 @@ void ClientConnection::join() {
     if (receiver.joinable()) {
         receiver.join();
     }
+
+    peer.shutdown();
 }
 
 void ClientConnection::stop() {
+    // Para detener al sender
+    notifications.close();
+
+    // Para detener al receiver
     peer.shutdown();
     peer.close();
-    join();
 }
 
 ClientConnection::~ClientConnection() {
-    peer.close();
-
-    if (sender.joinable()) {
-        sender.join();
-    }
-
-    if (receiver.joinable()) {
-        receiver.join();
-    }
+    _freeNotifications();
 }
 
 //-----------------------------------------------------------------------------

@@ -2,6 +2,8 @@
 #define __SOCKET_WRAPPER_H__
 
 //-----------------------------------------------------------------------------
+#include "../Exceptions/ClosedSocketException.h"
+#include "../Exceptions/Exception.h"
 #include "Socket.h"
 //-----------------------------------------------------------------------------
 
@@ -20,12 +22,11 @@ class SocketWrapper : public Socket {
     explicit SocketWrapper(const int fd);
 
    public:
-    /**
-     * Descripción: constructor default para el socketwrapper
-     *
-     * Parámetros: -
+    /** Constructor por defecto.
+     * Diseñado para permitir su posterior inicialización utilizando move
+     * semantics.
      */
-    SocketWrapper() = default;
+    SocketWrapper();
 
     /** (SERVER-SIDE)
      * Diseñado para ser utilizado por el SERVIDOR para ponerse a la
@@ -80,8 +81,8 @@ class SocketWrapper : public Socket {
     // tipos de datos específicos. Aplica la misma documentación para
     // >> que para recv, y para << que para send.
 
-    ssize_t operator<<(uint16_t n) const;
-    ssize_t operator>>(uint16_t& n) const;
+    ssize_t operator<<(uint32_t n) const;
+    ssize_t operator>>(uint32_t& n) const;
 
     ssize_t operator<<(const std::string& msg) const;
 

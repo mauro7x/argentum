@@ -10,7 +10,6 @@
 
 | Nombre y apellido | Padrón | Mail | GitHub |
 |-------------------|--------|------|--------|
-| Francisco Gauna | 100563 | fgauna@fi.uba.ar | [FranciscoGauna](https://github.com/FranciscoGauna) |
 | Mauro Parafati | 102749 | mparafati@fi.uba.ar | [mauro7x](https://github.com/mauro7x) |
 | Santiago Klein | 102192 | sklein@fi.uba.ar | [sankle](https://github.com/sankle) |
 | Yuhong Huang | 102146 | yhuang@fi.uba.ar | [tonyhuang07](https://github.com/tonyhuang07) |

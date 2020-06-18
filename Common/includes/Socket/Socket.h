@@ -134,24 +134,11 @@ class Socket {
     void _closeFdIfValid();
 
    public:
-    /**
-     * Descripción: constructor default para el socket
-     * 
-     * Parámetros: - 
+    /** Constructor por defecto.
+     * Diseñado para permitir su posterior inicialización utilizando move
+     * semantics.
      */
-    Socket() = default;
-    /** (SERVER-SIDE)
-     * Diseñado para ser utilizado por el SERVIDOR para ponerse a la
-     * escucha de conexiones entrantes.
-     *
-     * Descripción: constructor con un puerto y la cantidad de clientes
-     * que pueden haber simultaneamente esperando a ser aceptados.
-     *
-     * Parámetros: puerto , máxima cantidad de clientes encolados.
-     *
-     * >THROW EXPLICITO DE EXCEPTION.
-     */
-    Socket(const std::string& port, const int max_queued_clients);
+    Socket();
 
     /** (CLIENT-SIDE)
      * Diseñado para ser utilizado por el CLIENTE para conectarse
@@ -164,6 +151,19 @@ class Socket {
      * >THROW EXPLICITO DE EXCEPTION.
      */
     Socket(const std::string& hostname, const std::string& port);
+
+    /** (SERVER-SIDE)
+     * Diseñado para ser utilizado por el SERVIDOR para ponerse a la
+     * escucha de conexiones entrantes.
+     *
+     * Descripción: constructor con un puerto y la cantidad de clientes
+     * que pueden haber simultaneamente esperando a ser aceptados.
+     *
+     * Parámetros: puerto , máxima cantidad de clientes encolados.
+     *
+     * >THROW EXPLICITO DE EXCEPTION.
+     */
+    Socket(const std::string& port, const int max_queued_clients);
 
     /**
      * Deshabilitamos el constructor por copia y su operador.

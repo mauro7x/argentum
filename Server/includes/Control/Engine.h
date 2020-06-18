@@ -11,7 +11,7 @@
 
 //-----------------------------------------------------------------------------
 #include "../../../Common/includes/JSON.h"
-#include "../../../Common/includes/Queue.h"
+#include "../../../Common/includes/NonBlockingQueue.h"
 #include "../../../Common/includes/Thread.h"
 #include "../../../Common/includes/types.h"
 #include "../paths.h"
@@ -37,10 +37,10 @@ class Engine : public Thread {
     int rate;
 
     // Colas a vaciar en cada iteración
-    Queue<NewConnection*>& new_connections;  /* conexiones a agregar */
-    Queue<InstanceId*> finished_connections; /* conexiones que finalizaron */
-    Queue<Command*> commands;                /* comandos a procesar */
-    ActiveClients active_clients; /* contenedor de clientes activos */
+    NonBlockingQueue<NewConnection*>& new_connections;
+    NonBlockingQueue<InstanceId*> finished_connections;
+    NonBlockingQueue<Command*> commands;
+    ActiveClients active_clients;
     Game game;
 
     //-------------------------------------------------------------------------
@@ -52,14 +52,15 @@ class Engine : public Thread {
     /* Inicializa recursos internos */
     void _init();
 
-    /* Procesa las solicitudes de nuevas conexiones */
-    void _processNewConnections();
-
     /* Elimina las conexiones que finalizaron del contenedor de clientes */
     void _processFinishedConnections();
 
     /* Procesa los comandos en la cola de comandos y los ejecuta */
     void _processCommands();
+
+    /* Procesa las solicitudes de nuevas conexiones */
+    void _processNewConnections();
+
 
     /* Vacía las colas sin procesarlas para salir ordenadamente */
     void _freeQueues();
@@ -71,7 +72,8 @@ class Engine : public Thread {
 
    public:
     /* Constructor */
-    Engine(Database& database, Queue<NewConnection*>& new_connections);
+    Engine(Database& database,
+           NonBlockingQueue<NewConnection*>& new_connections);
 
     /* Deshabilitamos el constructor por copia. */
     Engine(const Engine&) = delete;

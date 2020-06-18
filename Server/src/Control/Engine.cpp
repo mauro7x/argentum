@@ -53,8 +53,8 @@ void Engine::_processFinishedConnections() {
 
 void Engine::_freeQueues() {
     {
-        NewConnection* p = NULL;
-        while ((p = new_connections.pop())) {
+        InstanceId* p = NULL;
+        while ((p = finished_connections.pop())) {
             delete p;
         }
     }
@@ -63,7 +63,6 @@ void Engine::_freeQueues() {
         InstanceId* p = NULL;
         while ((p = finished_connections.pop())) {
             game.deleteCharacter(*p);
-            delete p;
         }
     }
 
@@ -87,7 +86,8 @@ void Engine::_loopIteration(int it) {
 //-----------------------------------------------------------------------------
 // API Pública
 
-Engine::Engine(Database& database, Queue<NewConnection*>& new_connections)
+Engine::Engine(Database& database,
+               NonBlockingQueue<NewConnection*>& new_connections)
     : keep_executing(true),
       database(database),
       rate(0),
@@ -130,7 +130,8 @@ void Engine::run() {
             it += std::floor(lost / rate);
         }
 
-        //fprintf(stderr, "ENGINE: Sleeping for %i ms.\n", rest);
+        // fprintf(stderr, "ENGINE: Sleeping for %i ms.\n", rest);
+
         std::this_thread::sleep_for(std::chrono::milliseconds(rest));
         t1 += std::chrono::milliseconds(rate);
         it += 1;

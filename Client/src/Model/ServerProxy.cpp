@@ -8,7 +8,8 @@
 //-----------------------------------------------------------------------------
 // API Pública
 
-ServerProxy::ServerProxy(Queue<int*>& requests, Queue<PlayerData*>& broadcast)
+ServerProxy::ServerProxy(NonBlockingQueue<int*>& requests,
+                         NonBlockingQueue<PlayerData*>& broadcast)
     : requests(requests),
       broadcast(broadcast),
       player(

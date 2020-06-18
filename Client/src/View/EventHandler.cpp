@@ -130,10 +130,9 @@ Event EventHandler::_getEvent(const SDL_Event& e) {
 //-----------------------------------------------------------------------------
 // API Pública
 
-EventHandler::EventHandler(bool& view_running, Queue<int*>& requests)
-    : view_running(view_running),
-      requests(requests),
-      key_pressed(UNMAPPED_KEY) {
+EventHandler::EventHandler(std::atomic_bool& exit,
+                           NonBlockingQueue<int*>& requests)
+    : exit(exit), requests(requests), key_pressed(UNMAPPED_KEY) {
     _bindKeycodes();
 }
 
@@ -146,7 +145,7 @@ void EventHandler::handleEvent(const SDL_Event& e) {
         }
 
         case EXIT: {
-            view_running = false;
+            exit = true;
             break;
         }
 

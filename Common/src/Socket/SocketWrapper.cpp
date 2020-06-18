@@ -10,6 +10,8 @@ SocketWrapper::SocketWrapper(const int fd) : Socket(fd) {}
 //-----------------------------------------------------------------------------
 // API Pública
 
+SocketWrapper::SocketWrapper() : Socket() {}
+
 SocketWrapper::SocketWrapper(const std::string& port,
                              const int max_queued_clients)
     : Socket(port, max_queued_clients) {}
@@ -27,6 +29,10 @@ SocketWrapper& SocketWrapper::operator=(SocketWrapper&& other) {
 }
 
 SocketWrapper SocketWrapper::accept() const {
+    if (!fd_valid) {
+        throw Exception("Invalid socket file descriptor.");
+    }
+
     int peer_socket = ::accept(fd, NULL, NULL);
     if (peer_socket == -1) {
         throw ClosedSocketException("Error in function: Socket::accept()");
@@ -37,11 +43,11 @@ SocketWrapper SocketWrapper::accept() const {
 //-----------------------------------------------------------------------------
 // Sobrecarga de operadores
 
-ssize_t SocketWrapper::operator<<(uint16_t n) const {
+ssize_t SocketWrapper::operator<<(uint32_t n) const {
     return send((char*)&n, sizeof(n));
 }
 
-ssize_t SocketWrapper::operator>>(uint16_t& n) const {
+ssize_t SocketWrapper::operator>>(uint32_t& n) const {
     uint16_t received;
     ssize_t n_received;
     n_received = recv((char*)&received, sizeof(received));

@@ -4,18 +4,25 @@
 //-----------------------------------------------------------------------------
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+//-----------------------------------------------------------------------------
 
+//-----------------------------------------------------------------------------
+#include <atomic>
 #include <chrono>
 #include <cstdint>
 #include <fstream>
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+#include "../../../Common/includes/BlockingQueue.h"
 #include "../../../Common/includes/Exceptions/Exception.h"
 #include "../../../Common/includes/Exceptions/SDLException.h"
 #include "../../../Common/includes/JSON.h"
+#include "../../../Common/includes/NonBlockingQueue.h"
 #include "../../../Common/includes/UnitData.h"
 #include "../../../Common/includes/paths.h"
+#include "../Model/Command.h"
+#include "../Model/Update.h"
 #include "../paths.h"
 //-----------------------------------------------------------------------------
 
@@ -38,7 +45,7 @@
 //-----------------------------------------------------------------------------
 // Proxies para simular el server, después se cambia
 
-#include "../../../Common/includes/Queue.h"
+#include "../../../Common/includes/NonBlockingQueue.h"
 #include "../Model/ServerProxy.h"
 //-----------------------------------------------------------------------------
 
@@ -46,14 +53,16 @@
 
 class GameView {
    private:
+    /* Comunicación entre hilos */
+    BlockingQueue<Command*>& commands;
+    NonBlockingQueue<Update*>& updates;
+    std::atomic_bool& exit;
+
     /* Componentes SDL principales */
     Window window;
     Camera camera;
     Renderer renderer;
     int rate;
-
-    /* Flag de ejecución */
-    bool view_running;
 
     /* Componentes de la vista */
     HUDProxy hud;
@@ -67,15 +76,18 @@ class GameView {
     UnitContainer<Creature, CreatureData> creatures;
 
     /* Proxies */
-    Queue<int*> requests;
-    Queue<PlayerData*> broadcast;
+    NonBlockingQueue<int*> requests;
+    NonBlockingQueue<PlayerData*> broadcast;
     ServerProxy server; /* proxy, luego se reemplaza con la lógica del cliente*/
 
     /* La escena que se renderizará en cada frame */
     Stage stage;
 
-    /* Objetos activo que handlea eventos */
+    /* Objeto activo que handlea eventos */
     EventHandler event_handler;
+
+    //-------------------------------------------------------------------------
+    // Métodos privados
 
     /* Inicializa recursos */
     void _init();
@@ -92,9 +104,12 @@ class GameView {
     /* Ejecuta una iteración del loop */
     void _loopIteration(const int it);
 
+    //-------------------------------------------------------------------------
+
    public:
     /* Constructor */
-    GameView();
+    GameView(BlockingQueue<Command*>& commands,
+             NonBlockingQueue<Update*>& updates, std::atomic_bool& exit);
 
     /* Deshabilitamos el constructor por copia. */
     GameView(const GameView&) = delete;

@@ -8,7 +8,7 @@
 #include <vector>
 //-----------------------------------------------------------------------------
 #include "../../../Common/includes/Exceptions/ClosedSocketException.h"
-#include "../../../Common/includes/Queue.h"
+#include "../../../Common/includes/NonBlockingQueue.h"
 #include "../../../Common/includes/Socket/SocketWrapper.h"
 #include "../../../Common/includes/Thread.h"
 //-----------------------------------------------------------------------------
@@ -25,7 +25,7 @@ class Accepter : public Thread {
    private:
     SocketWrapper socket;
     Database& database;
-    Queue<NewConnection*>& new_connections;
+    NonBlockingQueue<NewConnection*>& new_connections;
     std::atomic_bool keep_accepting;
     std::vector<ClientLogin*> client_logins;
 
@@ -46,7 +46,8 @@ class Accepter : public Thread {
    public:
     /* Constructor */
     Accepter(const std::string& port, const int max_clients_queued,
-             Database& database, Queue<NewConnection*>& new_connections);
+             Database& database,
+             NonBlockingQueue<NewConnection*>& new_connections);
 
     /* Deshabilitamos el constructor por copia. */
     Accepter(const Accepter&) = delete;

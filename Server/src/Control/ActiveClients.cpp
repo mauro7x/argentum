@@ -8,8 +8,9 @@
 //-----------------------------------------------------------------------------
 // API Pública
 
-ActiveClients::ActiveClients(Queue<Command*>& commands,
-                             Queue<InstanceId*>& finished_connections)
+ActiveClients::ActiveClients(
+    NonBlockingQueue<Command*>& commands,
+    NonBlockingQueue<InstanceId*>& finished_connections)
     : commands(commands), finished_connections(finished_connections) {}
 
 void ActiveClients::add(const InstanceId id, SocketWrapper& peer) {

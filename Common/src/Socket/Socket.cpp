@@ -116,6 +116,19 @@ void Socket::_closeFdIfValid() {
 //-----------------------------------------------------------------------------
 // API Pública
 
+Socket::Socket() : fd(-1), fd_valid(false) {}
+
+Socket::Socket(const std::string& hostname, const std::string& port) {
+    // Método para el cliente. Conectarse a un servidor.
+    addrinfo* addresses;
+    try {
+        _setClientAddresses(hostname, port, &addresses);
+        _tryToConnectTo(addresses);
+    } catch (const Exception& e) {
+        throw e;
+    }
+}
+
 Socket::Socket(const std::string& port, const int max_queued_clients) {
     // Método para el servidor. Abrir servidor.
     fd_valid = false;
@@ -131,33 +144,26 @@ Socket::Socket(const std::string& port, const int max_queued_clients) {
     }
 }
 
-Socket::Socket(const std::string& hostname, const std::string& port) {
-    // Método para el cliente. Conectarse a un servidor.
-    addrinfo* addresses;
-    try {
-        _setClientAddresses(hostname, port, &addresses);
-        _tryToConnectTo(addresses);
-    } catch (const Exception& e) {
-        throw e;
-    }
-}
-
 Socket::Socket(Socket&& other) {
-    this->fd = std::move(other.fd);
-    this->fd_valid = std::move(other.fd_valid);
-    other.fd_valid = false;
+    this->fd = other.fd;
+    this->fd_valid = other.fd_valid;
     other.fd = -1;
+    other.fd_valid = false;
 }
 
 Socket& Socket::operator=(Socket&& other) {
-    this->fd = std::move(other.fd);
-    this->fd_valid = std::move(other.fd_valid);
-    other.fd_valid = false;
+    this->fd = other.fd;
+    this->fd_valid = other.fd_valid;
     other.fd = -1;
+    other.fd_valid = false;
     return *this;
 }
 
 Socket Socket::accept() const {
+    if (!fd_valid) {
+        throw Exception("Invalid socket file descriptor.");
+    }
+
     int peer_socket = ::accept(fd, NULL, NULL);
     if (peer_socket == -1) {
         throw ClosedSocketException("Error in function: Socket::accept()");
@@ -166,6 +172,10 @@ Socket Socket::accept() const {
 }
 
 ssize_t Socket::send(const char* source, const ssize_t len) const {
+    if (!fd_valid) {
+        throw Exception("Invalid socket file descriptor.");
+    }
+
     ssize_t total_sent = 0;
     ssize_t last_sent = 0;
 
@@ -186,6 +196,10 @@ ssize_t Socket::send(const char* source, const ssize_t len) const {
 }
 
 ssize_t Socket::recv(char* buffer, const ssize_t len) const {
+    if (!fd_valid) {
+        throw Exception("Invalid socket file descriptor.");
+    }
+
     int total_received = 0;
     int last_received = 0;
 
