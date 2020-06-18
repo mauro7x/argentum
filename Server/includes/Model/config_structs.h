@@ -112,8 +112,8 @@ struct KindCfg {
     Id id;
     std::string name;
     uint8_t max_health_factor;
-    uint8_t meditation_factor;
     uint8_t max_mana_factor;
+    uint8_t meditation_factor;
 
     // Atributos iniciales
     uint8_t initial_mana;
@@ -145,7 +145,7 @@ enum StateType {DEAD, ALIVE};
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-struct CharacterPersistenceCfg {
+struct CharacterCfg {
     Id race;
     Id kind;
 

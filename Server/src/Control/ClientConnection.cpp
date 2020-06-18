@@ -1,5 +1,4 @@
 #include "../../includes/Control/ClientConnection.h"
-
 //-----------------------------------------------------------------------------
 // Métodos privados
 
@@ -74,6 +73,19 @@ void ClientConnection::_sender() {
 void ClientConnection::_receiver() {
     // ejecución del receiver loop
     fprintf(stderr, "RECEIVER DE UN CLIENTE EMPEZANDO! Id: %i\n", id);
+
+    // Proxy receptor de ProxyCommands.
+    {
+        while (1) {
+            char cmd; 
+            this->peer.recv(&cmd, 1);
+            fprintf(stderr, "ClientConnection: command %c received\n", cmd);
+            if (cmd == 'e')
+                break;
+            CommandProxy* command = new CommandProxy(this->id, cmd);
+            this->commands.push(command);
+        }
+    }
 
     /** LOOP DE RECEIVER DE COMANDOS
      * Implementar el loop principal de este hilo.

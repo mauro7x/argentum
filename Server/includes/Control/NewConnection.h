@@ -3,16 +3,16 @@
 
 //-----------------------------------------------------------------------------
 #include "../../../Common/includes/Socket/SocketWrapper.h"
-#include "../../../Common/includes/UnitData.h"
+#include "../Model/config_structs.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 
 struct NewConnection {
     SocketWrapper peer;
-    PlayerData data;
+    CharacterCfg data;
 
-    NewConnection(SocketWrapper& peer, PlayerData& data)
+    NewConnection(SocketWrapper& peer, CharacterCfg& data)
         : peer(std::move(peer)), data(data) {}
 };
 

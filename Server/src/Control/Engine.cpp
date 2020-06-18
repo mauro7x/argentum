@@ -5,7 +5,7 @@
 
 /* PROXY QUE VA A SER Game.addPlayer() */
 InstanceId next_id_hardcoded = 100;
-InstanceId Engine::_GameAddPlayer(const PlayerData& init_data) {
+InstanceId Engine::_GameAddPlayer(const CharacterCfg& init_data) {
     return next_id_hardcoded++; /* hardcodeamos una id */
 }
 
@@ -16,27 +16,38 @@ void Engine::_init() {
     rate = 1000 / ticks_per_second; /* ms por cada tick (floor) */
 }
 
-void Engine::_processFinishedConnections() {
-    InstanceId* finished_connection = NULL;
-    while ((finished_connection = finished_connections.pop())) {
-        fprintf(stderr, "ENGINE: Eliminando una conexión terminada...\n");
-
-        active_clients.remove(*finished_connection);
-        // acá habría que persistir al cliente que se desconecto
-
-        delete finished_connection;
-    }
-}
-
 void Engine::_processNewConnections() {
     NewConnection* new_connection = NULL;
     while ((new_connection = new_connections.pop())) {
         fprintf(stderr, "ENGINE: Procesando una nueva conexión...\n");
 
-        InstanceId id = _GameAddPlayer((*new_connection).data);
+        InstanceId id = this->game.newCharacter((*new_connection).data);
         active_clients.add(id, (*new_connection).peer);
 
         delete new_connection;
+    }
+}
+
+void Engine::_processCommands() {
+    Command* p = nullptr;
+    while ((p = commands.pop())) {
+        fprintf(stderr, "ENGINE: Ejecutando comando\n");
+        (*p)(this->game);
+        delete p;
+    }
+    fprintf(stderr, "No hay mas comandos por ejecutar\n");
+}
+
+void Engine::_processFinishedConnections() {
+    InstanceId* finished_connection = NULL;
+    while ((finished_connection = finished_connections.pop())) {
+        fprintf(stderr, "ENGINE: Eliminando una conexión terminada...\n");
+
+        game.deleteCharacter(*finished_connection);
+        active_clients.remove(*finished_connection);
+        // acá habría que persistir al cliente que se desconecto
+
+        delete finished_connection;
     }
 }
 
@@ -49,9 +60,9 @@ void Engine::_freeQueues() {
     }
 
     {
-        NewConnection* p = NULL;
-        while ((p = new_connections.pop())) {
-            delete p;
+        InstanceId* p = NULL;
+        while ((p = finished_connections.pop())) {
+            game.deleteCharacter(*p);
         }
     }
 
@@ -64,8 +75,10 @@ void Engine::_freeQueues() {
 }
 
 void Engine::_loopIteration(int it) {
-    _processFinishedConnections();
     _processNewConnections();
+    _processCommands();
+    game.actCharacters(it);
+    _processFinishedConnections();
 }
 
 //-----------------------------------------------------------------------------
@@ -118,6 +131,7 @@ void Engine::run() {
         }
 
         // fprintf(stderr, "ENGINE: Sleeping for %i ms.\n", rest);
+
         std::this_thread::sleep_for(std::chrono::milliseconds(rest));
         t1 += std::chrono::milliseconds(rate);
         it += 1;
