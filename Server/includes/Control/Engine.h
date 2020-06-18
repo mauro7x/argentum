@@ -58,6 +58,9 @@ class Engine : public Thread {
     /* Elimina las conexiones que finalizaron del contenedor de clientes */
     void _processFinishedConnections();
 
+    /* Procesa los comandos en la cola de comandos y los ejecuta */
+    void _processCommands();
+
     /* Vacía las colas sin procesarlas para salir ordenadamente */
     void _freeQueues();
 

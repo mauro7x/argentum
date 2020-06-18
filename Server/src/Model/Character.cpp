@@ -56,9 +56,15 @@ Character::~Character() {
 
 //-----------------------------------------------------------------------------
 void Character::act(const unsigned int it) {
-    if (moving) 
-        _updateMovement(it);
-
+    if (moving) {
+        try {
+            _updateMovement(it);
+        } catch(const CollisionWhileMovingException& e) {
+            stopMoving();
+            fprintf(stderr, "Exception: %s\n", e.what());
+            // Como le respondo la excepecion?
+        }
+    }
     _updateTimeDependantAttributes(it);
 }
 
@@ -92,6 +98,8 @@ void Character::_updateTimeDependantAttributes(const unsigned int it) {
 
         this->recoverHealth(health_update);
         this->recoverMana(mana_update);
+
+        attribute_update_time_elapsed -= TIME_TO_UPDATE_ATTRIBUTES;
     }
 }
 
@@ -99,9 +107,11 @@ void Character::_updateMovement(const unsigned int it) {
     this->moving_time_elapsed += it * RATE; // Tiempo en ms acum sin moverme.
     
     while (this->moving_time_elapsed >= TIME_TO_MOVE_A_TILE) {
-        this->moving_time_elapsed -= TIME_TO_MOVE_A_TILE;
         this->position.move(moving_orientation);
         // broadcast true.
+        std::cout << "Character se movio." << std::endl;
+
+        this->moving_time_elapsed -= TIME_TO_MOVE_A_TILE;
     }
 }
 
@@ -332,9 +342,10 @@ const char* KindCantDoMagicException::what() const noexcept {
 //-----------------------------------------------------------------------------
 void Character::debug() {
     std::cout << "**Character debug:**" << std::endl;
-    this->inventory.debug();
-    this->equipment.debug();
+    //this->inventory.debug();
+    //this->equipment.debug();
     std::cout << "health: " << this->health << std::endl;
     std::cout << "mana: " << this->mana << std::endl;
+    std::cout << "position: x = " << this->position.getX() << " y = " << this->position.getY() << std::endl;
 }
 //-----------------------------------------------------------------------------
