@@ -7,6 +7,8 @@
 #include "../../../Common/includes/MapContainer.h"
 #include "../../../Common/includes/types.h"
 //-----------------------------------------------------------------------------
+#include "../Control/NotificationReply.h"
+//-----------------------------------------------------------------------------
 #include "Config.h"
 #include "config_structs.h"
 #include "Character.h"
@@ -77,49 +79,49 @@ class Game {
         //-----------------------------------------------------------------------------
 
         //-----------------------------------------------------------------------------
-        void startMovingUp(const Id caller);
-        void startMovingDown(const Id caller);
-        void startMovingLeft(const Id caller);
-        void startMovingRight(const Id caller);
+        NotificationReply startMovingUp(const Id caller);
+        NotificationReply startMovingDown(const Id caller);
+        NotificationReply startMovingLeft(const Id caller);
+        NotificationReply startMovingRight(const Id caller);
 
-        void stopMoving(const Id caller);
+        NotificationReply stopMoving(const Id caller);
 
-        void useWeapon(const Id caller, 
+        NotificationReply useWeapon(const Id caller, 
                        const uint32_t x_coord, const uint32_t y_coord);
 
-        void equip(const Id caller, const uint8_t n_slot);
+        NotificationReply equip(const Id caller, const uint8_t n_slot);
 
-        void meditate(const Id caller);
+        NotificationReply meditate(const Id caller);
 
-        void resurrect(const Id caller);
+        NotificationReply resurrect(const Id caller);
 
-        void list(const Id caller, const uint32_t x_coord, const uint32_t y_coord);
+        NotificationReply list(const Id caller, const uint32_t x_coord, const uint32_t y_coord);
 
-        void depositItemOnBank(const Id caller, 
+        NotificationReply depositItemOnBank(const Id caller, 
                                const uint32_t x_coord, const uint32_t y_coord,
                                const uint8_t n_slot, uint32_t amount);
-        void withdrawItemFromBank(const Id caller, 
+        NotificationReply withdrawItemFromBank(const Id caller, 
                                   const uint32_t x_coord, const uint32_t y_coord,
                                   const uint32_t item_id, const uint32_t amount);
 
-        void depositGoldOnBank(const Id caller, 
+        NotificationReply depositGoldOnBank(const Id caller, 
                                const uint32_t x_coord, const uint32_t y_coord,
                                const uint32_t amount);
-        void withdrawGoldFromBank(const Id caller, 
+        NotificationReply withdrawGoldFromBank(const Id caller, 
                                   const uint32_t x_coord, const uint32_t y_coord,
                                   const uint32_t amount);
         
-        void buyItem(const Id caller, 
+        NotificationReply buyItem(const Id caller, 
                      const uint32_t x_coord, const uint32_t y_coord,
                      const uint32_t item_id, const uint32_t amount);
-        void sellItem(const Id caller, 
+        NotificationReply sellItem(const Id caller, 
                       const uint32_t x_coord, const uint32_t y_coord,
                       const uint8_t n_slot, const uint32_t amount);
         
-        void take(const Id caller);
-        void drop(const Id caller, const uint8_t n_slot, const uint32_t amount);
+        NotificationReply take(const Id caller);
+        NotificationReply drop(const Id caller, const uint8_t n_slot, const uint32_t amount);
 
-        void listConnectedPlayers(const Id caller);
+        NotificationReply listConnectedPlayers(const Id caller);
 };
 //-----------------------------------------------------------------------------
 #endif  // __GAME_H__

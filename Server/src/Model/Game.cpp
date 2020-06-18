@@ -81,7 +81,7 @@ void Game::actCharacters(const int it) {
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-void Game::startMovingUp(const Id caller) {
+NotificationReply Game::startMovingUp(const Id caller) {
     if (!this->characters.count(caller)) {
         throw Exception("Game.cpp startMovingUp: unknown caller.");
     }
@@ -92,7 +92,7 @@ void Game::startMovingUp(const Id caller) {
     character.startMovingUp();
 }
 
-void Game::startMovingDown(const Id caller) {
+NotificationReply Game::startMovingDown(const Id caller) {
     if (!this->characters.count(caller)) {
         throw Exception("Game.cpp startMovingDown: unknown caller.");
     }
@@ -103,7 +103,7 @@ void Game::startMovingDown(const Id caller) {
     character.startMovingDown();
 }
 
-void Game::startMovingLeft(const Id caller) {
+NotificationReply Game::startMovingLeft(const Id caller) {
     if (!this->characters.count(caller)) {
         throw Exception("Game.cpp startMovingLeft: unknown caller.");
     }
@@ -114,7 +114,7 @@ void Game::startMovingLeft(const Id caller) {
     character.startMovingLeft();
 }
 
-void Game::startMovingRight(const Id caller) {
+NotificationReply Game::startMovingRight(const Id caller) {
     if (!this->characters.count(caller)) {
         throw Exception("Game.cpp startMovingRight: unknown caller.");
     }
@@ -125,7 +125,7 @@ void Game::startMovingRight(const Id caller) {
     character.startMovingRight();
 }
 
-void Game::stopMoving(const Id caller) {
+NotificationReply Game::stopMoving(const Id caller) {
     if (!this->characters.count(caller)) {
         throw Exception("Game.cpp stopMoving: unknown caller.");
     }
