@@ -115,12 +115,12 @@ void Player::render() const {
     }
 }
 
-SDL_Rect Player::getPos() const {
+SDL_Point Player::getPos() const {
     if (!state) {
         throw Exception("Player has not been initialized (pos requested).");
     }
 
-    return SDL_Rect({data.x_tile, data.y_tile, 0, 0});
+    return SDL_Point({data.x_tile, data.y_tile});
 }
 
 SDL_Rect Player::getBox() const {

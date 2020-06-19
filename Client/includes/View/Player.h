@@ -62,8 +62,8 @@ class Player : public Unit {
     /* Renderizarse si se encuentra dentro de la cámara */
     void render() const override;
 
-    /* Obtiene la posición en tiles (SOLO X e Y SON VÁLIDOS) */
-    SDL_Rect getPos() const;
+    /* Obtiene la posición en tiles */
+    SDL_Point getPos() const;
 
     /* Obtiene la posición y dimensiones en pixeles */
     SDL_Rect getBox() const;

@@ -17,7 +17,7 @@ Stage::Stage(const MapView& map, const Player& player,
       g_creatures(creatures) {}
 
 void Stage::render() const {
-    SDL_Rect player_pos = g_player.getPos();
+    SDL_Point player_pos = g_player.getPos();
 
     /* Renderizamos el piso */
     g_map.renderGround();
