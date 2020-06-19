@@ -55,6 +55,96 @@ class CommandProxy: public Command {
         virtual void operator()(Game& game) override;
 };
 
+//comando para los movimientos
+class CommandMovemente: public Command {
+    private:
+     SocketWrapper& peer;
+    
+    public:
+        CommandMovemente(InstanceId caller, char cmd, SocketWrapper& peer);
+        ~CommandMovemente();
+
+        virtual void operator()(Game& game) override;
+};
+
+//comando de usar armas
+class CommandUseWeapon: public Command {
+    private:
+     SocketWrapper& peer;
+     const uint32_t x_coord;
+     const uint32_t y_coord;
+    
+    public:
+        CommandUseWeapon(InstanceId caller, char cmd, SocketWrapper& peer, const uint32_t x_coord, const uint32_t y_coord);
+        ~CommandUseWeapon();
+
+        virtual void operator()(Game& game) override;
+};
+
+//comando para equipar las armas
+class CommandEquip: public Command {
+    private:
+     SocketWrapper& peer;
+     const uint8_t n_slot;
+    
+    public:
+        CommandEquip(InstanceId caller, char cmd, SocketWrapper& peer, const uint8_t n_slot);
+        ~CommandEquip();
+
+        virtual void operator()(Game& game) override;
+};
+
+
+class CommandMediate: public Command {
+    private:
+     SocketWrapper& peer;
+    
+    public:
+        CommandMediate(InstanceId caller, char cmd, SocketWrapper& peer);
+        ~CommandMediate();
+
+        virtual void operator()(Game& game) override;
+};
+
+class CommandResurrect: public Command {
+    private:
+     SocketWrapper& peer;
+    
+    public:
+        CommandResurrect(InstanceId caller, char cmd, SocketWrapper& peer);
+        ~CommandResurrect();
+
+        virtual void operator()(Game& game) override;
+};
+
+class CommandList: public Command {
+    private:
+     SocketWrapper& peer;
+     const uint32_t x_coord;
+     const uint32_t y_coord;
+    
+    public:
+        CommandList(InstanceId caller, char cmd, SocketWrapper& peer, const uint32_t x_coord, const uint32_t y_coord);
+        ~CommandList();
+
+        virtual void operator()(Game& game) override;
+};
+
+class CommandDepositItemOnBank: public Command {
+    private:
+     SocketWrapper& peer;
+     const uint32_t x_coord;
+     const uint32_t y_coord;
+    
+    public:
+        CommandDepositItemOnBank(InstanceId caller, char cmd, SocketWrapper& peer, const uint32_t x_coord, const uint32_t y_coord);
+        ~CommandDepositItemOnBank();
+
+        virtual void operator()(Game& game) override;
+};
+
+
+
 //-----------------------------------------------------------------------------
 
 #endif  // __COMMAND_H__
