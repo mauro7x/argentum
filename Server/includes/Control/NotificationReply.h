@@ -23,7 +23,8 @@ class NotificationReply: public Notification {
     NotificationReply();
     /* Constructor */
     NotificationReply(char opcode, uint32_t length, std::string reply);
-
+    /* Habilitamos el operador= para movimiento. */
+    NotificationReply& operator=(NotificationReply&& other);
     //-----------------------------------------------------------------------------
 
     /* Envío polimórfico de notificacion. Devuelve si se pudo enviar. */
