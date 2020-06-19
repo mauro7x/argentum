@@ -66,9 +66,9 @@ class CommandMovement : public Command {
 
    public:
     CommandMovement(InstanceId caller, char cmd, SocketWrapper& peer);
-    virtual ~CommandMovement() {}
+    ~CommandMovement() {}
 
-    virtual void operator()(Game& game) override;
+    void operator()(Game& game) override;
 };
 
 // comando de usar armas
@@ -83,9 +83,9 @@ class CommandUseWeapon : public Command {
    public:
     CommandUseWeapon(InstanceId caller, char cmd, SocketWrapper& peer,
                      const uint32_t x_coord, const uint32_t y_coord);
-    virtual ~CommandUseWeapon() {}
+    ~CommandUseWeapon() {}
 
-    virtual void operator()(Game& game) override;
+    void operator()(Game& game) override;
 };
 
 // comando para equipar las armas
@@ -99,9 +99,9 @@ class CommandEquip : public Command {
    public:
     CommandEquip(InstanceId caller, char cmd, SocketWrapper& peer,
                  const uint8_t n_slot);
-    virtual ~CommandEquip() {}
+    ~CommandEquip() {}
 
-    virtual void operator()(Game& game) override;
+    void operator()(Game& game) override;
 };
 
 class CommandMediate : public Command {
@@ -112,9 +112,9 @@ class CommandMediate : public Command {
 
    public:
     CommandMediate(InstanceId caller, char cmd, SocketWrapper& peer);
-    virtual ~CommandMediate() {}
+    ~CommandMediate() {}
 
-    virtual void operator()(Game& game) override;
+    void operator()(Game& game) override;
 };
 
 class CommandResurrect : public Command {
@@ -125,9 +125,9 @@ class CommandResurrect : public Command {
 
    public:
     CommandResurrect(InstanceId caller, char cmd, SocketWrapper& peer);
-    virtual ~CommandResurrect() {}
+    ~CommandResurrect() {}
 
-    virtual void operator()(Game& game) override;
+    void operator()(Game& game) override;
 };
 
 class CommandList : public Command {
@@ -141,9 +141,9 @@ class CommandList : public Command {
    public:
     CommandList(InstanceId caller, char cmd, SocketWrapper& peer,
                 const uint32_t x_coord, const uint32_t y_coord);
-    virtual ~CommandList() {}
+    ~CommandList() {}
 
-    virtual void operator()(Game& game) override;
+    void operator()(Game& game) override;
 };
 
 class CommandDepositItemOnBank : public Command {
@@ -160,9 +160,9 @@ class CommandDepositItemOnBank : public Command {
     CommandDepositItemOnBank(InstanceId caller, char cmd, SocketWrapper& peer,
                              const uint32_t x_coord, const uint32_t y_coord,
                              const uint8_t n_slot, const uint32_t amount);
-    virtual ~CommandDepositItemOnBank() {}
+    ~CommandDepositItemOnBank() {}
 
-    virtual void operator()(Game& game) override;
+    void operator()(Game& game) override;
 };
 
 class CommandWithdrawItemFromBank : public Command {
@@ -180,9 +180,9 @@ class CommandWithdrawItemFromBank : public Command {
                                 SocketWrapper& peer, const uint32_t x_coord,
                                 const uint32_t y_coord, const uint32_t item_id,
                                 const uint32_t amount);
-    virtual ~CommandWithdrawItemFromBank() {}
+    ~CommandWithdrawItemFromBank() {}
 
-    virtual void operator()(Game& game) override;
+    void operator()(Game& game) override;
 };
 
 class CommandGoldMove : public Command {
@@ -198,9 +198,9 @@ class CommandGoldMove : public Command {
     CommandGoldMove(InstanceId caller, char cmd, SocketWrapper& peer,
                     const uint32_t x_coord, const uint32_t y_coord,
                     const uint32_t amount);
-    virtual ~CommandGoldMove() {}
+    ~CommandGoldMove() {}
 
-    virtual void operator()(Game& game) override;
+    void operator()(Game& game) override;
 };
 
 class CommandBuy : public Command {
@@ -217,9 +217,9 @@ class CommandBuy : public Command {
     CommandBuy(InstanceId caller, char cmd, SocketWrapper& peer,
                const uint32_t x_coord, const uint32_t y_coord,
                const uint32_t item_id, const uint32_t amount);
-    virtual ~CommandBuy() {}
+    ~CommandBuy() {}
 
-    virtual void operator()(Game& game) override;
+    void operator()(Game& game) override;
 };
 
 class CommandSell : public Command {
@@ -236,9 +236,9 @@ class CommandSell : public Command {
     CommandSell(InstanceId caller, char cmd, SocketWrapper& peer,
                 const uint32_t x_coord, const uint32_t y_coord,
                 const uint8_t n_slot, const uint32_t amount);
-    virtual ~CommandSell() {}
+    ~CommandSell() {}
 
-    virtual void operator()(Game& game) override;
+    void operator()(Game& game) override;
 };
 
 class CommandTake : public Command {
@@ -249,9 +249,9 @@ class CommandTake : public Command {
 
    public:
     CommandTake(InstanceId caller, char cmd, SocketWrapper& peer);
-    virtual ~CommandTake() {}
+    ~CommandTake() {}
 
-    virtual void operator()(Game& game) override;
+    void operator()(Game& game) override;
 };
 
 class CommandDrop : public Command {
@@ -265,9 +265,9 @@ class CommandDrop : public Command {
    public:
     CommandDrop(InstanceId caller, char cmd, SocketWrapper& peer,
                 const uint8_t n_slot, const uint32_t amount);
-    virtual ~CommandDrop() {}
+    ~CommandDrop() {}
 
-    virtual void operator()(Game& game) override;
+    void operator()(Game& game) override;
 };
 
 //-----------------------------------------------------------------------------

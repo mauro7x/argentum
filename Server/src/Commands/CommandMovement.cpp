@@ -11,27 +11,27 @@ void CommandMovement::operator()(Game& game) {
     NotificationReply reply;
     switch (cmd) {
         case START_MOVING_UP_CMD: {
-            reply = game.startMovingUp(caller);
+            reply = std::move(game.startMovingUp(caller));
             reply.send(peer);
             break;
         }
         case START_MOVING_DOWN_CMD: {
-            reply = game.startMovingDown(caller);
+            reply = std::move(game.startMovingDown(caller));
             reply.send(peer);
             break;
         }
         case START_MOVING_LEFT_CMD: {
-            reply = game.startMovingLeft(caller);
+            reply = std::move(game.startMovingLeft(caller));
             reply.send(peer);
             break;
         }
         case START_MOVING_RIGHT_CMD: {
-            reply = game.startMovingRight(caller);
+            reply = std::move(game.startMovingRight(caller));
             reply.send(peer);
             break;
         }
         case STOP_MOVING_CMD: {
-            reply = game.stopMoving(caller);
+            reply = std::move(game.stopMoving(caller));
             reply.send(peer);
             break;
         }
