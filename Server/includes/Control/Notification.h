@@ -50,13 +50,13 @@ class Notification {
     Notification(const Notification&) = delete;
 
     /* Deshabilitamos el operador= para copia.*/
-    Notification& operator=(const Notification&) = delete;
+    Notification& operator=(const Notification&);
 
     /* Deshabilitamos el constructor por movimiento. */
     Notification(Notification&& other) = delete;
 
     /* Deshabilitamos el operador= para movimiento. */
-    Notification& operator=(Notification&& other) = delete;
+    // Notification& operator=(Notification&& other) = delete;
 
     //-----------------------------------------------------------------------------
 

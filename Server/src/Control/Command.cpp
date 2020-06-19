@@ -1,12 +1,12 @@
 #include "../../includes/Control/Command.h"
 
-Command::Command(InstanceId caller): caller(caller) {}
-Command::~Command() {}
+// Command::Command(InstanceId caller): caller(caller) {}
+// Command::~Command() {}
 
-CommandProxy::CommandProxy(InstanceId caller, char cmd): 
-    Command(caller),
-    cmd(cmd) {}
-CommandProxy::~CommandProxy() {}
+// CommandProxy::CommandProxy(InstanceId caller, char cmd): 
+//     Command(caller),
+//     cmd(cmd) {}
+// CommandProxy::~CommandProxy() {}
 
 void CommandProxy::operator()(Game& game) {
     if (cmd == 'w') {

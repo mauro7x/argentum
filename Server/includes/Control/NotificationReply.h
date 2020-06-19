@@ -19,6 +19,8 @@ class NotificationReply: public Notification {
     std::string reply;
     
    public:
+    /* Constructor por defult */
+    NotificationReply();
     /* Constructor */
     NotificationReply(char opcode, uint32_t length, std::string reply);
 
