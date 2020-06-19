@@ -58,15 +58,9 @@ Character::~Character() {
 
 //-----------------------------------------------------------------------------
 void Character::act(const unsigned int it) {
-    if (moving) {
-        try {
-            _updateMovement(it);
-        } catch(const CollisionWhileMovingException& e) {
-            stopMoving();
-            fprintf(stderr, "Exception: %s\n", e.what());
-            // Como le respondo la excepecion?
-        }
-    }
+    if (moving)
+        _updateMovement(it);
+
     _updateTimeDependantAttributes(it);
 }
 

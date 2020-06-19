@@ -69,6 +69,7 @@ NotificationReply Game::actCharacters(const int it) {
         try {
             it_characters->second.act(it);
         } catch(const CollisionWhileMovingException& e) {
+            it_characters->second.stopMoving();
             NotificationReply reply(ERROR_REPLY, e.what());
         }
         it_characters->second.debug();
