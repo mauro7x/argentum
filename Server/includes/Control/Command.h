@@ -2,8 +2,8 @@
 #define __COMMAND_H__
 
 //-----------------------------------------------------------------------------
-#include "../Model/Game.h"
 #include "../../../Common/includes/types.h"
+#include "../Model/Game.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -14,134 +14,233 @@
  * específicos de las clases concretas que hereden de esta. */
 
 class Command {
-    protected:
-        InstanceId caller;
+   protected:
+    InstanceId caller;
 
-    public:
-        /* Constructor */
-        Command(InstanceId caller);
+   public:
+    /* Constructor */
+    Command(InstanceId caller);
 
-        /* Deshabilitamos el constructor por copia. */
-        Command(const Command&) = delete;
+    /* Deshabilitamos el constructor por copia. */
+    Command(const Command&) = delete;
 
-        /* Deshabilitamos el operador= para copia.*/
-        Command& operator=(const Command&) = delete;
+    /* Deshabilitamos el operador= para copia.*/
+    Command& operator=(const Command&) = delete;
 
-        /* Deshabilitamos el constructor por movimiento. */
-        Command(Command&& other) = delete;
+    /* Deshabilitamos el constructor por movimiento. */
+    Command(Command&& other) = delete;
 
-        /* Deshabilitamos el operador= para movimiento. */
-        Command& operator=(Command&& other) = delete;
+    /* Deshabilitamos el operador= para movimiento. */
+    Command& operator=(Command&& other) = delete;
 
-        //-------------------------------------------------------------------------
+    //-------------------------------------------------------------------------
 
-        /* Ejecución polimórfica del comando */
-        virtual void operator()(Game& game) = 0;
+    /* Ejecución polimórfica del comando */
+    virtual void operator()(Game& game) = 0;
 
-        //-------------------------------------------------------------------------
+    //-------------------------------------------------------------------------
 
-        /* Destructor */
-        virtual ~Command();
+    /* Destructor */
+    virtual ~Command();
 };
 
-class CommandProxy: public Command {
-    private:
-        char cmd;
-    
-    public:
-        CommandProxy(InstanceId caller, char cmd);
-        ~CommandProxy();
+class CommandProxy : public Command {
+   private:
+    char cmd;
 
-        virtual void operator()(Game& game) override;
+   public:
+    CommandProxy(InstanceId caller, char cmd);
+    ~CommandProxy();
+
+    virtual void operator()(Game& game) override;
 };
 
-//comando para los movimientos
-class CommandMovemente: public Command {
-    private:
-     SocketWrapper& peer;
-    
-    public:
-        CommandMovemente(InstanceId caller, char cmd, SocketWrapper& peer);
-        ~CommandMovemente();
+// comando para los movimientos
+class CommandMovemente : public Command {
+   private:
+    SocketWrapper& peer;
 
-        virtual void operator()(Game& game) override;
+   public:
+    CommandMovemente(InstanceId caller, char cmd, SocketWrapper& peer);
+    ~CommandMovemente();
+
+    virtual void operator()(Game& game) override;
 };
 
-//comando de usar armas
-class CommandUseWeapon: public Command {
-    private:
-     SocketWrapper& peer;
-     const uint32_t x_coord;
-     const uint32_t y_coord;
-    
-    public:
-        CommandUseWeapon(InstanceId caller, char cmd, SocketWrapper& peer, const uint32_t x_coord, const uint32_t y_coord);
-        ~CommandUseWeapon();
+// comando de usar armas
+class CommandUseWeapon : public Command {
+   private:
+    SocketWrapper& peer;
+    const uint32_t x_coord;
+    const uint32_t y_coord;
 
-        virtual void operator()(Game& game) override;
+   public:
+    CommandUseWeapon(InstanceId caller, char cmd, SocketWrapper& peer,
+                     const uint32_t x_coord, const uint32_t y_coord);
+    ~CommandUseWeapon();
+
+    virtual void operator()(Game& game) override;
 };
 
-//comando para equipar las armas
-class CommandEquip: public Command {
-    private:
-     SocketWrapper& peer;
-     const uint8_t n_slot;
-    
-    public:
-        CommandEquip(InstanceId caller, char cmd, SocketWrapper& peer, const uint8_t n_slot);
-        ~CommandEquip();
+// comando para equipar las armas
+class CommandEquip : public Command {
+   private:
+    SocketWrapper& peer;
+    const uint8_t n_slot;
 
-        virtual void operator()(Game& game) override;
+   public:
+    CommandEquip(InstanceId caller, char cmd, SocketWrapper& peer,
+                 const uint8_t n_slot);
+    ~CommandEquip();
+
+    virtual void operator()(Game& game) override;
 };
 
+class CommandMediate : public Command {
+   private:
+    SocketWrapper& peer;
 
-class CommandMediate: public Command {
-    private:
-     SocketWrapper& peer;
-    
-    public:
-        CommandMediate(InstanceId caller, char cmd, SocketWrapper& peer);
-        ~CommandMediate();
+   public:
+    CommandMediate(InstanceId caller, char cmd, SocketWrapper& peer);
+    ~CommandMediate();
 
-        virtual void operator()(Game& game) override;
+    virtual void operator()(Game& game) override;
 };
 
-class CommandResurrect: public Command {
-    private:
-     SocketWrapper& peer;
-    
-    public:
-        CommandResurrect(InstanceId caller, char cmd, SocketWrapper& peer);
-        ~CommandResurrect();
+class CommandResurrect : public Command {
+   private:
+    SocketWrapper& peer;
 
-        virtual void operator()(Game& game) override;
+   public:
+    CommandResurrect(InstanceId caller, char cmd, SocketWrapper& peer);
+    ~CommandResurrect();
+
+    virtual void operator()(Game& game) override;
 };
 
-class CommandList: public Command {
-    private:
-     SocketWrapper& peer;
-     const uint32_t x_coord;
-     const uint32_t y_coord;
-    
-    public:
-        CommandList(InstanceId caller, char cmd, SocketWrapper& peer, const uint32_t x_coord, const uint32_t y_coord);
-        ~CommandList();
+class CommandList : public Command {
+   private:
+    SocketWrapper& peer;
+    const uint32_t x_coord;
+    const uint32_t y_coord;
 
-        virtual void operator()(Game& game) override;
+   public:
+    CommandList(InstanceId caller, char cmd, SocketWrapper& peer,
+                const uint32_t x_coord, const uint32_t y_coord);
+    ~CommandList();
+
+    virtual void operator()(Game& game) override;
 };
 
-class CommandDepositItemOnBank: public Command {
-    private:
-     SocketWrapper& peer;
-     const uint32_t x_coord;
-     const uint32_t y_coord;
-    
-    public:
-        CommandDepositItemOnBank(InstanceId caller, char cmd, SocketWrapper& peer, const uint32_t x_coord, const uint32_t y_coord);
-        ~CommandDepositItemOnBank();
+class CommandDepositItemOnBank : public Command {
+   private:
+    SocketWrapper& peer;
+    const uint32_t x_coord;
+    const uint32_t y_coord;
+    const uint8_t n_slot;
+    const uint32_t amount;
 
-        virtual void operator()(Game& game) override;
+   public:
+    CommandDepositItemOnBank(InstanceId caller, char cmd, SocketWrapper& peer,
+                             const uint32_t x_coord, const uint32_t y_coord,
+                             const uint8_t n_slot, const uint32_t amount);
+    ~CommandDepositItemOnBank();
+
+    virtual void operator()(Game& game) override;
 };
+
+class CommandWithdrawItemFromBank : public Command {
+   private:
+    SocketWrapper& peer;
+    const uint32_t x_coord;
+    const uint32_t y_coord;
+    const uint32_t item_id;
+    const uint32_t amount;
+
+   public:
+    CommandWithdrawItemFromBank(InstanceId caller, char cmd, SocketWrapper& peer,
+                             const uint32_t x_coord, const uint32_t y_coord,
+                             const uint32_t item_id, const uint32_t amount);
+    ~CommandWithdrawItemFromBank();
+
+    virtual void operator()(Game& game) override;
+};
+
+class CommandGoldMove : public Command {
+   private:
+    SocketWrapper& peer;
+    const uint32_t x_coord;
+    const uint32_t y_coord;
+    const uint32_t amount;
+
+   public:
+    CommandGoldMove(InstanceId caller, char cmd, SocketWrapper& peer,
+                             const uint32_t x_coord, const uint32_t y_coord,
+                               const uint32_t amount);
+    ~CommandGoldMove();
+
+    virtual void operator()(Game& game) override;
+};
+
+class CommandBuy : public Command {
+   private:
+    SocketWrapper& peer;
+    const uint32_t x_coord;
+    const uint32_t y_coord;
+    const uint32_t item_id;
+    const uint32_t amount;
+
+   public:
+    CommandBuy(InstanceId caller, char cmd, SocketWrapper& peer,
+                             const uint32_t x_coord, const uint32_t y_coord,
+                             const uint32_t item_id, const uint32_t amount);
+    ~CommandBuy();
+
+    virtual void operator()(Game& game) override;
+};
+
+class CommandSell : public Command {
+   private:
+    SocketWrapper& peer;
+    const uint32_t x_coord;
+    const uint32_t y_coord;
+    const uint8_t n_slot;
+    const uint32_t amount;
+
+   public:
+    CommandSell(InstanceId caller, char cmd, SocketWrapper& peer,
+                             const uint32_t x_coord, const uint32_t y_coord,
+                             const uint8_t n_slot, const uint32_t amount);
+    ~CommandSell();
+
+    virtual void operator()(Game& game) override;
+};
+
+class CommandTake : public Command {
+   private:
+    SocketWrapper& peer;
+
+   public:
+    CommandTake(InstanceId caller, char cmd, SocketWrapper& peer);
+    ~CommandTake();
+
+    virtual void operator()(Game& game) override;
+};
+
+class CommandDrop : public Command {
+   private:
+    SocketWrapper& peer;
+    const uint8_t n_slot;
+    const uint32_t amount;
+
+   public:
+    CommandDrop(InstanceId caller, char cmd, SocketWrapper& peer,
+                             const uint8_t n_slot, const uint32_t amount);
+    ~CommandDrop();
+
+    virtual void operator()(Game& game) override;
+};
+
 
 
 
