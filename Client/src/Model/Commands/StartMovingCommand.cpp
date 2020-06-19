@@ -1,4 +1,4 @@
-#include "../../../includes/Model/Commands/StartMovementCommand.h"
+#include "../../../includes/Model/Commands/StartMovingCommand.h"
 
 //-----------------------------------------------------------------------------
 // Métodos privados
@@ -8,34 +8,47 @@
 //-----------------------------------------------------------------------------
 // API Pública
 
-StartMovementCommand::StartMovementCommand(MovementDirection dir)
+StartMovingCommand::StartMovingCommand(MovingDirection dir)
     : Command(), dir(dir) {}
 
-bool StartMovementCommand::send(const SocketWrapper& socket) {
+bool StartMovingCommand::send(const SocketWrapper& socket) {
     // Enviamos el comando según el protocolo
+    ssize_t sent = 0;
+
+    sent = (socket << (char)COMMAND_OPCODE);
+    if (!sent) {
+        return false;
+    }
+
     switch (dir) {
         case UP_DIR: {
-            // implementar
+            sent = (socket << (char)START_MOVING_UP_CMD);
             break;
         }
 
         case DOWN_DIR: {
-            // implementar
+            sent = (socket << (char)START_MOVING_DOWN_CMD);
             break;
         }
 
         case LEFT_DIR: {
-            // implementar
+            sent = (socket << (char)START_MOVING_LEFT_CMD);
             break;
         }
 
         case RIGHT_DIR: {
-            // implementar
+            sent = (socket << (char)START_MOVING_RIGHT_CMD);
             break;
         }
     }
+
+    if (!sent) {
+        return false;
+    }
+
+    return true;
 }
 
-StartMovementCommand::~StartMovementCommand() {}
+StartMovingCommand::~StartMovingCommand() {}
 
 //-----------------------------------------------------------------------------

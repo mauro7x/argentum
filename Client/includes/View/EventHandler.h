@@ -14,11 +14,12 @@
 //-----------------------------------------------------------------------------
 //#include "../../../Common/includes/Exceptions/Exception.h"
 #include "../../../Common/includes/BlockingQueue.h"
-#include "../../../Common/includes/NonBlockingQueue.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 #include "../Model/Commands/Command.h"
+#include "../Model/Commands/StartMovingCommand.h"
+#include "../Model/Commands/StopMovingCommand.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -48,7 +49,6 @@ class EventHandler {
    private:
     std::atomic_bool& exit;
     BlockingQueue<Command*>& commands;
-    NonBlockingQueue<int*>& requests;  // proxy
     std::unordered_map<SDL_Keycode, Key> keys;
 
     /* Flags internos */
@@ -64,18 +64,13 @@ class EventHandler {
     Event _getEvent(const SDL_Event& e);
 
     //-------------------------------------------------------------------------
-    // MANEJO DE EVENTOS PARTICULARES
-
-    void _handleStartMovement(const Event& e) const;
-
-    void _handleStopMovement() const;
+    // Manejo de eventos particulares (que justifiquen abstracción)
 
     //-------------------------------------------------------------------------
 
    public:
     /* Constructor */
-    EventHandler(std::atomic_bool& exit, BlockingQueue<Command*>& commands,
-                 NonBlockingQueue<int*>& requests);
+    EventHandler(std::atomic_bool& exit, BlockingQueue<Command*>& commands);
 
     /* Handlea un evento de SDL */
     void handleEvent(const SDL_Event& e);

@@ -1,5 +1,5 @@
-#ifndef __START_MOVEMENT_COMMAND_H__
-#define __START_MOVEMENT_COMMAND_H__
+#ifndef __START_MOVING_COMMAND_H__
+#define __START_MOVING_COMMAND_H__
 
 //-----------------------------------------------------------------------------
 #include "../../../../Common/includes/Protocol.h"
@@ -8,18 +8,18 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-enum MovementDirection { UP_DIR, DOWN_DIR, LEFT_DIR, RIGHT_DIR };
+enum MovingDirection { UP_DIR, DOWN_DIR, LEFT_DIR, RIGHT_DIR };
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 
-class StartMovementCommand : public Command {
+class StartMovingCommand : public Command {
    private:
-    MovementDirection dir;
+    MovingDirection dir;
 
    public:
     /* Constructor */
-    StartMovementCommand(MovementDirection dir);
+    StartMovingCommand(MovingDirection dir);
 
     //-------------------------------------------------------------------------
 
@@ -29,9 +29,9 @@ class StartMovementCommand : public Command {
     //-------------------------------------------------------------------------
 
     /* Destructor */
-    ~StartMovementCommand() {}
+    ~StartMovingCommand();
 };
 
 //-----------------------------------------------------------------------------
 
-#endif  // __START_MOVEMENT_COMMAND_H__
+#endif  // __START_MOVING_COMMAND_H__

@@ -32,7 +32,7 @@ class Update {
     //-------------------------------------------------------------------------
 
     /* Ejecución polimórfica del update */
-    virtual void operator()(/* agregar parámetros comunes a todos */) = 0;
+    virtual void exec(/* agregar parámetros comunes a todos */) = 0;
 
     //-------------------------------------------------------------------------
 

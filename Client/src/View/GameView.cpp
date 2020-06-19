@@ -102,12 +102,10 @@ void GameView::_processSDLEvents() {
     }
 }
 
-void GameView::_processServerUpdates() {
-    /* Proxy */
-    PlayerData* update = NULL;
-    while ((update = broadcast.pop())) {
-        fprintf(stderr, "Soy el cliente. Recibimos un update.\n");
-        player.update(*update);
+void GameView::_processUpdates() {
+    Update* update = NULL;
+    while ((update = updates.pop())) {
+        update->exec();
         delete update;
     }
 }
@@ -116,7 +114,7 @@ void GameView::_loopIteration(const int it) {
     // auto t1 = std::chrono::steady_clock::now();
     /* Vaciamos las colas a procesar*/
     _processSDLEvents();
-    _processServerUpdates();
+    _processUpdates();
 
     /* Limpiamos la pantalla */
     renderer.clearScreen();
@@ -143,35 +141,40 @@ void GameView::_loopIteration(const int it) {
 
 GameView::GameView(BlockingQueue<Command*>& commands,
                    NonBlockingQueue<Update*>& updates, std::atomic_bool& exit)
-    : commands(commands),
+    :  // Comunicación entre hilos
+      commands(commands),
       updates(updates),
       exit(exit),
+
+      // Variables de SDL
       renderer(window, camera),
       rate(0),
+
+      // Componentes de la vista
       hud(&renderer),
       console(&renderer),
       map(&renderer),
+
+      // Unidades y contenedores de unidades
       unit_sprites(&renderer),
       player(&renderer, &unit_sprites),
       characters(&renderer, &unit_sprites),
       creatures(&renderer, &unit_sprites),
 
-      server(requests, broadcast),
-
+      // Escenario
       stage(map, player, characters, creatures),
-      event_handler(exit, requests) {}
+
+      // Handler de eventos
+      event_handler(exit, commands) {}
 
 void GameView::operator()() {
     // Iniciamos recursos necesarios
     _init();
     _loadMedia();
 
-    server.start();  // proxy
-
-    try {
-        //-------------------------------------------------------------------------
-        // PROXY PARA EL MANEJO DEL PRIMER PAQUETE DEL SERVER (hardcodeado).
-
+    //-------------------------------------------------------------------------
+    // PROXY PARA EL MANEJO DEL PRIMER PAQUETE DEL SERVER (hardcodeado).
+    {
         PlayerData init_data = {{1, 0, 0, DOWN_ORIENTATION},
                                 100,
                                 100,
@@ -190,49 +193,42 @@ void GameView::operator()() {
                                 1000};
         player.init(init_data);
         map.select(0); /* el id del mapa x ahora hardcodeado */
-        //-------------------------------------------------------------------------
-
-        // Variables para controlar el frame-rate
-        auto t1 = std::chrono::steady_clock::now();
-        auto t2 = t1;
-        std::chrono::duration<float, std::milli> diff;
-        int rest = 0, behind = 0, lost = 0;
-        int it = 1;
-
-        // Loop principal
-        while (!exit) {
-            _loopIteration(it);
-
-            // Controlamos el rate y verificamos pérdida de frames.
-            // Idea de implementación:
-            // https://eldipa.github.io/book-of-gehn/articles/2019/10/23/Constant-Rate-Loop.html
-            it = 0;
-            t2 = std::chrono::steady_clock::now();
-            diff = t2 - t1;
-            rest = rate - std::ceil(diff.count());
-
-            if (rest < 0) {
-                fprintf(stderr, "\n\n=== PÉRDIDA DE FRAME/S ===\n\n\n");
-                behind = -rest;
-                lost = rate + (behind - behind % rate);
-                rest = rate - behind % rate;
-                t1 += std::chrono::milliseconds(lost);
-                it += std::floor(lost / rate);
-            }
-
-            // fprintf(stderr, "MAIN-LOOP: Sleeping for %i ms.\n", rest);
-            std::this_thread::sleep_for(std::chrono::milliseconds(rest));
-            t1 += std::chrono::milliseconds(rate);
-            it += 1;
-        }
-    } catch (const Exception& e) {
-        server.kill();
-        server.join();
-        throw e;
     }
+    //-------------------------------------------------------------------------
 
-    server.kill();
-    server.join();
+    // Variables para controlar el frame-rate
+    auto t1 = std::chrono::steady_clock::now();
+    auto t2 = t1;
+    std::chrono::duration<float, std::milli> diff;
+    int rest = 0, behind = 0, lost = 0;
+    int it = 1;
+
+    // Loop principal
+    while (!exit) {
+        _loopIteration(it);
+
+        // Controlamos el rate y verificamos pérdida de frames.
+        // Idea de implementación:
+        // https://eldipa.github.io/book-of-gehn/articles/2019/10/23/Constant-Rate-Loop.html
+        it = 0;
+        t2 = std::chrono::steady_clock::now();
+        diff = t2 - t1;
+        rest = rate - std::ceil(diff.count());
+
+        if (rest < 0) {
+            fprintf(stderr, "\n\n=== PÉRDIDA DE FRAME/S ===\n\n\n");
+            behind = -rest;
+            lost = rate + (behind - behind % rate);
+            rest = rate - behind % rate;
+            t1 += std::chrono::milliseconds(lost);
+            it += std::floor(lost / rate);
+        }
+
+        // fprintf(stderr, "MAIN-LOOP: Sleeping for %i ms.\n", rest);
+        std::this_thread::sleep_for(std::chrono::milliseconds(rest));
+        t1 += std::chrono::milliseconds(rate);
+        it += 1;
+    }
 }
 
 GameView::~GameView() {

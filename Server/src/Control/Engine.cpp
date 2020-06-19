@@ -79,6 +79,8 @@ void Engine::_loopIteration(int it) {
     _processCommands();
     game.actCharacters(it);
     _processFinishedConnections();
+
+    // Envio del broadcast
 }
 
 //-----------------------------------------------------------------------------

@@ -125,77 +125,14 @@ Event EventHandler::_getEvent(const SDL_Event& e) {
     return INVALID;
 }
 
-void EventHandler::_handleStartMovement(const Event& e) const {
-    switch (e) {
-        case START_MOVING_UP: {
-            /* proxy */
-            int* cmd = new int(0);
-            fprintf(stderr,
-                    "EVENT-HANDLER | START_MOVING_UP | Enviamos un %i.\n",
-                    *cmd);
-            requests.push(cmd);
-
-            /* Real */
-
-            break;
-        }
-
-        case START_MOVING_DOWN: {
-            /* proxy */
-            int* cmd = new int(1);
-            fprintf(stderr,
-                    "EVENT-HANDLER | START_MOVING_DOWN | Enviamos un %i.\n",
-                    *cmd);
-            requests.push(cmd);
-
-            break;
-        }
-
-        case START_MOVING_LEFT: {
-            int* cmd = new int(2);
-            fprintf(stderr,
-                    "EVENT-HANDLER | START_MOVING_LEFT | Enviamos un %i.\n",
-                    *cmd);
-            requests.push(cmd);
-
-            break;
-        }
-
-        case START_MOVING_RIGHT: {
-            int* cmd = new int(3);
-            fprintf(stderr,
-                    "EVENT-HANDLER | START_MOVING_RIGHT | Enviamos un "
-                    "%i.\n",
-                    *cmd);
-            requests.push(cmd);
-
-            break;
-        }
-
-        default: {
-            break;
-        }
-    }
-}
-
-void EventHandler::_handleStopMovement() const {
-    int* cmd = new int(4);
-    fprintf(stderr, "EVENT-HANDLER | STOP_MOVING | Enviamos un %i.\n", *cmd);
-    requests.push(cmd);
-}
-
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 // API Pública
 
 EventHandler::EventHandler(std::atomic_bool& exit,
-                           BlockingQueue<Command*>& commands,
-                           NonBlockingQueue<int*>& requests)
-    : exit(exit),
-      commands(commands),
-      requests(requests),
-      key_pressed(UNMAPPED_KEY) {
+                           BlockingQueue<Command*>& commands)
+    : exit(exit), commands(commands), key_pressed(UNMAPPED_KEY) {
     _bindKeycodes();
 }
 
@@ -215,16 +152,28 @@ void EventHandler::handleEvent(const SDL_Event& e) {
         }
 
         // Movimiento
-        case START_MOVING_UP:
-        case START_MOVING_DOWN:
-        case START_MOVING_LEFT:
+        case START_MOVING_UP: {
+            commands.push(new StartMovingCommand(UP_DIR));
+            break;
+        }
+
+        case START_MOVING_DOWN: {
+            commands.push(new StartMovingCommand(DOWN_DIR));
+            break;
+        }
+
+        case START_MOVING_LEFT: {
+            commands.push(new StartMovingCommand(LEFT_DIR));
+            break;
+        }
+
         case START_MOVING_RIGHT: {
-            _handleStartMovement(event);
+            commands.push(new StartMovingCommand(RIGHT_DIR));
             break;
         }
 
         case STOP_MOVING: {
-            _handleStopMovement();
+            commands.push(new StopMovingCommand());
             break;
         }
 
