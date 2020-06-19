@@ -21,7 +21,7 @@
 #include "../../../Common/includes/NonBlockingQueue.h"
 #include "../../../Common/includes/UnitData.h"
 #include "../../../Common/includes/paths.h"
-#include "../Model/Command.h"
+#include "../Model/Commands/Command.h"
 #include "../Model/Update.h"
 #include "../paths.h"
 //-----------------------------------------------------------------------------
@@ -54,7 +54,7 @@
 class GameView {
    private:
     /* Comunicación entre hilos */
-    BlockingQueue<Command*>& commands;
+    BlockingQueue<Command*>& commands;  // es necesario tenerla aca?
     NonBlockingQueue<Update*>& updates;
     std::atomic_bool& exit;
 

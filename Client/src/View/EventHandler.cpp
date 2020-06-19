@@ -125,30 +125,8 @@ Event EventHandler::_getEvent(const SDL_Event& e) {
     return INVALID;
 }
 
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
-// API Pública
-
-EventHandler::EventHandler(std::atomic_bool& exit,
-                           NonBlockingQueue<int*>& requests)
-    : exit(exit), requests(requests), key_pressed(UNMAPPED_KEY) {
-    _bindKeycodes();
-}
-
-void EventHandler::handleEvent(const SDL_Event& e) {
-    Event event = _getEvent(e);
-
-    switch (event) {
-        case INVALID: {
-            break;
-        }
-
-        case EXIT: {
-            exit = true;
-            break;
-        }
-
+void EventHandler::_handleStartMovement(const Event& e) const {
+    switch (e) {
         case START_MOVING_UP: {
             /* proxy */
             int* cmd = new int(0);
@@ -156,6 +134,8 @@ void EventHandler::handleEvent(const SDL_Event& e) {
                     "EVENT-HANDLER | START_MOVING_UP | Enviamos un %i.\n",
                     *cmd);
             requests.push(cmd);
+
+            /* Real */
 
             break;
         }
@@ -192,15 +172,63 @@ void EventHandler::handleEvent(const SDL_Event& e) {
             break;
         }
 
-        case STOP_MOVING: {
-            int* cmd = new int(4);
-            fprintf(stderr, "EVENT-HANDLER | STOP_MOVING | Enviamos un %i.\n",
-                    *cmd);
-            requests.push(cmd);
+        default: {
+            break;
+        }
+    }
+}
 
+void EventHandler::_handleStopMovement() const {
+    int* cmd = new int(4);
+    fprintf(stderr, "EVENT-HANDLER | STOP_MOVING | Enviamos un %i.\n", *cmd);
+    requests.push(cmd);
+}
+
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+// API Pública
+
+EventHandler::EventHandler(std::atomic_bool& exit,
+                           BlockingQueue<Command*>& commands,
+                           NonBlockingQueue<int*>& requests)
+    : exit(exit),
+      commands(commands),
+      requests(requests),
+      key_pressed(UNMAPPED_KEY) {
+    _bindKeycodes();
+}
+
+void EventHandler::handleEvent(const SDL_Event& e) {
+    Event event = _getEvent(e);
+
+    switch (event) {
+        // Eventos de SDL que no nos interesan
+        case INVALID: {
             break;
         }
 
+        // Control
+        case EXIT: {
+            exit = true;
+            break;
+        }
+
+        // Movimiento
+        case START_MOVING_UP:
+        case START_MOVING_DOWN:
+        case START_MOVING_LEFT:
+        case START_MOVING_RIGHT: {
+            _handleStartMovement(event);
+            break;
+        }
+
+        case STOP_MOVING: {
+            _handleStopMovement();
+            break;
+        }
+
+        // Evento desconocido
         default: {
             break;
         }
