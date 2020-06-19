@@ -15,12 +15,12 @@
 class NotificationReply: public Notification {
    private:
     char opcode;
-    uint32_t length;
     std::string reply;
+    uint32_t length;
     
    public:
     /* Constructor */
-    NotificationReply(char opcode, uint32_t length, std::string reply);
+    NotificationReply(char opcode, std::string reply);
 
     //-----------------------------------------------------------------------------
 
