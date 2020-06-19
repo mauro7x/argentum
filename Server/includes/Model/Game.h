@@ -74,7 +74,7 @@ class Game {
         // Actualización del loop
         //-----------------------------------------------------------------------------
         
-        void actCharacters(const int it);
+        NotificationReply actCharacters(const int it);
 
         //-----------------------------------------------------------------------------
 

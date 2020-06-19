@@ -1,9 +1,9 @@
 #include <utility>
 #include <tuple>
-
 #include <cstdio> // debug
-
+//-----------------------------------------------------------------------------
 #include "../../../Common/includes/Exceptions/Exception.h"
+#include "../../../Common/includes/Protocol.h"
 //-----------------------------------------------------------------------------
 #include "../../includes/Model/Game.h"
 //-----------------------------------------------------------------------------
@@ -62,15 +62,14 @@ void Game::deleteCharacter(const InstanceId id) {
 // Actualización del loop
 //-----------------------------------------------------------------------------
 
-void Game::actCharacters(const int it) {
+NotificationReply Game::actCharacters(const int it) {
     std::unordered_map<InstanceId, Character>::iterator it_characters = this->characters.begin();
 
     while (it_characters != this->characters.end()) {
         try {
             it_characters->second.act(it);
         } catch(const CollisionWhileMovingException& e) {
-            // RESPONDER QUE NO SE PUEDE MOVER MAS.
-            fprintf(stderr, "ACT EXCEPTION: NO SE PUEDE MOVER MAS\n");
+            NotificationReply reply(ERROR_REPLY, e.what());
         }
         it_characters->second.debug();
 
