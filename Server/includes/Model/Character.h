@@ -33,6 +33,7 @@
 class Character {
     private:
         //-----------------------------------------------------------------------------
+
         unsigned int health, mana;
         const unsigned int intelligence, constitution, strength, agility;
         unsigned int max_health, max_mana;
@@ -48,10 +49,35 @@ class Character {
         bool moving;
         unsigned int moving_time_elapsed;
         unsigned int attribute_update_time_elapsed;
+
+        bool broadcast;
+
+        //-----------------------------------------------------------------------------
+
+        //-----------------------------------------------------------------------------
+
+        /*
+         * Recibe la cantidad de segundos que pasaron desde la última vez que se
+         * llamó.
+         * 
+         * Actualiza health y mana segun el paso del tiempo.
+         */
+        void _updateTimeDependantAttributes(const unsigned int seconds_elapsed);
+
+        /*
+         * Recibe el número de iteraciones que pasaron desde la última vez que
+         * se llamó.
+         * 
+         * Actualiza la posición del character según la velocidad de movimiento
+         * establecida.
+         */
+        void _updateMovement(const unsigned int it);
+
         //-----------------------------------------------------------------------------
 
     public:
         //-----------------------------------------------------------------------------
+
         Character(const CharacterCfg& init_data,
                   const RaceCfg& race, const KindCfg& kind,
                   MapContainer& map_container);
@@ -61,18 +87,25 @@ class Character {
         Character& operator=(const Character&) = delete;
         Character(Character&&) = delete;
         Character& operator=(Character&&) = delete;
+
         //-----------------------------------------------------------------------------
 
         //-----------------------------------------------------------------------------
         // Actualización de atributos.
         //-----------------------------------------------------------------------------
 
-        void act(const unsigned int it);
-
         /*
-         * Actualiza health y mana segun el paso del tiempo.
+         * Recibe la cantidad de iteraciones que ocurrieron desde la última
+         * vez que se llamó.
+         * 
+         * Actualiza los atributos del character que se ven afectados por el
+         * paso del tiempo: 
+         * 
+         * - posición [si el jugador está en movimiento]
+         * - vida [si tiene margen de recuperación]
+         * - maná [si tiene margen de recuperación]
          */
-        void _updateTimeDependantAttributes(const unsigned int seconds_elapsed);
+        void act(const unsigned int it);
 
         /*
          * Actualiza max_health, max_mana, y los limites de oro de los slots
@@ -82,7 +115,6 @@ class Character {
          */
         void updateLevelDependantAttributes();
 
-        void _updateMovement(const unsigned int it);
         //-----------------------------------------------------------------------------
 
         //-----------------------------------------------------------------------------
@@ -101,6 +133,7 @@ class Character {
         //-----------------------------------------------------------------------------
         //  Manejo de items
         //-----------------------------------------------------------------------------
+
         /*
          * Recibe la posicion del item en el inventario
          * que se quiere equipar, y lo equipa.
@@ -131,11 +164,13 @@ class Character {
          * especificada es invalida (fuera de rango).
          */
         Item* dropItem(const unsigned int inventory_position);
+
         //-----------------------------------------------------------------------------
 
         //-----------------------------------------------------------------------------
         // Modificación de maná y vida.
         //-----------------------------------------------------------------------------
+
         /*
          * Efectua la accion curativa de las pociones de mana.
          * Aumenta los puntos de mana en los points especificados,
@@ -156,11 +191,13 @@ class Character {
          * Lanza InsufficientManaException si no hay suficiente mana.
          */
         void consumeMana(const unsigned int mana_points);
+
         //-----------------------------------------------------------------------------
         
         //-----------------------------------------------------------------------------
         // Ataque y defensa
         //-----------------------------------------------------------------------------
+
         /*
          * Metodo llamado al usar báculos.        
          * 
@@ -228,11 +265,13 @@ class Character {
          * a Dead.
          */
         void die();
+
         //-----------------------------------------------------------------------------
 
         //-----------------------------------------------------------------------------
         // Obtención de estado
         //-----------------------------------------------------------------------------
+
         /* Retorna si el character es newbie o no. */
         const bool isNewbie() const;
 
@@ -247,6 +286,24 @@ class Character {
 
         /* Retorna el health máxima del character. */
         const unsigned int getMaxHealth() const;
+
+        //-----------------------------------------------------------------------------
+
+        //-----------------------------------------------------------------------------
+        // Broadcast control
+        //-----------------------------------------------------------------------------
+
+        /* 
+         * Retorna si el character debe ser broadcasteado
+         * [sufrió modificaciones] o no. 
+         */
+        const bool mustBeBroadcasted() const;
+
+        /*
+         * Es notificado que se lo ha broadcasteado.
+         */
+        void beBroadcasted();
+
         //-----------------------------------------------------------------------------
 
         void debug();
