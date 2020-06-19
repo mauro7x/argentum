@@ -2,8 +2,9 @@
 #define __COMMAND_H__
 
 //-----------------------------------------------------------------------------
-#include "../../../Common/includes/types.h"
+#include "../../../Common/includes/BlockingQueue.h"
 #include "../../../Common/includes/Protocol.h"
+#include "../../../Common/includes/types.h"
 #include "../Model/Game.h"
 
 //-----------------------------------------------------------------------------
@@ -62,10 +63,11 @@ class CommandMovement : public Command {
    private:
     InstanceId caller;
     char cmd;
-    SocketWrapper& peer;
+    BlockingQueue<Notification*>& notifications;
 
    public:
-    CommandMovement(InstanceId caller, char cmd, SocketWrapper& peer);
+    CommandMovement(InstanceId caller, char cmd,
+                    BlockingQueue<Notification*>& notifications);
     ~CommandMovement() {}
 
     void operator()(Game& game) override;
@@ -76,12 +78,13 @@ class CommandUseWeapon : public Command {
    private:
     InstanceId caller;
     char cmd;
-    SocketWrapper& peer;
+    BlockingQueue<Notification*>& notifications;
     const uint32_t x_coord;
     const uint32_t y_coord;
 
    public:
-    CommandUseWeapon(InstanceId caller, char cmd, SocketWrapper& peer,
+    CommandUseWeapon(InstanceId caller, char cmd,
+                     BlockingQueue<Notification*>& notifications,
                      const uint32_t x_coord, const uint32_t y_coord);
     ~CommandUseWeapon() {}
 
@@ -93,11 +96,12 @@ class CommandEquip : public Command {
    private:
     InstanceId caller;
     char cmd;
-    SocketWrapper& peer;
+    BlockingQueue<Notification*>& notifications;
     const uint8_t n_slot;
 
    public:
-    CommandEquip(InstanceId caller, char cmd, SocketWrapper& peer,
+    CommandEquip(InstanceId caller, char cmd,
+                 BlockingQueue<Notification*>& notifications,
                  const uint8_t n_slot);
     ~CommandEquip() {}
 
@@ -108,10 +112,11 @@ class CommandMediate : public Command {
    private:
     InstanceId caller;
     char cmd;
-    SocketWrapper& peer;
+    BlockingQueue<Notification*>& notifications;
 
    public:
-    CommandMediate(InstanceId caller, char cmd, SocketWrapper& peer);
+    CommandMediate(InstanceId caller, char cmd,
+                   BlockingQueue<Notification*>& notifications);
     ~CommandMediate() {}
 
     void operator()(Game& game) override;
@@ -121,10 +126,11 @@ class CommandResurrect : public Command {
    private:
     InstanceId caller;
     char cmd;
-    SocketWrapper& peer;
+    BlockingQueue<Notification*>& notifications;
 
    public:
-    CommandResurrect(InstanceId caller, char cmd, SocketWrapper& peer);
+    CommandResurrect(InstanceId caller, char cmd,
+                     BlockingQueue<Notification*>& notifications);
     ~CommandResurrect() {}
 
     void operator()(Game& game) override;
@@ -134,12 +140,13 @@ class CommandList : public Command {
    private:
     InstanceId caller;
     char cmd;
-    SocketWrapper& peer;
+    BlockingQueue<Notification*>& notifications;
     const uint32_t x_coord;
     const uint32_t y_coord;
 
    public:
-    CommandList(InstanceId caller, char cmd, SocketWrapper& peer,
+    CommandList(InstanceId caller, char cmd,
+                BlockingQueue<Notification*>& notifications,
                 const uint32_t x_coord, const uint32_t y_coord);
     ~CommandList() {}
 
@@ -150,14 +157,15 @@ class CommandDepositItemOnBank : public Command {
    private:
     InstanceId caller;
     char cmd;
-    SocketWrapper& peer;
+    BlockingQueue<Notification*>& notifications;
     const uint32_t x_coord;
     const uint32_t y_coord;
     const uint8_t n_slot;
     const uint32_t amount;
 
    public:
-    CommandDepositItemOnBank(InstanceId caller, char cmd, SocketWrapper& peer,
+    CommandDepositItemOnBank(InstanceId caller, char cmd,
+                             BlockingQueue<Notification*>& notifications,
                              const uint32_t x_coord, const uint32_t y_coord,
                              const uint8_t n_slot, const uint32_t amount);
     ~CommandDepositItemOnBank() {}
@@ -169,7 +177,7 @@ class CommandWithdrawItemFromBank : public Command {
    private:
     InstanceId caller;
     char cmd;
-    SocketWrapper& peer;
+    BlockingQueue<Notification*>& notifications;
     const uint32_t x_coord;
     const uint32_t y_coord;
     const uint32_t item_id;
@@ -177,9 +185,9 @@ class CommandWithdrawItemFromBank : public Command {
 
    public:
     CommandWithdrawItemFromBank(InstanceId caller, char cmd,
-                                SocketWrapper& peer, const uint32_t x_coord,
-                                const uint32_t y_coord, const uint32_t item_id,
-                                const uint32_t amount);
+                                BlockingQueue<Notification*>& notifications,
+                                const uint32_t x_coord, const uint32_t y_coord,
+                                const uint32_t item_id, const uint32_t amount);
     ~CommandWithdrawItemFromBank() {}
 
     void operator()(Game& game) override;
@@ -189,13 +197,14 @@ class CommandGoldMove : public Command {
    private:
     InstanceId caller;
     char cmd;
-    SocketWrapper& peer;
+    BlockingQueue<Notification*>& notifications;
     const uint32_t x_coord;
     const uint32_t y_coord;
     const uint32_t amount;
 
    public:
-    CommandGoldMove(InstanceId caller, char cmd, SocketWrapper& peer,
+    CommandGoldMove(InstanceId caller, char cmd,
+                    BlockingQueue<Notification*>& notifications,
                     const uint32_t x_coord, const uint32_t y_coord,
                     const uint32_t amount);
     ~CommandGoldMove() {}
@@ -207,14 +216,15 @@ class CommandBuy : public Command {
    private:
     InstanceId caller;
     char cmd;
-    SocketWrapper& peer;
+    BlockingQueue<Notification*>& notifications;
     const uint32_t x_coord;
     const uint32_t y_coord;
     const uint32_t item_id;
     const uint32_t amount;
 
    public:
-    CommandBuy(InstanceId caller, char cmd, SocketWrapper& peer,
+    CommandBuy(InstanceId caller, char cmd,
+               BlockingQueue<Notification*>& notifications,
                const uint32_t x_coord, const uint32_t y_coord,
                const uint32_t item_id, const uint32_t amount);
     ~CommandBuy() {}
@@ -226,14 +236,15 @@ class CommandSell : public Command {
    private:
     InstanceId caller;
     char cmd;
-    SocketWrapper& peer;
+    BlockingQueue<Notification*>& notifications;
     const uint32_t x_coord;
     const uint32_t y_coord;
     const uint8_t n_slot;
     const uint32_t amount;
 
    public:
-    CommandSell(InstanceId caller, char cmd, SocketWrapper& peer,
+    CommandSell(InstanceId caller, char cmd,
+                BlockingQueue<Notification*>& notifications,
                 const uint32_t x_coord, const uint32_t y_coord,
                 const uint8_t n_slot, const uint32_t amount);
     ~CommandSell() {}
@@ -245,10 +256,11 @@ class CommandTake : public Command {
    private:
     InstanceId caller;
     char cmd;
-    SocketWrapper& peer;
+    BlockingQueue<Notification*>& notifications;
 
    public:
-    CommandTake(InstanceId caller, char cmd, SocketWrapper& peer);
+    CommandTake(InstanceId caller, char cmd,
+                BlockingQueue<Notification*>& notifications);
     ~CommandTake() {}
 
     void operator()(Game& game) override;
@@ -258,12 +270,13 @@ class CommandDrop : public Command {
    private:
     InstanceId caller;
     char cmd;
-    SocketWrapper& peer;
+    BlockingQueue<Notification*>& notifications;
     const uint8_t n_slot;
     const uint32_t amount;
 
    public:
-    CommandDrop(InstanceId caller, char cmd, SocketWrapper& peer,
+    CommandDrop(InstanceId caller, char cmd,
+                BlockingQueue<Notification*>& notifications,
                 const uint8_t n_slot, const uint32_t amount);
     ~CommandDrop() {}
 
