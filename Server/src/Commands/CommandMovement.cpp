@@ -11,7 +11,7 @@ void CommandMovement::exec(Game& game) {
     NotificationReply* reply = NULL;
     switch (cmd) {
         case START_MOVING_UP_CMD: {
-            reply =game.startMovingUp(caller);
+            reply = game.startMovingUp(caller);
             notifications.push(reply);
             break;
         }

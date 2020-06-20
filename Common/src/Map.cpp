@@ -1,5 +1,5 @@
 #include "../includes/Map.h"
-#include "../../Server/includes/Model/RandomNumberGenerator.h"
+#include "../includes/RandomNumberGenerator.h"
 //-----------------------------------------------------------------------------
 // Métodos privados
 

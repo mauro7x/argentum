@@ -1,7 +1,7 @@
 #include "../includes/MapContainer.h"
 
 // Provisoriamente para map spawning selection
-#include "../../Server/includes/Model/RandomNumberGenerator.h"
+#include "../includes/RandomNumberGenerator.h"
 
 //-----------------------------------------------------------------------------
 // Métodos privados

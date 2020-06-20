@@ -3,7 +3,7 @@
 #include <cstdlib>
 
 #include "../../includes/Model/Formulas.h"
-#include "../../includes/Model/RandomNumberGenerator.h"
+#include "../../../Common/includes/RandomNumberGenerator.h"
 
 // Level
 const unsigned int Formulas::calculateLevelUpXP(const unsigned int level) {

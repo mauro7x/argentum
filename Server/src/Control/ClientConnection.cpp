@@ -111,9 +111,9 @@ void ClientConnection::_receiver() {
             switch (opcode) {
                     // Identificar comando, terminar de recibirlo, crearlo e
                     // insertarlo en la cola.
-                case START_MOVING_UP_CMD || START_MOVING_DOWN_CMD ||
+                case (START_MOVING_UP_CMD || START_MOVING_DOWN_CMD ||
                     START_MOVING_LEFT_CMD || START_MOVING_RIGHT_CMD ||
-                    STOP_MOVING_CMD: {
+                    STOP_MOVING_CMD): {
                     Command* command =
                         new CommandMovement(this->id, opcode, notifications);
                     break;
