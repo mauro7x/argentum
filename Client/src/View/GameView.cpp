@@ -28,6 +28,18 @@ void GameView::_init() {
                            SDL_GetError());
     }
 
+    /* Iniciamos el sistema de TTF */
+    if (TTF_Init() == -1) {
+        throw SDLException("Error in function TTF_Init()\nSDL_Error: %s",
+                           SDL_GetError());
+    }
+
+    /* Iniciamos el sistema de audio */
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
+        throw SDLException("Error in function Mix_OpenAudio()\nSDL_Error: %s",
+                           SDL_GetError());
+    }
+
     /* Setteamos el frame-rate */
     int fps = gui_config["fps"];
     rate = 1000 / fps; /* ms por cada frame (floor) */
@@ -234,6 +246,8 @@ void GameView::operator()() {
 }
 
 GameView::~GameView() {
+    Mix_Quit();
+    TTF_Quit();
     IMG_Quit();
     SDL_Quit();
 }
