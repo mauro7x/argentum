@@ -1,5 +1,5 @@
-#ifndef __CONSOLE_H__
-#define __CONSOLE_H__
+#ifndef __USER_STATS_H__
+#define __USER_STATS_H__
 
 //-----------------------------------------------------------------------------
 #include <SDL2/SDL.h>
@@ -13,19 +13,23 @@
 #include "../../../Common/includes/JSON.h"
 #include "../paths.h"
 #include "HUDComponent.h"
+#include "Player.h"
 #include "Renderer.h"
 #include "Texture.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 
-class Console : public HUDComponent {
+class UserStats : public HUDComponent {
    private:
+    const Player& player;
+
     // Texturas a renderizar
+    Texture base;
 
    public:
     /* Constructor */
-    Console(const Renderer* renderer);
+    UserStats(const Renderer* renderer, const Player& player);
 
     //-------------------------------------------------------------------------
 
@@ -41,9 +45,9 @@ class Console : public HUDComponent {
     //-------------------------------------------------------------------------
 
     /* Destructor */
-    ~Console();
+    ~UserStats();
 };
 
 //-----------------------------------------------------------------------------
 
-#endif  // __CONSOLE_H__
+#endif  // __USER_STATS_H__

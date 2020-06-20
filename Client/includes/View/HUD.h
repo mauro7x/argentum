@@ -3,42 +3,60 @@
 
 //-----------------------------------------------------------------------------
 #include <SDL2/SDL.h>
+//-----------------------------------------------------------------------------
 
+//-----------------------------------------------------------------------------
 #include <string>
+//-----------------------------------------------------------------------------
 
+//-----------------------------------------------------------------------------
 #include "../../../Common/includes/JSON.h"
 #include "../paths.h"
+#include "Console.h"
+#include "Player.h"
 #include "Renderer.h"
 #include "Texture.h"
+#include "UserInfo.h"
+#include "UserInventory.h"
+#include "UserStats.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 
-class HUDProxy {
+class HUD {
    private:
     bool initialized;
     const Renderer* g_renderer;
+    const Player& player;
+
+    // Offsets de renderizado
     int offset_x, offset_y;
     int w, h;
 
-    /* Proxy stuff */
-    Texture texture;
+    // Componentes
+    Console console;
+    UserInfo user_info;
+    UserInventory user_inventory;
+    UserStats user_stats;
+
+    // Capa frontal de decoración
+    Texture upper_layer;
 
    public:
     /* Constructor */
-    HUDProxy(const Renderer* renderer);
+    HUD(const Renderer* renderer, const Player& player);
 
     /* Deshabilitamos el constructor por copia. */
-    HUDProxy(const HUDProxy&) = delete;
+    HUD(const HUD&) = delete;
 
     /* Deshabilitamos el operador= para copia.*/
-    HUDProxy& operator=(const HUDProxy&) = delete;
+    HUD& operator=(const HUD&) = delete;
 
     /* Deshabilitamos el constructor por movimiento. */
-    HUDProxy(HUDProxy&& other) = delete;
+    HUD(HUD&& other) = delete;
 
     /* Deshabilitamos el operador= para movimiento. */
-    HUDProxy& operator=(HUDProxy&& other) = delete;
+    HUD& operator=(HUD&& other) = delete;
 
     //-------------------------------------------------------------------------
 
@@ -54,7 +72,7 @@ class HUDProxy {
     //-------------------------------------------------------------------------
 
     /* Destructor */
-    ~HUDProxy();
+    ~HUD();
 };
 
 //-----------------------------------------------------------------------------

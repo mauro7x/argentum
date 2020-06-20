@@ -80,9 +80,6 @@ void GameView::_init() {
     /* Iniciamos la HUD */
     hud.init(gui_config["hud"]);
 
-    /* Iniciamos la consola */
-    console.init(gui_config["console"]);
-
     /* Iniciamos los contenedores */
     characters.init(tile_w, tile_h, tile_movement_time);
     creatures.init(tile_w, tile_h, tile_movement_time);
@@ -90,7 +87,6 @@ void GameView::_init() {
 
 void GameView::_loadMedia() {
     hud.loadMedia();
-    console.loadMedia();
     map.loadMedia();
     unit_sprites.loadMedia();
 }
@@ -126,7 +122,6 @@ void GameView::_loopIteration(const int it) {
     /* Renderizamos y presentamos la pantalla */
     stage.render();
     hud.render();
-    console.render();
     renderer.presentScreen();
 
     auto t2 = std::chrono::steady_clock::now();
@@ -150,16 +145,15 @@ GameView::GameView(BlockingQueue<Command*>& commands,
       renderer(window, camera),
       rate(0),
 
-      // Componentes de la vista
-      hud(&renderer),
-      console(&renderer),
-      map(&renderer),
-
       // Unidades y contenedores de unidades
       unit_sprites(&renderer),
       player(&renderer, &unit_sprites),
       characters(&renderer, &unit_sprites),
       creatures(&renderer, &unit_sprites),
+
+      // Componentes de la vista
+      hud(&renderer, player),
+      map(&renderer),
 
       // Escenario
       stage(map, player, characters, creatures),

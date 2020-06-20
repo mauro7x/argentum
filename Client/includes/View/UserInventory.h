@@ -1,5 +1,5 @@
-#ifndef __CONSOLE_H__
-#define __CONSOLE_H__
+#ifndef __USER_INVENTORY_H__
+#define __USER_INVENTORY_H__
 
 //-----------------------------------------------------------------------------
 #include <SDL2/SDL.h>
@@ -13,19 +13,23 @@
 #include "../../../Common/includes/JSON.h"
 #include "../paths.h"
 #include "HUDComponent.h"
+#include "Player.h"
 #include "Renderer.h"
 #include "Texture.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 
-class Console : public HUDComponent {
+class UserInventory : public HUDComponent {
    private:
+    const Player& player;
+
     // Texturas a renderizar
+    Texture base;
 
    public:
     /* Constructor */
-    Console(const Renderer* renderer);
+    UserInventory(const Renderer* renderer, const Player& player);
 
     //-------------------------------------------------------------------------
 
@@ -41,9 +45,9 @@ class Console : public HUDComponent {
     //-------------------------------------------------------------------------
 
     /* Destructor */
-    ~Console();
+    ~UserInventory();
 };
 
 //-----------------------------------------------------------------------------
 
-#endif  // __CONSOLE_H__
+#endif  // __USER_INVENTORY_H__

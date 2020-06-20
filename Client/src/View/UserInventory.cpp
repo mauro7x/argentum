@@ -1,4 +1,4 @@
-#include "../../includes/View/Console.h"
+#include "../../includes/View/UserInventory.h"
 
 //-----------------------------------------------------------------------------
 // Métodos privados
@@ -8,11 +8,12 @@
 //-----------------------------------------------------------------------------
 // API Pública
 
-Console::Console(const Renderer* renderer) : HUDComponent(renderer) {}
+UserInventory::UserInventory(const Renderer* renderer, const Player& player)
+    : HUDComponent(renderer), player(player) {}
 
-void Console::init(const json& config) {
+void UserInventory::init(const json& config) {
     if (initialized) {
-        throw Exception("Console already initialized.");
+        throw Exception("UserInventory already initialized.");
     }
 
     offset_x = config["offset"]["x"];
@@ -23,27 +24,25 @@ void Console::init(const json& config) {
     initialized = true;
 }
 
-void Console::loadMedia() {
+void UserInventory::loadMedia() {
     if (!initialized) {
-        throw Exception("Console not initialized.");
+        throw Exception("UserInventory not initialized.");
     }
 
     // Cargar media
+    base.loadFromFile(g_renderer, HUD_USER_INVENTORY_BASE_FP);
 }
 
-void Console::render() const {
+void UserInventory::render() const {
     if (!initialized) {
-        throw Exception("Console not initialized.");
+        throw Exception("UserInventory not initialized.");
     }
 
     // Renderizar
-
-    /*
     SDL_Rect render_quad = {offset_x, offset_y, w, h};
-    g_renderer->render(texture.getTexture(), &render_quad);
-    */
+    g_renderer->render(base.getTexture(), &render_quad);
 }
 
-Console::~Console() {}
+UserInventory::~UserInventory() {}
 
 //-----------------------------------------------------------------------------
