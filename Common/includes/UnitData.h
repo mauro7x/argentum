@@ -24,7 +24,7 @@ struct UnitData {
 struct CharacterData {
     UnitData basic_data;
     Id head_id, body_id;
-    Id helmet_id, armour_id, shield_id, weapon_id;
+    EquipmentData equipment;
 };
 
 struct PlayerData : public CharacterData {
@@ -34,7 +34,6 @@ struct PlayerData : public CharacterData {
     uint32_t level, exp, levelup_exp;
 
     InventoryData inventory;
-    EquipmentData equipment;
 };
 
 struct CreatureData {

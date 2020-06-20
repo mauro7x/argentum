@@ -10,10 +10,10 @@ void Character::_copyData(const CharacterData& init_data) {
     // Ids gráficos
     head_id = init_data.head_id;
     body_id = init_data.body_id;
-    helmet_id = init_data.helmet_id;
-    armour_id = init_data.armour_id;
-    shield_id = init_data.shield_id;
-    weapon_id = init_data.weapon_id;
+    helmet_id = init_data.equipment[HELMET];
+    armour_id = init_data.equipment[ARMOUR];
+    shield_id = init_data.equipment[SHIELD];
+    weapon_id = init_data.equipment[WEAPON];
 }
 
 //-----------------------------------------------------------------------------

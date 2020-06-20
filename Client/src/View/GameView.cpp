@@ -180,10 +180,10 @@ void GameView::operator()() {
         init_data.basic_data = {1, 0, 0, DOWN_ORIENTATION};
         init_data.head_id = 2000;
         init_data.body_id = 2100;
-        init_data.helmet_id = 0;
-        init_data.armour_id = 0;
-        init_data.shield_id = 0;
-        init_data.weapon_id = 1000;
+        init_data.equipment[HELMET] = 0;
+        init_data.equipment[ARMOUR] = 0;
+        init_data.equipment[SHIELD] = 0;
+        init_data.equipment[WEAPON] = 1000;
         init_data.health = 100;
         init_data.max_health = 100;
         init_data.mana = 100;
