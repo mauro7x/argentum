@@ -7,7 +7,7 @@ CommandMovement::CommandMovement(InstanceId caller, char cmd,
                                  BlockingQueue<Notification*>& notifications)
     : caller(caller), cmd(cmd), notifications(notifications) {}
 
-void CommandMovement::operator()(Game& game) {
+void CommandMovement::exec(Game& game) {
     NotificationReply* reply = NULL;
     switch (cmd) {
         case START_MOVING_UP_CMD: {

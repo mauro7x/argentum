@@ -39,7 +39,7 @@ class Command {
     //-------------------------------------------------------------------------
 
     /* Ejecución polimórfica del comando */
-    virtual void operator()(Game& game) = 0;
+    virtual void exec(Game& game) = 0;
 
     //-------------------------------------------------------------------------
 
@@ -55,7 +55,7 @@ class CommandProxy : public Command {
     CommandProxy(InstanceId caller, char cmd);
     ~CommandProxy();
 
-    virtual void operator()(Game& game) override;
+    virtual void exec(Game& game) override;
 };
 
 // comando para los movimientos
@@ -70,7 +70,7 @@ class CommandMovement : public Command {
                     BlockingQueue<Notification*>& notifications);
     ~CommandMovement() {}
 
-    void operator()(Game& game) override;
+    void exec(Game& game) override;
 };
 
 // comando de usar armas
@@ -88,7 +88,7 @@ class CommandUseWeapon : public Command {
                      const uint32_t x_coord, const uint32_t y_coord);
     ~CommandUseWeapon() {}
 
-    void operator()(Game& game) override;
+    void exec(Game& game) override;
 };
 
 // comando para equipar las armas
@@ -105,7 +105,7 @@ class CommandEquip : public Command {
                  const uint8_t n_slot);
     ~CommandEquip() {}
 
-    void operator()(Game& game) override;
+    void exec(Game& game) override;
 };
 
 class CommandMediate : public Command {
@@ -119,7 +119,7 @@ class CommandMediate : public Command {
                    BlockingQueue<Notification*>& notifications);
     ~CommandMediate() {}
 
-    void operator()(Game& game) override;
+    void exec(Game& game) override;
 };
 
 class CommandResurrect : public Command {
@@ -133,7 +133,7 @@ class CommandResurrect : public Command {
                      BlockingQueue<Notification*>& notifications);
     ~CommandResurrect() {}
 
-    void operator()(Game& game) override;
+    void exec(Game& game) override;
 };
 
 class CommandList : public Command {
@@ -150,7 +150,7 @@ class CommandList : public Command {
                 const uint32_t x_coord, const uint32_t y_coord);
     ~CommandList() {}
 
-    void operator()(Game& game) override;
+    void exec(Game& game) override;
 };
 
 class CommandDepositItemOnBank : public Command {
@@ -170,7 +170,7 @@ class CommandDepositItemOnBank : public Command {
                              const uint8_t n_slot, const uint32_t amount);
     ~CommandDepositItemOnBank() {}
 
-    void operator()(Game& game) override;
+    void exec(Game& game) override;
 };
 
 class CommandWithdrawItemFromBank : public Command {
@@ -190,7 +190,7 @@ class CommandWithdrawItemFromBank : public Command {
                                 const uint32_t item_id, const uint32_t amount);
     ~CommandWithdrawItemFromBank() {}
 
-    void operator()(Game& game) override;
+    void exec(Game& game) override;
 };
 
 class CommandGoldMove : public Command {
@@ -209,7 +209,7 @@ class CommandGoldMove : public Command {
                     const uint32_t amount);
     ~CommandGoldMove() {}
 
-    void operator()(Game& game) override;
+    void exec(Game& game) override;
 };
 
 class CommandBuy : public Command {
@@ -229,7 +229,7 @@ class CommandBuy : public Command {
                const uint32_t item_id, const uint32_t amount);
     ~CommandBuy() {}
 
-    void operator()(Game& game) override;
+    void exec(Game& game) override;
 };
 
 class CommandSell : public Command {
@@ -249,7 +249,7 @@ class CommandSell : public Command {
                 const uint8_t n_slot, const uint32_t amount);
     ~CommandSell() {}
 
-    void operator()(Game& game) override;
+    void exec(Game& game) override;
 };
 
 class CommandTake : public Command {
@@ -263,7 +263,7 @@ class CommandTake : public Command {
                 BlockingQueue<Notification*>& notifications);
     ~CommandTake() {}
 
-    void operator()(Game& game) override;
+    void exec(Game& game) override;
 };
 
 class CommandDrop : public Command {
@@ -280,7 +280,7 @@ class CommandDrop : public Command {
                 const uint8_t n_slot, const uint32_t amount);
     ~CommandDrop() {}
 
-    void operator()(Game& game) override;
+    void exec(Game& game) override;
 };
 
 //-----------------------------------------------------------------------------
