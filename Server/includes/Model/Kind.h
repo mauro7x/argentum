@@ -5,6 +5,8 @@
 
 #include "config_structs.h"
 
+#include "../../../Common/includes/types.h"
+
 /*
  * Clase:
  *     Mago, clerigo, paladin, guerrero
@@ -16,7 +18,7 @@
  */
 class Kind {
     public:
-        const unsigned int id;
+        const Id id;
         const std::string name;
 
         const unsigned int max_health_factor;
