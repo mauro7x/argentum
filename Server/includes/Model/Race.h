@@ -5,6 +5,8 @@
 
 #include "config_structs.h"
 
+#include "../../../Common/includes/types.h"
+
 /*
  * Raza:
  *      Humanos, elfos, enanos, gnomos.
@@ -15,8 +17,11 @@
  * que intervienen en el calculo de atributos.
  */
 struct Race {
-        const unsigned int id;
+        const Id id;
         const std::string name;
+
+        const Id head_id;
+        const Id body_id;
 
         const unsigned int max_health_factor;
         const unsigned int max_mana_factor;

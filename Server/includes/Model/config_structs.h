@@ -6,14 +6,10 @@
 #include <string>
 
 #include "../../../Common/includes/types.h"
+#include "../../../Common/includes/Inventory.h"
 #include "../../../Common/includes/Orientation.h"
 //-----------------------------------------------------------------------------
 
-//-----------------------------------------------------------------------------
-#ifndef __WEARABLE_TYPE_H__
-#define __WEARABLE_TYPE_H__
-enum WearableType { HELMET, ARMOUR, SHIELD, WEAPON, N_WEARABLE_ITEMS };
-#endif
 //-----------------------------------------------------------------------------
 #ifndef __SPELL_TYPE_H__
 #define __SPELL_TYPE_H__
@@ -87,6 +83,10 @@ struct PotionCfg {
 struct RaceCfg {
     Id id;
     std::string name;
+
+    Id head_id;
+    Id body_id;
+
     uint8_t max_health_factor;
     uint8_t max_mana_factor;
     uint8_t health_recovery_factor;
