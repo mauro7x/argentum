@@ -2,6 +2,9 @@
 #define __SOCKET_WRAPPER_H__
 
 //-----------------------------------------------------------------------------
+#include <cstdint>
+#include <vector>
+
 #include "../Exceptions/ClosedSocketException.h"
 #include "../Exceptions/Exception.h"
 #include "Socket.h"
@@ -81,13 +84,17 @@ class SocketWrapper : public Socket {
     // tipos de datos específicos. Aplica la misma documentación para
     // >> que para recv, y para << que para send.
 
-    ssize_t operator<<(uint32_t n) const;
-    ssize_t operator>>(uint32_t& n) const;
-
-    ssize_t operator<<(const std::string& msg) const;
-
     ssize_t operator<<(char c) const;
     ssize_t operator>>(char& c) const;
+
+    ssize_t operator<<(const uint8_t& n) const;
+    ssize_t operator>>(uint8_t& n) const;
+
+    ssize_t operator<<(const uint32_t& n) const;
+    ssize_t operator>>(uint32_t& n) const;
+
+    ssize_t operator<<(const std::vector<uint8_t>& v) const;
+    ssize_t operator>>(std::vector<uint8_t>& v) const;
 
     //---------------------------------------------------------------------
 
