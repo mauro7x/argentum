@@ -92,6 +92,8 @@ class Map {
     const bool moveOcuppant(const int x, const int y,
                             const Orientation& orientation);
 
+    void establishCharacterSpawningPosition(int& x, int& y) const;
+
     //-------------------------------------------------------------------------
 
     /* Destructor */

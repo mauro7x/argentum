@@ -46,6 +46,8 @@ class MapContainer {
     /* Obtiene el mapa correspondiente para lectura */
     const Map& operator[](const Id id) const;
 
+    const Id getCharacterSpawningMap() const;
+
     //-------------------------------------------------------------------------
 
     /* Destructor */
