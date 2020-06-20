@@ -203,7 +203,7 @@ const bool Map::moveOcuppant(const int x, const int y,
     return _moveOcuppant(from_tile, to_tile);
 }
 
-void Map::establishCharacterSpawningPosition(int& x, int& y) const {
+void Map::establishCharacterSpawningPosition(InstanceId id, int& x, int& y) {
     bool valid_position = false;
     RandomNumberGenerator gen;
     while (!valid_position) {
@@ -213,6 +213,9 @@ void Map::establishCharacterSpawningPosition(int& x, int& y) const {
         if (!this->getTile(x, y).collision)
             valid_position = true;
     }
+    Tile& tile = this->_getTile(x, y);
+    tile.collision = true;
+    tile.occupant_id = id;
 }
 
 Map::~Map() {}

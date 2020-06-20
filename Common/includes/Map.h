@@ -6,9 +6,9 @@
 
 #include "Exceptions/Exception.h"
 #include "JSON.h"
+#include "Orientation.h"
 #include "Tile.h"
 #include "types.h"
-#include "Orientation.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -92,7 +92,7 @@ class Map {
     const bool moveOcuppant(const int x, const int y,
                             const Orientation& orientation);
 
-    void establishCharacterSpawningPosition(int& x, int& y) const;
+    void establishCharacterSpawningPosition(InstanceId id, int& x, int& y);
 
     //-------------------------------------------------------------------------
 

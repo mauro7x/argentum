@@ -35,7 +35,7 @@ const int Game::newCharacter(CharacterCfg& init_data) {
     int spawning_x_coord;
     int spawning_y_coord;
     this->map_container[spawning_map_id].establishCharacterSpawningPosition(
-        spawning_x_coord, spawning_y_coord);
+        this->next_instance_id, spawning_x_coord, spawning_y_coord);
 
     this->characters.emplace(
         std::piecewise_construct, std::forward_as_tuple(this->next_instance_id),
