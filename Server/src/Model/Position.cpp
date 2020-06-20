@@ -24,6 +24,10 @@ const int Position::getY() const {
     return this->y;
 }
 
+const Orientation Position::getOrientation() const {
+    return this->orientation;
+}
+
 const unsigned int Position::getDistance(const Position& other) const {
     return abs(this->x - other.getX()) + abs(this->y - other.getY());
 }
