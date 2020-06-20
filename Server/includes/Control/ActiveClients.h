@@ -6,6 +6,7 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+#include "../../../Common/includes/Exceptions/Exception.h"
 #include "../../../Common/includes/NonBlockingQueue.h"
 #include "../../../Common/includes/Socket/SocketWrapper.h"
 #include "../../../Common/includes/types.h"
@@ -13,6 +14,7 @@
 
 //-----------------------------------------------------------------------------
 #include "ClientConnection.h"
+#include "Notification.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -51,6 +53,9 @@ class ActiveClients {
 
     /* Elimina un cliente que ha finalizado su conexión */
     void remove(const InstanceId id);
+
+    /* Notifica a un cliente en particular */
+    void notify(const InstanceId& id, Notification* notification);
 
     /* Termina todas las conexiones forzosamente */
     void stop();

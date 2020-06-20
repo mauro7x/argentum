@@ -1,127 +1,131 @@
 #ifndef __GAME_H__
 #define __GAME_H__
 //-----------------------------------------------------------------------------
-#include <unordered_map>
 #include <cstdint>
+#include <unordered_map>
 //-----------------------------------------------------------------------------
 #include "../../../Common/includes/MapContainer.h"
 #include "../../../Common/includes/types.h"
 //-----------------------------------------------------------------------------
-#include "../Control/NotificationReply.h"
+#include "../Control/Notification.h"
 //-----------------------------------------------------------------------------
-#include "Config.h"
-#include "config_structs.h"
 #include "Character.h"
+#include "Config.h"
 #include "ItemsContainer.h"
+#include "config_structs.h"
 //-----------------------------------------------------------------------------
+
+// Forward declaration
+class ActiveClients;
+
 class Game {
-    private:
-        //-----------------------------------------------------------------------------
-        // Game components configuration files:
-        //-----------------------------------------------------------------------------
-        Config<RaceCfg> races;
-        Config<KindCfg> kinds;
-        //-----------------------------------------------------------------------------
+   private:
+    //-----------------------------------------------------------------------------
+    // Game components configuration files:
+    //-----------------------------------------------------------------------------
+    Config<RaceCfg> races;
+    Config<KindCfg> kinds;
+    //-----------------------------------------------------------------------------
 
-        //-----------------------------------------------------------------------------
-        // Game entities
-        //-----------------------------------------------------------------------------
-        MapContainer map_container;
-        ItemsContainer items;
-        std::unordered_map<InstanceId, Character> characters;
-        // std::unordered_map<int, Creatures> creatures; Falta implementar
-        //-----------------------------------------------------------------------------
-        InstanceId next_instance_id;
+    //-----------------------------------------------------------------------------
+    // Game entities
+    //-----------------------------------------------------------------------------
+    MapContainer map_container;
+    ItemsContainer items;
+    std::unordered_map<InstanceId, Character> characters;
+    // std::unordered_map<int, Creatures> creatures; Falta implementar
+    //-----------------------------------------------------------------------------
+    InstanceId next_instance_id;
 
-    public:
-        //-----------------------------------------------------------------------------
-        Game();
-        ~Game();
+    ActiveClients& active_clients;
 
-        Game(const Game&) = delete;
-        Game& operator=(const Game&) = delete;
-        Game(Game&& other) = delete;
-        Game& operator=(Game&& other) = delete;
-        //-----------------------------------------------------------------------------
+   public:
+    //-----------------------------------------------------------------------------
+    Game(ActiveClients& active_clients);
+    ~Game();
 
-        //-----------------------------------------------------------------------------
-        // DEFINIR COMO VIENE EL PLAYERDATA SI ES NUEVO!.
-        /*
-         * Recibe un struct CharacterCfg con toda la información persistida
-         * del character, o bien la información necesaria para crear un nuevo
-         * character.
-         * 
-         * Retorna el id único de instancia de dicho character, mediante el cual
-         * se interactuará con el mismo.
-         * 
-         * Lanza Exception si alguno de los id no mapea a ninguna raza/clase.
-         */
-        const int newCharacter(CharacterCfg& init_data);
+    Game(const Game&) = delete;
+    Game& operator=(const Game&) = delete;
+    Game(Game&& other) = delete;
+    Game& operator=(Game&& other) = delete;
+    //-----------------------------------------------------------------------------
 
-        /*
-        * Llamar a este metodo ante la desconexión de un character.
-        * 
-        * Recibe el id de instancia del character a eliminar.
-        * Lo persiste, y luego lo elimina del juego.
-        * 
-        * Lanza Exception si el id especificado no corresponde a ningún
-        * character en el juego.
-        */
-        void deleteCharacter(const InstanceId id);
-        //-----------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------
+    // DEFINIR COMO VIENE EL PLAYERDATA SI ES NUEVO!.
+    /*
+     * Recibe un struct CharacterCfg con toda la información persistida
+     * del character, o bien la información necesaria para crear un nuevo
+     * character.
+     *
+     * Retorna el id único de instancia de dicho character, mediante el cual
+     * se interactuará con el mismo.
+     *
+     * Lanza Exception si alguno de los id no mapea a ninguna raza/clase.
+     */
+    const int newCharacter(CharacterCfg& init_data);
 
-        //-----------------------------------------------------------------------------
-        // Actualización del loop
-        //-----------------------------------------------------------------------------
-        
-        NotificationReply* actCharacters(const int it);
+    /*
+     * Llamar a este metodo ante la desconexión de un character.
+     *
+     * Recibe el id de instancia del character a eliminar.
+     * Lo persiste, y luego lo elimina del juego.
+     *
+     * Lanza Exception si el id especificado no corresponde a ningún
+     * character en el juego.
+     */
+    void deleteCharacter(const InstanceId id);
+    //-----------------------------------------------------------------------------
 
-        //-----------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------
+    // Actualización del loop
+    //-----------------------------------------------------------------------------
 
-        //-----------------------------------------------------------------------------
-        NotificationReply* startMovingUp(const Id caller);
-        NotificationReply* startMovingDown(const Id caller);
-        NotificationReply* startMovingLeft(const Id caller);
-        NotificationReply* startMovingRight(const Id caller);
+    void actCharacters(const int it);
 
-        NotificationReply* stopMoving(const Id caller);
+    //-----------------------------------------------------------------------------
 
-        NotificationReply* useWeapon(const Id caller, 
-                       const uint32_t x_coord, const uint32_t y_coord);
+    //-----------------------------------------------------------------------------
+    void startMovingUp(const Id caller);
+    void startMovingDown(const Id caller);
+    void startMovingLeft(const Id caller);
+    void startMovingRight(const Id caller);
 
-        NotificationReply* equip(const Id caller, const uint8_t n_slot);
+    void stopMoving(const Id caller);
 
-        NotificationReply* meditate(const Id caller);
+    void useWeapon(const Id caller, const uint32_t x_coord,
+                   const uint32_t y_coord);
 
-        NotificationReply* resurrect(const Id caller);
+    void equip(const Id caller, const uint8_t n_slot);
 
-        NotificationReply* list(const Id caller, const uint32_t x_coord, const uint32_t y_coord);
+    void meditate(const Id caller);
 
-        NotificationReply* depositItemOnBank(const Id caller, 
-                               const uint32_t x_coord, const uint32_t y_coord,
-                               const uint8_t n_slot, uint32_t amount);
-        NotificationReply* withdrawItemFromBank(const Id caller, 
-                                  const uint32_t x_coord, const uint32_t y_coord,
-                                  const uint32_t item_id, const uint32_t amount);
+    void resurrect(const Id caller);
 
-        NotificationReply* depositGoldOnBank(const Id caller, 
-                               const uint32_t x_coord, const uint32_t y_coord,
-                               const uint32_t amount);
-        NotificationReply* withdrawGoldFromBank(const Id caller, 
-                                  const uint32_t x_coord, const uint32_t y_coord,
-                                  const uint32_t amount);
-        
-        NotificationReply* buyItem(const Id caller, 
-                     const uint32_t x_coord, const uint32_t y_coord,
-                     const uint32_t item_id, const uint32_t amount);
-        NotificationReply* sellItem(const Id caller, 
-                      const uint32_t x_coord, const uint32_t y_coord,
-                      const uint8_t n_slot, const uint32_t amount);
-        
-        NotificationReply* take(const Id caller);
-        NotificationReply* drop(const Id caller, const uint8_t n_slot, const uint32_t amount);
+    void list(const Id caller, const uint32_t x_coord, const uint32_t y_coord);
 
-        NotificationReply* listConnectedPlayers(const Id caller);
+    void depositItemOnBank(const Id caller, const uint32_t x_coord,
+                           const uint32_t y_coord, const uint8_t n_slot,
+                           uint32_t amount);
+    void withdrawItemFromBank(const Id caller, const uint32_t x_coord,
+                              const uint32_t y_coord, const uint32_t item_id,
+                              const uint32_t amount);
+
+    void depositGoldOnBank(const Id caller, const uint32_t x_coord,
+                           const uint32_t y_coord, const uint32_t amount);
+    void withdrawGoldFromBank(const Id caller, const uint32_t x_coord,
+                              const uint32_t y_coord, const uint32_t amount);
+
+    void buyItem(const Id caller, const uint32_t x_coord,
+                 const uint32_t y_coord, const uint32_t item_id,
+                 const uint32_t amount);
+    void sellItem(const Id caller, const uint32_t x_coord,
+                  const uint32_t y_coord, const uint8_t n_slot,
+                  const uint32_t amount);
+
+    void take(const Id caller);
+    void drop(const Id caller, const uint8_t n_slot, const uint32_t amount);
+
+    void listConnectedPlayers(const Id caller);
 };
 //-----------------------------------------------------------------------------
 #endif  // __GAME_H__

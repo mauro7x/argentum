@@ -29,13 +29,13 @@ void Engine::_processNewConnections() {
 }
 
 void Engine::_processCommands() {
-    Command* p = nullptr;
-    while ((p = commands.pop())) {
+    Command* cmd = nullptr;
+    while ((cmd = commands.pop())) {
         fprintf(stderr, "ENGINE: Ejecutando comando\n");
-        (*p)(this->game);
-        delete p;
+        cmd->exec(game);
+        delete cmd;
     }
-    fprintf(stderr, "No hay mas comandos por ejecutar\n");
+    // fprintf(stderr, "No hay mas comandos por ejecutar\n");
 }
 
 void Engine::_processFinishedConnections() {
@@ -96,7 +96,8 @@ Engine::Engine(Database& database,
       new_connections(new_connections),
       finished_connections(),
       commands(),
-      active_clients(commands, finished_connections) {}
+      active_clients(commands, finished_connections),
+      game(active_clients) {}
 
 void Engine::run() {
     fprintf(stderr, "DEBUG: Comienza la ejecución del engine.\n");

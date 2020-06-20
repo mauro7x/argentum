@@ -174,26 +174,34 @@ void GameView::operator()() {
 
     //-------------------------------------------------------------------------
     // PROXY PARA EL MANEJO DEL PRIMER PAQUETE DEL SERVER (hardcodeado).
+
     {
-        PlayerData init_data = {{1, 0, 0, DOWN_ORIENTATION},
-                                100,
-                                100,
-                                100,
-                                {InventorySlot({0, 0}), InventorySlot({0, 0}),
-                                 InventorySlot({0, 0}), InventorySlot({0, 0}),
-                                 InventorySlot({0, 0}), InventorySlot({0, 0}),
-                                 InventorySlot({0, 0}), InventorySlot({0, 0}),
-                                 InventorySlot({0, 0}), InventorySlot({0, 0})},
-                                {0, 0, 0, 0},
-                                2000,
-                                2100,
-                                1300,
-                                1400,
-                                1500,
-                                1000};
+        PlayerData init_data;
+        init_data.basic_data = {1, 0, 0, DOWN_ORIENTATION};
+        init_data.head_id = 2000;
+        init_data.body_id = 2100;
+        init_data.helmet_id = 0;
+        init_data.armour_id = 0;
+        init_data.shield_id = 0;
+        init_data.weapon_id = 1000;
+        init_data.health = 100;
+        init_data.max_health = 100;
+        init_data.mana = 100;
+        init_data.max_mana = 100;
+        init_data.safe_gold = 1000;
+        init_data.excess_gold = 100;
+        init_data.level = 10;
+        init_data.exp = 500;
+        init_data.levelup_exp = 700;
+        init_data.inventory = {0};
+        init_data.equipment = {0};
+
         player.init(init_data);
-        map.select(0); /* el id del mapa x ahora hardcodeado */
+        map.select(0);
     }
+
+    map.select(0);
+
     //-------------------------------------------------------------------------
 
     // Variables para controlar el frame-rate

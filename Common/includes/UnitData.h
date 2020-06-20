@@ -33,8 +33,8 @@ struct PlayerData : public CharacterData {
     uint32_t safe_gold, excess_gold;
     uint32_t level, exp, levelup_exp;
 
-    Inventory inventory;
-    Equipment equipment;
+    InventoryData inventory;
+    EquipmentData equipment;
 };
 
 struct CreatureData {

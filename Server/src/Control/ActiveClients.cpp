@@ -14,8 +14,9 @@ ActiveClients::ActiveClients(
     : commands(commands), finished_connections(finished_connections) {}
 
 void ActiveClients::add(const InstanceId id, SocketWrapper& peer) {
-    // Lanzar alguna excepción si el id ya existe en el container.
-    fprintf(stderr, "Agregando un cliente a la lista de clientes activos.\n");
+    if (content.count(id) > 0) {
+        throw Exception("ActiveClients::add: repeated client id.");
+    }
 
     content.emplace(
         id, new ClientConnection(id, peer, finished_connections, commands));
@@ -23,11 +24,21 @@ void ActiveClients::add(const InstanceId id, SocketWrapper& peer) {
 }
 
 void ActiveClients::remove(const InstanceId id) {
-    // Lanzar alguna excepción si el cliente no terminó.
+    if (content.count(id) == 0) {
+        throw Exception("ActiveClients::remove: invalid client id.");
+    }  // considerar tambien el caso en que su conexión no haya terminado
 
     content.at(id)->join(); /* join NO bloqueante, pues la conexión terminó */
     delete content.at(id);
     content.erase(id);
+}
+
+void ActiveClients::notify(const InstanceId& id, Notification* notification) {
+    if (content.count(id) == 0) {
+        throw Exception("ActiveClients::notify: invalid client id.");
+    }
+
+    content.at(id)->push(notification);
 }
 
 void ActiveClients::stop() {

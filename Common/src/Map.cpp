@@ -1,4 +1,5 @@
 #include "../includes/Map.h"
+
 #include "../includes/RandomNumberGenerator.h"
 //-----------------------------------------------------------------------------
 // Métodos privados
@@ -73,7 +74,7 @@ void Map::_fillTiles(const json& map, const json& tilesets) {
 
 int Map::_tileNumber(const int x, const int y) const {
     if (!isValid(x, y)) {
-        throw Exception("Invalid map coordinates.");
+        throw Exception("Invalid map coordinates. x = %i, y = %i\n", x, y);
     }
     return (y * w + x);
 }
@@ -177,7 +178,7 @@ const bool Map::moveOcuppant(const int x, const int y,
     }
 
     if (orientation == DOWN_ORIENTATION) {
-        if (y == this->h) {
+        if (y + 1 == this->h) {
             // Limite inferior alcanzado.
             return false;
         }
@@ -194,7 +195,7 @@ const bool Map::moveOcuppant(const int x, const int y,
         return _moveOcuppant(from_tile, to_tile);
     }
 
-    if (x == this->w) {
+    if (x + 1 == this->w) {
         // Limite derecho alcanzado.
         return false;
     }
@@ -206,8 +207,8 @@ void Map::establishCharacterSpawningPosition(int& x, int& y) const {
     bool valid_position = false;
     RandomNumberGenerator gen;
     while (!valid_position) {
-        x = gen(0, this->w);
-        y = gen(0, this->h);
+        x = gen(0, this->w - 1);
+        y = gen(0, this->h - 1);
 
         if (!this->getTile(x, y).collision)
             valid_position = true;

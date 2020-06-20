@@ -12,21 +12,18 @@
 /* Notificación de reply en carga de responder las respuestas del servidor
  * respecto a los comandos recibidos*/
 
-class NotificationReply: public Notification {
+class NotificationReply : public Notification {
    private:
     char opcode;
     std::string reply;
     uint32_t length;
-    
+
    public:
     /* Constructor por defult */
     NotificationReply();
-  
+
     /* Constructor */
-    NotificationReply(char opcode, uint32_t length, std::string reply);
-  
-    /* Habilitamos el operador= para movimiento. */
-    NotificationReply& operator=(NotificationReply&& other);
+    NotificationReply(char opcode, std::string reply);
 
     //-----------------------------------------------------------------------------
 
@@ -39,4 +36,4 @@ class NotificationReply: public Notification {
     virtual ~NotificationReply() {}
 };
 
-#endif //__NOTIFICATION_REPLY_H
+#endif  //__NOTIFICATION_REPLY_H

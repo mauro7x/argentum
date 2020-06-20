@@ -1,11 +1,12 @@
 #include "../../includes/Model/Defence.h"
-#include "../../includes/Model/Character.h" // Evito circular dependeces.
-#include "../../includes/Model/RandomNumberGenerator.h"
 
-Defence::Defence(const DefenceCfg& data):
-    Wearable(data.id, data.name, data.price, data.type),
-                min_defence(data.min_defence), 
-                max_defence(data.max_defence) {}
+#include "../../../Common/includes/RandomNumberGenerator.h"
+#include "../../includes/Model/Character.h"  // Evito circular dependeces.
+
+Defence::Defence(const DefenceCfg& data)
+    : Wearable(data.id, data.name, data.price, data.type),
+      min_defence(data.min_defence),
+      max_defence(data.max_defence) {}
 Defence::~Defence() {}
 
 const unsigned int Defence::use(Character& user) {

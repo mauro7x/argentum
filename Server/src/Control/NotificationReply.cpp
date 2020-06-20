@@ -8,25 +8,26 @@
 //-----------------------------------------------------------------------------
 // API Pública
 
-NotificationReply::NotificationReply(char opcode,
-                                     std::string reply)
-        : opcode(opcode), reply(reply), length(reply.size()) {}
-
-NotificationReply& NotificationReply::operator=(NotificationReply&& other){
-    this->opcode = other.opcode;
-    this->length = other.length;
-    this->reply = other.reply;
-    return *this;
-}
+NotificationReply::NotificationReply(char opcode, std::string reply)
+    : opcode(opcode), reply(reply), length(reply.size()) {}
 
 bool NotificationReply::send(const SocketWrapper& peer) {
-    try {
-        peer << char(0);
-        peer << opcode;
-        peer << length;
-        peer << reply;
-    } catch (const std::exception& e) {
+    ssize_t sent = 0;
+
+    sent = (peer << (char)REPLY_OPCODE);
+    if (!sent) {
         return false;
     }
+
+    sent = (peer << opcode);
+    if (!sent) {
+        return false;
+    }
+
+    sent = (peer << reply);
+    if (!sent) {
+        return false;
+    }
+
     return true;
 }

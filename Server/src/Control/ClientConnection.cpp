@@ -24,25 +24,6 @@ void ClientConnection::_sender() {
     // ejecución del sender loop
     fprintf(stderr, "SENDER DE UN CLIENTE EMPEZANDO! Id: %i\n", id);
 
-    /** LOOP DE SENDER DE NOTIFICATIONS
-     * Implementar el loop principal de este hilo.
-     * Tiene que enviar notificacioens al cliente de la siguiente forma:
-     *
-     * 1. Saca un Notification* de la cola de notificaciones (aun no está
-     * implementada, es similar a comando sólo que en vez de saber ejecutarse,
-     * saben enviarse).
-     *
-     * 2. Se llama a Notification->send(peer), es decir se le pasa el peer
-     * socket para que la notificación se envíe a si misma.
-     *
-     * 3. Se libera la notificacion haciendo delete Notification*.
-     *
-     * 4. Se repite desde 1.
-     *
-     * Deberá salir del loop cuando el socket peer deje de funcionar, ya sea
-     * porque fue cerrado por el server o por el cliente.
-     */
-
     try {
         Notification* notification = NULL;
         bool socket_valid = true;
@@ -74,74 +55,61 @@ void ClientConnection::_receiver() {
     // ejecución del receiver loop
     fprintf(stderr, "RECEIVER DE UN CLIENTE EMPEZANDO! Id: %i\n", id);
 
-    // Proxy receptor de ProxyCommands.
-    {
-        while (1) {
-            char cmd;
-            this->peer.recv(&cmd, 1);
-            fprintf(stderr, "ClientConnection: command %c received\n", cmd);
-            if (cmd == 'e')
-                break;
-            CommandProxy* command = new CommandProxy(this->id, cmd);
-            this->commands.push(command);
-        }
-    }
-
-    /** LOOP DE RECEIVER DE COMANDOS
-     * Implementar el loop principal de este hilo.
-     * Tiene que recibir comandos desde el cliente de la siguiente forma:
-     *
-     * 1. Se recibe 1 byte de opcode.
-     *
-     * 2. Se switchea con el opcode y se recibe el resto del comando.
-     *
-     * 3. Se crea el comando en memoria dinámica y se lo almacena como un
-     * Command* (de manera polimorfica) para luego pushearlo a la cola de
-     * comandos `commands`.
-     *
-     * 4. Se repite desde 1.
-     *
-     * Deberá salir del loop cuando el receive del opcode devuelva 0 (es decir,
-     * que se recibieron 0 bytes).
-     */
-
     try {
-        char opcode;
+        uint8_t opcode;
         while (peer >> opcode) {
             switch (opcode) {
-                    // Identificar comando, terminar de recibirlo, crearlo e
-                    // insertarlo en la cola.
-                case (START_MOVING_UP_CMD || START_MOVING_DOWN_CMD ||
-                    START_MOVING_LEFT_CMD || START_MOVING_RIGHT_CMD ||
-                    STOP_MOVING_CMD): {
-                    Command* command =
-                        new CommandMovement(this->id, opcode, notifications);
+                case COMMAND_OPCODE: {
+                    peer >> opcode;
+                    _receiveCommand(opcode);
                     break;
                 }
-                default: {
-                    // print proxy por ahora
-                    fprintf(stderr, "Se recibió el opcode: %d\n", opcode);
 
-                    /*
+                default: {
                     throw Exception(
                         "Unknown opcode received by client handler.");
-                        */
                 }
             }
         }
     } catch (const std::exception& e) {
         // Error inesperado
         stop();
-        fprintf(stderr, "ClientConnection // _receiver: %s\n", e.what());
+        fprintf(stderr, "ClientConnection::_receiver: %s\n", e.what());
     } catch (...) {
         // Error desconocido
         stop();
-        fprintf(stderr, "ClientConnection // _receiver: Unknown error.\n");
+        fprintf(stderr, "ClientConnection::_receiver: Unknown error.\n");
     }
 
     // Avisamos que terminamos
     _finishThread();
     fprintf(stderr, "RECEIVER DE UN CLIENTE TERMINANDO! Id: %i\n", id);
+}
+
+void ClientConnection::_receiveCommand(char opcode) {
+    Command* cmd = NULL;
+
+    switch (opcode) {
+        case START_MOVING_UP_CMD:
+        case START_MOVING_DOWN_CMD:
+        case START_MOVING_LEFT_CMD:
+        case START_MOVING_RIGHT_CMD:
+        case STOP_MOVING_CMD: {
+            cmd = new CommandMovement(id, opcode);
+            fprintf(stderr, "Command receiver: recibimos el comando %d\n",
+                    opcode);
+            commands.push(cmd);
+            break;
+        }
+
+        default: {
+            fprintf(stderr,
+                    "ClientConnection::_receiveCommand: received %c (unknown "
+                    "opcode).",
+                    opcode);
+            break;
+        }
+    }
 }
 
 //-----------------------------------------------------------------------------

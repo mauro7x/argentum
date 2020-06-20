@@ -44,7 +44,7 @@ class Command {
     //-------------------------------------------------------------------------
 
     /* Destructor */
-    virtual ~Command();
+    virtual ~Command() {}
 };
 
 class CommandProxy : public Command {
@@ -63,11 +63,9 @@ class CommandMovement : public Command {
    private:
     InstanceId caller;
     char cmd;
-    BlockingQueue<Notification*>& notifications;
 
    public:
-    CommandMovement(InstanceId caller, char cmd,
-                    BlockingQueue<Notification*>& notifications);
+    CommandMovement(InstanceId caller, char cmd);
     ~CommandMovement() {}
 
     void exec(Game& game) override;
@@ -78,14 +76,13 @@ class CommandUseWeapon : public Command {
    private:
     InstanceId caller;
     char cmd;
-    BlockingQueue<Notification*>& notifications;
+
     const uint32_t x_coord;
     const uint32_t y_coord;
 
    public:
-    CommandUseWeapon(InstanceId caller, char cmd,
-                     BlockingQueue<Notification*>& notifications,
-                     const uint32_t x_coord, const uint32_t y_coord);
+    CommandUseWeapon(InstanceId caller, char cmd, const uint32_t x_coord,
+                     const uint32_t y_coord);
     ~CommandUseWeapon() {}
 
     void exec(Game& game) override;
@@ -96,13 +93,11 @@ class CommandEquip : public Command {
    private:
     InstanceId caller;
     char cmd;
-    BlockingQueue<Notification*>& notifications;
+
     const uint8_t n_slot;
 
    public:
-    CommandEquip(InstanceId caller, char cmd,
-                 BlockingQueue<Notification*>& notifications,
-                 const uint8_t n_slot);
+    CommandEquip(InstanceId caller, char cmd, const uint8_t n_slot);
     ~CommandEquip() {}
 
     void exec(Game& game) override;
@@ -112,11 +107,9 @@ class CommandMediate : public Command {
    private:
     InstanceId caller;
     char cmd;
-    BlockingQueue<Notification*>& notifications;
 
    public:
-    CommandMediate(InstanceId caller, char cmd,
-                   BlockingQueue<Notification*>& notifications);
+    CommandMediate(InstanceId caller, char cmd);
     ~CommandMediate() {}
 
     void exec(Game& game) override;
@@ -126,11 +119,9 @@ class CommandResurrect : public Command {
    private:
     InstanceId caller;
     char cmd;
-    BlockingQueue<Notification*>& notifications;
 
    public:
-    CommandResurrect(InstanceId caller, char cmd,
-                     BlockingQueue<Notification*>& notifications);
+    CommandResurrect(InstanceId caller, char cmd);
     ~CommandResurrect() {}
 
     void exec(Game& game) override;
@@ -140,14 +131,13 @@ class CommandList : public Command {
    private:
     InstanceId caller;
     char cmd;
-    BlockingQueue<Notification*>& notifications;
+
     const uint32_t x_coord;
     const uint32_t y_coord;
 
    public:
-    CommandList(InstanceId caller, char cmd,
-                BlockingQueue<Notification*>& notifications,
-                const uint32_t x_coord, const uint32_t y_coord);
+    CommandList(InstanceId caller, char cmd, const uint32_t x_coord,
+                const uint32_t y_coord);
     ~CommandList() {}
 
     void exec(Game& game) override;
@@ -157,7 +147,7 @@ class CommandDepositItemOnBank : public Command {
    private:
     InstanceId caller;
     char cmd;
-    BlockingQueue<Notification*>& notifications;
+
     const uint32_t x_coord;
     const uint32_t y_coord;
     const uint8_t n_slot;
@@ -165,7 +155,6 @@ class CommandDepositItemOnBank : public Command {
 
    public:
     CommandDepositItemOnBank(InstanceId caller, char cmd,
-                             BlockingQueue<Notification*>& notifications,
                              const uint32_t x_coord, const uint32_t y_coord,
                              const uint8_t n_slot, const uint32_t amount);
     ~CommandDepositItemOnBank() {}
@@ -177,7 +166,7 @@ class CommandWithdrawItemFromBank : public Command {
    private:
     InstanceId caller;
     char cmd;
-    BlockingQueue<Notification*>& notifications;
+
     const uint32_t x_coord;
     const uint32_t y_coord;
     const uint32_t item_id;
@@ -185,7 +174,6 @@ class CommandWithdrawItemFromBank : public Command {
 
    public:
     CommandWithdrawItemFromBank(InstanceId caller, char cmd,
-                                BlockingQueue<Notification*>& notifications,
                                 const uint32_t x_coord, const uint32_t y_coord,
                                 const uint32_t item_id, const uint32_t amount);
     ~CommandWithdrawItemFromBank() {}
@@ -197,16 +185,14 @@ class CommandGoldMove : public Command {
    private:
     InstanceId caller;
     char cmd;
-    BlockingQueue<Notification*>& notifications;
+
     const uint32_t x_coord;
     const uint32_t y_coord;
     const uint32_t amount;
 
    public:
-    CommandGoldMove(InstanceId caller, char cmd,
-                    BlockingQueue<Notification*>& notifications,
-                    const uint32_t x_coord, const uint32_t y_coord,
-                    const uint32_t amount);
+    CommandGoldMove(InstanceId caller, char cmd, const uint32_t x_coord,
+                    const uint32_t y_coord, const uint32_t amount);
     ~CommandGoldMove() {}
 
     void exec(Game& game) override;
@@ -216,7 +202,7 @@ class CommandBuy : public Command {
    private:
     InstanceId caller;
     char cmd;
-    BlockingQueue<Notification*>& notifications;
+
     const uint32_t x_coord;
     const uint32_t y_coord;
     const uint32_t item_id;
@@ -224,7 +210,7 @@ class CommandBuy : public Command {
 
    public:
     CommandBuy(InstanceId caller, char cmd,
-               BlockingQueue<Notification*>& notifications,
+
                const uint32_t x_coord, const uint32_t y_coord,
                const uint32_t item_id, const uint32_t amount);
     ~CommandBuy() {}
@@ -236,7 +222,7 @@ class CommandSell : public Command {
    private:
     InstanceId caller;
     char cmd;
-    BlockingQueue<Notification*>& notifications;
+
     const uint32_t x_coord;
     const uint32_t y_coord;
     const uint8_t n_slot;
@@ -244,7 +230,7 @@ class CommandSell : public Command {
 
    public:
     CommandSell(InstanceId caller, char cmd,
-                BlockingQueue<Notification*>& notifications,
+
                 const uint32_t x_coord, const uint32_t y_coord,
                 const uint8_t n_slot, const uint32_t amount);
     ~CommandSell() {}
@@ -256,11 +242,9 @@ class CommandTake : public Command {
    private:
     InstanceId caller;
     char cmd;
-    BlockingQueue<Notification*>& notifications;
 
    public:
-    CommandTake(InstanceId caller, char cmd,
-                BlockingQueue<Notification*>& notifications);
+    CommandTake(InstanceId caller, char cmd);
     ~CommandTake() {}
 
     void exec(Game& game) override;
@@ -270,13 +254,13 @@ class CommandDrop : public Command {
    private:
     InstanceId caller;
     char cmd;
-    BlockingQueue<Notification*>& notifications;
+
     const uint8_t n_slot;
     const uint32_t amount;
 
    public:
     CommandDrop(InstanceId caller, char cmd,
-                BlockingQueue<Notification*>& notifications,
+
                 const uint8_t n_slot, const uint32_t amount);
     ~CommandDrop() {}
 

@@ -7,14 +7,6 @@ void Player::_copyData(const PlayerData& init_data) {
     // Data básica
     data = init_data.basic_data;
 
-    // Data específica
-    health = init_data.health;
-    mana = init_data.mana;
-    gold = init_data.gold;
-
-    inventory = init_data.inventory;
-    equipment = init_data.equipment;
-
     // Ids gráficos
     head_id = init_data.head_id;
     body_id = init_data.body_id;
@@ -22,24 +14,28 @@ void Player::_copyData(const PlayerData& init_data) {
     armour_id = init_data.armour_id;
     shield_id = init_data.shield_id;
     weapon_id = init_data.weapon_id;
+
+    // Stats
+    health = init_data.health;
+    max_health = init_data.max_health;
+    mana = init_data.mana;
+    max_mana = init_data.max_mana;
+    safe_gold = init_data.safe_gold;
+    excess_gold = init_data.excess_gold;
+    level = init_data.level;
+    exp = init_data.exp;
+    levelup_exp = init_data.levelup_exp;
+
+    // Inventario y equipamiento
+    inventory = init_data.inventory;
+    equipment = init_data.equipment;
 }
 
 //-----------------------------------------------------------------------------
 // API Pública
 
 Player::Player(Renderer* renderer, UnitSpriteContainer* sprites)
-    : Unit(renderer, sprites),
-      health(0),
-      mana(0),
-      gold(0),
-      inventory({0}),
-      equipment({0}),
-      head_id(0),
-      body_id(0),
-      helmet_id(0),
-      armour_id(0),
-      shield_id(0),
-      weapon_id(0) {}
+    : Unit(renderer, sprites) {}
 
 void Player::init(const PlayerData& init_data) {
     if (state) {

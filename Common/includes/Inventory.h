@@ -1,5 +1,5 @@
-#ifndef __INVENTORY_H__
-#define __INVENTORY_H__
+#ifndef __INVENTORY_TYPES_H__
+#define __INVENTORY_TYPES_H__
 
 //-----------------------------------------------------------------------------
 #include <array>
@@ -22,8 +22,8 @@ struct InventorySlot {
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-typedef std::array<InventorySlot, N_INVENTORY_SLOTS> Inventory;
-typedef std::array<Id, N_WEARABLE_ITEMS> Equipment;
+typedef std::array<InventorySlot, N_INVENTORY_SLOTS> InventoryData;
+typedef std::array<Id, N_WEARABLE_ITEMS> EquipmentData;
 //-----------------------------------------------------------------------------
 
-#endif  // __INVENTORY_H__
+#endif  // __INVENTORY_TYPES_H__

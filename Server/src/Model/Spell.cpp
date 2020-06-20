@@ -1,13 +1,11 @@
 #include "../../includes/Model/Spell.h"
-#include "../../includes/Model/Character.h" // Evito circular dependences.
-#include "../../includes/Model/RandomNumberGenerator.h"
 
-Spell::Spell(const int id,
-             const std::string name,
-             const unsigned int mana_usage_cost):
-                id(id),
-                name(name),
-                mana_usage_cost(mana_usage_cost) {}
+#include "../../../Common/includes/RandomNumberGenerator.h"
+#include "../../includes/Model/Character.h"  // Evito circular dependences.
+
+Spell::Spell(const int id, const std::string name,
+             const unsigned int mana_usage_cost)
+    : id(id), name(name), mana_usage_cost(mana_usage_cost) {}
 Spell::~Spell() {}
 
 Spell* SpellFactory::newSpell(const SpellCfg& data) {
@@ -20,11 +18,11 @@ Spell* SpellFactory::newSpell(const SpellCfg& data) {
     }
 }
 
-AttackingSpell::AttackingSpell(const SpellCfg& data): 
-    Spell(data.id, data.name, data.mana_usage_cost),
-    attack_distance(data.attack_distance), 
-    min_damage(data.min_damage),
-    max_damage(data.max_damage) {}
+AttackingSpell::AttackingSpell(const SpellCfg& data)
+    : Spell(data.id, data.name, data.mana_usage_cost),
+      attack_distance(data.attack_distance),
+      min_damage(data.min_damage),
+      max_damage(data.max_damage) {}
 AttackingSpell::~AttackingSpell() {}
 
 const unsigned int AttackingSpell::cast(Character& caster) {
@@ -40,9 +38,9 @@ const unsigned int AttackingSpell::getRange() const {
     return this->attack_distance;
 }
 
-HealingSpell::HealingSpell(const SpellCfg& data): 
-    Spell(data.id, data.name, data.mana_usage_cost),
-    recovery_points(data.recovery_points) {}
+HealingSpell::HealingSpell(const SpellCfg& data)
+    : Spell(data.id, data.name, data.mana_usage_cost),
+      recovery_points(data.recovery_points) {}
 HealingSpell::~HealingSpell() {}
 
 const unsigned int HealingSpell::cast(Character& caster) {
@@ -52,11 +50,11 @@ const unsigned int HealingSpell::cast(Character& caster) {
 
     caster.recoverHealth(this->recovery_points);
 
-    return 0; // No hace daño otro jugador.
+    return 0;  // No hace daño otro jugador.
 }
 
 const unsigned int HealingSpell::getRange() const {
-    return 0; // Se lanza sobre si mismo.
+    return 0;  // Se lanza sobre si mismo.
 }
 
 const char* UnknownSpellTypeException::what() const noexcept {

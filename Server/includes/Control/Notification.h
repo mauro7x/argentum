@@ -2,6 +2,7 @@
 #define __NOTIFICATION_H__
 
 //-----------------------------------------------------------------------------
+#include "../../../Common/includes/Protocol.h"
 #include "../../../Common/includes/Socket/SocketWrapper.h"
 //-----------------------------------------------------------------------------
 

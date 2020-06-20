@@ -57,6 +57,9 @@ class ClientConnection {
     /* Función que corre en el hilo del receiver */
     void _receiver();
 
+    /* [RECEIVER] Recibe un comando */
+    void _receiveCommand(char opcode);
+
     //-------------------------------------------------------------------------
 
    public:

@@ -14,9 +14,9 @@
 #include "../../../Common/includes/NonBlockingQueue.h"
 #include "../../../Common/includes/Thread.h"
 #include "../../../Common/includes/types.h"
-#include "../paths.h"
-#include "../Model/config_structs.h"
 #include "../Model/Game.h"
+#include "../Model/config_structs.h"
+#include "../paths.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -41,6 +41,8 @@ class Engine : public Thread {
     NonBlockingQueue<InstanceId*> finished_connections;
     NonBlockingQueue<Command*> commands;
     ActiveClients active_clients;
+
+    // Instancia de juego
     Game game;
 
     //-------------------------------------------------------------------------
@@ -60,7 +62,6 @@ class Engine : public Thread {
 
     /* Procesa las solicitudes de nuevas conexiones */
     void _processNewConnections();
-
 
     /* Vacía las colas sin procesarlas para salir ordenadamente */
     void _freeQueues();
