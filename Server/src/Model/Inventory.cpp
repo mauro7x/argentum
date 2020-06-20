@@ -138,6 +138,19 @@ void Inventory::gatherGold(const uint32_t amount) {
     }
 }
 
+void Inventory::fillBroadcastData(PlayerData& data) const {
+    data.safe_gold = this->safe_gold;
+    data.excess_gold = this->excess_gold;
+    
+    for (int i = 0; i < N_INVENTORY_SLOTS; ++i) {
+        if (!this->slots[i].getItemId())
+            data.inventory[i] = {0, 0};
+
+        data.inventory[i] = {this->slots[i].getItemId(),
+                             this->slots[i].getAmount()};
+    }
+}
+
 const char* FullInventoryException::what() const noexcept {
     return "No puede agregar más elementos al inventario.";
 }

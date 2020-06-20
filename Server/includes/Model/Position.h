@@ -5,6 +5,7 @@
 
 #include "../../../Common/includes/MapContainer.h"
 #include "../../../Common/includes/Orientation.h"
+#include "../../../Common/includes/UnitData.h"
 
 class Position {
     private:
@@ -37,9 +38,6 @@ class Position {
         /* Devuelve la coordenada y de la posición del character */
         const int getY() const;
 
-        /* Devuelve la orientación de la posición del character */
-        const Orientation getOrientation() const;
-
         /* 
          * Mueve un tile la posición en la dirección de la orientation. 
          * 
@@ -47,6 +45,12 @@ class Position {
          * a causa de una colisión.
          */
         void move(const Orientation& orientation);
+
+        /*
+         * Llena los campos x_tile, y_tile y orientation del
+         * PlayerData para su broadcast.
+         */
+        void fillBroadcastData(PlayerData& data) const;
 };
 
 class CollisionWhileMovingException: std::exception {

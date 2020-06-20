@@ -24,10 +24,6 @@ const int Position::getY() const {
     return this->y;
 }
 
-const Orientation Position::getOrientation() const {
-    return this->orientation;
-}
-
 const unsigned int Position::getDistance(const Position& other) const {
     return abs(this->x - other.getX()) + abs(this->y - other.getY());
 }
@@ -55,6 +51,12 @@ void Position::move(const Orientation& orientation) {
             this->x -= 1;
             break;
     }
+}
+
+void Position::fillBroadcastData(PlayerData& data) const {
+    data.basic_data.x_tile = this->x;
+    data.basic_data.y_tile = this->y;
+    data.basic_data.orientation = this->orientation;
 }
 
 const char* CollisionWhileMovingException::what() const noexcept {

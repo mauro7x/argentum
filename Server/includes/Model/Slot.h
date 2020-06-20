@@ -25,6 +25,9 @@ class Slot {
 
         void addItem(Item* item_id);
         Item* takeItem();
+
+        const Id getItemId() const;
+        const unsigned int getAmount() const; 
 };
 
 #endif

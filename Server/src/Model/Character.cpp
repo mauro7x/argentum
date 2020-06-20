@@ -1,5 +1,4 @@
 #include <math.h>
-
 #include <algorithm>
 //-----------------------------------------------------------------------------
 #include "../../includes/Model/Character.h"
@@ -335,6 +334,26 @@ const bool Character::mustBeBroadcasted() const {
 
 void Character::beBroadcasted() {
     this->broadcast = false;
+}
+
+void Character::fillBroadcastData(PlayerData& data) const {
+    // Llena x_tile, y_tile, orientation.
+    this->position.fillBroadcastData(data);
+
+    data.head_id = this->race.head_id;
+    data.body_id = this->race.body_id;
+
+    data.health = this->health;
+    data.max_health = this->max_health;
+    data.mana = this->mana;
+    data.max_mana = this->max_mana;
+
+    // Llena level, exp, levelup_exp
+    this->level.fillBroadcastData(data);
+    // Llena safe_gold, excess_gold e inventory.
+    this->inventory.fillBroadcastData(data);
+    // Llena equipment, helmet_id, armour_id, shield_id, weapon_id;
+    this->equipment.fillBroadcastData(data);
 }
 //-----------------------------------------------------------------------------
 

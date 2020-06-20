@@ -1,17 +1,17 @@
 #ifndef __INVENTORY_H__
 #define __INVENTORY_H__
 
-#define EMPTY_ITEM_ID 0
-
 #include <array>
 #include <cstdio>
 #include <exception>
 #include <map>
 
-#include "../../../Common/includes/Inventory.h"
 #include "Item.h"
 #include "Level.h"
 #include "Slot.h"
+
+#include "../../../Common/includes/Inventory.h"
+#include "../../../Common/includes/UnitData.h"
 
 /*
  * El Inventario es un contenedor que guarda Items,
@@ -64,6 +64,8 @@ class Inventory {
     Inventory(Inventory&&) = delete;
     Inventory& operator=(Inventory&&) = delete;
 
+    void updateMaxAmountsOfGold();
+
     /*
      * Obtiene el item en la posicion especificada.
      * En caso de no haber, retorna nullptr.
@@ -100,7 +102,11 @@ class Inventory {
      */
     void addGold(const uint32_t amount);
 
-    void updateMaxAmountsOfGold();
+    /*
+     * Llena los campos safe_gold, excess_gold e
+     * inventory de PlayerData para su broadcast.
+     */
+    void fillBroadcastData(PlayerData& data) const;
 
     void debug() const;  // Para testear.
 };

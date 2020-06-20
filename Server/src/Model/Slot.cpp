@@ -47,3 +47,10 @@ Item* Slot::takeItem() {
 
     return item;
 }
+
+const Id Slot::getItemId() const {
+    return this->item->getId();
+}
+const unsigned int Slot::getAmount() const {
+    return this->amount;
+}

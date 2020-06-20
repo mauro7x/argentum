@@ -55,3 +55,10 @@ const unsigned int Level::getLevel() const {
 const unsigned int Level::isNewbie() const {
     return Formulas::isNewbie(this->level);
 }
+
+void Level::fillBroadcastData(PlayerData& data) const {
+    data.level = this->level;
+    data.exp = this->xp;
+    data.levelup_exp = this->level_up_xp;
+
+}

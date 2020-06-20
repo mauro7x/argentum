@@ -2,7 +2,11 @@
 #define __EQUIPMENT_H__
 
 #include <array>
+
 #include "Wearable.h"
+
+#include "../../../Common/includes/UnitData.h"
+#include "../../../Common/includes/Inventory.h"
 
 class Character; // Forward declaration p/evitar circular dependences.
 
@@ -70,6 +74,8 @@ class Equipment {
          * En caso de no tener nada con lo que pueda defenderse, devuelve 0.
          */
         const unsigned int getDefensePoints(Character& defender);
+
+        void fillBroadcastData(PlayerData& data) const;
 
         void debug() const; // Para testear
 };

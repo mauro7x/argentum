@@ -1,6 +1,8 @@
 #ifndef __LEVEL_H__
 #define __LEVEL_H__
 
+#include "../../../Common/includes/UnitData.h"
+
 class Character; // Forward declaration para evitar circular dependences.
 
 class Level {
@@ -30,6 +32,8 @@ class Level {
 
         const unsigned int getLevel() const;
         const unsigned int isNewbie() const;
+
+        void fillBroadcastData(PlayerData& data) const;
 };
 
 #endif

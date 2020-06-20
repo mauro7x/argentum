@@ -19,6 +19,9 @@
 //-----------------------------------------------------------------------------
 #include "config_structs.h"
 //-----------------------------------------------------------------------------
+#include "../../../Common/includes/UnitData.h"
+//-----------------------------------------------------------------------------
+
 /*
  * Representa al ente manejado por el jugador.
  * 
@@ -307,6 +310,16 @@ class Character {
          * Es notificado que se lo ha broadcasteado.
          */
         void beBroadcasted();
+
+        /*
+         * Recibe una estructura de broadcast de tipo PlayerData,
+         * y la llena con sus atributos actuales para su broadcasteo.
+         * 
+         * [El InstanceId del jugador en el struct ya viene dado]
+         * 
+         * ??? EL ID DEL MAPA ???
+         */
+        void fillBroadcastData(PlayerData& data) const;
 
         //-----------------------------------------------------------------------------
 
