@@ -2,8 +2,8 @@
     {
         "id": 100,
         "name": "Humano",
-        "head_id": 0,
-        "body_id": 0,
+        "head_id": 2000,
+        "body_id": 2100,
         "max_health_factor": 10,
         "max_mana_factor": 10,
         "health_recovery_factor": 10,
@@ -18,8 +18,8 @@
     {
         "id": 101,
         "name": "Elfos",
-        "head_id": 0,
-        "body_id": 0,
+        "head_id": 2000,
+        "body_id": 2100,
         "max_health_factor": 10,
         "max_mana_factor": 10,
         "health_recovery_factor": 10,
@@ -34,8 +34,8 @@
     {
         "id": 102,
         "name": "Enanos",
-        "head_id": 0,
-        "body_id": 0,
+        "head_id": 2000,
+        "body_id": 2100,
         "max_health_factor": 10,
         "max_mana_factor": 10,
         "health_recovery_factor": 10,
@@ -50,8 +50,8 @@
     {
         "id": 103,
         "name": "Gnomos",
-        "head_id": 0,
-        "body_id": 0,
+        "head_id": 2000,
+        "body_id": 2100,
         "max_health_factor": 10,
         "max_mana_factor": 10,
         "health_recovery_factor": 10,
