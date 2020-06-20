@@ -12,6 +12,13 @@ NotificationReply::NotificationReply(char opcode,
                                      std::string reply)
         : opcode(opcode), reply(reply), length(reply.size()) {}
 
+NotificationReply& NotificationReply::operator=(NotificationReply&& other){
+    this->opcode = other.opcode;
+    this->length = other.length;
+    this->reply = other.reply;
+    return *this;
+}
+
 bool NotificationReply::send(const SocketWrapper& peer) {
     try {
         peer << char(0);

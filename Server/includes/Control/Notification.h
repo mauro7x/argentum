@@ -55,8 +55,8 @@ class Notification {
     /* Deshabilitamos el constructor por movimiento. */
     Notification(Notification&& other) = delete;
 
-    /* Deshabilitamos el operador= para movimiento. */
-    Notification& operator=(Notification&& other) = delete;
+    /* Habilitamos el operador= para movimiento. */
+    Notification& operator=(Notification&& other);
 
     //-----------------------------------------------------------------------------
 

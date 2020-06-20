@@ -19,8 +19,14 @@ class NotificationReply: public Notification {
     uint32_t length;
     
    public:
+    /* Constructor por defult */
+    NotificationReply();
+  
     /* Constructor */
-    NotificationReply(char opcode, std::string reply);
+    NotificationReply(char opcode, uint32_t length, std::string reply);
+  
+    /* Habilitamos el operador= para movimiento. */
+    NotificationReply& operator=(NotificationReply&& other);
 
     //-----------------------------------------------------------------------------
 

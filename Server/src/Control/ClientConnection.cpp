@@ -77,7 +77,7 @@ void ClientConnection::_receiver() {
     // Proxy receptor de ProxyCommands.
     {
         while (1) {
-            char cmd; 
+            char cmd;
             this->peer.recv(&cmd, 1);
             fprintf(stderr, "ClientConnection: command %c received\n", cmd);
             if (cmd == 'e')
@@ -111,7 +111,13 @@ void ClientConnection::_receiver() {
             switch (opcode) {
                     // Identificar comando, terminar de recibirlo, crearlo e
                     // insertarlo en la cola.
-
+                case START_MOVING_UP_CMD || START_MOVING_DOWN_CMD ||
+                    START_MOVING_LEFT_CMD || START_MOVING_RIGHT_CMD ||
+                    STOP_MOVING_CMD: {
+                    Command* command =
+                        new CommandMovement(this->id, opcode, notifications);
+                    break;
+                }
                 default: {
                     // print proxy por ahora
                     fprintf(stderr, "Se recibió el opcode: %d\n", opcode);
