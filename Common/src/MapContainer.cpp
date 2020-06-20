@@ -1,5 +1,8 @@
 #include "../includes/MapContainer.h"
 
+// Provisoriamente para map spawning selection
+#include "../../Server/includes/Model/RandomNumberGenerator.h"
+
 //-----------------------------------------------------------------------------
 // Métodos privados
 
@@ -43,6 +46,17 @@ const Map& MapContainer::operator[](const Id id) const {
     }
 
     return content.at(id);
+}
+
+const Id MapContainer::getCharacterSpawningMap() const {
+    std::vector<Id> possible_maps; 
+    std::unordered_map<Id, Map>::const_iterator it = this->content.begin();
+    while (it != this->content.end()) {
+        possible_maps.push_back(it->first);
+        ++it;
+    }
+    RandomNumberGenerator gen;
+    return possible_maps.at(gen(0, possible_maps.size()));
 }
 
 MapContainer::~MapContainer() {}

@@ -17,7 +17,10 @@
 //-----------------------------------------------------------------------------
 Character::Character(const CharacterCfg& init_data,
                      const RaceCfg& race, const KindCfg& kind,
-                     MapContainer& map_container):
+                     MapContainer& map_container,
+                     const Id init_map,
+                     const int init_x_coord,
+                     const int init_y_coord):
         
         health(kind.initial_health + race.initial_health),
         mana(kind.initial_mana + race.initial_mana),
@@ -33,15 +36,17 @@ Character::Character(const CharacterCfg& init_data,
 
         inventory(this->level),
 
-        position(init_data.map,
-                 init_data.x_coord,
-                 init_data.y_coord,
+        position(init_map,
+                 init_x_coord,
+                 init_y_coord,
                  map_container),
         
         moving_orientation(DEFAULT_MOVING_ORIENTATION),
         moving(false),
         moving_time_elapsed(0),
-        attribute_update_time_elapsed(0) {
+        attribute_update_time_elapsed(0),
+        
+        broadcast(true) { // Cuando se crea, debe ser broadcasteado. 
 
     // SI EL JUGADOR ESTA PERSISTIDO Y NO ES NUEVO, LLENAR TODO LO QUE SE TIENE QUE LLENAR.
     
@@ -56,15 +61,9 @@ Character::~Character() {
 
 //-----------------------------------------------------------------------------
 void Character::act(const unsigned int it) {
-    if (moving) {
-        try {
-            _updateMovement(it);
-        } catch(const CollisionWhileMovingException& e) {
-            stopMoving();
-            fprintf(stderr, "Exception: %s\n", e.what());
-            // Como le respondo la excepecion?
-        }
-    }
+    if (moving)
+        _updateMovement(it);
+
     _updateTimeDependantAttributes(it);
 }
 
@@ -80,6 +79,8 @@ void Character::updateLevelDependantAttributes() {
                         this->level.getLevel());
 
     this->inventory.updateMaxAmountsOfGold();
+
+    this->broadcast = true;
 }
 
 void Character::_updateTimeDependantAttributes(const unsigned int it) {
@@ -95,8 +96,7 @@ void Character::_updateTimeDependantAttributes(const unsigned int it) {
                                         this->race.mana_recovery_factor,
                                         TIME_TO_UPDATE_ATTRIBUTES / 1000); // en segundos
 
-
-        this->recoverHealth(health_update);
+        this->recoverHealth(health_update);        
         this->recoverMana(mana_update);
 
         attribute_update_time_elapsed -= TIME_TO_UPDATE_ATTRIBUTES;
@@ -108,8 +108,8 @@ void Character::_updateMovement(const unsigned int it) {
     
     while (this->moving_time_elapsed >= TIME_TO_MOVE_A_TILE) {
         this->position.move(moving_orientation);
-        // broadcast true.
-        std::cout << "Character se movio." << std::endl;
+
+        this->broadcast = true;
 
         this->moving_time_elapsed -= TIME_TO_MOVE_A_TILE;
     }
@@ -150,11 +150,19 @@ void Character::stopMoving() {
 
 //-----------------------------------------------------------------------------
 void Character::recoverHealth(const unsigned int points) {
+    if (!points)
+        return;
+    
     this->health = std::min(this->health + points, max_health);
+    this->broadcast = true;
 }
 
 void Character::recoverMana(const unsigned int points) {
+    if (!points)
+        return;
+
     this->mana = std::min(this->mana + points, max_mana);
+    this->broadcast = true;
 }
 
 void Character::consumeMana(const unsigned int points) {
@@ -163,6 +171,7 @@ void Character::consumeMana(const unsigned int points) {
     }
 
     this->mana -= points;
+    this->broadcast = true;
 }
 //-----------------------------------------------------------------------------
 
@@ -182,14 +191,20 @@ void Character::equip(Wearable* item) {
         // Agrego lo que tenia equipado al inventario.
         takeItem(prev_equipped_item);
     }
+
+    this->broadcast = true;
 }
 
 const unsigned int Character::takeItem(Item* item) {
-    return this->inventory.addItem(item);
+    const unsigned int position = this->inventory.addItem(item);
+    this->broadcast = true;
+    return position;
 }
 
 Item* Character::dropItem(unsigned int position) {
-    return this->inventory.gatherItem(position);
+    Item* dropped_item = this->inventory.gatherItem(position);
+    this->broadcast = true;
+    return dropped_item;
 }
 //-----------------------------------------------------------------------------
 
@@ -256,6 +271,8 @@ const unsigned int Character::attack(Character& attacked) {
         this->level.onKillUpdate(*this, attacked.getMaxHealth(), attacked.getLevel());
     }
 
+    this->broadcast = true;
+
     return effective_damage;
 }
 
@@ -281,6 +298,8 @@ const unsigned int Character::receiveAttack(const unsigned int damage,
         this->die();
     }
 
+    this->broadcast = true;
+
     return damage_received;
 }
 
@@ -288,6 +307,7 @@ void Character::die() {
     delete this->state;
     this->state = new Dead();
     // DROPEAR ORO EN EXCESO E ITEMS DEL INVENTARIO
+    this->broadcast = true;
 }
 //-----------------------------------------------------------------------------
 
@@ -310,6 +330,16 @@ const unsigned int Character::getMaxHealth() const {
 
 const bool Character::isNewbie() const {
     return this->level.isNewbie();
+}
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+const bool Character::mustBeBroadcasted() const {
+    return this->broadcast;
+}
+
+void Character::beBroadcasted() {
+    this->broadcast = false;
 }
 //-----------------------------------------------------------------------------
 

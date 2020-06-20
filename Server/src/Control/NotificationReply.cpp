@@ -8,9 +8,9 @@
 //-----------------------------------------------------------------------------
 // API Pública
 
-NotificationReply::NotificationReply(char opcode, uint32_t length,
+NotificationReply::NotificationReply(char opcode,
                                      std::string reply)
-    : opcode(opcode), length(length), reply(reply) {}
+        : opcode(opcode), reply(reply), length(reply.size()) {}
 
 NotificationReply& NotificationReply::operator=(NotificationReply&& other){
     this->opcode = other.opcode;
