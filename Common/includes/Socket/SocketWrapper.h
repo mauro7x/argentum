@@ -3,6 +3,7 @@
 
 //-----------------------------------------------------------------------------
 #include <cstdint>
+#include <string>
 #include <vector>
 
 #include "../Exceptions/ClosedSocketException.h"
@@ -92,6 +93,9 @@ class SocketWrapper : public Socket {
 
     ssize_t operator<<(const uint32_t& n) const;
     ssize_t operator>>(uint32_t& n) const;
+
+    ssize_t operator<<(const std::string& s) const;
+    ssize_t operator>>(std::string& s) const;
 
     ssize_t operator<<(const std::vector<uint8_t>& v) const;
     ssize_t operator>>(std::vector<uint8_t>& v) const;
