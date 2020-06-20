@@ -87,7 +87,7 @@ ssize_t SocketWrapper::operator<<(const std::vector<uint8_t>& v) const {
 
     // Enviamos el vector
     uint8_t byte;
-    for (int i = 0; i < size; i++) {
+    for (uint8_t i = 0; i < size; i++) {
         byte = v.at(i);
         last_sent = this->operator<<(byte);
         if (last_sent) {
@@ -115,7 +115,7 @@ ssize_t SocketWrapper::operator>>(std::vector<uint8_t>& v) const {
     // Recibimos el vector
     v.reserve(size);
     uint8_t byte;
-    for (int i = 0; i < size; i++) {
+    for (uint8_t i = 0; i < size; i++) {
         last_received += this->operator>>(byte);
         if (last_received) {
             received += last_received;
