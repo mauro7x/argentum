@@ -13,7 +13,13 @@
 
 //-----------------------------------------------------------------------------
 //#include "../../../Common/includes/Exceptions/Exception.h"
-#include "../../../Common/includes/NonBlockingQueue.h"
+#include "../../../Common/includes/BlockingQueue.h"
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+#include "../Model/Commands/Command.h"
+#include "../Model/Commands/StartMovingCommand.h"
+#include "../Model/Commands/StopMovingCommand.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -42,7 +48,7 @@ enum Key { UNMAPPED_KEY, UP_KEY, DOWN_KEY, LEFT_KEY, RIGHT_KEY, ESC_KEY };
 class EventHandler {
    private:
     std::atomic_bool& exit;
-    NonBlockingQueue<int*>& requests;
+    BlockingQueue<Command*>& commands;
     std::unordered_map<SDL_Keycode, Key> keys;
 
     /* Flags internos */
@@ -58,13 +64,13 @@ class EventHandler {
     Event _getEvent(const SDL_Event& e);
 
     //-------------------------------------------------------------------------
-    // MANEJO DE EVENTOS PARTICULARES
+    // Manejo de eventos particulares (que justifiquen abstracción)
 
     //-------------------------------------------------------------------------
 
    public:
     /* Constructor */
-    EventHandler(std::atomic_bool& exit, NonBlockingQueue<int*>& requests);
+    EventHandler(std::atomic_bool& exit, BlockingQueue<Command*>& commands);
 
     /* Handlea un evento de SDL */
     void handleEvent(const SDL_Event& e);

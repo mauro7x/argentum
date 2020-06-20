@@ -11,6 +11,7 @@
 #include <chrono>
 #include <cstdint>
 #include <fstream>
+#include <thread>
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -21,7 +22,7 @@
 #include "../../../Common/includes/NonBlockingQueue.h"
 #include "../../../Common/includes/UnitData.h"
 #include "../../../Common/includes/paths.h"
-#include "../Model/Command.h"
+#include "../Model/Commands/Command.h"
 #include "../Model/Update.h"
 #include "../paths.h"
 //-----------------------------------------------------------------------------
@@ -43,18 +44,11 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-// Proxies para simular el server, después se cambia
-
-#include "../../../Common/includes/NonBlockingQueue.h"
-#include "../Model/ServerProxy.h"
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
 
 class GameView {
    private:
     /* Comunicación entre hilos */
-    BlockingQueue<Command*>& commands;
+    BlockingQueue<Command*>& commands;  // es necesario tenerla aca?
     NonBlockingQueue<Update*>& updates;
     std::atomic_bool& exit;
 
@@ -75,11 +69,6 @@ class GameView {
     UnitContainer<Character, CharacterData> characters;
     UnitContainer<Creature, CreatureData> creatures;
 
-    /* Proxies */
-    NonBlockingQueue<int*> requests;
-    NonBlockingQueue<PlayerData*> broadcast;
-    ServerProxy server; /* proxy, luego se reemplaza con la lógica del cliente*/
-
     /* La escena que se renderizará en cada frame */
     Stage stage;
 
@@ -99,7 +88,7 @@ class GameView {
     void _processSDLEvents();
 
     /* Vacía la cola de updates del servidor */
-    void _processServerUpdates();
+    void _processUpdates();
 
     /* Ejecuta una iteración del loop */
     void _loopIteration(const int it);
