@@ -315,7 +315,7 @@ class Character {
          * Recibe una estructura de broadcast de tipo PlayerData,
          * y la llena con sus atributos actuales para su broadcasteo.
          * 
-         * [El InstanceId del jugador en el struct ya viene dado]
+         * [No llena los campos: id, nickname]
          * 
          * ??? EL ID DEL MAPA ???
          */

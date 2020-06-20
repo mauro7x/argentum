@@ -2,6 +2,8 @@
 #define __UNIT_DATA_H__
 
 //-----------------------------------------------------------------------------
+#include <string>
+//-----------------------------------------------------------------------------
 #include "Inventory.h"
 #include "Orientation.h"
 #include "types.h"
@@ -23,6 +25,7 @@ struct UnitData {
 
 struct CharacterData {
     UnitData basic_data;
+    std::string nickname;
     Id head_id, body_id;
     EquipmentData equipment;
 };
