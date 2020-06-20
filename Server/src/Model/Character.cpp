@@ -17,7 +17,10 @@
 //-----------------------------------------------------------------------------
 Character::Character(const CharacterCfg& init_data,
                      const RaceCfg& race, const KindCfg& kind,
-                     MapContainer& map_container):
+                     MapContainer& map_container,
+                     const Id init_map,
+                     const int init_x_coord,
+                     const int init_y_coord):
         
         health(kind.initial_health + race.initial_health),
         mana(kind.initial_mana + race.initial_mana),
@@ -33,9 +36,9 @@ Character::Character(const CharacterCfg& init_data,
 
         inventory(this->level),
 
-        position(init_data.map,
-                 init_data.x_coord,
-                 init_data.y_coord,
+        position(init_map,
+                 init_x_coord,
+                 init_y_coord,
                  map_container),
         
         moving_orientation(DEFAULT_MOVING_ORIENTATION),

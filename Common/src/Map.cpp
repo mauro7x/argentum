@@ -1,5 +1,5 @@
 #include "../includes/Map.h"
-
+#include "../../Server/includes/Model/RandomNumberGenerator.h"
 //-----------------------------------------------------------------------------
 // Métodos privados
 
@@ -200,6 +200,18 @@ const bool Map::moveOcuppant(const int x, const int y,
     }
     Tile& to_tile = _getTile(x + 1, y);
     return _moveOcuppant(from_tile, to_tile);
+}
+
+void Map::establishCharacterSpawningPosition(int& x, int& y) const {
+    bool valid_position = false;
+    RandomNumberGenerator gen;
+    while (!valid_position) {
+        x = gen(0, this->w);
+        y = gen(0, this->h);
+
+        if (!this->getTile(x, y).collision)
+            valid_position = true;
+    }
 }
 
 Map::~Map() {}
