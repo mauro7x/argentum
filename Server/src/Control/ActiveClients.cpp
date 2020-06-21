@@ -13,13 +13,13 @@ ActiveClients::ActiveClients(
     NonBlockingQueue<InstanceId*>& finished_connections)
     : commands(commands), finished_connections(finished_connections) {}
 
-void ActiveClients::add(const InstanceId id, SocketWrapper& peer) {
+void ActiveClients::add(const InstanceId id, const Id map, SocketWrapper& peer) {
     if (content.count(id) > 0) {
         throw Exception("ActiveClients::add: repeated client id.");
     }
 
     content.emplace(
-        id, new ClientConnection(id, peer, finished_connections, commands));
+        id, new ClientConnection(id, map, peer, finished_connections, commands));
     content.at(id)->start();
 }
 
@@ -39,6 +39,21 @@ void ActiveClients::notify(const InstanceId& id, Notification* notification) {
     }
 
     content.at(id)->push(notification);
+}
+
+void ActiveClients::sendDifferentialBroadcastToAll(Notification* broadcast) {
+    std::unordered_map<InstanceId, ClientConnection*>::iterator it = this->content.begin();
+
+    Notification* broadcast_copy;
+
+    while (it != this->content.end()) {
+        broadcast_copy = new NotificationBroadcast(
+            *((NotificationBroadcast*) broadcast));
+        it->second->push(broadcast_copy);
+        ++it;
+    }
+
+    delete broadcast;
 }
 
 void ActiveClients::stop() {
