@@ -7,14 +7,18 @@
 //-----------------------------------------------------------------------------
 #include "../../includes/Control/ActiveClients.h"
 #include "../../includes/Control/NotificationReply.h"
+#include "../../includes/Control/NotificationBroadcast.h"
 #include "../../includes/Model/Game.h"
 //-----------------------------------------------------------------------------
 #define FIRST_INSTANCE_ID 1
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-Game::Game(ActiveClients& active_clients)
-    : next_instance_id(FIRST_INSTANCE_ID), active_clients(active_clients) {
+Game::Game(ActiveClients& active_clients, 
+           NonBlockingQueue<Notification*>& differential_broadcasts): 
+        next_instance_id(FIRST_INSTANCE_ID), 
+        active_clients(active_clients),
+        differential_broadcasts(differential_broadcasts) {
     map_container.loadMaps();
 }
 
@@ -22,6 +26,37 @@ Game::~Game() {
     // PERSISTIR TODO ANTES QUE SE DESTRUYA
 }
 //-----------------------------------------------------------------------------
+
+void Game::_pushCharacterDifferentialBroadcast(InstanceId id, BroadcastType broadcast_type) {
+    PlayerData player_data;
+    player_data.basic_data.gid = id;
+    // llenar nickname
+    player_data.nickname = "mauroputo";
+    Character& character = this->characters.at(id);
+    character.fillBroadcastData(player_data);
+    character.beBroadcasted();
+    NotificationBroadcast* broadcast = new NotificationBroadcast(
+                                        id, player_data, 
+                                        broadcast_type, CHARACTER_TYPE);
+    this->differential_broadcasts.push(broadcast);
+}
+
+void Game::_pushFullBroadcast(InstanceId receiver) {
+    std::unordered_map<InstanceId, Character>::iterator it_characters = this->characters.begin();
+    
+    while (it_characters != this->characters.end()) {
+        PlayerData player_data;
+        player_data.basic_data.gid = it_characters->first;
+        // llenar nickname
+        player_data.nickname = "mauroputo";
+        it_characters->second.fillBroadcastData(player_data);
+        NotificationBroadcast* broadcast = new NotificationBroadcast(
+                                            it_characters->first, player_data,
+                                            NEW_BROADCAST, CHARACTER_TYPE);
+        this->active_clients.notify(receiver, broadcast);
+        ++it_characters;
+    }
+}
 
 //-----------------------------------------------------------------------------
 const int Game::newCharacter(CharacterCfg& init_data) {
@@ -47,6 +82,10 @@ const int Game::newCharacter(CharacterCfg& init_data) {
 
     this->characters.at(next_instance_id).debug();
 
+    _pushCharacterDifferentialBroadcast(this->next_instance_id, NEW_BROADCAST);
+
+    _pushFullBroadcast(this->next_instance_id);
+
     ++this->next_instance_id;
     return next_instance_id - 1;
 }
@@ -55,6 +94,8 @@ void Game::deleteCharacter(const InstanceId id) {
     if (!this->characters.count(id)) {
         throw Exception("deleteCharacter: Unknown character id [", id, "]");
     }
+
+    _pushCharacterDifferentialBroadcast(id, DELETE_BROADCAST);
 
     // PERSISTIR ESTADO DEL JUGADOR
 
@@ -77,6 +118,10 @@ void Game::actCharacters(const int it) {
             it_characters->second.stopMoving();
             Notification* reply = new NotificationReply(ERROR_REPLY, e.what());
             active_clients.notify(it_characters->first, reply);
+        }
+
+        if (it_characters->second.mustBeBroadcasted()) {
+            _pushCharacterDifferentialBroadcast(it_characters->first, UPDATE_BROADCAST);
         }
 
         it_characters->second.debug();
@@ -141,4 +186,12 @@ void Game::stopMoving(const Id caller) {
 
     Character& character = this->characters.at(caller);
     character.stopMoving();
+}
+//-----------------------------------------------------------------------
+const Id Game::getMapId(const InstanceId caller) {
+    if (!this->characters.count(caller)) {
+        throw Exception("Game.cpp::getMapId: unknown caller.");
+    }
+
+    return this->characters.at(caller).getMapId();
 }
