@@ -9,12 +9,11 @@
 #include "types.h"
 //-----------------------------------------------------------------------------
 
-//-----------------------------------------------------------------------------
-
 /* Información básica necesaria para cualquier unidad */
 struct UnitData {
     InstanceId gid; /* unit id (ingame)*/
 
+    Id map;
     int x_tile, y_tile;      /* coordenadas en tiles */
     Orientation orientation; /* orientación de la unidad */
 };
