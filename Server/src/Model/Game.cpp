@@ -38,7 +38,8 @@ const int Game::newCharacter(CharacterCfg& init_data) {
         this->next_instance_id, spawning_x_coord, spawning_y_coord);
 
     this->characters.emplace(
-        std::piecewise_construct, std::forward_as_tuple(this->next_instance_id),
+        std::piecewise_construct, 
+        std::forward_as_tuple(this->next_instance_id),
         std::forward_as_tuple(init_data, this->races[init_data.race],
                               this->kinds[init_data.kind], this->map_container,
                               spawning_map_id, spawning_x_coord,
