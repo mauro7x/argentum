@@ -6,19 +6,19 @@
 #include "../../../Common/includes/Protocol.h"
 //-----------------------------------------------------------------------------
 #include "../../includes/Control/ActiveClients.h"
-#include "../../includes/Control/NotificationReply.h"
 #include "../../includes/Control/NotificationBroadcast.h"
+#include "../../includes/Control/NotificationReply.h"
 #include "../../includes/Model/Game.h"
 //-----------------------------------------------------------------------------
 #define FIRST_INSTANCE_ID 1
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-Game::Game(ActiveClients& active_clients, 
-           NonBlockingQueue<Notification*>& differential_broadcasts): 
-        next_instance_id(FIRST_INSTANCE_ID), 
-        active_clients(active_clients),
-        differential_broadcasts(differential_broadcasts) {
+Game::Game(ActiveClients& active_clients,
+           NonBlockingQueue<Notification*>& differential_broadcasts)
+    : next_instance_id(FIRST_INSTANCE_ID),
+      active_clients(active_clients),
+      differential_broadcasts(differential_broadcasts) {
     map_container.loadMaps();
 }
 
@@ -27,7 +27,8 @@ Game::~Game() {
 }
 //-----------------------------------------------------------------------------
 
-void Game::_pushCharacterDifferentialBroadcast(InstanceId id, BroadcastType broadcast_type) {
+void Game::_pushCharacterDifferentialBroadcast(InstanceId id,
+                                               BroadcastType broadcast_type) {
     PlayerData player_data;
     player_data.basic_data.gid = id;
     // llenar nickname
@@ -36,14 +37,14 @@ void Game::_pushCharacterDifferentialBroadcast(InstanceId id, BroadcastType broa
     character.fillBroadcastData(player_data);
     character.beBroadcasted();
     NotificationBroadcast* broadcast = new NotificationBroadcast(
-                                        id, player_data, 
-                                        broadcast_type, CHARACTER_TYPE);
+        id, player_data, broadcast_type, CHARACTER_TYPE);
     this->differential_broadcasts.push(broadcast);
 }
 
 void Game::_pushFullBroadcast(InstanceId receiver) {
-    std::unordered_map<InstanceId, Character>::iterator it_characters = this->characters.begin();
-    
+    std::unordered_map<InstanceId, Character>::iterator it_characters =
+        this->characters.begin();
+
     while (it_characters != this->characters.end()) {
         PlayerData player_data;
         player_data.basic_data.gid = it_characters->first;
@@ -51,8 +52,7 @@ void Game::_pushFullBroadcast(InstanceId receiver) {
         player_data.nickname = "mauroputo";
         it_characters->second.fillBroadcastData(player_data);
         NotificationBroadcast* broadcast = new NotificationBroadcast(
-                                            it_characters->first, player_data,
-                                            NEW_BROADCAST, CHARACTER_TYPE);
+            it_characters->first, player_data, NEW_BROADCAST, CHARACTER_TYPE);
         this->active_clients.notify(receiver, broadcast);
         ++it_characters;
     }
@@ -73,8 +73,7 @@ const int Game::newCharacter(CharacterCfg& init_data) {
         this->next_instance_id, spawning_x_coord, spawning_y_coord);
 
     this->characters.emplace(
-        std::piecewise_construct, 
-        std::forward_as_tuple(this->next_instance_id),
+        std::piecewise_construct, std::forward_as_tuple(this->next_instance_id),
         std::forward_as_tuple(init_data, this->races[init_data.race],
                               this->kinds[init_data.kind], this->map_container,
                               spawning_map_id, spawning_x_coord,
@@ -122,10 +121,11 @@ void Game::actCharacters(const int it) {
         }
 
         if (it_characters->second.mustBeBroadcasted()) {
-            _pushCharacterDifferentialBroadcast(it_characters->first, UPDATE_BROADCAST);
+            _pushCharacterDifferentialBroadcast(it_characters->first,
+                                                UPDATE_BROADCAST);
         }
 
-        it_characters->second.debug();
+        // it_characters->second.debug();
 
         ++it_characters;
     }
