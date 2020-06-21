@@ -1,7 +1,8 @@
 #include "../../includes/Model/Equipment.h"
-#include "../../includes/Model/Character.h"
 
-#include <iostream> // Para testear
+#include <iostream>  // Para testear
+
+#include "../../includes/Model/Character.h"
 
 Equipment::Equipment() {
     // Inicializo array de wearables con nullptr.
@@ -35,8 +36,8 @@ const unsigned int Equipment::getAttackRange() const {
 
 const unsigned int Equipment::getDefensePoints(Character& defender) {
     unsigned int defense_points = 0;
-    // Sumo los puntos de defensa de cada wearables de defensa que lleva puesto,
-    // que resultan ser todos menos WEAPON.
+    /* Sumo los puntos de defensa de cada wearables de defensa 
+    que lleva puesto,que resultan ser todos menos WEAPON.*/
     for (unsigned int type = 0; type < N_WEARABLE_ITEMS; ++type) {
         if (type == WEAPON) {
             continue;
@@ -54,9 +55,8 @@ void Equipment::fillBroadcastData(PlayerData& data) const {
             data.equipment[i] = 0;
         } else {
             data.equipment[i] = this->container[i]->getId();
-        }        
+        }
     }
-
 }
 
 void Equipment::debug() const {

@@ -17,7 +17,8 @@ NotificationMessage::NotificationMessage(uint32_t sender_length,
       message_length(message_length),
       message(message) {}
 
-bool NotificationMessage::send(const InstanceId sender, const SocketWrapper& peer) {
+bool NotificationMessage::send(const InstanceId sender,
+                               const SocketWrapper& peer) {
     try {
         peer << char(1);
         peer << sender_length;
