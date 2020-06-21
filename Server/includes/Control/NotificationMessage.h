@@ -27,7 +27,7 @@ class NotificationMessage : public Notification {
     //-----------------------------------------------------------------------------
 
     /* Envío polimórfico de notificacion. Devuelve si se pudo enviar. */
-    virtual bool send(const SocketWrapper& peer);
+    virtual bool send(const InstanceId sender, const SocketWrapper& peer);
 
     //-----------------------------------------------------------------------------
 

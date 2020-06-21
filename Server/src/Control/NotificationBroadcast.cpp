@@ -35,12 +35,17 @@ NotificationBroadcast& NotificationBroadcast::operator=(
     return *this;
 }
 
-bool NotificationBroadcast::send(const SocketWrapper& peer) {
+bool NotificationBroadcast::send(const InstanceId sender, const SocketWrapper& peer) {
     Serialized serialized = json::to_msgpack(j);
     uint32_t size = serialized.size();
+
+    if (sender == this->id) {
+        this->entity_type = PLAYER_TYPE;
+    }
+
     try {
         switch(this->broadcast_type) {
-            case DELETE:
+            case DELETE_BROADCAST:
                 peer << (char) BROADCAST_OPCODE;
                 peer << (char) broadcast_type;
                 peer << (char) entity_type;

@@ -4,6 +4,7 @@
 //-----------------------------------------------------------------------------
 #include "../../../Common/includes/Protocol.h"
 #include "../../../Common/includes/Socket/SocketWrapper.h"
+#include "../../../Common/includes/types.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -20,7 +21,7 @@
 class Notification {
    public:
     /* Constructor */
-    Notification() {}
+    Notification();
 
     /**
      * Descripción: Generatión de la notificatión depende de los parametros.
@@ -57,17 +58,21 @@ class Notification {
     Notification(Notification&& other) = delete;
 
     /* Habilitamos el operador= para movimiento. */
-    Notification& operator=(Notification&& other);
+    Notification& operator=(Notification&&) = delete;
 
     //-----------------------------------------------------------------------------
 
     /* Envío polimórfico de notificacion. Devuelve si se pudo enviar. */
-    virtual bool send(const SocketWrapper& peer) = 0;
+    virtual bool send(const InstanceId sender, const SocketWrapper& peer) = 0;
+
+    virtual const bool isBroadcast() const;
+
+    virtual const Id getMapId() const;
 
     //-----------------------------------------------------------------------------
 
     /* Destructor */
-    virtual ~Notification() {}
+    virtual ~Notification();
 };
 
 //-----------------------------------------------------------------------------
