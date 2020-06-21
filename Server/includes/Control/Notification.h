@@ -23,31 +23,6 @@ class Notification {
     /* Constructor */
     Notification();
 
-    /**
-     * Descripción: Generatión de la notificatión depende de los parametros.
-     *
-     * Parámetros: - booleano is_reply : para checkear si es una respuesta para
-     *               comandos
-     *             - caracter opcode : para indicar tipo de la respuesta, si no
-     *               es una respuesta, opcode es NULL;
-     *             - unit32_t longitud : la cantidad de bytes del mensaje que va
-     *               a enviar al cliente
-     *             - string reply : mensaje de formato string a enviar al
-     * cliente.
-     *             - uint32_t sender_length : la cantidad de bytes del nombre
-     * del sender, 0 si no es un mensaje privado;
-     *             - string sender : nombre del sender en formato string, NULL
-     * si no es un mensaje privado;
-     *
-     * Retorno: clase Notificaction.
-     *
-     */
-    // pendiente------
-    // static std::unique_ptr<Notification> getNotification(bool is_reply, char
-    // opcode, uint32_t length,
-    //                              std::string reply, uint32_t sender_length,
-    //                              std::string sender);
-
     /* Deshabilitamos el constructor por copia. */
     Notification(const Notification&) = delete;
 
