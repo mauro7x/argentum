@@ -39,6 +39,8 @@ class Position {
         /* Devuelve la coordenada y de la posición del character */
         const int getY() const;
 
+        const Id getMapId() const;
+
         /* 
          * Mueve un tile la posición en la dirección de la orientation. 
          * 

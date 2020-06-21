@@ -301,6 +301,7 @@ void Character::die() {
     delete this->state;
     this->state = new Dead();
     // DROPEAR ORO EN EXCESO E ITEMS DEL INVENTARIO
+    // CAMBIAR HEAD_ID Y BODY_ID A LAS DE UN FANTASMA.
     this->broadcast = true;
 }
 //-----------------------------------------------------------------------------
@@ -324,6 +325,10 @@ const unsigned int Character::getMaxHealth() const {
 
 const bool Character::isNewbie() const {
     return this->level.isNewbie();
+}
+
+const Id Character::getMapId() const {
+    return this->position.getMapId();
 }
 //-----------------------------------------------------------------------------
 

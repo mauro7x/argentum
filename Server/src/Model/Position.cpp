@@ -24,6 +24,10 @@ const int Position::getY() const {
     return this->y;
 }
 
+const Id Position::getMapId() const {
+    return this->map;
+}
+
 const unsigned int Position::getDistance(const Position& other) const {
     return abs(this->x - other.getX()) + abs(this->y - other.getY());
 }
