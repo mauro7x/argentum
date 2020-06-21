@@ -70,6 +70,9 @@ class Game {
      */
     const int newCharacter(CharacterCfg& init_data);
 
+    /* método provisorio */
+    void broadcastNewCharacter(InstanceId id);
+
     /*
      * Llamar a este metodo ante la desconexión de un character.
      *

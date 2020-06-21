@@ -50,10 +50,13 @@ const unsigned int Equipment::getDefensePoints(Character& defender) {
 
 void Equipment::fillBroadcastData(PlayerData& data) const {
     for (int i = 0; i < N_WEARABLE_ITEMS; ++i) {
-        if (!this->container[i])
+        if (!this->container[i]) {
             data.equipment[i] = 0;
-        data.equipment[i] = this->container[i]->getId();
+        } else {
+            data.equipment[i] = this->container[i]->getId();
+        }        
     }
+
 }
 
 void Equipment::debug() const {

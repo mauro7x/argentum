@@ -37,7 +37,6 @@ NotificationBroadcast& NotificationBroadcast::operator=(
 
 bool NotificationBroadcast::send(const InstanceId sender, const SocketWrapper& peer) {
     Serialized serialized = json::to_msgpack(j);
-    uint32_t size = serialized.size();
 
     if (sender == this->id) {
         this->entity_type = PLAYER_TYPE;
@@ -56,7 +55,6 @@ bool NotificationBroadcast::send(const InstanceId sender, const SocketWrapper& p
                 peer << (char) BROADCAST_OPCODE;
                 peer << (char) broadcast_type;
                 peer << (char) entity_type;
-                peer << size;
                 peer << serialized;
                 break;
         }

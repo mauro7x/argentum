@@ -21,19 +21,15 @@
 
 class Player : public Unit {
    private:
-    // Cuerpo y vestimenta
+    std::string nickname;
     Id head_id = 0, body_id = 0;
-    Id helmet_id = 0, armour_id = 0, shield_id = 0, weapon_id = 0;
+    EquipmentData equipment = {0};
+    InventoryData inventory = {0};
 
-    // Vida, mana, oro, nivel
     uint32_t health = 0, max_health = 0;
     uint32_t mana = 0, max_mana = 0;
     uint32_t safe_gold = 0, excess_gold = 0;
     uint32_t level = 0, exp = 0, levelup_exp = 0;
-
-    // Inventario y equipamiento
-    InventoryData inventory = {0};
-    EquipmentData equipment = {0};
 
     /* Copia la data desde el paquete recibido */
     void _copyData(const PlayerData& init_data);

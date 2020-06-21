@@ -24,6 +24,7 @@ void Engine::_processNewConnections() {
         InstanceId id = this->game.newCharacter((*new_connection).data);
         Id map = this->game.getMapId(id);
         active_clients.add(id, map, (*new_connection).peer);
+        this->game.broadcastNewCharacter(id);
 
         delete new_connection;
     }

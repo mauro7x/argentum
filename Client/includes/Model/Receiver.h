@@ -1,50 +1,78 @@
-#ifndef __UPDATER_H__
-#define __UPDATER_H__
+#ifndef __RECEIVER_H__
+#define __RECEIVER_H__
 
 //-----------------------------------------------------------------------------
 #include <atomic>
+#include <cstdint>
 #include <exception>
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 #include "../../../Common/includes/Exceptions/Exception.h"
+#include "../../../Common/includes/JSON.h"
 #include "../../../Common/includes/NonBlockingQueue.h"
+#include "../../../Common/includes/Protocol.h"
 #include "../../../Common/includes/Socket/SocketWrapper.h"
 #include "../../../Common/includes/Thread.h"
+#include "../../../Common/includes/UnitData.h"
+#include "../../../Common/includes/json_conversion.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-#include "Update.h"
+#include "Broadcasts/Broadcast.h"
+#include "Broadcasts/Broadcasts.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 
-class Updater : public Thread {
+class Receiver : public Thread {
    private:
-    const SocketWrapper& socket;        /* SÓLO LECTURA (RECV) */
-    NonBlockingQueue<Update*>& updates; /* Updates a recibir */
-    std::atomic_bool& exit;             /* flag de ejecución compartido */
+    const SocketWrapper& socket;              /* SÓLO LECTURA (RECV) */
+    NonBlockingQueue<Broadcast*>& broadcasts; /* Broadcasts a recibir */
+    // falta cola de info para mostrar x chat
+    std::atomic_bool& exit; /* flag de ejecución compartido */
+    std::atomic_bool& first_package_received;
 
     //-----------------------------------------------------------------------------
     // Métodos privados
+
+    /* Recibe una respuesta y la pushea en la cola */
+    void _receiveReply() const;
+
+    /* Recibe un mensaje privado y lo pushea en la cola */
+    void _receivePrivateMessage() const;
+
+    /* Recibe un broadcast y lo pushea en la cola */
+    void _receiveBroadcast() const;
+
+    /* Recibe un broadcast de tipo new */
+    void _receiveNewBroadcast() const;
+
+    /* Recibe un broadcast de tipo update */
+    void _receiveUpdateBroadcast() const;
+
+    /* Recibe un broadcast de tipo delete */
+    void _receiveDeleteBroadcast() const;
+
     //-----------------------------------------------------------------------------
 
    public:
     /* Constructor */
-    Updater(const SocketWrapper& socket, NonBlockingQueue<Update*>& updates,
-            std::atomic_bool& exit);
+    Receiver(const SocketWrapper& socket,
+             NonBlockingQueue<Broadcast*>& broadcasts, std::atomic_bool& exit,
+             std::atomic_bool& first_package_received);
 
     /* Deshabilitamos el constructor por copia. */
-    Updater(const Updater&) = delete;
+    Receiver(const Receiver&) = delete;
 
     /* Deshabilitamos el operador= para copia.*/
-    Updater& operator=(const Updater&) = delete;
+    Receiver& operator=(const Receiver&) = delete;
 
     /* Deshabilitamos el constructor por movimiento. */
-    Updater(Updater&& other) = delete;
+    Receiver(Receiver&& other) = delete;
 
     /* Deshabilitamos el operador= para movimiento. */
-    Updater& operator=(Updater&& other) = delete;
+    Receiver& operator=(Receiver&& other) = delete;
 
     //-----------------------------------------------------------------------------
 
@@ -54,9 +82,9 @@ class Updater : public Thread {
     //-----------------------------------------------------------------------------
 
     /* Destructor */
-    ~Updater();
+    ~Receiver();
 };
 
 //-----------------------------------------------------------------------------
 
-#endif  // __UPDATER_H__
+#endif  // __RECEIVER_H__

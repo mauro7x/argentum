@@ -18,10 +18,10 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+#include "Broadcasts/Broadcast.h"
 #include "CommandDispatcher.h"
 #include "Commands/Command.h"
-#include "Update.h"
-#include "Updater.h"
+#include "Receiver.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -30,8 +30,9 @@ class Client {
    private:
     // Canales de comunicación entre hilos (thread-safe)
     BlockingQueue<Command*> commands;
-    NonBlockingQueue<Update*> updates;
+    NonBlockingQueue<Broadcast*> broadcasts;
     std::atomic_bool exit;
+    std::atomic_bool first_package_received;
 
     //-------------------------------------------------------------------------
     // Métodos privados
@@ -39,7 +40,7 @@ class Client {
     /* Interactúa con el jugador para conectarlo a un determinado servidor */
     bool _connect(SocketWrapper& socket) const;  // PROXY
 
-    /* Libera la memoria de los comandos o updates que no se hayan procesado */
+    /* Libera la memoria de comandos/broadcasts que no se hayan procesado */
     void _freeQueues();
 
     //-------------------------------------------------------------------------

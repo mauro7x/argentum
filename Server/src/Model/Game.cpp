@@ -82,12 +82,13 @@ const int Game::newCharacter(CharacterCfg& init_data) {
 
     this->characters.at(next_instance_id).debug();
 
-    _pushCharacterDifferentialBroadcast(this->next_instance_id, NEW_BROADCAST);
-
-    _pushFullBroadcast(this->next_instance_id);
-
     ++this->next_instance_id;
     return next_instance_id - 1;
+}
+
+void Game::broadcastNewCharacter(InstanceId id) {
+    _pushCharacterDifferentialBroadcast(id, NEW_BROADCAST);
+    _pushFullBroadcast(id);
 }
 
 void Game::deleteCharacter(const InstanceId id) {

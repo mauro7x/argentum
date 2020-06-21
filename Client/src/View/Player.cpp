@@ -6,14 +6,13 @@
 void Player::_copyData(const PlayerData& init_data) {
     // Data básica
     data = init_data.basic_data;
+    nickname = init_data.nickname;
 
     // Ids gráficos
     head_id = init_data.head_id;
     body_id = init_data.body_id;
-    helmet_id = init_data.equipment[HELMET];
-    armour_id = init_data.equipment[ARMOUR];
-    shield_id = init_data.equipment[SHIELD];
-    weapon_id = init_data.equipment[WEAPON];
+    equipment = init_data.equipment;
+    inventory = init_data.inventory;
 
     // Stats
     health = init_data.health;
@@ -25,10 +24,6 @@ void Player::_copyData(const PlayerData& init_data) {
     level = init_data.level;
     exp = init_data.exp;
     levelup_exp = init_data.levelup_exp;
-
-    // Inventario y equipamiento
-    inventory = init_data.inventory;
-    equipment = init_data.equipment;
 }
 
 //-----------------------------------------------------------------------------
@@ -86,18 +81,18 @@ void Player::render() const {
     }
 
     // Armadura
-    if (armour_id) {
-        _render(g_sprites->get(armour_id));
+    if (equipment[ARMOUR]) {
+        _render(g_sprites->get(equipment[ARMOUR]));
     }
 
     // Escudo
-    if (shield_id) {
-        _render(g_sprites->get(shield_id));
+    if (equipment[SHIELD]) {
+        _render(g_sprites->get(equipment[SHIELD]));
     }
 
     // Espada
-    if (weapon_id) {
-        _render(g_sprites->get(weapon_id));
+    if (equipment[WEAPON]) {
+        _render(g_sprites->get(equipment[WEAPON]));
     }
 
     // Cabeza
@@ -106,8 +101,8 @@ void Player::render() const {
     }
 
     // Casco
-    if (helmet_id) {
-        _render(g_sprites->get(helmet_id));
+    if (equipment[HELMET]) {
+        _render(g_sprites->get(equipment[HELMET]));
     }
 }
 
