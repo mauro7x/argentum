@@ -73,6 +73,7 @@ enum BroadcastType {
     DELETE};
 
 enum EntityType {
+    PLAYER,
     CHARACTER, 
     CREATURE,
     ITEM};
