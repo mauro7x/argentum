@@ -4,7 +4,24 @@
 // Métodos privados
 
 void Receiver::_receiveReply() const {
-    throw Exception("Receiver::run: replies not implemented yet.");
+    // implementación proxy
+
+    uint8_t opcode;
+    std::string reply;
+    ssize_t received = 0;
+
+    received = (socket >> opcode);
+    if (!received) {
+        throw Exception("Receiver::_receiveReply: incomplete reply received.");
+    }
+
+    received = (socket >> reply);
+    if (!received) {
+        throw Exception("Receiver::_receiveReply: incomplete reply received.");
+    }
+
+    // switchear segun el tipo para el color
+    fprintf(stderr, "REPLY RECIBIDA: %s\n", reply.c_str());
 }
 
 void Receiver::_receivePrivateMessage() const {
@@ -20,8 +37,6 @@ void Receiver::_receiveBroadcast() const {
         throw Exception(
             "Receiver::_receiveBroadcast: incomplete broadcast received.");
     }
-
-    fprintf(stderr, "recibiendo broadcast. opcode = %i\n", opcode);
 
     switch (opcode) {
         case NEW_BROADCAST: {
@@ -58,15 +73,11 @@ void Receiver::_receiveNewBroadcast() const {
             "Receiver::_receiveNewBroadcast: incomplete broadcast received.");
     }
 
-    fprintf(stderr, "recibiendo new. entity_type = %i\n", entity_type);
-
     received = (socket >> serialized_broadcast);
     if (!received) {
         throw Exception(
             "Receiver::_receiveNewBroadcast: incomplete broadcast received.");
     }
-
-    fprintf(stderr, "recibiendo new. ya recibimos el broadcast\n");
 
     switch (entity_type) {
         case PLAYER_TYPE: {
@@ -259,7 +270,6 @@ void Receiver::run() {
     try {
         uint8_t opcode;
         while (socket >> opcode) {
-            fprintf(stderr, "recibi un paquete. opcode = %i\n", opcode);
             switch (opcode) {
                 case REPLY_OPCODE: {
                     _receiveReply();
