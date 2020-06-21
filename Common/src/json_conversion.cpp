@@ -52,4 +52,6 @@ void from_json(const json& j, PlayerData& data) {
     j.at("level").get_to(data.level);
     j.at("exp").get_to(data.exp);
     j.at("levelup_exp").get_to(data.levelup_exp);
+    data.equipment = j.at("equipment").get<EquipmentData>();
+    data.inventory = j.at("inventory").get<InventoryData>();
 }
