@@ -82,13 +82,18 @@ ssize_t SocketWrapper::operator<<(const std::string& s) const {
     uint32_t size = s.size();
     sent += this->operator<<(size);
     if (sent != sizeof(size)) {
-        return sent;
+        return 0;
     }
 
     // Enviamos el string
     last_sent = send(s.c_str(), size);
+    if (last_sent) {
+        sent += last_sent;
+    } else {
+        return 0;
+    }
 
-    return sent + last_sent;
+    return sent;
 }
 
 ssize_t SocketWrapper::operator>>(std::string& s) const {
@@ -100,7 +105,7 @@ ssize_t SocketWrapper::operator>>(std::string& s) const {
     uint32_t size;
     received += this->operator>>(size);
     if (received != sizeof(size)) {
-        return received;
+        return 0;
     }
 
     // Recibimos el vector
@@ -112,7 +117,7 @@ ssize_t SocketWrapper::operator>>(std::string& s) const {
             received += last_received;
             s += byte;
         } else {
-            return received;
+            return 0;
         }
     }
 
@@ -126,7 +131,7 @@ ssize_t SocketWrapper::operator<<(const std::vector<uint8_t>& v) const {
     uint32_t size = v.size();
     sent += this->operator<<(size);
     if (sent != sizeof(size)) {
-        return sent;
+        return 0;
     }
 
     // Enviamos el vector
@@ -137,7 +142,7 @@ ssize_t SocketWrapper::operator<<(const std::vector<uint8_t>& v) const {
         if (last_sent) {
             sent += last_sent;
         } else {
-            return sent;
+            return 0;
         }
     }
 
@@ -153,7 +158,7 @@ ssize_t SocketWrapper::operator>>(std::vector<uint8_t>& v) const {
     uint32_t size;
     received += this->operator>>(size);
     if (received != sizeof(size)) {
-        return received;
+        return 0;
     }
 
     // Recibimos el vector
@@ -165,7 +170,7 @@ ssize_t SocketWrapper::operator>>(std::vector<uint8_t>& v) const {
             received += last_received;
             v.push_back(byte);
         } else {
-            return received;
+            return 0;
         }
     }
 
