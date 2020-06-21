@@ -85,7 +85,7 @@ Tile& Map::_getTile(const int x, const int y) {
 }
 
 const bool Map::_moveOcuppant(Tile& from_tile, Tile& to_tile) {
-    if (to_tile.collision || to_tile.occupant_id /*|| to_tile.npc_id*/) {
+    if (to_tile.collision || to_tile.occupant_id || to_tile.npc_id) {
         // El tile está ocupado / hay colisión.
         return false;
     }
