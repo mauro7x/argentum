@@ -45,6 +45,7 @@ bool Client::_connect(SocketWrapper& socket) const {
 void Client::_freeQueues() {
     {
         Command* command = NULL;
+        commands.close();
         while ((command = commands.pop())) {
             delete command;
         }
@@ -91,12 +92,33 @@ void Client::run() {
     command_dispatcher.start();
     updater.start();
 
-    // FALTA VER COMO HACER QUE SI EL SOCKET SE CIERRA (DEL LADO DEL SERVER), LA
-    // VISTA TERMINE
+    try {
+        // Lanzamos la vista del juego
+        GameView game(commands, updates, exit);
+        game();
 
-    // Lanzamos la vista del juego
-    GameView game(commands, updates, exit);
-    game();
+    } catch (const Exception& e) {
+        socket.shutdown();
+        socket.close();
+        commands.close();
+        command_dispatcher.join();
+        updater.join();
+        throw e;
+    } catch (const std::exception& e) {
+        socket.shutdown();
+        socket.close();
+        commands.close();
+        command_dispatcher.join();
+        updater.join();
+        throw e;
+    } catch (...) {
+        socket.shutdown();
+        socket.close();
+        commands.close();
+        command_dispatcher.join();
+        updater.join();
+        throw;
+    }
 
     // Cerramos la conexión ordenadamente
     socket.shutdown();
@@ -107,12 +129,15 @@ void Client::run() {
     command_dispatcher.join();
     updater.join();
 
-    // En caso de que hayan quedado comandos o updates sin procesar.
+    // Liberamos las colas
     _freeQueues();
 
     fprintf(stderr, "DEBUG: Termina la ejecución del cliente.\n");
 }
 
-Client::~Client() {}
+Client::~Client() {
+    // Liberamos las colas
+    _freeQueues();
+}
 
 //-----------------------------------------------------------------------------

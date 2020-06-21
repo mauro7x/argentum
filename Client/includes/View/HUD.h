@@ -30,8 +30,8 @@ class HUD {
     const Player& player;
 
     // Offsets de renderizado
-    int offset_x, offset_y;
-    int w, h;
+    int offset_x = 0, offset_y = 0;
+    int w = 0, h = 0;
 
     // Componentes
     Console console;
@@ -66,8 +66,14 @@ class HUD {
     /* Carga los archivos necesarios */
     void loadMedia();
 
+    /* Actualiza su información */
+    void update();
+
     /* Renderiza la interfaz entera */
     void render() const;
+
+    /* Libera recursos */
+    void free();
 
     //-------------------------------------------------------------------------
 

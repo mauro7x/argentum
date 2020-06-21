@@ -22,6 +22,7 @@
 class Console : public HUDComponent {
    private:
     // Texturas a renderizar
+    Texture base;
 
    public:
     /* Constructor */
@@ -37,6 +38,9 @@ class Console : public HUDComponent {
 
     /* Renderiza la consola */
     void render() const override;
+
+    /* Libera recursos */
+    virtual void free() override;
 
     //-------------------------------------------------------------------------
 

@@ -12,6 +12,8 @@ HUD::HUD(const Renderer* renderer, const Player& player)
     : initialized(false),
       g_renderer(renderer),
       player(player),
+
+      // Componentes
       console(renderer),
       user_info(renderer, player),
       user_inventory(renderer, player),
@@ -52,6 +54,10 @@ void HUD::loadMedia() {
     upper_layer.loadFromFile(g_renderer, HUD_UPPER_LAYER_FP);
 }
 
+void HUD::update() {
+    // updatear la info
+}
+
 void HUD::render() const {
     if (!initialized) {
         throw Exception("HUD not initialized.");
@@ -68,6 +74,15 @@ void HUD::render() const {
     g_renderer->render(upper_layer.getTexture(), &render_quad);
 }
 
-HUD::~HUD() {}
+void HUD::free() {
+    console.free();
+    user_info.free();
+    user_inventory.free();
+    user_stats.free();
+}
+
+HUD::~HUD() {
+    free();
+}
 
 //-----------------------------------------------------------------------------

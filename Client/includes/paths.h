@@ -26,9 +26,16 @@
 // HUD assets paths
 
 #define HUD_UPPER_LAYER_FP "../Assets/HUD/UpperLayer.png"
+#define HUD_CONSOLE_BASE_FP "../Assets/HUD/Console/base.png"
 #define HUD_USER_INFO_BASE_FP "../Assets/HUD/UserInfo/base.png"
 #define HUD_USER_INVENTORY_BASE_FP "../Assets/HUD/UserInventory/base.png"
 #define HUD_USER_STATS_BASE_FP "../Assets/HUD/UserStats/base.png"
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+// Fonts paths
+
+#define FONT_OLDLONDON_FP "../Assets/Fonts/OldLondon.ttf"
 //-----------------------------------------------------------------------------
 
 #endif  // __CLIENT_PATHS_H__

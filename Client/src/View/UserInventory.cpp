@@ -16,10 +16,10 @@ void UserInventory::init(const json& config) {
         throw Exception("UserInventory already initialized.");
     }
 
-    offset_x = config["offset"]["x"];
-    offset_y = config["offset"]["y"];
-    w = config["w"];
-    h = config["h"];
+    render_rect.x = config["offset"]["x"];
+    render_rect.y = config["offset"]["y"];
+    render_rect.w = config["w"];
+    render_rect.h = config["h"];
 
     initialized = true;
 }
@@ -33,15 +33,19 @@ void UserInventory::loadMedia() {
     base.loadFromFile(g_renderer, HUD_USER_INVENTORY_BASE_FP);
 }
 
+void UserInventory::update() {}
+
 void UserInventory::render() const {
     if (!initialized) {
         throw Exception("UserInventory not initialized.");
     }
 
-    // Renderizar
-    SDL_Rect render_quad = {offset_x, offset_y, w, h};
+    // Renderizar la base
+    SDL_Rect render_quad = render_rect;
     g_renderer->render(base.getTexture(), &render_quad);
 }
+
+void UserInventory::free() {}
 
 UserInventory::~UserInventory() {}
 

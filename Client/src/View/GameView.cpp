@@ -246,6 +246,9 @@ void GameView::operator()() {
 }
 
 GameView::~GameView() {
+    // Es necesario liberar las fuentes utilizadas antes de llamar a TTF_Quit.
+    hud.free();
+
     Mix_Quit();
     TTF_Quit();
     IMG_Quit();

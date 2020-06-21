@@ -5,6 +5,7 @@
 #include <stdio.h>
 
 #include <atomic>
+#include <exception>
 #include <string>
 //-----------------------------------------------------------------------------
 

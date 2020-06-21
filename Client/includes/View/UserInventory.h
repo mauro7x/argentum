@@ -39,8 +39,14 @@ class UserInventory : public HUDComponent {
     /* Carga los archivos necesarios */
     void loadMedia() override;
 
+    /* Actualiza la información que se muestra */
+    void update() override;
+
     /* Renderiza la consola */
     void render() const override;
+
+    /* Libera recursos */
+    virtual void free() override;
 
     //-------------------------------------------------------------------------
 

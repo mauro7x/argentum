@@ -4,6 +4,7 @@
 //-----------------------------------------------------------------------------
 #include "../../../Common/includes/JSON.h"
 #include "Renderer.h"
+#include "Texture.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -14,13 +15,15 @@ class HUDComponent {
     const Renderer* g_renderer;
 
     // Offsets de renderizado
-    int offset_x, offset_y;
-    int w, h;
+    SDL_Rect render_rect = {0};
+
+    /* Centra una textura en un rectangulo */
+    void _center(SDL_Point& texture_pos, const Texture& texture,
+                 const SDL_Rect& rect);
 
    public:
     /* Constructor */
-    HUDComponent(const Renderer* renderer)
-        : initialized(false), g_renderer(renderer) {}
+    HUDComponent(const Renderer* renderer);
 
     /* Deshabilitamos el constructor por copia. */
     HUDComponent(const HUDComponent&) = delete;
@@ -42,13 +45,19 @@ class HUDComponent {
     /* Carga los archivos necesarios */
     virtual void loadMedia() = 0;
 
+    /* Actualiza la información que se muestra */
+    virtual void update();
+
     /* Renderiza la consola */
     virtual void render() const = 0;
+
+    /* Libera recursos */
+    virtual void free();
 
     //-------------------------------------------------------------------------
 
     /* Destructor */
-    virtual ~HUDComponent() {}
+    virtual ~HUDComponent();
 };
 
 //-----------------------------------------------------------------------------

@@ -44,6 +44,26 @@
             "offset": {
                 "x": 686,
                 "y": 7
+            },
+            "components": {
+                "lvl": {
+                    "fontsize": 30,
+                    "w": 36,
+                    "h": 36,
+                    "offset": {
+                        "x": 27,
+                        "y": 17
+                    }
+                },
+                "nickname": {
+                    "fontsize": 40,
+                    "w": 177,
+                    "h": 50,
+                    "offset": {
+                        "x": 70,
+                        "y": 10
+                    }
+                }
             }
         },
         "user_inventory": {
