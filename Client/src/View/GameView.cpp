@@ -111,13 +111,10 @@ void GameView::_processBroadcasts() {
 }
 
 void GameView::_loopIteration(const int it) {
-    auto t1 = std::chrono::steady_clock::now();
+    // auto t1 = std::chrono::steady_clock::now();
     /* Vaciamos las colas a procesar*/
     _processSDLEvents();
     _processBroadcasts();
-
-    SDL_Point pos = player.getPos();
-    fprintf(stderr, "Player pos. X=%i, Y=%i\n", pos.x, pos.y);
 
     /* Limpiamos la pantalla */
     renderer.clearScreen();
@@ -132,9 +129,9 @@ void GameView::_loopIteration(const int it) {
     console.render();
     renderer.presentScreen();
 
-    auto t2 = std::chrono::steady_clock::now();
-    std::chrono::duration<float, std::milli> diff = t2 - t1;
-    fprintf(stderr, "Iteration time: %i ms.\n", (int)diff.count());
+    // auto t2 = std::chrono::steady_clock::now();
+    // std::chrono::duration<float, std::milli> diff = t2 - t1;
+    // fprintf(stderr, "Iteration time: %i ms.\n", (int)diff.count());
 }
 
 //-----------------------------------------------------------------------------
