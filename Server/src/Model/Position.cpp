@@ -31,11 +31,11 @@ const unsigned int Position::getDistance(const Position& other) const {
 }
 
 void Position::move(const Orientation& orientation) {
+    this->orientation = orientation;
+    
     if (!this->map_container[this->map].moveOcuppant(this->x, this->y,
                                                      orientation))
         throw CollisionWhileMovingException();
-
-    this->orientation = orientation;
 
     switch (orientation) {
         case UP_ORIENTATION:

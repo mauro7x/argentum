@@ -116,21 +116,25 @@ void Character::_updateMovement(const unsigned int it) {
 
 void Character::startMovingUp() {
     this->moving_orientation = UP_ORIENTATION;
+    this->position.move(moving_orientation);
     this->moving = true;
 }
 
 void Character::startMovingDown() {
     this->moving_orientation = DOWN_ORIENTATION;
+    this->position.move(moving_orientation);
     this->moving = true;
 }
 
 void Character::startMovingRight() {
     this->moving_orientation = RIGHT_ORIENTATION;
+    this->position.move(moving_orientation);
     this->moving = true;
 }
 
 void Character::startMovingLeft() {
     this->moving_orientation = LEFT_ORIENTATION;
+    this->position.move(moving_orientation);
     this->moving = true;
 }
 

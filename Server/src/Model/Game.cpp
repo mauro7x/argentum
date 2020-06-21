@@ -125,7 +125,7 @@ void Game::actCharacters(const int it) {
                                                 UPDATE_BROADCAST);
         }
 
-        // it_characters->second.debug();
+        it_characters->second.debug();
 
         ++it_characters;
     }
@@ -139,10 +139,17 @@ void Game::startMovingUp(const Id caller) {
         throw Exception("Game.cpp startMovingUp: unknown caller.");
     }
 
-    fprintf(stderr, "GAME: Moving Up cmd\n");
+    // fprintf(stderr, "GAME: Moving Up cmd\n");
 
     Character& character = this->characters.at(caller);
-    character.startMovingUp();
+
+    try {
+        character.startMovingUp();
+    } catch (const CollisionWhileMovingException& e) {
+            character.stopMoving();
+            Notification* reply = new NotificationReply(ERROR_REPLY, e.what());
+            active_clients.notify(caller, reply);
+    }
 }
 
 void Game::startMovingDown(const Id caller) {
@@ -150,10 +157,17 @@ void Game::startMovingDown(const Id caller) {
         throw Exception("Game.cpp startMovingDown: unknown caller.");
     }
 
-    fprintf(stderr, "GAME: Moving Down cmd\n");
+    // fprintf(stderr, "GAME: Moving Down cmd\n");
 
     Character& character = this->characters.at(caller);
-    character.startMovingDown();
+
+    try {
+        character.startMovingDown();
+    } catch (const CollisionWhileMovingException& e) {
+            character.stopMoving();
+            Notification* reply = new NotificationReply(ERROR_REPLY, e.what());
+            active_clients.notify(caller, reply);
+    }
 }
 
 void Game::startMovingLeft(const Id caller) {
@@ -161,10 +175,17 @@ void Game::startMovingLeft(const Id caller) {
         throw Exception("Game.cpp startMovingLeft: unknown caller.");
     }
 
-    fprintf(stderr, "GAME: Moving Left cmd\n");
+    // fprintf(stderr, "GAME: Moving Left cmd\n");
 
     Character& character = this->characters.at(caller);
-    character.startMovingLeft();
+
+    try {
+        character.startMovingLeft();
+    } catch (const CollisionWhileMovingException& e) {
+            character.stopMoving();
+            Notification* reply = new NotificationReply(ERROR_REPLY, e.what());
+            active_clients.notify(caller, reply);
+    }
 }
 
 void Game::startMovingRight(const Id caller) {
@@ -172,10 +193,17 @@ void Game::startMovingRight(const Id caller) {
         throw Exception("Game.cpp startMovingRight: unknown caller.");
     }
 
-    fprintf(stderr, "GAME: Moving Right cmd\n");
+    // fprintf(stderr, "GAME: Moving Right cmd\n");
 
     Character& character = this->characters.at(caller);
-    character.startMovingRight();
+
+    try {
+        character.startMovingRight();
+    } catch (const CollisionWhileMovingException& e) {
+            character.stopMoving();
+            Notification* reply = new NotificationReply(ERROR_REPLY, e.what());
+            active_clients.notify(caller, reply);
+    }
 }
 
 void Game::stopMoving(const Id caller) {
@@ -183,7 +211,7 @@ void Game::stopMoving(const Id caller) {
         throw Exception("Game.cpp stopMoving: unknown caller.");
     }
 
-    fprintf(stderr, "GAME: Stop Moving cmd\n");
+    // fprintf(stderr, "GAME: Stop Moving cmd\n");
 
     Character& character = this->characters.at(caller);
     character.stopMoving();
