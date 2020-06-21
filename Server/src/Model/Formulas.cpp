@@ -14,7 +14,7 @@ const unsigned int Formulas::calculateLevelUpXP(const unsigned int level) {
 
 const unsigned int Formulas::calculateAttackXPGain(
     const unsigned int damage, const unsigned int attacked_level,
-    const unsigned int attacker_level) {s
+    const unsigned int attacker_level) {
     return damage *
            std::max(attacked_level - attacker_level + 10, (unsigned int)0);
 }
