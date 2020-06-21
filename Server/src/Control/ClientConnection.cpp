@@ -124,9 +124,7 @@ void ClientConnection::_receiveCommand(char opcode) {
 // API Pública
 
 ClientConnection::ClientConnection(
-    const InstanceId id, 
-    const Id map,
-    SocketWrapper& peer,
+    const InstanceId id, const Id map, SocketWrapper& peer,
     NonBlockingQueue<InstanceId*>& finished_connections,
     NonBlockingQueue<Command*>& commands)
     : id(id),
@@ -154,7 +152,7 @@ void ClientConnection::join() {
         receiver.join();
     }
 
-    peer.shutdown();
+    // peer.shutdown(); ESTA EXPLOTANDO, VER POR QUÉ
 }
 
 void ClientConnection::changeMap(Id map) {
