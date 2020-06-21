@@ -6,16 +6,17 @@
 #include "../../../Common/includes/MapContainer.h"
 #include "../../../Common/includes/Orientation.h"
 #include "../../../Common/includes/UnitData.h"
+#include "../../../Common/includes/types.h"
 
 class Position {
     private:
-        int id_map;
+        Id map;
         int x, y;
         Orientation orientation;
         MapContainer& map_container;
     
     public:
-        Position(const int id_map, 
+        Position(const Id map, 
                  const int init_x_coord,
                  const int init_y_coord,
                  MapContainer& map_container);
