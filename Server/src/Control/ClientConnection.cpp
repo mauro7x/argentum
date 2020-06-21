@@ -152,7 +152,7 @@ void ClientConnection::join() {
         receiver.join();
     }
 
-    // peer.shutdown(); ESTA EXPLOTANDO, VER POR QUÉ
+    peer.close();
 }
 
 void ClientConnection::changeMap(Id map) {
