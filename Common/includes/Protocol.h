@@ -67,6 +67,16 @@ enum ReplyOpcode {
 
 };
 
+enum BroadcastType {
+    NEW, 
+    UPDATE, 
+    DELETE};
+
+enum EntityType {
+    CHARACTER, 
+    CREATURE,
+    ITEM};
+
 //-----------------------------------------------------------------------------
 
 #endif  // __PROTOCOL_H__

@@ -31,9 +31,9 @@ Identificas el mensaje con el primer byte recibido (opcode), y para cada caso se
     
 | TIPO | DESCRIPCION | ESTRUCTURA (B) |
 |--------|------|----------------|
-| 0 | NEW | `LENGTH (4) + BROADCAST (LENGTH)` | 
-| 1 | UPDATE | `LENGTH (4) + BROADCAST (LENGTH)` | 
-| 2 | DELETE | `ID (4)` | 
+| 0 | NEW | `ENTITY_TYPE(1) + LENGTH (4) + BROADCAST (LENGTH)` | 
+| 1 | UPDATE | `ENTITY_TYPE(1) + LENGTH (4) + BROADCAST (LENGTH)` | 
+| 2 | DELETE | `ENTITY_TYPE(1) + ID (4)` | 
 
 ---
 

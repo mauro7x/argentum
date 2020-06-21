@@ -16,8 +16,6 @@
 
 using json = nlohmann::json;
 
-enum BroadcastType {NEW, UPDATE, DELETE};
-
 /* Notificación de Broadcast en carga de enviar el broadcast del juego 
 al cliente*/
 
@@ -25,19 +23,28 @@ class NotificationBroadcast : public Notification {
    private:
         InstanceId id;
         Id map;
-        BroadcastType type;
+        BroadcastType broadcast_type;
+        EntityType entity_type;
         json j;
 
    public:
     /* Constructor */
-    NotificationBroadcast(InstanceId id, PlayerData& data, BroadcastType opcode);
+    NotificationBroadcast(InstanceId id, PlayerData& data, 
+                          BroadcastType opcode, EntityType entity_type);
 
+     /* Deshabilitamos el constructor por copia. */
+    NotificationBroadcast(const NotificationBroadcast& other);
+
+    /* Deshabilitamos el operador= para copia.*/
+    NotificationBroadcast& operator=(const NotificationBroadcast& other);
     //-----------------------------------------------------------------------------
 
     /* Envío polimórfico de notificacion. Devuelve si se pudo enviar. */
     virtual bool send(const SocketWrapper& peer);
 
-    const Id getMapId() const;
+    virtual const Id getMapId() const;
+
+    virtual const bool isBroadcast() const;
 
     //-----------------------------------------------------------------------------
 
