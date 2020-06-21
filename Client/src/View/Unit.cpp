@@ -199,6 +199,14 @@ void Unit::act(const int it) {
     }
 }
 
+SDL_Point Unit::getPos() const {
+    if (!state) {
+        throw Exception("Unit has not been initialized (pos requested).");
+    }
+
+    return SDL_Point({data.x_tile, data.y_tile});
+}
+
 Unit::~Unit() {}
 
 //-----------------------------------------------------------------------------

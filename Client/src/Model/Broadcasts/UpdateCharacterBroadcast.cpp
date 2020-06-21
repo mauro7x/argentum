@@ -15,9 +15,11 @@ void UpdateCharacterBroadcast::exec(
     MapView& map, Player& player,
     UnitContainer<Character, CharacterData>& characters,
     UnitContainer<Creature, CreatureData>& creatures) {
-    // liberar la posicion anterior del personaje
+    SDL_Point old_pos = characters.getPos(data.basic_data.gid);
+    map.clearTile(old_pos.x, old_pos.y);
     characters.update(data.basic_data.gid, data);
-    // ocupar la posición nueva en el mapa
+    map.occupyTile(data.basic_data.gid, data.basic_data.x_tile,
+                   data.basic_data.y_tile);
 }
 
 UpdateCharacterBroadcast::~UpdateCharacterBroadcast() {}

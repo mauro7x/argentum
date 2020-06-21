@@ -15,8 +15,10 @@ void DeleteCreatureBroadcast::exec(
     MapView& map, Player& player,
     UnitContainer<Character, CharacterData>& characters,
     UnitContainer<Creature, CreatureData>& creatures) {
+    SDL_Point old_pos = creatures.getPos(id);
     creatures.remove(id);
-    // liberar la posicion
+
+    map.clearTile(old_pos.x, old_pos.y);
 }
 
 DeleteCreatureBroadcast::~DeleteCreatureBroadcast() {}

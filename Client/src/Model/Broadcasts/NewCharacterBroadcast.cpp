@@ -16,7 +16,8 @@ void NewCharacterBroadcast::exec(
     UnitContainer<Character, CharacterData>& characters,
     UnitContainer<Creature, CreatureData>& creatures) {
     characters.add(data.basic_data.gid, data);
-    // agregarlo en el mapa
+    map.occupyTile(data.basic_data.gid, data.basic_data.x_tile,
+                   data.basic_data.y_tile);
 }
 
 NewCharacterBroadcast::~NewCharacterBroadcast() {}

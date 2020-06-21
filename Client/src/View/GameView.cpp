@@ -121,6 +121,8 @@ void GameView::_loopIteration(const int it) {
 
     /* Acciones previas al renderizado*/
     player.act(it);
+    characters.act(it);
+    creatures.act(it);
     camera.center(player.getBox(), map.widthInPx(), map.heightInPx());
 
     /* Renderizamos y presentamos la pantalla */

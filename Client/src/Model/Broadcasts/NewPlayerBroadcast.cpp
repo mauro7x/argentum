@@ -15,10 +15,10 @@ void NewPlayerBroadcast::exec(
     MapView& map, Player& player,
     UnitContainer<Character, CharacterData>& characters,
     UnitContainer<Creature, CreatureData>& creatures) {
-    // liberar la posicion anterior del personaje
     map.select(data.basic_data.map);
     player.init(data);
-    // ocupar la posición nueva en el mapa
+    map.occupyTile(data.basic_data.gid, data.basic_data.x_tile,
+                   data.basic_data.y_tile);
 }
 
 NewPlayerBroadcast::~NewPlayerBroadcast() {}
