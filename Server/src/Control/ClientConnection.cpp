@@ -27,7 +27,7 @@ void ClientConnection::_sender() {
     try {
         Notification* notification = nullptr;
         bool socket_valid = true;
-        while ((notification = notifications.pop()) && !finished_threads) {
+        while (!finished_threads && (notification = notifications.pop())) {
             if (notification->isBroadcast()) {
                 if (!(notification->getMapId() == this->map)) {
                     delete notification;
