@@ -167,7 +167,7 @@ void ClientConnection::stop() {
     notifications.close();
 
     // Para detener al receiver
-    peer.shutdown();
+    // peer.shutdown(); checkear que onda!!
     peer.close();
 }
 
