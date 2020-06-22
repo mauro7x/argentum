@@ -55,7 +55,9 @@ void HUD::loadMedia() {
 }
 
 void HUD::update() {
-    // updatear la info
+    user_info.update();
+    user_inventory.update();
+    user_stats.update();
 }
 
 void HUD::render() const {

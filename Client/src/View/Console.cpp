@@ -44,6 +44,8 @@ void Console::render() const {
 
 void Console::free() {}
 
-Console::~Console() {}
+Console::~Console() {
+    free();
+}
 
 //-----------------------------------------------------------------------------
