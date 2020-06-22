@@ -11,7 +11,8 @@
 
 * Realizar el movimiento de las unidades utilizando los ticks de la iteración de acten vez del tiempo interno que haya pasado. -Mau, 21/06.
 * Eliminar SDLException y usar Exception con SDL_GetError(). -Mau, 21/06.
-* Cambiar el wait primitivo por el primer paquete y la lógica del mismo del receiver a una clase aparte, y no lanzar ningun hilo hasta que el mismo no llegue. -Mau, 21/06.
+* ~~Cambiar el wait primitivo por el primer paquete y la lógica del mismo del receiver a una clase aparte, y no lanzar ningun hilo hasta que el mismo no llegue. -Mau, 21/06.~~
+    * **UPDATE:** Ahora esto no se hace más, sino que se tiene un LogIn que se lanza antes de los hilos del receiver y del dispatcher, con el objetivo de handlear la conexión del jugador al juego en sí (una vez que ya se conectó el socket) y de recibir el primer paquete (la data inicial). Esta abstracción permite convertirla en una vista en un futuro. -Mau, 22/06.
 
 ---
 
