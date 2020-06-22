@@ -15,7 +15,6 @@
 //-----------------------------------------------------------------------------
 #include "ClientConnection.h"
 #include "Notification.h"
-#include "NotificationBroadcast.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -58,7 +57,9 @@ class ActiveClients {
     /* Notifica a un cliente en particular */
     void notify(const InstanceId& id, Notification* notification);
 
-    void sendDifferentialBroadcastToAll(Notification* notification);
+    void sendDifferentialBroadcastToAll(Notification* broadcast,
+                                        const InstanceId updated_client,
+                                        const bool send_to_updated_client);
 
     /* Termina todas las conexiones forzosamente */
     void stop();

@@ -3,12 +3,6 @@
 //-----------------------------------------------------------------------------
 // Métodos privados
 
-/* PROXY QUE VA A SER Game.addPlayer() */
-InstanceId next_id_hardcoded = 100;
-InstanceId Engine::_GameAddPlayer(const CharacterCfg& init_data) {
-    return next_id_hardcoded++; /* hardcodeamos una id */
-}
-
 void Engine::_init() {
     // Cargamos la configuración
     json config = JSON::loadJsonFile(ENGINE_CONFIG_FILEPATH);
@@ -53,13 +47,6 @@ void Engine::_processFinishedConnections() {
     }
 }
 
-void Engine::_sendDifferentialBroadcasts() {
-    Notification* broadcast = nullptr;
-    while ((broadcast = differential_broadcasts.pop())) {
-        this->active_clients.sendDifferentialBroadcastToAll(broadcast);
-    }
-}
-
 void Engine::_freeQueues() {
     {
         InstanceId* p = nullptr;
@@ -88,9 +75,6 @@ void Engine::_loopIteration(int it) {
     _processCommands();
     game.actCharacters(it);
     _processFinishedConnections();
-
-    // Broadcast
-    _sendDifferentialBroadcasts();
 }
 
 //-----------------------------------------------------------------------------
@@ -107,7 +91,7 @@ Engine::Engine(Database& database,
       finished_connections(),
       commands(),
       active_clients(commands, finished_connections),
-      game(active_clients, differential_broadcasts) {}
+      game(active_clients) {}
 
 void Engine::run() {
     fprintf(stderr, "DEBUG: Comienza la ejecución del engine.\n");

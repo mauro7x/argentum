@@ -1,12 +1,6 @@
 #include "../../includes/Control/ActiveClients.h"
-
+#include "../../includes/Control/NotificationBroadcast.h"
 //-----------------------------------------------------------------------------
-// Métodos privados
-
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
-// API Pública
 
 ActiveClients::ActiveClients(
     NonBlockingQueue<Command*>& commands,
@@ -42,13 +36,20 @@ void ActiveClients::notify(const InstanceId& id, Notification* notification) {
     content.at(id)->push(notification);
 }
 
-void ActiveClients::sendDifferentialBroadcastToAll(Notification* broadcast) {
+void ActiveClients::sendDifferentialBroadcastToAll(
+    Notification* broadcast, const InstanceId updated_client,
+    const bool send_to_updated_client) {
     std::unordered_map<InstanceId, ClientConnection*>::iterator it =
         this->content.begin();
 
     Notification* broadcast_copy;
 
     while (it != this->content.end()) {
+        if (it->first == updated_client && (!send_to_updated_client)) {
+            ++it;
+            continue;
+        }
+
         broadcast_copy =
             new NotificationBroadcast(*((NotificationBroadcast*)broadcast));
         it->second->push(broadcast_copy);
