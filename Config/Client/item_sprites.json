@@ -1,0 +1,262 @@
+{
+    "dirpath": "../Assets/Sprites/Items/",
+    "helmet": [
+        {
+            "gid": 1300,
+            "w": 32,
+            "h": 32,
+            "color_key": {
+                "is_needed": true,
+                "color": {
+                    "r": 0,
+                    "g": 0,
+                    "b": 0
+                }
+            }
+        },
+        {
+            "gid": 1301,
+            "w": 32,
+            "h": 32,
+            "color_key": {
+                "is_needed": true,
+                "color": {
+                    "r": 0,
+                    "g": 0,
+                    "b": 0
+                }
+            }
+        },
+        {
+            "gid": 1302,
+            "w": 32,
+            "h": 32,
+            "color_key": {
+                "is_needed": true,
+                "color": {
+                    "r": 0,
+                    "g": 0,
+                    "b": 0
+                }
+            }
+        }
+    ],
+    "armour": [
+        {
+            "gid": 1400,
+            "w": 32,
+            "h": 32,
+            "color_key": {
+                "is_needed": true,
+                "color": {
+                    "r": 0,
+                    "g": 0,
+                    "b": 0
+                }
+            }
+        },
+        {
+            "gid": 1401,
+            "w": 32,
+            "h": 32,
+            "color_key": {
+                "is_needed": true,
+                "color": {
+                    "r": 0,
+                    "g": 0,
+                    "b": 0
+                }
+            }
+        },
+        {
+            "gid": 1402,
+            "w": 32,
+            "h": 32,
+            "color_key": {
+                "is_needed": true,
+                "color": {
+                    "r": 0,
+                    "g": 0,
+                    "b": 0
+                }
+            }
+        }
+    ],
+    "shield": [
+        {
+            "gid": 1500,
+            "w": 32,
+            "h": 32,
+            "color_key": {
+                "is_needed": true,
+                "color": {
+                    "r": 0,
+                    "g": 0,
+                    "b": 0
+                }
+            }
+        },
+        {
+            "gid": 1501,
+            "w": 32,
+            "h": 32,
+            "color_key": {
+                "is_needed": true,
+                "color": {
+                    "r": 0,
+                    "g": 0,
+                    "b": 0
+                }
+            }
+        }
+    ],
+    "weapon": [
+        {
+            "gid": 1000,
+            "w": 32,
+            "h": 32,
+            "color_key": {
+                "is_needed": true,
+                "color": {
+                    "r": 0,
+                    "g": 0,
+                    "b": 0
+                }
+            }
+        },
+        {
+            "gid": 1001,
+            "w": 32,
+            "h": 32,
+            "color_key": {
+                "is_needed": true,
+                "color": {
+                    "r": 0,
+                    "g": 0,
+                    "b": 0
+                }
+            }
+        },
+        {
+            "gid": 1002,
+            "w": 32,
+            "h": 32,
+            "color_key": {
+                "is_needed": true,
+                "color": {
+                    "r": 0,
+                    "g": 0,
+                    "b": 0
+                }
+            }
+        },
+        {
+            "gid": 1003,
+            "w": 32,
+            "h": 32,
+            "color_key": {
+                "is_needed": true,
+                "color": {
+                    "r": 0,
+                    "g": 0,
+                    "b": 0
+                }
+            }
+        },
+        {
+            "gid": 1004,
+            "w": 32,
+            "h": 32,
+            "color_key": {
+                "is_needed": true,
+                "color": {
+                    "r": 0,
+                    "g": 0,
+                    "b": 0
+                }
+            }
+        }
+    ],
+    "wand": [
+        {
+            "gid": 1100,
+            "w": 32,
+            "h": 32,
+            "color_key": {
+                "is_needed": true,
+                "color": {
+                    "r": 0,
+                    "g": 0,
+                    "b": 0
+                }
+            }
+        },
+        {
+            "gid": 1101,
+            "w": 32,
+            "h": 32,
+            "color_key": {
+                "is_needed": true,
+                "color": {
+                    "r": 0,
+                    "g": 0,
+                    "b": 0
+                }
+            }
+        },
+        {
+            "gid": 1102,
+            "w": 32,
+            "h": 32,
+            "color_key": {
+                "is_needed": true,
+                "color": {
+                    "r": 0,
+                    "g": 0,
+                    "b": 0
+                }
+            }
+        },
+        {
+            "gid": 1103,
+            "w": 32,
+            "h": 32,
+            "color_key": {
+                "is_needed": true,
+                "color": {
+                    "r": 0,
+                    "g": 0,
+                    "b": 0
+                }
+            }
+        }
+    ],
+    "potions": [
+        {
+            "gid": 1600,
+            "w": 32,
+            "h": 32,
+            "color_key": {
+                "is_needed": true,
+                "color": {
+                    "r": 0,
+                    "g": 0,
+                    "b": 0
+                }
+            }
+        },
+        {
+            "gid": 1601,
+            "w": 32,
+            "h": 32,
+            "color_key": {
+                "is_needed": true,
+                "color": {
+                    "r": 0,
+                    "g": 0,
+                    "b": 0
+                }
+            }
+        }
+    ]
+}
