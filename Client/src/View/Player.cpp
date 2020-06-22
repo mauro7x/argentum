@@ -123,6 +123,14 @@ const std::string& Player::getNickname() const {
     return nickname;
 }
 
+const EquipmentData& Player::getEquipment() const {
+    return equipment;
+}
+
+const InventoryData& Player::getInventory() const {
+    return inventory;
+}
+
 const uint32_t& Player::getHealth() const {
     return health;
 }
