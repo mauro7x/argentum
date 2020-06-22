@@ -12,7 +12,8 @@ UserInfo::UserInfo(const Renderer* renderer, const Player& player)
     : HUDComponent(renderer),
       player(player),
       nickname_font(NULL),
-      lvl_font(NULL) {}
+      lvl_font(NULL),
+      xp(renderer) {}
 
 void UserInfo::init(const json& config) {
     if (initialized) {
@@ -43,6 +44,18 @@ void UserInfo::init(const json& config) {
     lvl_box.w = config["components"]["lvl"]["w"];
     lvl_box.h = config["components"]["lvl"]["h"];
 
+    // XP
+    SDL_Point xp_offset = {0};
+    xp_offset.x = config["components"]["xp_bar"]["offset"]["x"];
+    xp_offset.x += render_rect.x;
+    xp_offset.y = config["components"]["xp_bar"]["offset"]["y"];
+    xp_offset.y += render_rect.y;
+    Uint8 r = config["components"]["xp_bar"]["color"]["r"];
+    Uint8 g = config["components"]["xp_bar"]["color"]["g"];
+    Uint8 b = config["components"]["xp_bar"]["color"]["b"];
+    Uint8 a = config["components"]["xp_bar"]["color"]["a"];
+    xp.init(xp_offset, 0, 100, SDL_Color({r, g, b, a}), BOTH_PBTEXTYPE);
+
     initialized = true;
 }
 
@@ -53,31 +66,54 @@ void UserInfo::loadMedia() {
 
     // Cargamos las fuentes a usar
     nickname_font = TTF_OpenFont(FONT_OLDLONDON_FP, nickname_fontsize);
-    lvl_font = TTF_OpenFont(FONT_OLDLONDON_FP, lvl_fontsize);
+    lvl_font = TTF_OpenFont(FONT_AUGUSTA_FP, lvl_fontsize);
 
-    if (!nickname_font /*|| !lvl_font*/) {
-        throw Exception("UserInfo::init: Error opening TTF_Font/s.");
+    if (!nickname_font || !lvl_font) {
+        throw Exception("UserInfo::loadMedia: Error opening TTF_Font/s.");
     }
 
     // Cargar media
     base.loadFromFile(g_renderer, HUD_USER_INFO_BASE_FP);
 
     // proxy nickname
-    current_nickname = "Mauro";
+    current_nickname = "loading";
     nickname.loadFromRenderedText(g_renderer, nickname_font,
                                   current_nickname.c_str(),
                                   SDL_Color({0xFF, 0xFF, 0xFF, 0xFF}));
     _center(nickname_pos, nickname, nickname_box);
 
     // proxy level
-    current_lvl = 17;
-    lvl.loadFromRenderedText(g_renderer, lvl_font, std::to_string(current_lvl),
+    current_lvl = 0;
+    lvl.loadFromRenderedText(g_renderer, lvl_font, "loading",
                              SDL_Color({0xFF, 0xFF, 0xFF, 0xFF}));
     _center(lvl_pos, lvl, lvl_box);
+
+    xp.loadMedia();
 }
 
 void UserInfo::update() {
-    // fijarse si cambio el lvl (el nombre no cambia)
+    // Sólo nos interesa actualizar el username una vez
+    if (!nickname_loaded) {
+        current_nickname = player.getNickname();
+        nickname.loadFromRenderedText(g_renderer, nickname_font,
+                                      current_nickname.c_str(),
+                                      SDL_Color({0xFF, 0xFF, 0xFF, 0xFF}));
+        _center(nickname_pos, nickname, nickname_box);
+        nickname_loaded = true;
+    }
+
+    // Update del nivel si es necesario
+    uint32_t new_lvl = player.getLevel();
+    if (current_lvl != new_lvl) {
+        current_lvl = new_lvl;
+        lvl.loadFromRenderedText(g_renderer, lvl_font,
+                                 std::to_string(current_lvl),
+                                 SDL_Color({0xFF, 0xFF, 0xFF, 0xFF}));
+        _center(lvl_pos, lvl, lvl_box);
+    }
+
+    // Update de la experiencia
+    xp.update(player.getExp(), player.getLvlUpExp());
 }
 
 void UserInfo::render() const {
@@ -89,13 +125,17 @@ void UserInfo::render() const {
     SDL_Rect render_quad = render_rect;
     g_renderer->render(base.getTexture(), &render_quad);
 
-    // Renderizamos los componentes
+    // Nickname
     render_quad = {nickname_pos.x, nickname_pos.y, nickname.getWidth(),
                    nickname.getHeight()};
     g_renderer->render(nickname.getTexture(), &render_quad);
 
+    // Lvl
     render_quad = {lvl_pos.x, lvl_pos.y, lvl.getWidth(), lvl.getHeight()};
     g_renderer->render(lvl.getTexture(), &render_quad);
+
+    // Barra de xp
+    xp.render();
 }
 
 void UserInfo::free() {
@@ -108,8 +148,12 @@ void UserInfo::free() {
         TTF_CloseFont(lvl_font);
         lvl_font = NULL;
     }
+
+    xp.free();
 }
 
-UserInfo::~UserInfo() {}
+UserInfo::~UserInfo() {
+    free();
+}
 
 //-----------------------------------------------------------------------------

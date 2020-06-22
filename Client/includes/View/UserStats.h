@@ -14,6 +14,7 @@
 #include "../paths.h"
 #include "HUDComponent.h"
 #include "Player.h"
+#include "ProgressBar.h"
 #include "Renderer.h"
 #include "Texture.h"
 //-----------------------------------------------------------------------------
@@ -26,6 +27,9 @@ class UserStats : public HUDComponent {
 
     // Texturas a renderizar
     Texture base;
+
+    ProgressBar health;
+    ProgressBar mana;
 
    public:
     /* Constructor */

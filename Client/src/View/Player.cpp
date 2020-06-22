@@ -116,6 +116,51 @@ SDL_Rect Player::getBox() const {
     return SDL_Rect({(int)x, (int)y, body_w, head_h});
 }
 
+//-------------------------------------------------------------------------
+// Getters para graficar en el HUD
+
+const std::string& Player::getNickname() const {
+    return nickname;
+}
+
+const uint32_t& Player::getHealth() const {
+    return health;
+}
+
+const uint32_t& Player::getMaxHealth() const {
+    return max_health;
+}
+
+const uint32_t& Player::getMana() const {
+    return mana;
+}
+
+const uint32_t& Player::getMaxMana() const {
+    return max_mana;
+}
+
+const uint32_t& Player::getSafeGold() const {
+    return safe_gold;
+}
+
+const uint32_t& Player::getExcessGold() const {
+    return excess_gold;
+}
+
+const uint32_t& Player::getLevel() const {
+    return level;
+}
+
+const uint32_t& Player::getExp() const {
+    return exp;
+}
+
+const uint32_t& Player::getLvlUpExp() const {
+    return levelup_exp;
+}
+
+//-------------------------------------------------------------------------
+
 Player::~Player() {}
 
 //-----------------------------------------------------------------------------

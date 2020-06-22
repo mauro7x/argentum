@@ -66,6 +66,26 @@ class Player : public Unit {
 
     //-------------------------------------------------------------------------
 
+    //-------------------------------------------------------------------------
+    // Getters para graficar en el HUD
+
+    const std::string& getNickname() const;
+
+    const uint32_t& getHealth() const;
+    const uint32_t& getMaxHealth() const;
+
+    const uint32_t& getMana() const;
+    const uint32_t& getMaxMana() const;
+
+    const uint32_t& getSafeGold() const;
+    const uint32_t& getExcessGold() const;
+
+    const uint32_t& getLevel() const;
+    const uint32_t& getExp() const;
+    const uint32_t& getLvlUpExp() const;
+
+    //-------------------------------------------------------------------------
+
     /* Destructor */
     ~Player();
 };

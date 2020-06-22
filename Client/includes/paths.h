@@ -30,12 +30,16 @@
 #define HUD_USER_INFO_BASE_FP "../Assets/HUD/UserInfo/base.png"
 #define HUD_USER_INVENTORY_BASE_FP "../Assets/HUD/UserInventory/base.png"
 #define HUD_USER_STATS_BASE_FP "../Assets/HUD/UserStats/base.png"
+#define HUD_PROGRESSBAR_BASE_FP "../Assets/HUD/ProgressBar/base.png"
+#define HUD_PROGRESSBAR_BISEL_FP "../Assets/HUD/ProgressBar/bisel.png"
+#define HUD_PROGRESSBAR_BORDER_FP "../Assets/HUD/ProgressBar/black_border.png"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 // Fonts paths
 
 #define FONT_OLDLONDON_FP "../Assets/Fonts/OldLondon.ttf"
+#define FONT_AUGUSTA_FP "../Assets/Fonts/Augusta.ttf"
 //-----------------------------------------------------------------------------
 
 #endif  // __CLIENT_PATHS_H__

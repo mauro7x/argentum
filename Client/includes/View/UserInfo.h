@@ -16,6 +16,7 @@
 #include "../paths.h"
 #include "HUDComponent.h"
 #include "Player.h"
+#include "ProgressBar.h"
 #include "Renderer.h"
 #include "Texture.h"
 //-----------------------------------------------------------------------------
@@ -25,6 +26,9 @@
 class UserInfo : public HUDComponent {
    private:
     const Player& player;
+
+    // Flags internos
+    bool nickname_loaded = false;
 
     // Offsets de renderizado
     SDL_Rect nickname_box = {0};
@@ -46,6 +50,8 @@ class UserInfo : public HUDComponent {
 
     Texture lvl;
     uint32_t current_lvl = 0;
+
+    ProgressBar xp;
 
    public:
     /* Constructor */

@@ -16,6 +16,7 @@ void UserInventory::init(const json& config) {
         throw Exception("UserInventory already initialized.");
     }
 
+    // Offsets de renderizado
     render_rect.x = config["offset"]["x"];
     render_rect.y = config["offset"]["y"];
     render_rect.w = config["w"];
@@ -47,6 +48,8 @@ void UserInventory::render() const {
 
 void UserInventory::free() {}
 
-UserInventory::~UserInventory() {}
+UserInventory::~UserInventory() {
+    free();
+}
 
 //-----------------------------------------------------------------------------
