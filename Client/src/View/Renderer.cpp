@@ -135,6 +135,25 @@ void Renderer::renderIfVisible(SDL_Texture* texture, SDL_Rect* render_quad,
     }
 }
 
+/* Rellena el rectangulo */
+void Renderer::fillQuad(SDL_Rect* quad, int r, int g, int b, int a) const {
+    if (!initialized) {
+        throw Exception("Renderer not initialized.");
+    }
+
+    if (SDL_SetRenderDrawColor(renderer, r, g, b, a)) {
+        throw SDLException(
+            "Error in function SDL_SetRenderDrawColor() while filling "
+            "quad.\nSDL_Error: %s",
+            SDL_GetError());
+    }
+
+    /* Escalamos a las dimensiones en las que estamos renderizando */
+    _resize(quad);
+
+    SDL_RenderFillRect(renderer, quad);
+}
+
 void Renderer::fillQuadIfVisible(SDL_Rect* quad, int r, int g, int b,
                                  int a) const {
     if (!initialized) {
@@ -142,20 +161,9 @@ void Renderer::fillQuadIfVisible(SDL_Rect* quad, int r, int g, int b,
     }
 
     if (camera.isVisible(quad)) {
-        if (SDL_SetRenderDrawColor(renderer, r, g, b, a)) {
-            throw SDLException(
-                "Error in function SDL_SetRenderDrawColor() while filling "
-                "quad.\nSDL_Error: %s",
-                SDL_GetError());
-        }
-
         quad->x += camera.xOffset();
         quad->y += camera.yOffset();
-
-        /* Escalamos a las dimensiones en las que estamos renderizando */
-        _resize(quad);
-
-        SDL_RenderFillRect(renderer, quad);
+        fillQuad(quad, r, g, b, a);
     }
 }
 
