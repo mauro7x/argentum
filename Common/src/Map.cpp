@@ -218,6 +218,12 @@ void Map::establishCharacterSpawningPosition(InstanceId id, int& x, int& y) {
     tile.occupant_id = id;
 }
 
+void Map::deleteCharacterPosition(int& x, int& y) {
+    Tile& tile = this->_getTile(x, y);
+    tile.collision = false;
+    tile.occupant_id = 0;
+}
+
 void Map::occupyTile(InstanceId id, const int x, const int y) {
     Tile& tile = this->_getTile(x, y);
     tile.occupant_id = id;

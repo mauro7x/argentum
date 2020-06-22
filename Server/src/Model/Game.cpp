@@ -98,7 +98,10 @@ void Game::deleteCharacter(const InstanceId id) {
     _pushCharacterDifferentialBroadcast(id, DELETE_BROADCAST);
 
     // PERSISTIR ESTADO DEL JUGADOR
-
+    int x = this->characters.at(id).getPosition().getX();
+    int y = this->characters.at(id).getPosition().getY();
+    Id map = this->characters.at(id).getMapId();
+    this->map_container[map].deleteCharacterPosition(x, y);
     this->characters.erase(id);
 }
 //-----------------------------------------------------------------------------
@@ -146,9 +149,9 @@ void Game::startMovingUp(const Id caller) {
     try {
         character.startMovingUp();
     } catch (const CollisionWhileMovingException& e) {
-            character.stopMoving();
-            Notification* reply = new NotificationReply(ERROR_REPLY, e.what());
-            active_clients.notify(caller, reply);
+        character.stopMoving();
+        Notification* reply = new NotificationReply(ERROR_REPLY, e.what());
+        active_clients.notify(caller, reply);
     }
 }
 
@@ -164,9 +167,9 @@ void Game::startMovingDown(const Id caller) {
     try {
         character.startMovingDown();
     } catch (const CollisionWhileMovingException& e) {
-            character.stopMoving();
-            Notification* reply = new NotificationReply(ERROR_REPLY, e.what());
-            active_clients.notify(caller, reply);
+        character.stopMoving();
+        Notification* reply = new NotificationReply(ERROR_REPLY, e.what());
+        active_clients.notify(caller, reply);
     }
 }
 
@@ -182,9 +185,9 @@ void Game::startMovingLeft(const Id caller) {
     try {
         character.startMovingLeft();
     } catch (const CollisionWhileMovingException& e) {
-            character.stopMoving();
-            Notification* reply = new NotificationReply(ERROR_REPLY, e.what());
-            active_clients.notify(caller, reply);
+        character.stopMoving();
+        Notification* reply = new NotificationReply(ERROR_REPLY, e.what());
+        active_clients.notify(caller, reply);
     }
 }
 
@@ -200,9 +203,9 @@ void Game::startMovingRight(const Id caller) {
     try {
         character.startMovingRight();
     } catch (const CollisionWhileMovingException& e) {
-            character.stopMoving();
-            Notification* reply = new NotificationReply(ERROR_REPLY, e.what());
-            active_clients.notify(caller, reply);
+        character.stopMoving();
+        Notification* reply = new NotificationReply(ERROR_REPLY, e.what());
+        active_clients.notify(caller, reply);
     }
 }
 
