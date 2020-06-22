@@ -30,8 +30,16 @@ class NotificationBroadcast : public Notification {
    public:
     /* Constructor */
     NotificationBroadcast(InstanceId id, PlayerData& data, 
-                          BroadcastType opcode, EntityType entity_type);
+                          BroadcastType opcode, EntityType entity_type);//sacar entitytype
 
+
+     /* Constructor para data de creature*/
+    NotificationBroadcast(InstanceId id, CreatureData& data, 
+                          BroadcastType opcode, EntityType entity_type);
+     
+     /* Constructor para data de item */
+//     NotificationBroadcast(InstanceId id, ItemData& data, 
+//                           BroadcastType opcode, EntityType entity_type);
      /* Deshabilitamos el constructor por copia. */
     NotificationBroadcast(const NotificationBroadcast& other);
 
