@@ -95,13 +95,13 @@ void Client::run() {
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
         }
     }
-  
-     // Lanzamos el command dispatcher
+
+    // Lanzamos el command dispatcher
     command_dispatcher.start();
-  
+
     try {
         // Lanzamos la vista del juego
-        GameView game(commands, updates, exit);
+        GameView game(commands, broadcasts, exit);
         game();
 
     } catch (const Exception& e) {
@@ -109,21 +109,21 @@ void Client::run() {
         socket.close();
         commands.close();
         command_dispatcher.join();
-        updater.join();
+        receiver.join();
         throw e;
     } catch (const std::exception& e) {
         socket.shutdown();
         socket.close();
         commands.close();
         command_dispatcher.join();
-        updater.join();
+        receiver.join();
         throw e;
     } catch (...) {
         socket.shutdown();
         socket.close();
         commands.close();
         command_dispatcher.join();
-        updater.join();
+        receiver.join();
         throw;
     }
 
