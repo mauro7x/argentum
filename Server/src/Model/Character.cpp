@@ -1,4 +1,5 @@
 #include <math.h>
+
 #include <algorithm>
 //-----------------------------------------------------------------------------
 #include "../../includes/Model/Character.h"
@@ -116,25 +117,37 @@ void Character::_updateMovement(const unsigned int it) {
 
 void Character::startMovingUp() {
     this->moving_orientation = UP_ORIENTATION;
-    this->position.move(moving_orientation);
+    // comento esto porque genera que si toco muchas veces la tecla, se mueva
+    // mucho ignorando el limite de tiempo. hay una forma de solucionarlo,
+    // avisame y lo hablamos -mau
+    // this->position.move(moving_orientation);
     this->moving = true;
 }
 
 void Character::startMovingDown() {
     this->moving_orientation = DOWN_ORIENTATION;
-    this->position.move(moving_orientation);
+    // comento esto porque genera que si toco muchas veces la tecla, se mueva
+    // mucho ignorando el limite de tiempo. hay una forma de solucionarlo,
+    // avisame y lo hablamos -mau
+    // this->position.move(moving_orientation);
     this->moving = true;
 }
 
 void Character::startMovingRight() {
     this->moving_orientation = RIGHT_ORIENTATION;
-    this->position.move(moving_orientation);
+    // comento esto porque genera que si toco muchas veces la tecla, se mueva
+    // mucho ignorando el limite de tiempo. hay una forma de solucionarlo,
+    // avisame y lo hablamos -mau
+    // this->position.move(moving_orientation);
     this->moving = true;
 }
 
 void Character::startMovingLeft() {
     this->moving_orientation = LEFT_ORIENTATION;
-    this->position.move(moving_orientation);
+    // comento esto porque genera que si toco muchas veces la tecla, se mueva
+    // mucho ignorando el limite de tiempo. hay una forma de solucionarlo,
+    // avisame y lo hablamos -mau
+    // this->position.move(moving_orientation);
     this->moving = true;
 }
 

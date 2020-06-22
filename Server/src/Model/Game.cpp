@@ -98,10 +98,13 @@ void Game::deleteCharacter(const InstanceId id) {
     _pushCharacterDifferentialBroadcast(id, DELETE_BROADCAST);
 
     // PERSISTIR ESTADO DEL JUGADOR
-    int x = this->characters.at(id).getPosition().getX();
-    int y = this->characters.at(id).getPosition().getY();
-    Id map = this->characters.at(id).getMapId();
-    this->map_container[map].deleteCharacterPosition(x, y);
+
+    // Lo sacamos del mapa
+    const Position& pos = this->characters.at(id).getPosition();
+    const Id map_id = this->characters.at(id).getMapId();
+    this->map_container[map_id].clearTile(pos.getX(), pos.getY());
+
+    // Lo eliminamos
     this->characters.erase(id);
 }
 //-----------------------------------------------------------------------------
