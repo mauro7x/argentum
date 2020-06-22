@@ -84,6 +84,28 @@
             "offset": {
                 "x": 686,
                 "y": 128
+            },
+            "components": {
+                "slot_w": 32,
+                "slot_h": 32,
+                "equipment": {
+                    "weapon_offset": {
+                        "x": 32,
+                        "y": 39
+                    },
+                    "helmet_offset": {
+                        "x": 89,
+                        "y": 39
+                    },
+                    "armour_offset": {
+                        "x": 146,
+                        "y": 39
+                    },
+                    "shield_offset": {
+                        "x": 203,
+                        "y": 39
+                    }
+                }
             }
         },
         "user_stats": {

@@ -19,6 +19,12 @@ void UpdatePlayerBroadcast::exec(
     // EL MAPA ACTUAL, LIMPIAR CREATURES, CHARACTERS, CAMBIAR EL MAPA Y HACER EL
     // UPDATE EN EL NUEVO MAPA.
 
+    //-------------------------------------------------------------------------
+    // PROXY PARA HARCODEAR EL INVENTARIO Y PROBAR LA HUD
+
+    data.equipment = {1302, 1402, 0, 1100};
+    //-------------------------------------------------------------------------
+
     SDL_Point old_pos = player.getPos();
     map.clearTile(old_pos.x, old_pos.y);
     player.update(data);
