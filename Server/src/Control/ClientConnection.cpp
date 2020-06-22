@@ -66,7 +66,10 @@ void ClientConnection::_receiver() {
         while (peer >> opcode) {
             switch (opcode) {
                 case COMMAND_OPCODE: {
-                    peer >> opcode;
+                    size_t received = (peer >> opcode);
+                    if (!received) {
+                        throw Exception("Incomplete command received.");
+                    }
                     _receiveCommand(opcode);
                     break;
                 }
