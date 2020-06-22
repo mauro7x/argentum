@@ -8,7 +8,7 @@ void Receiver::_receiveReply() const {
 
     uint8_t opcode;
     std::string reply;
-    ssize_t received = 0;
+    size_t received = 0;
 
     received = (socket >> opcode);
     if (!received) {
@@ -30,7 +30,7 @@ void Receiver::_receivePrivateMessage() const {
 
 void Receiver::_receiveBroadcast() const {
     uint8_t opcode;
-    ssize_t received = 0;
+    size_t received = 0;
 
     received = (socket >> opcode);
     if (!received) {
@@ -65,7 +65,7 @@ void Receiver::_receiveBroadcast() const {
 void Receiver::_receiveNewBroadcast() const {
     uint8_t entity_type = 0;
     std::vector<uint8_t> serialized_broadcast;
-    ssize_t received = 0;
+    size_t received = 0;
 
     received = (socket >> entity_type);
     if (!received) {
@@ -81,25 +81,25 @@ void Receiver::_receiveNewBroadcast() const {
 
     switch (entity_type) {
         case PLAYER_TYPE: {
-            if (!first_package_received) {
-                PlayerData received_data;
-                json j = json::from_msgpack(serialized_broadcast);
-                received_data = j.get<PlayerData>();
-                broadcasts.push(new NewPlayerBroadcast(received_data));
-                first_package_received = true;
-            }
-
+            // Por ahora ignoramos este bug del servidor, lanzando un warning
+            fprintf(stderr,
+                    "WARNING: Reiceved new player broadcast again. This should "
+                    "not be received more than once.\n");
             break;
+
+            // Lo que deberíamos hacer
+            throw Exception(
+                "Receiver::_receiveNewBroadcast: received new player broadcast "
+                "(invalid combination, this data should only be received when "
+                "connecting).");
         }
 
         case CHARACTER_TYPE: {
-            if (first_package_received) {
-                PlayerData received_data;
-                json j = json::from_msgpack(serialized_broadcast);
-                received_data = j.get<PlayerData>();
-                broadcasts.push(
-                    new NewCharacterBroadcast((CharacterData)received_data));
-            }
+            PlayerData received_data;
+            json j = json::from_msgpack(serialized_broadcast);
+            received_data = j.get<PlayerData>();
+            broadcasts.push(
+                new NewCharacterBroadcast((CharacterData)received_data));
             break;
         }
 
@@ -130,7 +130,7 @@ void Receiver::_receiveNewBroadcast() const {
 void Receiver::_receiveUpdateBroadcast() const {
     uint8_t entity_type = 0;
     std::vector<uint8_t> serialized_broadcast;
-    ssize_t received = 0;
+    size_t received = 0;
 
     received = (socket >> entity_type);
     if (!received) {
@@ -148,24 +148,19 @@ void Receiver::_receiveUpdateBroadcast() const {
 
     switch (entity_type) {
         case PLAYER_TYPE: {
-            if (first_package_received) {
-                PlayerData received_data;
-                json j = json::from_msgpack(serialized_broadcast);
-                received_data = j.get<PlayerData>();
-                broadcasts.push(new UpdatePlayerBroadcast(received_data));
-            }
+            PlayerData received_data;
+            json j = json::from_msgpack(serialized_broadcast);
+            received_data = j.get<PlayerData>();
+            broadcasts.push(new UpdatePlayerBroadcast(received_data));
             break;
         }
 
         case CHARACTER_TYPE: {
-            if (first_package_received) {
-                PlayerData received_data;
-                json j = json::from_msgpack(serialized_broadcast);
-                received_data = j.get<PlayerData>();
-                broadcasts.push(
-                    new UpdateCharacterBroadcast((CharacterData)received_data));
-            }
-
+            PlayerData received_data;
+            json j = json::from_msgpack(serialized_broadcast);
+            received_data = j.get<PlayerData>();
+            broadcasts.push(
+                new UpdateCharacterBroadcast((CharacterData)received_data));
             break;
         }
 
@@ -197,7 +192,7 @@ void Receiver::_receiveUpdateBroadcast() const {
 void Receiver::_receiveDeleteBroadcast() const {
     uint8_t entity_type = 0;
     uint32_t id = 0;
-    ssize_t received = 0;
+    size_t received = 0;
 
     received = (socket >> entity_type);
     if (!received) {
@@ -222,18 +217,12 @@ void Receiver::_receiveDeleteBroadcast() const {
         }
 
         case CHARACTER_TYPE: {
-            if (first_package_received) {
-                broadcasts.push(new DeleteCharacterBroadcast(id));
-            }
-
+            broadcasts.push(new DeleteCharacterBroadcast(id));
             break;
         }
 
         case CREATURE_TYPE: {
-            if (first_package_received) {
-                broadcasts.push(new DeleteCreatureBroadcast(id));
-            }
-
+            broadcasts.push(new DeleteCreatureBroadcast(id));
             break;
         }
 
@@ -259,12 +248,8 @@ void Receiver::_receiveDeleteBroadcast() const {
 
 Receiver::Receiver(const SocketWrapper& socket,
                    NonBlockingQueue<Broadcast*>& broadcasts,
-                   std::atomic_bool& exit,
-                   std::atomic_bool& first_package_received)
-    : socket(socket),
-      broadcasts(broadcasts),
-      exit(exit),
-      first_package_received(first_package_received) {}
+                   std::atomic_bool& exit)
+    : socket(socket), broadcasts(broadcasts), exit(exit) {}
 
 void Receiver::run() {
     try {

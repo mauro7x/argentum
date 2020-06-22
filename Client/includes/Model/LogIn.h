@@ -1,88 +1,79 @@
-#ifndef __RECEIVER_H__
-#define __RECEIVER_H__
+#ifndef __LOG_IN_H__
+#define __LOG_IN_H__
 
 //-----------------------------------------------------------------------------
-#include <atomic>
 #include <cstdint>
-#include <exception>
+#include <vector>
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-#include "../../../Common/includes/Exceptions/Exception.h"
 #include "../../../Common/includes/JSON.h"
 #include "../../../Common/includes/NonBlockingQueue.h"
 #include "../../../Common/includes/Protocol.h"
 #include "../../../Common/includes/Socket/SocketWrapper.h"
-#include "../../../Common/includes/Thread.h"
 #include "../../../Common/includes/UnitData.h"
 #include "../../../Common/includes/json_conversion.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 #include "Broadcasts/Broadcast.h"
-#include "Broadcasts/Broadcasts.h"
+#include "Broadcasts/NewPlayerBroadcast.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 
-class Receiver : public Thread {
+/** LogInProxy
+ * Clase que se encarga de, una vez conectados con el servidor, intercambiar
+ * mensajes con el mismo para seleccionar un personaje (existente o crear uno
+ * nuevo) en el juego y recibir la data inicial para poder empezar a jugar.
+ */
+
+class LogInProxy {
    private:
-    const SocketWrapper& socket;              /* SÓLO LECTURA (RECV) */
-    NonBlockingQueue<Broadcast*>& broadcasts; /* Broadcasts a recibir */
-    // falta cola de info para mostrar x chat
-    std::atomic_bool& exit; /* flag de ejecución compartido */
+    SocketWrapper& socket;
+    NonBlockingQueue<Broadcast*>& broadcasts;
 
     //-----------------------------------------------------------------------------
     // Métodos privados
 
-    /* Recibe una respuesta y la pushea en la cola */
-    void _receiveReply() const;
-
-    /* Recibe un mensaje privado y lo pushea en la cola */
-    void _receivePrivateMessage() const;
-
-    /* Recibe un broadcast y lo pushea en la cola */
-    void _receiveBroadcast() const;
-
-    /* Recibe un broadcast de tipo new */
-    void _receiveNewBroadcast() const;
-
-    /* Recibe un broadcast de tipo update */
-    void _receiveUpdateBroadcast() const;
-
-    /* Recibe un broadcast de tipo delete */
-    void _receiveDeleteBroadcast() const;
+    /* Recibe la data inicial del jugador y la pushea como un broadcast new. */
+    void _receiveFirstPackage() const;
 
     //-----------------------------------------------------------------------------
 
    public:
-    /* Constructor */
-    Receiver(const SocketWrapper& socket,
-             NonBlockingQueue<Broadcast*>& broadcasts, std::atomic_bool& exit);
+    /** Constructor
+     * Recibe el socket conectado con el servidor (lo utilizará para lectura
+     * y escritura, por lo que no se permite su uso simultaneo con otros hilos
+     * de ejecución), y una cola no bloqueante donde pushear el primer paquete.
+     */
+    LogInProxy(SocketWrapper& socket, NonBlockingQueue<Broadcast*>& broadcasts);
 
     /* Deshabilitamos el constructor por copia. */
-    Receiver(const Receiver&) = delete;
+    LogInProxy(const LogInProxy&) = delete;
 
     /* Deshabilitamos el operador= para copia.*/
-    Receiver& operator=(const Receiver&) = delete;
+    LogInProxy& operator=(const LogInProxy&) = delete;
 
     /* Deshabilitamos el constructor por movimiento. */
-    Receiver(Receiver&& other) = delete;
+    LogInProxy(LogInProxy&& other) = delete;
 
     /* Deshabilitamos el operador= para movimiento. */
-    Receiver& operator=(Receiver&& other) = delete;
+    LogInProxy& operator=(LogInProxy&& other) = delete;
 
     //-----------------------------------------------------------------------------
+    // Métodos de la API pública
 
-    /* Hilo principal de ejecución */
-    void run() override;
+    /* Coordina la conexión del cliente al juego, ya sea mediante un usuario
+     * pre-existente o mediante uno nuevo. */
+    void operator()() const;
 
     //-----------------------------------------------------------------------------
 
     /* Destructor */
-    ~Receiver();
+    ~LogInProxy();
 };
 
 //-----------------------------------------------------------------------------
 
-#endif  // __RECEIVER_H__
+#endif  // __LOG_IN_H__

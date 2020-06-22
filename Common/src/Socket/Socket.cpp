@@ -177,18 +177,18 @@ size_t Socket::send(const char* source, const size_t len) const {
     }
 
     size_t total_sent = 0;
-    size_t last_sent = 0;
+    ssize_t last_sent = 0;
 
     while (total_sent < len) {
         last_sent =
             ::send(fd, &source[total_sent], len - total_sent, MSG_NOSIGNAL);
 
-        if (last_sent == -1) {
+        if (last_sent < 0) {
             throw Exception("Error in function: Socket::send()");
         } else if (last_sent == 0) {
             return total_sent;
         } else {
-            total_sent += last_sent;
+            total_sent += (size_t)last_sent;
         }
     }
 
@@ -200,19 +200,19 @@ size_t Socket::recv(char* buffer, const size_t len) const {
         throw Exception("Invalid socket file descriptor.");
     }
 
-    int total_received = 0;
-    int last_received = 0;
+    size_t total_received = 0;
+    ssize_t last_received = 0;
 
     while (total_received < len) {
         last_received =
             ::recv(fd, &buffer[total_received], len - total_received, 0);
 
-        if (last_received == -1) {
+        if (last_received < 0) {
             throw Exception("Error in function: Socket::recv()");
         } else if (last_received == 0) {
             return total_received;
         } else {
-            total_received += last_received;
+            total_received += (size_t)last_received;
         }
     }
 
