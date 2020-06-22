@@ -42,6 +42,8 @@ bool NotificationBroadcast::send(const InstanceId sender,
         this->entity_type = PLAYER_TYPE;
     }
 
+    fprintf(stderr, "Envio broadcast tipo %i, entity %i\n",
+            this->broadcast_type, this->entity_type);
     try {
         switch (this->broadcast_type) {
             case DELETE_BROADCAST:

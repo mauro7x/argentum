@@ -90,8 +90,10 @@ void Character::_updateTimeDependantAttributes(const unsigned int it) {
             this->race.mana_recovery_factor,
             TIME_TO_UPDATE_ATTRIBUTES / 1000);  // en segundos
 
-        this->recoverHealth(health_update);
-        this->recoverMana(mana_update);
+        if ((this->health < this->max_health))
+            this->recoverHealth(health_update);
+        if ((this->mana < this->max_mana))
+            this->recoverMana(mana_update);
 
         attribute_update_time_elapsed -= TIME_TO_UPDATE_ATTRIBUTES;
     }
@@ -162,7 +164,7 @@ void Character::stopMoving() {
 void Character::recoverHealth(const unsigned int points) {
     if (!points)
         return;
-
+        
     this->health = std::min(this->health + points, max_health);
     this->broadcast = true;
 }
