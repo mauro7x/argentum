@@ -5,7 +5,7 @@
             {
                 "gid": 2000,
                 "clip_w": 17,
-                "clip_h": 50,
+                "clip_h": 52,
                 "up_row_col_clips": [
                     0,
                     3,
@@ -77,7 +77,7 @@
             {
                 "gid": 1300,
                 "clip_w": 17,
-                "clip_h": 50,
+                "clip_h": 52,
                 "up_row_col_clips": [
                     0,
                     3,
