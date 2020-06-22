@@ -4,6 +4,7 @@
 //-----------------------------------------------------------------------------
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 #include <stdio.h>
 
 #include <string>
@@ -12,6 +13,10 @@
 #include "Renderer.h"
 //-----------------------------------------------------------------------------
 
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+enum TextType { SOLID_TEXT, BLENDED_TEXT };
 //-----------------------------------------------------------------------------
 
 class Texture {
@@ -46,6 +51,11 @@ class Texture {
      */
     void loadFromFile(const Renderer* renderer, std::string filepath,
                       int r = -1, int g = -1, int b = -1);
+
+    /* Carga la textura desde un texto */
+    void loadFromRenderedText(const Renderer* renderer, TTF_Font* font,
+                              std::string text, SDL_Color color,
+                              TextType type = BLENDED_TEXT);
 
     /* Settea la modulación de los colores */
     void setColor(Uint8 red, Uint8 green, Uint8 blue) const;

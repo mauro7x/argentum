@@ -1,4 +1,4 @@
-#include "../../includes/View/Console.h"
+#include "../../includes/View/UserStats.h"
 
 //-----------------------------------------------------------------------------
 // Métodos privados
@@ -8,11 +8,12 @@
 //-----------------------------------------------------------------------------
 // API Pública
 
-Console::Console(const Renderer* renderer) : HUDComponent(renderer) {}
+UserStats::UserStats(const Renderer* renderer, const Player& player)
+    : HUDComponent(renderer), player(player) {}
 
-void Console::init(const json& config) {
+void UserStats::init(const json& config) {
     if (initialized) {
-        throw Exception("Console already initialized.");
+        throw Exception("UserStats already initialized.");
     }
 
     render_rect.x = config["offset"]["x"];
@@ -23,18 +24,20 @@ void Console::init(const json& config) {
     initialized = true;
 }
 
-void Console::loadMedia() {
+void UserStats::loadMedia() {
     if (!initialized) {
-        throw Exception("Console not initialized.");
+        throw Exception("UserStats not initialized.");
     }
 
     // Cargar media
-    base.loadFromFile(g_renderer, HUD_CONSOLE_BASE_FP);
+    base.loadFromFile(g_renderer, HUD_USER_STATS_BASE_FP);
 }
 
-void Console::render() const {
+void UserStats::update() {}
+
+void UserStats::render() const {
     if (!initialized) {
-        throw Exception("Console not initialized.");
+        throw Exception("UserStats not initialized.");
     }
 
     // Renderizar la base
@@ -42,8 +45,8 @@ void Console::render() const {
     g_renderer->render(base.getTexture(), &render_quad);
 }
 
-void Console::free() {}
+void UserStats::free() {}
 
-Console::~Console() {}
+UserStats::~UserStats() {}
 
 //-----------------------------------------------------------------------------

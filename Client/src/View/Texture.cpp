@@ -33,6 +33,7 @@ void Texture::loadFromFile(const Renderer* renderer, std::string filepath,
                            int r, int g, int b) {
     // Eliminamos una textura previa si existe
     free();
+
     SDL_Surface* loaded_surface = IMG_Load(filepath.c_str());
     if (loaded_surface == NULL) {
         throw SDLException("Error in function IMG_Load()\nSDL_Error: %s",
@@ -56,8 +57,51 @@ void Texture::loadFromFile(const Renderer* renderer, std::string filepath,
     width = loaded_surface->w;
     height = loaded_surface->h;
 
-    // Get rid of old loaded surface
+    // Liberamos la surface
     SDL_FreeSurface(loaded_surface);
+}
+
+void Texture::loadFromRenderedText(const Renderer* renderer, TTF_Font* font,
+                                   std::string text, SDL_Color color,
+                                   TextType type) {
+    // Eliminamos una textura previa si existe
+    free();
+
+    // Generamos la surface de texto
+    SDL_Surface* text_surface = NULL;
+
+    switch (type) {
+        case SOLID_TEXT: {
+            text_surface = TTF_RenderText_Solid(font, text.c_str(), color);
+            break;
+        }
+
+        case BLENDED_TEXT: {
+            text_surface = TTF_RenderText_Blended(font, text.c_str(), color);
+            break;
+        }
+
+        default: {
+            throw SDLException(
+                "Error in function loadFromRenderedText(). Unknown text type.");
+        }
+    }
+
+    if (text_surface == NULL) {
+        throw SDLException(
+            "Error in function TTF_RenderText_Solid()\nSDL_Error: %s",
+            SDL_GetError());
+    }
+
+    // Creamos la textura desde la surface
+    texture = renderer->createTextureFromSurface(text_surface);
+
+    // Seteamos las dimensiones
+    width = text_surface->w;
+    height = text_surface->h;
+
+    // Liberamos la surface
+    SDL_FreeSurface(text_surface);
 }
 
 void Texture::setColor(Uint8 red, Uint8 green, Uint8 blue) const {

@@ -4,6 +4,8 @@
 //-----------------------------------------------------------------------------
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_mixer.h>
+#include <SDL2/SDL_ttf.h>
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -30,7 +32,6 @@
 //-----------------------------------------------------------------------------
 #include "Camera.h"
 #include "Character.h"
-#include "Console.h"
 #include "Creature.h"
 #include "EventHandler.h"
 #include "HUD.h"
@@ -58,16 +59,15 @@ class GameView {
     Renderer renderer;
     int rate;
 
-    /* Componentes de la vista */
-    HUDProxy hud;
-    ConsoleProxy console;
-    MapView map;
-
     /* Unidades */
     UnitSpriteContainer unit_sprites;
     Player player;
     UnitContainer<Character, CharacterData> characters;
     UnitContainer<Creature, CreatureData> creatures;
+
+    /* Componentes de la vista */
+    HUD hud;
+    MapView map;
 
     /* La escena que se renderizará en cada frame */
     Stage stage;
