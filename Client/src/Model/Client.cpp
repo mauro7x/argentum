@@ -1,10 +1,5 @@
 #include "../../includes/Model/Client.h"
 
-#include <iostream>
-#include <string>
-
-#include "../../../Common/includes/Socket/SocketWrapper.h"
-
 //-----------------------------------------------------------------------------
 // Métodos privados
 
@@ -42,6 +37,24 @@ bool Client::_connect(SocketWrapper& socket) const {
     return true;
 }
 
+void Client::_finish(SocketWrapper& socket,
+                     CommandDispatcher& command_dispatcher,
+                     Receiver& receiver) {
+    // Cerramos la conexión ordenadamente
+    socket.shutdown();
+    socket.close();
+
+    // Cerramos la cola de comandos para que el dispatcher termine
+    commands.close();
+
+    // Joineamos los hilos
+    command_dispatcher.join();
+    receiver.join();
+
+    // En caso de que las colas no hayan sido vaciadas
+    _freeQueues();
+}
+
 void Client::_freeQueues() {
     {
         Command* command = NULL;
@@ -64,7 +77,7 @@ void Client::_freeQueues() {
 //-----------------------------------------------------------------------------
 // API Pública
 
-Client::Client() : exit(false), first_package_received(false) {}
+Client::Client() : exit(false) {}
 
 void Client::run() {
     fprintf(stderr, "DEBUG: Comienza la ejecución del cliente.\n");
@@ -78,26 +91,24 @@ void Client::run() {
         return;
     }
 
-    // una vez que tenemos el socket, lanzamos a los 3 hilos
+    // Ahora estamos conectados con el server, debemos loggearnos o crear un
+    // nuevo personaje
+
+    // Proxy para el LogIn
+    {
+        LogInProxy login(socket, broadcasts);
+        login();
+    }
+
+    // Ahora ya nos encontramos conectados y recibimos la data del primer
+    // paquete. Lanzamos los hilos
 
     // Dispatcher y Receiver (objetos activos)
     CommandDispatcher command_dispatcher(socket, commands, exit);
-    Receiver receiver(socket, broadcasts, exit, first_package_received);
+    Receiver receiver(socket, broadcasts, exit);
 
-    // Lanzamos el receiver
-    receiver.start();
-
-    // Decirle al usuario que esta cargando
-
-    // Dormimos hasta recibir el primer paquete
-    {
-        while (!first_package_received) {
-            std::this_thread::sleep_for(std::chrono::milliseconds(100));
-        }
-    }
-
-    // Lanzamos el command dispatcher
     command_dispatcher.start();
+    receiver.start();
 
     try {
         // Lanzamos la vista del juego
@@ -105,45 +116,24 @@ void Client::run() {
         game();
 
     } catch (const Exception& e) {
-        socket.shutdown();
-        socket.close();
-        commands.close();
-        command_dispatcher.join();
-        receiver.join();
+        _finish(socket, command_dispatcher, receiver);
         throw e;
     } catch (const std::exception& e) {
-        socket.shutdown();
-        socket.close();
-        commands.close();
-        command_dispatcher.join();
-        receiver.join();
+        _finish(socket, command_dispatcher, receiver);
         throw e;
     } catch (...) {
-        socket.shutdown();
-        socket.close();
-        commands.close();
-        command_dispatcher.join();
-        receiver.join();
+        _finish(socket, command_dispatcher, receiver);
         throw;
     }
 
-    // Cerramos la conexión ordenadamente
-    socket.shutdown();
-    socket.close();
-
-    // Cerramos la cola de comandos, y joineamos los hilos
-    commands.close();
-    command_dispatcher.join();
-    receiver.join();
-
-    // En caso de que hayan quedado comandos o broadcasts sin procesar.
-    _freeQueues();
+    // Terminamos la ejecución ordenadamente
+    _finish(socket, command_dispatcher, receiver);
 
     fprintf(stderr, "DEBUG: Termina la ejecución del cliente.\n");
 }
 
 Client::~Client() {
-    // Liberamos las colas
+    // Nos aseguramos de no perder memoria en las colas
     _freeQueues();
 }
 
