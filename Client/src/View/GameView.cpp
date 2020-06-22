@@ -110,25 +110,27 @@ void GameView::_processSDLEvents() {
     }
 }
 
-void GameView::_processUpdates() {
-    Update* update = NULL;
-    while ((update = updates.pop())) {
-        update->exec();
-        delete update;
+void GameView::_processBroadcasts() {
+    Broadcast* broadcast = NULL;
+    while ((broadcast = broadcasts.pop())) {
+        broadcast->exec(map, player, characters, creatures);
+        delete broadcast;
     }
 }
 
 void GameView::_loopIteration(const int it) {
-    auto t1 = std::chrono::steady_clock::now();
+    // auto t1 = std::chrono::steady_clock::now();
     /* Vaciamos las colas a procesar*/
     _processSDLEvents();
-    _processUpdates();
+    _processBroadcasts();
 
     /* Limpiamos la pantalla */
     renderer.clearScreen();
 
     /* Acciones previas al renderizado*/
     player.act(it);
+    characters.act(it);
+    creatures.act(it);
     camera.center(player.getBox(), map.widthInPx(), map.heightInPx());
 
     /* Renderizamos y presentamos la pantalla */
@@ -136,9 +138,9 @@ void GameView::_loopIteration(const int it) {
     hud.render();
     renderer.presentScreen();
 
-    auto t2 = std::chrono::steady_clock::now();
-    std::chrono::duration<float, std::milli> diff = t2 - t1;
-    fprintf(stderr, "Iteration time: %i ms.\n", (int)diff.count());
+    // auto t2 = std::chrono::steady_clock::now();
+    // std::chrono::duration<float, std::milli> diff = t2 - t1;
+    // fprintf(stderr, "Iteration time: %i ms.\n", (int)diff.count());
 }
 
 //-----------------------------------------------------------------------------
@@ -147,10 +149,11 @@ void GameView::_loopIteration(const int it) {
 // API Pública
 
 GameView::GameView(BlockingQueue<Command*>& commands,
-                   NonBlockingQueue<Update*>& updates, std::atomic_bool& exit)
+                   NonBlockingQueue<Broadcast*>& broadcasts,
+                   std::atomic_bool& exit)
     :  // Comunicación entre hilos
       commands(commands),
-      updates(updates),
+      broadcasts(broadcasts),
       exit(exit),
 
       // Variables de SDL
@@ -180,10 +183,11 @@ void GameView::operator()() {
 
     //-------------------------------------------------------------------------
     // PROXY PARA EL MANEJO DEL PRIMER PAQUETE DEL SERVER (hardcodeado).
-
+    /*
     {
         PlayerData init_data;
-        init_data.basic_data = {1, 0, 0, DOWN_ORIENTATION};
+        init_data.basic_data = {1, 0, 0, 0, DOWN_ORIENTATION};
+        init_data.nickname = "Mauro";
         init_data.head_id = 2000;
         init_data.body_id = 2100;
         init_data.equipment[HELMET] = 0;
@@ -200,13 +204,13 @@ void GameView::operator()() {
         init_data.exp = 500;
         init_data.levelup_exp = 700;
         init_data.inventory = {0};
-        init_data.equipment = {0};
 
         player.init(init_data);
         map.select(0);
     }
 
     map.select(0);
+    */
 
     //-------------------------------------------------------------------------
 

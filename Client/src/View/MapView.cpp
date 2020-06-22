@@ -50,6 +50,16 @@ void MapView::select(const Id id) {
     }
 }
 
+void MapView::occupyTile(InstanceId id, const int x_tile, const int y_tile) {
+    Map& current_map = maps[current_map_id];
+    current_map.occupyTile(id, x_tile, y_tile);
+}
+
+void MapView::clearTile(const int x_tile, const int y_tile) {
+    Map& current_map = maps[current_map_id];
+    current_map.clearTile(x_tile, y_tile);
+}
+
 void MapView::renderGround() const {
     const Map& current_map = maps[current_map_id];
     SDL_Rect render_quad = {0};

@@ -6,6 +6,7 @@
 //-----------------------------------------------------------------------------
 #include "../../../Common/includes/MapContainer.h"
 #include "../../../Common/includes/types.h"
+#include "../../../Common/includes/NonBlockingQueue.h"
 //-----------------------------------------------------------------------------
 #include "../Control/Notification.h"
 //-----------------------------------------------------------------------------
@@ -38,10 +39,12 @@ class Game {
     InstanceId next_instance_id;
 
     ActiveClients& active_clients;
+    NonBlockingQueue<Notification*>& differential_broadcasts;
 
    public:
     //-----------------------------------------------------------------------------
-    Game(ActiveClients& active_clients);
+    Game(ActiveClients& active_clients,
+         NonBlockingQueue<Notification*>& differential_broadcasts);
     ~Game();
 
     Game(const Game&) = delete;
@@ -49,6 +52,9 @@ class Game {
     Game(Game&& other) = delete;
     Game& operator=(Game&& other) = delete;
     //-----------------------------------------------------------------------------
+
+    void _pushCharacterDifferentialBroadcast(InstanceId id, BroadcastType type);
+    void _pushFullBroadcast(InstanceId receiver);
 
     //-----------------------------------------------------------------------------
     // DEFINIR COMO VIENE EL PLAYERDATA SI ES NUEVO!.
@@ -63,6 +69,9 @@ class Game {
      * Lanza Exception si alguno de los id no mapea a ninguna raza/clase.
      */
     const int newCharacter(CharacterCfg& init_data);
+
+    /* método provisorio */
+    void broadcastNewCharacter(InstanceId id);
 
     /*
      * Llamar a este metodo ante la desconexión de un character.
@@ -126,6 +135,9 @@ class Game {
     void drop(const Id caller, const uint8_t n_slot, const uint32_t amount);
 
     void listConnectedPlayers(const Id caller);
+
+    //-------------------------------------------------------------------------
+    const Id getMapId(const InstanceId caller);
 };
 //-----------------------------------------------------------------------------
 #endif  // __GAME_H__

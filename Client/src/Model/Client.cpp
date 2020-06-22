@@ -52,9 +52,9 @@ void Client::_freeQueues() {
     }
 
     {
-        Update* update = NULL;
-        while ((update = updates.pop())) {
-            delete update;
+        Broadcast* broadcast = NULL;
+        while ((broadcast = broadcasts.pop())) {
+            delete broadcast;
         }
     }
 }
@@ -64,7 +64,7 @@ void Client::_freeQueues() {
 //-----------------------------------------------------------------------------
 // API Pública
 
-Client::Client() : exit(false) {}
+Client::Client() : exit(false), first_package_received(false) {}
 
 void Client::run() {
     fprintf(stderr, "DEBUG: Comienza la ejecución del cliente.\n");
@@ -80,18 +80,25 @@ void Client::run() {
 
     // una vez que tenemos el socket, lanzamos a los 3 hilos
 
-    // FALTA VER COMO MANEJAR EL PRIMER PAQUETE (debería ser bloqueante)
-    // UNA IDEA ES TENER UN MINI LOOP HASTA RECIBIRLO, Y AHI LAUNCHEAR LA VISTA.
-    // ESTE LOOP PUEDE ESTAR DENTRO O FUERA DE LA VISTA.
-
-    // Dispatcher y Updater (objetos activos)
+    // Dispatcher y Receiver (objetos activos)
     CommandDispatcher command_dispatcher(socket, commands, exit);
-    Updater updater(socket, updates, exit);
+    Receiver receiver(socket, broadcasts, exit, first_package_received);
 
-    // Lanzamos los hilos
+    // Lanzamos el receiver
+    receiver.start();
+
+    // Decirle al usuario que esta cargando
+
+    // Dormimos hasta recibir el primer paquete
+    {
+        while (!first_package_received) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        }
+    }
+  
+     // Lanzamos el command dispatcher
     command_dispatcher.start();
-    updater.start();
-
+  
     try {
         // Lanzamos la vista del juego
         GameView game(commands, updates, exit);
@@ -127,9 +134,9 @@ void Client::run() {
     // Cerramos la cola de comandos, y joineamos los hilos
     commands.close();
     command_dispatcher.join();
-    updater.join();
+    receiver.join();
 
-    // Liberamos las colas
+    // En caso de que hayan quedado comandos o broadcasts sin procesar.
     _freeQueues();
 
     fprintf(stderr, "DEBUG: Termina la ejecución del cliente.\n");

@@ -1,4 +1,5 @@
 #include <math.h>
+
 #include <algorithm>
 //-----------------------------------------------------------------------------
 #include "../../includes/Model/Character.h"
@@ -116,21 +117,37 @@ void Character::_updateMovement(const unsigned int it) {
 
 void Character::startMovingUp() {
     this->moving_orientation = UP_ORIENTATION;
+    // comento esto porque genera que si toco muchas veces la tecla, se mueva
+    // mucho ignorando el limite de tiempo. hay una forma de solucionarlo,
+    // avisame y lo hablamos -mau
+    // this->position.move(moving_orientation);
     this->moving = true;
 }
 
 void Character::startMovingDown() {
     this->moving_orientation = DOWN_ORIENTATION;
+    // comento esto porque genera que si toco muchas veces la tecla, se mueva
+    // mucho ignorando el limite de tiempo. hay una forma de solucionarlo,
+    // avisame y lo hablamos -mau
+    // this->position.move(moving_orientation);
     this->moving = true;
 }
 
 void Character::startMovingRight() {
     this->moving_orientation = RIGHT_ORIENTATION;
+    // comento esto porque genera que si toco muchas veces la tecla, se mueva
+    // mucho ignorando el limite de tiempo. hay una forma de solucionarlo,
+    // avisame y lo hablamos -mau
+    // this->position.move(moving_orientation);
     this->moving = true;
 }
 
 void Character::startMovingLeft() {
     this->moving_orientation = LEFT_ORIENTATION;
+    // comento esto porque genera que si toco muchas veces la tecla, se mueva
+    // mucho ignorando el limite de tiempo. hay una forma de solucionarlo,
+    // avisame y lo hablamos -mau
+    // this->position.move(moving_orientation);
     this->moving = true;
 }
 
@@ -301,6 +318,7 @@ void Character::die() {
     delete this->state;
     this->state = new Dead();
     // DROPEAR ORO EN EXCESO E ITEMS DEL INVENTARIO
+    // CAMBIAR HEAD_ID Y BODY_ID A LAS DE UN FANTASMA.
     this->broadcast = true;
 }
 //-----------------------------------------------------------------------------
@@ -325,6 +343,10 @@ const unsigned int Character::getMaxHealth() const {
 const bool Character::isNewbie() const {
     return this->level.isNewbie();
 }
+
+const Id Character::getMapId() const {
+    return this->position.getMapId();
+}
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -337,7 +359,7 @@ void Character::beBroadcasted() {
 }
 
 void Character::fillBroadcastData(PlayerData& data) const {
-    // Llena x_tile, y_tile, orientation.
+    // Llena map_id, x_tile, y_tile, orientation.
     this->position.fillBroadcastData(data);
 
     data.head_id = this->race.head_id;

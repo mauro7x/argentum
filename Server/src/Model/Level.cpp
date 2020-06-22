@@ -1,17 +1,19 @@
+#include "../../includes/Model/Level.h"
+
 #include <math.h>
+
 #include <algorithm>
 
-#include "../../includes/Model/Level.h"
-#include "../../includes/Model/Formulas.h"
 #include "../../includes/Model/Character.h"
+#include "../../includes/Model/Formulas.h"
 
 #define INITIAL_LEVEL 1
 #define INITIAL_XP 0
 
-Level::Level():
-    level(INITIAL_LEVEL),
-    xp(INITIAL_XP),
-    level_up_xp(Formulas::calculateLevelUpXP(this->level)) {}
+Level::Level()
+    : level(INITIAL_LEVEL),
+      xp(INITIAL_XP),
+      level_up_xp(Formulas::calculateLevelUpXP(this->level)) {}
 
 Level::~Level() {}
 
@@ -26,15 +28,14 @@ void Level::sumXP(Character& character, const unsigned int points) {
     }
 }
 
-void Level::onAttackUpdate(Character& character,
-                           const unsigned int damage, 
+void Level::onAttackUpdate(Character& character, const unsigned int damage,
                            const unsigned int attacked_level) {
     if (!damage) {
         return;
     }
 
-    unsigned int gained_xp = Formulas::calculateAttackXPGain(damage, 
-                                attacked_level, this->level);
+    unsigned int gained_xp =
+        Formulas::calculateAttackXPGain(damage, attacked_level, this->level);
 
     this->sumXP(character, gained_xp);
 }
@@ -42,8 +43,8 @@ void Level::onAttackUpdate(Character& character,
 void Level::onKillUpdate(Character& character,
                          const unsigned int attacked_max_health,
                          const unsigned int attacked_level) {
-    unsigned int gained_xp = Formulas::calculateKillXPGain(attacked_max_health,
-                                attacked_level, this->level);
+    unsigned int gained_xp = Formulas::calculateKillXPGain(
+        attacked_max_health, attacked_level, this->level);
 
     this->sumXP(character, gained_xp);
 }
@@ -60,5 +61,4 @@ void Level::fillBroadcastData(PlayerData& data) const {
     data.level = this->level;
     data.exp = this->xp;
     data.levelup_exp = this->level_up_xp;
-
 }

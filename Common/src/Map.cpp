@@ -92,10 +92,10 @@ const bool Map::_moveOcuppant(Tile& from_tile, Tile& to_tile) {
 
     // Se puede mover.
     to_tile.occupant_id = from_tile.occupant_id;
-    to_tile.collision = true;
+    // to_tile.collision = true;
 
     from_tile.occupant_id = 0;
-    from_tile.collision = false;
+    // from_tile.collision = false;
 
     return true;
 }
@@ -214,8 +214,17 @@ void Map::establishCharacterSpawningPosition(InstanceId id, int& x, int& y) {
             valid_position = true;
     }
     Tile& tile = this->_getTile(x, y);
-    tile.collision = true;
     tile.occupant_id = id;
+}
+
+void Map::occupyTile(InstanceId id, const int x, const int y) {
+    Tile& tile = this->_getTile(x, y);
+    tile.occupant_id = id;
+}
+
+void Map::clearTile(const int x, const int y) {
+    Tile& tile = this->_getTile(x, y);
+    tile.occupant_id = 0;
 }
 
 Map::~Map() {}

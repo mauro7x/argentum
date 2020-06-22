@@ -7,13 +7,15 @@ void Character::_copyData(const CharacterData& init_data) {
     // Data básica
     data = init_data.basic_data;
 
-    // Ids gráficos
+    // Nombre de usuario
+    nickname = init_data.nickname;
+
+    // Cuerpo y cabeza
     head_id = init_data.head_id;
     body_id = init_data.body_id;
-    helmet_id = init_data.equipment[HELMET];
-    armour_id = init_data.equipment[ARMOUR];
-    shield_id = init_data.equipment[SHIELD];
-    weapon_id = init_data.equipment[WEAPON];
+
+    // Inventario
+    equipment = init_data.equipment;
 }
 
 //-----------------------------------------------------------------------------
@@ -27,28 +29,21 @@ Character::Character(Renderer* renderer, UnitSpriteContainer* sprites,
     : Unit(renderer, sprites, tile_w, tile_h, tile_movement_time),
       head_id(0),
       body_id(0),
-      helmet_id(0),
-      armour_id(0),
-      shield_id(0),
-      weapon_id(0) {}
+      equipment({0}) {}
 
 Character::Character(Character&& other) : Unit(std::move(other)) {
+    nickname = other.nickname;
     head_id = other.head_id;
     body_id = other.body_id;
-    helmet_id = other.helmet_id;
-    armour_id = other.armour_id;
-    shield_id = other.shield_id;
-    weapon_id = other.weapon_id;
+    equipment = other.equipment;
 }
 
 Character& Character::operator=(Character&& other) {
     Unit::operator=(std::move(other));
+    nickname = other.nickname;
     head_id = other.head_id;
     body_id = other.body_id;
-    helmet_id = other.helmet_id;
-    armour_id = other.armour_id;
-    shield_id = other.shield_id;
-    weapon_id = other.weapon_id;
+    equipment = other.equipment;
 
     return *this;
 }
@@ -94,18 +89,18 @@ void Character::render() const {
     }
 
     // Armadura
-    if (armour_id) {
-        _render(g_sprites->get(armour_id));
+    if (equipment[ARMOUR]) {
+        _render(g_sprites->get(equipment[ARMOUR]));
     }
 
     // Escudo
-    if (shield_id) {
-        _render(g_sprites->get(shield_id));
+    if (equipment[SHIELD]) {
+        _render(g_sprites->get(equipment[SHIELD]));
     }
 
     // Espada
-    if (weapon_id) {
-        _render(g_sprites->get(weapon_id));
+    if (equipment[WEAPON]) {
+        _render(g_sprites->get(equipment[WEAPON]));
     }
 
     // Cabeza
@@ -114,8 +109,8 @@ void Character::render() const {
     }
 
     // Casco
-    if (helmet_id) {
-        _render(g_sprites->get(helmet_id));
+    if (equipment[HELMET]) {
+        _render(g_sprites->get(equipment[HELMET]));
     }
 }
 

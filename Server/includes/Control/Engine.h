@@ -42,6 +42,9 @@ class Engine : public Thread {
     NonBlockingQueue<Command*> commands;
     ActiveClients active_clients;
 
+   // Colas de broadcast
+   NonBlockingQueue<Notification*> differential_broadcasts;
+
     // Instancia de juego
     Game game;
 
@@ -62,6 +65,12 @@ class Engine : public Thread {
 
     /* Procesa las solicitudes de nuevas conexiones */
     void _processNewConnections();
+
+    /* 
+     * Envia los broadcasts con los cambios que se produjeron en una 
+     * iteracion del loop 
+     */
+    void _sendDifferentialBroadcasts();
 
     /* Vacía las colas sin procesarlas para salir ordenadamente */
     void _freeQueues();

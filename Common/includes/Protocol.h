@@ -67,6 +67,10 @@ enum ReplyOpcode {
 
 };
 
+enum BroadcastType { NEW_BROADCAST, UPDATE_BROADCAST, DELETE_BROADCAST };
+
+enum EntityType { PLAYER_TYPE, CHARACTER_TYPE, CREATURE_TYPE, ITEM_TYPE };
+
 //-----------------------------------------------------------------------------
 
 #endif  // __PROTOCOL_H__

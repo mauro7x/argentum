@@ -87,6 +87,9 @@ class Unit {
 
     //-------------------------------------------------------------------------
 
+    /* Obtiene la posición en tiles */
+    SDL_Point getPos() const;
+
     /* Destructor */
     virtual ~Unit();
 };

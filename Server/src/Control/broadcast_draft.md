@@ -123,3 +123,103 @@ full.send(peer) {
 }
 
 Queue<FullBroadcast*> queue;
+
+
+
+
+Broadcast:
+
+
+----> Cola de actualizaciones [updates]
+
+    2 opciones:
+        encolamos PLAYER IDS + TYPE [NEW, DELETE, UPDATE].
+
+        encolamos NotificationBroadcast
+
+
+
+----> Cola de full broadcast [mandar toda la info]
+
+    2 opciones:
+        encolamos PLAYER IDS.
+
+        encolamos NotificationBroadcast
+
+
+std::map<PlayerId, PlayerData>
+
+
+enum type {NEW, UPDATE, DELETE}
+
+
+
+
+    // Envio del broadcast
+    _processUpdateBroadcasts() {
+        // LOS DATOS SON DEFINITIVOS
+        // desencolo NotificationBroadcst*
+        // me fijo si ya lo habia procesado.
+        // le pido el broadcast
+        // lo pusheo a la cola de notificaciones de todos los senders
+            // -> cada sender se fija si pertenece a su mapa y lo envia.
+    }
+    _processFullBroadcasts() {
+        // LOS DATOS SON DEFINITIVOS
+        // preparo el broadcast de todos los jugadores.
+        // desencolo id
+        // le pusheo al sender del ID que desencole.
+    }
+
+
+    ColaUpdates<PlayerBroadcastInfo*> info;
+
+
+
+    while(!colaupdates.empty())
+        info = colaupdates.pop()
+
+        std::map<MapId, Broadcast>
+
+
+
+
+    struct PlayerBroadcastInfo {
+        BroadcastType = NEW/DELETE/UPDATE.
+        PlayerData = ?.
+    }
+
+    struct Broadcast {
+        
+    }
+
+J1 NEW toda la info playerdata
+J2 NEW toda la info playerdata
+J1 UPDATE x_coord +=1 playerdata
+J2 UPDATE y_coord-=1 playerdata
+J2 UPDATE vida -= 30 playerdata
+J1 UPDATE ... playerdata
+J1 UPDATE .. playerdata
+J1 DELETE .. playerdata
+
+{
+        
+}
+    
+
+    Desencolo y armo algo asi
+     {
+        map_id = 1: {
+                        Jugador 1: UPDATE
+                        Jugador 2: NEW
+                        Jugador 3: 
+                    }
+        map_id = 2: {
+
+                    }
+
+
+
+
+
+    
