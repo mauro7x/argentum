@@ -51,7 +51,7 @@ class Character {
 
         Orientation moving_orientation;
         bool moving;
-        unsigned int moving_time_elapsed;
+        int moving_cooldown_time;
         unsigned int attribute_update_time_elapsed;
 
         bool broadcast;

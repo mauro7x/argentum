@@ -40,7 +40,7 @@ Character::Character(const CharacterCfg& init_data, const RaceCfg& race,
 
       moving_orientation(DEFAULT_MOVING_ORIENTATION),
       moving(false),
-      moving_time_elapsed(0),
+      moving_cooldown_time(0),
       attribute_update_time_elapsed(0),
 
       broadcast(true) {  // Cuando se crea, debe ser broadcasteado.
@@ -58,8 +58,14 @@ Character::~Character() {
 
 //-----------------------------------------------------------------------------
 void Character::act(const unsigned int it) {
-    if (moving)
+    if (moving) {
         _updateMovement(it);
+    } else {
+        if (this->moving_cooldown_time > 0) {
+            this->moving_cooldown_time =
+                std::max(this->moving_cooldown_time - RATE, 0);
+        }
+    }
 
     _updateTimeDependantAttributes(it);
 }
@@ -100,14 +106,14 @@ void Character::_updateTimeDependantAttributes(const unsigned int it) {
 }
 
 void Character::_updateMovement(const unsigned int it) {
-    this->moving_time_elapsed += it * RATE;  // Tiempo en ms acum sin moverme.
-
-    while (this->moving_time_elapsed >= TIME_TO_MOVE_A_TILE) {
+    this->moving_cooldown_time -= it * RATE;
+    
+    while (this->moving_cooldown_time <= 0) {
         this->position.move(moving_orientation);
 
         this->broadcast = true;
 
-        this->moving_time_elapsed -= TIME_TO_MOVE_A_TILE;
+        this->moving_cooldown_time += TIME_TO_MOVE_A_TILE;
     }
 }
 
@@ -119,43 +125,26 @@ void Character::_updateMovement(const unsigned int it) {
 
 void Character::startMovingUp() {
     this->moving_orientation = UP_ORIENTATION;
-    // comento esto porque genera que si toco muchas veces la tecla, se mueva
-    // mucho ignorando el limite de tiempo. hay una forma de solucionarlo,
-    // avisame y lo hablamos -mau
-    // this->position.move(moving_orientation);
     this->moving = true;
 }
 
 void Character::startMovingDown() {
     this->moving_orientation = DOWN_ORIENTATION;
-    // comento esto porque genera que si toco muchas veces la tecla, se mueva
-    // mucho ignorando el limite de tiempo. hay una forma de solucionarlo,
-    // avisame y lo hablamos -mau
-    // this->position.move(moving_orientation);
     this->moving = true;
 }
 
 void Character::startMovingRight() {
     this->moving_orientation = RIGHT_ORIENTATION;
-    // comento esto porque genera que si toco muchas veces la tecla, se mueva
-    // mucho ignorando el limite de tiempo. hay una forma de solucionarlo,
-    // avisame y lo hablamos -mau
-    // this->position.move(moving_orientation);
     this->moving = true;
 }
 
 void Character::startMovingLeft() {
     this->moving_orientation = LEFT_ORIENTATION;
-    // comento esto porque genera que si toco muchas veces la tecla, se mueva
-    // mucho ignorando el limite de tiempo. hay una forma de solucionarlo,
-    // avisame y lo hablamos -mau
-    // this->position.move(moving_orientation);
     this->moving = true;
 }
 
 void Character::stopMoving() {
     this->moving = false;
-    this->moving_time_elapsed = 0;
 }
 
 //-----------------------------------------------------------------------------
@@ -164,7 +153,7 @@ void Character::stopMoving() {
 void Character::recoverHealth(const unsigned int points) {
     if (!points)
         return;
-        
+
     this->health = std::min(this->health + points, max_health);
     this->broadcast = true;
 }
