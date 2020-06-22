@@ -53,7 +53,7 @@ void Unit::_movementFinished() {
     }
 }
 
-int Unit::_calculateSpriteX(const Sprite& sprite) const {
+int Unit::_calculateSpriteX(const UnitSprite& sprite) const {
     switch (data.orientation) {
         case UP_ORIENTATION:
             return (sprite.up_col +
@@ -81,7 +81,7 @@ int Unit::_calculateSpriteX(const Sprite& sprite) const {
         "Orientation invalid (trying to calculate sprite x-position).");
 }
 
-int Unit::_calculateSpriteY(const Sprite& sprite) const {
+int Unit::_calculateSpriteY(const UnitSprite& sprite) const {
     switch (data.orientation) {
         case UP_ORIENTATION:
             return sprite.up_row * sprite.clip_h;
@@ -97,7 +97,7 @@ int Unit::_calculateSpriteY(const Sprite& sprite) const {
         "Orientation invalid (trying to calculate sprite y-position).");
 }
 
-void Unit::_render(const Sprite& sprite) const {
+void Unit::_render(const UnitSprite& sprite) const {
     // Paso 1: centramos el sprite en el tile
     int x = (tile_w - (sprite.clip_w)) / 2;
     int y = (tile_h * (0.8)) - (sprite.clip_h);

@@ -7,6 +7,7 @@
 #include "../../../Common/includes/Exceptions/Exception.h"
 #include "../../../Common/includes/UnitData.h"
 #include "Renderer.h"
+#include "Sprites.h"
 #include "UnitSpriteContainer.h"
 //-----------------------------------------------------------------------------
 
@@ -49,13 +50,13 @@ class Unit {
     void _movementFinished();
 
     /* Calcula la posición x del clip a renderizar */
-    int _calculateSpriteX(const Sprite& sprite) const;
+    int _calculateSpriteX(const UnitSprite& sprite) const;
 
     /* Calcula la posición y del clip a renderizar */
-    int _calculateSpriteY(const Sprite& sprite) const;
+    int _calculateSpriteY(const UnitSprite& sprite) const;
 
     /* Renderiza un sprite agregando el offset necesario */
-    void _render(const Sprite& sprite) const;
+    void _render(const UnitSprite& sprite) const;
 
    public:
     /* Constructor por defecto para poder almacenarlas en maps */

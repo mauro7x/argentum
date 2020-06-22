@@ -8,8 +8,10 @@
 //-----------------------------------------------------------------------------
 // API Pública
 
-UserInventory::UserInventory(const Renderer* renderer, const Player& player)
-    : HUDComponent(renderer), player(player) {}
+UserInventory::UserInventory(const Renderer* renderer,
+                             const ItemSpriteContainer& item_sprites,
+                             const Player& player)
+    : HUDComponent(renderer), g_item_sprites(item_sprites), g_player(player) {}
 
 void UserInventory::init(const json& config) {
     if (initialized) {

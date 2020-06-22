@@ -1,5 +1,5 @@
-#ifndef __SPRITE_H__
-#define __SPRITE_H__
+#ifndef __SPRITES_H__
+#define __SPRITES_H__
 
 //-----------------------------------------------------------------------------
 #include <cstdint>
@@ -10,7 +10,7 @@
 
 //-----------------------------------------------------------------------------
 
-struct Sprite {
+struct UnitSprite {
     Id id;
     uint16_t clip_w, clip_h;
     uint8_t up_row, up_col, up_clips;
@@ -21,6 +21,11 @@ struct Sprite {
     Texture texture;
 };
 
+struct ItemSprite {
+    Id id;
+    Texture texture;
+};
+
 //-----------------------------------------------------------------------------
 
-#endif  // __SPRITE_H__
+#endif  // __SPRITES_H__

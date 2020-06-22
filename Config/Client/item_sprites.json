@@ -1,6 +1,6 @@
 {
     "dirpath": "../Assets/Sprites/Items/",
-    "helmet": [
+    "helmets": [
         {
             "gid": 1300,
             "color_key": {
@@ -35,7 +35,7 @@
             }
         }
     ],
-    "armour": [
+    "armours": [
         {
             "gid": 1400,
             "color_key": {
@@ -70,7 +70,7 @@
             }
         }
     ],
-    "shield": [
+    "shields": [
         {
             "gid": 1500,
             "color_key": {
@@ -94,7 +94,7 @@
             }
         }
     ],
-    "weapon": [
+    "weapons": [
         {
             "gid": 1000,
             "color_key": {
@@ -151,7 +151,7 @@
             }
         }
     ],
-    "wand": [
+    "wands": [
         {
             "gid": 1100,
             "color_key": {

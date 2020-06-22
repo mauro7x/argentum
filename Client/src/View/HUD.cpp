@@ -8,15 +8,17 @@
 //-----------------------------------------------------------------------------
 // API Pública
 
-HUD::HUD(const Renderer* renderer, const Player& player)
+HUD::HUD(const Renderer* renderer, const ItemSpriteContainer& item_sprites,
+         const Player& player)
     : initialized(false),
       g_renderer(renderer),
-      player(player),
+      g_item_sprites(item_sprites),
+      g_player(player),
 
       // Componentes
       console(renderer),
       user_info(renderer, player),
-      user_inventory(renderer, player),
+      user_inventory(renderer, item_sprites, player),
       user_stats(renderer, player) {}
 
 void HUD::init(const json& config) {

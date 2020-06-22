@@ -13,6 +13,7 @@
 #include "../../../Common/includes/JSON.h"
 #include "../paths.h"
 #include "HUDComponent.h"
+#include "ItemSpriteContainer.h"
 #include "Player.h"
 #include "Renderer.h"
 #include "Texture.h"
@@ -22,14 +23,17 @@
 
 class UserInventory : public HUDComponent {
    private:
-    const Player& player;
+    const ItemSpriteContainer& g_item_sprites;
+    const Player& g_player;
 
     // Texturas a renderizar
     Texture base;
 
    public:
     /* Constructor */
-    UserInventory(const Renderer* renderer, const Player& player);
+    UserInventory(const Renderer* renderer,
+                  const ItemSpriteContainer& item_sprites,
+                  const Player& player);
 
     //-------------------------------------------------------------------------
 

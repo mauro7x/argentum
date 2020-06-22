@@ -13,6 +13,7 @@
 #include "../../../Common/includes/JSON.h"
 #include "../paths.h"
 #include "Console.h"
+#include "ItemSpriteContainer.h"
 #include "Player.h"
 #include "Renderer.h"
 #include "Texture.h"
@@ -27,7 +28,8 @@ class HUD {
    private:
     bool initialized;
     const Renderer* g_renderer;
-    const Player& player;
+    const ItemSpriteContainer& g_item_sprites;
+    const Player& g_player;
 
     // Offsets de renderizado
     int offset_x = 0, offset_y = 0;
@@ -44,7 +46,8 @@ class HUD {
 
    public:
     /* Constructor */
-    HUD(const Renderer* renderer, const Player& player);
+    HUD(const Renderer* renderer, const ItemSpriteContainer& item_sprites,
+        const Player& player);
 
     /* Deshabilitamos el constructor por copia. */
     HUD(const HUD&) = delete;

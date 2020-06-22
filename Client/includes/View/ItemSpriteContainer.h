@@ -1,5 +1,5 @@
-#ifndef __UNIT_SPRITE_CONTAINER_H__
-#define __UNIT_SPRITE_CONTAINER_H__
+#ifndef __ITEM_SPRITE_CONTAINER_H__
+#define __ITEM_SPRITE_CONTAINER_H__
 
 //-----------------------------------------------------------------------------
 #include <fstream>
@@ -16,29 +16,29 @@
 
 //-----------------------------------------------------------------------------
 
-class UnitSpriteContainer {
+class ItemSpriteContainer {
    private:
     const Renderer* g_renderer;
-    std::unordered_map<Id, UnitSprite> content;
+    std::unordered_map<Id, ItemSprite> content;
 
     /* Carga los sprites leyendo datos del json y la textura del dirpath */
     void _loadSpritesFromJson(const json& sprites, const std::string& dirpath);
 
    public:
     /* Constructor */
-    UnitSpriteContainer(const Renderer* renderer);
+    ItemSpriteContainer(const Renderer* renderer);
 
     /* Deshabilitamos el constructor por copia. */
-    UnitSpriteContainer(const UnitSpriteContainer&) = delete;
+    ItemSpriteContainer(const ItemSpriteContainer&) = delete;
 
     /* Deshabilitamos el operador= para copia.*/
-    UnitSpriteContainer& operator=(const UnitSpriteContainer&) = delete;
+    ItemSpriteContainer& operator=(const ItemSpriteContainer&) = delete;
 
     /* Deshabilitamos el constructor por movimiento. */
-    UnitSpriteContainer(UnitSpriteContainer&& other) = delete;
+    ItemSpriteContainer(ItemSpriteContainer&& other) = delete;
 
     /* Deshabilitamos el operador= para movimiento. */
-    UnitSpriteContainer& operator=(UnitSpriteContainer&& other) = delete;
+    ItemSpriteContainer& operator=(ItemSpriteContainer&& other) = delete;
 
     //-------------------------------------------------------------------------
 
@@ -46,14 +46,14 @@ class UnitSpriteContainer {
     void loadMedia();
 
     /* Obtiene el sprite correspondiente */
-    const UnitSprite& get(const Id id) const;
-    const UnitSprite& operator[](const Id id) const;
+    const ItemSprite& get(const Id id) const;
+    const ItemSprite& operator[](const Id id) const;
 
     //-------------------------------------------------------------------------
 
     /* Destructor */
-    ~UnitSpriteContainer();
+    ~ItemSpriteContainer();
 };
 
 //-----------------------------------------------------------------------------
-#endif  // __UNIT_SPRITE_CONTAINER_H__
+#endif  // __ITEM_SPRITE_CONTAINER_H__

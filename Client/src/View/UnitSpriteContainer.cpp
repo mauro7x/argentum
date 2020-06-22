@@ -14,7 +14,7 @@ void UnitSpriteContainer::_loadSpritesFromJson(const json& sprites,
     for (int i = 0; i < size; i++) {
         id = sprites[i]["gid"];
         filepath = dirpath + std::to_string(id) + ".png";
-        Sprite tmp;
+        UnitSprite tmp;
         tmp.id = id;
         tmp.clip_w = sprites[i]["clip_w"];
         tmp.clip_h = sprites[i]["clip_h"];
@@ -75,7 +75,7 @@ void UnitSpriteContainer::loadMedia() {
     _loadSpritesFromJson(sprites["creature"], dirpath);
 }
 
-const Sprite& UnitSpriteContainer::get(const Id id) const {
+const UnitSprite& UnitSpriteContainer::get(const Id id) const {
     if (content.count(id) == 0) {
         throw Exception("Unknown sprite id.");
     }
@@ -83,7 +83,7 @@ const Sprite& UnitSpriteContainer::get(const Id id) const {
     return content.at(id);
 }
 
-const Sprite& UnitSpriteContainer::operator[](const Id id) const {
+const UnitSprite& UnitSpriteContainer::operator[](const Id id) const {
     return this->get(id);
 }
 
