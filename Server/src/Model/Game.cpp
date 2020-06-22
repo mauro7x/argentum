@@ -99,11 +99,6 @@ void Game::deleteCharacter(const InstanceId id) {
 
     // PERSISTIR ESTADO DEL JUGADOR
 
-    // Lo sacamos del mapa
-    const Position& pos = this->characters.at(id).getPosition();
-    const Id map_id = this->characters.at(id).getMapId();
-    this->map_container[map_id].clearTile(pos.getX(), pos.getY());
-
     // Lo eliminamos
     this->characters.erase(id);
 }

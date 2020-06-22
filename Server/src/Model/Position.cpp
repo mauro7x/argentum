@@ -12,7 +12,9 @@ Position::Position(const Id map, const int init_x_coord, const int init_y_coord,
       orientation(DEFAULT_ORIENTATION),
       map_container(map_container) {}
 
-Position::~Position() {}
+Position::~Position() {
+    map_container[map].clearTile(x, y);
+}
 
 const int Position::getX() const {
     return this->x;
