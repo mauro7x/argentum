@@ -15,9 +15,9 @@ class Creature {
    private:
     Id id;
     std::string name;
-    unsigned int health_max;
-    unsigned int health_actual;
-    unsigned int damage;
+    uint32_t health_max;
+    uint32_t health_actual;
+    uint32_t damage;
     Position position;
 
     Orientation moving_orientation;
@@ -31,7 +31,7 @@ class Creature {
     /* Constructor */
     Creature(const CreatureCfg& data, MapContainer& map_container,
              const Id init_map, const int init_x_coord, const int init_y_coord,
-             const unsigned int health, const unsigned int damage);
+             const uint32_t health, const uint32_t damage);
 
     /* Destructor */
     ~Creature();
