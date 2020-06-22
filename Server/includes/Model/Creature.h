@@ -13,9 +13,11 @@
 
 class Creature {
    private:
+    Id id;
+    std::string name;
     unsigned int health_max;
     unsigned int health_actual;
-    StateType state;
+    unsigned int damage;
     Position position;
 
     Orientation moving_orientation;
@@ -27,8 +29,9 @@ class Creature {
     //-----------------------------------------------------------------------------
 
     /* Constructor */
-    Creature(unsigned int health, MapContainer& map_container, const Id init_map,
-             const int init_x_coord, const int init_y_coord);
+    Creature(const CreatureCfg& data, MapContainer& map_container,
+             const Id init_map, const int init_x_coord, const int init_y_coord,
+             const unsigned int health, const unsigned int damage);
 
     /* Destructor */
     ~Creature();
@@ -69,11 +72,10 @@ class Creature {
 
     /*
      * Efectúa la recepción del ataque del jugador.
-     * si el damage supera la vida actual, 
+     * si el damage supera la vida actual,
      */
     void receiveAttack(const unsigned int damage);
 
     unsigned int getMaxHealth();
-    
 };
 #endif  //__CREATURE_H__

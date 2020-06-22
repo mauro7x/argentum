@@ -57,7 +57,7 @@ void Config<KindCfg>::_parseFile() {
 
 template <>
 void Config<NPCCfg>::_parseFile() {
-    json j = JSON::loadJsonFile(CREATURES_CONFIG_FILEPATH);
+    json j = JSON::loadJsonFile(NPC_CONFIG_FILEPATH);
 
     int size = j.size();
     for (int i = 0; i < size; i++) {
@@ -173,7 +173,22 @@ void Config<PotionCfg>::_parseFile() {
     }
 }
 
+template <>
+void Config<CreatureCfg>::_parseFile() {
+    json j = JSON::loadJsonFile(CREATURES_CONFIG_FILEPATH);
 
+    int size = j.size();
+    for (int i = 0; i < size; i++) {
+        CreatureCfg creature;
+
+        creature.id = j[i]["id"];
+        creature.name = j[i]["name"];
+        creature.base_damage = j[i]["base_damage"];
+        creature.base_health = j[i]["base_health"];
+
+        config[creature.id] = creature;
+    }
+}
 
 /* Para cualquier clase que no sea esperada, nos quejamos */
 template <class T>

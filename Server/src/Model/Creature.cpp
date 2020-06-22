@@ -7,12 +7,15 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-Creature::Creature(unsigned int health, MapContainer& map_container,
+Creature::Creature(const CreatureCfg& data, MapContainer& map_container,
                    const Id init_map, const int init_x_coord,
-                   const int init_y_coord)
-    : health_max(health),
+                   const int init_y_coord, const unsigned int health,
+                   const unsigned int damage)
+    : id(data.id),
+      name(data.name),
+      health_max(data.base_health),
       health_actual(health),
-      state(ALIVE),
+      damage(damage),
       position(init_map, init_x_coord, init_y_coord, map_container),
       moving(false),
       moving_time_elapsed(0),
@@ -46,11 +49,9 @@ void Creature::stopMoving() {
 void Creature::receiveAttack(const unsigned int damage) {
     if (damage >= health_actual) {
         health_actual = 0;
-        state = DEAD;
     } else {
         health_actual -= damage;
     }
-    
 }
 
 unsigned int Creature::getMaxHealth() {

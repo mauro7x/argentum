@@ -151,5 +151,13 @@ struct CharacterCfg {
 
     StateType state;
 };
+
+struct CreatureCfg {
+    Id id;
+    std::string name;
+    unsigned int base_damage;
+    unsigned int base_health;
+
+};
 //-----------------------------------------------------------------------------
 #endif  // __CONFIG_STRUCTS_H__
