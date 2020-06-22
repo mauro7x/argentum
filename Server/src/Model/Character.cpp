@@ -38,8 +38,7 @@ Character::Character(const CharacterCfg& init_data, const RaceCfg& race,
 
       position(init_map, init_x_coord, init_y_coord, map_container),
 
-      moving_orientation(DEFAULT_MOVING_ORIENTATION),
-      moving(false),
+      is_moving(false),
       moving_cooldown_time(0),
       attribute_update_time_elapsed(0),
 
@@ -58,12 +57,11 @@ Character::~Character() {
 
 //-----------------------------------------------------------------------------
 void Character::act(const unsigned int it) {
-    if (moving) {
+    if (is_moving) {
         _updateMovement(it);
     } else {
-        if (this->moving_cooldown_time > 0) {
-            this->moving_cooldown_time =
-                std::max(this->moving_cooldown_time - RATE, 0);
+        if (moving_cooldown_time > 0) {
+            moving_cooldown_time = std::max(moving_cooldown_time - RATE, 0);
         }
     }
 
@@ -107,11 +105,11 @@ void Character::_updateTimeDependantAttributes(const unsigned int it) {
 
 void Character::_updateMovement(const unsigned int it) {
     this->moving_cooldown_time -= it * RATE;
-    
-    while (this->moving_cooldown_time <= 0) {
-        this->position.move(moving_orientation);
 
+    while (this->moving_cooldown_time <= 0) {
         this->broadcast = true;
+        
+        this->position.move();
 
         this->moving_cooldown_time += TIME_TO_MOVE_A_TILE;
     }
@@ -124,27 +122,27 @@ void Character::_updateMovement(const unsigned int it) {
 //-----------------------------------------------------------------------------
 
 void Character::startMovingUp() {
-    this->moving_orientation = UP_ORIENTATION;
-    this->moving = true;
+    this->position.changeOrientation(UP_ORIENTATION);
+    this->is_moving = true;
 }
 
 void Character::startMovingDown() {
-    this->moving_orientation = DOWN_ORIENTATION;
-    this->moving = true;
+    this->position.changeOrientation(DOWN_ORIENTATION);
+    this->is_moving = true;
 }
 
 void Character::startMovingRight() {
-    this->moving_orientation = RIGHT_ORIENTATION;
-    this->moving = true;
+    this->position.changeOrientation(RIGHT_ORIENTATION);
+    this->is_moving = true;
 }
 
 void Character::startMovingLeft() {
-    this->moving_orientation = LEFT_ORIENTATION;
-    this->moving = true;
+    this->position.changeOrientation(LEFT_ORIENTATION);
+    this->is_moving = true;
 }
 
 void Character::stopMoving() {
-    this->moving = false;
+    this->is_moving = false;
 }
 
 //-----------------------------------------------------------------------------

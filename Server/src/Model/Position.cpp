@@ -32,14 +32,12 @@ const unsigned int Position::getDistance(const Position& other) const {
     return abs(this->x - other.getX()) + abs(this->y - other.getY());
 }
 
-void Position::move(const Orientation& orientation) {
-    this->orientation = orientation;
-    
+void Position::move() {
     if (!this->map_container[this->map].moveOcuppant(this->x, this->y,
-                                                     orientation))
+                                                     this->orientation))
         throw CollisionWhileMovingException();
 
-    switch (orientation) {
+    switch (this->orientation) {
         case UP_ORIENTATION:
             this->y -= 1;
             break;
@@ -56,6 +54,10 @@ void Position::move(const Orientation& orientation) {
             this->x -= 1;
             break;
     }
+}
+
+void Position::changeOrientation(Orientation orientation) {
+    this->orientation = orientation;
 }
 
 void Position::fillBroadcastData(PlayerData& data) const {

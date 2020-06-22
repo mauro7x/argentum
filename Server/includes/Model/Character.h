@@ -49,8 +49,7 @@ class Character {
         Equipment equipment;
         Position position;
 
-        Orientation moving_orientation;
-        bool moving;
+        bool is_moving;
         int moving_cooldown_time;
         unsigned int attribute_update_time_elapsed;
 
