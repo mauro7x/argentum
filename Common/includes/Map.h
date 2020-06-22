@@ -91,8 +91,14 @@ class Map {
 
     const bool moveOcuppant(const int x, const int y,
                             const Orientation& orientation);
-
+    /*iniciando una posicion para el character*/
     void establishCharacterSpawningPosition(InstanceId id, int& x, int& y);
+
+    /* Ocupa una celda con un ocupante */
+    void occupyTile(InstanceId id, const int x, const int y);
+
+    /* Elimina al ocupante de una celda */
+    void clearTile(const int x, const int y);
 
     //-------------------------------------------------------------------------
 

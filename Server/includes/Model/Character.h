@@ -294,6 +294,9 @@ class Character {
         /* Retorna el health máxima del character. */
         const unsigned int getMaxHealth() const;
 
+        /* Retorna el id del mapa en el que se encuentra */
+        const Id getMapId() const;
+
         //-----------------------------------------------------------------------------
 
         //-----------------------------------------------------------------------------

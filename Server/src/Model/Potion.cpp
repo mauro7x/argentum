@@ -1,13 +1,12 @@
 #include "../../includes/Model/Potion.h"
-#include "../../includes/Model/Character.h" // Se incluye aca para evitar dependencias 
-                                   // circulares.
 
-Potion::Potion(const Id id,
-               std::string name,
-               const unsigned int price,
-               const unsigned int recovery_points):
-    Item(id, name, price),
-    recovery_points(recovery_points) {}
+#include "../../includes/Model/Character.h"  
+/* Se incluye aca para evitar dependencias
+ circulares.*/
+
+Potion::Potion(const Id id, std::string name, const unsigned int price,
+               const unsigned int recovery_points)
+    : Item(id, name, price), recovery_points(recovery_points) {}
 
 Potion::~Potion() {}
 
@@ -21,18 +20,16 @@ Potion* PotionFactory::newPotion(const PotionCfg& data) {
     }
 }
 
-HealthPotion::HealthPotion(const PotionCfg& data): 
-    Potion(data.id, data.name, 
-           data.price, data.recovery_points) {}
+HealthPotion::HealthPotion(const PotionCfg& data)
+    : Potion(data.id, data.name, data.price, data.recovery_points) {}
 HealthPotion::~HealthPotion() {}
 
 void HealthPotion::equip(Character& equipper) {
     equipper.recoverHealth(this->recovery_points);
 }
 
-ManaPotion::ManaPotion(const PotionCfg& data): 
-    Potion(data.id, data.name, 
-           data.price, data.recovery_points) {}
+ManaPotion::ManaPotion(const PotionCfg& data)
+    : Potion(data.id, data.name, data.price, data.recovery_points) {}
 ManaPotion::~ManaPotion() {}
 
 void ManaPotion::equip(Character& equipper) {

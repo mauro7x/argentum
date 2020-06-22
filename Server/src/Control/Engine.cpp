@@ -17,12 +17,14 @@ void Engine::_init() {
 }
 
 void Engine::_processNewConnections() {
-    NewConnection* new_connection = NULL;
+    NewConnection* new_connection = nullptr;
     while ((new_connection = new_connections.pop())) {
         fprintf(stderr, "ENGINE: Procesando una nueva conexión...\n");
 
         InstanceId id = this->game.newCharacter((*new_connection).data);
-        active_clients.add(id, (*new_connection).peer);
+        Id map = this->game.getMapId(id);
+        active_clients.add(id, map, (*new_connection).peer);
+        this->game.broadcastNewCharacter(id);
 
         delete new_connection;
     }
@@ -39,7 +41,7 @@ void Engine::_processCommands() {
 }
 
 void Engine::_processFinishedConnections() {
-    InstanceId* finished_connection = NULL;
+    InstanceId* finished_connection = nullptr;
     while ((finished_connection = finished_connections.pop())) {
         fprintf(stderr, "ENGINE: Eliminando una conexión terminada...\n");
 
@@ -51,23 +53,30 @@ void Engine::_processFinishedConnections() {
     }
 }
 
+void Engine::_sendDifferentialBroadcasts() {
+    Notification* broadcast = nullptr;
+    while ((broadcast = differential_broadcasts.pop())) {
+        this->active_clients.sendDifferentialBroadcastToAll(broadcast);
+    }
+}
+
 void Engine::_freeQueues() {
     {
-        InstanceId* p = NULL;
+        InstanceId* p = nullptr;
         while ((p = finished_connections.pop())) {
             delete p;
         }
     }
 
     {
-        InstanceId* p = NULL;
+        InstanceId* p = nullptr;
         while ((p = finished_connections.pop())) {
             game.deleteCharacter(*p);
         }
     }
 
     {
-        Command* p = NULL;
+        Command* p = nullptr;
         while ((p = commands.pop())) {
             delete p;
         }
@@ -80,7 +89,8 @@ void Engine::_loopIteration(int it) {
     game.actCharacters(it);
     _processFinishedConnections();
 
-    // Envio del broadcast
+    // Broadcast
+    _sendDifferentialBroadcasts();
 }
 
 //-----------------------------------------------------------------------------
@@ -97,7 +107,7 @@ Engine::Engine(Database& database,
       finished_connections(),
       commands(),
       active_clients(commands, finished_connections),
-      game(active_clients) {}
+      game(active_clients, differential_broadcasts) {}
 
 void Engine::run() {
     fprintf(stderr, "DEBUG: Comienza la ejecución del engine.\n");

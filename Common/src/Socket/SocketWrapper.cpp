@@ -82,13 +82,18 @@ ssize_t SocketWrapper::operator<<(const std::string& s) const {
     uint32_t size = s.size();
     sent += this->operator<<(size);
     if (sent != sizeof(size)) {
-        return sent;
+        return 0;
     }
 
     // Enviamos el string
     last_sent = send(s.c_str(), size);
+    if (last_sent) {
+        sent += last_sent;
+    } else {
+        return 0;
+    }
 
-    return sent + last_sent;
+    return sent;
 }
 
 ssize_t SocketWrapper::operator>>(std::string& s) const {
@@ -100,19 +105,19 @@ ssize_t SocketWrapper::operator>>(std::string& s) const {
     uint32_t size;
     received += this->operator>>(size);
     if (received != sizeof(size)) {
-        return received;
+        return 0;
     }
 
-    // Recibimos el vector
+    // Recibimos el string
     s.reserve(size);
     char byte;
-    for (uint8_t i = 0; i < size; i++) {
+    for (unsigned int i = 0; i < size; i++) {
         last_received += this->operator>>(byte);
         if (last_received) {
             received += last_received;
             s += byte;
         } else {
-            return received;
+            return 0;
         }
     }
 
@@ -126,18 +131,18 @@ ssize_t SocketWrapper::operator<<(const std::vector<uint8_t>& v) const {
     uint32_t size = v.size();
     sent += this->operator<<(size);
     if (sent != sizeof(size)) {
-        return sent;
+        return 0;
     }
 
     // Enviamos el vector
     uint8_t byte;
-    for (uint8_t i = 0; i < size; i++) {
+    for (unsigned int i = 0; i < size; i++) {
         byte = v.at(i);
         last_sent = this->operator<<(byte);
         if (last_sent) {
             sent += last_sent;
         } else {
-            return sent;
+            return 0;
         }
     }
 
@@ -153,19 +158,19 @@ ssize_t SocketWrapper::operator>>(std::vector<uint8_t>& v) const {
     uint32_t size;
     received += this->operator>>(size);
     if (received != sizeof(size)) {
-        return received;
+        return 0;
     }
 
     // Recibimos el vector
     v.reserve(size);
     uint8_t byte;
-    for (uint8_t i = 0; i < size; i++) {
+    for (unsigned int i = 0; i < size; i++) {
         last_received += this->operator>>(byte);
         if (last_received) {
             received += last_received;
             v.push_back(byte);
         } else {
-            return received;
+            return 0;
         }
     }
 

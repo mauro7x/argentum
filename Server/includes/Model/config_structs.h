@@ -150,10 +150,6 @@ struct CharacterCfg {
     Id kind;
 
     StateType state;
-
-    Id map;
-    int x_coord, y_coord;
-    Orientation orientation;
 };
 //-----------------------------------------------------------------------------
 #endif  // __CONFIG_STRUCTS_H__

@@ -22,8 +22,8 @@
 #include "../../../Common/includes/NonBlockingQueue.h"
 #include "../../../Common/includes/UnitData.h"
 #include "../../../Common/includes/paths.h"
+#include "../Model/Broadcasts/Broadcast.h"
 #include "../Model/Commands/Command.h"
-#include "../Model/Update.h"
 #include "../paths.h"
 //-----------------------------------------------------------------------------
 
@@ -49,7 +49,7 @@ class GameView {
    private:
     /* Comunicación entre hilos */
     BlockingQueue<Command*>& commands;  // es necesario tenerla aca?
-    NonBlockingQueue<Update*>& updates;
+    NonBlockingQueue<Broadcast*>& broadcasts;
     std::atomic_bool& exit;
 
     /* Componentes SDL principales */
@@ -87,8 +87,8 @@ class GameView {
     /* Vacía la cola de eventos de SDL */
     void _processSDLEvents();
 
-    /* Vacía la cola de updates del servidor */
-    void _processUpdates();
+    /* Vacía la cola de broadcasts del servidor */
+    void _processBroadcasts();
 
     /* Ejecuta una iteración del loop */
     void _loopIteration(const int it);
@@ -98,7 +98,7 @@ class GameView {
    public:
     /* Constructor */
     GameView(BlockingQueue<Command*>& commands,
-             NonBlockingQueue<Update*>& updates, std::atomic_bool& exit);
+             NonBlockingQueue<Broadcast*>& broadcasts, std::atomic_bool& exit);
 
     /* Deshabilitamos el constructor por copia. */
     GameView(const GameView&) = delete;

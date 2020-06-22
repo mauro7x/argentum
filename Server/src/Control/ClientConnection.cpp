@@ -25,10 +25,16 @@ void ClientConnection::_sender() {
     fprintf(stderr, "SENDER DE UN CLIENTE EMPEZANDO! Id: %i\n", id);
 
     try {
-        Notification* notification = NULL;
+        Notification* notification = nullptr;
         bool socket_valid = true;
         while ((notification = notifications.pop())) {
-            socket_valid = notification->send(peer);
+            if (notification->isBroadcast()) {
+                if (!(notification->getMapId() == this->map)) {
+                    delete notification;
+                    continue;
+                }
+            }
+            socket_valid = notification->send(this->id, peer);
             delete notification;
 
             if (!socket_valid) {
@@ -118,10 +124,11 @@ void ClientConnection::_receiveCommand(char opcode) {
 // API Pública
 
 ClientConnection::ClientConnection(
-    const InstanceId id, SocketWrapper& peer,
+    const InstanceId id, const Id map, SocketWrapper& peer,
     NonBlockingQueue<InstanceId*>& finished_connections,
     NonBlockingQueue<Command*>& commands)
     : id(id),
+      map(map),
       peer(std::move(peer)),
       finished_connections(finished_connections),
       finished_threads(0),
@@ -145,7 +152,11 @@ void ClientConnection::join() {
         receiver.join();
     }
 
-    peer.shutdown();
+    // peer.shutdown();  checkear que onda !!
+}
+
+void ClientConnection::changeMap(Id map) {
+    this->map = map;
 }
 
 void ClientConnection::stop() {

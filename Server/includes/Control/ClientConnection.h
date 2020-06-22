@@ -5,6 +5,7 @@
 #include <exception>
 #include <mutex>
 #include <thread>
+#include <atomic>
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -25,6 +26,7 @@
 class ClientConnection {
    private:
     InstanceId id;
+    std::atomic<Id> map;
     SocketWrapper peer;
     NonBlockingQueue<InstanceId*>& finished_connections;
 
@@ -64,7 +66,8 @@ class ClientConnection {
 
    public:
     /* Constructor */
-    ClientConnection(const InstanceId id, SocketWrapper& peer,
+    ClientConnection(const InstanceId id, const Id map,
+                     SocketWrapper& peer,
                      NonBlockingQueue<InstanceId*>& finished_connections,
                      NonBlockingQueue<Command*>& commands);
 
@@ -87,6 +90,8 @@ class ClientConnection {
 
     /* Agrega notificación a enviar a la cola */
     void push(Notification* notification);
+
+    void changeMap(Id map);
 
     /* Joinea ambos hilos: el sender y el receiver */
     void join();

@@ -15,6 +15,7 @@
 //-----------------------------------------------------------------------------
 #include "ClientConnection.h"
 #include "Notification.h"
+#include "NotificationBroadcast.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -49,13 +50,15 @@ class ActiveClients {
     //-------------------------------------------------------------------------
 
     /* Agrega un nuevo cliente activo */
-    void add(const InstanceId id, SocketWrapper& peer);
+    void add(const InstanceId id, const Id map, SocketWrapper& peer);
 
     /* Elimina un cliente que ha finalizado su conexión */
     void remove(const InstanceId id);
 
     /* Notifica a un cliente en particular */
     void notify(const InstanceId& id, Notification* notification);
+
+    void sendDifferentialBroadcastToAll(Notification* notification);
 
     /* Termina todas las conexiones forzosamente */
     void stop();

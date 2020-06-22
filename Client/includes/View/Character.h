@@ -11,9 +11,9 @@
 
 class Character : public Unit {
    private:
-    // Cuerpo y vestimenta
+    std::string nickname;
     Id head_id, body_id;
-    Id helmet_id, armour_id, shield_id, weapon_id;
+    EquipmentData equipment;
 
     /* Copia la data desde el paquete recibido */
     void _copyData(const CharacterData& init_data);

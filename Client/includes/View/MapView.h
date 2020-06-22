@@ -56,6 +56,12 @@ class MapView {
     /* Selecciona el mapa indicado por el id */
     void select(const Id id);
 
+    /* Settea el ocupante de una celda */
+    void occupyTile(InstanceId id, const int x_tile, const int y_tile);
+
+    /* Libera una celda */
+    void clearTile(const int x_tile, const int y_tile);
+
     //-------------------------------------------------------------------------
     // RENDERIZACIÓN
 

@@ -6,6 +6,7 @@
 #include "../../../Common/includes/Protocol.h"
 //-----------------------------------------------------------------------------
 #include "../../includes/Control/ActiveClients.h"
+#include "../../includes/Control/NotificationBroadcast.h"
 #include "../../includes/Control/NotificationReply.h"
 #include "../../includes/Model/Game.h"
 //-----------------------------------------------------------------------------
@@ -13,8 +14,11 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-Game::Game(ActiveClients& active_clients)
-    : next_instance_id(FIRST_INSTANCE_ID), active_clients(active_clients) {
+Game::Game(ActiveClients& active_clients,
+           NonBlockingQueue<Notification*>& differential_broadcasts)
+    : next_instance_id(FIRST_INSTANCE_ID),
+      active_clients(active_clients),
+      differential_broadcasts(differential_broadcasts) {
     map_container.loadMaps();
 }
 
@@ -22,6 +26,37 @@ Game::~Game() {
     // PERSISTIR TODO ANTES QUE SE DESTRUYA
 }
 //-----------------------------------------------------------------------------
+
+void Game::_pushCharacterDifferentialBroadcast(InstanceId id,
+                                               BroadcastType broadcast_type) {
+    PlayerData player_data;
+    player_data.basic_data.gid = id;
+    // llenar nickname
+    player_data.nickname = "mauroputo";
+    Character& character = this->characters.at(id);
+    character.fillBroadcastData(player_data);
+    character.beBroadcasted();
+    NotificationBroadcast* broadcast = new NotificationBroadcast(
+        id, player_data, broadcast_type, CHARACTER_TYPE);
+    this->differential_broadcasts.push(broadcast);
+}
+
+void Game::_pushFullBroadcast(InstanceId receiver) {
+    std::unordered_map<InstanceId, Character>::iterator it_characters =
+        this->characters.begin();
+
+    while (it_characters != this->characters.end()) {
+        PlayerData player_data;
+        player_data.basic_data.gid = it_characters->first;
+        // llenar nickname
+        player_data.nickname = "mauroputo";
+        it_characters->second.fillBroadcastData(player_data);
+        NotificationBroadcast* broadcast = new NotificationBroadcast(
+            it_characters->first, player_data, NEW_BROADCAST, CHARACTER_TYPE);
+        this->active_clients.notify(receiver, broadcast);
+        ++it_characters;
+    }
+}
 
 //-----------------------------------------------------------------------------
 const int Game::newCharacter(CharacterCfg& init_data) {
@@ -50,13 +85,26 @@ const int Game::newCharacter(CharacterCfg& init_data) {
     return next_instance_id - 1;
 }
 
+void Game::broadcastNewCharacter(InstanceId id) {
+    _pushCharacterDifferentialBroadcast(id, NEW_BROADCAST);
+    _pushFullBroadcast(id);
+}
+
 void Game::deleteCharacter(const InstanceId id) {
     if (!this->characters.count(id)) {
         throw Exception("deleteCharacter: Unknown character id [", id, "]");
     }
 
+    _pushCharacterDifferentialBroadcast(id, DELETE_BROADCAST);
+
     // PERSISTIR ESTADO DEL JUGADOR
 
+    // Lo sacamos del mapa
+    const Position& pos = this->characters.at(id).getPosition();
+    const Id map_id = this->characters.at(id).getMapId();
+    this->map_container[map_id].clearTile(pos.getX(), pos.getY());
+
+    // Lo eliminamos
     this->characters.erase(id);
 }
 //-----------------------------------------------------------------------------
@@ -78,6 +126,11 @@ void Game::actCharacters(const int it) {
             active_clients.notify(it_characters->first, reply);
         }
 
+        if (it_characters->second.mustBeBroadcasted()) {
+            _pushCharacterDifferentialBroadcast(it_characters->first,
+                                                UPDATE_BROADCAST);
+        }
+
         it_characters->second.debug();
 
         ++it_characters;
@@ -92,10 +145,17 @@ void Game::startMovingUp(const Id caller) {
         throw Exception("Game.cpp startMovingUp: unknown caller.");
     }
 
-    fprintf(stderr, "GAME: Moving Up cmd\n");
+    // fprintf(stderr, "GAME: Moving Up cmd\n");
 
     Character& character = this->characters.at(caller);
-    character.startMovingUp();
+
+    try {
+        character.startMovingUp();
+    } catch (const CollisionWhileMovingException& e) {
+        character.stopMoving();
+        Notification* reply = new NotificationReply(ERROR_REPLY, e.what());
+        active_clients.notify(caller, reply);
+    }
 }
 
 void Game::startMovingDown(const Id caller) {
@@ -103,10 +163,17 @@ void Game::startMovingDown(const Id caller) {
         throw Exception("Game.cpp startMovingDown: unknown caller.");
     }
 
-    fprintf(stderr, "GAME: Moving Down cmd\n");
+    // fprintf(stderr, "GAME: Moving Down cmd\n");
 
     Character& character = this->characters.at(caller);
-    character.startMovingDown();
+
+    try {
+        character.startMovingDown();
+    } catch (const CollisionWhileMovingException& e) {
+        character.stopMoving();
+        Notification* reply = new NotificationReply(ERROR_REPLY, e.what());
+        active_clients.notify(caller, reply);
+    }
 }
 
 void Game::startMovingLeft(const Id caller) {
@@ -114,10 +181,17 @@ void Game::startMovingLeft(const Id caller) {
         throw Exception("Game.cpp startMovingLeft: unknown caller.");
     }
 
-    fprintf(stderr, "GAME: Moving Left cmd\n");
+    // fprintf(stderr, "GAME: Moving Left cmd\n");
 
     Character& character = this->characters.at(caller);
-    character.startMovingLeft();
+
+    try {
+        character.startMovingLeft();
+    } catch (const CollisionWhileMovingException& e) {
+        character.stopMoving();
+        Notification* reply = new NotificationReply(ERROR_REPLY, e.what());
+        active_clients.notify(caller, reply);
+    }
 }
 
 void Game::startMovingRight(const Id caller) {
@@ -125,10 +199,17 @@ void Game::startMovingRight(const Id caller) {
         throw Exception("Game.cpp startMovingRight: unknown caller.");
     }
 
-    fprintf(stderr, "GAME: Moving Right cmd\n");
+    // fprintf(stderr, "GAME: Moving Right cmd\n");
 
     Character& character = this->characters.at(caller);
-    character.startMovingRight();
+
+    try {
+        character.startMovingRight();
+    } catch (const CollisionWhileMovingException& e) {
+        character.stopMoving();
+        Notification* reply = new NotificationReply(ERROR_REPLY, e.what());
+        active_clients.notify(caller, reply);
+    }
 }
 
 void Game::stopMoving(const Id caller) {
@@ -136,8 +217,16 @@ void Game::stopMoving(const Id caller) {
         throw Exception("Game.cpp stopMoving: unknown caller.");
     }
 
-    fprintf(stderr, "GAME: Stop Moving cmd\n");
+    // fprintf(stderr, "GAME: Stop Moving cmd\n");
 
     Character& character = this->characters.at(caller);
     character.stopMoving();
+}
+//-----------------------------------------------------------------------
+const Id Game::getMapId(const InstanceId caller) {
+    if (!this->characters.count(caller)) {
+        throw Exception("Game.cpp::getMapId: unknown caller.");
+    }
+
+    return this->characters.at(caller).getMapId();
 }
