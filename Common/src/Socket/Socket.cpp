@@ -171,13 +171,13 @@ Socket Socket::accept() const {
     return std::move(Socket(peer_socket));
 }
 
-ssize_t Socket::send(const char* source, const ssize_t len) const {
+size_t Socket::send(const char* source, const size_t len) const {
     if (!fd_valid) {
         throw Exception("Invalid socket file descriptor.");
     }
 
-    ssize_t total_sent = 0;
-    ssize_t last_sent = 0;
+    size_t total_sent = 0;
+    size_t last_sent = 0;
 
     while (total_sent < len) {
         last_sent =
@@ -195,7 +195,7 @@ ssize_t Socket::send(const char* source, const ssize_t len) const {
     return total_sent;
 }
 
-ssize_t Socket::recv(char* buffer, const ssize_t len) const {
+size_t Socket::recv(char* buffer, const size_t len) const {
     if (!fd_valid) {
         throw Exception("Invalid socket file descriptor.");
     }

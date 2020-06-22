@@ -43,40 +43,40 @@ SocketWrapper SocketWrapper::accept() const {
 //-----------------------------------------------------------------------------
 // Sobrecarga de operadores
 
-ssize_t SocketWrapper::operator<<(char c) const {
+size_t SocketWrapper::operator<<(char c) const {
     return send(&c, sizeof(c));
 }
 
-ssize_t SocketWrapper::operator>>(char& c) const {
+size_t SocketWrapper::operator>>(char& c) const {
     return recv(&c, sizeof(c));
 }
 
-ssize_t SocketWrapper::operator<<(const uint8_t& n) const {
+size_t SocketWrapper::operator<<(const uint8_t& n) const {
     return send((char*)&n, sizeof(n));
 }
 
-ssize_t SocketWrapper::operator>>(uint8_t& n) const {
+size_t SocketWrapper::operator>>(uint8_t& n) const {
     uint8_t received;
-    ssize_t n_received;
+    size_t n_received;
     n_received = recv((char*)&received, sizeof(received));
     n = received;
     return n_received;
 }
 
-ssize_t SocketWrapper::operator<<(const uint32_t& n) const {
+size_t SocketWrapper::operator<<(const uint32_t& n) const {
     return send((char*)&n, sizeof(n));
 }
 
-ssize_t SocketWrapper::operator>>(uint32_t& n) const {
+size_t SocketWrapper::operator>>(uint32_t& n) const {
     uint32_t received;
-    ssize_t n_received;
+    size_t n_received;
     n_received = recv((char*)&received, sizeof(received));
     n = received;
     return n_received;
 }
 
-ssize_t SocketWrapper::operator<<(const std::string& s) const {
-    ssize_t sent = 0, last_sent = 0;
+size_t SocketWrapper::operator<<(const std::string& s) const {
+    size_t sent = 0, last_sent = 0;
 
     // Primero enviamos la longitud
     uint32_t size = s.size();
@@ -96,8 +96,8 @@ ssize_t SocketWrapper::operator<<(const std::string& s) const {
     return sent;
 }
 
-ssize_t SocketWrapper::operator>>(std::string& s) const {
-    ssize_t received = 0, last_received = 0;
+size_t SocketWrapper::operator>>(std::string& s) const {
+    size_t received = 0, last_received = 0;
     s.clear();
     s.shrink_to_fit();
 
@@ -124,8 +124,8 @@ ssize_t SocketWrapper::operator>>(std::string& s) const {
     return received;
 }
 
-ssize_t SocketWrapper::operator<<(const std::vector<uint8_t>& v) const {
-    ssize_t sent = 0, last_sent = 0;
+size_t SocketWrapper::operator<<(const std::vector<uint8_t>& v) const {
+    size_t sent = 0, last_sent = 0;
 
     // Primero enviamos la longitud
     uint32_t size = v.size();
@@ -149,8 +149,8 @@ ssize_t SocketWrapper::operator<<(const std::vector<uint8_t>& v) const {
     return sent;
 }
 
-ssize_t SocketWrapper::operator>>(std::vector<uint8_t>& v) const {
-    ssize_t received = 0, last_received = 0;
+size_t SocketWrapper::operator>>(std::vector<uint8_t>& v) const {
+    size_t received = 0, last_received = 0;
     v.clear();
     v.shrink_to_fit();
 

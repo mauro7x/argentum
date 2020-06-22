@@ -198,7 +198,7 @@ class Socket {
      *
      * >THROW EXPLICITO DE EXCEPTION.
      */
-    ssize_t send(const char* source, const ssize_t len) const;
+    size_t send(const char* source, const size_t len) const;
 
     /**
      * Descripción: recibe len bytes del socket en el buffer.
@@ -210,7 +210,7 @@ class Socket {
      *
      * >THROW EXPLICITO DE EXCEPTION.
      */
-    ssize_t recv(char* buffer, const ssize_t len) const;
+    size_t recv(char* buffer, const size_t len) const;
 
     /**
      * Descripción: desconecta uno o ambos canales del socket.

@@ -13,7 +13,7 @@ NotificationReply::NotificationReply(char opcode, std::string reply)
 
 bool NotificationReply::send(const InstanceId sender,
                              const SocketWrapper& peer) {
-    ssize_t sent = 0;
+    size_t sent = 0;
 
     sent = (peer << (char)REPLY_OPCODE);
     if (!sent) {

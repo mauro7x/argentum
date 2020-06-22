@@ -15,6 +15,10 @@ void UpdatePlayerBroadcast::exec(
     MapView& map, Player& player,
     UnitContainer<Character, CharacterData>& characters,
     UnitContainer<Creature, CreatureData>& creatures) {
+    // FALTA IDENTIFICAR EL CAMBIO DE MAPA. EN ESTE ULTIMO CASO, DEBEMOS LIMPIAR
+    // EL MAPA ACTUAL, LIMPIAR CREATURES, CHARACTERS, CAMBIAR EL MAPA Y HACER EL
+    // UPDATE EN EL NUEVO MAPA.
+
     SDL_Point old_pos = player.getPos();
     map.clearTile(old_pos.x, old_pos.y);
     player.update(data);
