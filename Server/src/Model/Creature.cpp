@@ -19,7 +19,14 @@ Creature::Creature(const CreatureCfg& data, MapContainer& map_container,
       position(init_map, init_x_coord, init_y_coord, map_container),
       moving(false),
       moving_time_elapsed(0),
-      attribute_update_time_elapsed(0) {}
+      attribute_update_time_elapsed(0),
+      broadcast(true) {}
+
+Creature::~Creature() {}
+
+void Creature::act(const unsigned int it) {
+    // IMPLEMENTAR
+}
 
 void Creature::startMovingUp() {
     this->moving_orientation = UP_ORIENTATION;
@@ -52,8 +59,24 @@ void Creature::receiveAttack(const unsigned int damage) {
     } else {
         health_actual -= damage;
     }
+
+    this->broadcast = true;
 }
 
 unsigned int Creature::getMaxHealth() {
     return health_max;
+}
+
+void Creature::fillBroadcastData(CreatureData& data) const {
+    this->position.fillBroadcastData(data.basic_data);
+    data.creature_id = this->id;
+    data.health = this->health_actual;
+}
+
+const bool Creature::mustBeBroadcasted() const {
+    return this->broadcast;
+}
+
+void Creature::beBroadcasted() {
+    this->broadcast = false;
 }

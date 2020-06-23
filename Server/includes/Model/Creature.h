@@ -5,6 +5,7 @@
 #include "../../../Common/includes/MapContainer.h"
 #include "../../../Common/includes/Orientation.h"
 #include "../../../Common/includes/types.h"
+#include "../../../Common/includes/UnitData.h"
 //-----------------------------------------------------------------------------
 #include "config_structs.h"
 //-----------------------------------------------------------------------------
@@ -24,6 +25,8 @@ class Creature {
     bool moving;
     unsigned int moving_time_elapsed;
     unsigned int attribute_update_time_elapsed;
+
+    bool broadcast;
 
    public:
     //-----------------------------------------------------------------------------
@@ -55,7 +58,7 @@ class Creature {
      * Actualiza los atributos de la creatura que se ven afectados por el
      * paso del tiempo:
      *
-     * - posición [si la creatura está en movimiento]
+     * - posición [si la criatura está en movimiento]
      */
     void act(const unsigned int it);
 
@@ -77,5 +80,10 @@ class Creature {
     void receiveAttack(const unsigned int damage);
 
     unsigned int getMaxHealth();
+
+    void fillBroadcastData(CreatureData& data) const;
+
+    const bool mustBeBroadcasted() const;
+    void beBroadcasted();
 };
 #endif  //__CREATURE_H__

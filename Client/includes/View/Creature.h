@@ -14,6 +14,9 @@ class Creature : public Unit {
     // Cuerpo
     Id creature_id;
 
+    // Vida
+    uint32_t health;
+
     /* Copia la data desde el paquete recibido */
     void _copyData(const CreatureData& init_data);
 

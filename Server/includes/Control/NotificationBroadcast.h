@@ -4,43 +4,42 @@
 //-----------------------------------------------------------------------------
 #include <string>
 //-----------------------------------------------------------------------------
+#include "../../../Common/includes/Protocol.h"
 #include "../../../Common/includes/Socket/SocketWrapper.h"
 #include "../../../Common/includes/UnitData.h"
-#include "../../../Common/includes/types.h"
-#include "../../../Common/includes/json.hpp"
 #include "../../../Common/includes/json_conversion.h"
-#include "../../../Common/includes/Protocol.h"
+#include "../../../Common/includes/json.hpp"
+#include "../../../Common/includes/types.h"
 //-----------------------------------------------------------------------------
 #include "Notification.h"
 //-----------------------------------------------------------------------------
 
 using json = nlohmann::json;
 
-/* Notificación de Broadcast en carga de enviar el broadcast del juego 
+/* Notificación de Broadcast en carga de enviar el broadcast del juego
 al cliente*/
 
 class NotificationBroadcast : public Notification {
    private:
-        InstanceId id;
-        Id map;
-        BroadcastType broadcast_type;
-        EntityType entity_type;
-        json j;
+    InstanceId id;
+    Id map;
+    BroadcastType broadcast_type;
+    EntityType entity_type;
+    json j;
 
    public:
     /* Constructor */
-    NotificationBroadcast(InstanceId id, PlayerData& data, 
-                          BroadcastType opcode, EntityType entity_type);//sacar entitytype
+    NotificationBroadcast(InstanceId id, PlayerData& data,
+                          BroadcastType broadcast_type);
 
+    /* Constructor para data de creature*/
+    NotificationBroadcast(InstanceId id, CreatureData& data,
+                          BroadcastType broadcast_type);
 
-     /* Constructor para data de creature*/
-    NotificationBroadcast(InstanceId id, CreatureData& data, 
-                          BroadcastType opcode, EntityType entity_type);
-     
-     /* Constructor para data de item */
-//     NotificationBroadcast(InstanceId id, ItemData& data, 
-//                           BroadcastType opcode, EntityType entity_type);
-     /* Deshabilitamos el constructor por copia. */
+    /* Constructor para data de item */
+    //     NotificationBroadcast(InstanceId id, ItemData& data,
+    //                           BroadcastType opcode, EntityType entity_type);
+    /* Deshabilitamos el constructor por copia. */
     NotificationBroadcast(const NotificationBroadcast& other);
 
     /* Deshabilitamos el operador= para copia.*/

@@ -11,12 +11,20 @@
 //-----------------------------------------------------------------------------
 #include "Character.h"
 #include "Config.h"
+#include "Creature.h"
 #include "ItemsContainer.h"
 #include "config_structs.h"
 //-----------------------------------------------------------------------------
 
 // Forward declaration
 class ActiveClients;
+
+struct MapCreaturesInfo {
+    MapCreaturesInfo(unsigned int amount_of_creatures,
+                     int creature_spawning_cooldown);
+    unsigned int amount_of_creatures;
+    int creature_spawning_cooldown;
+};
 
 class Game {
    private:
@@ -25,6 +33,8 @@ class Game {
     //-----------------------------------------------------------------------------
     Config<RaceCfg> races;
     Config<KindCfg> kinds;
+
+    Config<CreatureCfg> creatures_data;
     //-----------------------------------------------------------------------------
 
     //-----------------------------------------------------------------------------
@@ -33,11 +43,14 @@ class Game {
     MapContainer map_container;
     ItemsContainer items;
     std::unordered_map<InstanceId, Character> characters;
-    // std::unordered_map<int, Creatures> creatures; Falta implementar
+    std::unordered_map<InstanceId, Creature> creatures;
     //-----------------------------------------------------------------------------
     InstanceId next_instance_id;
 
     ActiveClients& active_clients;
+
+    std::unordered_map<Id, MapCreaturesInfo> maps_creatures_info;
+    int creature_spawn_cooldown;
 
    public:
     //-----------------------------------------------------------------------------
@@ -50,11 +63,18 @@ class Game {
     Game& operator=(Game&& other) = delete;
     //-----------------------------------------------------------------------------
 
-    Notification* _buildBroadcast(InstanceId id, BroadcastType broadcast_type,
-                          EntityType entity_type);
+    Notification* _buildPlayerBroadcast(InstanceId id,
+                                        BroadcastType broadcast_type);
+
+    Notification* _buildCreatureBroadcast(InstanceId id,
+                                          BroadcastType broadcast_type);
 
     void _pushCharacterDifferentialBroadcast(InstanceId id, BroadcastType type,
                                              bool send_to_caller);
+
+    void _pushCreatureDifferentialBroadcast(InstanceId creature,
+                                            BroadcastType broadcast_type);
+
     void _pushFullBroadcast(InstanceId receiver, bool is_new_connection);
 
     //-----------------------------------------------------------------------------
@@ -69,7 +89,21 @@ class Game {
      *
      * Lanza Exception si alguno de los id no mapea a ninguna raza/clase.
      */
-    const int newCharacter(CharacterCfg& init_data);
+    const InstanceId newCharacter(const CharacterCfg& init_data);
+
+    /*
+     * Recibe un struct CreatureCfg con toda la información necesaria
+     * para crear una criatura.
+     *
+     * Lanza Exception si alguno de los id no mapea a ninguna criatura.
+     */
+    void newCreature(const CreatureCfg& init_data, const Id init_map);
+
+    const Id _randomSelectCreature() const;
+
+    void _spawnNewCreature(const Id spawning_map);
+
+    void spawnNewCreatures(const int it);
 
     /* método provisorio */
     void broadcastNewCharacter(InstanceId id);
@@ -91,6 +125,8 @@ class Game {
     //-----------------------------------------------------------------------------
 
     void actCharacters(const int it);
+
+    void actCreatures(const int it);
 
     //-----------------------------------------------------------------------------
 

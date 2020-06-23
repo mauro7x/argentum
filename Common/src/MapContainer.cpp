@@ -23,6 +23,7 @@ void MapContainer::loadMaps() {
     tile_h = maps["tileheight"];
 
     int size = maps["data"].size();
+
     for (int i = 0; i < size; i++) {
         filepath = maps["data"][i]["filepath"];
         map = JSON::loadJsonFile(filepath);
@@ -46,6 +47,18 @@ const Map& MapContainer::operator[](const Id id) const {
     }
 
     return content.at(id);
+}
+
+std::vector<Id> MapContainer::getMapsId() const {
+    std::vector<Id> maps_id;
+
+    std::unordered_map<Id, Map>::const_iterator it = this->content.begin();
+    while (it != this->content.end()) {
+        maps_id.push_back(it->first);
+        ++it;
+    }
+
+    return std::move(maps_id);
 }
 
 const Id MapContainer::getCharacterSpawningMap() const {

@@ -1,6 +1,6 @@
-#include <array>
-
 #include "../../includes/Model/Config.h"
+
+#include <array>
 //-----------------------------------------------------------------------------
 // API Pública
 
@@ -50,7 +50,7 @@ void Config<KindCfg>::_parseFile() {
         kind.constitution = j[i]["constitution"];
         kind.strength = j[i]["strength"];
         kind.agility = j[i]["agility"];
-        
+
         config[kind.id] = kind;
     }
 }
@@ -130,14 +130,13 @@ template <>
 void Config<DefenceCfg>::_parseFile() {
     json j = JSON::loadJsonFile(ITEMS_CONFIG_FILEPATH);
 
-    std::array<std::string, AMOUNT_OF_DEFFENCE_TYPES> defences = 
-        {"helmets", "armours", "shields"};
-    
-    std::array<WearableType, AMOUNT_OF_DEFFENCE_TYPES> defence_types =
-        {HELMET, ARMOUR, SHIELD};
+    std::array<std::string, AMOUNT_OF_DEFFENCE_TYPES> defences = {
+        "helmets", "armours", "shields"};
 
-    for (int k = 0; k < AMOUNT_OF_DEFFENCE_TYPES;
-         ++k) {
+    std::array<WearableType, AMOUNT_OF_DEFFENCE_TYPES> defence_types = {
+        HELMET, ARMOUR, SHIELD};
+
+    for (int k = 0; k < AMOUNT_OF_DEFFENCE_TYPES; ++k) {
         int size = j[defences[k]].size();
 
         for (int i = 0; i < size; i++) {

@@ -55,7 +55,7 @@ class Position {
      * Llena los campos x_tile, y_tile y orientation del
      * PlayerData para su broadcast.
      */
-    void fillBroadcastData(PlayerData& data) const;
+    void fillBroadcastData(UnitData& data) const;
 };
 
 class CollisionWhileMovingException : std::exception {

@@ -4,10 +4,12 @@
 
 void ClientConnection::_finishThread() {
     std::unique_lock<std::mutex> l(m);
-    fprintf(stderr, "Se llamó a finishThread...\n");
+    fprintf(stderr, "CLIENTE %i: se llamó a _finishThread.\n", id);
     if ((++finished_threads) == 2) {
-        fprintf(stderr,
-                "finishThread agregando conexión terminada a la cola...\n");
+        fprintf(
+            stderr,
+            "CLIENTE %i: _finishThread agrega conexión terminada a la cola.\n",
+            id);
         finished_connections.push(new InstanceId(id));
     }
 }
@@ -22,7 +24,7 @@ void ClientConnection::_freeNotifications() {
 
 void ClientConnection::_sender() {
     // ejecución del sender loop
-    fprintf(stderr, "SENDER DE UN CLIENTE EMPEZANDO! Id: %i\n", id);
+    fprintf(stderr, "CLIENTE %i: Sender finaliza su ejecución.\n", id);
 
     try {
         Notification* notification = nullptr;
@@ -54,12 +56,12 @@ void ClientConnection::_sender() {
 
     // Avisamos que terminamos
     _finishThread();
-    fprintf(stderr, "SENDER DE UN CLIENTE TERMINANDO! Id: %i\n", id);
+    fprintf(stderr, "CLIENTE %i: Sender finaliza su ejecución.\n", id);
 }
 
 void ClientConnection::_receiver() {
     // ejecución del receiver loop
-    fprintf(stderr, "RECEIVER DE UN CLIENTE EMPEZANDO! Id: %i\n", id);
+    fprintf(stderr, "CLIENTE %i: Receiver comienza su ejecución.\n", id);
 
     try {
         uint8_t opcode;
@@ -93,7 +95,7 @@ void ClientConnection::_receiver() {
     // Avisamos que terminamos
     this->notifications.close();
     _finishThread();
-    fprintf(stderr, "RECEIVER DE UN CLIENTE TERMINANDO! Id: %i\n", id);
+    fprintf(stderr, "CLIENTE %i: Receiver finaliza su ejecución.\n", id);
 }
 
 void ClientConnection::_receiveCommand(char opcode) {
@@ -156,7 +158,7 @@ void ClientConnection::join() {
         receiver.join();
     }
 
-    // peer.shutdown();  checkear que onda !!
+    peer.shutdown();
 }
 
 void ClientConnection::changeMap(Id map) {
@@ -168,7 +170,7 @@ void ClientConnection::stop() {
     notifications.close();
 
     // Para detener al receiver
-    // peer.shutdown(); checkear que onda!!
+    peer.shutdown();
     peer.close();
 }
 
