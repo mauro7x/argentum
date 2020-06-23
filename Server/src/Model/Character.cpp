@@ -349,7 +349,7 @@ void Character::beBroadcasted() {
 
 void Character::fillBroadcastData(PlayerData& data) const {
     // Llena map_id, x_tile, y_tile, orientation.
-    this->position.fillBroadcastData(data);
+    this->position.fillBroadcastData(data.basic_data);
 
     data.head_id = this->race.head_id;
     data.body_id = this->race.body_id;
