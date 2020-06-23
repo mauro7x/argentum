@@ -156,7 +156,7 @@ void ClientConnection::join() {
         receiver.join();
     }
 
-    // peer.shutdown();  checkear que onda !!
+    peer.shutdown();
 }
 
 void ClientConnection::changeMap(Id map) {
@@ -168,7 +168,7 @@ void ClientConnection::stop() {
     notifications.close();
 
     // Para detener al receiver
-    // peer.shutdown(); checkear que onda!!
+    peer.shutdown();
     peer.close();
 }
 

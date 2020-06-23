@@ -13,7 +13,7 @@ void Engine::_init() {
 void Engine::_processNewConnections() {
     NewConnection* new_connection = nullptr;
     while ((new_connection = new_connections.pop())) {
-        fprintf(stderr, "ENGINE: Procesando una nueva conexión...\n");
+        fprintf(stderr, "ENGINE: Procesando una nueva conexión... (1/2).\n");
 
         InstanceId id = this->game.newCharacter((*new_connection).data);
         Id map = this->game.getMapId(id);
@@ -21,15 +21,18 @@ void Engine::_processNewConnections() {
         this->game.broadcastNewCharacter(id);
 
         delete new_connection;
+
+        fprintf(stderr, "ENGINE: Nueva conexión agregada (2/2).\n");
     }
 }
 
 void Engine::_processCommands() {
     Command* cmd = nullptr;
     while ((cmd = commands.pop())) {
-        fprintf(stderr, "ENGINE: Ejecutando comando\n");
+        fprintf(stderr, "ENGINE: Ejecutando comando (1/2).\n");
         cmd->exec(game);
         delete cmd;
+        fprintf(stderr, "ENGINE: Comando ejecutado (2/2).\n");
     }
     // fprintf(stderr, "No hay mas comandos por ejecutar\n");
 }
@@ -37,13 +40,16 @@ void Engine::_processCommands() {
 void Engine::_processFinishedConnections() {
     InstanceId* finished_connection = nullptr;
     while ((finished_connection = finished_connections.pop())) {
-        fprintf(stderr, "ENGINE: Eliminando una conexión terminada...\n");
+        fprintf(stderr,
+                "ENGINE: Eliminando una conexión terminada... (1/2).\n");
 
         game.deleteCharacter(*finished_connection);
         active_clients.remove(*finished_connection);
         // acá habría que persistir al cliente que se desconecto
 
         delete finished_connection;
+
+        fprintf(stderr, "ENGINE: Conexión eliminada (2/2).\n");
     }
 }
 
@@ -139,7 +145,7 @@ void Engine::run() {
     //-------------------------------------------------------------------------
     // Salimos ordenadamente:
 
-    // Terminamos las conexiones forzosamente
+    // Terminamos las conexiones
     active_clients.stop();
 
     // Vaciamos las colas para no perder memoria:
