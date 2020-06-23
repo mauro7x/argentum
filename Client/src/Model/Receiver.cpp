@@ -104,12 +104,10 @@ void Receiver::_receiveNewBroadcast() const {
         }
 
         case CREATURE_TYPE: {
-            // Falta el json conversion todavia
-
-            // CreatureData received_data;
-            // json j = json::from_msgpack(serialized_broadcast);
-            // received_data = j.get<CreatureData>();
-            // broadcasts.push(new NewCreatureBroadcast(received_data));
+            CreatureData received_data;
+            json j = json::from_msgpack(serialized_broadcast);
+            received_data = j.get<CreatureData>();
+            broadcasts.push(new NewCreatureBroadcast(received_data));
             break;
         }
 
@@ -165,12 +163,10 @@ void Receiver::_receiveUpdateBroadcast() const {
         }
 
         case CREATURE_TYPE: {
-            // Falta el json conversion todavia
-
-            // CreatureData received_data;
-            // json j = json::from_msgpack(serialized_broadcast);
-            // received_data = j.get<CreatureData>();
-            // broadcasts.push(new UpdateCreatureBroadcast(received_data));
+            CreatureData received_data;
+            json j = json::from_msgpack(serialized_broadcast);
+            received_data = j.get<CreatureData>();
+            broadcasts.push(new UpdateCreatureBroadcast(received_data));
             break;
         }
 
