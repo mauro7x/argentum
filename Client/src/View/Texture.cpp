@@ -63,7 +63,7 @@ void Texture::loadFromFile(const Renderer* renderer, std::string filepath,
 
 void Texture::loadFromRenderedText(const Renderer* renderer, TTF_Font* font,
                                    std::string text, SDL_Color color,
-                                   TextType type) {
+                                   TextType type, SDL_Color shade) {
     // Eliminamos una textura previa si existe
     free();
 
@@ -73,6 +73,12 @@ void Texture::loadFromRenderedText(const Renderer* renderer, TTF_Font* font,
     switch (type) {
         case SOLID_TEXT: {
             text_surface = TTF_RenderText_Solid(font, text.c_str(), color);
+            break;
+        }
+
+        case SHADED_TEXT: {
+            text_surface =
+                TTF_RenderText_Shaded(font, text.c_str(), color, shade);
             break;
         }
 
