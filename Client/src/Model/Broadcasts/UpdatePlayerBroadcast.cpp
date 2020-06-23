@@ -22,7 +22,18 @@ void UpdatePlayerBroadcast::exec(
     //-------------------------------------------------------------------------
     // PROXY PARA HARCODEAR EL INVENTARIO Y PROBAR LA HUD
 
-    data.equipment = {1302, 1402, 0, 1100};
+    data.equipment = {1100, 1302, 1402, 0};
+    data.inventory = {
+        InventorySlot({1000, 1}),   InventorySlot({1001, 1}),
+        InventorySlot({1102, 2}),   InventorySlot({0, 0}),
+        InventorySlot({0, 0}),      InventorySlot({0, 0}),
+        InventorySlot({0, 0}),      InventorySlot({0, 0}),
+        InventorySlot({0, 0}),      InventorySlot({0, 0}),
+        InventorySlot({0, 0}),      InventorySlot({1300, 9000}),
+        InventorySlot({0, 0}),      InventorySlot({0, 0}),
+        InventorySlot({1401, 454}), InventorySlot({1500, 1}),
+        InventorySlot({1400, 1}),   InventorySlot({1301, 1}),
+    };
     //-------------------------------------------------------------------------
 
     SDL_Point old_pos = player.getPos();

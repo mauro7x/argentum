@@ -10,6 +10,7 @@ void ProgressBar::_renderProgress() const {
     render_quad.w *= relative_progress;
     g_renderer->fillQuad(&render_quad, color.r, color.g, color.b, color.a);
 }
+
 void ProgressBar::_center(SDL_Point& texture_pos, const Texture& texture,
                           const SDL_Rect& rect) {
     texture_pos.x = rect.x + (rect.w - texture.getWidth()) / 2;
@@ -47,7 +48,7 @@ void ProgressBar::loadMedia() {
     }
 
     // Cargamos la fuente
-    font = TTF_OpenFont(FONT_OLDLONDON_FP, PROGRESS_BAR_FONT_SIZE);
+    font = TTF_OpenFont(FONT_ANCIENTMEDIUM_FP, PROGRESS_BAR_FONT_SIZE);
 
     if (!font) {
         throw Exception("ProgressBar::loadMedia: Error opening TTF_Font/s.");

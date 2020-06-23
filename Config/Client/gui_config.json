@@ -105,6 +105,32 @@
                         "x": 203,
                         "y": 39
                     }
+                },
+                "inventory": {
+                    "quantities_fontsize": 14,
+                    "first_slot_offset": {
+                        "x": 20,
+                        "y": 122
+                    },
+                    "rows": 3,
+                    "slots_per_row": 6,
+                    "offset_between_slots": {
+                        "x": 39,
+                        "y": 39
+                    }
+                },
+                "gold": {
+                    "fontsize": 20,
+                    "w": 73,
+                    "h": 23,
+                    "safe_gold_offset": {
+                        "x": 60,
+                        "y": 261
+                    },
+                    "excess_gold_offset": {
+                        "x": 174,
+                        "y": 261
+                    }
                 }
             }
         },

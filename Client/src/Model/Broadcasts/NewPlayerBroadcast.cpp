@@ -18,7 +18,7 @@ void NewPlayerBroadcast::exec(
     //-------------------------------------------------------------------------
     // PROXY PARA HARCODEAR EL INVENTARIO Y PROBAR LA HUD
 
-    data.equipment = {1302, 1402, 0, 1100};
+    data.equipment = {1100, 1302, 1402, 0};
     //-------------------------------------------------------------------------
 
     map.select(data.basic_data.map);
