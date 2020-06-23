@@ -49,7 +49,7 @@ class HUDComponent {
     virtual void loadMedia() = 0;
 
     /* Actualiza la información que se muestra */
-    virtual void update();
+    virtual void update(const int it);
 
     /* Renderiza la consola */
     virtual void render() const = 0;

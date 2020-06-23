@@ -14,6 +14,10 @@
 * ~~Cambiar el wait primitivo por el primer paquete y la lógica del mismo del receiver a una clase aparte, y no lanzar ningun hilo hasta que el mismo no llegue. -Mau, 21/06.~~
     * **UPDATE:** Ahora esto no se hace más, sino que se tiene un LogIn que se lanza antes de los hilos del receiver y del dispatcher, con el objetivo de handlear la conexión del jugador al juego en sí (una vez que ya se conectó el socket) y de recibir el primer paquete (la data inicial). Esta abstracción permite convertirla en una vista en un futuro. -Mau, 22/06.
 * Agregarle el nickname en la cabeza a los jugadores. -Mau, 23/06.
+* Optimizar el renderizado del mapa usando vectores de listas para los objetos estáticos (recomendación de Martín). -Mau, 23/06.
+* Implementar la consola de output (la de input ya funciona). -Mau, 23/06.
+* Agregar tick que titila al escribir en la consola. -Mau, 23/06.
+* Indicador que diga la posición actual en una esquina. -Mau, 23/06.
 
 ---
 
