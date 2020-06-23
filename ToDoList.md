@@ -17,6 +17,7 @@
 * Optimizar el renderizado del mapa usando vectores de listas para los objetos estáticos (recomendación de Martín). -Mau, 23/06.
 * Implementar la consola de output (la de input ya funciona). -Mau, 23/06.
 * Agregar tick que titila al escribir en la consola. -Mau, 23/06.
+* Indicador que diga la posición actual en una esquina. -Mau, 23/06.
 
 ---
 
