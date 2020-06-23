@@ -2,10 +2,10 @@
 #define __COMMAND_H__
 
 //-----------------------------------------------------------------------------
-#include "../../../Common/includes/BlockingQueue.h"
-#include "../../../Common/includes/Protocol.h"
-#include "../../../Common/includes/types.h"
-#include "../Model/Game.h"
+#include "../../../../Common/includes/BlockingQueue.h"
+#include "../../../../Common/includes/Protocol.h"
+#include "../../../../Common/includes/types.h"
+#include "../../Model/Game.h"
 
 //-----------------------------------------------------------------------------
 

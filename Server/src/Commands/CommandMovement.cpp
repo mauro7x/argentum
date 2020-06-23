@@ -1,4 +1,4 @@
-#include "../../includes/Control/Command.h"
+#include "../../includes/Control/Commands/Command.h"
 
 //-----------------------------------------------------------------------------
 // API Pública

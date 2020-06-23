@@ -28,7 +28,7 @@
 
 //-----------------------------------------------------------------------------
 #include "ActiveClients.h"
-#include "Command.h"
+#include "Commands/Command.h"
 #include "Database.h"
 #include "NewConnection.h"
 //-----------------------------------------------------------------------------
