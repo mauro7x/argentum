@@ -6,10 +6,13 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
+//-----------------------------------------------------------------------------
 
+//-----------------------------------------------------------------------------
 #include "Exceptions/Exception.h"
 #include "JSON.h"
 #include "Map.h"
+#include "defs.h"
 #include "paths.h"
 #include "types.h"
 //-----------------------------------------------------------------------------

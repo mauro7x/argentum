@@ -5,9 +5,10 @@
 // Métodos privados
 
 void Map::_checkIfValid(const json& map) const {
-    if ((tile_w != map["tilewidth"]) || (tile_h != map["tileheight"])) {
-        throw Exception("Invalid map file. Tiles must be %i x %i.", tile_w,
-                        tile_h);
+    if ((TILE_WIDTH != map["tilewidth"]) ||
+        (TILE_HEIGHT != map["tileheight"])) {
+        throw Exception("Invalid map file. Tiles must be %i x %i.", TILE_WIDTH,
+                        TILE_HEIGHT);
     }
 
     if (map["layers"].size() != EXPECTED_LAYERS) {
@@ -105,14 +106,11 @@ const bool Map::_moveOcuppant(Tile& from_tile, Tile& to_tile) {
 //-----------------------------------------------------------------------------
 // API Pública
 
-Map::Map() : w(0), h(0), tile_w(0), tile_h(0) {}
+Map::Map() {}
 
-void Map::init(const json& map, const json& tilesets, const int tile_w,
-               const int tile_h) {
+void Map::init(const json& map, const json& tilesets) {
     w = map["width"];
     h = map["height"];
-    this->tile_w = tile_w;
-    this->tile_h = tile_h;
 
     _checkIfValid(map);
     _fillTiles(map, tilesets);
@@ -121,16 +119,12 @@ void Map::init(const json& map, const json& tilesets, const int tile_w,
 Map::Map(Map&& other) {
     this->w = other.w;
     this->h = other.h;
-    this->tile_w = other.tile_w;
-    this->tile_h = other.tile_h;
     this->tiles = std::move(other.tiles);
 }
 
 Map& Map::operator=(Map&& other) {
     this->w = other.w;
     this->h = other.h;
-    this->tile_w = other.tile_w;
-    this->tile_h = other.tile_h;
     this->tiles = std::move(other.tiles);
     return *this;
 }
@@ -144,11 +138,11 @@ int Map::getHeightTiles() const {
 }
 
 int Map::getTileWidth() const {
-    return tile_w;
+    return TILE_WIDTH;
 }
 
 int Map::getTileHeight() const {
-    return tile_h;
+    return TILE_HEIGHT;
 }
 
 bool Map::isValid(const int x, const int y) const {
