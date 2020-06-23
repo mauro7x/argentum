@@ -5,20 +5,18 @@
 #include "../../../Common/includes/Exceptions/Exception.h"
 #include "../../../Common/includes/Protocol.h"
 //-----------------------------------------------------------------------------
-#include "../../includes/Control/ActiveClients.h"
 #include "../../includes/Control/NotificationBroadcast.h"
 #include "../../includes/Control/NotificationReply.h"
+#include "../../includes/Control/ActiveClients.h"
+//-----------------------------------------------------------------------------
 #include "../../includes/Model/Game.h"
 //-----------------------------------------------------------------------------
 #define FIRST_INSTANCE_ID 1
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-Game::Game(ActiveClients& active_clients,
-           NonBlockingQueue<Notification*>& differential_broadcasts)
-    : next_instance_id(FIRST_INSTANCE_ID),
-      active_clients(active_clients),
-      differential_broadcasts(differential_broadcasts) {
+Game::Game(ActiveClients& active_clients)
+    : next_instance_id(FIRST_INSTANCE_ID), active_clients(active_clients) {
     map_container.loadMaps();
 }
 
@@ -27,33 +25,63 @@ Game::~Game() {
 }
 //-----------------------------------------------------------------------------
 
-void Game::_pushCharacterDifferentialBroadcast(InstanceId id,
-                                               BroadcastType broadcast_type) {
+Notification* Game::_buildBroadcast(InstanceId id,
+                                             BroadcastType broadcast_type,
+                                             EntityType entity_type) {
     PlayerData player_data;
     player_data.basic_data.gid = id;
     // llenar nickname
-    player_data.nickname = "mauroputo";
+    player_data.nickname = "dummynick";
     Character& character = this->characters.at(id);
     character.fillBroadcastData(player_data);
-    character.beBroadcasted();
-    NotificationBroadcast* broadcast = new NotificationBroadcast(
-        id, player_data, broadcast_type, CHARACTER_TYPE);
-    this->differential_broadcasts.push(broadcast);
+
+    Notification* broadcast =
+        new NotificationBroadcast(id, player_data, broadcast_type, entity_type);
+    
+    return broadcast;
 }
 
-void Game::_pushFullBroadcast(InstanceId receiver) {
+void Game::_pushCharacterDifferentialBroadcast(InstanceId caller,
+                                               BroadcastType broadcast_type,
+                                               bool send_to_caller) {
+    Notification* broadcast =
+        _buildBroadcast(caller, broadcast_type, CHARACTER_TYPE);
+
+    this->active_clients.sendDifferentialBroadcastToAll(broadcast, caller,
+                                                        send_to_caller);
+
+    this->characters.at(caller).beBroadcasted();
+}
+
+void Game::_pushFullBroadcast(InstanceId receiver, bool is_new_connection) {
+    Notification* broadcast;
+
+    if (is_new_connection) {
+        // Si es una nueva conexión, envío al cliente nuevo su
+        // NEW PLAYER BROADCAST
+        broadcast = _buildBroadcast(receiver, NEW_BROADCAST, CHARACTER_TYPE);
+        this->active_clients.notify(receiver, broadcast);
+    }
+
     std::unordered_map<InstanceId, Character>::iterator it_characters =
         this->characters.begin();
 
     while (it_characters != this->characters.end()) {
-        PlayerData player_data;
-        player_data.basic_data.gid = it_characters->first;
-        // llenar nickname
-        player_data.nickname = "mauroputo";
-        it_characters->second.fillBroadcastData(player_data);
-        NotificationBroadcast* broadcast = new NotificationBroadcast(
-            it_characters->first, player_data, NEW_BROADCAST, CHARACTER_TYPE);
+        if (it_characters->first == receiver) {
+            /*
+             * El receptor no tiene nada que recibir. Si era una nueva conexion,
+             * ya recibió su NEW PLAYER BROADCAST, y si cambia el mapa acá no
+             * tiene que recibir sus propios datos.
+             */
+            ++it_characters;
+            continue;
+        }
+
+        broadcast = _buildBroadcast(it_characters->first, NEW_BROADCAST,
+                                    CHARACTER_TYPE);
+
         this->active_clients.notify(receiver, broadcast);
+
         ++it_characters;
     }
 }
@@ -86,8 +114,8 @@ const int Game::newCharacter(CharacterCfg& init_data) {
 }
 
 void Game::broadcastNewCharacter(InstanceId id) {
-    _pushCharacterDifferentialBroadcast(id, NEW_BROADCAST);
-    _pushFullBroadcast(id);
+    _pushFullBroadcast(id, true);
+    _pushCharacterDifferentialBroadcast(id, NEW_BROADCAST, false);
 }
 
 void Game::deleteCharacter(const InstanceId id) {
@@ -95,14 +123,9 @@ void Game::deleteCharacter(const InstanceId id) {
         throw Exception("deleteCharacter: Unknown character id [", id, "]");
     }
 
-    _pushCharacterDifferentialBroadcast(id, DELETE_BROADCAST);
+    _pushCharacterDifferentialBroadcast(id, DELETE_BROADCAST, false);
 
     // PERSISTIR ESTADO DEL JUGADOR
-
-    // Lo sacamos del mapa
-    const Position& pos = this->characters.at(id).getPosition();
-    const Id map_id = this->characters.at(id).getMapId();
-    this->map_container[map_id].clearTile(pos.getX(), pos.getY());
 
     // Lo eliminamos
     this->characters.erase(id);
@@ -128,7 +151,7 @@ void Game::actCharacters(const int it) {
 
         if (it_characters->second.mustBeBroadcasted()) {
             _pushCharacterDifferentialBroadcast(it_characters->first,
-                                                UPDATE_BROADCAST);
+                                                UPDATE_BROADCAST, true);
         }
 
         it_characters->second.debug();

@@ -38,9 +38,8 @@ Character::Character(const CharacterCfg& init_data, const RaceCfg& race,
 
       position(init_map, init_x_coord, init_y_coord, map_container),
 
-      moving_orientation(DEFAULT_MOVING_ORIENTATION),
-      moving(false),
-      moving_time_elapsed(0),
+      is_moving(false),
+      moving_cooldown_time(0),
       attribute_update_time_elapsed(0),
 
       broadcast(true) {  // Cuando se crea, debe ser broadcasteado.
@@ -58,8 +57,13 @@ Character::~Character() {
 
 //-----------------------------------------------------------------------------
 void Character::act(const unsigned int it) {
-    if (moving)
+    if (is_moving) {
         _updateMovement(it);
+    } else {
+        if (moving_cooldown_time > 0) {
+            moving_cooldown_time = std::max(moving_cooldown_time - RATE, 0);
+        }
+    }
 
     _updateTimeDependantAttributes(it);
 }
@@ -90,22 +94,24 @@ void Character::_updateTimeDependantAttributes(const unsigned int it) {
             this->race.mana_recovery_factor,
             TIME_TO_UPDATE_ATTRIBUTES / 1000);  // en segundos
 
-        this->recoverHealth(health_update);
-        this->recoverMana(mana_update);
+        if ((this->health < this->max_health))
+            this->recoverHealth(health_update);
+        if ((this->mana < this->max_mana))
+            this->recoverMana(mana_update);
 
         attribute_update_time_elapsed -= TIME_TO_UPDATE_ATTRIBUTES;
     }
 }
 
 void Character::_updateMovement(const unsigned int it) {
-    this->moving_time_elapsed += it * RATE;  // Tiempo en ms acum sin moverme.
+    this->moving_cooldown_time -= it * RATE;
 
-    while (this->moving_time_elapsed >= TIME_TO_MOVE_A_TILE) {
-        this->position.move(moving_orientation);
-
+    while (this->moving_cooldown_time <= 0) {
         this->broadcast = true;
+        
+        this->position.move();
 
-        this->moving_time_elapsed -= TIME_TO_MOVE_A_TILE;
+        this->moving_cooldown_time += TIME_TO_MOVE_A_TILE;
     }
 }
 
@@ -116,44 +122,27 @@ void Character::_updateMovement(const unsigned int it) {
 //-----------------------------------------------------------------------------
 
 void Character::startMovingUp() {
-    this->moving_orientation = UP_ORIENTATION;
-    // comento esto porque genera que si toco muchas veces la tecla, se mueva
-    // mucho ignorando el limite de tiempo. hay una forma de solucionarlo,
-    // avisame y lo hablamos -mau
-    // this->position.move(moving_orientation);
-    this->moving = true;
+    this->position.changeOrientation(UP_ORIENTATION);
+    this->is_moving = true;
 }
 
 void Character::startMovingDown() {
-    this->moving_orientation = DOWN_ORIENTATION;
-    // comento esto porque genera que si toco muchas veces la tecla, se mueva
-    // mucho ignorando el limite de tiempo. hay una forma de solucionarlo,
-    // avisame y lo hablamos -mau
-    // this->position.move(moving_orientation);
-    this->moving = true;
+    this->position.changeOrientation(DOWN_ORIENTATION);
+    this->is_moving = true;
 }
 
 void Character::startMovingRight() {
-    this->moving_orientation = RIGHT_ORIENTATION;
-    // comento esto porque genera que si toco muchas veces la tecla, se mueva
-    // mucho ignorando el limite de tiempo. hay una forma de solucionarlo,
-    // avisame y lo hablamos -mau
-    // this->position.move(moving_orientation);
-    this->moving = true;
+    this->position.changeOrientation(RIGHT_ORIENTATION);
+    this->is_moving = true;
 }
 
 void Character::startMovingLeft() {
-    this->moving_orientation = LEFT_ORIENTATION;
-    // comento esto porque genera que si toco muchas veces la tecla, se mueva
-    // mucho ignorando el limite de tiempo. hay una forma de solucionarlo,
-    // avisame y lo hablamos -mau
-    // this->position.move(moving_orientation);
-    this->moving = true;
+    this->position.changeOrientation(LEFT_ORIENTATION);
+    this->is_moving = true;
 }
 
 void Character::stopMoving() {
-    this->moving = false;
-    this->moving_time_elapsed = 0;
+    this->is_moving = false;
 }
 
 //-----------------------------------------------------------------------------

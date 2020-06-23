@@ -91,6 +91,7 @@ void ClientConnection::_receiver() {
     }
 
     // Avisamos que terminamos
+    this->notifications.close();
     _finishThread();
     fprintf(stderr, "RECEIVER DE UN CLIENTE TERMINANDO! Id: %i\n", id);
 }

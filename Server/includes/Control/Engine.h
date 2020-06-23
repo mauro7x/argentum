@@ -42,17 +42,11 @@ class Engine : public Thread {
     NonBlockingQueue<Command*> commands;
     ActiveClients active_clients;
 
-   // Colas de broadcast
-   NonBlockingQueue<Notification*> differential_broadcasts;
-
     // Instancia de juego
     Game game;
 
     //-------------------------------------------------------------------------
     // Métodos privados
-
-    /* PROXY PARA LA CLASE GAME Y SU ADDPLAYER (SOLO PARA PROBAR) */
-    InstanceId _GameAddPlayer(const CharacterCfg& init_data);
 
     /* Inicializa recursos internos */
     void _init();

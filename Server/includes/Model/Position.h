@@ -9,56 +9,58 @@
 #include "../../../Common/includes/types.h"
 
 class Position {
-    private:
-        Id map;
-        int x, y;
-        Orientation orientation;
-        MapContainer& map_container;
-    
-    public:
-        Position(const Id map, 
-                 const int init_x_coord,
-                 const int init_y_coord,
-                 MapContainer& map_container);
-        ~Position();
+   private:
+    Id map;
+    int x, y;
+    Orientation orientation;
+    MapContainer& map_container;
 
-        Position(const Position&) = delete;
-        Position& operator=(const Position&) = delete;
-        Position(Position&&) = delete;
-        Position& operator=(Position&&) = delete;
+   public:
+    Position(const Id map, const int init_x_coord, const int init_y_coord,
+             MapContainer& map_container);
+    ~Position();
 
-        /*
-         * Devuelve la distancia Manhhattan [1] entre las coordenadas
-         * de this y las de other.
-         */
-        const unsigned int getDistance(const Position& other) const;
+    Position(const Position&) = delete;
+    Position& operator=(const Position&) = delete;
+    Position(Position&&) = delete;
+    Position& operator=(Position&&) = delete;
 
-        /* Devuelve la coordenada x de la posición del character */
-        const int getX() const;
+    /*
+     * Devuelve la distancia Manhhattan [1] entre las coordenadas
+     * de this y las de other.
+     */
+    const unsigned int getDistance(const Position& other) const;
 
-        /* Devuelve la coordenada y de la posición del character */
-        const int getY() const;
+    /* Devuelve la coordenada x de la posición del character */
+    const int getX() const;
 
-        const Id getMapId() const;
+    /* Devuelve la coordenada y de la posición del character */
+    const int getY() const;
 
-        /* 
-         * Mueve un tile la posición en la dirección de la orientation. 
-         * 
-         * Lanza CollisionWhileMovingException si no se puede mover
-         * a causa de una colisión.
-         */
-        void move(const Orientation& orientation);
+    /* Devuelve el Id del mapa en el que se encuentra */
+    const Id getMapId() const;
 
-        /*
-         * Llena los campos x_tile, y_tile y orientation del
-         * PlayerData para su broadcast.
-         */
-        void fillBroadcastData(PlayerData& data) const;
+    /* Cambia la orientacion por la especificada */
+    void changeOrientation(Orientation orientation);
+
+    /*
+     * Mueve un tile la posición en la dirección de la orientation.
+     *
+     * Lanza CollisionWhileMovingException si no se puede mover
+     * a causa de una colisión.
+     */
+    void move();
+
+    /*
+     * Llena los campos x_tile, y_tile y orientation del
+     * PlayerData para su broadcast.
+     */
+    void fillBroadcastData(PlayerData& data) const;
 };
 
-class CollisionWhileMovingException: std::exception {
-    public:
-        virtual const char* what() const noexcept;
+class CollisionWhileMovingException : std::exception {
+   public:
+    virtual const char* what() const noexcept;
 };
 
 #endif

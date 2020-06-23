@@ -6,9 +6,8 @@
 //-----------------------------------------------------------------------------
 #include "../../../Common/includes/MapContainer.h"
 #include "../../../Common/includes/types.h"
-#include "../../../Common/includes/NonBlockingQueue.h"
 //-----------------------------------------------------------------------------
-#include "../Control/Notification.h"
+#include "../../includes/Control/Notification.h"
 //-----------------------------------------------------------------------------
 #include "Character.h"
 #include "Config.h"
@@ -39,12 +38,10 @@ class Game {
     InstanceId next_instance_id;
 
     ActiveClients& active_clients;
-    NonBlockingQueue<Notification*>& differential_broadcasts;
 
    public:
     //-----------------------------------------------------------------------------
-    Game(ActiveClients& active_clients,
-         NonBlockingQueue<Notification*>& differential_broadcasts);
+    Game(ActiveClients& active_clients);
     ~Game();
 
     Game(const Game&) = delete;
@@ -53,8 +50,12 @@ class Game {
     Game& operator=(Game&& other) = delete;
     //-----------------------------------------------------------------------------
 
-    void _pushCharacterDifferentialBroadcast(InstanceId id, BroadcastType type);
-    void _pushFullBroadcast(InstanceId receiver);
+    Notification* _buildBroadcast(InstanceId id, BroadcastType broadcast_type,
+                          EntityType entity_type);
+
+    void _pushCharacterDifferentialBroadcast(InstanceId id, BroadcastType type,
+                                             bool send_to_caller);
+    void _pushFullBroadcast(InstanceId receiver, bool is_new_connection);
 
     //-----------------------------------------------------------------------------
     // DEFINIR COMO VIENE EL PLAYERDATA SI ES NUEVO!.

@@ -150,6 +150,16 @@ struct CharacterCfg {
     Id kind;
 
     StateType state;
+
+    EquipmentData equipment;
+    InventoryData inventory;
+
+    uint32_t health;
+    uint32_t mana;
+    uint32_t safe_gold;
+    uint32_t excess_gold;
+    uint32_t level;
+    uint32_t exp;
 };
 
 struct CreatureCfg {

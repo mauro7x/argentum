@@ -12,7 +12,9 @@ Position::Position(const Id map, const int init_x_coord, const int init_y_coord,
       orientation(DEFAULT_ORIENTATION),
       map_container(map_container) {}
 
-Position::~Position() {}
+Position::~Position() {
+    map_container[map].clearTile(x, y);
+}
 
 const int Position::getX() const {
     return this->x;
@@ -30,14 +32,12 @@ const unsigned int Position::getDistance(const Position& other) const {
     return abs(this->x - other.getX()) + abs(this->y - other.getY());
 }
 
-void Position::move(const Orientation& orientation) {
-    this->orientation = orientation;
-    
+void Position::move() {
     if (!this->map_container[this->map].moveOcuppant(this->x, this->y,
-                                                     orientation))
+                                                     this->orientation))
         throw CollisionWhileMovingException();
 
-    switch (orientation) {
+    switch (this->orientation) {
         case UP_ORIENTATION:
             this->y -= 1;
             break;
@@ -54,6 +54,10 @@ void Position::move(const Orientation& orientation) {
             this->x -= 1;
             break;
     }
+}
+
+void Position::changeOrientation(Orientation orientation) {
+    this->orientation = orientation;
 }
 
 void Position::fillBroadcastData(PlayerData& data) const {
