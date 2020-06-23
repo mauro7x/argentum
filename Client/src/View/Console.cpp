@@ -8,6 +8,12 @@ void Console::_center(SDL_Point& texture_pos, const Texture& texture,
     // Centramos solo verticalmente
     texture_pos.x = rect.x;
     texture_pos.y = rect.y + (rect.h - texture.getHeight()) / 2;
+
+    // Scroll horizontal
+    int excess = texture.getWidth() - rect.w;
+    if (excess > 0) {
+        texture_pos.x -= excess;
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -66,8 +72,10 @@ void Console::enableInput() {
 }
 
 void Console::append(const char* text) {
-    current_input += text;
-    input_changed = true;
+    if (current_input.size() < INPUT_MAX_SIZE) {
+        current_input += text;
+        input_changed = true;
+    }
 }
 
 void Console::removeChar() {
