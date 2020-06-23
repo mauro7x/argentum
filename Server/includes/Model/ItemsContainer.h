@@ -42,7 +42,7 @@ class ItemsContainer {
          * 
          * Lanza Exception si el id no corresponde a ningún item.
          */
-        Item* operator[](Id item_id);
+        Item* operator[](const Id item_id);
 };
 
 #endif
