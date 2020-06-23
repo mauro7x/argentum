@@ -167,7 +167,6 @@ struct CreatureCfg {
     std::string name;
     unsigned int base_damage;
     unsigned int base_health;
-
 };
 //-----------------------------------------------------------------------------
 #endif  // __CONFIG_STRUCTS_H__
