@@ -5,6 +5,7 @@
 #include <fstream>
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 #include "Exceptions/Exception.h"
 #include "JSON.h"
@@ -39,6 +40,10 @@ class MapContainer {
 
     /* Carga los mapas parseando los json correspondiente */
     void loadMaps();
+
+    /* PROVISORIO! */
+    /* Para crear el mapa de conteo de criaturas por mapa */
+    std::vector<Id> getMapsId() const;
 
     /* Obtiene el mapa correspondiente modificable */
     Map& operator[](const Id id);
