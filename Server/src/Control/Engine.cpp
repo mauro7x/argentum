@@ -74,6 +74,8 @@ void Engine::_loopIteration(int it) {
     _processNewConnections();
     _processCommands();
     game.actCharacters(it);
+    game.actCreatures(it);
+    game.spawnNewCreatures(it);
     _processFinishedConnections();
 }
 
