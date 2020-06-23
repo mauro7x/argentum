@@ -3,6 +3,7 @@
 
 //-----------------------------------------------------------------------------
 #include "../../../Common/includes/MapContainer.h"
+#include "../../../Common/includes/defs.h"
 #include "../../../Common/includes/types.h"
 //-----------------------------------------------------------------------------
 
@@ -20,17 +21,15 @@ class MapView {
     MapContainer maps;
 
     /* Current map info */
-    Id current_map_id;
-    int w_tiles, h_tiles;
-    int tile_w, tile_h;
+    Id current_map_id = 0;
+    int w_tiles = 0, h_tiles = 0;
 
     /* Calcula el rectangulo sobre el que se debe graficar la textura. Esta
      * función es necesaria ya que el sistema de coordenadas en Tiled (el editor
      * de mapas utilizado) es inverso al que utiliza SDL, por lo que esta
      * función arregla esto. */
     SDL_Rect _getRenderQuad(const Texture& texture, const int x_tile,
-                            const int y_tile, const int tile_w,
-                            const int tile_h) const;
+                            const int y_tile) const;
 
    public:
     /* Constructor */
@@ -54,7 +53,7 @@ class MapView {
     void loadMedia();
 
     /* Selecciona el mapa indicado por el id */
-    void select(const Id id);
+    void changeMap(const Id id);
 
     /* Settea el ocupante de una celda */
     void occupyTile(InstanceId id, const int x_tile, const int y_tile);
