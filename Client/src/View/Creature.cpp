@@ -9,6 +9,9 @@ void Creature::_copyData(const CreatureData& init_data) {
 
     // Ids gráficos
     creature_id = init_data.creature_id;
+
+    // Vida
+    health = init_data.health;
 }
 
 //-----------------------------------------------------------------------------
@@ -24,11 +27,13 @@ Creature::Creature(Renderer* renderer, UnitSpriteContainer* sprites,
 
 Creature::Creature(Creature&& other) : Unit(std::move(other)) {
     creature_id = other.creature_id;
+    health = other.health;
 }
 
 Creature& Creature::operator=(Creature&& other) {
     Unit::operator=(std::move(other));
     creature_id = other.creature_id;
+    health = other.health;
 
     return *this;
 }
@@ -67,8 +72,6 @@ void Creature::render() const {
         throw Exception(
             "Creature has not been initialized (render requested).");
     }
-
-    // printInfo();
 
     // Cuerpo
     _render(g_sprites->get(creature_id));
