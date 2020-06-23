@@ -1,8 +1,7 @@
 #include "../../includes/Model/Slot.h"
 
-Slot::Slot():
-    item(nullptr),
-    amount(0) {}
+Slot::Slot() : item(nullptr), amount(0) {}
+Slot::Slot(Item* item, uint32_t amount) : item(item), amount(amount) {}
 
 Slot::~Slot() {}
 
@@ -52,7 +51,7 @@ const Id Slot::getItemId() const {
     if (!item) {
         return 0;
     }
-    
+
     return this->item->getId();
 }
 const unsigned int Slot::getAmount() const {

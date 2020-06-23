@@ -4,10 +4,15 @@
 
 #include "../../includes/Model/Character.h"
 
-Equipment::Equipment() {
+Equipment::Equipment(const EquipmentData& init_data,
+                     ItemsContainer& items_container) {
     // Inicializo array de wearables con nullptr.
     for (unsigned int i = 0; i < container.size(); ++i) {
-        container[i] = nullptr;
+        if (!init_data[i]) {
+            this->container[i] = nullptr;
+        } else {
+            this->container[i] = (Wearable*)items_container[init_data[i]];
+        }
     }
 }
 
@@ -36,7 +41,7 @@ const unsigned int Equipment::getAttackRange() const {
 
 const unsigned int Equipment::getDefensePoints(Character& defender) {
     unsigned int defense_points = 0;
-    /* Sumo los puntos de defensa de cada wearables de defensa 
+    /* Sumo los puntos de defensa de cada wearables de defensa
     que lleva puesto,que resultan ser todos menos WEAPON.*/
     for (unsigned int type = 0; type < N_WEARABLE_ITEMS; ++type) {
         if (type == WEAPON) {

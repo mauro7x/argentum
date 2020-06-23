@@ -1,28 +1,41 @@
 #include "../../includes/Model/Inventory.h"
+
+#include <iostream>  // Para testear
+
 #include "../../includes/Model/Formulas.h"
 
-#include <iostream> // Para testear
-
-Inventory::Inventory(Level& character_level): 
-                        occupied_slots(0),
-                        safe_gold(0),
-                        excess_gold(0),
-                        character_level(character_level) {
+Inventory::Inventory(const InventoryData& init_data, uint32_t init_safe_gold,
+                     uint32_t init_excess_gold, Level& character_level,
+                     ItemsContainer& items_container)
+    : occupied_slots(0),
+      safe_gold(init_safe_gold),
+      excess_gold(init_excess_gold),
+      character_level(character_level) {
     for (unsigned int i = 0; i < slots.size(); ++i) {
-        slots[i] = std::move(Slot());
+        if (!init_data[i].item || !init_data[i].amount) {
+            continue;
+        }
+        
+        Id item_id = init_data[i].item;
+        uint32_t amount = init_data[i].amount;
+
+        slots[i] = std::move(Slot(items_container[item_id], amount));
+
+        this->id_slot_map[item_id] = i;
+        ++this->occupied_slots;
     }
-    
+
     // Establezco maximos de oro en exceso y seguro.
     this->updateMaxAmountsOfGold();
- }
+}
 
 Inventory::~Inventory() {}
 
 void Inventory::updateMaxAmountsOfGold() {
-    this->max_safe_gold = Formulas::calculateMaxSafeGold(
-                                this->character_level.getLevel());
-    this->max_excess_gold = Formulas::calculateMaxExcessGold(
-                                this->max_safe_gold);
+    this->max_safe_gold =
+        Formulas::calculateMaxSafeGold(this->character_level.getLevel());
+    this->max_excess_gold =
+        Formulas::calculateMaxExcessGold(this->max_safe_gold);
 }
 
 const uint8_t Inventory::_getNextFreeSlot() const {
@@ -42,7 +55,7 @@ const uint8_t Inventory::addItem(Item* item) {
 
     uint8_t n_slot;
     const Id item_id = item->getId();
-    
+
     // Me fijo si ya hay algún slot de este item.
     if (this->id_slot_map.count(item_id)) {
         n_slot = this->id_slot_map[item_id];
@@ -69,19 +82,18 @@ Item* Inventory::gatherItem(const uint8_t n_slot) {
 
     if (slot.isEmpty())
         return nullptr;
-    
+
     Item* item = slot.takeItem();
 
     if (slot.isEmpty()) {
         this->id_slot_map.erase(item->getId());
         --this->occupied_slots;
     }
-    
+
     return item;
 }
 
-unsigned int Inventory::_addGold(const uint32_t amount, 
-                                 unsigned int& slot_gold,
+unsigned int Inventory::_addGold(const uint32_t amount, unsigned int& slot_gold,
                                  unsigned int& slot_max_gold) {
     unsigned int added_gold = 0;
 
@@ -101,7 +113,7 @@ unsigned int Inventory::_addGold(const uint32_t amount,
 }
 
 unsigned int Inventory::_gatherGold(const uint32_t amount,
-                                   unsigned int& slot_gold) {
+                                    unsigned int& slot_gold) {
     unsigned int gathered_gold = 0;
 
     if (slot_gold >= amount) {
@@ -116,7 +128,8 @@ unsigned int Inventory::_gatherGold(const uint32_t amount,
 }
 
 void Inventory::addGold(const uint32_t amount) {
-    unsigned int remaining = _addGold(amount, this->safe_gold, this->max_safe_gold);
+    unsigned int remaining =
+        _addGold(amount, this->safe_gold, this->max_safe_gold);
 
     if (_addGold(remaining, this->excess_gold, this->max_excess_gold) > 0) {
         // Se llego al limite de capacidad y no se pudo agregar todo el oro
@@ -132,7 +145,7 @@ void Inventory::gatherGold(const uint32_t amount) {
 
     unsigned int gathered = _gatherGold(amount, this->excess_gold);
     unsigned int remaining = amount - gathered;
-    
+
     if (remaining) {
         _gatherGold(amount - gathered, this->safe_gold);
     }
@@ -141,7 +154,7 @@ void Inventory::gatherGold(const uint32_t amount) {
 void Inventory::fillBroadcastData(PlayerData& data) const {
     data.safe_gold = this->safe_gold;
     data.excess_gold = this->excess_gold;
-    
+
     for (int i = 0; i < N_INVENTORY_SLOTS; ++i) {
         if (!this->slots[i].getItemId())
             data.inventory[i] = {0, 0};
@@ -168,8 +181,8 @@ const char* GoldMaximumCapacityReachedException::what() const noexcept {
 }
 
 void Inventory::debug() const {
-    // std::cout << "Inventory: [" << this->items_quantity << " elements]" << std::endl;
-    // for (unsigned int i = 0; i < this->container.size(); ++i) {
+    // std::cout << "Inventory: [" << this->items_quantity << " elements]" <<
+    // std::endl; for (unsigned int i = 0; i < this->container.size(); ++i) {
     //     if (this->container[i]) {
     //         std::cout << "Posicion " << i << ": ";
     //         std::cout << this->container[i]->what() << std::endl;

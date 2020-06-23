@@ -174,7 +174,7 @@ const InstanceId Game::newCharacter(const CharacterCfg& init_data) {
         std::forward_as_tuple(init_data, this->races[init_data.race],
                               this->kinds[init_data.kind], this->map_container,
                               spawning_map_id, spawning_x_coord,
-                              spawning_y_coord));
+                              spawning_y_coord, this->items));
 
     this->characters.at(new_character_id).debug();
 

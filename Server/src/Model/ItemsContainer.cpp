@@ -66,7 +66,7 @@ ItemsContainer::~ItemsContainer() {
     }
 }
 
-Item* ItemsContainer::operator[](Id item_id) {
+Item* ItemsContainer::operator[](const Id item_id) {
     if (!this->container.count(item_id))
         throw Exception("Trying to acces an invalid item ID.");
 

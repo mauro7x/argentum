@@ -1,7 +1,18 @@
 #include "../../includes/Model/States.h"
 
+#include "../../../Common/includes/Exceptions/Exception.h"
+
 State::State() {}
 State::~State() {}
+
+State* StateFactory::newState(StateType state) {
+    if (state == ALIVE)
+        return new Alive();
+    else if (state == DEAD)
+        return new Dead();
+    else
+        throw Exception("State::newState invalid StateType.");
+}
 
 Alive::Alive() {}
 Alive::~Alive() {}
@@ -24,4 +35,3 @@ const bool Dead::canAttack() const {
 const bool Dead::canBeAttacked() const {
     return false;
 }
-

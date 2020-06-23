@@ -19,11 +19,12 @@
 Character::Character(const CharacterCfg& init_data, const RaceCfg& race,
                      const KindCfg& kind, MapContainer& map_container,
                      const Id init_map, const int init_x_coord,
-                     const int init_y_coord)
+                     const int init_y_coord, ItemsContainer& items_container)
     :
 
-      health(kind.initial_health + race.initial_health),
-      mana(kind.initial_mana + race.initial_mana),
+      health(init_data.health),
+      mana(init_data.mana),
+
       intelligence(kind.intelligence + race.intelligence),
       constitution(kind.constitution + race.constitution),
       strength(kind.strength + race.strength),
@@ -32,9 +33,13 @@ Character::Character(const CharacterCfg& init_data, const RaceCfg& race,
       race(race),
       kind(kind),
 
-      state(new Alive()),
+      state(StateFactory::newState(init_data.state)),
 
-      inventory(this->level),
+      level(init_data.level, init_data.exp),
+
+      inventory(init_data.inventory, init_data.safe_gold, init_data.excess_gold,
+                this->level, items_container),
+      equipment(init_data.equipment, items_container),
 
       position(init_map, init_x_coord, init_y_coord, map_container),
 
@@ -42,8 +47,7 @@ Character::Character(const CharacterCfg& init_data, const RaceCfg& race,
       moving_cooldown_time(0),
       attribute_update_time_elapsed(0),
 
-      broadcast(true) {  // Cuando se crea, debe ser broadcasteado.
-
+      broadcast(false) {
     // SI EL JUGADOR ESTA PERSISTIDO Y NO ES NUEVO, LLENAR TODO LO QUE SE TIENE
     // QUE LLENAR.
 
@@ -108,7 +112,7 @@ void Character::_updateMovement(const unsigned int it) {
 
     while (this->moving_cooldown_time <= 0) {
         this->broadcast = true;
-        
+
         this->position.move();
 
         this->moving_cooldown_time += TIME_TO_MOVE_A_TILE;

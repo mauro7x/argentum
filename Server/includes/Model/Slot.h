@@ -4,15 +4,14 @@
 #include "../../../Common/includes/types.h"
 #include "Item.h"
 
-#define EMPTY_ITEM_ID 0
-
 class Slot {
     private:
         Item* item;
-        unsigned int amount;
+        uint32_t amount;
 
     public:
         Slot();
+        Slot(Item* item, uint32_t amount);
         ~Slot();
 
         Slot(Slot&& other);

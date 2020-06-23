@@ -7,12 +7,9 @@
 #include "../../includes/Model/Character.h"
 #include "../../includes/Model/Formulas.h"
 
-#define INITIAL_LEVEL 1
-#define INITIAL_XP 0
-
-Level::Level()
-    : level(INITIAL_LEVEL),
-      xp(INITIAL_XP),
+Level::Level(uint32_t init_level, uint32_t init_xp)
+    : level(init_level),
+      xp(init_xp),
       level_up_xp(Formulas::calculateLevelUpXP(this->level)) {}
 
 Level::~Level() {}
@@ -53,7 +50,7 @@ const unsigned int Level::getLevel() const {
     return this->level;
 }
 
-const unsigned int Level::isNewbie() const {
+const bool Level::isNewbie() const {
     return Formulas::isNewbie(this->level);
 }
 

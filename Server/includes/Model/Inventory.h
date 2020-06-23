@@ -6,12 +6,12 @@
 #include <exception>
 #include <map>
 
-#include "Item.h"
-#include "Level.h"
-#include "Slot.h"
-
 #include "../../../Common/includes/Inventory.h"
 #include "../../../Common/includes/UnitData.h"
+#include "Item.h"
+#include "ItemsContainer.h"
+#include "Level.h"
+#include "Slot.h"
 
 /*
  * El Inventario es un contenedor que guarda Items,
@@ -56,7 +56,9 @@ class Inventory {
     unsigned int _gatherGold(const uint32_t amount, unsigned int& slot_gold);
 
    public:
-    Inventory(Level& level);
+    Inventory(const InventoryData& init_data, uint32_t init_safe_gold,
+              uint32_t init_excess_gold, Level& level,
+              ItemsContainer& items_container);
     ~Inventory();
 
     Inventory(const Inventory&) = delete;
