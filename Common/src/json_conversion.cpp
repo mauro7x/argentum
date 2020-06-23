@@ -1,18 +1,12 @@
 #include "../includes/json_conversion.h"
 
 void to_json(json& j, const InventorySlot& data) {
-    j = json{{"item", data.item}, 
-             {"amount", data.amount}};
-}
-
-void from_json(const json& j, InventorySlot& data) {
-    j.at("item").get_to(data.item);
-    j.at("amount").get_to(data.amount);
+    j = json{{"item", data.item}, {"amount", data.amount}};
 }
 
 void to_json(json& j, const PlayerData& data) {
-    j = json{{"gid", data.basic_data.gid}, 
-             {"map", data.basic_data.map}, 
+    j = json{{"gid", data.basic_data.gid},
+             {"map", data.basic_data.map},
              {"x_tile", data.basic_data.x_tile},
              {"y_tile", data.basic_data.y_tile},
              {"orientation", data.basic_data.orientation},
@@ -27,15 +21,29 @@ void to_json(json& j, const PlayerData& data) {
              {"excess_gold", data.excess_gold},
              {"level", data.level},
              {"exp", data.exp},
-             {"levelup_exp", data.levelup_exp},
-             };
+             {"levelup_exp", data.levelup_exp}};
     j["equipment"] = json(data.equipment);
     j["inventory"] = json(data.inventory);
 }
 
+void to_json(json& j, const CreatureData& data) {
+    j = json{{"gid", data.basic_data.gid},
+             {"map", data.basic_data.map},
+             {"x_tile", data.basic_data.x_tile},
+             {"y_tile", data.basic_data.y_tile},
+             {"orientation", data.basic_data.orientation},
+             {"creature_id", data.creature_id},
+             {"health", data.health}};
+}
+
+void from_json(const json& j, InventorySlot& data) {
+    j.at("item").get_to(data.item);
+    j.at("amount").get_to(data.amount);
+}
+
 void from_json(const json& j, PlayerData& data) {
     j.at("gid").get_to(data.basic_data.gid);
-    j.at("map").get_to(data.basic_data.map); 
+    j.at("map").get_to(data.basic_data.map);
     j.at("x_tile").get_to(data.basic_data.x_tile);
     j.at("y_tile").get_to(data.basic_data.y_tile);
     j.at("orientation").get_to(data.basic_data.orientation);
@@ -55,23 +63,12 @@ void from_json(const json& j, PlayerData& data) {
     data.inventory = j.at("inventory").get<InventoryData>();
 }
 
-
-void to_json(json& j, CreatureData& data){
-    j = json{{"gid", data.basic_data.gid}, 
-             {"map", data.basic_data.map}, 
-             {"x_tile", data.basic_data.x_tile},
-             {"y_tile", data.basic_data.y_tile},
-             {"orientation", data.basic_data.orientation},
-             {"creature_id", data.creature_id},
-             {"health", data.health},
-             };
-}
-
 void from_json(const json& j, CreatureData& data) {
     j.at("gid").get_to(data.basic_data.gid);
-    j.at("map").get_to(data.basic_data.map); 
+    j.at("map").get_to(data.basic_data.map);
     j.at("x_tile").get_to(data.basic_data.x_tile);
     j.at("y_tile").get_to(data.basic_data.y_tile);
+    j.at("orientation").get_to(data.basic_data.orientation);
     j.at("creature_id").get_to(data.creature_id);
     j.at("health").get_to(data.health);
 }
