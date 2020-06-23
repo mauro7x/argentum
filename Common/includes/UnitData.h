@@ -41,6 +41,7 @@ struct PlayerData : public CharacterData {
 struct CreatureData {
     UnitData basic_data;
     Id creature_id;
+    uint32_t health;
 };
 
 //-----------------------------------------------------------------------------

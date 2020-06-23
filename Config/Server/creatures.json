@@ -1,18 +1,26 @@
 [
     {
         "id": 300,
-        "name": "Goblin"
+        "name": "Goblin",
+        "base_damage":10,
+        "base_heath":100
     },
     {
         "id": 301,
-        "name": "Esqueleto"
+        "name": "Esqueleto",
+        "base_damage":10,
+        "base_heath":100
     },
     {
         "id": 302,
-        "name": "Zombie"
+        "name": "Zombie",
+        "base_damage":10,
+        "base_heath":100
     },
     {
         "id": 303,
-        "name": "Araña"
+        "name": "Araña",
+        "base_damage":10,
+        "base_heath":100
     }
 ]

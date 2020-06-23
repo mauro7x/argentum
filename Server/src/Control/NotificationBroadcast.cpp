@@ -37,31 +37,37 @@ NotificationBroadcast& NotificationBroadcast::operator=(
 bool NotificationBroadcast::send(const InstanceId sender,
                                  const SocketWrapper& peer) {
     Serialized serialized = json::to_msgpack(j);
-
+    
+    fprintf(stderr, "Envio broadcast tipo %i, entity %i\n",
+            this->broadcast_type, this->entity_type);
+  
     if (sender == this->id) {
         this->entity_type = PLAYER_TYPE;
     }
-
-    fprintf(stderr, "Envio broadcast tipo %i, entity %i\n",
-            this->broadcast_type, this->entity_type);
-    try {
-        switch (this->broadcast_type) {
-            case DELETE_BROADCAST:
-                peer << (char)BROADCAST_OPCODE;
-                peer << (char)broadcast_type;
-                peer << (char)entity_type;
-                peer << this->id;
-                break;
-
-            default:
-                peer << (char)BROADCAST_OPCODE;
-                peer << (char)broadcast_type;
-                peer << (char)entity_type;
-                peer << serialized;
-                break;
-        }
-    } catch (const std::exception& e) {
+    size_t send = 0;
+    send = peer << (char)BROADCAST_OPCODE;
+    if (!send) {
         return false;
+    }
+    send = peer << (char)broadcast_type;
+    if (!send) {
+        return false;
+    }
+    send = peer << (char)entity_type;
+    if (!send) {
+        return false;
+    }
+    if (this->broadcast_type == DELETE_BROADCAST) {
+        send = peer << this->id;
+        if (!send) {
+            return false;
+        }
+    } else {
+        send = peer << serialized;
+        if (!send) {
+            return false;
+
+        }
     }
     return true;
 }

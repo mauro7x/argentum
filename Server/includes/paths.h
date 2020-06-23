@@ -11,6 +11,7 @@
 #define ENGINE_CONFIG_FILEPATH "../Config/Server/engine_config.json"
 #define RACES_CONFIG_FILEPATH "../Config/Server/races.json"
 #define KINDS_CONFIG_FILEPATH "../Config/Server/kinds.json"
+#define NPC_CONFIG_FILEPATH "../Config/Server/npcs.json"
 #define CREATURES_CONFIG_FILEPATH "../Config/Server/creatures.json"
 #define ITEMS_CONFIG_FILEPATH "../Config/Server/items.json"
 

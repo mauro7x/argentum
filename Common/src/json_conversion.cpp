@@ -35,7 +35,6 @@ void to_json(json& j, const PlayerData& data) {
 
 void from_json(const json& j, PlayerData& data) {
     j.at("gid").get_to(data.basic_data.gid);
-    j.at("map").get_to(data.basic_data.map);
     j.at("map").get_to(data.basic_data.map); 
     j.at("x_tile").get_to(data.basic_data.x_tile);
     j.at("y_tile").get_to(data.basic_data.y_tile);
@@ -54,4 +53,25 @@ void from_json(const json& j, PlayerData& data) {
     j.at("levelup_exp").get_to(data.levelup_exp);
     data.equipment = j.at("equipment").get<EquipmentData>();
     data.inventory = j.at("inventory").get<InventoryData>();
+}
+
+
+void to_json(json& j, CreatureData& data){
+    j = json{{"gid", data.basic_data.gid}, 
+             {"map", data.basic_data.map}, 
+             {"x_tile", data.basic_data.x_tile},
+             {"y_tile", data.basic_data.y_tile},
+             {"orientation", data.basic_data.orientation},
+             {"creature_id", data.creature_id},
+             {"health", data.health},
+             };
+}
+
+void from_json(const json& j, CreatureData& data) {
+    j.at("gid").get_to(data.basic_data.gid);
+    j.at("map").get_to(data.basic_data.map); 
+    j.at("x_tile").get_to(data.basic_data.x_tile);
+    j.at("y_tile").get_to(data.basic_data.y_tile);
+    j.at("creature_id").get_to(data.creature_id);
+    j.at("health").get_to(data.health);
 }
