@@ -43,7 +43,26 @@ void ClientLogin::run() {
         // que agregamos la petición de crear jugador a la cola y terminamos
 
         // esta data deberia venir el login
-        CharacterCfg init_data = {100, 201, ALIVE};
+        CharacterCfg init_data;
+        init_data.race = 100;
+        init_data.kind = 201;
+        init_data.state = ALIVE;
+        init_data.equipment = {1100, 1302, 1402, 0};
+        init_data.inventory = {
+            InventorySlot({1000, 1}),   InventorySlot({1001, 1}),
+            InventorySlot({1102, 2}),   InventorySlot({1300, 9000}),
+            InventorySlot({1401, 454}), InventorySlot({1500, 1}),
+            InventorySlot({1400, 1}),   InventorySlot({1301, 1}),
+            InventorySlot({0, 0}),      InventorySlot({0, 0}),
+            InventorySlot({0, 0}),      InventorySlot({0, 0}),
+            InventorySlot({0, 0}),      InventorySlot({0, 0}),
+            InventorySlot({0, 0}),      InventorySlot({0, 0})};
+        init_data.health = 50;
+        init_data.safe_gold = 100;
+        init_data.excess_gold = 50;
+        init_data.level = 10;
+        init_data.exp = 100;
+
         new_connections.push(new NewConnection(peer, init_data));
 
         // ACA NO SE DEBERÍA HACER NADA QUE FALLE, PORQUE EL SOCKET YA NO
