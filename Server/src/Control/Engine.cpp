@@ -3,13 +3,6 @@
 //-----------------------------------------------------------------------------
 // Métodos privados
 
-void Engine::_init() {
-    // Cargamos la configuración
-    json config = JSON::loadJsonFile(ENGINE_CONFIG_FILEPATH);
-    int ticks_per_second = config["ticks_per_second"];
-    rate = 1000 / ticks_per_second; /* ms por cada tick (floor) */
-}
-
 void Engine::_processNewConnections() {
     NewConnection* new_connection = nullptr;
     while ((new_connection = new_connections.pop())) {
@@ -94,7 +87,6 @@ Engine::Engine(Database& database,
                NonBlockingQueue<NewConnection*>& new_connections)
     : keep_executing(true),
       database(database),
-      rate(0),
       new_connections(new_connections),
       finished_connections(),
       commands(),
@@ -103,9 +95,6 @@ Engine::Engine(Database& database,
 
 void Engine::run() {
     fprintf(stderr, "DEBUG: Comienza la ejecución del engine.\n");
-
-    // Inicializamos recursos necesarios
-    _init();
 
     // Variables para controlar el frame-rate
     auto t1 = std::chrono::steady_clock::now();
@@ -124,21 +113,21 @@ void Engine::run() {
         it = 0;
         t2 = std::chrono::steady_clock::now();
         diff = t2 - t1;
-        rest = rate - std::ceil(diff.count());
+        rest = RATE - std::ceil(diff.count());
 
         if (rest < 0) {
             fprintf(stderr, "\n\n=== PÉRDIDA DE FRAME/S ===\n\n\n");
             behind = -rest;
-            lost = rate + (behind - behind % rate);
-            rest = rate - behind % rate;
+            lost = RATE + (behind - behind % RATE);
+            rest = RATE - behind % RATE;
             t1 += std::chrono::milliseconds(lost);
-            it += std::floor(lost / rate);
+            it += std::floor(lost / RATE);
         }
 
         // fprintf(stderr, "ENGINE: Sleeping for %i ms.\n", rest);
 
         std::this_thread::sleep_for(std::chrono::milliseconds(rest));
-        t1 += std::chrono::milliseconds(rate);
+        t1 += std::chrono::milliseconds(RATE);
         it += 1;
     }
 

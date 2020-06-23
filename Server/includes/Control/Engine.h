@@ -14,8 +14,15 @@
 #include "../../../Common/includes/NonBlockingQueue.h"
 #include "../../../Common/includes/Thread.h"
 #include "../../../Common/includes/types.h"
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
 #include "../Model/Game.h"
 #include "../Model/config_structs.h"
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+#include "../defs.h"
 #include "../paths.h"
 //-----------------------------------------------------------------------------
 
@@ -33,9 +40,6 @@ class Engine : public Thread {
     std::atomic_bool keep_executing;
     Database& database;
 
-    // Configuración interna
-    int rate;
-
     // Colas a vaciar en cada iteración
     NonBlockingQueue<NewConnection*>& new_connections;
     NonBlockingQueue<InstanceId*> finished_connections;
@@ -48,9 +52,6 @@ class Engine : public Thread {
     //-------------------------------------------------------------------------
     // Métodos privados
 
-    /* Inicializa recursos internos */
-    void _init();
-
     /* Elimina las conexiones que finalizaron del contenedor de clientes */
     void _processFinishedConnections();
 
@@ -60,9 +61,9 @@ class Engine : public Thread {
     /* Procesa las solicitudes de nuevas conexiones */
     void _processNewConnections();
 
-    /* 
-     * Envia los broadcasts con los cambios que se produjeron en una 
-     * iteracion del loop 
+    /*
+     * Envia los broadcasts con los cambios que se produjeron en una
+     * iteracion del loop
      */
     void _sendDifferentialBroadcasts();
 
