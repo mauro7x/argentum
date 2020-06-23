@@ -40,10 +40,6 @@ void GameView::_init() {
                            SDL_GetError());
     }
 
-    /* Setteamos el frame-rate */
-    int fps = gui_config["fps"];
-    rate = 1000 / fps; /* ms por cada frame (floor) */
-
     /* Cargamos las dimensiones de los tiles */
     int tile_w = map_config["tilewidth"];
     int tile_h = map_config["tileheight"];
@@ -160,7 +156,6 @@ GameView::GameView(BlockingQueue<Command*>& commands,
 
       // Componentes SDL principales
       renderer(window, camera),
-      rate(0),
 
       // Contenedores de sprites
       unit_sprites(&renderer),
@@ -177,7 +172,7 @@ GameView::GameView(BlockingQueue<Command*>& commands,
 
       // Otros
       stage(map, player, characters, creatures),
-      event_handler(exit, commands) {}
+      event_handler(exit, hud, commands) {}
 
 void GameView::operator()() {
     // Iniciamos recursos necesarios
@@ -201,20 +196,20 @@ void GameView::operator()() {
         it = 0;
         t2 = std::chrono::steady_clock::now();
         diff = t2 - t1;
-        rest = rate - std::ceil(diff.count());
+        rest = RATE - std::ceil(diff.count());
 
         if (rest < 0) {
             fprintf(stderr, "\n\n=== PÉRDIDA DE FRAME/S ===\n\n\n");
             behind = -rest;
-            lost = rate + (behind - behind % rate);
-            rest = rate - behind % rate;
+            lost = RATE + (behind - behind % RATE);
+            rest = RATE - behind % RATE;
             t1 += std::chrono::milliseconds(lost);
-            it += std::floor(lost / rate);
+            it += std::floor(lost / RATE);
         }
 
         // fprintf(stderr, "MAIN-LOOP: Sleeping for %i ms.\n", rest);
         std::this_thread::sleep_for(std::chrono::milliseconds(rest));
-        t1 += std::chrono::milliseconds(rate);
+        t1 += std::chrono::milliseconds(RATE);
         it += 1;
     }
 }
