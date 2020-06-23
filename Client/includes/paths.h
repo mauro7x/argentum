@@ -40,6 +40,9 @@
 
 #define FONT_OLDLONDON_FP "../Assets/Fonts/OldLondon.ttf"
 #define FONT_AUGUSTA_FP "../Assets/Fonts/Augusta.ttf"
+#define FONT_DUNGEON_FP "../Assets/Fonts/Dungeon.ttf"
+#define FONT_GAMEOVER_FP "../Assets/Fonts/GameOver.ttf"
+#define FONT_ANCIENTMEDIUM_FP "../Assets/Fonts/AncientMedium.ttf"
 //-----------------------------------------------------------------------------
 
 #endif  // __CLIENT_PATHS_H__
