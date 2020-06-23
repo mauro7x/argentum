@@ -3,24 +3,24 @@
         "id": 300,
         "name": "Goblin",
         "base_damage":10,
-        "base_heath":100
+        "base_health":100
     },
     {
         "id": 301,
         "name": "Esqueleto",
         "base_damage":10,
-        "base_heath":100
+        "base_health":100
     },
     {
         "id": 302,
         "name": "Zombie",
         "base_damage":10,
-        "base_heath":100
+        "base_health":100
     },
     {
         "id": 303,
         "name": "Araña",
         "base_damage":10,
-        "base_heath":100
+        "base_health":100
     }
 ]
