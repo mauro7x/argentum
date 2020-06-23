@@ -28,32 +28,34 @@ struct MapCreaturesInfo {
 
 class Game {
    private:
-    //-----------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     // Game components configuration files:
-    //-----------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     Config<RaceCfg> races;
     Config<KindCfg> kinds;
-
     Config<CreatureCfg> creatures_data;
-    //-----------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
-    //-----------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     // Game entities
-    //-----------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     MapContainer map_container;
     ItemsContainer items;
     std::unordered_map<InstanceId, Character> characters;
     std::unordered_map<InstanceId, Creature> creatures;
-    //-----------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
+
+    //--------------------------------------------------------------------------
+    // Additional attributes
+    //--------------------------------------------------------------------------
     InstanceId next_instance_id;
-
     ActiveClients& active_clients;
-
     std::unordered_map<Id, MapCreaturesInfo> maps_creatures_info;
     int creature_spawn_cooldown;
+    //--------------------------------------------------------------------------
 
    public:
-    //-----------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     Game(ActiveClients& active_clients);
     ~Game();
 
@@ -61,23 +63,63 @@ class Game {
     Game& operator=(const Game&) = delete;
     Game(Game&& other) = delete;
     Game& operator=(Game&& other) = delete;
-    //-----------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
+    //--------------------------------------------------------------------------
+    // Métodos de broadcast
+    //--------------------------------------------------------------------------
+
+    /*
+     * Construye el broadcast del character cuya id es recibida.
+     * 
+     * Alloca memoria, que luego deberá ser desallocada por el caller.
+     */
     Notification* _buildPlayerBroadcast(InstanceId id,
                                         BroadcastType broadcast_type);
 
+    /*
+     * Construye el broadcast de la creature cuya id es recibida.
+     * 
+     * Alloca memoria, que luego deberá ser desallocada por el caller.
+     */
     Notification* _buildCreatureBroadcast(InstanceId id,
                                           BroadcastType broadcast_type);
 
+    /*
+     * Ante actualizaciones (NEW, UPDATE, DELETE) de un jugador, 
+     * se invoca este método. Su función es broadcastear dicha actualización,
+     * pusheándola a los clientes activos.
+     * 
+     * El atributo send_to_caller indica si dicho broadcast debe ser
+     * enviado al jugador que se actualizo o no.
+     */
     void _pushCharacterDifferentialBroadcast(InstanceId id, BroadcastType type,
                                              bool send_to_caller);
 
+    /*
+     * Ante actualizaciones (NEW, UPDATE, DELETE) de una criatura, 
+     * se invoca este método. Su función es broadcastear dicha actualización,
+     * pusheándola a los clientes activos.
+     */
     void _pushCreatureDifferentialBroadcast(InstanceId creature,
                                             BroadcastType broadcast_type);
 
+    /*
+     * Ante la conexión de un nuevo jugador o el cambio de mapa, se invoca
+     * este método para enviarle a dicho jugador un full broadcast con
+     * toda la información del juego. 
+     */
     void _pushFullBroadcast(InstanceId receiver, bool is_new_connection);
 
-    //-----------------------------------------------------------------------------
+    /* método provisorio */
+    void broadcastNewCharacter(InstanceId id);
+
+    //--------------------------------------------------------------------------
+
+    //--------------------------------------------------------------------------
+    // Creación y eliminación de entidades
+    //--------------------------------------------------------------------------
+
     // DEFINIR COMO VIENE EL PLAYERDATA SI ES NUEVO!.
     /*
      * Recibe un struct CharacterCfg con toda la información persistida
@@ -93,20 +135,12 @@ class Game {
 
     /*
      * Recibe un struct CreatureCfg con toda la información necesaria
-     * para crear una criatura.
+     * para crear una criatura en el mapa especificado.
      *
-     * Lanza Exception si alguno de los id no mapea a ninguna criatura.
+     * Lanza Exception si el id no mapea a ninguna config de criatura,
+     * o el id del mapa inicial no mapea a ningun mapa disponible.
      */
     void newCreature(const CreatureCfg& init_data, const Id init_map);
-
-    const Id _randomSelectCreature() const;
-
-    void _spawnNewCreature(const Id spawning_map);
-
-    void spawnNewCreatures(const int it);
-
-    /* método provisorio */
-    void broadcastNewCharacter(InstanceId id);
 
     /*
      * Llamar a este metodo ante la desconexión de un character.
@@ -118,19 +152,51 @@ class Game {
      * character en el juego.
      */
     void deleteCharacter(const InstanceId id);
-    //-----------------------------------------------------------------------------
 
-    //-----------------------------------------------------------------------------
+    /*
+     * Llamar a este método ante la muerte de una criatura.
+     * 
+     * Recibe el id de instancia de la criatura a eliminar.
+     * 
+     * Efectúa el drop aleatorio de elementos.
+     * 
+     * Lanza Exception si el id especificado no corresponde a ninguna
+     * criatura del juego.
+     */
+    void deleteCreature(const InstanceId id);
+
+    /* 
+     * Escoge aleatoriamente una criatura entre las disponibles en la config,
+     * y deuvelve su Id.
+     */
+    const Id _randomSelectCreature() const;
+
+    /*
+     * Recibe un mapa en el cual spawnea una criatura aleatoria.
+     */
+    void _spawnNewCreature(const Id spawning_map);
+
+    //--------------------------------------------------------------------------
+
+    //--------------------------------------------------------------------------
     // Actualización del loop
-    //-----------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
     void actCharacters(const int it);
 
     void actCreatures(const int it);
 
-    //-----------------------------------------------------------------------------
+    /*
+     * Spawnea criaturas en cada mapa según TIME_TO_SPAWN_CREATURE, hasta
+     * alcanzar el número máximo MAX_CREATURES_PER_MAP.
+     */
+    void spawnNewCreatures(const int it);
+    
+    //--------------------------------------------------------------------------
 
-    //-----------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
+    // Comandos
+    //--------------------------------------------------------------------------
     void startMovingUp(const Id caller);
     void startMovingDown(const Id caller);
     void startMovingLeft(const Id caller);
@@ -174,6 +240,7 @@ class Game {
     void listConnectedPlayers(const Id caller);
 
     //-------------------------------------------------------------------------
+
     const Id getMapId(const InstanceId caller);
 };
 //-----------------------------------------------------------------------------

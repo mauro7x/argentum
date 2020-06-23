@@ -59,9 +59,16 @@ class Config {
         return config.at(id);
     }
 
-    /* Devuelve una referencia al mapa para su iteración */
-    const std::unordered_map<Id, T>& getMap() const {
-        return this->config;
+    /* 
+     * Agrega al vector ids recibido todas las ids existentes
+     * en la configuración.
+     */
+    void gatherIds(std::vector<Id>& ids) const {
+        auto it = this->config.begin();
+        while (it != this->config.end()) {
+            ids.push_back(it->first);
+            ++it;
+        }
     }
 
     /* Conocer la cantidad de Ts que tenemos */

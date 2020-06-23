@@ -14,58 +14,45 @@ ItemsContainer::ItemsContainer() {
     Config<DefenceCfg> defences;
     Config<PotionCfg> potions;
 
-    const std::unordered_map<Id, WeaponCfg>& weapons_map = weapons.getMap();
+    std::vector<Id> weapons_id;
+    weapons.gatherIds(weapons_id);
 
-    std::unordered_map<Id, WeaponCfg>::const_iterator it_weapons =
-        weapons_map.begin();
-
-    while (it_weapons != weapons_map.end()) {
-        this->container.emplace(
-            std::piecewise_construct, std::forward_as_tuple(it_weapons->first),
-            std::forward_as_tuple(new Weapon(it_weapons->second)));
-
-        it_weapons++;
+    for (unsigned int i = 0; i < weapons_id.size(); ++i) {
+        Id id = weapons_id[i];
+        this->container.emplace(std::piecewise_construct,
+                                std::forward_as_tuple(id),
+                                std::forward_as_tuple(new Weapon(weapons[id])));
     }
 
-    const std::unordered_map<Id, WandCfg>& wands_map = wands.getMap();
+    std::vector<Id> wands_id;
+    wands.gatherIds(wands_id);
 
-    std::unordered_map<Id, WandCfg>::const_iterator it_wands =
-        wands_map.begin();
-
-    while (it_wands != wands_map.end()) {
-        this->container.emplace(
-            std::piecewise_construct, std::forward_as_tuple(it_wands->first),
-            std::forward_as_tuple(
-                new Wand(it_wands->second, spells[it_wands->second.spell_id])));
-
-        it_wands++;
+    for (unsigned int i = 0; i < wands_id.size(); ++i) {
+        Id id = wands_id[i];
+        this->container.emplace(std::piecewise_construct,
+                                std::forward_as_tuple(id),
+                                std::forward_as_tuple(new Wand(
+                                    wands[id], spells[wands[id].spell_id])));
     }
 
-    const std::unordered_map<Id, DefenceCfg>& defences_map = defences.getMap();
+    std::vector<Id> defences_id;
+    defences.gatherIds(defences_id);
 
-    std::unordered_map<Id, DefenceCfg>::const_iterator it_defences =
-        defences_map.begin();
-
-    while (it_defences != defences_map.end()) {
+    for (unsigned int i = 0; i < defences_id.size(); ++i) {
+        Id id = defences_id[i];
         this->container.emplace(
-            std::piecewise_construct, std::forward_as_tuple(it_defences->first),
-            std::forward_as_tuple(new Defence(it_defences->second)));
-
-        it_defences++;
+            std::piecewise_construct, std::forward_as_tuple(id),
+            std::forward_as_tuple(new Defence(defences[id])));
     }
 
-    const std::unordered_map<Id, PotionCfg>& potions_map = potions.getMap();
+    std::vector<Id> potions_id;
+    potions.gatherIds(potions_id);
 
-    std::unordered_map<Id, PotionCfg>::const_iterator it_potions =
-        potions_map.begin();
-
-    while (it_potions != potions_map.end()) {
+    for (unsigned int i = 0; i < potions_id.size(); ++i) {
+        Id id = potions_id[i];
         this->container.emplace(
-            std::piecewise_construct, std::forward_as_tuple(it_potions->first),
-            std::forward_as_tuple(
-                PotionFactory::newPotion(it_potions->second)));
-
-        it_potions++;
+            std::piecewise_construct, std::forward_as_tuple(id),
+            std::forward_as_tuple(PotionFactory::newPotion(potions[id])));
     }
 }
 
