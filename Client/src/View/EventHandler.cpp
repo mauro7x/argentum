@@ -4,10 +4,15 @@
 // Métodos privados
 
 void EventHandler::_bindKeycodes() {
+    // En un futuro se podría permitir al usuario bindear las teclas que quiera
+    // utilizando esta función y algún configurable.
+
     keys.emplace(SDLK_w, UP_KEY);
     keys.emplace(SDLK_s, DOWN_KEY);
     keys.emplace(SDLK_a, LEFT_KEY);
     keys.emplace(SDLK_d, RIGHT_KEY);
+    keys.emplace(SDLK_RETURN, ENTER_KEY);
+    keys.emplace(SDLK_BACKSPACE, DELETE_KEY);
     keys.emplace(SDLK_ESCAPE, ESC_KEY);
 }
 
@@ -20,14 +25,16 @@ Key EventHandler::_getKey(const SDL_Keycode& key) {
 }
 
 Event EventHandler::_getEvent(const SDL_Event& e) {
-    Key key;
-
     if (e.type == SDL_QUIT) {
-        return EXIT;
+        return EXIT_EV;
     }
 
-    if (e.type == SDL_KEYDOWN /*&& e.key.repeat == 0*/) {
-        key = _getKey(e.key.keysym.sym);
+    if ((e.type == SDL_TEXTINPUT) && (text_input_enabled)) {
+        return TEXT_INPUT_EV;
+    }
+
+    if ((e.type == SDL_KEYDOWN) && (!text_input_enabled)) {
+        Key key = _getKey(e.key.keysym.sym);
 
         switch (key) {
             case UNMAPPED_KEY: {
@@ -37,7 +44,7 @@ Event EventHandler::_getEvent(const SDL_Event& e) {
             case UP_KEY: {
                 if (!key_pressed) {
                     key_pressed = UP_KEY;
-                    return START_MOVING_UP;
+                    return START_MOVING_UP_EV;
                 }
                 break;
             }
@@ -45,7 +52,7 @@ Event EventHandler::_getEvent(const SDL_Event& e) {
             case DOWN_KEY: {
                 if (!key_pressed) {
                     key_pressed = DOWN_KEY;
-                    return START_MOVING_DOWN;
+                    return START_MOVING_DOWN_EV;
                 }
                 break;
             }
@@ -53,7 +60,7 @@ Event EventHandler::_getEvent(const SDL_Event& e) {
             case LEFT_KEY: {
                 if (!key_pressed) {
                     key_pressed = LEFT_KEY;
-                    return START_MOVING_LEFT;
+                    return START_MOVING_LEFT_EV;
                 }
                 break;
             }
@@ -61,13 +68,41 @@ Event EventHandler::_getEvent(const SDL_Event& e) {
             case RIGHT_KEY: {
                 if (!key_pressed) {
                     key_pressed = RIGHT_KEY;
-                    return START_MOVING_RIGHT;
+                    return START_MOVING_RIGHT_EV;
                 }
                 break;
             }
 
+            case ENTER_KEY: {
+                text_input_enabled = true;
+                return START_INPUT_EV;
+            }
+
             case ESC_KEY: {
-                return EXIT;
+                return EXIT_EV;
+            }
+
+            default: {
+                break;
+            }
+        }
+    }
+
+    if ((e.type == SDL_KEYDOWN) && (text_input_enabled)) {
+        Key key = _getKey(e.key.keysym.sym);
+
+        switch (key) {
+            case ENTER_KEY: {
+                text_input_enabled = false;
+                return STOP_INPUT_EV;
+            }
+
+            case DELETE_KEY: {
+                return DELETE_CHAR_EV;
+            }
+
+            case ESC_KEY: {
+                return EXIT_EV;
             }
 
             default: {
@@ -77,7 +112,7 @@ Event EventHandler::_getEvent(const SDL_Event& e) {
     }
 
     if (e.type == SDL_KEYUP && e.key.repeat == 0) {
-        key = _getKey(e.key.keysym.sym);
+        Key key = _getKey(e.key.keysym.sym);
 
         switch (key) {
             case UNMAPPED_KEY: {
@@ -87,7 +122,7 @@ Event EventHandler::_getEvent(const SDL_Event& e) {
             case UP_KEY: {
                 if (key_pressed == UP_KEY) {
                     key_pressed = UNMAPPED_KEY;
-                    return STOP_MOVING;
+                    return STOP_MOVING_EV;
                 }
                 break;
             }
@@ -95,7 +130,7 @@ Event EventHandler::_getEvent(const SDL_Event& e) {
             case DOWN_KEY: {
                 if (key_pressed == DOWN_KEY) {
                     key_pressed = UNMAPPED_KEY;
-                    return STOP_MOVING;
+                    return STOP_MOVING_EV;
                 }
                 break;
             }
@@ -103,7 +138,7 @@ Event EventHandler::_getEvent(const SDL_Event& e) {
             case LEFT_KEY: {
                 if (key_pressed == LEFT_KEY) {
                     key_pressed = UNMAPPED_KEY;
-                    return STOP_MOVING;
+                    return STOP_MOVING_EV;
                 }
                 break;
             }
@@ -111,7 +146,7 @@ Event EventHandler::_getEvent(const SDL_Event& e) {
             case RIGHT_KEY: {
                 if (key_pressed == RIGHT_KEY) {
                     key_pressed = UNMAPPED_KEY;
-                    return STOP_MOVING;
+                    return STOP_MOVING_EV;
                 }
                 break;
             }
@@ -122,7 +157,7 @@ Event EventHandler::_getEvent(const SDL_Event& e) {
         }
     }
 
-    return INVALID;
+    return INVALID_EV;
 }
 
 //-----------------------------------------------------------------------------
@@ -130,9 +165,9 @@ Event EventHandler::_getEvent(const SDL_Event& e) {
 //-----------------------------------------------------------------------------
 // API Pública
 
-EventHandler::EventHandler(std::atomic_bool& exit,
+EventHandler::EventHandler(std::atomic_bool& exit, HUD& hud,
                            BlockingQueue<Command*>& commands)
-    : exit(exit), commands(commands), key_pressed(UNMAPPED_KEY) {
+    : exit(exit), hud(hud), commands(commands) {
     _bindKeycodes();
 }
 
@@ -141,45 +176,79 @@ void EventHandler::handleEvent(const SDL_Event& e) {
 
     switch (event) {
         // Eventos de SDL que no nos interesan
-        case INVALID: {
+        case INVALID_EV: {
             break;
         }
 
         // Control
-        case EXIT: {
+        case EXIT_EV: {
             exit = true;
             break;
         }
 
         // Movimiento
-        case START_MOVING_UP: {
+        case START_MOVING_UP_EV: {
             commands.push(new StartMovingCommand(UP_DIR));
             break;
         }
 
-        case START_MOVING_DOWN: {
+        case START_MOVING_DOWN_EV: {
             commands.push(new StartMovingCommand(DOWN_DIR));
             break;
         }
 
-        case START_MOVING_LEFT: {
+        case START_MOVING_LEFT_EV: {
             commands.push(new StartMovingCommand(LEFT_DIR));
             break;
         }
 
-        case START_MOVING_RIGHT: {
+        case START_MOVING_RIGHT_EV: {
             commands.push(new StartMovingCommand(RIGHT_DIR));
             break;
         }
 
-        case STOP_MOVING: {
+        case STOP_MOVING_EV: {
             commands.push(new StopMovingCommand());
             break;
         }
 
-        // Evento desconocido
-        default: {
+        case START_INPUT_EV: {
+            hud.enableInput();
             break;
+        }
+
+        case TEXT_INPUT_EV: {
+            hud.newInputText(e.text.text);
+            break;
+        }
+
+        case DELETE_CHAR_EV: {
+            hud.removeChar();
+            break;
+        }
+
+        case STOP_INPUT_EV: {
+            std::string text = hud.popText();
+
+            //-----------------------------------------------------------------
+            // procesar el texto, por ahora:
+
+            if (text.size()) {
+                fprintf(stderr, "%s\n", text.c_str());
+            } else {
+                fprintf(stderr, "se recibio un texto vacio\n");
+            }
+
+            //-----------------------------------------------------------------
+
+            hud.disableInput();
+            break;
+        }
+
+        // No deberíamos llegar acá nunca
+        default: {
+            throw Exception(
+                "EventHandler::handleEvent: unknown event received.");
         }
     }
 }

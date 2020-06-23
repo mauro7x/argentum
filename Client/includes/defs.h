@@ -1,11 +1,11 @@
-#ifndef __SERVER_DEFS_H__
-#define __SERVER_DEFS_H__
+#ifndef __CLIENT_DEFS_H__
+#define __CLIENT_DEFS_H__
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 // Argumentos esperados en la invocación
 
-enum ExpectedArgs { NAME, PORT, EXPECTED_ARGC };
+enum ExpectedArgs { NAME, EXPECTED_ARGC };
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -18,10 +18,11 @@ enum ExpectedArgs { NAME, PORT, EXPECTED_ARGC };
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-// Configuración del servidor
+// Configuración de la vista principal
 
-#define MAX_CLIENTS_QUEUED 10
+#define FPS 60            /* frames/s */
+#define RATE (1000 / FPS) /* ms/frame */
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-#endif  // __SERVER_DEFS_H__
+#endif  // __CLIENT_DEFS_H__

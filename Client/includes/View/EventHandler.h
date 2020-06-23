@@ -12,34 +12,52 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-//#include "../../../Common/includes/Exceptions/Exception.h"
 #include "../../../Common/includes/BlockingQueue.h"
+#include "../../../Common/includes/Exceptions/Exception.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 #include "../Model/Commands/Command.h"
-#include "../Model/Commands/StartMovingCommand.h"
-#include "../Model/Commands/StopMovingCommand.h"
+#include "../Model/Commands/Commands.h"
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+#include "HUD.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 
 enum Event {
     /* Evento que no nos interesa */
-    INVALID,
+    INVALID_EV = 0,
 
     /* Movimiento */
-    START_MOVING_UP,
-    START_MOVING_DOWN,
-    START_MOVING_LEFT,
-    START_MOVING_RIGHT,
-    STOP_MOVING,
+    START_MOVING_UP_EV,
+    START_MOVING_DOWN_EV,
+    START_MOVING_LEFT_EV,
+    START_MOVING_RIGHT_EV,
+    STOP_MOVING_EV,
+
+    /* Interacción con la consola */
+    START_INPUT_EV,
+    TEXT_INPUT_EV,
+    DELETE_CHAR_EV,
+    STOP_INPUT_EV,
 
     /* Cierre del juego */
-    EXIT
+    EXIT_EV
 };
 
-enum Key { UNMAPPED_KEY, UP_KEY, DOWN_KEY, LEFT_KEY, RIGHT_KEY, ESC_KEY };
+enum Key {
+    UNMAPPED_KEY = 0,
+    UP_KEY,
+    DOWN_KEY,
+    LEFT_KEY,
+    RIGHT_KEY,
+    ENTER_KEY,
+    DELETE_KEY,
+    ESC_KEY
+};
 
 //-----------------------------------------------------------------------------
 
@@ -48,11 +66,13 @@ enum Key { UNMAPPED_KEY, UP_KEY, DOWN_KEY, LEFT_KEY, RIGHT_KEY, ESC_KEY };
 class EventHandler {
    private:
     std::atomic_bool& exit;
+    HUD& hud;
     BlockingQueue<Command*>& commands;
     std::unordered_map<SDL_Keycode, Key> keys;
 
     /* Flags internos */
-    Key key_pressed;
+    Key key_pressed = UNMAPPED_KEY;
+    bool text_input_enabled = false;
 
     /* Bindea las keycodes de entrada */
     void _bindKeycodes();
@@ -70,7 +90,8 @@ class EventHandler {
 
    public:
     /* Constructor */
-    EventHandler(std::atomic_bool& exit, BlockingQueue<Command*>& commands);
+    EventHandler(std::atomic_bool& exit, HUD& hud,
+                 BlockingQueue<Command*>& commands);
 
     /* Handlea un evento de SDL */
     void handleEvent(const SDL_Event& e);

@@ -21,6 +21,8 @@ enum ExpectedArgs { NAME, PORT, EXPECTED_ARGC };
 // Configuración del servidor
 
 #define MAX_CLIENTS_QUEUED 10
+#define FPS 30            /* frames/s */
+#define RATE (1000 / FPS) /* ms/frame */
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------

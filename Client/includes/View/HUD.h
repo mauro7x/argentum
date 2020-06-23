@@ -69,6 +69,26 @@ class HUD {
     /* Carga los archivos necesarios */
     void loadMedia();
 
+    //-------------------------------------------------------------------------
+    // Interacción con la consola
+
+    /* Habilita la consola */
+    void enableInput();
+
+    /* Escribe el texto recibido a la consola */
+    void newInputText(const char* text);
+
+    /* Borra el último caracter escrito */
+    void removeChar();
+
+    /* Retorna el texto escrito y limpia la consola */
+    std::string popText();
+
+    /* Deshabilita la consola */
+    void disableInput();
+
+    //-------------------------------------------------------------------------
+
     /* Actualiza su información */
     void update();
 

@@ -37,10 +37,10 @@ class UserInfo : public HUDComponent {
     SDL_Point lvl_pos = {0};
 
     // Fuentes a utilizar
-    TTF_Font* nickname_font;
     int nickname_fontsize = 0;
-    TTF_Font* lvl_font;
+    TTF_Font* nickname_font = NULL;
     int lvl_fontsize = 0;
+    TTF_Font* lvl_font = NULL;
 
     // Texturas a renderizar
     Texture base;

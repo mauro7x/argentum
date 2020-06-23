@@ -26,6 +26,7 @@
 #include "../../../Common/includes/paths.h"
 #include "../Model/Broadcasts/Broadcast.h"
 #include "../Model/Commands/Command.h"
+#include "../defs.h"
 #include "../paths.h"
 //-----------------------------------------------------------------------------
 
@@ -58,7 +59,6 @@ class GameView {
     Window window;
     Camera camera;
     Renderer renderer;
-    int rate = 0;
 
     // Contenedores de sprites
     UnitSpriteContainer unit_sprites;

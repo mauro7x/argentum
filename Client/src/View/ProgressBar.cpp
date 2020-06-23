@@ -48,7 +48,8 @@ void ProgressBar::loadMedia() {
     }
 
     // Cargamos la fuente
-    font = TTF_OpenFont(FONT_ANCIENTMEDIUM_FP, PROGRESS_BAR_FONT_SIZE);
+    // font = TTF_OpenFont(FONT_ANCIENTMEDIUM_FP, PROGRESS_BAR_FONT_SIZE);
+    font = TTF_OpenFont(FONT_CINZELBOLD_FP, PROGRESS_BAR_FONT_SIZE);
 
     if (!font) {
         throw Exception("ProgressBar::loadMedia: Error opening TTF_Font/s.");
