@@ -228,7 +228,7 @@ void Game::_pushFullBroadcast(InstanceId receiver, bool is_new_connection) {
             }
 
             iterator->second.creature_spawning_cooldown -=
-                it * TIME_TO_SPAWN_CREATURE;
+                it * RATE;
             while (iterator->second.creature_spawning_cooldown <= 0) {
                 _spawnNewCreature(iterator->first);
                 ++iterator->second.amount_of_creatures;
