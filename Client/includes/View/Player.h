@@ -71,6 +71,9 @@ class Player : public Unit {
 
     const std::string& getNickname() const;
 
+    const EquipmentData& getEquipment() const;
+    const InventoryData& getInventory() const;
+
     const uint32_t& getHealth() const;
     const uint32_t& getMaxHealth() const;
 

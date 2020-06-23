@@ -11,7 +11,7 @@
 #include "../../../Common/includes/types.h"
 #include "../paths.h"
 #include "Renderer.h"
-#include "Sprite.h"
+#include "Sprites.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -19,7 +19,7 @@
 class UnitSpriteContainer {
    private:
     const Renderer* g_renderer;
-    std::unordered_map<Id, Sprite> content;
+    std::unordered_map<Id, UnitSprite> content;
 
     /* Carga los sprites leyendo datos del json y la textura del dirpath */
     void _loadSpritesFromJson(const json& sprites, const std::string& dirpath);
@@ -46,8 +46,8 @@ class UnitSpriteContainer {
     void loadMedia();
 
     /* Obtiene el sprite correspondiente */
-    const Sprite& get(const Id id) const;
-    const Sprite& operator[](const Id id) const;
+    const UnitSprite& get(const Id id) const;
+    const UnitSprite& operator[](const Id id) const;
 
     //-------------------------------------------------------------------------
 

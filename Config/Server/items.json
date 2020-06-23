@@ -5,22 +5,46 @@
             "name": "Espada",
             "price": 100,
             "attack_distance": 1,
-            "min_damage": 10,
-            "max_damage": 20
+            "min_damage": 2,
+            "max_damage": 5
         },
         {
             "id": 1001,
-            "name": "Arco",
+            "name": "Hacha",
+            "price": 100,
+            "attack_distance": 1,
+            "min_damage": 4,
+            "max_damage": 5
+        },
+        {
+            "id": 1002,
+            "name": "Martillo",
+            "price": 100,
+            "attack_distance": 1,
+            "min_damage": 1,
+            "max_damage": 9
+        },
+        {
+            "id": 1003,
+            "name": "Arco simple",
             "price": 100,
             "attack_distance": 5,
-            "min_damage": 10,
-            "max_damage": 20
+            "min_damage": 1,
+            "max_damage": 4
+        },
+        {
+            "id": 1004,
+            "name": "Arco compuesto",
+            "price": 100,
+            "attack_distance": 5,
+            "min_damage": 4,
+            "max_damage": 16
         }
     ],
     "wands": [
         {
             "id": 1100,
-            "name": "Báculo nudoso",
+            "name": "Vara de fresno",
             "spell_id": 1200,
             "price": 100
         },
@@ -29,12 +53,44 @@
             "name": "Flauta élfica",
             "spell_id": 1201,
             "price": 100
+        },
+        {
+            "id": 1102,
+            "name": "Bastón nudoso",
+            "spell_id": 1202,
+            "price": 100
+        },
+        {
+            "id": 1103,
+            "name": "Báculo engarzado",
+            "spell_id": 1203,
+            "price": 100
         }
     ],
     "spells": [
         {
             "id": 1200,
-            "name": "misil",
+            "name": "Flecha Mágica",
+            "spell_type": 0,
+            "mana_usage_cost": 5,
+            "attack_distance": 5,
+            "min_damage": 2,
+            "max_damage": 4,
+            "recovery_points": 0
+        },
+        {
+            "id": 1201,
+            "name": "Curar",
+            "spell_type": 1,
+            "mana_usage_cost": 100,
+            "attack_distance": 0,
+            "min_damage": 0,
+            "max_damage": 0,
+            "recovery_points": 100
+        },
+        {
+            "id": 1202,
+            "name": "Misil",
             "spell_type": 0,
             "mana_usage_cost": 15,
             "attack_distance": 5,
@@ -43,14 +99,14 @@
             "recovery_points": 0
         },
         {
-            "id": 1201,
-            "name": "curar",
-            "spell_type": 1,
-            "mana_usage_cost": 100,
-            "attack_distance": 0,
-            "min_damage": 0,
-            "max_damage": 0,
-            "recovery_points": 100
+            "id": 1203,
+            "name": "Explosión",
+            "spell_type": 0,
+            "mana_usage_cost": 30,
+            "attack_distance": 5,
+            "min_damage": 8,
+            "max_damage": 20,
+            "recovery_points": 0
         }
     ],
     "helmets": [
@@ -58,26 +114,61 @@
             "id": 1300,
             "name": "Capucha",
             "price": 100,
-            "min_defence": 10,
-            "max_defence": 20
+            "min_defence": 1,
+            "max_defence": 4
+        },
+        {
+            "id": 1301,
+            "name": "Casco de Hierro",
+            "price": 100,
+            "min_defence": 4,
+            "max_defence": 8
+        },
+        {
+            "id": 1302,
+            "name": "Sombrero Mágico",
+            "price": 100,
+            "min_defence": 4,
+            "max_defence": 12
         }
     ],
     "armours": [
         {
             "id": 1400,
-            "name": "Armadura",
+            "name": "Armadura de cuero",
             "price": 100,
-            "min_defence": 10,
-            "max_defence": 20
+            "min_defence": 2,
+            "max_defence": 6
+        },
+        {
+            "id": 1401,
+            "name": "Armadura de placas",
+            "price": 100,
+            "min_defence": 15,
+            "max_defence": 30
+        },
+        {
+            "id": 1402,
+            "name": "Túnica azul",
+            "price": 100,
+            "min_defence": 6,
+            "max_defence": 10
         }
     ],
     "shields": [
         {
             "id": 1500,
-            "name": "Escudo",
+            "name": "Escudo de tortuga",
             "price": 100,
-            "min_defence": 10,
-            "max_defence": 20
+            "min_defence": 1,
+            "max_defence": 2
+        },
+        {
+            "id": 1501,
+            "name": "Escudo de hierro",
+            "price": 100,
+            "min_defence": 1,
+            "max_defence": 4
         }
     ],
     "potions": [

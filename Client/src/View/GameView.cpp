@@ -98,9 +98,10 @@ void GameView::_init() {
 }
 
 void GameView::_loadMedia() {
+    unit_sprites.loadMedia();
+    item_sprites.loadMedia();
     hud.loadMedia();
     map.loadMedia();
-    unit_sprites.loadMedia();
 }
 
 void GameView::_processSDLEvents() {
@@ -157,63 +158,31 @@ GameView::GameView(BlockingQueue<Command*>& commands,
       broadcasts(broadcasts),
       exit(exit),
 
-      // Variables de SDL
+      // Componentes SDL principales
       renderer(window, camera),
       rate(0),
 
-      // Unidades y contenedores de unidades
+      // Contenedores de sprites
       unit_sprites(&renderer),
+      item_sprites(&renderer),
+
+      // Unidades
       player(&renderer, &unit_sprites),
       characters(&renderer, &unit_sprites),
       creatures(&renderer, &unit_sprites),
 
       // Componentes de la vista
-      hud(&renderer, player),
+      hud(&renderer, item_sprites, player),
       map(&renderer),
 
-      // Escenario
+      // Otros
       stage(map, player, characters, creatures),
-
-      // Handler de eventos
       event_handler(exit, commands) {}
 
 void GameView::operator()() {
     // Iniciamos recursos necesarios
     _init();
     _loadMedia();
-
-    //-------------------------------------------------------------------------
-    // PROXY PARA EL MANEJO DEL PRIMER PAQUETE DEL SERVER (hardcodeado).
-    /*
-    {
-        PlayerData init_data;
-        init_data.basic_data = {1, 0, 0, 0, DOWN_ORIENTATION};
-        init_data.nickname = "Mauro";
-        init_data.head_id = 2000;
-        init_data.body_id = 2100;
-        init_data.equipment[HELMET] = 0;
-        init_data.equipment[ARMOUR] = 0;
-        init_data.equipment[SHIELD] = 0;
-        init_data.equipment[WEAPON] = 1000;
-        init_data.health = 100;
-        init_data.max_health = 100;
-        init_data.mana = 100;
-        init_data.max_mana = 100;
-        init_data.safe_gold = 1000;
-        init_data.excess_gold = 100;
-        init_data.level = 10;
-        init_data.exp = 500;
-        init_data.levelup_exp = 700;
-        init_data.inventory = {0};
-
-        player.init(init_data);
-        map.select(0);
-    }
-
-    map.select(0);
-    */
-
-    //-------------------------------------------------------------------------
 
     // Variables para controlar el frame-rate
     auto t1 = std::chrono::steady_clock::now();

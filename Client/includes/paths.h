@@ -19,7 +19,7 @@
 #define CONFIG_FILEPATH "../Config/Client/user_config.json"
 #define GUI_CONFIG_FILEPATH "../Config/Client/gui_config.json"
 #define UNIT_SPRITES_FILEPATH "../Config/Client/unit_sprites.json"
-#define INVENTORY_SPRITES_FILEPATH "../Config/Client/inventory_sprites.json"
+#define ITEM_SPRITES_FILEPATH "../Config/Client/item_sprites.json"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -40,6 +40,9 @@
 
 #define FONT_OLDLONDON_FP "../Assets/Fonts/OldLondon.ttf"
 #define FONT_AUGUSTA_FP "../Assets/Fonts/Augusta.ttf"
+#define FONT_DUNGEON_FP "../Assets/Fonts/Dungeon.ttf"
+#define FONT_GAMEOVER_FP "../Assets/Fonts/GameOver.ttf"
+#define FONT_ANCIENTMEDIUM_FP "../Assets/Fonts/AncientMedium.ttf"
 //-----------------------------------------------------------------------------
 
 #endif  // __CLIENT_PATHS_H__

@@ -35,6 +35,7 @@
 #include "Creature.h"
 #include "EventHandler.h"
 #include "HUD.h"
+#include "ItemSpriteContainer.h"
 #include "MapView.h"
 #include "Player.h"
 #include "Renderer.h"
@@ -48,31 +49,32 @@
 
 class GameView {
    private:
-    /* Comunicación entre hilos */
+    // Comunicación entre hilos
     BlockingQueue<Command*>& commands;  // es necesario tenerla aca?
     NonBlockingQueue<Broadcast*>& broadcasts;
     std::atomic_bool& exit;
 
-    /* Componentes SDL principales */
+    // Componentes SDL principales
     Window window;
     Camera camera;
     Renderer renderer;
-    int rate;
+    int rate = 0;
 
-    /* Unidades */
+    // Contenedores de sprites
     UnitSpriteContainer unit_sprites;
+    ItemSpriteContainer item_sprites;
+
+    // Unidades
     Player player;
     UnitContainer<Character, CharacterData> characters;
     UnitContainer<Creature, CreatureData> creatures;
 
-    /* Componentes de la vista */
+    // Componentes de la vista
     HUD hud;
     MapView map;
 
-    /* La escena que se renderizará en cada frame */
+    // Otros
     Stage stage;
-
-    /* Objeto activo que handlea eventos */
     EventHandler event_handler;
 
     //-------------------------------------------------------------------------

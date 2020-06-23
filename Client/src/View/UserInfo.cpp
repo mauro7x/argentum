@@ -75,16 +75,16 @@ void UserInfo::loadMedia() {
     // Cargar media
     base.loadFromFile(g_renderer, HUD_USER_INFO_BASE_FP);
 
-    // proxy nickname
+    // Nickname loading
     current_nickname = "loading";
     nickname.loadFromRenderedText(g_renderer, nickname_font,
                                   current_nickname.c_str(),
                                   SDL_Color({0xFF, 0xFF, 0xFF, 0xFF}));
     _center(nickname_pos, nickname, nickname_box);
 
-    // proxy level
+    // Level loading
     current_lvl = 0;
-    lvl.loadFromRenderedText(g_renderer, lvl_font, "loading",
+    lvl.loadFromRenderedText(g_renderer, lvl_font, std::to_string(current_lvl),
                              SDL_Color({0xFF, 0xFF, 0xFF, 0xFF}));
     _center(lvl_pos, lvl, lvl_box);
 

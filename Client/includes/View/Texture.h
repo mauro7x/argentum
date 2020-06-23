@@ -16,7 +16,7 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-enum TextType { SOLID_TEXT, BLENDED_TEXT };
+enum TextType { SOLID_TEXT, SHADED_TEXT, BLENDED_TEXT };
 //-----------------------------------------------------------------------------
 
 class Texture {
@@ -55,7 +55,8 @@ class Texture {
     /* Carga la textura desde un texto */
     void loadFromRenderedText(const Renderer* renderer, TTF_Font* font,
                               std::string text, SDL_Color color,
-                              TextType type = BLENDED_TEXT);
+                              TextType type = BLENDED_TEXT,
+                              SDL_Color shade = {0, 0, 0, 0});
 
     /* Settea la modulación de los colores */
     void setColor(Uint8 red, Uint8 green, Uint8 blue) const;
