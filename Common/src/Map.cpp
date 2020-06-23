@@ -203,15 +203,22 @@ const bool Map::moveOcuppant(const int x, const int y,
     return _moveOcuppant(from_tile, to_tile);
 }
 
-void Map::establishCharacterSpawningPosition(InstanceId id, int& x, int& y) {
+void Map::establishEntitySpawningPosition(InstanceId id, int& x, int& y,
+                                          bool is_creature) {
     bool valid_position = false;
     RandomNumberGenerator gen;
     while (!valid_position) {
         x = gen(0, this->w - 1);
         y = gen(0, this->h - 1);
 
-        if (!this->getTile(x, y).collision)
+        const Tile& tile = this->getTile(x, y);
+
+        if (!tile.collision) {
+            if (is_creature && tile.safe_zone) {
+                continue;
+            }
             valid_position = true;
+        }
     }
     Tile& tile = this->_getTile(x, y);
     tile.occupant_id = id;
