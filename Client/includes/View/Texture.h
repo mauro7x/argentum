@@ -56,7 +56,7 @@ class Texture {
     void loadFromRenderedText(const Renderer* renderer, TTF_Font* font,
                               std::string text, SDL_Color color,
                               TextType type = BLENDED_TEXT,
-                              SDL_Color shade = {0, 0, 0, 128});
+                              SDL_Color shade = {0, 0, 0, 0});
 
     /* Settea la modulación de los colores */
     void setColor(Uint8 red, Uint8 green, Uint8 blue) const;
