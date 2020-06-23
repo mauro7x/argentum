@@ -8,7 +8,6 @@ void GameView::_init() {
     json user_config = JSON::loadJsonFile(CONFIG_FILEPATH);
     json gui_config = JSON::loadJsonFile(GUI_CONFIG_FILEPATH);
     json map_config = JSON::loadJsonFile(MAPS_FILEPATH);
-    json common_config = JSON::loadJsonFile(COMMON_CONFIG_FILEPATH);
 
     /* Iniciamos el sistema de SDL */
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -72,10 +71,6 @@ void GameView::_init() {
     gui_config["window"]["w"] = (int)(original_w * scale_factor_w);
     gui_config["window"]["h"] = (int)(original_h * scale_factor_h);
 
-    /* Cargamos la velocidad de movimiento de las unidades */
-    int speed = common_config["tiles_per_sec"]["character_speed"];
-    float tile_movement_time = 1000 / speed;
-
     /* Iniciamos la ventana */
     window.init(gui_config["window"]);
 
@@ -87,10 +82,6 @@ void GameView::_init() {
 
     /* Iniciamos la HUD */
     hud.init(gui_config["hud"]);
-
-    /* Iniciamos los contenedores */
-    characters.init(tile_w, tile_h, tile_movement_time);
-    creatures.init(tile_w, tile_h, tile_movement_time);
 }
 
 void GameView::_loadMedia() {

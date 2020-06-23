@@ -3,9 +3,15 @@
 
 //-----------------------------------------------------------------------------
 #include <SDL2/SDL.h>
+//-----------------------------------------------------------------------------
 
+//-----------------------------------------------------------------------------
 #include "../../../Common/includes/Exceptions/Exception.h"
 #include "../../../Common/includes/UnitData.h"
+#include "../../../Common/includes/defs.h"
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
 #include "Renderer.h"
 #include "Sprites.h"
 #include "UnitSpriteContainer.h"
@@ -38,7 +44,6 @@ class Unit {
 
     /* Componentes para el renderizado gráfico */
     float x, y;                  /* posición en pixeles */
-    float tile_movement_time;    /* tiempo necesario para mover un tile */
     float x_vel, y_vel;          /* velocidades en cada componente*/
     Uint32 last_moved;           /* ultimo movimiento */
     int current_animation_frame; /* frame actual a renderizar */
@@ -64,7 +69,7 @@ class Unit {
 
     /* Constructor */
     Unit(Renderer* renderer, UnitSpriteContainer* sprites, const int tile_w = 0,
-         const int tile_h = 0, const int tile_movement_time = 0);
+         const int tile_h = 0);
 
     /* Deshabilitamos el constructor por copia. */
     Unit(const Unit&) = delete;

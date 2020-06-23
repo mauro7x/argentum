@@ -49,11 +49,6 @@ void Player::init(const PlayerData& init_data) {
     x = tile_w * data.x_tile;
     y = tile_h * data.y_tile;
 
-    /* Cargamos velocidad */
-    json common_config = JSON::loadJsonFile(COMMON_CONFIG_FILEPATH);
-    int speed = common_config["tiles_per_sec"]["character_speed"]; /* tiles/s */
-    tile_movement_time = 1000 / speed;                             /* ms */
-
     /* Completamos la inicialización */
     state = READY;
 }

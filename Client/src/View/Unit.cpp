@@ -9,18 +9,18 @@ void Unit::_setMovementSpeed() {
 
     /* Velocidad en X */
     if (next_x > x) {
-        x_vel = ((float)(next_x - x) / tile_movement_time);
+        x_vel = ((float)(next_x - x) / UNIT_TIME_TO_MOVE);
     } else if (next_x < x) {
-        x_vel = -((float)(x - next_x) / tile_movement_time);
+        x_vel = -((float)(x - next_x) / UNIT_TIME_TO_MOVE);
     } else {
         x_vel = 0;
     }
 
     /* Velocidad en Y */
     if (next_y > y) {
-        y_vel = ((float)(next_y - y) / tile_movement_time);
+        y_vel = ((float)(next_y - y) / UNIT_TIME_TO_MOVE);
     } else if (next_y < y) {
-        y_vel = -((float)(y - next_y) / tile_movement_time);
+        y_vel = -((float)(y - next_y) / UNIT_TIME_TO_MOVE);
     } else {
         y_vel = 0;
     }
@@ -125,7 +125,7 @@ void Unit::_render(const UnitSprite& sprite) const {
 Unit::Unit() {}
 
 Unit::Unit(Renderer* renderer, UnitSpriteContainer* sprites, const int tile_w,
-           const int tile_h, const int tile_movement_time)
+           const int tile_h)
     : g_renderer(renderer),
       g_sprites(sprites),
       tile_w(tile_w),
@@ -134,7 +134,6 @@ Unit::Unit(Renderer* renderer, UnitSpriteContainer* sprites, const int tile_w,
       state(NOT_INIT),
       x(0),
       y(0),
-      tile_movement_time(tile_movement_time),
       x_vel(0),
       y_vel(0),
       last_moved(0),
@@ -151,7 +150,6 @@ Unit::Unit(Unit&& other) {
     state = other.state;
     x = other.x;
     y = other.y;
-    tile_movement_time = other.tile_movement_time;
     x_vel = other.x_vel;
     y_vel = other.y_vel;
     last_moved = other.last_moved;
@@ -169,7 +167,6 @@ Unit& Unit::operator=(Unit&& other) {
     state = other.state;
     x = other.x;
     y = other.y;
-    tile_movement_time = other.tile_movement_time;
     x_vel = other.x_vel;
     y_vel = other.y_vel;
     last_moved = other.last_moved;

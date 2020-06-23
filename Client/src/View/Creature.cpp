@@ -20,10 +20,8 @@ void Creature::_copyData(const CreatureData& init_data) {
 // API Pública
 
 Creature::Creature(Renderer* renderer, UnitSpriteContainer* sprites,
-                   const int tile_w, const int tile_h,
-                   const float tile_movement_time)
-    : Unit(renderer, sprites, tile_w, tile_h, tile_movement_time),
-      creature_id(0) {}
+                   const int tile_w, const int tile_h)
+    : Unit(renderer, sprites, tile_w, tile_h), creature_id(0) {}
 
 Creature::Creature(Creature&& other) : Unit(std::move(other)) {
     creature_id = other.creature_id;

@@ -24,9 +24,8 @@ void Character::_copyData(const CharacterData& init_data) {
 // API Pública
 
 Character::Character(Renderer* renderer, UnitSpriteContainer* sprites,
-                     const int tile_w, const int tile_h,
-                     const float tile_movement_time)
-    : Unit(renderer, sprites, tile_w, tile_h, tile_movement_time),
+                     const int tile_w, const int tile_h)
+    : Unit(renderer, sprites, tile_w, tile_h),
       head_id(0),
       body_id(0),
       equipment({0}) {}
