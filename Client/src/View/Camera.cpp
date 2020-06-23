@@ -10,7 +10,7 @@
 
 Camera::Camera() : initialized(false), x(0), y(0) {}
 
-void Camera::init(const json& config, const int tile_w, const int tile_h) {
+void Camera::init(const json& config) {
     if (initialized) {
         throw Exception("Camera already initialized.");
     }
@@ -19,8 +19,6 @@ void Camera::init(const json& config, const int tile_w, const int tile_h) {
     h = config["h"];
     offset_x = config["offset"]["x"];
     offset_y = config["offset"]["y"];
-    this->tile_w = tile_w;
-    this->tile_h = tile_h;
 
     initialized = true;
 }
@@ -91,8 +89,8 @@ void Camera::center(const SDL_Rect object, const int map_width,
         throw Exception("Camera not initialized.");
     }
 
-    x = (object.x + tile_w / 2) - (w / 2);
-    y = (object.y + tile_h / 2) - (h / 2);
+    x = (object.x + TILE_WIDTH / 2) - (w / 2);
+    y = (object.y + TILE_HEIGHT / 2) - (h / 2);
 
     if (x < 0) {
         x = 0;

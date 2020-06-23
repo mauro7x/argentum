@@ -3,9 +3,15 @@
 
 //-----------------------------------------------------------------------------
 #include <SDL2/SDL.h>
+//-----------------------------------------------------------------------------
 
+//-----------------------------------------------------------------------------
 #include "../../../Common/includes/Exceptions/Exception.h"
 #include "../../../Common/includes/UnitData.h"
+#include "../../../Common/includes/defs.h"
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
 #include "Renderer.h"
 #include "Sprites.h"
 #include "UnitSpriteContainer.h"
@@ -30,18 +36,16 @@ class Unit {
     /* Componentes para renderizar */
     Renderer* g_renderer;
     UnitSpriteContainer* g_sprites;
-    int tile_w, tile_h;
 
     /* Data del personaje */
-    UnitData data;
-    UnitState state;
+    UnitData data = {0};
+    UnitState state = NOT_INIT;
 
     /* Componentes para el renderizado gráfico */
-    float x, y;                  /* posición en pixeles */
-    float tile_movement_time;    /* tiempo necesario para mover un tile */
-    float x_vel, y_vel;          /* velocidades en cada componente*/
-    Uint32 last_moved;           /* ultimo movimiento */
-    int current_animation_frame; /* frame actual a renderizar */
+    float x = 0, y = 0;              /* posición en pixeles */
+    float x_vel = 0, y_vel = 0;      /* velocidades en cada componente*/
+    Uint32 last_moved = 0;           /* ultimo movimiento */
+    int current_animation_frame = 0; /* frame actual a renderizar */
 
     /* Settea la velocidad de movimiento en caso de ser necesario */
     void _setMovementSpeed();
@@ -63,8 +67,7 @@ class Unit {
     Unit();
 
     /* Constructor */
-    Unit(Renderer* renderer, UnitSpriteContainer* sprites, const int tile_w = 0,
-         const int tile_h = 0, const int tile_movement_time = 0);
+    Unit(Renderer* renderer, UnitSpriteContainer* sprites);
 
     /* Deshabilitamos el constructor por copia. */
     Unit(const Unit&) = delete;

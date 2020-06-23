@@ -19,11 +19,8 @@ void Creature::_copyData(const CreatureData& init_data) {
 //-----------------------------------------------------------------------------
 // API Pública
 
-Creature::Creature(Renderer* renderer, UnitSpriteContainer* sprites,
-                   const int tile_w, const int tile_h,
-                   const float tile_movement_time)
-    : Unit(renderer, sprites, tile_w, tile_h, tile_movement_time),
-      creature_id(0) {}
+Creature::Creature(Renderer* renderer, UnitSpriteContainer* sprites)
+    : Unit(renderer, sprites) {}
 
 Creature::Creature(Creature&& other) : Unit(std::move(other)) {
     creature_id = other.creature_id;
@@ -47,8 +44,8 @@ void Creature::init(const CreatureData& init_data) {
     _copyData(init_data);
 
     /* Seteamos nuestra posición en pixeles para el renderizado */
-    x = tile_w * data.x_tile;
-    y = tile_h * data.y_tile;
+    x = TILE_WIDTH * data.x_tile;
+    y = TILE_HEIGHT * data.y_tile;
 
     /* Completamos la inicialización */
     state = READY;

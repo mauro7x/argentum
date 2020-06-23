@@ -16,7 +16,7 @@ void NewPlayerBroadcast::exec(
     UnitContainer<Character, CharacterData>& characters,
     UnitContainer<Creature, CreatureData>& creatures) {
 
-    map.select(data.basic_data.map);
+    map.changeMap(data.basic_data.map);
     player.init(data);
     map.occupyTile(data.basic_data.gid, data.basic_data.x_tile,
                    data.basic_data.y_tile);

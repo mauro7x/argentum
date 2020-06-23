@@ -3,14 +3,21 @@
 
 //-----------------------------------------------------------------------------
 #include <SDL2/SDL.h>
+//-----------------------------------------------------------------------------
 
+//-----------------------------------------------------------------------------
 #include <fstream>
 #include <unordered_map>
+//-----------------------------------------------------------------------------
 
+//-----------------------------------------------------------------------------
 #include "../../../Common/includes/Exceptions/Exception.h"
 #include "../../../Common/includes/JSON.h"
 #include "../../../Common/includes/UnitData.h"
 #include "../../../Common/includes/types.h"
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
 #include "Renderer.h"
 #include "Unit.h"
 #include "UnitSpriteContainer.h"
@@ -21,22 +28,14 @@
 template <class ConcreteUnit, class Data>
 class UnitContainer {
    private:
-    bool initialized;
     Renderer* g_renderer;
     UnitSpriteContainer* g_sprites;
     std::unordered_map<InstanceId, ConcreteUnit> content;
-    int tile_w, tile_h;
-    float tile_movement_time;
 
    public:
     /* Constructor */
     UnitContainer(Renderer* renderer, UnitSpriteContainer* sprites)
-        : initialized(false),
-          g_renderer(renderer),
-          g_sprites(sprites),
-          tile_w(0),
-          tile_h(0),
-          tile_movement_time(0) {}
+        : g_renderer(renderer), g_sprites(sprites) {}
 
     /* Deshabilitamos el constructor por copia. */
     UnitContainer(const UnitContainer&) = delete;
@@ -52,32 +51,13 @@ class UnitContainer {
 
     //-------------------------------------------------------------------------
 
-    /* Inicializa recursos */
-    void init(const int tile_w, const int tile_h,
-              const float tile_movement_time) {
-        if (initialized) {
-            throw Exception("Container already initialized.");
-        }
-
-        this->tile_w = tile_w;
-        this->tile_h = tile_h;
-        this->tile_movement_time = tile_movement_time;
-
-        initialized = true;
-    }
-
     /* Agrega una nueva unidad con el id y la data recibida. */
     void add(const InstanceId id, const Data& init_data) {
-        if (!initialized) {
-            throw Exception("Container not initialized.");
-        }
-
         if (content.count(id) > 0) {
             throw Exception("ID already taken by another unit (id repeated).");
         }
 
-        ConcreteUnit new_unit(g_renderer, g_sprites, tile_w, tile_h,
-                              tile_movement_time);
+        ConcreteUnit new_unit(g_renderer, g_sprites);
         new_unit.init(init_data);
         content.emplace(id, std::move(new_unit));
     }
@@ -85,10 +65,6 @@ class UnitContainer {
     /* Actualiza la unidad con la data recibida. */
     /* Si el id es inválido lanza una excepción informándolo. */
     void update(const InstanceId id, const Data& updated_data) {
-        if (!initialized) {
-            throw Exception("Container not initialized.");
-        }
-
         if (content.count(id) == 0) {
             throw Exception("Attempt to update unknown unit (id is invalid).");
         }
@@ -98,10 +74,6 @@ class UnitContainer {
 
     /* Obtiene la posición de una unidad en tiles */
     SDL_Point getPos(const InstanceId id) const {
-        if (!initialized) {
-            throw Exception("Container not initialized.");
-        }
-
         if (content.count(id) == 0) {
             throw Exception("Attempt to update unknown unit (id is invalid).");
         }
@@ -111,10 +83,6 @@ class UnitContainer {
 
     /* Les da un turno de acción a las unidades */
     void act(const int it) {
-        if (!initialized) {
-            throw Exception("Container not initialized.");
-        }
-
         for (auto i = content.begin(); i != content.end(); i++) {
             i->second.act(it);
         }
@@ -122,10 +90,6 @@ class UnitContainer {
 
     /* Renderiza la unidad si el id es válido */
     void render(const InstanceId id) const {
-        if (!initialized) {
-            throw Exception("Container not initialized.");
-        }
-
         if (content.count(id) > 0) {
             content.at(id).render();
         }
@@ -134,10 +98,6 @@ class UnitContainer {
     /* Elimina la unidad. */
     /* Si el id es inválido lanza una excepción informándolo. */
     void remove(const InstanceId id) {
-        if (!initialized) {
-            throw Exception("Container not initialized.");
-        }
-
         if (content.count(id) == 0) {
             throw Exception("Attempt to remove unknown unit (id is invalid).");
         }
@@ -147,10 +107,6 @@ class UnitContainer {
 
     /* Elimina todas las unidades. */
     void clear() {
-        if (!initialized) {
-            throw Exception("Container not initialized.");
-        }
-
         content.clear();
     }
 

@@ -3,11 +3,14 @@
 
 //-----------------------------------------------------------------------------
 #include <vector>
+//-----------------------------------------------------------------------------
 
+//-----------------------------------------------------------------------------
 #include "Exceptions/Exception.h"
 #include "JSON.h"
 #include "Orientation.h"
 #include "Tile.h"
+#include "defs.h"
 #include "types.h"
 //-----------------------------------------------------------------------------
 
@@ -30,8 +33,7 @@ enum MapLayer {
 
 class Map {
    private:
-    int w, h;
-    int tile_w, tile_h;
+    int w = 0, h = 0;
     std::vector<Tile> tiles;
 
     /* Chequea si el mapa es válido. Lanza exepción si no. */
@@ -68,8 +70,7 @@ class Map {
 
     /* Inicializa sus datos leyendo el json de la dirección recibida, recibiendo
      * las medidas que se esperan de cada tile */
-    void init(const json& map, const json& tilesets, const int tile_w,
-              const int tile_h);
+    void init(const json& map, const json& tilesets);
 
     /* Devuelve la anchura en tiles */
     int getWidthTiles() const;
