@@ -131,8 +131,9 @@ void Game::_pushFullBroadcast(InstanceId receiver, bool is_new_connection) {
 
     while (it_creatures != this->creatures.end()) {
         broadcast = _buildCreatureBroadcast(it_creatures->first, NEW_BROADCAST);
-        this->active_clients.sendDifferentialBroadcastToAll(
-            broadcast, it_creatures->first, false);
+
+        this->active_clients.notify(receiver, broadcast);
+        
         ++it_creatures;
     }
 }
