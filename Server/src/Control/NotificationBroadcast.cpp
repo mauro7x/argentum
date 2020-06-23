@@ -6,12 +6,20 @@
 typedef std::vector<uint8_t> Serialized;
 
 NotificationBroadcast::NotificationBroadcast(InstanceId id, PlayerData& data,
-                                             BroadcastType broadcast_type,
-                                             EntityType entity_type)
+                                             BroadcastType broadcast_type)
     : id(id),
       map(data.basic_data.map),
       broadcast_type(broadcast_type),
-      entity_type(entity_type) {
+      entity_type(CHARACTER_TYPE) {
+    j = data;
+}
+
+NotificationBroadcast::NotificationBroadcast(InstanceId id, CreatureData& data,
+                                             BroadcastType broadcast_type)
+    : id(id),
+      map(data.basic_data.map),
+      broadcast_type(broadcast_type),
+      entity_type(CREATURE_TYPE) {
     j = data;
 }
 
@@ -37,10 +45,10 @@ NotificationBroadcast& NotificationBroadcast::operator=(
 bool NotificationBroadcast::send(const InstanceId sender,
                                  const SocketWrapper& peer) {
     Serialized serialized = json::to_msgpack(j);
-    
+
     fprintf(stderr, "Envio broadcast tipo %i, entity %i\n",
             this->broadcast_type, this->entity_type);
-  
+
     if (sender == this->id) {
         this->entity_type = PLAYER_TYPE;
     }
@@ -66,7 +74,6 @@ bool NotificationBroadcast::send(const InstanceId sender,
         send = peer << serialized;
         if (!send) {
             return false;
-
         }
     }
     return true;
