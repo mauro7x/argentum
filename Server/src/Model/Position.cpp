@@ -60,11 +60,11 @@ void Position::changeOrientation(Orientation orientation) {
     this->orientation = orientation;
 }
 
-void Position::fillBroadcastData(PlayerData& data) const {
-    data.basic_data.map = this->map;
-    data.basic_data.x_tile = this->x;
-    data.basic_data.y_tile = this->y;
-    data.basic_data.orientation = this->orientation;
+void Position::fillBroadcastData(UnitData& data) const {
+    data.map = this->map;
+    data.x_tile = this->x;
+    data.y_tile = this->y;
+    data.orientation = this->orientation;
 }
 
 const char* CollisionWhileMovingException::what() const noexcept {
