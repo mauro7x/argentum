@@ -104,8 +104,7 @@ SDL_Texture* Renderer::createTextureFromSurface(SDL_Surface* surface) const {
 }
 
 void Renderer::render(SDL_Texture* texture, SDL_Rect* render_quad,
-                      const SDL_Rect* clip, double angle, SDL_Point* center,
-                      SDL_RendererFlip flip) const {
+                      const SDL_Rect* clip) const {
     if (!initialized) {
         throw Exception("Renderer not initialized.");
     }
@@ -113,8 +112,7 @@ void Renderer::render(SDL_Texture* texture, SDL_Rect* render_quad,
     /* Escalamos a las dimensiones en las que estamos renderizando */
     _resize(render_quad);
 
-    if (SDL_RenderCopyEx(renderer, texture, clip, render_quad, angle, center,
-                         flip)) {
+    if (SDL_RenderCopy(renderer, texture, clip, render_quad)) {
         throw SDLException(
             "Error in function SDL_RenderCopyEx()\nSDL_Error: %s",
             SDL_GetError());
@@ -122,8 +120,7 @@ void Renderer::render(SDL_Texture* texture, SDL_Rect* render_quad,
 }
 
 void Renderer::renderIfVisible(SDL_Texture* texture, SDL_Rect* render_quad,
-                               const SDL_Rect* clip, double angle,
-                               SDL_Point* center, SDL_RendererFlip flip) const {
+                               const SDL_Rect* clip) const {
     if (!initialized) {
         throw Exception("Renderer not initialized.");
     }
@@ -131,7 +128,7 @@ void Renderer::renderIfVisible(SDL_Texture* texture, SDL_Rect* render_quad,
     if (camera.isVisible(render_quad)) {
         render_quad->x += camera.xOffset();
         render_quad->y += camera.yOffset();
-        render(texture, render_quad, clip, angle, center, flip);
+        render(texture, render_quad, clip);
     }
 }
 
