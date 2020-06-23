@@ -20,7 +20,7 @@ Creature::Creature(const CreatureCfg& data, MapContainer& map_container,
       moving(false),
       moving_time_elapsed(0),
       attribute_update_time_elapsed(0),
-      broadcast(true) {}
+      broadcast(false) {}
 
 Creature::~Creature() {}
 
