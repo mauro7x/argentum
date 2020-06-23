@@ -87,7 +87,7 @@ void UserInfo::loadMedia() {
     xp.loadMedia();
 }
 
-void UserInfo::update() {
+void UserInfo::update(const int it) {
     // Sólo nos interesa actualizar el username una vez
     if (!nickname_loaded) {
         current_nickname = player.getNickname();

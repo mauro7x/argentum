@@ -96,7 +96,7 @@ class HUD {
     //-------------------------------------------------------------------------
 
     /* Actualiza su información */
-    void update();
+    void update(const int it);
 
     /* Renderiza la interfaz entera */
     void render() const;

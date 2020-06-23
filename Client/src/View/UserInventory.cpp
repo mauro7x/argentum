@@ -211,7 +211,7 @@ void UserInventory::loadMedia() {
     _center(excess_gold_pos, excess_gold, excess_gold_box);
 }
 
-void UserInventory::update() {
+void UserInventory::update(const int it) {
     // Actualizamos el equipamiento
     equipment = g_player.getEquipment();
 

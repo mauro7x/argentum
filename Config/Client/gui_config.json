@@ -39,7 +39,7 @@
             "components": {
                 "input_box": {
                     "fontsize": 16,
-                    "w": 662,
+                    "w": 657,
                     "h": 20,
                     "offset": {
                         "x": 5,
