@@ -7,17 +7,17 @@
 
 //-----------------------------------------------------------------------------
 #include "../../../Common/includes/JSON.h"
+#include "../../../Common/includes/defs.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 
 class Camera {
    private:
-    bool initialized;
-    int x, y;
-    int w, h;
-    int offset_x, offset_y;
-    int tile_w, tile_h;
+    bool initialized = false;
+    int x = 0, y = 0;
+    int w = 0, h = 0;
+    int offset_x = 0, offset_y = 0;
 
    public:
     /* Constructor */
@@ -38,7 +38,7 @@ class Camera {
     //-------------------------------------------------------------------------
 
     /* Inicializa recursos */
-    void init(const json& config, const int tile_w, const int tile_h);
+    void init(const json& config);
 
     /* Devuelve si el objeto es visible por la camara o no */
     bool isVisible(const SDL_Rect* object) const;

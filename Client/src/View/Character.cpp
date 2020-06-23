@@ -23,12 +23,8 @@ void Character::_copyData(const CharacterData& init_data) {
 //-----------------------------------------------------------------------------
 // API Pública
 
-Character::Character(Renderer* renderer, UnitSpriteContainer* sprites,
-                     const int tile_w, const int tile_h)
-    : Unit(renderer, sprites, tile_w, tile_h),
-      head_id(0),
-      body_id(0),
-      equipment({0}) {}
+Character::Character(Renderer* renderer, UnitSpriteContainer* sprites)
+    : Unit(renderer, sprites) {}
 
 Character::Character(Character&& other) : Unit(std::move(other)) {
     nickname = other.nickname;
@@ -56,8 +52,8 @@ void Character::init(const CharacterData& init_data) {
     _copyData(init_data);
 
     /* Seteamos nuestra posición en pixeles para el renderizado */
-    x = tile_w * data.x_tile;
-    y = tile_h * data.y_tile;
+    x = TILE_WIDTH * data.x_tile;
+    y = TILE_HEIGHT * data.y_tile;
 
     /* Completamos la inicialización */
     state = READY;

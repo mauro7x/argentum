@@ -14,7 +14,6 @@
 #include "../../../Common/includes/Exceptions/Exception.h"
 #include "../../../Common/includes/JSON.h"
 #include "../../../Common/includes/UnitData.h"
-#include "../../../Common/includes/defs.h"
 #include "../../../Common/includes/types.h"
 //-----------------------------------------------------------------------------
 
@@ -58,7 +57,7 @@ class UnitContainer {
             throw Exception("ID already taken by another unit (id repeated).");
         }
 
-        ConcreteUnit new_unit(g_renderer, g_sprites, TILE_WIDTH, TILE_HEIGHT);
+        ConcreteUnit new_unit(g_renderer, g_sprites);
         new_unit.init(init_data);
         content.emplace(id, std::move(new_unit));
     }

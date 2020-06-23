@@ -3,6 +3,7 @@
 
 //-----------------------------------------------------------------------------
 #include "../../../Common/includes/Exceptions/Exception.h"
+#include "../../../Common/includes/defs.h"
 #include "../../../Common/includes/types.h"
 //-----------------------------------------------------------------------------
 
@@ -15,16 +16,15 @@
 class Character : public Unit {
    private:
     std::string nickname;
-    Id head_id, body_id;
-    EquipmentData equipment;
+    Id head_id = 0, body_id = 0;
+    EquipmentData equipment = {0};
 
     /* Copia la data desde el paquete recibido */
     void _copyData(const CharacterData& init_data);
 
    public:
     /* Constructor */
-    Character(Renderer* renderer, UnitSpriteContainer* sprites,
-              const int tile_w, const int tile_h);
+    Character(Renderer* renderer, UnitSpriteContainer* sprites);
 
     /* Deshabilitamos el constructor por copia. */
     Character(const Character&) = delete;

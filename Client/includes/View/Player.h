@@ -8,7 +8,7 @@
 
 //-----------------------------------------------------------------------------
 #include "../../../Common/includes/Exceptions/Exception.h"
-#include "../../../Common/includes/JSON.h"
+#include "../../../Common/includes/defs.h"
 #include "../../../Common/includes/paths.h"
 #include "../../../Common/includes/types.h"
 //-----------------------------------------------------------------------------

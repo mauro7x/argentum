@@ -4,8 +4,8 @@
 // Métodos privados
 
 void Unit::_setMovementSpeed() {
-    int next_x = data.x_tile * tile_w;
-    int next_y = data.y_tile * tile_h;
+    int next_x = data.x_tile * TILE_WIDTH;
+    int next_y = data.y_tile * TILE_HEIGHT;
 
     /* Velocidad en X */
     if (next_x > x) {
@@ -34,8 +34,8 @@ void Unit::_setMovementSpeed() {
 }
 
 void Unit::_movementFinished() {
-    int next_x = data.x_tile * tile_w;
-    int next_y = data.y_tile * tile_h;
+    int next_x = data.x_tile * TILE_WIDTH;
+    int next_y = data.y_tile * TILE_HEIGHT;
 
     if (((x_vel > 0) && (x > next_x)) || ((x_vel < 0) && (x < next_x))) {
         x = next_x;
@@ -99,8 +99,8 @@ int Unit::_calculateSpriteY(const UnitSprite& sprite) const {
 
 void Unit::_render(const UnitSprite& sprite) const {
     // Paso 1: centramos el sprite en el tile
-    int x = (tile_w - (sprite.clip_w)) / 2;
-    int y = (tile_h * (0.8)) - (sprite.clip_h);
+    int x = (TILE_WIDTH - (sprite.clip_w)) / 2;
+    int y = (TILE_HEIGHT * (0.8)) - (sprite.clip_h);
 
     // Paso 2: agregamos el offset de la unidad en el mapa
     x += (int)this->x;
@@ -124,28 +124,14 @@ void Unit::_render(const UnitSprite& sprite) const {
 
 Unit::Unit() {}
 
-Unit::Unit(Renderer* renderer, UnitSpriteContainer* sprites, const int tile_w,
-           const int tile_h)
-    : g_renderer(renderer),
-      g_sprites(sprites),
-      tile_w(tile_w),
-      tile_h(tile_h),
-      data({0}),
-      state(NOT_INIT),
-      x(0),
-      y(0),
-      x_vel(0),
-      y_vel(0),
-      last_moved(0),
-      current_animation_frame(0) {}
+Unit::Unit(Renderer* renderer, UnitSpriteContainer* sprites)
+    : g_renderer(renderer), g_sprites(sprites) {}
 
 Unit::Unit(Unit&& other) {
     g_renderer = other.g_renderer;
     other.g_renderer = NULL;
     g_sprites = other.g_sprites;
     other.g_sprites = NULL;
-    tile_w = other.tile_w;
-    tile_h = other.tile_h;
     data = other.data;
     state = other.state;
     x = other.x;
@@ -161,8 +147,6 @@ Unit& Unit::operator=(Unit&& other) {
     other.g_renderer = NULL;
     g_sprites = other.g_sprites;
     g_sprites = NULL;
-    tile_w = other.tile_w;
-    tile_h = other.tile_h;
     data = other.data;
     state = other.state;
     x = other.x;

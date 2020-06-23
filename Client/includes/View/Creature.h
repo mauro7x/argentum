@@ -3,6 +3,7 @@
 
 //-----------------------------------------------------------------------------
 #include "../../../Common/includes/Exceptions/Exception.h"
+#include "../../../Common/includes/defs.h"
 #include "../../../Common/includes/types.h"
 //-----------------------------------------------------------------------------
 
@@ -15,18 +16,17 @@
 class Creature : public Unit {
    private:
     // Cuerpo
-    Id creature_id;
+    Id creature_id = 0;
 
     // Vida
-    uint32_t health;
+    uint32_t health = 0;
 
     /* Copia la data desde el paquete recibido */
     void _copyData(const CreatureData& init_data);
 
    public:
     /* Constructor */
-    Creature(Renderer* renderer, UnitSpriteContainer* sprites, const int tile_w,
-             const int tile_h);
+    Creature(Renderer* renderer, UnitSpriteContainer* sprites);
 
     /* Deshabilitamos el constructor por copia. */
     Creature(const Creature&) = delete;

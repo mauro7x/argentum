@@ -40,14 +40,9 @@ void Player::init(const PlayerData& init_data) {
     /* Copiamos la data inicial */
     _copyData(init_data);
 
-    /* Cargamos dimensiones del tile */
-    json map_data = JSON::loadJsonFile(MAPS_FILEPATH);
-    tile_w = map_data["tilewidth"];
-    tile_h = map_data["tileheight"];
-
     /* Con ellas, seteamos nuestra posición en pixeles para el renderizado */
-    x = tile_w * data.x_tile;
-    y = tile_h * data.y_tile;
+    x = TILE_WIDTH * data.x_tile;
+    y = TILE_HEIGHT * data.y_tile;
 
     /* Completamos la inicialización */
     state = READY;
