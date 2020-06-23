@@ -56,7 +56,30 @@ void HUD::loadMedia() {
     upper_layer.loadFromFile(g_renderer, HUD_UPPER_LAYER_FP);
 }
 
+void HUD::enableInput() {
+    console.enableInput();
+}
+
+void HUD::newInputText(const char* text) {
+    console.append(text);
+}
+
+void HUD::removeChar() {
+    console.removeChar();
+}
+
+std::string HUD::popText() {
+    std::string input_text = console.getInputText();
+    console.clearInput();
+    return input_text;
+}
+
+void HUD::disableInput() {
+    console.disableInput();
+}
+
 void HUD::update() {
+    console.update();
     user_info.update();
     user_inventory.update();
     user_stats.update();

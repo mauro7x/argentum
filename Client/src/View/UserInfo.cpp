@@ -9,11 +9,7 @@
 // API Pública
 
 UserInfo::UserInfo(const Renderer* renderer, const Player& player)
-    : HUDComponent(renderer),
-      player(player),
-      nickname_font(NULL),
-      lvl_font(NULL),
-      xp(renderer) {}
+    : HUDComponent(renderer), player(player), xp(renderer) {}
 
 void UserInfo::init(const json& config) {
     if (initialized) {

@@ -35,6 +35,17 @@
             "offset": {
                 "x": 7,
                 "y": 7
+            },
+            "components": {
+                "input_box": {
+                    "fontsize": 16,
+                    "w": 672,
+                    "h": 20,
+                    "offset": {
+                        "x": 5,
+                        "y": 115
+                    }
+                }
             }
         },
         "user_info": {
@@ -106,7 +117,7 @@
                     }
                 },
                 "inventory": {
-                    "quantities_fontsize": 14,
+                    "quantities_fontsize": 12,
                     "first_slot_offset": {
                         "x": 20,
                         "y": 122

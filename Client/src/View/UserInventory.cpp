@@ -185,7 +185,7 @@ void UserInventory::loadMedia() {
     base.loadFromFile(g_renderer, HUD_USER_INVENTORY_BASE_FP);
 
     // Fuentes a utilizar
-    quantities_font = TTF_OpenFont(FONT_ANCIENTMEDIUM_FP, quantities_fontsize);
+    quantities_font = TTF_OpenFont(FONT_CINZELBOLD_FP, quantities_fontsize);
     gold_font = TTF_OpenFont(FONT_AUGUSTA_FP, gold_fontsize);
 
     if (!quantities_font || !gold_font) {
