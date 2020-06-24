@@ -10,15 +10,20 @@
 //-----------------------------------------------------------------------------
 #include "../../../Common/includes/Exceptions/Exception.h"
 #include "../../../Common/includes/Exceptions/LoginException.h"
+#include "../Model/config_structs.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+struct Userinfo {
+    std::string password;
+    CharacterCfg character_data;
+};
 
 class Database {
    private:
     bool initialized;
     std::mutex m;
-    std::unordered_map<std::string, std::string> clients; /* user: pass */
+    std::unordered_map<std::string, Userinfo> clients; /* user: pass */
 
     //-------------------------------------------------------------------------
     // Métodos privados
@@ -48,11 +53,13 @@ class Database {
 
     /* Intento de un cliente para loggearse (PROXY) */
     // El retorno va a tener que ser PlayerData en un futuro, por ahora proxy.
-    void signIn(const std::string& username, const std::string& password);
+    void signIn(const std::string& username, const std::string& password,
+                CharacterCfg& character_data);
 
     /* Un cliente crea un usuario nuevo (PROXY) */
     // El retorno va a tener que ser PlayerData en un futuro, por ahora proxy.
-    void signUp(const std::string& username, const std::string& password);
+    void signUp(const std::string& username, const std::string& password,
+                Id race, Id kind, CharacterCfg& character_data);
 
     //-------------------------------------------------------------------------
 
