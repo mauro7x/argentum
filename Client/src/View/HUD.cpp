@@ -57,32 +57,60 @@ void HUD::loadMedia() {
 }
 
 void HUD::enableInput() {
+    if (!initialized) {
+        throw Exception("HUD not initialized.");
+    }
+
     console.enableInput();
 }
 
-void HUD::addMessage(const std::string& message) {
-    console.add(message);
+void HUD::addMessage(const std::string& message, MessageType type) {
+    if (!initialized) {
+        throw Exception("HUD not initialized.");
+    }
+
+    console.add(message, type);
 }
 
 void HUD::newInputText(const char* text) {
+    if (!initialized) {
+        throw Exception("HUD not initialized.");
+    }
+
     console.append(text);
 }
 
 void HUD::removeChar() {
+    if (!initialized) {
+        throw Exception("HUD not initialized.");
+    }
+
     console.removeChar();
 }
 
 std::string HUD::popText() {
+    if (!initialized) {
+        throw Exception("HUD not initialized.");
+    }
+
     std::string input_text = console.getInputText();
     console.clearInput();
     return input_text;
 }
 
 void HUD::disableInput() {
+    if (!initialized) {
+        throw Exception("HUD not initialized.");
+    }
+
     console.disableInput();
 }
 
 void HUD::update(const int it) {
+    if (!initialized) {
+        throw Exception("HUD not initialized.");
+    }
+
     console.update(it);
     user_info.update(it);
     user_inventory.update(it);

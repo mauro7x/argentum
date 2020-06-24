@@ -232,14 +232,12 @@ void EventHandler::handleEvent(const SDL_Event& e) {
 
             Command* cmd = input_parser.parse(input);
             if (cmd) {
-                fprintf(stderr, "Enviando comando al servidor.\n");
+                hud.addMessage(">> " + input, USER_CMD_MSG_TYPE);
                 commands.push(cmd);
             } else if (!input.empty()) {
-                fprintf(stderr, "No se reconoció el comando: %s\n",
-                        input.c_str());
+                hud.addMessage("Comando inexistente.", ERROR_MSG_TYPE);
             }
 
-            hud.addMessage(input);
             hud.disableInput();
             break;
         }

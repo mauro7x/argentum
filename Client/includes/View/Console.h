@@ -10,6 +10,7 @@
 #include <cstdint>
 #include <list>
 #include <string>
+#include <unordered_map>
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -35,6 +36,33 @@
 #define INPUT_MAX_SIZE 256
 #define CURSOR_TIME_ANIMATION 500
 #define ITERATIONS_TO_SWITCH_CURSOR (CURSOR_TIME_ANIMATION / RATE)
+
+#define ERROR_MSG_COLOR \
+    { 199, 12, 12, 255 }
+#define INFO_MSG_COLOR \
+    { 255, 255, 255, 255 }
+#define SUCCESS_MSG_COLOR \
+    { 120, 235, 91, 255 }
+#define LIST_MSG_COLOR \
+    { 247, 223, 134, 255 }
+#define PRIVATE_MSG_COLOR \
+    { 250, 122, 199, 255 }
+#define USER_CMD_MSG_COLOR \
+    { 110, 110, 110, 255 }
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+
+enum MessageType {
+    ERROR_MSG_TYPE,
+    INFO_MSG_TYPE,
+    SUCCESS_MSG_TYPE,
+    LIST_MSG_TYPE,
+    PRIVATE_MSG_TYPE,
+    USER_CMD_MSG_TYPE,
+    N_MSG_TYPES
+};
+
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -62,6 +90,9 @@ class Console : public HUDComponent {
     TTF_Font* input_font = NULL;
     TTF_Font* output_font = NULL;
     TTF_Font* cursor_font = NULL;
+
+    // Colores de renderizado
+    std::unordered_map<int, SDL_Color> colors;
 
     // Texturas a renderizar
     Texture base;
@@ -106,7 +137,7 @@ class Console : public HUDComponent {
     void append(const char* text);
 
     /* Agrega el mensaje recibido a la consola */
-    void add(const std::string& message);
+    void add(const std::string& message, MessageType type);
 
     /* Elimina el último caracter ingresado */
     void removeChar();

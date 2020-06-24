@@ -92,6 +92,14 @@ void Console::init(const json& config) {
     render_rect.w = config["w"];
     render_rect.h = config["h"];
 
+    // Colores de renderizado
+    colors.emplace(ERROR_MSG_TYPE, SDL_Color(ERROR_MSG_COLOR));
+    colors.emplace(INFO_MSG_TYPE, SDL_Color(INFO_MSG_COLOR));
+    colors.emplace(SUCCESS_MSG_TYPE, SDL_Color(SUCCESS_MSG_COLOR));
+    colors.emplace(LIST_MSG_TYPE, SDL_Color(LIST_MSG_COLOR));
+    colors.emplace(PRIVATE_MSG_TYPE, SDL_Color(PRIVATE_MSG_COLOR));
+    colors.emplace(USER_CMD_MSG_TYPE, SDL_Color(USER_CMD_MSG_COLOR));
+
     // Input
     input_fontsize = config["components"]["input_box"]["fontsize"];
     input_box.x =
@@ -139,28 +147,44 @@ void Console::loadMedia() {
 }
 
 void Console::enableInput() {
+    if (!initialized) {
+        throw Exception("Console not initialized.");
+    }
+
     SDL_StartTextInput();
     _resetCursorCooldown();
     input_enabled = true;
 }
 
 void Console::append(const char* text) {
+    if (!initialized) {
+        throw Exception("Console not initialized.");
+    }
+
     if (current_input.size() < INPUT_MAX_SIZE) {
         current_input += text;
         input_changed = true;
     }
 }
 
-void Console::add(const std::string& message) {
+void Console::add(const std::string& message, MessageType type) {
+    if (!initialized) {
+        throw Exception("Console not initialized.");
+    }
+
     if (!message.empty()) {
         messages.emplace_front(Texture());
-        messages.front().loadFromRenderedWrappedText(g_renderer, output_font,
-                                                     message, output_box.w);
+        messages.front().loadFromRenderedWrappedText(
+            g_renderer, output_font, message, output_box.w, colors[type]);
         _discardOldMessages();
     }
 }
 
 void Console::removeChar() {
+    if (!initialized) {
+        throw Exception("Console not initialized.");
+    }
+
     if (!current_input.empty()) {
         current_input.pop_back();
     }
@@ -169,21 +193,37 @@ void Console::removeChar() {
 }
 
 std::string Console::getInputText() {
+    if (!initialized) {
+        throw Exception("Console not initialized.");
+    }
+
     return current_input;
 }
 
 void Console::clearInput() {
+    if (!initialized) {
+        throw Exception("Console not initialized.");
+    }
+
     current_input.clear();
     input_changed = true;
 }
 
 void Console::disableInput() {
+    if (!initialized) {
+        throw Exception("Console not initialized.");
+    }
+
     SDL_StopTextInput();
     show_cursor = false;
     input_enabled = false;
 }
 
 void Console::update(const int it) {
+    if (!initialized) {
+        throw Exception("Console not initialized.");
+    }
+
     if (input_enabled) {
         if (input_changed) {
             if (!current_input.empty()) {
