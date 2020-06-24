@@ -68,11 +68,7 @@ void ClientConnection::_receiver() {
         while (peer >> opcode) {
             switch (opcode) {
                 case COMMAND_OPCODE: {
-                    size_t received = (peer >> opcode);
-                    if (!received) {
-                        throw Exception("Incomplete command received.");
-                    }
-                    _receiveCommand(opcode);
+                    _receiveCommand();
                     break;
                 }
 
@@ -98,29 +94,17 @@ void ClientConnection::_receiver() {
     fprintf(stderr, "CLIENTE %i: Receiver finaliza su ejecución.\n", id);
 }
 
-void ClientConnection::_receiveCommand(char opcode) {
-    Command* cmd = NULL;
-
-    switch (opcode) {
-        case START_MOVING_UP_CMD:
-        case START_MOVING_DOWN_CMD:
-        case START_MOVING_LEFT_CMD:
-        case START_MOVING_RIGHT_CMD:
-        case STOP_MOVING_CMD: {
-            cmd = new CommandMovement(id, opcode);
-            fprintf(stderr, "Command receiver: recibimos el comando %d\n",
-                    opcode);
-            commands.push(cmd);
-            break;
-        }
-
-        default: {
-            fprintf(stderr,
-                    "ClientConnection::_receiveCommand: received %c (unknown "
-                    "opcode).",
-                    opcode);
-            break;
-        }
+void ClientConnection::_receiveCommand() {
+    char opcode_cmd;
+    peer >> opcode_cmd;
+    try {
+        Command* cmd = CommandFactory::newCommand(id, opcode_cmd, peer);
+        commands.push(cmd);
+    } catch (const Exception& e) {
+        // Comando desconocido. Envio error.
+        NotificationReply* reply_error =
+            new NotificationReply(ERROR_REPLY, e.what());
+        this->notifications.push(reply_error);
     }
 }
 
