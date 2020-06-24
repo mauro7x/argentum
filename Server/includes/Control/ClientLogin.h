@@ -14,6 +14,7 @@
 #include "../../../Common/includes/NonBlockingQueue.h"
 #include "../../../Common/includes/Socket/SocketWrapper.h"
 #include "../../../Common/includes/Thread.h"
+#include "../../../Common/includes/Protocol.h"
 #include "../Model/config_structs.h"
 //-----------------------------------------------------------------------------
 
@@ -36,6 +37,12 @@ class ClientLogin : public Thread {
 
     /* Proxy para el login */
     void _loginProxy();
+
+    /* Ejecutar el proceso de login de un jugador
+     * genera un nuevo character config si es un usuario nuevo,
+     * si el usuario ya esta creado, devuelvo los datos correspondes.
+    */
+    CharacterCfg _login();
 
     //-------------------------------------------------------------------------
 
