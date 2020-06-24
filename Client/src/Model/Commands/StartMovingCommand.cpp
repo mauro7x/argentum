@@ -15,29 +15,29 @@ bool StartMovingCommand::send(const SocketWrapper& socket) {
     // Enviamos el comando según el protocolo
     ssize_t sent = 0;
 
-    sent = (socket << (char)COMMAND_OPCODE);
+    sent = (socket << (uint8_t)COMMAND_OPCODE);
     if (!sent) {
         return false;
     }
 
     switch (dir) {
         case UP_DIR: {
-            sent = (socket << (char)START_MOVING_UP_CMD);
+            sent = (socket << (uint8_t)START_MOVING_UP_CMD);
             break;
         }
 
         case DOWN_DIR: {
-            sent = (socket << (char)START_MOVING_DOWN_CMD);
+            sent = (socket << (uint8_t)START_MOVING_DOWN_CMD);
             break;
         }
 
         case LEFT_DIR: {
-            sent = (socket << (char)START_MOVING_LEFT_CMD);
+            sent = (socket << (uint8_t)START_MOVING_LEFT_CMD);
             break;
         }
 
         case RIGHT_DIR: {
-            sent = (socket << (char)START_MOVING_RIGHT_CMD);
+            sent = (socket << (uint8_t)START_MOVING_RIGHT_CMD);
             break;
         }
     }
