@@ -65,9 +65,8 @@ void Map::_fillTiles(const json& map, const json& tilesets) {
 
         /* Ocupantes */
         tile.occupant_id = 0;
-
-        /* esto por ahora lo saque porque no se si es necesario -mau */
-        // tile.item_id = 0;
+        
+        tile.item_id = 0;
 
         tiles.push_back(tile);
     }

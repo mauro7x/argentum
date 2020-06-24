@@ -24,9 +24,7 @@ struct Tile {
 
     /* Ocupantes */
     InstanceId occupant_id;
-
-    // que onda esto? es necesario?
-    // InstanceId item_id;
+    Id item_id;
 };
 
 //-----------------------------------------------------------------------------
