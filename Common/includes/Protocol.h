@@ -70,6 +70,20 @@ enum ReplyOpcode {
     LIST_REPLY     /* Amarillo */
 };
 
+enum MessageType {
+    // Mensajes del servidor
+    ERROR_MSG = 0,
+    INFO_MSG,
+    SUCCESS_MSG,
+    LIST_MSG,
+
+    // Mensajes del chat general
+    GENERAL_MSG = 128,
+
+    // Mensajes privados
+    PRIVATE_MSG,
+};
+
 enum BroadcastType { NEW_BROADCAST, UPDATE_BROADCAST, DELETE_BROADCAST };
 
 enum EntityType { PLAYER_TYPE, CHARACTER_TYPE, CREATURE_TYPE, ITEM_TYPE };

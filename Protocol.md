@@ -25,6 +25,27 @@ Identificas el mensaje con el primer byte recibido (opcode), y para cada caso se
 | 129 | Sign-in | C -> S | `USER_LENGTH (4) + USERNAME (USER_LENGTH) + PASS_LENGTH (4) + PASSWORD (PASS_LENGTH)` |
 | 130 | Sign-up | C -> S | `USER_LENGTH (4) + USERNAME (USER_LENGTH) + PASS_LENGTH (4) + PASSWORD (PASS_LENGTH) + RACE (1) + KIND (1)` |
 
+## PROPUESTA (MAU 24/06)
+
+| OPCODE | TIPO | DIRECCIÓN | ESTRUCTURA (B) |
+|--------|------|-----------|----------------|
+| 0 | Mensaje | S -> C | `TYPE (1) + ...` |
+| 1 | Broadcast | S -> C | `TYPE (1) + ...` |
+| 128 | Comando | C -> S | `TYPE (1) + ...` |
+| 129 | Sign-in | C -> S | `USER_LENGTH (4) + USERNAME (USER_LENGTH) + PASS_LENGTH (4) + PASSWORD (PASS_LENGTH)` |
+| 130 | Sign-up | C -> S | `USER_LENGTH (4) + USERNAME (USER_LENGTH) + PASS_LENGTH (4) + PASSWORD (PASS_LENGTH) + RACE (1) + KIND (1)` |
+
+### Message (OP = 0):
+
+| OPCODE | TIPO | ESTRUCTURA (B) |
+|--------|------|----------------|
+| 0 | Mensaje de error del server | `MSG_LENGTH (4) + MSG (MSG_LENGTH)` |
+| 1 | Mensaje de información del server | `MSG_LENGTH (4) + MSG (MSG_LENGTH)` |
+| 2 | Mensaje de éxito del server | `MSG_LENGTH (4) + MSG (MSG_LENGTH)` |
+| 3 | Lista del server | `ver lista` |
+| 128 | Mensaje privado | `SENDER_LENGTH (4) + SENDER (SENDER_LENGTH) + MSG_LENGTH (4) + MSG (MSG_LENGTH)` |
+| 129 | Mensaje general | `SENDER_LENGTH (4) + SENDER (SENDER_LENGTH) + MSG_LENGTH (4) + MSG (MSG_LENGTH)` |
+
 ---
 
 ### Broadcast:
@@ -83,7 +104,7 @@ Identificas el mensaje con el primer byte recibido (opcode), y para cada caso se
 |--------|------|
 | 0 | Error (rojo) |
 | 1 | Informacion (blanco) |
-| 2 | Información (verde) |
+| 2 | Éxito (verde) |
 | 3 | Lista (amarillo) |
 
 ---
