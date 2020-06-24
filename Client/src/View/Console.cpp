@@ -15,6 +15,19 @@ void Console::_setInputPos() {
     }
 }
 
+void Console::_discardOldMessages() {
+    int offset = output_box.h;
+
+    for (auto it = messages.begin(); it != messages.end();) {
+        if (offset < 0) {
+            it = messages.erase(it);
+        } else {
+            it++;
+        }
+        offset -= it->getHeight();
+    }
+}
+
 void Console::_resetCursorCooldown() {
     show_cursor = true;
     cursor_cooldown = ITERATIONS_TO_SWITCH_CURSOR;
@@ -50,7 +63,16 @@ void Console::_renderInputBox() const {
     }
 }
 
-void Console::_renderOutputBox() const {}
+void Console::_renderOutputBox() const {
+    SDL_Rect render_quad = {output_box.x, output_box.h, 0, 0};
+
+    for (auto& message : messages) {
+        render_quad.w = message.getWidth();
+        render_quad.h = message.getHeight();
+        render_quad.y -= render_quad.h;
+        g_renderer->render(message.getTexture(), &render_quad);
+    }
+}
 
 //-----------------------------------------------------------------------------
 
@@ -134,7 +156,7 @@ void Console::add(const std::string& message) {
         messages.emplace_front(Texture());
         messages.front().loadFromRenderedWrappedText(g_renderer, output_font,
                                                      message, output_box.w);
-        fprintf(stderr, "Mensajes: %lu\n", messages.size());
+        _discardOldMessages();
     }
 }
 

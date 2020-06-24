@@ -2,10 +2,10 @@
 #define __CLIENT_CONNECTION_H__
 
 //-----------------------------------------------------------------------------
+#include <atomic>
 #include <exception>
 #include <mutex>
 #include <thread>
-#include <atomic>
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -67,8 +67,7 @@ class ClientConnection {
 
    public:
     /* Constructor */
-    ClientConnection(const InstanceId id, const Id map,
-                     SocketWrapper& peer,
+    ClientConnection(const InstanceId id, const Id map, SocketWrapper& peer,
                      NonBlockingQueue<InstanceId*>& finished_connections,
                      NonBlockingQueue<Command*>& commands);
 

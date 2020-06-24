@@ -72,6 +72,9 @@ class Console : public HUDComponent {
     /* Settea la posición de renderizado del input-text */
     void _setInputPos();
 
+    /* Elimina mensajes que quedan por fuera de la pantalla */
+    void _discardOldMessages();
+
     /* Resetea el cooldown del cursor switch */
     void _resetCursorCooldown();
 
