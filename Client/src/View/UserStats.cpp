@@ -64,7 +64,7 @@ void UserStats::loadMedia() {
     mana.loadMedia();
 }
 
-void UserStats::update() {
+void UserStats::update(const int it) {
     health.update(player.getHealth(), player.getMaxHealth());
     mana.update(player.getMana(), player.getMaxMana());
 }

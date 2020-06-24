@@ -60,6 +60,10 @@ void HUD::enableInput() {
     console.enableInput();
 }
 
+void HUD::addMessage(const std::string& message) {
+    console.add(message);
+}
+
 void HUD::newInputText(const char* text) {
     console.append(text);
 }
@@ -78,11 +82,11 @@ void HUD::disableInput() {
     console.disableInput();
 }
 
-void HUD::update() {
-    console.update();
-    user_info.update();
-    user_inventory.update();
-    user_stats.update();
+void HUD::update(const int it) {
+    console.update(it);
+    user_info.update(it);
+    user_inventory.update(it);
+    user_stats.update(it);
 }
 
 void HUD::render() const {

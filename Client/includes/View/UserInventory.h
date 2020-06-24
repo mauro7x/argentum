@@ -97,7 +97,7 @@ class UserInventory : public HUDComponent {
     void loadMedia() override;
 
     /* Actualiza la información que se muestra */
-    void update() override;
+    void update(const int it) override;
 
     /* Renderiza la consola */
     void render() const override;

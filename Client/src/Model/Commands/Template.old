@@ -1,4 +1,4 @@
-#include "../../../includes/Model/Commands/StopMovingCommand.h"
+#include "../../../includes/Model/Commands/Template.h"
 
 //-----------------------------------------------------------------------------
 // Métodos privados
@@ -8,9 +8,9 @@
 //-----------------------------------------------------------------------------
 // API Pública
 
-StopMovingCommand::StopMovingCommand() : Command() {}
+Template::Template() : Command() {}
 
-bool StopMovingCommand::send(const SocketWrapper& socket) {
+bool Template::send(const SocketWrapper& socket) {
     // Enviamos el comando según el protocolo
     ssize_t sent = 0;
 
@@ -19,14 +19,9 @@ bool StopMovingCommand::send(const SocketWrapper& socket) {
         return false;
     }
 
-    sent = (socket << (uint8_t)STOP_MOVING_CMD);
-    if (!sent) {
-        return false;
-    }
-
     return true;
 }
 
-StopMovingCommand::~StopMovingCommand() {}
+Template::~Template() {}
 
 //-----------------------------------------------------------------------------

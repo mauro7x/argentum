@@ -228,19 +228,18 @@ void EventHandler::handleEvent(const SDL_Event& e) {
         }
 
         case STOP_INPUT_EV: {
-            std::string text = hud.popText();
+            std::string input = hud.popText();
 
-            //-----------------------------------------------------------------
-            // procesar el texto, por ahora:
-
-            if (text.size()) {
-                fprintf(stderr, "%s\n", text.c_str());
-            } else {
-                fprintf(stderr, "se recibio un texto vacio\n");
+            Command* cmd = input_parser.parse(input);
+            if (cmd) {
+                fprintf(stderr, "Enviando comando al servidor.\n");
+                commands.push(cmd);
+            } else if (!input.empty()) {
+                fprintf(stderr, "No se reconoció el comando: %s\n",
+                        input.c_str());
             }
 
-            //-----------------------------------------------------------------
-
+            hud.addMessage(input);
             hud.disableInput();
             break;
         }

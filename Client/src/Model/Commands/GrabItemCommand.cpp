@@ -1,4 +1,4 @@
-#include "../../../includes/Model/Commands/StopMovingCommand.h"
+#include "../../../includes/Model/Commands/GrabItemCommand.h"
 
 //-----------------------------------------------------------------------------
 // Métodos privados
@@ -8,9 +8,9 @@
 //-----------------------------------------------------------------------------
 // API Pública
 
-StopMovingCommand::StopMovingCommand() : Command() {}
+GrabItemCommand::GrabItemCommand() : Command() {}
 
-bool StopMovingCommand::send(const SocketWrapper& socket) {
+bool GrabItemCommand::send(const SocketWrapper& socket) {
     // Enviamos el comando según el protocolo
     ssize_t sent = 0;
 
@@ -19,7 +19,7 @@ bool StopMovingCommand::send(const SocketWrapper& socket) {
         return false;
     }
 
-    sent = (socket << (uint8_t)STOP_MOVING_CMD);
+    sent = (socket << (uint8_t)GRAB_OBJECT_CMD);
     if (!sent) {
         return false;
     }
@@ -27,6 +27,6 @@ bool StopMovingCommand::send(const SocketWrapper& socket) {
     return true;
 }
 
-StopMovingCommand::~StopMovingCommand() {}
+GrabItemCommand::~GrabItemCommand() {}
 
 //-----------------------------------------------------------------------------

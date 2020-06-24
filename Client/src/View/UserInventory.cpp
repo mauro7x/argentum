@@ -196,22 +196,19 @@ void UserInventory::loadMedia() {
     for (int i = 0; i < N_INVENTORY_SLOTS; i++) {
         quantity = inventory[i].amount;
         inventory_quantities[i].loadFromRenderedText(
-            g_renderer, quantities_font, " " + std::to_string(quantity) + " ",
-            SDL_Color({0xFF, 0xFF, 0xFF, 0xFF}));
+            g_renderer, quantities_font, " " + std::to_string(quantity) + " ");
     }
 
     safe_gold.loadFromRenderedText(g_renderer, gold_font,
-                                   std::to_string(current_safe_gold),
-                                   SDL_Color({0xFF, 0xFF, 0xFF, 0xFF}));
+                                   std::to_string(current_safe_gold));
     _center(safe_gold_pos, safe_gold, safe_gold_box);
 
     excess_gold.loadFromRenderedText(g_renderer, gold_font,
-                                     std::to_string(current_excess_gold),
-                                     SDL_Color({0xFF, 0xFF, 0xFF, 0xFF}));
+                                     std::to_string(current_excess_gold));
     _center(excess_gold_pos, excess_gold, excess_gold_box);
 }
 
-void UserInventory::update() {
+void UserInventory::update(const int it) {
     // Actualizamos el equipamiento
     equipment = g_player.getEquipment();
 
@@ -223,8 +220,7 @@ void UserInventory::update() {
             inventory[i] = updated_inventory[i];
             inventory_quantities[i].loadFromRenderedText(
                 g_renderer, quantities_font,
-                " " + std::to_string(inventory[i].amount) + " ",
-                SDL_Color({0xFF, 0xFF, 0xFF, 0xFF}));
+                " " + std::to_string(inventory[i].amount) + " ");
         }
     }
 
@@ -233,8 +229,7 @@ void UserInventory::update() {
     if (current_safe_gold != updated_safe_gold) {
         current_safe_gold = updated_safe_gold;
         safe_gold.loadFromRenderedText(g_renderer, gold_font,
-                                       std::to_string(current_safe_gold),
-                                       SDL_Color({0xFF, 0xFF, 0xFF, 0xFF}));
+                                       std::to_string(current_safe_gold));
         _center(safe_gold_pos, safe_gold, safe_gold_box);
     }
 
@@ -242,8 +237,7 @@ void UserInventory::update() {
     if (current_excess_gold != updated_excess_gold) {
         current_excess_gold = updated_excess_gold;
         excess_gold.loadFromRenderedText(g_renderer, gold_font,
-                                         std::to_string(current_excess_gold),
-                                         SDL_Color({0xFF, 0xFF, 0xFF, 0xFF}));
+                                         std::to_string(current_excess_gold));
         _center(excess_gold_pos, excess_gold, excess_gold_box);
     }
 }

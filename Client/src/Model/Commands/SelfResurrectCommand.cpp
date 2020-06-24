@@ -1,4 +1,4 @@
-#include "../../../includes/Model/Commands/StopMovingCommand.h"
+#include "../../../includes/Model/Commands/SelfResurrectCommand.h"
 
 //-----------------------------------------------------------------------------
 // Métodos privados
@@ -8,9 +8,9 @@
 //-----------------------------------------------------------------------------
 // API Pública
 
-StopMovingCommand::StopMovingCommand() : Command() {}
+SelfResurrectCommand::SelfResurrectCommand() : Command() {}
 
-bool StopMovingCommand::send(const SocketWrapper& socket) {
+bool SelfResurrectCommand::send(const SocketWrapper& socket) {
     // Enviamos el comando según el protocolo
     ssize_t sent = 0;
 
@@ -19,7 +19,7 @@ bool StopMovingCommand::send(const SocketWrapper& socket) {
         return false;
     }
 
-    sent = (socket << (uint8_t)STOP_MOVING_CMD);
+    sent = (socket << (uint8_t)SELF_RESURRECT_CMD);
     if (!sent) {
         return false;
     }
@@ -27,6 +27,6 @@ bool StopMovingCommand::send(const SocketWrapper& socket) {
     return true;
 }
 
-StopMovingCommand::~StopMovingCommand() {}
+SelfResurrectCommand::~SelfResurrectCommand() {}
 
 //-----------------------------------------------------------------------------

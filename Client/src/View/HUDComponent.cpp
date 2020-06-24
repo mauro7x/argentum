@@ -17,7 +17,7 @@ void HUDComponent::_center(SDL_Point& texture_pos, const Texture& texture,
 HUDComponent::HUDComponent(const Renderer* renderer)
     : initialized(false), g_renderer(renderer) {}
 
-void HUDComponent::update() {}
+void HUDComponent::update(const int it) {}
 
 void HUDComponent::free() {}
 
