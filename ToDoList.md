@@ -35,6 +35,8 @@
 
 * Agregar una opción a hud.addMessage para agregar mensajes en negrita. -Mau, 24/06.
 
+* Idea primitiva: inicializar los sistemas de SDL una sola vez (para la vista de login y para la del game) en Client.cpp con alguna función, por lo que en GameView podemos eliminar la función init y hacer la inicialización leyendo los jsons en el constructor. -Mau, 24/06.
+
 ---
 
 ## Common
