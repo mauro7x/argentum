@@ -19,6 +19,7 @@
 //-----------------------------------------------------------------------------
 #include "../Model/Commands/Command.h"
 #include "../Model/Commands/Commands.h"
+#include "../Model/InputParser.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -69,6 +70,7 @@ class EventHandler {
     HUD& hud;
     BlockingQueue<Command*>& commands;
     std::unordered_map<SDL_Keycode, Key> keys;
+    InputParser input_parser;
 
     /* Flags internos */
     Key key_pressed = UNMAPPED_KEY;
