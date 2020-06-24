@@ -3,7 +3,7 @@
 //-----------------------------------------------------------------------------
 // API Pública
 
-CommandMovement::CommandMovement(InstanceId caller, char cmd)
+CommandMovement::CommandMovement(InstanceId caller, uint8_t cmd)
     : caller(caller), cmd(cmd) {}
 
 void CommandMovement::exec(Game& game) {

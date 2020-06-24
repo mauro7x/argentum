@@ -47,25 +47,14 @@ class Command {
     virtual ~Command() {}
 };
 
-class CommandProxy : public Command {
-   private:
-    char cmd;
-
-   public:
-    CommandProxy(InstanceId caller, char cmd);
-    ~CommandProxy();
-
-    virtual void exec(Game& game) override;
-};
-
 // comando para los movimientos
 class CommandMovement : public Command {
    private:
     InstanceId caller;
-    char cmd;
+    uint8_t cmd;
 
    public:
-    CommandMovement(InstanceId caller, char cmd);
+    CommandMovement(InstanceId caller, uint8_t cmd);
     ~CommandMovement() {}
 
     void exec(Game& game) override;
@@ -75,13 +64,13 @@ class CommandMovement : public Command {
 class CommandUseWeapon : public Command {
    private:
     InstanceId caller;
-    char cmd;
+    uint8_t cmd;
 
     const uint32_t x_coord;
     const uint32_t y_coord;
 
    public:
-    CommandUseWeapon(InstanceId caller, char cmd, const uint32_t x_coord,
+    CommandUseWeapon(InstanceId caller, uint8_t cmd, const uint32_t x_coord,
                      const uint32_t y_coord);
     ~CommandUseWeapon() {}
 
@@ -92,12 +81,12 @@ class CommandUseWeapon : public Command {
 class CommandEquip : public Command {
    private:
     InstanceId caller;
-    char cmd;
+    uint8_t cmd;
 
     const uint8_t n_slot;
 
    public:
-    CommandEquip(InstanceId caller, char cmd, const uint8_t n_slot);
+    CommandEquip(InstanceId caller, uint8_t cmd, const uint8_t n_slot);
     ~CommandEquip() {}
 
     void exec(Game& game) override;
@@ -106,10 +95,10 @@ class CommandEquip : public Command {
 class CommandMediate : public Command {
    private:
     InstanceId caller;
-    char cmd;
+    uint8_t cmd;
 
    public:
-    CommandMediate(InstanceId caller, char cmd);
+    CommandMediate(InstanceId caller, uint8_t cmd);
     ~CommandMediate() {}
 
     void exec(Game& game) override;
@@ -118,10 +107,10 @@ class CommandMediate : public Command {
 class CommandResurrect : public Command {
    private:
     InstanceId caller;
-    char cmd;
+    uint8_t cmd;
 
    public:
-    CommandResurrect(InstanceId caller, char cmd);
+    CommandResurrect(InstanceId caller, uint8_t cmd);
     ~CommandResurrect() {}
 
     void exec(Game& game) override;
@@ -130,13 +119,13 @@ class CommandResurrect : public Command {
 class CommandList : public Command {
    private:
     InstanceId caller;
-    char cmd;
+    uint8_t cmd;
 
     const uint32_t x_coord;
     const uint32_t y_coord;
 
    public:
-    CommandList(InstanceId caller, char cmd, const uint32_t x_coord,
+    CommandList(InstanceId caller, uint8_t cmd, const uint32_t x_coord,
                 const uint32_t y_coord);
     ~CommandList() {}
 
@@ -146,7 +135,7 @@ class CommandList : public Command {
 class CommandDepositItemOnBank : public Command {
    private:
     InstanceId caller;
-    char cmd;
+    uint8_t cmd;
 
     const uint32_t x_coord;
     const uint32_t y_coord;
@@ -154,7 +143,7 @@ class CommandDepositItemOnBank : public Command {
     const uint32_t amount;
 
    public:
-    CommandDepositItemOnBank(InstanceId caller, char cmd,
+    CommandDepositItemOnBank(InstanceId caller, uint8_t cmd,
                              const uint32_t x_coord, const uint32_t y_coord,
                              const uint8_t n_slot, const uint32_t amount);
     ~CommandDepositItemOnBank() {}
@@ -165,7 +154,7 @@ class CommandDepositItemOnBank : public Command {
 class CommandWithdrawItemFromBank : public Command {
    private:
     InstanceId caller;
-    char cmd;
+    uint8_t cmd;
 
     const uint32_t x_coord;
     const uint32_t y_coord;
@@ -173,7 +162,7 @@ class CommandWithdrawItemFromBank : public Command {
     const uint32_t amount;
 
    public:
-    CommandWithdrawItemFromBank(InstanceId caller, char cmd,
+    CommandWithdrawItemFromBank(InstanceId caller, uint8_t cmd,
                                 const uint32_t x_coord, const uint32_t y_coord,
                                 const uint32_t item_id, const uint32_t amount);
     ~CommandWithdrawItemFromBank() {}
@@ -184,14 +173,14 @@ class CommandWithdrawItemFromBank : public Command {
 class CommandGoldMove : public Command {
    private:
     InstanceId caller;
-    char cmd;
+    uint8_t cmd;
 
     const uint32_t x_coord;
     const uint32_t y_coord;
     const uint32_t amount;
 
    public:
-    CommandGoldMove(InstanceId caller, char cmd, const uint32_t x_coord,
+    CommandGoldMove(InstanceId caller, uint8_t cmd, const uint32_t x_coord,
                     const uint32_t y_coord, const uint32_t amount);
     ~CommandGoldMove() {}
 
@@ -201,7 +190,7 @@ class CommandGoldMove : public Command {
 class CommandBuy : public Command {
    private:
     InstanceId caller;
-    char cmd;
+    uint8_t cmd;
 
     const uint32_t x_coord;
     const uint32_t y_coord;
@@ -209,7 +198,7 @@ class CommandBuy : public Command {
     const uint32_t amount;
 
    public:
-    CommandBuy(InstanceId caller, char cmd,
+    CommandBuy(InstanceId caller, uint8_t cmd,
 
                const uint32_t x_coord, const uint32_t y_coord,
                const uint32_t item_id, const uint32_t amount);
@@ -221,7 +210,7 @@ class CommandBuy : public Command {
 class CommandSell : public Command {
    private:
     InstanceId caller;
-    char cmd;
+    uint8_t cmd;
 
     const uint32_t x_coord;
     const uint32_t y_coord;
@@ -229,7 +218,7 @@ class CommandSell : public Command {
     const uint32_t amount;
 
    public:
-    CommandSell(InstanceId caller, char cmd,
+    CommandSell(InstanceId caller, uint8_t cmd,
 
                 const uint32_t x_coord, const uint32_t y_coord,
                 const uint8_t n_slot, const uint32_t amount);
@@ -241,10 +230,10 @@ class CommandSell : public Command {
 class CommandTake : public Command {
    private:
     InstanceId caller;
-    char cmd;
+    uint8_t cmd;
 
    public:
-    CommandTake(InstanceId caller, char cmd);
+    CommandTake(InstanceId caller, uint8_t cmd);
     ~CommandTake() {}
 
     void exec(Game& game) override;
@@ -253,13 +242,13 @@ class CommandTake : public Command {
 class CommandDrop : public Command {
    private:
     InstanceId caller;
-    char cmd;
+    uint8_t cmd;
 
     const uint8_t n_slot;
     const uint32_t amount;
 
    public:
-    CommandDrop(InstanceId caller, char cmd,
+    CommandDrop(InstanceId caller, uint8_t cmd,
 
                 const uint8_t n_slot, const uint32_t amount);
     ~CommandDrop() {}

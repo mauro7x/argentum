@@ -2,10 +2,10 @@
 #define __CLIENT_CONNECTION_H__
 
 //-----------------------------------------------------------------------------
+#include <atomic>
 #include <exception>
 #include <mutex>
 #include <thread>
-#include <atomic>
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -60,14 +60,13 @@ class ClientConnection {
     void _receiver();
 
     /* [RECEIVER] Recibe un comando */
-    void _receiveCommand(char opcode);
+    void _receiveCommand(uint8_t opcode);
 
     //-------------------------------------------------------------------------
 
    public:
     /* Constructor */
-    ClientConnection(const InstanceId id, const Id map,
-                     SocketWrapper& peer,
+    ClientConnection(const InstanceId id, const Id map, SocketWrapper& peer,
                      NonBlockingQueue<InstanceId*>& finished_connections,
                      NonBlockingQueue<Command*>& commands);
 

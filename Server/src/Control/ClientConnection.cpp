@@ -98,7 +98,7 @@ void ClientConnection::_receiver() {
     fprintf(stderr, "CLIENTE %i: Receiver finaliza su ejecución.\n", id);
 }
 
-void ClientConnection::_receiveCommand(char opcode) {
+void ClientConnection::_receiveCommand(uint8_t opcode) {
     Command* cmd = NULL;
 
     switch (opcode) {
