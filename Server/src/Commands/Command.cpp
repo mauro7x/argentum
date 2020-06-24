@@ -9,7 +9,7 @@
 #include "../../includes/Control/Commands/EquipCommand.h"
 #include "../../includes/Control/Commands/ListCommand.h"
 #include "../../includes/Control/Commands/MeditateCommand.h"
-#include "../../includes/Control/Commands/ResurrectCommand.h"
+#include "../../includes/Control/Commands/SelfResurrectCommand.h"
 #include "../../includes/Control/Commands/SellItemCommand.h"
 #include "../../includes/Control/Commands/StartMovingDownCommand.h"
 #include "../../includes/Control/Commands/StartMovingLeftCommand.h"
@@ -53,8 +53,8 @@ Command* CommandFactory::newCommand(InstanceId caller, char opcode,
             return new MeditateCommand(caller);
         }
 
-        case RESURRECT_CMD: {
-            return new ResurrectCommand(caller);
+        case SELF_RESURRECT_CMD: {
+            return new SelfResurrectCommand(caller);
         }
 
         case GRAB_OBJECT_CMD: {
