@@ -8,17 +8,18 @@
 //-----------------------------------------------------------------------------
 // API Pública
 
-Camera::Camera() : initialized(false), x(0), y(0) {}
+Camera::Camera() {}
 
 void Camera::init(const json& config) {
     if (initialized) {
         throw Exception("Camera already initialized.");
     }
 
-    w = config["w"];
-    h = config["h"];
-    offset_x = config["offset"]["x"];
-    offset_y = config["offset"]["y"];
+    // Offsets posicionales
+    box.x = config["offset"]["x"];
+    box.y = config["offset"]["y"];
+    box.w = config["w"];
+    box.h = config["h"];
 
     initialized = true;
 }
@@ -28,25 +29,18 @@ bool Camera::isVisible(const SDL_Rect* object) const {
         throw Exception("Camera not initialized.");
     }
 
-    // The sides of the rectangles
-    int leftA, leftB;
-    int rightA, rightB;
-    int topA, topB;
-    int bottomA, bottomB;
+    // Calculamos los lados del objeto
+    int leftA = object->x;
+    int rightA = object->x + object->w;
+    int topA = object->y;
+    int bottomA = object->y + object->h;
 
-    // Calculate the sides of rect A
-    leftA = object->x;
-    rightA = object->x + object->w;
-    topA = object->y;
-    bottomA = object->y + object->h;
+    // Calculamos los lados de la cámara
+    int leftB = pos.x;
+    int rightB = pos.x + box.w;
+    int topB = pos.y;
+    int bottomB = pos.y + box.h;
 
-    // Calculate the sides of camera
-    leftB = x;
-    rightB = x + w;
-    topB = y;
-    bottomB = y + h;
-
-    // If any of the sides from A are outside of camera
     if (bottomA <= topB) {
         return false;
     }
@@ -63,7 +57,6 @@ bool Camera::isVisible(const SDL_Rect* object) const {
         return false;
     }
 
-    // If none of the sides from A are outside camera
     return true;
 }
 
@@ -72,7 +65,7 @@ int Camera::xOffset() const {
         throw Exception("Camera not initialized.");
     }
 
-    return offset_x - x;
+    return box.x - pos.x;
 }
 
 int Camera::yOffset() const {
@@ -80,7 +73,7 @@ int Camera::yOffset() const {
         throw Exception("Camera not initialized.");
     }
 
-    return offset_y - y;
+    return box.y - pos.y;
 }
 
 void Camera::center(const SDL_Rect object, const int map_width,
@@ -89,20 +82,20 @@ void Camera::center(const SDL_Rect object, const int map_width,
         throw Exception("Camera not initialized.");
     }
 
-    x = (object.x + TILE_WIDTH / 2) - (w / 2);
-    y = (object.y + TILE_HEIGHT / 2) - (h / 2);
+    pos.x = (object.x + TILE_WIDTH / 2) - (box.w / 2);
+    pos.y = (object.y + TILE_HEIGHT / 2) - (box.h / 2);
 
-    if (x < 0) {
-        x = 0;
+    if (pos.x < 0) {
+        pos.x = 0;
     }
-    if (y < 0) {
-        y = 0;
+    if (pos.y < 0) {
+        pos.y = 0;
     }
-    if (x > map_width - w) {
-        x = map_width - w;
+    if (pos.x > map_width - box.w) {
+        pos.x = map_width - box.w;
     }
-    if (y > map_height - h) {
-        y = map_height - h;
+    if (pos.y > map_height - box.h) {
+        pos.y = map_height - box.h;
     }
 }
 
