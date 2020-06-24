@@ -14,6 +14,7 @@
 //-----------------------------------------------------------------------------
 #include "../../../Common/includes/BlockingQueue.h"
 #include "../../../Common/includes/Exceptions/Exception.h"
+#include "../../../Common/includes/JSON.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -28,6 +29,7 @@
 
 //-----------------------------------------------------------------------------
 #include "HUD.h"
+#include "MapView.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -48,6 +50,11 @@ enum Event {
     TEXT_INPUT_EV,
     DELETE_CHAR_EV,
     STOP_INPUT_EV,
+
+    /* Clicks del usuario */
+    MAP_SINGLE_CLICK_EV,
+    HUD_SINGLE_CLICK_EV,
+    HUD_DOUBLE_CLICK_EV,
 
     /* Cierre del juego */
     EXIT_EV
@@ -70,15 +77,28 @@ enum Key {
 
 class EventHandler {
    private:
-    std::atomic_bool& exit;
+    // Comunicación entre hilos
+    std::atomic_bool& exit;            /* flag de ejecución */
+    BlockingQueue<Command*>& commands; /* cola de comandos */
+
+    // Componentes externos para el handleo de ciertos eventos
     HUD& hud;
-    BlockingQueue<Command*>& commands;
+    const MapView& map;
+    SDL_Rect inventory_box = {0};
+    SDL_Rect camera_box = {0};
+    float scale_factor_w = 0;
+    float scale_factor_h = 0;
+
+    // Componentes internos
     std::unordered_map<SDL_Keycode, Key> keys;
     InputParser input_parser;
 
-    /* Flags internos */
+    // Flags internos
     Key key_pressed = UNMAPPED_KEY;
     bool text_input_enabled = false;
+
+    //-------------------------------------------------------------------------
+    // Métodos privados
 
     /* Bindea las keycodes de entrada */
     void _bindKeycodes();
@@ -89,15 +109,31 @@ class EventHandler {
     /* Traduce el evento del sistema en un evento esperado */
     Event _getEvent(const SDL_Event& e);
 
-    //-------------------------------------------------------------------------
-    // Manejo de eventos particulares (que justifiquen abstracción)
+    /* Traduce SDL_TEXTINPUT en un evento esperado */
+    Event _getTextInputEv();
+
+    /* Traduce SDL_MOUSEBUTTONDOWN en un evento esperado */
+    Event _getMouseButtonDownEv(const SDL_Event& e);
+
+    /* Traduce SDL_KEYDOWN en un evento esperado */
+    Event _getKeyDownEv(const SDL_Event& e);
+
+    /* Traduce SDL_KEYUP en un evento esperado */
+    Event _getKeyUpEv(const SDL_Event& e);
+
+    /* Verifica si el click ocurrió dentro del SDL_Rect provisto */
+    bool _clickInside(const SDL_Rect& rect, const SDL_Event& e) const;
 
     //-------------------------------------------------------------------------
 
    public:
     /* Constructor */
-    EventHandler(std::atomic_bool& exit, HUD& hud,
-                 BlockingQueue<Command*>& commands);
+    EventHandler(std::atomic_bool& exit, BlockingQueue<Command*>& commands,
+                 HUD& hud, const MapView& map);
+
+    /* Inicializa recursos */
+    void init(const json& config, const float scale_factor_w,
+              const float scale_factor_h);
 
     /* Handlea un evento de SDL */
     void handleEvent(const SDL_Event& e);

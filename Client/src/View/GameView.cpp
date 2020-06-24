@@ -77,6 +77,9 @@ void GameView::_init() {
 
     /* Iniciamos la HUD */
     hud.init(gui_config["hud"]);
+
+    /* Iniciamos el EventHandler */
+    event_handler.init(gui_config, scale_factor_w, scale_factor_h);
 }
 
 void GameView::_loadMedia() {
@@ -170,7 +173,7 @@ GameView::GameView(BlockingQueue<Command*>& commands,
 
       // Otros
       stage(map, player, characters, creatures),
-      event_handler(exit, hud, commands) {}
+      event_handler(exit, commands, hud, map) {}
 
 void GameView::operator()() {
     // Iniciamos recursos necesarios

@@ -25,22 +25,91 @@ Key EventHandler::_getKey(const SDL_Keycode& key) {
 }
 
 Event EventHandler::_getEvent(const SDL_Event& e) {
-    if (e.type == SDL_QUIT) {
-        return EXIT_EV;
-    }
+    switch (e.type) {
+        case SDL_QUIT: {
+            return EXIT_EV;
+        }
 
-    if ((e.type == SDL_TEXTINPUT) && (text_input_enabled)) {
+        case SDL_TEXTINPUT: {
+            return _getTextInputEv();
+        }
+
+        case SDL_MOUSEBUTTONDOWN: {
+            return _getMouseButtonDownEv(e);
+        }
+
+        case SDL_KEYDOWN: {
+            return _getKeyDownEv(e);
+        }
+
+        case SDL_KEYUP: {
+            return _getKeyUpEv(e);
+        }
+
+        default: {
+            return INVALID_EV;
+        }
+    }
+}
+
+// Traductores de eventos particulares
+
+Event EventHandler::_getTextInputEv() {
+    if (text_input_enabled) {
         return TEXT_INPUT_EV;
     }
+    return INVALID_EV;
+}
 
-    if ((e.type == SDL_KEYDOWN) && (!text_input_enabled)) {
-        Key key = _getKey(e.key.keysym.sym);
+Event EventHandler::_getMouseButtonDownEv(const SDL_Event& e) {
+    if (e.button.button != SDL_BUTTON_LEFT) {
+        return INVALID_EV;
+    }
 
-        switch (key) {
-            case UNMAPPED_KEY: {
-                break;
+    bool on_camera = _clickInside(camera_box, e);
+    bool on_inventory = _clickInside(inventory_box, e);
+
+    switch (e.button.clicks) {
+        case 1: {
+            // Single left click
+
+            if (on_camera) {
+                fprintf(stderr, "Click en la camara del juego!\n");
+            } else if (on_inventory) {
+                fprintf(stderr, "Click en el inventario!\n");
             }
 
+            break;
+        }
+
+        case 2: {
+            // Double left click
+
+            if (on_inventory) {
+                fprintf(stderr, "Doble click en el inventario!\n");
+            }
+
+            break;
+        }
+
+        default: {
+            break;
+        }
+    }
+
+    return INVALID_EV;
+}
+
+Event EventHandler::_getKeyDownEv(const SDL_Event& e) {
+    Key key = _getKey(e.key.keysym.sym);
+
+    // La mayoría de las veces la tecla no interesa
+    if (key == UNMAPPED_KEY) {
+        return INVALID_EV;
+    }
+
+    if (!text_input_enabled) {
+        switch (key) {
             case UP_KEY: {
                 if (!key_pressed) {
                     key_pressed = UP_KEY;
@@ -86,11 +155,7 @@ Event EventHandler::_getEvent(const SDL_Event& e) {
                 break;
             }
         }
-    }
-
-    if ((e.type == SDL_KEYDOWN) && (text_input_enabled)) {
-        Key key = _getKey(e.key.keysym.sym);
-
+    } else {
         switch (key) {
             case ENTER_KEY: {
                 text_input_enabled = false;
@@ -111,53 +176,71 @@ Event EventHandler::_getEvent(const SDL_Event& e) {
         }
     }
 
-    if (e.type == SDL_KEYUP && e.key.repeat == 0) {
-        Key key = _getKey(e.key.keysym.sym);
+    return INVALID_EV;
+}
 
-        switch (key) {
-            case UNMAPPED_KEY: {
-                break;
-            }
+Event EventHandler::_getKeyUpEv(const SDL_Event& e) {
+    Key key = _getKey(e.key.keysym.sym);
 
-            case UP_KEY: {
-                if (key_pressed == UP_KEY) {
-                    key_pressed = UNMAPPED_KEY;
-                    return STOP_MOVING_EV;
-                }
-                break;
-            }
+    switch (key) {
+        case UNMAPPED_KEY: {
+            break;
+        }
 
-            case DOWN_KEY: {
-                if (key_pressed == DOWN_KEY) {
-                    key_pressed = UNMAPPED_KEY;
-                    return STOP_MOVING_EV;
-                }
-                break;
+        case UP_KEY: {
+            if (key_pressed == UP_KEY) {
+                key_pressed = UNMAPPED_KEY;
+                return STOP_MOVING_EV;
             }
+            break;
+        }
 
-            case LEFT_KEY: {
-                if (key_pressed == LEFT_KEY) {
-                    key_pressed = UNMAPPED_KEY;
-                    return STOP_MOVING_EV;
-                }
-                break;
+        case DOWN_KEY: {
+            if (key_pressed == DOWN_KEY) {
+                key_pressed = UNMAPPED_KEY;
+                return STOP_MOVING_EV;
             }
+            break;
+        }
 
-            case RIGHT_KEY: {
-                if (key_pressed == RIGHT_KEY) {
-                    key_pressed = UNMAPPED_KEY;
-                    return STOP_MOVING_EV;
-                }
-                break;
+        case LEFT_KEY: {
+            if (key_pressed == LEFT_KEY) {
+                key_pressed = UNMAPPED_KEY;
+                return STOP_MOVING_EV;
             }
+            break;
+        }
 
-            default: {
-                break;
+        case RIGHT_KEY: {
+            if (key_pressed == RIGHT_KEY) {
+                key_pressed = UNMAPPED_KEY;
+                return STOP_MOVING_EV;
             }
+            break;
+        }
+
+        default: {
+            break;
         }
     }
 
     return INVALID_EV;
+}
+
+// Métodos auxiliares
+
+bool EventHandler::_clickInside(const SDL_Rect& rect,
+                                const SDL_Event& e) const {
+    // Primero escalamos el click
+    SDL_Point click_pos = {((int)(e.button.x / scale_factor_w)),
+                           ((int)(e.button.y / scale_factor_h))};
+
+    if ((click_pos.x > (rect.x + rect.w)) || (click_pos.x < (rect.x)) ||
+        (click_pos.y > (rect.y + rect.h)) || (click_pos.y < (rect.y))) {
+        return false;
+    }
+
+    return true;
 }
 
 //-----------------------------------------------------------------------------
@@ -165,10 +248,29 @@ Event EventHandler::_getEvent(const SDL_Event& e) {
 //-----------------------------------------------------------------------------
 // API Pública
 
-EventHandler::EventHandler(std::atomic_bool& exit, HUD& hud,
-                           BlockingQueue<Command*>& commands)
-    : exit(exit), hud(hud), commands(commands) {
+EventHandler::EventHandler(std::atomic_bool& exit,
+                           BlockingQueue<Command*>& commands, HUD& hud,
+                           const MapView& map)
+    : exit(exit), commands(commands), hud(hud), map(map) {
     _bindKeycodes();
+}
+
+void EventHandler::init(const json& config, const float scale_factor_w,
+                        const float scale_factor_h) {
+    // Cargamos la box de la cámara del juego
+    camera_box.x = config["camera"]["offset"]["x"];
+    camera_box.y = config["camera"]["offset"]["y"];
+    camera_box.w = config["camera"]["w"];
+    camera_box.h = config["camera"]["h"];
+
+    // Cargamos la box del inventario
+    inventory_box.x = config["hud"]["user_inventory"]["offset"]["x"];
+    inventory_box.y = config["hud"]["user_inventory"]["offset"]["y"];
+    inventory_box.w = config["hud"]["user_inventory"]["w"];
+    inventory_box.h = config["hud"]["user_inventory"]["h"];
+
+    this->scale_factor_w = scale_factor_w;
+    this->scale_factor_h = scale_factor_h;
 }
 
 void EventHandler::handleEvent(const SDL_Event& e) {
@@ -212,6 +314,7 @@ void EventHandler::handleEvent(const SDL_Event& e) {
             break;
         }
 
+        // Texto
         case START_INPUT_EV: {
             hud.enableInput();
             break;
@@ -239,6 +342,23 @@ void EventHandler::handleEvent(const SDL_Event& e) {
             }
 
             hud.disableInput();
+            break;
+        }
+
+        // Clicks
+        case MAP_SINGLE_CLICK_EV: {
+            fprintf(stderr, "Click en el mapa. Falta implementar.\n");
+            break;
+        }
+
+        case HUD_SINGLE_CLICK_EV: {
+            fprintf(stderr, "Click en el inventario. Falta implementar.\n");
+            break;
+        }
+
+        case HUD_DOUBLE_CLICK_EV: {
+            fprintf(stderr,
+                    "Doble click en el inventario. Falta implementar.\n");
             break;
         }
 
