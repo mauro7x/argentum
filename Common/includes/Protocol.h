@@ -64,11 +64,10 @@ enum CommandOpcode {
 };
 
 enum ReplyOpcode {
-    ERROR_REPLY = 0,
+    ERROR_REPLY,   /* Rojo */
     INFO_REPLY,    /* Blanco */
     SUCCESS_REPLY, /* Verde */
     LIST_REPLY     /* Amarillo */
-
 };
 
 enum BroadcastType { NEW_BROADCAST, UPDATE_BROADCAST, DELETE_BROADCAST };

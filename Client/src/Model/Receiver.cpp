@@ -29,212 +29,24 @@ void Receiver::_receivePrivateMessage() const {
 }
 
 void Receiver::_receiveBroadcast() const {
-    uint8_t opcode;
+    uint8_t broadcast_type, entity_type;
     size_t received = 0;
 
-    received = (socket >> opcode);
+    received = (socket >> broadcast_type);
     if (!received) {
         throw Exception(
             "Receiver::_receiveBroadcast: incomplete broadcast received.");
     }
 
-    switch (opcode) {
-        case NEW_BROADCAST: {
-            _receiveNewBroadcast();
-            break;
-        }
-
-        case UPDATE_BROADCAST: {
-            _receiveUpdateBroadcast();
-            break;
-        }
-
-        case DELETE_BROADCAST: {
-            _receiveDeleteBroadcast();
-            break;
-        }
-
-        default: {
-            throw Exception(
-                "Receiver::_receiveBroadcast: invalid broadcast type "
-                "received.");
-        }
-    }
-}
-
-void Receiver::_receiveNewBroadcast() const {
-    uint8_t entity_type = 0;
-    std::vector<uint8_t> serialized_broadcast;
-    size_t received = 0;
-
     received = (socket >> entity_type);
     if (!received) {
         throw Exception(
-            "Receiver::_receiveNewBroadcast: incomplete broadcast received.");
+            "Receiver::_receiveBroadcast: incomplete broadcast received.");
     }
 
-    received = (socket >> serialized_broadcast);
-    if (!received) {
-        throw Exception(
-            "Receiver::_receiveNewBroadcast: incomplete broadcast received.");
-    }
-
-    switch (entity_type) {
-        case PLAYER_TYPE: {
-            // Por ahora ignoramos este bug del servidor, lanzando un warning
-            fprintf(stderr,
-                    "WARNING: Reiceved new player broadcast again. This should "
-                    "not be received more than once.\n");
-            break;
-
-            // Lo que deberíamos hacer
-            throw Exception(
-                "Receiver::_receiveNewBroadcast: received new player broadcast "
-                "(invalid combination, this data should only be received when "
-                "connecting).");
-        }
-
-        case CHARACTER_TYPE: {
-            PlayerData received_data;
-            json j = json::from_msgpack(serialized_broadcast);
-            received_data = j.get<PlayerData>();
-            broadcasts.push(
-                new NewCharacterBroadcast((CharacterData)received_data));
-            break;
-        }
-
-        case CREATURE_TYPE: {
-            CreatureData received_data;
-            json j = json::from_msgpack(serialized_broadcast);
-            received_data = j.get<CreatureData>();
-            broadcasts.push(new NewCreatureBroadcast(received_data));
-            break;
-        }
-
-        case ITEM_TYPE: {
-            throw Exception(
-                "Receiver::_receiveNewBroadcast: items not implemented yet.");
-            break;
-        }
-
-        default: {
-            throw Exception(
-                "Receiver::_receiveNewBroadcast: invalid entity type "
-                "received.");
-        }
-    }
-}
-
-void Receiver::_receiveUpdateBroadcast() const {
-    uint8_t entity_type = 0;
-    std::vector<uint8_t> serialized_broadcast;
-    size_t received = 0;
-
-    received = (socket >> entity_type);
-    if (!received) {
-        throw Exception(
-            "Receiver::_receiveUpdateBroadcast: incomplete broadcast "
-            "received.");
-    }
-
-    received = (socket >> serialized_broadcast);
-    if (!received) {
-        throw Exception(
-            "Receiver::_receiveUpdateBroadcast: incomplete broadcast "
-            "received.");
-    }
-
-    switch (entity_type) {
-        case PLAYER_TYPE: {
-            PlayerData received_data;
-            json j = json::from_msgpack(serialized_broadcast);
-            received_data = j.get<PlayerData>();
-            broadcasts.push(new UpdatePlayerBroadcast(received_data));
-            break;
-        }
-
-        case CHARACTER_TYPE: {
-            PlayerData received_data;
-            json j = json::from_msgpack(serialized_broadcast);
-            received_data = j.get<PlayerData>();
-            broadcasts.push(
-                new UpdateCharacterBroadcast((CharacterData)received_data));
-            break;
-        }
-
-        case CREATURE_TYPE: {
-            CreatureData received_data;
-            json j = json::from_msgpack(serialized_broadcast);
-            received_data = j.get<CreatureData>();
-            broadcasts.push(new UpdateCreatureBroadcast(received_data));
-            break;
-        }
-
-        case ITEM_TYPE: {
-            throw Exception(
-                "Receiver::_receiveUpdateBroadcast: items not implemented "
-                "yet.");
-            break;
-        }
-
-        default: {
-            throw Exception(
-                "Receiver::_receiveUpdateBroadcast: invalid entity type "
-                "received.");
-        }
-    }
-}
-
-void Receiver::_receiveDeleteBroadcast() const {
-    uint8_t entity_type = 0;
-    uint32_t id = 0;
-    size_t received = 0;
-
-    received = (socket >> entity_type);
-    if (!received) {
-        throw Exception(
-            "Receiver::_receiveDeleteBroadcast: incomplete broadcast "
-            "received.");
-    }
-
-    received = (socket >> id);
-    if (!received) {
-        throw Exception(
-            "Receiver::_receiveDeleteBroadcast: incomplete broadcast "
-            "received.");
-    }
-
-    switch (entity_type) {
-        case PLAYER_TYPE: {
-            throw Exception(
-                "Receiver::_receiveDeleteBroadcast: received player delete "
-                "broadcast.");
-            break;
-        }
-
-        case CHARACTER_TYPE: {
-            broadcasts.push(new DeleteCharacterBroadcast(id));
-            break;
-        }
-
-        case CREATURE_TYPE: {
-            broadcasts.push(new DeleteCreatureBroadcast(id));
-            break;
-        }
-
-        case ITEM_TYPE: {
-            throw Exception(
-                "Receiver::_receiveDeleteBroadcast: items not implemented "
-                "yet.");
-            break;
-        }
-
-        default: {
-            throw Exception(
-                "Receiver::_receiveDeleteBroadcast: invalid entity type "
-                "received.");
-        }
-    }
+    Broadcast* new_broadcast =
+        BroadcastFactory::newBroadcast(broadcast_type, entity_type, socket);
+    broadcasts.push(new_broadcast);
 }
 
 //-----------------------------------------------------------------------------
