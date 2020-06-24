@@ -31,6 +31,8 @@
 
 * Pensar si vale la pena tener los métodos init o usar el constructor. -Mau, 24/06.
 
+* Una clase Units que encapsule los contenedores de unidades de criaturas, personajes, etc. -Mau, 24/06.
+
 ---
 
 ## Common
