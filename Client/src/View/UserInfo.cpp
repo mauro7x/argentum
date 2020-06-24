@@ -74,14 +74,12 @@ void UserInfo::loadMedia() {
     // Nickname loading
     current_nickname = "loading";
     nickname.loadFromRenderedText(g_renderer, nickname_font,
-                                  current_nickname.c_str(),
-                                  SDL_Color({0xFF, 0xFF, 0xFF, 0xFF}));
+                                  current_nickname.c_str());
     _center(nickname_pos, nickname, nickname_box);
 
     // Level loading
     current_lvl = 0;
-    lvl.loadFromRenderedText(g_renderer, lvl_font, std::to_string(current_lvl),
-                             SDL_Color({0xFF, 0xFF, 0xFF, 0xFF}));
+    lvl.loadFromRenderedText(g_renderer, lvl_font, std::to_string(current_lvl));
     _center(lvl_pos, lvl, lvl_box);
 
     xp.loadMedia();
@@ -92,8 +90,7 @@ void UserInfo::update(const int it) {
     if (!nickname_loaded) {
         current_nickname = player.getNickname();
         nickname.loadFromRenderedText(g_renderer, nickname_font,
-                                      current_nickname.c_str(),
-                                      SDL_Color({0xFF, 0xFF, 0xFF, 0xFF}));
+                                      current_nickname.c_str());
         _center(nickname_pos, nickname, nickname_box);
         nickname_loaded = true;
     }
@@ -103,8 +100,7 @@ void UserInfo::update(const int it) {
     if (current_lvl != new_lvl) {
         current_lvl = new_lvl;
         lvl.loadFromRenderedText(g_renderer, lvl_font,
-                                 std::to_string(current_lvl),
-                                 SDL_Color({0xFF, 0xFF, 0xFF, 0xFF}));
+                                 std::to_string(current_lvl));
         _center(lvl_pos, lvl, lvl_box);
     }
 

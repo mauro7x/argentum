@@ -63,7 +63,7 @@ void Texture::loadFromFile(const Renderer* renderer, std::string filepath,
 
 void Texture::loadFromRenderedText(const Renderer* renderer, TTF_Font* font,
                                    std::string text, SDL_Color color,
-                                   TextType type, SDL_Color shade) {
+                                   TextType type) {
     // Eliminamos una textura previa si existe
     free();
 
@@ -73,12 +73,6 @@ void Texture::loadFromRenderedText(const Renderer* renderer, TTF_Font* font,
     switch (type) {
         case SOLID_TEXT: {
             text_surface = TTF_RenderText_Solid(font, text.c_str(), color);
-            break;
-        }
-
-        case SHADED_TEXT: {
-            text_surface =
-                TTF_RenderText_Shaded(font, text.c_str(), color, shade);
             break;
         }
 
@@ -92,6 +86,33 @@ void Texture::loadFromRenderedText(const Renderer* renderer, TTF_Font* font,
                 "Error in function loadFromRenderedText(). Unknown text type.");
         }
     }
+
+    if (text_surface == NULL) {
+        throw SDLException(
+            "Error in function TTF_RenderText_Solid()\nSDL_Error: %s",
+            SDL_GetError());
+    }
+
+    // Creamos la textura desde la surface
+    texture = renderer->createTextureFromSurface(text_surface);
+
+    // Seteamos las dimensiones
+    width = text_surface->w;
+    height = text_surface->h;
+
+    // Liberamos la surface
+    SDL_FreeSurface(text_surface);
+}
+
+void Texture::loadFromRenderedWrappedText(const Renderer* renderer,
+                                          TTF_Font* font, std::string text,
+                                          int max_width, SDL_Color color) {
+    // Eliminamos una textura previa si existe
+    free();
+
+    // Generamos la surface de texto
+    SDL_Surface* text_surface =
+        TTF_RenderText_Blended_Wrapped(font, text.c_str(), color, max_width);
 
     if (text_surface == NULL) {
         throw SDLException(

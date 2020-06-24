@@ -81,6 +81,9 @@ class HUD {
     /* Habilita la consola */
     void enableInput();
 
+    /* Agrega el mensaje a la consola */
+    void addMessage(const std::string& message);
+
     /* Escribe el texto recibido a la consola */
     void newInputText(const char* text);
 

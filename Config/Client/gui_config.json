@@ -37,6 +37,15 @@
                 "y": 7
             },
             "components": {
+                "output_box": {
+                    "fontsize": 12,
+                    "w": 662,
+                    "h": 108,
+                    "offset": {
+                        "x": 5,
+                        "y": 0
+                    }
+                },
                 "input_box": {
                     "fontsize": 16,
                     "w": 657,

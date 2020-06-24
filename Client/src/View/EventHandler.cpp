@@ -239,6 +239,7 @@ void EventHandler::handleEvent(const SDL_Event& e) {
                         input.c_str());
             }
 
+            hud.addMessage(input);
             hud.disableInput();
             break;
         }
