@@ -58,6 +58,7 @@ void ClientLogin::run() {
             InventorySlot({0, 0}),      InventorySlot({0, 0}),
             InventorySlot({0, 0}),      InventorySlot({0, 0})};
         init_data.health = 50;
+        init_data.mana = 100;
         init_data.safe_gold = 100;
         init_data.excess_gold = 50;
         init_data.level = 10;
