@@ -4,6 +4,9 @@
 //-----------------------------------------------------------------------------
 #include <cstdint>
 #include <vector>
+#include <exception>
+#include <iostream>
+#include <string>
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -38,6 +41,9 @@ class LogInProxy {
 
     /* Recibe la data inicial del jugador y la pushea como un broadcast new. */
     void _receiveFirstPackage() const;
+
+    /* manejo de signin y signup */
+    void _login() const;
 
     //-----------------------------------------------------------------------------
 
