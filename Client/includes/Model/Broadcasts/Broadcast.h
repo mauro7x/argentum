@@ -2,8 +2,6 @@
 #define __BROADCAST_H__
 
 //-----------------------------------------------------------------------------
-#include <SDL2/SDL.h>
-
 #include "../../../../Common/includes/UnitData.h"
 #include "../../View/Character.h"
 #include "../../View/Creature.h"

@@ -75,7 +75,7 @@ Message* MessageFactory::newMessage(uint8_t message_type,
             }
 
             return new SignedMessage(sender, content, PRIVATE_SIGNED_MSG,
-                                     PRIVATE_MSG_COLOR);
+                                     GENERAL_MSG_COLOR);
         }
 
         default: {

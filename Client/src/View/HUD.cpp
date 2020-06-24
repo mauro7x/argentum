@@ -64,12 +64,12 @@ void HUD::enableInput() {
     console.enableInput();
 }
 
-void HUD::addMessage(const std::string& message, MessageType type) {
+void HUD::addMessage(const std::string& message, const Color& color) {
     if (!initialized) {
         throw Exception("HUD not initialized.");
     }
 
-    console.add(message, type);
+    console.add(message, color);
 }
 
 void HUD::newInputText(const char* text) {

@@ -9,8 +9,9 @@
 
 enum Opcode {
     // Server -> Client opcodes
-    REPLY_OPCODE = 0,
-    PRIVATE_MESSAGE_OPCODE,
+    // REPLY_OPCODE = 0,
+    // PRIVATE_MESSAGE_OPCODE,
+    MESSAGE_OPCODE = 0,
     BROADCAST_OPCODE,
 
     // Client -> Server opcodes

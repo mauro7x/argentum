@@ -92,14 +92,6 @@ void Console::init(const json& config) {
     render_rect.w = config["w"];
     render_rect.h = config["h"];
 
-    // Colores de renderizado
-    colors.emplace(ERROR_MSG_TYPE, SDL_Color(ERROR_MSG_COLOR));
-    colors.emplace(INFO_MSG_TYPE, SDL_Color(INFO_MSG_COLOR));
-    colors.emplace(SUCCESS_MSG_TYPE, SDL_Color(SUCCESS_MSG_COLOR));
-    colors.emplace(LIST_MSG_TYPE, SDL_Color(LIST_MSG_COLOR));
-    colors.emplace(PRIVATE_MSG_TYPE, SDL_Color(PRIVATE_MSG_COLOR));
-    colors.emplace(USER_CMD_MSG_TYPE, SDL_Color(USER_CMD_MSG_COLOR));
-
     // Input
     input_fontsize = config["components"]["input_box"]["fontsize"];
     input_box.x =
@@ -167,7 +159,7 @@ void Console::append(const char* text) {
     }
 }
 
-void Console::add(const std::string& message, MessageType type) {
+void Console::add(const std::string& message, const Color& color) {
     if (!initialized) {
         throw Exception("Console not initialized.");
     }
@@ -175,7 +167,8 @@ void Console::add(const std::string& message, MessageType type) {
     if (!message.empty()) {
         messages.emplace_front(Texture());
         messages.front().loadFromRenderedWrappedText(
-            g_renderer, output_font, message, output_box.w, colors[type]);
+            g_renderer, output_font, message, output_box.w,
+            SDL_Color({color.r, color.g, color.b, color.a}));
         _discardOldMessages();
     }
 }

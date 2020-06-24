@@ -22,6 +22,7 @@
 #include "CommandDispatcher.h"
 #include "Commands/Command.h"
 #include "LogIn.h"
+#include "Messages/Message.h"
 #include "Receiver.h"
 //-----------------------------------------------------------------------------
 
@@ -32,6 +33,7 @@ class Client {
     // Canales de comunicación entre hilos (thread-safe)
     BlockingQueue<Command*> commands;
     NonBlockingQueue<Broadcast*> broadcasts;
+    NonBlockingQueue<Message*> messages;
     std::atomic_bool exit;
 
     //-------------------------------------------------------------------------

@@ -232,17 +232,16 @@ void EventHandler::handleEvent(const SDL_Event& e) {
 
             Command* cmd = input_parser.parse(input);
             if (cmd) {
-                hud.addMessage(">> " + input, USER_CMD_MSG_TYPE);
+                hud.addMessage(">> " + input, USER_CMD_MSG_COLOR);
                 commands.push(cmd);
             } else if (!input.empty()) {
-                hud.addMessage("Comando inexistente.", ERROR_MSG_TYPE);
+                hud.addMessage("Comando inexistente.", ERROR_MSG_COLOR);
             }
 
             hud.disableInput();
             break;
         }
 
-        // No deberíamos llegar acá nunca
         default: {
             throw Exception(
                 "EventHandler::handleEvent: unknown event received.");

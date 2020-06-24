@@ -260,7 +260,7 @@ void Game::actCharacters(const int it) {
             it_characters->second.act(it);
         } catch (const CollisionWhileMovingException& e) {
             it_characters->second.stopMoving();
-            Notification* reply = new NotificationReply(ERROR_REPLY, e.what());
+            Notification* reply = new NotificationReply(ERROR_MSG, e.what());
             active_clients.notify(it_characters->first, reply);
         }
 

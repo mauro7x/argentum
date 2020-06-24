@@ -29,6 +29,7 @@
 //-----------------------------------------------------------------------------
 #include "../Model/Broadcasts/Broadcast.h"
 #include "../Model/Commands/Command.h"
+#include "../Model/Messages/Message.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -57,8 +58,9 @@
 class GameView {
    private:
     // Comunicación entre hilos
-    BlockingQueue<Command*>& commands;  // es necesario tenerla aca?
+    BlockingQueue<Command*>& commands;
     NonBlockingQueue<Broadcast*>& broadcasts;
+    NonBlockingQueue<Message*>& messages;
     std::atomic_bool& exit;
 
     // Componentes SDL principales
@@ -95,6 +97,9 @@ class GameView {
     /* Vacía la cola de eventos de SDL */
     void _processSDLEvents();
 
+    /* Vacía la cola de mensajes del servidor */
+    void _processMessages();
+
     /* Vacía la cola de broadcasts del servidor */
     void _processBroadcasts();
 
@@ -106,7 +111,8 @@ class GameView {
    public:
     /* Constructor */
     GameView(BlockingQueue<Command*>& commands,
-             NonBlockingQueue<Broadcast*>& broadcasts, std::atomic_bool& exit);
+             NonBlockingQueue<Broadcast*>& broadcasts,
+             NonBlockingQueue<Message*>& messages, std::atomic_bool& exit);
 
     /* Deshabilitamos el constructor por copia. */
     GameView(const GameView&) = delete;

@@ -8,25 +8,22 @@
 //-----------------------------------------------------------------------------
 // API Pública
 
-NotificationReply::NotificationReply(char opcode, std::string reply)
-    : opcode(opcode), reply(reply), length(reply.size()) {}
+NotificationReply::NotificationReply(uint8_t message_type, std::string reply)
+    : message_type(message_type), reply(reply) {}
 
 bool NotificationReply::send(const InstanceId sender,
                              const SocketWrapper& peer) {
-    size_t sent = 0;
+    // Enviamos la notificación según el protocolo
 
-    sent = (peer << (char)REPLY_OPCODE);
-    if (!sent) {
+    if (!(peer << (uint8_t)MESSAGE_OPCODE)) {
         return false;
     }
 
-    sent = (peer << opcode);
-    if (!sent) {
+    if (!(peer << message_type)) {
         return false;
     }
 
-    sent = (peer << reply);
-    if (!sent) {
+    if (!(peer << reply)) {
         return false;
     }
 

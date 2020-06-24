@@ -2,14 +2,15 @@
 #define __NOTIFICATION_H__
 
 //-----------------------------------------------------------------------------
-#include "../../../Common/includes/Protocol.h"
-#include "../../../Common/includes/Socket/SocketWrapper.h"
-#include "../../../Common/includes/types.h"
+// #include <memory> que hace esto? -m
+#include <cstdint>
+#include <string>
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-#include <memory>
-#include <string>
+#include "../../../Common/includes/Protocol.h"
+#include "../../../Common/includes/Socket/SocketWrapper.h"
+#include "../../../Common/includes/types.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------

@@ -4,9 +4,15 @@
 //-----------------------------------------------------------------------------
 #include <string>
 //-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
 #include "../../../Common/includes/Socket/SocketWrapper.h"
 //-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
 #include "Notification.h"
+//-----------------------------------------------------------------------------
+
 //-----------------------------------------------------------------------------
 
 /* Notificación de reply en carga de responder las respuestas del servidor
@@ -14,16 +20,15 @@
 
 class NotificationReply : public Notification {
    private:
-    char opcode;
+    uint8_t message_type;
     std::string reply;
-    uint32_t length;
 
    public:
     /* Constructor por defult */
     NotificationReply();
 
     /* Constructor */
-    NotificationReply(char opcode, std::string reply);
+    NotificationReply(uint8_t message_type, std::string reply);
 
     //-----------------------------------------------------------------------------
 

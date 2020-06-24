@@ -3,43 +3,27 @@
 //-----------------------------------------------------------------------------
 // Métodos privados
 
-void Receiver::_receiveReply() const {
-    // implementación proxy
+void Receiver::_receiveMessage() const {
+    uint8_t message_type;
 
-    uint8_t opcode;
-    std::string reply;
-    size_t received = 0;
-
-    received = (socket >> opcode);
-    if (!received) {
-        throw Exception("Receiver::_receiveReply: incomplete reply received.");
+    if (!(socket >> message_type)) {
+        throw Exception(
+            "Receiver::_receiveMessage: incomplete message received.");
     }
 
-    received = (socket >> reply);
-    if (!received) {
-        throw Exception("Receiver::_receiveReply: incomplete reply received.");
-    }
-
-    // switchear segun el tipo para el color
-    fprintf(stderr, "REPLY RECIBIDA: %s\n", reply.c_str());
-}
-
-void Receiver::_receivePrivateMessage() const {
-    throw Exception("Receiver::run: private messages not implemented yet.");
+    Message* new_message = MessageFactory::newMessage(message_type, socket);
+    messages.push(new_message);
 }
 
 void Receiver::_receiveBroadcast() const {
     uint8_t broadcast_type, entity_type;
-    size_t received = 0;
 
-    received = (socket >> broadcast_type);
-    if (!received) {
+    if (!(socket >> broadcast_type)) {
         throw Exception(
             "Receiver::_receiveBroadcast: incomplete broadcast received.");
     }
 
-    received = (socket >> entity_type);
-    if (!received) {
+    if (!(socket >> entity_type)) {
         throw Exception(
             "Receiver::_receiveBroadcast: incomplete broadcast received.");
     }
@@ -56,21 +40,16 @@ void Receiver::_receiveBroadcast() const {
 
 Receiver::Receiver(const SocketWrapper& socket,
                    NonBlockingQueue<Broadcast*>& broadcasts,
-                   std::atomic_bool& exit)
-    : socket(socket), broadcasts(broadcasts), exit(exit) {}
+                   NonBlockingQueue<Message*>& messages, std::atomic_bool& exit)
+    : socket(socket), broadcasts(broadcasts), messages(messages), exit(exit) {}
 
 void Receiver::run() {
     try {
         uint8_t opcode;
         while (socket >> opcode) {
             switch (opcode) {
-                case REPLY_OPCODE: {
-                    _receiveReply();
-                    break;
-                }
-
-                case PRIVATE_MESSAGE_OPCODE: {
-                    _receivePrivateMessage();
+                case MESSAGE_OPCODE: {
+                    _receiveMessage();
                     break;
                 }
 

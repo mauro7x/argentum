@@ -93,6 +93,14 @@ void GameView::_processSDLEvents() {
     }
 }
 
+void GameView::_processMessages() {
+    Message* message = NULL;
+    while ((message = messages.pop())) {
+        message->update(hud);
+        delete message;
+    }
+}
+
 void GameView::_processBroadcasts() {
     Broadcast* broadcast = NULL;
     while ((broadcast = broadcasts.pop())) {
@@ -103,8 +111,10 @@ void GameView::_processBroadcasts() {
 
 void GameView::_loopIteration(const int it) {
     // auto t1 = std::chrono::steady_clock::now();
+
     /* Vaciamos las colas a procesar*/
     _processSDLEvents();
+    _processMessages();
     _processBroadcasts();
 
     /* Limpiamos la pantalla */
@@ -134,10 +144,12 @@ void GameView::_loopIteration(const int it) {
 
 GameView::GameView(BlockingQueue<Command*>& commands,
                    NonBlockingQueue<Broadcast*>& broadcasts,
+                   NonBlockingQueue<Message*>& messages,
                    std::atomic_bool& exit)
     :  // Comunicación entre hilos
       commands(commands),
       broadcasts(broadcasts),
+      messages(messages),
       exit(exit),
 
       // Componentes SDL principales

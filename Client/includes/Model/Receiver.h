@@ -18,6 +18,8 @@
 //-----------------------------------------------------------------------------
 #include "Broadcasts/Broadcast.h"
 #include "Broadcasts/BroadcastFactory.h"
+#include "Messages/Message.h"
+#include "Messages/MessageFactory.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -26,36 +28,25 @@ class Receiver : public Thread {
    private:
     const SocketWrapper& socket;              /* SÓLO LECTURA (RECV) */
     NonBlockingQueue<Broadcast*>& broadcasts; /* Broadcasts a recibir */
-    // falta cola de info para mostrar x chat
+    NonBlockingQueue<Message*>& messages;     /* Mensajes a recibir */
     std::atomic_bool& exit; /* flag de ejecución compartido */
 
     //-----------------------------------------------------------------------------
     // Métodos privados
 
-    /* Recibe una respuesta y la pushea en la cola */
-    void _receiveReply() const;
-
-    /* Recibe un mensaje privado y lo pushea en la cola */
-    void _receivePrivateMessage() const;
+    /* Recibe un mensaje y lo pushea en la cola */
+    void _receiveMessage() const;
 
     /* Recibe un broadcast y lo pushea en la cola */
     void _receiveBroadcast() const;
-
-    /* Recibe un broadcast de tipo new */
-    void _receiveNewBroadcast() const;
-
-    /* Recibe un broadcast de tipo update */
-    void _receiveUpdateBroadcast() const;
-
-    /* Recibe un broadcast de tipo delete */
-    void _receiveDeleteBroadcast() const;
 
     //-----------------------------------------------------------------------------
 
    public:
     /* Constructor */
     Receiver(const SocketWrapper& socket,
-             NonBlockingQueue<Broadcast*>& broadcasts, std::atomic_bool& exit);
+             NonBlockingQueue<Broadcast*>& broadcasts,
+             NonBlockingQueue<Message*>& messages, std::atomic_bool& exit);
 
     /* Deshabilitamos el constructor por copia. */
     Receiver(const Receiver&) = delete;

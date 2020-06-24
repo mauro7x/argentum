@@ -14,6 +14,7 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+#include "../colors.h"
 #include "../paths.h"
 //-----------------------------------------------------------------------------
 
@@ -82,7 +83,7 @@ class HUD {
     void enableInput();
 
     /* Agrega el mensaje a la consola */
-    void addMessage(const std::string& message, MessageType type);
+    void addMessage(const std::string& message, const Color& color);
 
     /* Escribe el texto recibido a la consola */
     void newInputText(const char* text);

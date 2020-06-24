@@ -70,6 +70,13 @@ void Client::_freeQueues() {
             delete broadcast;
         }
     }
+
+    {
+        Message* message = NULL;
+        while ((message = messages.pop())) {
+            delete message;
+        }
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -105,14 +112,14 @@ void Client::run() {
 
     // Dispatcher y Receiver (objetos activos)
     CommandDispatcher command_dispatcher(socket, commands, exit);
-    Receiver receiver(socket, broadcasts, exit);
+    Receiver receiver(socket, broadcasts, messages, exit);
 
     command_dispatcher.start();
     receiver.start();
 
     try {
         // Lanzamos la vista del juego
-        GameView game(commands, broadcasts, exit);
+        GameView game(commands, broadcasts, messages, exit);
         game();
 
     } catch (const Exception& e) {

@@ -33,6 +33,8 @@
 
 * Una clase Units que encapsule los contenedores de unidades de criaturas, personajes, etc. -Mau, 24/06.
 
+* Agregar una opción a hud.addMessage para agregar mensajes en negrita. -Mau, 24/06.
+
 ---
 
 ## Common
