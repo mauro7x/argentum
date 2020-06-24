@@ -108,7 +108,8 @@ void ClientConnection::_receiveCommand(char opcode) {
         case START_MOVING_RIGHT_CMD:
         case STOP_MOVING_CMD: {
             cmd = new CommandMovement(id, opcode);
-            fprintf(stderr, "Command receiver: recibimos el comando %d\n",
+            fprintf(stderr,
+                    "CLIENTE %i: Se recibió el comando con opcode %d.\n", id,
                     opcode);
             commands.push(cmd);
             break;
@@ -116,9 +117,9 @@ void ClientConnection::_receiveCommand(char opcode) {
 
         default: {
             fprintf(stderr,
-                    "ClientConnection::_receiveCommand: received %c (unknown "
-                    "opcode).",
-                    opcode);
+                    "CLIENTE %i: Se recibió el comando DESCONOCIDO con opcode "
+                    "%d. Se ignora.\n",
+                    id, opcode);
             break;
         }
     }
