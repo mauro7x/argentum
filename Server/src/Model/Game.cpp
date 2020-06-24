@@ -322,7 +322,7 @@ void Game::spawnNewCreatures(const int it) {
 // Comandos
 //-----------------------------------------------------------------------------
 
-void Game::startMovingUp(const Id caller) {
+void Game::startMovingUp(const InstanceId caller) {
     if (!this->characters.count(caller)) {
         throw Exception("Game.cpp startMovingUp: unknown caller.");
     }
@@ -332,7 +332,7 @@ void Game::startMovingUp(const Id caller) {
     character.startMovingUp();
 }
 
-void Game::startMovingDown(const Id caller) {
+void Game::startMovingDown(const InstanceId caller) {
     if (!this->characters.count(caller)) {
         throw Exception("Game.cpp startMovingDown: unknown caller.");
     }
@@ -342,7 +342,7 @@ void Game::startMovingDown(const Id caller) {
     character.startMovingDown();
 }
 
-void Game::startMovingLeft(const Id caller) {
+void Game::startMovingLeft(const InstanceId caller) {
     if (!this->characters.count(caller)) {
         throw Exception("Game.cpp startMovingLeft: unknown caller.");
     }
@@ -352,7 +352,7 @@ void Game::startMovingLeft(const Id caller) {
     character.startMovingLeft();
 }
 
-void Game::startMovingRight(const Id caller) {
+void Game::startMovingRight(const InstanceId caller) {
     if (!this->characters.count(caller)) {
         throw Exception("Game.cpp startMovingRight: unknown caller.");
     }
@@ -362,7 +362,7 @@ void Game::startMovingRight(const Id caller) {
     character.startMovingRight();
 }
 
-void Game::stopMoving(const Id caller) {
+void Game::stopMoving(const InstanceId caller) {
     if (!this->characters.count(caller)) {
         throw Exception("Game.cpp stopMoving: unknown caller.");
     }
@@ -370,6 +370,75 @@ void Game::stopMoving(const Id caller) {
     Character& character = this->characters.at(caller);
 
     character.stopMoving();
+}
+
+void Game::useWeapon(const InstanceId caller, const uint32_t x_coord,
+                     const uint32_t y_coord) {
+    fprintf(stderr, "Comando useWeapon no implementado.\n");
+}
+
+void Game::equip(const InstanceId caller, const uint8_t n_slot) {
+    fprintf(stderr, "Comando equip no implementado.\n");
+}
+
+void Game::meditate(const InstanceId caller) {
+    fprintf(stderr, "Comando meditate no implementado.\n");
+}
+
+void Game::resurrect(const InstanceId caller) {
+    fprintf(stderr, "Comando resurrect no implementado.\n");
+}
+
+void Game::list(const InstanceId caller, const uint32_t x_coord,
+                const uint32_t y_coord) {
+    fprintf(stderr, "Comando list no implementado.\n");
+}
+
+void Game::depositItemOnBank(const InstanceId caller, const uint32_t x_coord,
+                             const uint32_t y_coord, const uint8_t n_slot,
+                             uint32_t amount) {
+    fprintf(stderr, "Comando depositItemOnBank no implementado.\n");
+}
+
+void Game::withdrawItemFromBank(const InstanceId caller, const uint32_t x_coord,
+                                const uint32_t y_coord, const uint32_t item_id,
+                                const uint32_t amount) {
+    fprintf(stderr, "Comando withdrawitemfrombank no implementado.\n");
+}
+
+void Game::depositGoldOnBank(const InstanceId caller, const uint32_t x_coord,
+                             const uint32_t y_coord, const uint32_t amount) {
+    fprintf(stderr, "Comando depositgoldonbank no implementado.\n");
+}
+
+void Game::withdrawGoldFromBank(const InstanceId caller, const uint32_t x_coord,
+                                const uint32_t y_coord, const uint32_t amount) {
+    fprintf(stderr, "Comando withdrawgoldfrombank no implementado.\n");
+}
+
+void Game::buyItem(const InstanceId caller, const uint32_t x_coord,
+                   const uint32_t y_coord, const uint32_t item_id,
+                   const uint32_t amount) {
+    fprintf(stderr, "Comando buyitem no implementado.\n");
+}
+
+void Game::sellItem(const InstanceId caller, const uint32_t x_coord,
+                    const uint32_t y_coord, const uint8_t n_slot,
+                    const uint32_t amount) {
+    fprintf(stderr, "Comando sellitem no implementado.\n");
+}
+
+void Game::take(const InstanceId caller) {
+    fprintf(stderr, "Comando take no implementado.\n");
+}
+
+void Game::drop(const InstanceId caller, const uint8_t n_slot,
+                const uint32_t amount) {
+    fprintf(stderr, "Comando drop no implementado.\n");
+}
+
+void Game::listConnectedPlayers(const InstanceId caller) {
+    fprintf(stderr, "Comando list no implementado.\n");
 }
 //-----------------------------------------------------------------------
 
