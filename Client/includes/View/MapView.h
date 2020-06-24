@@ -84,10 +84,7 @@ class MapView {
     /* Devuelve el ID de la unidad ocupante de una celda */
     InstanceId getOccupant(const int x, const int y) const;
 
-    /* Devuelve si es un tile válido que forma parte del mapa */
-    bool isValid(const int x, const int y) const;
-
-    /* Devuelve si hay collision en la celda dada */
+    /* Devuelve si la celda dada pertenece a un indoor */
     bool indoor(const int x, const int y) const;
 
     /* Obtiene la anchura en tiles del mapa actual */
