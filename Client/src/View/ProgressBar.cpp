@@ -62,8 +62,7 @@ void ProgressBar::loadMedia() {
 
     // Cargamos el texto
     if (text_type) {
-        text.loadFromRenderedText(g_renderer, font, "loading",
-                                  SDL_Color({0xFF, 0xFF, 0xFF, 0xFF}));
+        text.loadFromRenderedText(g_renderer, font, "loading");
         _center(text_pos, text, render_rect);
     }
 }
@@ -82,8 +81,7 @@ void ProgressBar::update(uint32_t current_value, uint32_t max_value) {
             case ABSOLUTE_PBTEXTYPE: {
                 text.loadFromRenderedText(g_renderer, font,
                                           std::to_string(current_value) + "/" +
-                                              std::to_string(max_value),
-                                          SDL_Color({0xFF, 0xFF, 0xFF, 0xFF}));
+                                              std::to_string(max_value));
                 break;
             }
 
@@ -92,8 +90,7 @@ void ProgressBar::update(uint32_t current_value, uint32_t max_value) {
                     g_renderer, font,
                     std::to_string(
                         (int)((((float)current_value) / max_value) * 100)) +
-                        "%",
-                    SDL_Color({0xFF, 0xFF, 0xFF, 0xFF}));
+                        "%");
                 break;
             }
 
@@ -104,8 +101,7 @@ void ProgressBar::update(uint32_t current_value, uint32_t max_value) {
                         std::to_string(max_value) + " (" +
                         std::to_string(
                             (int)((((float)current_value) / max_value) * 100)) +
-                        "%)",
-                    SDL_Color({0xFF, 0xFF, 0xFF, 0xFF}));
+                        "%)");
                 break;
             }
 

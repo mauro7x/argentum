@@ -60,6 +60,10 @@ void HUD::enableInput() {
     console.enableInput();
 }
 
+void HUD::addMessage(const std::string& message) {
+    console.add(message);
+}
+
 void HUD::newInputText(const char* text) {
     console.append(text);
 }

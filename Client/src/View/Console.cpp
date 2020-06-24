@@ -3,16 +3,15 @@
 //-----------------------------------------------------------------------------
 // Métodos privados
 
-void Console::_center(SDL_Point& texture_pos, const Texture& texture,
-                      const SDL_Rect& rect) {
+void Console::_setInputPos() {
     // Centramos solo verticalmente
-    texture_pos.x = rect.x;
-    texture_pos.y = rect.y + (rect.h - texture.getHeight()) / 2;
+    input_pos.x = input_box.x;
+    input_pos.y = input_box.y + (input_box.h - input.getHeight()) / 2;
 
     // Scroll horizontal
-    int excess = texture.getWidth() - rect.w;
+    int excess = input.getWidth() - input_box.w;
     if (excess > 0) {
-        texture_pos.x -= excess;
+        input_pos.x -= excess;
     }
 }
 
@@ -28,6 +27,30 @@ void Console::_switchCursorVisibility() {
         show_cursor = true;
     }
 }
+
+void Console::_renderInputBox() const {
+    if (input_enabled) {
+        // Renderizar el input
+        SDL_Rect render_quad = {input_pos.x, input_pos.y, input.getWidth(),
+                                input.getHeight()};
+        g_renderer->render(input.getTexture(), &render_quad);
+
+        // Renderizar el cursor si corresponde
+        if (show_cursor) {
+            if (current_input.size()) {
+                render_quad = {input_pos.x + input.getWidth(), input_pos.y,
+                               cursor.getWidth(), cursor.getHeight()};
+            } else {
+                render_quad = {input_pos.x, input_pos.y, cursor.getWidth(),
+                               cursor.getHeight()};
+            }
+
+            g_renderer->render(cursor.getTexture(), &render_quad);
+        }
+    }
+}
+
+void Console::_renderOutputBox() const {}
 
 //-----------------------------------------------------------------------------
 
@@ -56,6 +79,15 @@ void Console::init(const json& config) {
     input_box.w = (int)config["components"]["input_box"]["w"];
     input_box.h = (int)config["components"]["input_box"]["h"];
 
+    // Output
+    output_fontsize = config["components"]["output_box"]["fontsize"];
+    output_box.x =
+        (int)config["components"]["output_box"]["offset"]["x"] + render_rect.x;
+    output_box.y =
+        (int)config["components"]["output_box"]["offset"]["y"] + render_rect.y;
+    output_box.w = (int)config["components"]["output_box"]["w"];
+    output_box.h = (int)config["components"]["output_box"]["h"];
+
     initialized = true;
 }
 
@@ -69,20 +101,19 @@ void Console::loadMedia() {
 
     // Cargamos la/s fuente/s a usar
     input_font = TTF_OpenFont(CONSOLE_INPUT_FONT, input_fontsize);
+    output_font = TTF_OpenFont(CONSOLE_OUTPUT_FONT, output_fontsize);
     cursor_font = TTF_OpenFont(CONSOLE_CURSOR_FONT, input_fontsize);
 
-    if (!input_font || !cursor_font) {
+    if (!input_font || !cursor_font || !output_font) {
         throw Exception("Console::loadMedia: Error opening TTF_Font/s.");
     }
 
-    // Cargamos la textura con texto vacío
-    input.loadFromRenderedText(g_renderer, input_font, " ",
-                               SDL_Color({0xFF, 0xFF, 0xFF, 0xFF}));
-    _center(input_pos, input, input_box);
+    // Cargamos el input_text vacío
+    input.loadFromRenderedText(g_renderer, input_font, " ");
+    _setInputPos();
 
     // Cargamos el cursor
-    cursor.loadFromRenderedText(g_renderer, cursor_font, "|",
-                                SDL_Color({0xFF, 0xFF, 0xFF, 0xFF}));
+    cursor.loadFromRenderedText(g_renderer, cursor_font, "|");
 }
 
 void Console::enableInput() {
@@ -95,6 +126,15 @@ void Console::append(const char* text) {
     if (current_input.size() < INPUT_MAX_SIZE) {
         current_input += text;
         input_changed = true;
+    }
+}
+
+void Console::add(const std::string& message) {
+    if (!message.empty()) {
+        messages.emplace_front(Texture());
+        messages.front().loadFromRenderedWrappedText(g_renderer, output_font,
+                                                     message, output_box.w);
+        fprintf(stderr, "Mensajes: %lu\n", messages.size());
     }
 }
 
@@ -126,13 +166,11 @@ void Console::update(const int it) {
         if (input_changed) {
             if (!current_input.empty()) {
                 input.loadFromRenderedText(g_renderer, input_font,
-                                           current_input.c_str(),
-                                           SDL_Color({0xFF, 0xFF, 0xFF, 0xFF}));
+                                           current_input.c_str());
             } else {
-                input.loadFromRenderedText(g_renderer, input_font, " ",
-                                           SDL_Color({0xFF, 0xFF, 0xFF, 0xFF}));
+                input.loadFromRenderedText(g_renderer, input_font, " ");
             }
-            _center(input_pos, input, input_box);
+            _setInputPos();
 
             _resetCursorCooldown();
             input_changed = false;
@@ -155,31 +193,20 @@ void Console::render() const {
     SDL_Rect render_quad = render_rect;
     g_renderer->render(base.getTexture(), &render_quad);
 
-    if (input_enabled) {
-        // Renderizar el input
-        render_quad = {input_pos.x, input_pos.y, input.getWidth(),
-                       input.getHeight()};
-        g_renderer->render(input.getTexture(), &render_quad);
-
-        // Renderizar el cursor si corresponde
-        if (show_cursor) {
-            if (current_input.size()) {
-                render_quad = {input_pos.x + input.getWidth(), input_pos.y,
-                               cursor.getWidth(), cursor.getHeight()};
-            } else {
-                render_quad = {input_pos.x, input_pos.y, cursor.getWidth(),
-                               cursor.getHeight()};
-            }
-
-            g_renderer->render(cursor.getTexture(), &render_quad);
-        }
-    }
+    // Renderizamos las boxes
+    _renderInputBox();
+    _renderOutputBox();
 }
 
 void Console::free() {
     if (input_font) {
         TTF_CloseFont(input_font);
         input_font = NULL;
+    }
+
+    if (output_font) {
+        TTF_CloseFont(output_font);
+        output_font = NULL;
     }
 
     if (cursor_font) {
