@@ -26,7 +26,7 @@ Command::~Command() {}
 // VERIFICAR SI SOCKET RECIBE BIEN LAS COSAS!
 // VERIFICAR SI SOCKET RECIBE BIEN LAS COSAS!
 // VERIFICAR SI SOCKET RECIBE BIEN LAS COSAS!
-Command* CommandFactory::newCommand(InstanceId caller, char opcode,
+Command* CommandFactory::newCommand(InstanceId caller, uint8_t opcode,
                                     SocketWrapper& socket) {
     switch (opcode) {
         case START_MOVING_UP_CMD: {

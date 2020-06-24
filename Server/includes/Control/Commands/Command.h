@@ -46,7 +46,7 @@ class Command {
 
 class CommandFactory {
    public:
-    static Command* newCommand(InstanceId caller, char opcode,
+    static Command* newCommand(InstanceId caller, uint8_t opcode,
                                SocketWrapper& socket);
 };
 

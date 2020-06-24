@@ -95,7 +95,7 @@ void ClientConnection::_receiver() {
 }
 
 void ClientConnection::_receiveCommand() {
-    char opcode_cmd;
+    uint8_t opcode_cmd;
     peer >> opcode_cmd;
     try {
         Command* cmd = CommandFactory::newCommand(id, opcode_cmd, peer);
