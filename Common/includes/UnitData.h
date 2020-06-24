@@ -44,6 +44,12 @@ struct CreatureData {
     uint32_t health;
 };
 
+struct ItemData {
+    Id item_id;
+    Id map;
+    int x_tile, y_tile;
+};
+
 //-----------------------------------------------------------------------------
 
 #endif  // __UNIT_DATA_H__
