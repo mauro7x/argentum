@@ -72,12 +72,12 @@ void Texture::loadFromRenderedText(const Renderer* renderer, TTF_Font* font,
 
     switch (type) {
         case SOLID_TEXT: {
-            text_surface = TTF_RenderText_Solid(font, text.c_str(), color);
+            text_surface = TTF_RenderUTF8_Solid(font, text.c_str(), color);
             break;
         }
 
         case BLENDED_TEXT: {
-            text_surface = TTF_RenderText_Blended(font, text.c_str(), color);
+            text_surface = TTF_RenderUTF8_Blended(font, text.c_str(), color);
             break;
         }
 
@@ -113,7 +113,7 @@ void Texture::loadFromRenderedWrappedText(const Renderer* renderer,
 
     // Generamos la surface de texto
     SDL_Surface* text_surface =
-        TTF_RenderText_Blended_Wrapped(font, text.c_str(), color, max_width);
+        TTF_RenderUTF8_Blended_Wrapped(font, text.c_str(), color, max_width);
 
     if (text_surface == NULL) {
         throw SDLException(
