@@ -19,6 +19,7 @@
 //-----------------------------------------------------------------------------
 #include "Commands/Command.h"
 #include "Notification.h"
+#include "NotificationReply.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -60,7 +61,7 @@ class ClientConnection {
     void _receiver();
 
     /* [RECEIVER] Recibe un comando */
-    void _receiveCommand(char opcode);
+    void _receiveCommand();
 
     //-------------------------------------------------------------------------
 
