@@ -61,14 +61,14 @@ class Texture {
 
     /* Carga la textura desde un texto */
     void loadFromRenderedText(const Renderer* renderer, TTF_Font* font,
-                              std::string text,
+                              const std::string& text,
                               SDL_Color color = SDL_Color({0xFF, 0xFF, 0xFF,
                                                            0xFF}),
                               TextType type = BLENDED_TEXT);
 
     /* Carga la textura desde un texto y la wrappea a una anchura */
     void loadFromRenderedWrappedText(const Renderer* renderer, TTF_Font* font,
-                                     std::string text, int max_width,
+                                     const std::string& text, int max_width,
                                      SDL_Color color = SDL_Color({0xFF, 0xFF,
                                                                   0xFF, 0xFF}));
 

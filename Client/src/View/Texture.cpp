@@ -62,7 +62,7 @@ void Texture::loadFromFile(const Renderer* renderer, std::string filepath,
 }
 
 void Texture::loadFromRenderedText(const Renderer* renderer, TTF_Font* font,
-                                   std::string text, SDL_Color color,
+                                   const std::string& text, SDL_Color color,
                                    TextType type) {
     // Eliminamos una textura previa si existe
     free();
@@ -105,7 +105,8 @@ void Texture::loadFromRenderedText(const Renderer* renderer, TTF_Font* font,
 }
 
 void Texture::loadFromRenderedWrappedText(const Renderer* renderer,
-                                          TTF_Font* font, std::string text,
+                                          TTF_Font* font,
+                                          const std::string& text,
                                           int max_width, SDL_Color color) {
     // Eliminamos una textura previa si existe
     free();
