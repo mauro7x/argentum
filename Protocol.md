@@ -67,7 +67,7 @@ Identificas el mensaje con el primer byte recibido (opcode), y para cada caso se
 | 2 | Empezar a mover a la izquierda | `-` | 
 | 3 | Empezar a mover a la derecha | `-` | 
 | 4 | Dejar de mover | `-` |
-| 5 | Usar arma principal | `POS` |
+| 5 | Usar arma principal | `INSTANCEID (4)` |
 | 6 | Equipar objeto | `POSICION INVENTARIO (SLOT) (1)` |
 | 7 | Tomar | `-` |
 | 8 | Tirar | `POSICION INVENTARIO (SLOT) (1)` |

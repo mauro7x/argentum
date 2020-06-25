@@ -48,6 +48,9 @@ class Map {
     /* Obtiene un tile modificable */
     Tile& _getTile(const int x, const int y);
 
+    /* Devuelve si el tile es válido y es parte del mapa */
+    bool _isValid(const int x, const int y) const;
+
     const bool _moveOcuppant(Tile& from_tile, Tile& to_tile);
 
    public:
@@ -83,9 +86,6 @@ class Map {
 
     /* Devuelve la altura de un tile */
     int getTileHeight() const;
-
-    /* Devuelve si el tile es válido y es parte del mapa */
-    bool isValid(const int x, const int y) const;
 
     /* Obtiene un Tile de solo lectura */
     const Tile& getTile(const int x, const int y) const;

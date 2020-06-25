@@ -15,9 +15,8 @@
 class Camera {
    private:
     bool initialized = false;
-    int x = 0, y = 0;
-    int w = 0, h = 0;
-    int offset_x = 0, offset_y = 0;
+    SDL_Rect box = {0};
+    SDL_Point pos = {0};
 
    public:
     /* Constructor */

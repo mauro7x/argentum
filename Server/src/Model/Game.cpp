@@ -372,8 +372,7 @@ void Game::stopMoving(const InstanceId caller) {
     character.stopMoving();
 }
 
-void Game::useWeapon(const InstanceId caller, const uint32_t x_coord,
-                     const uint32_t y_coord) {
+void Game::useWeapon(const InstanceId caller, const InstanceId target) {
     fprintf(stderr, "Comando useWeapon no implementado.\n");
 }
 

@@ -62,10 +62,9 @@ Command* CommandFactory::newCommand(InstanceId caller, uint8_t opcode,
         }
 
         case USE_MAIN_WEAPON_CMD: {
-            uint32_t x_coord, y_coord;
-            socket >> x_coord;
-            socket >> y_coord;
-            return new UseWeaponCommand(caller, x_coord, y_coord);
+            uint32_t target_id;
+            socket >> target_id;
+            return new UseWeaponCommand(caller, target_id);
         }
 
         case BUY_OBJECT_CMD: {

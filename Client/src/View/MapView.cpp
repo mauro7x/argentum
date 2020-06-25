@@ -153,9 +153,10 @@ InstanceId MapView::getOccupant(const int x, const int y) const {
     return current_tile.occupant_id;
 }
 
-bool MapView::isValid(const int x, const int y) const {
+Id MapView::getNPC(const int x, const int y) const {
     const Map& current_map = maps[current_map_id];
-    return current_map.isValid(x, y);
+    const Tile& current_tile = current_map.getTile(x, y);
+    return current_tile.npc;
 }
 
 bool MapView::indoor(const int x, const int y) const {

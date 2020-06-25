@@ -7,6 +7,7 @@
 #include "SelfResurrectCommand.h"
 #include "StartMovingCommand.h"
 #include "StopMovingCommand.h"
+#include "UseMainWeaponCommand.h"
 //-----------------------------------------------------------------------------
 
 #endif  // __COMMANDS_H__

@@ -1,4 +1,4 @@
-#include "../../../includes/Model/Commands/StopMovingCommand.h"
+#include "../../../includes/Model/Commands/UseMainWeaponCommand.h"
 
 //-----------------------------------------------------------------------------
 // Métodos privados
@@ -8,21 +8,26 @@
 //-----------------------------------------------------------------------------
 // API Pública
 
-StopMovingCommand::StopMovingCommand() : Command() {}
+UseMainWeaponCommand::UseMainWeaponCommand(const InstanceId& target)
+    : Command(), target(target) {}
 
-bool StopMovingCommand::send(const SocketWrapper& socket) {
+bool UseMainWeaponCommand::send(const SocketWrapper& socket) {
     // Enviamos el comando según el protocolo
     if (!(socket << (uint8_t)COMMAND_OPCODE)) {
         return false;
     }
 
-    if (!(socket << (uint8_t)STOP_MOVING_CMD)) {
+    if (!(socket << (uint8_t)USE_MAIN_WEAPON_CMD)) {
+        return false;
+    }
+
+    if (!(socket << (uint32_t)target)) {
         return false;
     }
 
     return true;
 }
 
-StopMovingCommand::~StopMovingCommand() {}
+UseMainWeaponCommand::~UseMainWeaponCommand() {}
 
 //-----------------------------------------------------------------------------
