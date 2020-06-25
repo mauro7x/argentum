@@ -11,11 +11,13 @@
 
 class DepositGoldCommand : public Command {
    private:
-    // Atributos
+    uint32_t x;
+    uint32_t y;
+    uint32_t amount;
 
    public:
     /* Constructor */
-    DepositGoldCommand();
+    DepositGoldCommand(uint32_t x, uint32_t y, uint32_t amount);
 
     //-------------------------------------------------------------------------
 

@@ -1,9 +1,5 @@
-#ifndef __SEND_PM_COMMAND_H__
-#define __SEND_PM_COMMAND_H__
-
-//-----------------------------------------------------------------------------
-#include <string>
-//-----------------------------------------------------------------------------
+#ifndef __HELP_NPC_COMMAND_H__
+#define __HELP_NPC_COMMAND_H__
 
 //-----------------------------------------------------------------------------
 #include "../../../../Common/includes/Protocol.h"
@@ -13,14 +9,14 @@
 
 //-----------------------------------------------------------------------------
 
-class SendPMCommand : public Command {
+class HelpNpcCommand : public Command {
    private:
-    const std::string& receiver;
-    const std::string& content;
+    uint32_t x;
+    uint32_t y;
 
    public:
     /* Constructor */
-    SendPMCommand(const std::string& receiver, const std::string& content);
+    HelpNpcCommand(uint32_t x, uint32_t y);
 
     //-------------------------------------------------------------------------
 
@@ -30,9 +26,9 @@ class SendPMCommand : public Command {
     //-------------------------------------------------------------------------
 
     /* Destructor */
-    ~SendPMCommand();
+    ~HelpNpcCommand();
 };
 
 //-----------------------------------------------------------------------------
 
-#endif  // __SEND_PM_COMMAND_H__
+#endif  // __HELP_NPC_COMMAND_H__

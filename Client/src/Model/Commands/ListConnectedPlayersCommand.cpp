@@ -16,6 +16,10 @@ bool ListConnectedPlayersCommand::send(const SocketWrapper& socket) {
         return false;
     }
 
+    if (!(socket << (uint8_t)LIST_CONNECTED_PLAYERS_CMD)) {
+        return false;
+    }
+
     return true;
 }
 

@@ -1,4 +1,4 @@
-#include "../../../includes/Model/Commands/WithdrawNObjectsCommand.h"
+#include "../../../includes/Model/Commands/HelpNpcCommand.h"
 
 //-----------------------------------------------------------------------------
 // Métodos privados
@@ -8,18 +8,16 @@
 //-----------------------------------------------------------------------------
 // API Pública
 
-WithdrawNObjectsCommand::WithdrawNObjectsCommand(uint32_t x, uint32_t y,
-                                                 uint32_t item_id,
-                                                 uint32_t amount)
-    : Command(), x(x), y(y), item_id(item_id), amount(amount) {}
+HelpNpcCommand::HelpNpcCommand(uint32_t x, uint32_t y)
+    : Command(), x(x), y(y) {}
 
-bool WithdrawNObjectsCommand::send(const SocketWrapper& socket) {
+bool HelpNpcCommand::send(const SocketWrapper& socket) {
     // Enviamos el comando según el protocolo
     if (!(socket << (uint8_t)COMMAND_OPCODE)) {
         return false;
     }
 
-    if (!(socket << (uint8_t)WITHDRAW_N_OBJECTS_CMD)) {
+    if (!(socket << (uint8_t)HELP_NPC_CMD)) {
         return false;
     }
 
@@ -31,17 +29,9 @@ bool WithdrawNObjectsCommand::send(const SocketWrapper& socket) {
         return false;
     }
 
-    if (!(socket << (uint32_t)item_id)) {
-        return false;
-    }
-
-    if (!(socket << (uint32_t)amount)) {
-        return false;
-    }
-
     return true;
 }
 
-WithdrawNObjectsCommand::~WithdrawNObjectsCommand() {}
+HelpNpcCommand::~HelpNpcCommand() {}
 
 //-----------------------------------------------------------------------------

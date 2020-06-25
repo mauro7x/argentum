@@ -11,11 +11,12 @@
 
 class ThrowNObjectsCommand : public Command {
    private:
-    // Atributos
+    uint8_t inventory_slot;
+    uint32_t amount;
 
    public:
     /* Constructor */
-    ThrowNObjectsCommand();
+    ThrowNObjectsCommand(uint8_t inventory_slot, uint32_t amount);
 
     //-------------------------------------------------------------------------
 

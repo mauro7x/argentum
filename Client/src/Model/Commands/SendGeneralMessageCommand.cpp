@@ -1,4 +1,4 @@
-#include "../../../includes/Model/Commands/ThrowNObjectsCommand.h"
+#include "../../../includes/Model/Commands/SendGeneralMessageCommand.h"
 
 //-----------------------------------------------------------------------------
 // Métodos privados
@@ -8,31 +8,26 @@
 //-----------------------------------------------------------------------------
 // API Pública
 
-ThrowNObjectsCommand::ThrowNObjectsCommand(uint8_t inventory_slot,
-                                           uint32_t amount)
-    : Command(), inventory_slot(inventory_slot), amount(amount) {}
+SendGeneralMessageCommand::SendGeneralMessageCommand(const std::string& content)
+    : Command(), content(content) {}
 
-bool ThrowNObjectsCommand::send(const SocketWrapper& socket) {
+bool SendGeneralMessageCommand::send(const SocketWrapper& socket) {
     // Enviamos el comando según el protocolo
     if (!(socket << (uint8_t)COMMAND_OPCODE)) {
         return false;
     }
 
-    if (!(socket << (uint8_t)THROW_N_OBJECTS_CMD)) {
+    if (!(socket << (uint8_t)SEND_GENERAL_MESSAGE_CMD)) {
         return false;
     }
 
-    if (!(socket << (uint8_t)inventory_slot)) {
-        return false;
-    }
-
-    if (!(socket << (uint32_t)amount)) {
+    if (!(socket << content)) {
         return false;
     }
 
     return true;
 }
 
-ThrowNObjectsCommand::~ThrowNObjectsCommand() {}
+SendGeneralMessageCommand::~SendGeneralMessageCommand() {}
 
 //-----------------------------------------------------------------------------

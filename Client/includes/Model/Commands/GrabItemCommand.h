@@ -10,9 +10,6 @@
 //-----------------------------------------------------------------------------
 
 class GrabItemCommand : public Command {
-   private:
-    // Atributos
-
    public:
     /* Constructor */
     GrabItemCommand();

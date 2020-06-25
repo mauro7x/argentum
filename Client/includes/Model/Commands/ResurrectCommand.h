@@ -11,11 +11,12 @@
 
 class ResurrectCommand : public Command {
    private:
-    // Atributos
+    uint32_t x;
+    uint32_t y;
 
    public:
     /* Constructor */
-    ResurrectCommand();
+    ResurrectCommand(uint32_t x, uint32_t y);
 
     //-------------------------------------------------------------------------
 

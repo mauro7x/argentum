@@ -83,7 +83,7 @@ Identificas el mensaje con el primer byte recibido (opcode), y para cada caso se
 | 18 | Retirar | `POS + ID (4) + CANTIDAD (4)` |
 | 19 | Retirar oro | `POS + CANTIDAD (4)` |
 | 20 | Comprar | `POS + ID (4) + CANTIDAD (4)` |
-| 21 | Vender | `POS + ID (4) + CANTIDAD (4)` |
+| 21 | Vender | `POS + SLOT INVENTARIO (1) + CANTIDAD (4)` |
 | 22 | Listar jugadores conectados | `` |
 | 23 | Mensaje general | `CONTENT_LENGTH (4) + CONTENT (LENGTH)` |
 | 24 | Mensaje privado | `NICK_LENGTH (4) + NICKNAME (NICK_LENGTH) + CONTENT_LENGTH (4) + CONTENT (LENGTH)` |

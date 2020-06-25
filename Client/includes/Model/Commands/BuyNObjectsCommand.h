@@ -11,11 +11,15 @@
 
 class BuyNObjectsCommand : public Command {
    private:
-    // Atributos
+    uint32_t x;
+    uint32_t y;
+    uint32_t item_id;
+    uint32_t amount;
 
    public:
     /* Constructor */
-    BuyNObjectsCommand();
+    BuyNObjectsCommand(uint32_t x, uint32_t y, uint32_t item_id,
+                       uint32_t amount);
 
     //-------------------------------------------------------------------------
 

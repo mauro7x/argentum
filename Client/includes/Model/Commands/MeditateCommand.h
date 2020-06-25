@@ -10,9 +10,6 @@
 //-----------------------------------------------------------------------------
 
 class MeditateCommand : public Command {
-   private:
-    // Atributos
-
    public:
     /* Constructor */
     MeditateCommand();

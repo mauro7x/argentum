@@ -1,5 +1,5 @@
-#ifndef __SEND_PM_COMMAND_H__
-#define __SEND_PM_COMMAND_H__
+#ifndef __SEND_GENERAL_MESSAGE_COMMAND_H__
+#define __SEND_GENERAL_MESSAGE_COMMAND_H__
 
 //-----------------------------------------------------------------------------
 #include <string>
@@ -13,14 +13,13 @@
 
 //-----------------------------------------------------------------------------
 
-class SendPMCommand : public Command {
+class SendGeneralMessageCommand : public Command {
    private:
-    const std::string& receiver;
-    const std::string& content;
+    std::string content;
 
    public:
     /* Constructor */
-    SendPMCommand(const std::string& receiver, const std::string& content);
+    SendGeneralMessageCommand(const std::string& content);
 
     //-------------------------------------------------------------------------
 
@@ -30,9 +29,9 @@ class SendPMCommand : public Command {
     //-------------------------------------------------------------------------
 
     /* Destructor */
-    ~SendPMCommand();
+    ~SendGeneralMessageCommand();
 };
 
 //-----------------------------------------------------------------------------
 
-#endif  // __SEND_PM_COMMAND_H__
+#endif  // __SEND_GENERAL_MESSAGE_COMMAND_H__

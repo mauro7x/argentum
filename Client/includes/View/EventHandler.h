@@ -97,7 +97,7 @@ class EventHandler {
     // Flags internos
     Key key_pressed = UNMAPPED_KEY;
     bool text_input_enabled = false;
-    Selection current_selection = {0, -1};
+    Selection current_selection = {false, 0, 0, -1};
 
     // Componentes internos
     std::unordered_map<SDL_Keycode, Key> keys;

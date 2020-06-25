@@ -11,11 +11,13 @@
 
 class WithdrawGoldCommand : public Command {
    private:
-    // Atributos
+    uint32_t x;
+    uint32_t y;
+    uint32_t amount;
 
    public:
     /* Constructor */
-    WithdrawGoldCommand();
+    WithdrawGoldCommand(uint32_t x, uint32_t y, uint32_t amount);
 
     //-------------------------------------------------------------------------
 
