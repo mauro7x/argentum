@@ -188,7 +188,8 @@ void Game::_pushFullBroadcast(InstanceId receiver, bool is_new_connection) {
         int x_coord, y_coord;
         _mapKeyToCoordinates(it_items->first, x_coord, y_coord);
 
-        broadcast = _buildItemBroadcast(receiver_map_id, x_coord, y_coord, NEW_BROADCAST);
+        broadcast = _buildItemBroadcast(receiver_map_id, x_coord, y_coord,
+                                        NEW_BROADCAST);
 
         ++it_items;
     }
@@ -528,8 +529,12 @@ void Game::take(const InstanceId caller) {
 
 void Game::drop(const InstanceId caller, const uint8_t n_slot,
                 const uint32_t amount) {
-    fprintf(stderr, "Game::drop: dropear slot %i cantidad %i\n", n_slot, amount);
+    fprintf(stderr, "Game::drop: dropear slot %i cantidad %i\n", n_slot,
+            amount);
+    fprintf(stderr,
+            "ITEM BROADCAST AUN NO IMPLEMENTADO EN EL CLIENTE. SIN EFECTO.\n");
     return;
+    
     if (!this->characters.count(caller)) {
         throw Exception("Game::equip: unknown caller.");
     }
@@ -565,6 +570,7 @@ void Game::drop(const InstanceId caller, const uint8_t n_slot,
     }
 
     Id map_id = character.getMapId();
+    fprintf(stderr, "Se agrego al mapa\n");
 
     // Agrego elemento al mapa de dropped items cooldown
     const std::string key = std::move(_coordinatesToMapKey(x, y));
