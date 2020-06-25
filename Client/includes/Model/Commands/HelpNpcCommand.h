@@ -1,5 +1,5 @@
-#ifndef __THROW_N_OBJECTS_COMMAND_H__
-#define __THROW_N_OBJECTS_COMMAND_H__
+#ifndef __HELP_NPC_COMMAND_H__
+#define __HELP_NPC_COMMAND_H__
 
 //-----------------------------------------------------------------------------
 #include "../../../../Common/includes/Protocol.h"
@@ -9,14 +9,14 @@
 
 //-----------------------------------------------------------------------------
 
-class ThrowNObjectsCommand : public Command {
+class HelpNpcCommand : public Command {
    private:
-    uint8_t inventory_slot;
-    uint32_t amount;
+    uint32_t x;
+    uint32_t y;
 
    public:
     /* Constructor */
-    ThrowNObjectsCommand(uint8_t inventory_slot, uint32_t amount);
+    HelpNpcCommand(uint32_t x, uint32_t y);
 
     //-------------------------------------------------------------------------
 
@@ -26,9 +26,9 @@ class ThrowNObjectsCommand : public Command {
     //-------------------------------------------------------------------------
 
     /* Destructor */
-    ~ThrowNObjectsCommand();
+    ~HelpNpcCommand();
 };
 
 //-----------------------------------------------------------------------------
 
-#endif  // __THROW_N_OBJECTS_COMMAND_H__
+#endif  // __HELP_NPC_COMMAND_H__

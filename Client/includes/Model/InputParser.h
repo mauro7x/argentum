@@ -2,6 +2,7 @@
 #define __INPUT_PARSER_H__
 
 //-----------------------------------------------------------------------------
+#include <algorithm>
 #include <string>
 #include <unordered_map>
 //-----------------------------------------------------------------------------
@@ -35,8 +36,8 @@
 #define BUY_EXPECTED_INPUT "/comprar"
 #define SELL_EXPECTED_INPUT "/vender"
 #define LIST_PLAYERS_EXPECTED_INPUT "/listar_jugadores"
+#define HELP_NPC_INPUT "/help"
 //-----------------------------------------------------------------------------
-
 
 //-----------------------------------------------------------------------------
 
@@ -52,7 +53,8 @@ enum InputCommand {
     WITHDRAW_INPUT_CMD,
     BUY_INPUT_CMD,
     SELL_INPUT_CMD,
-    LIST_PLAYERS_INPUT_CMD
+    LIST_PLAYERS_INPUT_CMD,
+    HELP_NPC_INPUT_CMD
 };
 
 //-----------------------------------------------------------------------------
@@ -83,6 +85,17 @@ class InputParser {
 
     /* Obtiene el cuerpo del comando */
     std::string _getCommandBody(const std::string& command_input) const;
+
+    /* Splittea el string con un delimitador y guarda ambas partes */
+    void _splitBy(char delim, const std::string& original, std::string& left,
+                  std::string& right) const;
+
+    /* Verifica si el string es numérico */
+    bool _isNumeric(const std::string& string) const;
+
+    /* Obtiene el valor númerico del string (si es posible). Devuelve true si se
+     * pudo, false si hubieron errores */
+    bool _castToUint32(const std::string& string, uint32_t& result) const;
 
     /* Parsea un input de tipo MENSAJE PRIVADO */
     Command* _parseMessageInput(const std::string& message_input) const;

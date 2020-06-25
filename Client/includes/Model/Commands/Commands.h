@@ -8,6 +8,7 @@
 #include "EquipObjectCommand.h"
 #include "GrabItemCommand.h"
 #include "HealCommand.h"
+#include "HelpNpcCommand.h"
 #include "ListCommand.h"
 #include "ListConnectedPlayersCommand.h"
 #include "MeditateCommand.h"

@@ -1,4 +1,4 @@
-#include "../../../includes/Model/Commands/ThrowNObjectsCommand.h"
+#include "../../../includes/Model/Commands/HelpNpcCommand.h"
 
 //-----------------------------------------------------------------------------
 // Métodos privados
@@ -8,31 +8,30 @@
 //-----------------------------------------------------------------------------
 // API Pública
 
-ThrowNObjectsCommand::ThrowNObjectsCommand(uint8_t inventory_slot,
-                                           uint32_t amount)
-    : Command(), inventory_slot(inventory_slot), amount(amount) {}
+HelpNpcCommand::HelpNpcCommand(uint32_t x, uint32_t y)
+    : Command(), x(x), y(y) {}
 
-bool ThrowNObjectsCommand::send(const SocketWrapper& socket) {
+bool HelpNpcCommand::send(const SocketWrapper& socket) {
     // Enviamos el comando según el protocolo
     if (!(socket << (uint8_t)COMMAND_OPCODE)) {
         return false;
     }
 
-    if (!(socket << (uint8_t)THROW_N_OBJECTS_CMD)) {
+    if (!(socket << (uint8_t)HELP_NPC_CMD)) {
         return false;
     }
 
-    if (!(socket << (uint8_t)inventory_slot)) {
+    if (!(socket << (uint32_t)x)) {
         return false;
     }
 
-    if (!(socket << (uint32_t)amount)) {
+    if (!(socket << (uint32_t)y)) {
         return false;
     }
 
     return true;
 }
 
-ThrowNObjectsCommand::~ThrowNObjectsCommand() {}
+HelpNpcCommand::~HelpNpcCommand() {}
 
 //-----------------------------------------------------------------------------

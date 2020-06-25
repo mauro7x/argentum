@@ -17,7 +17,9 @@ void EventHandler::_bindKeycodes() {
 }
 
 void EventHandler::_clearSelection() {
-    current_selection.npc_selected = 0;
+    current_selection.npc_selected = false;
+    current_selection.npc_x_tile = 0;
+    current_selection.npc_y_tile = 0;
     current_selection.inventory_slot_selected = -1;
 
     // algun método que le diga a la hud que saque la selección?
@@ -372,7 +374,9 @@ void EventHandler::handleEvent(const SDL_Event& e) {
             // Si el tile tiene un NPC, lo seleccionamos para futuros comandos
             Id npc = map.getNPC(tile.x, tile.y);
             if (npc) {
-                current_selection.npc_selected = npc;
+                current_selection.npc_selected = true;
+                current_selection.npc_x_tile = tile.x;
+                current_selection.npc_y_tile = tile.y;
                 hud.addMessage(
                     ">> Has seleccionado a un NPC, ahora puedes enviarle "
                     "comandos.",

@@ -16,6 +16,7 @@ void InputParser::_fillCommands() {
     commands.emplace(BUY_EXPECTED_INPUT, BUY_INPUT_CMD);
     commands.emplace(SELL_EXPECTED_INPUT, SELL_INPUT_CMD);
     commands.emplace(LIST_PLAYERS_EXPECTED_INPUT, LIST_PLAYERS_INPUT_CMD);
+    commands.emplace(HELP_NPC_INPUT, HELP_NPC_INPUT_CMD);
 }
 
 Command* InputParser::_parseCommandInput(
@@ -50,8 +51,37 @@ Command* InputParser::_parseCommand(const std::string& command_input,
         }
 
         case THROW_INPUT_CMD: {
-            (*g_reply) = "Este comando aun no está implementado.";
-            return NULL;
+            if (current_selection.inventory_slot_selected < 0) {
+                (*g_reply) =
+                    "Debes seleccionar el item que quieres tirar (haciéndole "
+                    "click).";
+                return NULL;
+            }
+
+            body = _getCommandBody(command_input);
+            if (body.empty()) {
+                return new ThrowNObjectsCommand(
+                    current_selection.inventory_slot_selected, 1);
+            }
+
+            std::string n, excess;
+            _splitBy(' ', body, n, excess);
+
+            if (!excess.empty()) {
+                (*g_reply) =
+                    "Uso esperado del comando tirar: /tirar [<cantidad>]";
+                return NULL;
+            }
+
+            uint32_t amount;
+            if (!_castToUint32(n, amount)) {
+                (*g_reply) =
+                    "Uso esperado del comando tirar: /tirar [<cantidad>]";
+                return NULL;
+            }
+
+            return new ThrowNObjectsCommand(
+                current_selection.inventory_slot_selected, amount);
         }
 
         case MEDITATE_INPUT_CMD: {
@@ -109,6 +139,27 @@ Command* InputParser::_parseCommand(const std::string& command_input,
             return NULL;
         }
 
+        case HELP_NPC_CMD: {
+            if (!current_selection.npc_selected) {
+                (*g_reply) =
+                    "Debes seleccionar al NPC al que le quieras pedir ayuda "
+                    "(haciéndole "
+                    "click).";
+                return NULL;
+            }
+
+            body = _getCommandBody(command_input);
+            if (!body.empty()) {
+                (*g_reply) = "El comando '/help' no admite parámetros.";
+                return NULL;
+            }
+
+            fprintf(stderr, "Envío comando npchelp con x=%u, y=%u\n",
+                    current_selection.npc_x_tile, current_selection.npc_y_tile);
+            return new HelpNpcCommand(current_selection.npc_x_tile,
+                                      current_selection.npc_y_tile);
+        }
+
         default: {
             throw Exception(
                 "InputParser::_parseCommand: unknown cmd_id "
@@ -129,7 +180,19 @@ std::string InputParser::_getCommandBody(
     if (index == std::string::npos) {
         return std::string("");
     } else {
-        return command_input.substr(index);
+        return command_input.substr(index + 1);
+    }
+}
+
+void InputParser::_splitBy(char delim, const std::string& original,
+                           std::string& left, std::string& right) const {
+    size_t index = original.find_first_of(delim);
+    if (index == std::string::npos) {
+        left = original;
+        right = "";
+    } else {
+        left = original.substr(0, index);
+        right = original.substr(index + 1);
     }
 }
 
@@ -137,6 +200,32 @@ Command* InputParser::_parseMessageInput(
     const std::string& message_input) const {
     (*g_reply) = "Mensajes privados aun no implementados.";
     return NULL;
+}
+
+bool InputParser::_isNumeric(const std::string& string) const {
+    // Función sacada de:
+    // https://stackoverflow.com/questions/4654636/how-to-determine-if-a-string-is-a-number-with-c
+    return (!string.empty() &&
+            std::find_if(string.begin(), string.end(), [](unsigned char c) {
+                return !std::isdigit(c);
+            }) == string.end());
+}
+
+bool InputParser::_castToUint32(const std::string& string,
+                                uint32_t& result) const {
+    uint32_t tmp;
+    try {
+        if (!_isNumeric(string)) {
+            return false;
+        }
+
+        tmp = std::stoi(string);
+    } catch (const std::exception& e) {
+        return false;
+    }
+
+    result = tmp;
+    return true;
 }
 
 //-----------------------------------------------------------------------------
