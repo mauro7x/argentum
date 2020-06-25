@@ -40,12 +40,11 @@ bool Client::_connect(SocketWrapper& socket) const {
 void Client::_finish(SocketWrapper& socket,
                      CommandDispatcher& command_dispatcher,
                      Receiver& receiver) {
-    // Cerramos la conexión ordenadamente
-    socket.shutdown();
-    socket.close();
-
     // Cerramos la cola de comandos para que el dispatcher termine
     commands.close();
+
+    // Cerramos la conexión ordenadamente
+    socket.shutdown();
 
     // Joineamos los hilos
     command_dispatcher.join();
