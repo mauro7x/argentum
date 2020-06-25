@@ -107,11 +107,11 @@ void HUD::disableInput() {
 }
 
 int8_t HUD::getEquipmentSlotClicked(const SDL_Point& click_pos) {
-    return -1;
+    return user_inventory.getEquipmentSlotClicked(click_pos);
 }
 
 int8_t HUD::getInventorySlotClicked(const SDL_Point& click_pos) {
-    return -1;
+    return user_inventory.getInventorySlotClicked(click_pos);
 }
 
 void HUD::update(const int it) {
