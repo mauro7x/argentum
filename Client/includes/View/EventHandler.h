@@ -15,6 +15,7 @@
 #include "../../../Common/includes/BlockingQueue.h"
 #include "../../../Common/includes/Exceptions/Exception.h"
 #include "../../../Common/includes/JSON.h"
+#include "../../../Common/includes/types.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -25,9 +26,11 @@
 
 //-----------------------------------------------------------------------------
 #include "../colors.h"
+#include "../defs.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+#include "Camera.h"
 #include "HUD.h"
 #include "MapView.h"
 //-----------------------------------------------------------------------------
@@ -52,9 +55,9 @@ enum Event {
     STOP_INPUT_EV,
 
     /* Clicks del usuario */
-    MAP_SINGLE_CLICK_EV,
-    HUD_SINGLE_CLICK_EV,
-    HUD_DOUBLE_CLICK_EV,
+    CAMERA_SINGLE_CLICK_EV,
+    INVENTORY_SINGLE_CLICK_EV,
+    INVENTORY_DOUBLE_CLICK_EV,
 
     /* Cierre del juego */
     EXIT_EV
@@ -84,18 +87,19 @@ class EventHandler {
     // Componentes externos para el handleo de ciertos eventos
     HUD& hud;
     const MapView& map;
+    const Camera& camera;
     SDL_Rect inventory_box = {0};
     SDL_Rect camera_box = {0};
     float scale_factor_w = 0;
     float scale_factor_h = 0;
 
-    // Componentes internos
-    std::unordered_map<SDL_Keycode, Key> keys;
-    InputParser input_parser;
-
     // Flags internos
     Key key_pressed = UNMAPPED_KEY;
     bool text_input_enabled = false;
+
+    // Componentes internos
+    std::unordered_map<SDL_Keycode, Key> keys;
+    InputParser input_parser;
 
     //-------------------------------------------------------------------------
     // Métodos privados
@@ -124,12 +128,15 @@ class EventHandler {
     /* Verifica si el click ocurrió dentro del SDL_Rect provisto */
     bool _clickInside(const SDL_Rect& rect, const SDL_Event& e) const;
 
+    /* Transforma un click recibido en el mapa del juego en un tile */
+    SDL_Point _clickToTile(const SDL_Event& e) const;
+
     //-------------------------------------------------------------------------
 
    public:
     /* Constructor */
     EventHandler(std::atomic_bool& exit, BlockingQueue<Command*>& commands,
-                 HUD& hud, const MapView& map);
+                 HUD& hud, const MapView& map, const Camera& camera);
 
     /* Inicializa recursos */
     void init(const json& config, const float scale_factor_w,

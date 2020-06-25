@@ -71,7 +71,7 @@ class Game {
 
     /*
      * Construye el broadcast del character cuya id es recibida.
-     * 
+     *
      * Alloca memoria, que luego deberá ser desallocada por el caller.
      */
     Notification* _buildPlayerBroadcast(InstanceId id,
@@ -79,17 +79,17 @@ class Game {
 
     /*
      * Construye el broadcast de la creature cuya id es recibida.
-     * 
+     *
      * Alloca memoria, que luego deberá ser desallocada por el caller.
      */
     Notification* _buildCreatureBroadcast(InstanceId id,
                                           BroadcastType broadcast_type);
 
     /*
-     * Ante actualizaciones (NEW, UPDATE, DELETE) de un jugador, 
+     * Ante actualizaciones (NEW, UPDATE, DELETE) de un jugador,
      * se invoca este método. Su función es broadcastear dicha actualización,
      * pusheándola a los clientes activos.
-     * 
+     *
      * El atributo send_to_caller indica si dicho broadcast debe ser
      * enviado al jugador que se actualizo o no.
      */
@@ -97,7 +97,7 @@ class Game {
                                              bool send_to_caller);
 
     /*
-     * Ante actualizaciones (NEW, UPDATE, DELETE) de una criatura, 
+     * Ante actualizaciones (NEW, UPDATE, DELETE) de una criatura,
      * se invoca este método. Su función es broadcastear dicha actualización,
      * pusheándola a los clientes activos.
      */
@@ -107,7 +107,7 @@ class Game {
     /*
      * Ante la conexión de un nuevo jugador o el cambio de mapa, se invoca
      * este método para enviarle a dicho jugador un full broadcast con
-     * toda la información del juego. 
+     * toda la información del juego.
      */
     void _pushFullBroadcast(InstanceId receiver, bool is_new_connection);
 
@@ -155,17 +155,17 @@ class Game {
 
     /*
      * Llamar a este método ante la muerte de una criatura.
-     * 
+     *
      * Recibe el id de instancia de la criatura a eliminar.
-     * 
+     *
      * Efectúa el drop aleatorio de elementos.
-     * 
+     *
      * Lanza Exception si el id especificado no corresponde a ninguna
      * criatura del juego.
      */
     void deleteCreature(const InstanceId id);
 
-    /* 
+    /*
      * Escoge aleatoriamente una criatura entre las disponibles en la config,
      * y deuvelve su Id.
      */
@@ -191,7 +191,7 @@ class Game {
      * alcanzar el número máximo MAX_CREATURES_PER_MAP.
      */
     void spawnNewCreatures(const int it);
-    
+
     //--------------------------------------------------------------------------
 
     //--------------------------------------------------------------------------
@@ -204,8 +204,7 @@ class Game {
 
     void stopMoving(const InstanceId caller);
 
-    void useWeapon(const InstanceId caller, const uint32_t x_coord,
-                   const uint32_t y_coord);
+    void useWeapon(const InstanceId caller, const InstanceId target);
 
     void equip(const InstanceId caller, const uint8_t n_slot);
 
@@ -213,7 +212,8 @@ class Game {
 
     void resurrect(const InstanceId caller);
 
-    void list(const InstanceId caller, const uint32_t x_coord, const uint32_t y_coord);
+    void list(const InstanceId caller, const uint32_t x_coord,
+              const uint32_t y_coord);
 
     void depositItemOnBank(const InstanceId caller, const uint32_t x_coord,
                            const uint32_t y_coord, const uint8_t n_slot,
@@ -235,7 +235,8 @@ class Game {
                   const uint32_t amount);
 
     void take(const InstanceId caller);
-    void drop(const InstanceId caller, const uint8_t n_slot, const uint32_t amount);
+    void drop(const InstanceId caller, const uint8_t n_slot,
+              const uint32_t amount);
 
     void listConnectedPlayers(const InstanceId caller);
 

@@ -173,7 +173,7 @@ GameView::GameView(BlockingQueue<Command*>& commands,
 
       // Otros
       stage(map, player, characters, creatures),
-      event_handler(exit, commands, hud, map) {}
+      event_handler(exit, commands, hud, map, camera) {}
 
 void GameView::operator()() {
     // Iniciamos recursos necesarios

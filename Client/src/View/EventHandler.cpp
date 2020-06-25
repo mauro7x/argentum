@@ -71,22 +71,18 @@ Event EventHandler::_getMouseButtonDownEv(const SDL_Event& e) {
 
     switch (e.button.clicks) {
         case 1: {
-            // Single left click
-
             if (on_camera) {
-                fprintf(stderr, "Click en la camara del juego!\n");
+                return CAMERA_SINGLE_CLICK_EV;
             } else if (on_inventory) {
-                fprintf(stderr, "Click en el inventario!\n");
+                return INVENTORY_SINGLE_CLICK_EV;
             }
 
             break;
         }
 
         case 2: {
-            // Double left click
-
             if (on_inventory) {
-                fprintf(stderr, "Doble click en el inventario!\n");
+                return INVENTORY_DOUBLE_CLICK_EV;
             }
 
             break;
@@ -243,6 +239,14 @@ bool EventHandler::_clickInside(const SDL_Rect& rect,
     return true;
 }
 
+SDL_Point EventHandler::_clickToTile(const SDL_Event& e) const {
+    SDL_Point click_pos = {((int)(e.button.x / scale_factor_w)),
+                           ((int)(e.button.y / scale_factor_h))};
+    click_pos.x -= camera.xOffset();
+    click_pos.y -= camera.yOffset();
+
+    return SDL_Point({click_pos.x / TILE_WIDTH, click_pos.y / TILE_HEIGHT});
+}
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -250,8 +254,8 @@ bool EventHandler::_clickInside(const SDL_Rect& rect,
 
 EventHandler::EventHandler(std::atomic_bool& exit,
                            BlockingQueue<Command*>& commands, HUD& hud,
-                           const MapView& map)
-    : exit(exit), commands(commands), hud(hud), map(map) {
+                           const MapView& map, const Camera& camera)
+    : exit(exit), commands(commands), hud(hud), map(map), camera(camera) {
     _bindKeycodes();
 }
 
@@ -346,17 +350,37 @@ void EventHandler::handleEvent(const SDL_Event& e) {
         }
 
         // Clicks
-        case MAP_SINGLE_CLICK_EV: {
-            fprintf(stderr, "Click en el mapa. Falta implementar.\n");
+        case CAMERA_SINGLE_CLICK_EV: {
+            // Obtenemos el tile clickeado
+            SDL_Point tile = _clickToTile(e);
+
+            // Si el tile tiene un ocupante, usamos el arma principal
+            InstanceId occupant = map.getOccupant(tile.x, tile.y);
+            if (occupant) {
+                commands.push(new UseMainWeaponCommand(occupant));
+                break;
+            }
+
+            // Si el tile tiene un NPC, lo seleccionamos para futuros comandos
+            Id npc = map.getNPC(tile.x, tile.y);
+            if (npc) {
+                fprintf(stderr,
+                        "NPC seleccionado %i. Aun no se implementó esto!\n",
+                        npc);
+                hud.addMessage("NPC seleccionado.", SUCCESS_MSG_COLOR);
+
+                break;
+            }
+
             break;
         }
 
-        case HUD_SINGLE_CLICK_EV: {
+        case INVENTORY_SINGLE_CLICK_EV: {
             fprintf(stderr, "Click en el inventario. Falta implementar.\n");
             break;
         }
 
-        case HUD_DOUBLE_CLICK_EV: {
+        case INVENTORY_DOUBLE_CLICK_EV: {
             fprintf(stderr,
                     "Doble click en el inventario. Falta implementar.\n");
             break;
