@@ -22,6 +22,7 @@ Command* InputParser::_parseCommandInput(
     const std::string& command_input) const {
     std::string identifier = _getCommandIdentifier(command_input);
     if (commands.count(identifier) == 0) {
+        (*g_reply) = "Comando inexistente.";
         return NULL;
     }
 
@@ -34,9 +35,7 @@ Command* InputParser::_parseCommand(const std::string& command_input,
 
     switch (cmd_id) {
         case EQUIP_INPUT_CMD: {
-            fprintf(stderr,
-                    "InputParser::_parseCommand: comando EQUIPAR aun no "
-                    "implementado.\n");
+            (*g_reply) = "Este comando aun no está implementado.";
             return NULL;
         }
 
@@ -46,13 +45,12 @@ Command* InputParser::_parseCommand(const std::string& command_input,
                 return new GrabItemCommand;
             }
 
+            (*g_reply) = "El comando '/tomar' no admite parámetros.";
             return NULL;
         }
 
         case THROW_INPUT_CMD: {
-            fprintf(stderr,
-                    "InputParser::_parseCommand: comando TIRAR aun no "
-                    "implementado.\n");
+            (*g_reply) = "Este comando aun no está implementado.";
             return NULL;
         }
 
@@ -62,6 +60,7 @@ Command* InputParser::_parseCommand(const std::string& command_input,
                 return new MeditateCommand;
             }
 
+            (*g_reply) = "El comando '/meditar' no admite parámetros.";
             return NULL;
         }
 
@@ -70,61 +69,43 @@ Command* InputParser::_parseCommand(const std::string& command_input,
             if (body.empty()) {
                 return new SelfResurrectCommand;
             } else {
-                fprintf(stderr,
-                        "InputParser::_parseCommand: comando RESUCITAR CON "
-                        "SACERDOTE aun no "
-                        "implementado.\n");
+                (*g_reply) = "Este comando aun no está implementado.";
                 return NULL;
             }
         }
 
         case HEAL_INPUT_CMD: {
-            fprintf(stderr,
-                    "InputParser::_parseCommand: comando CURAR aun no "
-                    "implementado.\n");
+            (*g_reply) = "Este comando aun no está implementado.";
             return NULL;
         }
 
         case LIST_INPUT_CMD: {
-            fprintf(stderr,
-                    "InputParser::_parseCommand: comando LISTAR aun no "
-                    "implementado.\n");
+            (*g_reply) = "Este comando aun no está implementado.";
             return NULL;
         }
 
         case DEPOSIT_INPUT_CMD: {
-            fprintf(stderr,
-                    "InputParser::_parseCommand: comando DEPOSITAR aun no "
-                    "implementado.\n");
+            (*g_reply) = "Este comando aun no está implementado.";
             return NULL;
         }
 
         case WITHDRAW_INPUT_CMD: {
-            fprintf(stderr,
-                    "InputParser::_parseCommand: comando RETIRAR aun no "
-                    "implementado.\n");
+            (*g_reply) = "Este comando aun no está implementado.";
             return NULL;
         }
 
         case BUY_INPUT_CMD: {
-            fprintf(stderr,
-                    "InputParser::_parseCommand: comando COMPRAR aun no "
-                    "implementado.\n");
+            (*g_reply) = "Este comando aun no está implementado.";
             return NULL;
         }
 
         case SELL_INPUT_CMD: {
-            fprintf(stderr,
-                    "InputParser::_parseCommand: comando VENDER aun no "
-                    "implementado.\n");
+            (*g_reply) = "Este comando aun no está implementado.";
             return NULL;
         }
 
         case LIST_PLAYERS_INPUT_CMD: {
-            fprintf(stderr,
-                    "InputParser::_parseCommand: comando LISTAR JUGADORES "
-                    "CONECTADOS aun no "
-                    "implementado.\n");
+            (*g_reply) = "Este comando aun no está implementado.";
             return NULL;
         }
 
@@ -154,10 +135,7 @@ std::string InputParser::_getCommandBody(
 
 Command* InputParser::_parseMessageInput(
     const std::string& message_input) const {
-    fprintf(stderr,
-            "InputParser::_parseMessageInput: mensajes privados todavía no "
-            "implementados!\n");
-
+    (*g_reply) = "Mensajes privados aun no implementados.";
     return NULL;
 }
 
@@ -166,11 +144,15 @@ Command* InputParser::_parseMessageInput(
 //-----------------------------------------------------------------------------
 // API Pública
 
-InputParser::InputParser() {
+InputParser::InputParser(Selection& current_selection)
+    : current_selection(current_selection) {
     _fillCommands();
 }
 
-Command* InputParser::parse(const std::string& input) const {
+Command* InputParser::parse(const std::string& input, std::string& reply) {
+    // Setteamos el puntero a la respuesta
+    g_reply = &reply;
+
     if (input.empty()) {
         return NULL;
     }
@@ -186,6 +168,7 @@ Command* InputParser::parse(const std::string& input) const {
         }
 
         default: {
+            (*g_reply) = "Mensajes generales aun no implementados.";
             return NULL;
         }
     }

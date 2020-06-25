@@ -16,6 +16,13 @@ void EventHandler::_bindKeycodes() {
     keys.emplace(SDLK_ESCAPE, ESC_KEY);
 }
 
+void EventHandler::_clearSelection() {
+    current_selection.npc_selected = 0;
+    current_selection.inventory_slot_selected = -1;
+
+    // algun método que le diga a la hud que saque la selección?
+}
+
 Key EventHandler::_getKey(const SDL_Keycode& key) {
     if (keys.count(key)) {
         return keys.at(key);
@@ -67,30 +74,17 @@ Event EventHandler::_getMouseButtonDownEv(const SDL_Event& e) {
     }
 
     bool on_camera = _clickInside(camera_box, e);
+    if (on_camera) {
+        return CAMERA_SINGLE_CLICK_EV;
+    }
+
     bool on_inventory = _clickInside(inventory_box, e);
-
-    switch (e.button.clicks) {
-        case 1: {
-            if (on_camera) {
-                return CAMERA_SINGLE_CLICK_EV;
-            } else if (on_inventory) {
-                return INVENTORY_SINGLE_CLICK_EV;
-            }
-
-            break;
+    if (on_inventory) {
+        if (e.button.clicks == 2) {
+            return INVENTORY_DOUBLE_CLICK_EV;
         }
 
-        case 2: {
-            if (on_inventory) {
-                return INVENTORY_DOUBLE_CLICK_EV;
-            }
-
-            break;
-        }
-
-        default: {
-            break;
-        }
+        return INVENTORY_SINGLE_CLICK_EV;
     }
 
     return INVALID_EV;
@@ -225,6 +219,11 @@ Event EventHandler::_getKeyUpEv(const SDL_Event& e) {
 
 // Métodos auxiliares
 
+SDL_Point EventHandler::_getClickPos(const SDL_Event& e) const {
+    return SDL_Point({((int)(e.button.x / scale_factor_w)),
+                      ((int)(e.button.y / scale_factor_h))});
+}
+
 bool EventHandler::_clickInside(const SDL_Rect& rect,
                                 const SDL_Event& e) const {
     // Primero escalamos el click
@@ -240,8 +239,7 @@ bool EventHandler::_clickInside(const SDL_Rect& rect,
 }
 
 SDL_Point EventHandler::_clickToTile(const SDL_Event& e) const {
-    SDL_Point click_pos = {((int)(e.button.x / scale_factor_w)),
-                           ((int)(e.button.y / scale_factor_h))};
+    SDL_Point click_pos = _getClickPos(e);
     click_pos.x -= camera.xOffset();
     click_pos.y -= camera.yOffset();
 
@@ -255,7 +253,12 @@ SDL_Point EventHandler::_clickToTile(const SDL_Event& e) const {
 EventHandler::EventHandler(std::atomic_bool& exit,
                            BlockingQueue<Command*>& commands, HUD& hud,
                            const MapView& map, const Camera& camera)
-    : exit(exit), commands(commands), hud(hud), map(map), camera(camera) {
+    : exit(exit),
+      commands(commands),
+      hud(hud),
+      map(map),
+      camera(camera),
+      input_parser(current_selection) {
     _bindKeycodes();
 }
 
@@ -294,21 +297,25 @@ void EventHandler::handleEvent(const SDL_Event& e) {
 
         // Movimiento
         case START_MOVING_UP_EV: {
+            _clearSelection();
             commands.push(new StartMovingCommand(UP_DIR));
             break;
         }
 
         case START_MOVING_DOWN_EV: {
+            _clearSelection();
             commands.push(new StartMovingCommand(DOWN_DIR));
             break;
         }
 
         case START_MOVING_LEFT_EV: {
+            _clearSelection();
             commands.push(new StartMovingCommand(LEFT_DIR));
             break;
         }
 
         case START_MOVING_RIGHT_EV: {
+            _clearSelection();
             commands.push(new StartMovingCommand(RIGHT_DIR));
             break;
         }
@@ -335,17 +342,18 @@ void EventHandler::handleEvent(const SDL_Event& e) {
         }
 
         case STOP_INPUT_EV: {
+            hud.disableInput();
             std::string input = hud.popText();
-
-            Command* cmd = input_parser.parse(input);
+            std::string reply;
+            Command* cmd = input_parser.parse(input, reply);
             if (cmd) {
                 hud.addMessage(">> " + input, USER_CMD_MSG_COLOR);
                 commands.push(cmd);
-            } else if (!input.empty()) {
-                hud.addMessage("Comando inexistente.", ERROR_MSG_COLOR);
+            } else if (!reply.empty()) {
+                hud.addMessage(reply, WARNING_MSG_COLOR);
             }
 
-            hud.disableInput();
+            _clearSelection();
             break;
         }
 
@@ -364,10 +372,7 @@ void EventHandler::handleEvent(const SDL_Event& e) {
             // Si el tile tiene un NPC, lo seleccionamos para futuros comandos
             Id npc = map.getNPC(tile.x, tile.y);
             if (npc) {
-                fprintf(stderr,
-                        "NPC seleccionado %i. Aun no se implementó esto!\n",
-                        npc);
-
+                current_selection.npc_selected = npc;
                 hud.addMessage(
                     ">> Has seleccionado a un NPC, ahora puedes enviarle "
                     "comandos.",
@@ -379,13 +384,34 @@ void EventHandler::handleEvent(const SDL_Event& e) {
         }
 
         case INVENTORY_SINGLE_CLICK_EV: {
-            fprintf(stderr, "Click en el inventario. Falta implementar.\n");
+            _clearSelection();
+            SDL_Point click_pos = _getClickPos(e);
+
+            int8_t inventory_slot = hud.getInventorySlotClicked(click_pos);
+            if (inventory_slot > 0) {
+                current_selection.inventory_slot_selected = inventory_slot;
+                // algun método que le diga a la hud que lo resalte?
+            }
+
             break;
         }
 
         case INVENTORY_DOUBLE_CLICK_EV: {
-            fprintf(stderr,
-                    "Doble click en el inventario. Falta implementar.\n");
+            _clearSelection();
+            SDL_Point click_pos = _getClickPos(e);
+
+            int8_t inventory_slot = hud.getInventorySlotClicked(click_pos);
+            if (inventory_slot > 0) {
+                // equipar objeto
+                break;
+            }
+
+            int8_t equipment_slot = hud.getEquipmentSlotClicked(click_pos);
+            if (equipment_slot > 0) {
+                // desequipar objeto
+                break;
+            }
+
             break;
         }
 

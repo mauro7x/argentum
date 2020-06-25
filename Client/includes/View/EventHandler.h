@@ -33,6 +33,7 @@
 #include "Camera.h"
 #include "HUD.h"
 #include "MapView.h"
+#include "Selection.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -96,6 +97,7 @@ class EventHandler {
     // Flags internos
     Key key_pressed = UNMAPPED_KEY;
     bool text_input_enabled = false;
+    Selection current_selection = {0, -1};
 
     // Componentes internos
     std::unordered_map<SDL_Keycode, Key> keys;
@@ -106,6 +108,9 @@ class EventHandler {
 
     /* Bindea las keycodes de entrada */
     void _bindKeycodes();
+
+    /* Resetea la selección a invalida */
+    void _clearSelection();
 
     /* Traduce el Keycode de SDL a una key esperada */
     Key _getKey(const SDL_Keycode& key);
@@ -124,6 +129,9 @@ class EventHandler {
 
     /* Traduce SDL_KEYUP en un evento esperado */
     Event _getKeyUpEv(const SDL_Event& e);
+
+    /* Obtiene la posición del click del mouse escalada */
+    SDL_Point _getClickPos(const SDL_Event& e) const;
 
     /* Verifica si el click ocurrió dentro del SDL_Rect provisto */
     bool _clickInside(const SDL_Rect& rect, const SDL_Event& e) const;

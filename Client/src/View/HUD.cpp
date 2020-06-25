@@ -106,6 +106,14 @@ void HUD::disableInput() {
     console.disableInput();
 }
 
+int8_t HUD::getEquipmentSlotClicked(const SDL_Point& click_pos) {
+    return -1;
+}
+
+int8_t HUD::getInventorySlotClicked(const SDL_Point& click_pos) {
+    return -1;
+}
+
 void HUD::update(const int it) {
     if (!initialized) {
         throw Exception("HUD not initialized.");

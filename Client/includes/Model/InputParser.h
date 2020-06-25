@@ -17,6 +17,11 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+#include "../View/Selection.h"
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+// Comandos esperados
 
 #define EQUIP_EXPECTED_INPUT "/equipar"
 #define GRAB_EXPECTED_INPUT "/tomar"
@@ -30,6 +35,10 @@
 #define BUY_EXPECTED_INPUT "/comprar"
 #define SELL_EXPECTED_INPUT "/vender"
 #define LIST_PLAYERS_EXPECTED_INPUT "/listar_jugadores"
+//-----------------------------------------------------------------------------
+
+
+//-----------------------------------------------------------------------------
 
 enum InputCommand {
     EQUIP_INPUT_CMD,
@@ -45,13 +54,16 @@ enum InputCommand {
     SELL_INPUT_CMD,
     LIST_PLAYERS_INPUT_CMD
 };
+
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 
 class InputParser {
    private:
+    Selection& current_selection;
     std::unordered_map<std::string, InputCommand> commands;
+    std::string* g_reply;
 
     //-----------------------------------------------------------------------------
     // Métodos privados
@@ -79,7 +91,7 @@ class InputParser {
 
    public:
     /* Constructor */
-    InputParser();
+    InputParser(Selection& current_selection);
 
     /* Deshabilitamos el constructor por copia. */
     InputParser(const InputParser&) = delete;
@@ -98,7 +110,7 @@ class InputParser {
 
     /* Parsea un input y obtiene un comando. Si el input es inválido, retorna
      * NULL. */
-    Command* parse(const std::string& input) const;
+    Command* parse(const std::string& input, std::string& reply);
 
     //-----------------------------------------------------------------------------
 
