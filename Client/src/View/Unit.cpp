@@ -75,10 +75,9 @@ int Unit::_calculateSpriteX(const UnitSprite& sprite) const {
                     ((current_animation_frame / sprite.change_every_n_frames) %
                      sprite.right_clips)) *
                    sprite.clip_w;
+        default:
+            throw Exception("Unit::_calculateSpriteX: invalid orientation.");
     }
-
-    throw Exception(
-        "Orientation invalid (trying to calculate sprite x-position).");
 }
 
 int Unit::_calculateSpriteY(const UnitSprite& sprite) const {
@@ -91,10 +90,9 @@ int Unit::_calculateSpriteY(const UnitSprite& sprite) const {
             return sprite.left_row * sprite.clip_h;
         case RIGHT_ORIENTATION:
             return sprite.right_row * sprite.clip_h;
+        default:
+            throw Exception("Unit::_canculateSpriteY: invalid orientation.");
     }
-
-    throw Exception(
-        "Orientation invalid (trying to calculate sprite y-position).");
 }
 
 void Unit::_render(const UnitSprite& sprite) const {
