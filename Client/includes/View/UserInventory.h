@@ -39,14 +39,9 @@ class UserInventory : public HUDComponent {
     // Offsets de renderizado
     int slot_w = 0;
     int slot_h = 0;
-    SDL_Point equipment_weapon = {0};
-    SDL_Point equipment_helmet = {0};
-    SDL_Point equipment_armour = {0};
-    SDL_Point equipment_shield = {0};
-    SDL_Point first_inventory_slot = {0};
-    int inventory_rows = 0;
-    int slots_per_row = 0;
-    SDL_Point offset_between_slots = {0};
+    std::array<SDL_Point, N_INVENTORY_SLOTS> inventory_slots = {0};
+    std::array<SDL_Point, N_WEARABLE_ITEMS> equipment_slots = {0};
+
     SDL_Rect safe_gold_box = {0};
     SDL_Point safe_gold_pos = {0};
     SDL_Rect excess_gold_box = {0};
@@ -95,6 +90,14 @@ class UserInventory : public HUDComponent {
 
     /* Carga los archivos necesarios */
     void loadMedia() override;
+
+    /* Obtiene el slot del equipamiento que fue clickeado
+     * (retorna -1 si ningún slot fue clickeado) */
+    int8_t getEquipmentSlotClicked(const SDL_Point& click_pos);
+
+    /* Obtiene el slot del inventario que fue clickeado
+     * (retorna -1 si ningún slot fue clickeado) */
+    int8_t getInventorySlotClicked(const SDL_Point& click_pos);
 
     /* Actualiza la información que se muestra */
     void update(const int it) override;
