@@ -32,10 +32,12 @@
 #define HEAL_EXPECTED_INPUT "/curar"
 #define LIST_EXPECTED_INPUT "/listar"
 #define DEPOSIT_EXPECTED_INPUT "/depositar"
+#define DEPOSIT_GOLD_EXPECTED_INPUT "/depositaroro"
 #define WITHDRAW_EXPECTED_INPUT "/retirar"
+#define WITHDRAW_GOLD_EXPECTED_INPUT "/retiraroro"
 #define BUY_EXPECTED_INPUT "/comprar"
 #define SELL_EXPECTED_INPUT "/vender"
-#define LIST_PLAYERS_EXPECTED_INPUT "/listar_jugadores"
+#define LIST_PLAYERS_EXPECTED_INPUT "/listarjugadores"
 #define HELP_NPC_INPUT "/help"
 //-----------------------------------------------------------------------------
 
@@ -50,7 +52,9 @@ enum InputCommand {
     HEAL_INPUT_CMD,
     LIST_INPUT_CMD,
     DEPOSIT_INPUT_CMD,
+    DEPOSIT_GOLD_INPUT_CMD,
     WITHDRAW_INPUT_CMD,
+    WITHDRAW_GOLD_INPUT_CMD,
     BUY_INPUT_CMD,
     SELL_INPUT_CMD,
     LIST_PLAYERS_INPUT_CMD,
@@ -86,19 +90,23 @@ class InputParser {
     /* Obtiene el cuerpo del comando */
     std::string _getCommandBody(const std::string& command_input) const;
 
-    /* Splittea el string con un delimitador y guarda ambas partes */
+    /* Splittea el string con un delimitador (char) y guarda ambas partes */
     void _splitBy(char delim, const std::string& original, std::string& left,
                   std::string& right) const;
+
+    /* Splittea el string con un delimitador (string) y guarda ambas partes */
+    void _splitBy(const std::string& delim, const std::string& original,
+                  std::string& left, std::string& right) const;
 
     /* Verifica si el string es numérico */
     bool _isNumeric(const std::string& string) const;
 
-    /* Obtiene el valor númerico del string (si es posible). Devuelve true si se
-     * pudo, false si hubieron errores */
+    /* Obtiene el valor númerico del string (si es posible). Devuelve true
+     * si se pudo, false si hubieron errores */
     bool _castToUint32(const std::string& string, uint32_t& result) const;
 
     /* Parsea un input de tipo MENSAJE PRIVADO */
-    Command* _parseMessageInput(const std::string& message_input) const;
+    Command* _parsePMInput(const std::string& message_input) const;
 
     //-----------------------------------------------------------------------------
 
@@ -121,8 +129,8 @@ class InputParser {
     //-----------------------------------------------------------------------------
     // Métodos de la API pública
 
-    /* Parsea un input y obtiene un comando. Si el input es inválido, retorna
-     * NULL. */
+    /* Parsea un input y obtiene un comando. Si el input es inválido,
+     * retorna NULL. */
     Command* parse(const std::string& input, std::string& reply);
 
     //-----------------------------------------------------------------------------

@@ -11,11 +11,15 @@
 
 class WithdrawNObjectsCommand : public Command {
    private:
-    // Atributos
+    uint32_t x;
+    uint32_t y;
+    uint32_t item_id;
+    uint32_t amount;
 
    public:
     /* Constructor */
-    WithdrawNObjectsCommand();
+    WithdrawNObjectsCommand(uint32_t x, uint32_t y, uint32_t item_id,
+                            uint32_t amount);
 
     //-------------------------------------------------------------------------
 

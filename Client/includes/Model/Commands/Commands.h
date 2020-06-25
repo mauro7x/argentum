@@ -15,6 +15,7 @@
 #include "ResurrectCommand.h"
 #include "SelfResurrectCommand.h"
 #include "SellNObjectsCommand.h"
+#include "SendGeneralMessageCommand.h"
 #include "SendPMCommand.h"
 #include "StartMovingCommand.h"
 #include "StopMovingCommand.h"

@@ -1,4 +1,4 @@
-#include "../../../includes/Model/Commands/SendPMCommand.h"
+#include "../../../includes/Model/Commands/SendGeneralMessageCommand.h"
 
 //-----------------------------------------------------------------------------
 // Métodos privados
@@ -8,21 +8,16 @@
 //-----------------------------------------------------------------------------
 // API Pública
 
-SendPMCommand::SendPMCommand(const std::string& receiver,
-                             const std::string& content)
-    : Command(), receiver(receiver), content(content) {}
+SendGeneralMessageCommand::SendGeneralMessageCommand(const std::string& content)
+    : Command(), content(content) {}
 
-bool SendPMCommand::send(const SocketWrapper& socket) {
+bool SendGeneralMessageCommand::send(const SocketWrapper& socket) {
     // Enviamos el comando según el protocolo
     if (!(socket << (uint8_t)COMMAND_OPCODE)) {
         return false;
     }
 
-    if (!(socket << (uint8_t)SEND_PRIVATE_MESSAGE_CMD)) {
-        return false;
-    }
-
-    if (!(socket << receiver)) {
+    if (!(socket << (uint8_t)SEND_GENERAL_MESSAGE_CMD)) {
         return false;
     }
 
@@ -33,6 +28,6 @@ bool SendPMCommand::send(const SocketWrapper& socket) {
     return true;
 }
 
-SendPMCommand::~SendPMCommand() {}
+SendGeneralMessageCommand::~SendGeneralMessageCommand() {}
 
 //-----------------------------------------------------------------------------

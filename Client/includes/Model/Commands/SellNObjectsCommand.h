@@ -11,11 +11,15 @@
 
 class SellNObjectsCommand : public Command {
    private:
-    // Atributos
+    uint32_t x;
+    uint32_t y;
+    uint8_t inventory_slot;
+    uint32_t amount;
 
    public:
     /* Constructor */
-    SellNObjectsCommand();
+    SellNObjectsCommand(uint32_t x, uint32_t y, uint8_t inventory_slot,
+                        uint32_t amount);
 
     //-------------------------------------------------------------------------
 

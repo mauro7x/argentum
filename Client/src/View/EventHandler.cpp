@@ -393,13 +393,12 @@ void EventHandler::handleEvent(const SDL_Event& e) {
             int8_t inventory_slot = hud.getInventorySlotClicked(click_pos);
             if (inventory_slot >= 0) {
                 current_selection.inventory_slot_selected = inventory_slot;
-                {  // PROXY
-                    // algun método que le diga a la hud que lo resalte? por
-                    // ahora:
-                    hud.addMessage(
-                        ">> Has seleccionado un objeto de tu inventario.",
-                        USER_CMD_MSG_COLOR);
-                }
+
+                // PROXY: Algun método que le diga a la hud que lo resalte?
+                // Por ahora:
+                hud.addMessage(
+                    ">> Has seleccionado un objeto de tu inventario.",
+                    USER_CMD_MSG_COLOR);
             }
 
             break;

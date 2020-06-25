@@ -17,15 +17,15 @@ Marcarlos cuando estén implementados y funcionando!
 | 10 | Meditar | X | | |
 | 11 | Resucitar (solo) | X | | |
 | 12 | Listar comandos disponibles del NPC (/help) | X | | |
-| 13 | Resucitar (con sacerdote) | | | |
-| 14 | Curar | | | |
-| 15 | Listar | | | |
-| 16 | Depositar | | | |
-| 17 | Depositar oro | | | |
-| 18 | Retirar | | | |
-| 19 | Retirar oro | | | | 
-| 20 | Comprar | | | |
-| 21 | Vender | | | |
-| 22 | Listar jugadores conectados | | | |
-| 23 | Mensaje general | | | |
-| 24 | Mensaje privado | | | |
+| 13 | Resucitar (con sacerdote) | X | | |
+| 14 | Curar | X | | |
+| 15 | Listar | X | | |
+| 16 | Depositar | X | | |
+| 17 | Depositar oro | X | | |
+| 18 | Retirar | X | | |
+| 19 | Retirar oro | X | | | 
+| 20 | Comprar | X | | |
+| 21 | Vender | X | | |
+| 22 | Listar jugadores conectados | X | | |
+| 23 | Mensaje general | X | | |
+| 24 | Mensaje privado | X | | |

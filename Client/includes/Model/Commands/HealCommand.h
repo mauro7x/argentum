@@ -11,11 +11,12 @@
 
 class HealCommand : public Command {
    private:
-    // Atributos
+    uint32_t x;
+    uint32_t y;
 
    public:
     /* Constructor */
-    HealCommand();
+    HealCommand(uint32_t x, uint32_t y);
 
     //-------------------------------------------------------------------------
 

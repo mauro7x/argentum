@@ -199,7 +199,7 @@ void Game::newCreature(const CreatureCfg& init_data, const Id init_map) {
                               spawning_x_coord, spawning_y_coord,
                               init_data.base_health, init_data.base_damage));
 
-    fprintf(stderr, "NEW CREATURE: %s \n", init_data.name.c_str());
+    // fprintf(stderr, "NEW CREATURE: %s \n", init_data.name.c_str());
 
     _pushCreatureDifferentialBroadcast(new_creature_id, NEW_BROADCAST);
 }

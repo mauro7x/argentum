@@ -10,9 +10,6 @@
 //-----------------------------------------------------------------------------
 
 class ListConnectedPlayersCommand : public Command {
-   private:
-    // Atributos
-
    public:
     /* Constructor */
     ListConnectedPlayersCommand();

@@ -11,11 +11,12 @@
 
 class ListCommand : public Command {
    private:
-    // Atributos
+    uint32_t x;
+    uint32_t y;
 
    public:
     /* Constructor */
-    ListCommand();
+    ListCommand(uint32_t x, uint32_t y);
 
     //-------------------------------------------------------------------------
 
