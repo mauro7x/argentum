@@ -2,6 +2,7 @@
 #define __MAP_H__
 
 //-----------------------------------------------------------------------------
+#include <exception>
 #include <vector>
 //-----------------------------------------------------------------------------
 
@@ -12,6 +13,8 @@
 #include "Tile.h"
 #include "defs.h"
 #include "types.h"
+//-----------------------------------------------------------------------------
+#define DROPPING_RANGE 3
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -99,13 +102,38 @@ class Map {
     /* Ocupa una celda con un ocupante */
     void occupyTile(InstanceId id, const int x, const int y);
 
+    /*
+     * Busca el tile libre de item más cercano (en la linea direccional de la
+     * orientacion recibida) al correspondiente a las coordenadas x e y
+     * recibidas
+     *
+     * Agrega dicho item a ese tile libre buscado y cambia
+     * los valores de x e y con las coordenadas del mismo.
+     *
+     * Dicha búsqueda se realiza hasta DROPPING_RANGE tiles aldeaños,
+     * en la línea de orientación recibida.
+     *
+     * Lanza ItemCouldNotBeAddedException si no se encuentra tile
+     * libre para que el item lo ocupe dentro del rango DROPPING_RANGE.
+     */
+    void addItem(const Id item_id, int& x, int& y,
+                 const Orientation& orientation);
+
     /* Elimina al ocupante de una celda */
-    void clearTile(const int x, const int y);
+    void clearTileOcuppant(const int x, const int y);
+
+    /* Elimina el item de una celda */
+    void clearTileItem(const int x, const int y);
 
     //-------------------------------------------------------------------------
 
     /* Destructor */
     ~Map();
+};
+
+class ItemCouldNotBeAddedException : public std::exception {
+   public:
+    virtual const char* what() const noexcept;
 };
 
 //-----------------------------------------------------------------------------

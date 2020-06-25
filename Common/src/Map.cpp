@@ -65,7 +65,7 @@ void Map::_fillTiles(const json& map, const json& tilesets) {
 
         /* Ocupantes */
         tile.occupant_id = 0;
-        
+
         tile.item_id = 0;
 
         tiles.push_back(tile);
@@ -222,11 +222,80 @@ void Map::occupyTile(InstanceId id, const int x, const int y) {
     tile.occupant_id = id;
 }
 
-void Map::clearTile(const int x, const int y) {
+void Map::addItem(const Id item_id, int& x, int& y,
+                  const Orientation& orientation) {
+    bool empty_tile_found = false;
+
+    Tile& tile = this->_getTile(x, y);
+    fprintf(stderr, "Map::addItem DEBUG: intento agregar en x = %i, y = %i\n", x, y);
+    if (!tile.item_id) {
+        tile.item_id = item_id;
+        empty_tile_found = true;
+    }
+    // HABRIA QUE PONERLE ALGUN LIMITE A ESTE LOOP DE MAXIMA PROFUNDIDAD.
+    while (!empty_tile_found) {
+        for (int i = orientation; i < N_ORIENTATIONS; i = (i + 1) % N_ORIENTATIONS) {
+            switch (i) {
+                case UP_ORIENTATION: {
+                    if (y == 0)
+                        continue;
+
+                    --y;
+                    break;
+                }
+
+                case DOWN_ORIENTATION: {
+                    if (y == this->h)
+                        continue;
+
+                    ++y;
+                    break;
+                }
+
+                case LEFT_ORIENTATION: {
+                    if (x == 0)
+                        continue;
+
+                    --x;
+                    break;
+                }
+
+                case RIGHT_ORIENTATION: {
+                    if (x == this->w)
+                        continue;
+                    
+                    ++x;
+                    break;
+                }
+
+                default:
+                    throw(Exception("Map::addItem: Unknown orientation."));
+            }
+
+            tile = this->_getTile(x, y);
+            fprintf(stderr, "Map::addItem DEBUG: intento agregar en x = %i, y = %i\n", x, y);
+            if (!tile.item_id) {
+                tile.item_id = item_id;
+                empty_tile_found = true;
+            }
+        }
+    }
+}
+
+void Map::clearTileOcuppant(const int x, const int y) {
     Tile& tile = this->_getTile(x, y);
     tile.occupant_id = 0;
 }
 
+void Map::clearTileItem(const int x, const int y) {
+    Tile& tile = this->_getTile(x, y);
+    tile.item_id = 0;
+}
+
 Map::~Map() {}
+
+const char* ItemCouldNotBeAddedException::what() const noexcept {
+    return "No se pudo agregar el item dropeado al mapa.";
+}
 
 //-----------------------------------------------------------------------------
