@@ -1,4 +1,5 @@
 #include "../../includes/Model/Position.h"
+#include "../../../Common/includes/Exceptions/Exception.h"
 
 #include <cstdlib>
 
@@ -13,7 +14,7 @@ Position::Position(const Id map, const int init_x_coord, const int init_y_coord,
       map_container(map_container) {}
 
 Position::~Position() {
-    map_container[map].clearTile(x, y);
+    map_container[map].clearTileOcuppant(x, y);
 }
 
 const int Position::getX() const {
@@ -22,6 +23,10 @@ const int Position::getX() const {
 
 const int Position::getY() const {
     return this->y;
+}
+
+const Orientation Position::getOrientation() const {
+    return this->orientation;
 }
 
 const Id Position::getMapId() const {
@@ -53,6 +58,9 @@ void Position::move() {
         case LEFT_ORIENTATION:
             this->x -= 1;
             break;
+
+        default:
+            throw Exception("Position::move: unknown orientation.");
     }
 }
 

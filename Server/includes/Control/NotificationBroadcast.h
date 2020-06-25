@@ -7,8 +7,8 @@
 #include "../../../Common/includes/Protocol.h"
 #include "../../../Common/includes/Socket/SocketWrapper.h"
 #include "../../../Common/includes/UnitData.h"
-#include "../../../Common/includes/json_conversion.h"
 #include "../../../Common/includes/json.hpp"
+#include "../../../Common/includes/json_conversion.h"
 #include "../../../Common/includes/types.h"
 //-----------------------------------------------------------------------------
 #include "Notification.h"
@@ -28,13 +28,16 @@ class NotificationBroadcast : public Notification {
     json j;
 
    public:
-    /* Constructor */
+    /* Constructor para data de characters */
     NotificationBroadcast(InstanceId id, PlayerData& data,
                           BroadcastType broadcast_type);
 
-    /* Constructor para data de creature*/
+    /* Constructor para data de creatures */
     NotificationBroadcast(InstanceId id, CreatureData& data,
                           BroadcastType broadcast_type);
+
+    /* Constructor para data de items */
+    NotificationBroadcast(ItemData& data, BroadcastType broadcast_type);
 
     /* Constructor para data de item */
     //     NotificationBroadcast(InstanceId id, ItemData& data,

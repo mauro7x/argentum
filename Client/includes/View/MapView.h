@@ -63,7 +63,7 @@ class MapView {
     void occupyTile(InstanceId id, const int x_tile, const int y_tile);
 
     /* Libera una celda */
-    void clearTile(const int x_tile, const int y_tile);
+    void clearTileOcuppant(const int x_tile, const int y_tile);
 
     //-------------------------------------------------------------------------
     // Métodos de renderizado

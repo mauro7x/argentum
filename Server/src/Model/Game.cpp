@@ -1,5 +1,4 @@
 #include <cstdio>  // debug
-#include <tuple>
 #include <utility>
 //-----------------------------------------------------------------------------
 #include "../../../Common/includes/Exceptions/Exception.h"
@@ -15,14 +14,13 @@
 #define FIRST_INSTANCE_ID 1
 #define RATE 1000 / 30
 #define MAX_CREATURES_PER_MAP 20
-#define TIME_TO_SPAWN_CREATURE 3000  // en ms
+#define TIME_TO_SPAWN_CREATURE 3000           // en ms
+#define TIME_TO_DISSAPEAR_DROPPED_ITEM 30000  // en ms
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 Game::Game(ActiveClients& active_clients)
-    : next_instance_id(FIRST_INSTANCE_ID),
-      active_clients(active_clients),
-      creature_spawn_cooldown(0) {
+    : next_instance_id(FIRST_INSTANCE_ID), active_clients(active_clients) {
     map_container.loadMaps();
 
     std::vector<Id> maps_id = std::move(this->map_container.getMapsId());
@@ -43,6 +41,24 @@ MapCreaturesInfo::MapCreaturesInfo(unsigned int amount_of_creatures,
                                    int creature_spawning_cooldown)
     : amount_of_creatures(amount_of_creatures),
       creature_spawning_cooldown(creature_spawning_cooldown) {}
+
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+// Métodos de broadcast
+//-----------------------------------------------------------------------------
+
+const std::string _coordinatesToMapKey(int x, int y) {
+    return std::move(std::to_string(x) + "," + std::to_string(y));
+}
+
+void _mapKeyToCoordinates(const std::string& key, int& x, int& y) {
+    std::size_t delim = key.find(',');
+    x = std::stoi(key.substr(0, delim));
+    y = std::stoi(key.substr(delim + 1));
+    fprintf(stderr, "DEBUG _mapKeyToCoordinates: key = %s --> x = %i, y = %i",
+            key.c_str(), x, y);
+}
 
 //-----------------------------------------------------------------------------
 
@@ -78,6 +94,20 @@ Notification* Game::_buildCreatureBroadcast(InstanceId id,
     return broadcast;
 }
 
+Notification* Game::_buildItemBroadcast(Id map_id, int x_coord, int y_coord,
+                                        BroadcastType broadcast_type) {
+    ItemData data;
+    data.item_id =
+        this->map_container[map_id].getTile(x_coord, y_coord).item_id;
+    data.map = map_id;
+    data.x_tile = x_coord;
+    data.y_tile = y_coord;
+
+    Notification* broadcast = new NotificationBroadcast(data, broadcast_type);
+
+    return broadcast;
+}
+
 void Game::_pushCharacterDifferentialBroadcast(InstanceId caller,
                                                BroadcastType broadcast_type,
                                                bool send_to_caller) {
@@ -99,6 +129,14 @@ void Game::_pushCreatureDifferentialBroadcast(InstanceId creature,
     this->creatures.at(creature).beBroadcasted();
 }
 
+void Game::_pushItemDifferentialBroadcast(Id map_id, int x_coord, int y_coord,
+                                          BroadcastType broadcast_type) {
+    Notification* broadcast =
+        _buildItemBroadcast(map_id, x_coord, y_coord, broadcast_type);
+
+    this->active_clients.sendDifferentialBroadcastToAll(broadcast, 0, false);
+}
+
 void Game::_pushFullBroadcast(InstanceId receiver, bool is_new_connection) {
     Notification* broadcast;
 
@@ -117,7 +155,8 @@ void Game::_pushFullBroadcast(InstanceId receiver, bool is_new_connection) {
             /*
              * El receptor no tiene nada que recibir. Si era una nueva conexion,
              * ya recibió su NEW PLAYER BROADCAST, y si cambia el mapa acá no
-             * tiene que recibir sus propios datos.
+             * tiene que recibir sus propios datos, pues le llega un
+             * DIFFERENTIAL UPDATE.
              */
             ++it_characters;
             continue;
@@ -139,6 +178,19 @@ void Game::_pushFullBroadcast(InstanceId receiver, bool is_new_connection) {
         this->active_clients.notify(receiver, broadcast);
 
         ++it_creatures;
+    }
+
+    Id receiver_map_id = this->characters.at(receiver).getMapId();
+    std::unordered_map<std::string, int>::iterator it_items =
+        dropped_items_lifetime_per_map[receiver_map_id].begin();
+
+    while (it_items != dropped_items_lifetime_per_map[receiver_map_id].end()) {
+        int x_coord, y_coord;
+        _mapKeyToCoordinates(it_items->first, x_coord, y_coord);
+
+        broadcast = _buildItemBroadcast(receiver_map_id, x_coord, y_coord, NEW_BROADCAST);
+
+        ++it_items;
     }
 }
 
@@ -316,6 +368,37 @@ void Game::spawnNewCreatures(const int it) {
     }
 }
 
+void Game::updateDroppedItemsLifetime(const int it) {
+    // Recorremos primero los unordered_map de lifetime de items droppeados para
+    // cada map_id. Luego, por cada item droppeado actualizamos su lifetime, y
+    // si el mismo llega a cero (o menos) lo eliminamos del mapa.
+
+    std::unordered_map<Id, std::unordered_map<std::string, int>>::iterator
+        map_iterator = this->dropped_items_lifetime_per_map.begin();
+
+    while (map_iterator != this->dropped_items_lifetime_per_map.end()) {
+        std::unordered_map<std::string, int>::iterator dropped_items_iterator =
+            map_iterator->second.begin();
+
+        while (dropped_items_iterator != map_iterator->second.end()) {
+            int& lifetime = dropped_items_iterator->second;
+
+            lifetime -= it * RATE;
+
+            if (lifetime <= 0) {
+                // Eliminamos el item del mapa.
+                int x, y;
+                _mapKeyToCoordinates(dropped_items_iterator->first, x, y);
+                this->map_container[map_iterator->first].clearTileItem(x, y);
+            }
+
+            ++dropped_items_iterator;
+        }
+
+        ++map_iterator;
+    }
+}
+
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -324,60 +407,69 @@ void Game::spawnNewCreatures(const int it) {
 
 void Game::startMovingUp(const InstanceId caller) {
     if (!this->characters.count(caller)) {
-        throw Exception("Game.cpp startMovingUp: unknown caller.");
+        throw Exception("Game::startMovingUp: unknown caller.");
     }
 
     Character& character = this->characters.at(caller);
-
     character.startMovingUp();
 }
 
 void Game::startMovingDown(const InstanceId caller) {
     if (!this->characters.count(caller)) {
-        throw Exception("Game.cpp startMovingDown: unknown caller.");
+        throw Exception("Game::startMovingDown: unknown caller.");
     }
 
     Character& character = this->characters.at(caller);
-
     character.startMovingDown();
 }
 
 void Game::startMovingLeft(const InstanceId caller) {
     if (!this->characters.count(caller)) {
-        throw Exception("Game.cpp startMovingLeft: unknown caller.");
+        throw Exception("Game::startMovingLeft: unknown caller.");
     }
 
     Character& character = this->characters.at(caller);
-
     character.startMovingLeft();
 }
 
 void Game::startMovingRight(const InstanceId caller) {
     if (!this->characters.count(caller)) {
-        throw Exception("Game.cpp startMovingRight: unknown caller.");
+        throw Exception("Game::startMovingRight: unknown caller.");
     }
 
     Character& character = this->characters.at(caller);
-
     character.startMovingRight();
 }
 
 void Game::stopMoving(const InstanceId caller) {
     if (!this->characters.count(caller)) {
-        throw Exception("Game.cpp stopMoving: unknown caller.");
+        throw Exception("Game::stopMoving: unknown caller.");
     }
 
     Character& character = this->characters.at(caller);
-
     character.stopMoving();
 }
 
 void Game::useWeapon(const InstanceId caller, const InstanceId target) {
     fprintf(stderr, "Comando useWeapon no implementado.\n");
+    return;
 }
 
 void Game::equip(const InstanceId caller, const uint8_t n_slot) {
-    fprintf(stderr, "Comando equip no implementado.\n");
+    // Comando sin testear, puede fallar :3
+    if (!this->characters.count(caller)) {
+        throw Exception("Game::equip: unknown caller.");
+    }
+
+    Character& character = this->characters.at(caller);
+
+    try {
+        character.equip(n_slot);
+    } catch (const InvalidPositionException& e) {
+        Notification* reply = new NotificationReply(ERROR_MSG, e.what());
+        active_clients.notify(caller, reply);
+        return;
+    }
 }
 
 void Game::unequip(const InstanceId caller, const uint8_t n_slot) {
@@ -385,50 +477,50 @@ void Game::unequip(const InstanceId caller, const uint8_t n_slot) {
 }
 
 void Game::meditate(const InstanceId caller) {
-    fprintf(stderr, "Comando meditate no implementado.\n");
+    fprintf(stderr, "Game::meditate no implementado.\n");
 }
 
 void Game::resurrect(const InstanceId caller) {
-    fprintf(stderr, "Comando resurrect no implementado.\n");
+    fprintf(stderr, "Game::resurrect no implementado.\n");
 }
 
 void Game::list(const InstanceId caller, const uint32_t x_coord,
                 const uint32_t y_coord) {
-    fprintf(stderr, "Comando list no implementado.\n");
+    fprintf(stderr, "Game::list no implementado.\n");
 }
 
 void Game::depositItemOnBank(const InstanceId caller, const uint32_t x_coord,
                              const uint32_t y_coord, const uint8_t n_slot,
                              uint32_t amount) {
-    fprintf(stderr, "Comando depositItemOnBank no implementado.\n");
+    fprintf(stderr, "Game::depositItemOnBank no implementado.\n");
 }
 
 void Game::withdrawItemFromBank(const InstanceId caller, const uint32_t x_coord,
                                 const uint32_t y_coord, const uint32_t item_id,
                                 const uint32_t amount) {
-    fprintf(stderr, "Comando withdrawitemfrombank no implementado.\n");
+    fprintf(stderr, "Game::withdrawitemfrombank no implementado.\n");
 }
 
 void Game::depositGoldOnBank(const InstanceId caller, const uint32_t x_coord,
                              const uint32_t y_coord, const uint32_t amount) {
-    fprintf(stderr, "Comando depositgoldonbank no implementado.\n");
+    fprintf(stderr, "Game::depositgoldonbank no implementado.\n");
 }
 
 void Game::withdrawGoldFromBank(const InstanceId caller, const uint32_t x_coord,
                                 const uint32_t y_coord, const uint32_t amount) {
-    fprintf(stderr, "Comando withdrawgoldfrombank no implementado.\n");
+    fprintf(stderr, "Game::withdrawgoldfrombank no implementado.\n");
 }
 
 void Game::buyItem(const InstanceId caller, const uint32_t x_coord,
                    const uint32_t y_coord, const uint32_t item_id,
                    const uint32_t amount) {
-    fprintf(stderr, "Comando buyitem no implementado.\n");
+    fprintf(stderr, "Game::buyitem no implementado.\n");
 }
 
 void Game::sellItem(const InstanceId caller, const uint32_t x_coord,
                     const uint32_t y_coord, const uint8_t n_slot,
                     const uint32_t amount) {
-    fprintf(stderr, "Comando sellitem no implementado.\n");
+    fprintf(stderr, "Game::sellitem no implementado.\n");
 }
 
 void Game::take(const InstanceId caller) {
@@ -437,7 +529,49 @@ void Game::take(const InstanceId caller) {
 
 void Game::drop(const InstanceId caller, const uint8_t n_slot,
                 const uint32_t amount) {
-    fprintf(stderr, "Comando drop no implementado.\n");
+    if (!this->characters.count(caller)) {
+        throw Exception("Game::equip: unknown caller.");
+    }
+
+    Character& character = this->characters.at(caller);
+    Item* dropped;
+
+    try {
+        dropped = character.dropItem(n_slot);
+    } catch (const InvalidPositionException& e) {
+        Notification* reply = new NotificationReply(ERROR_MSG, e.what());
+        active_clients.notify(caller, reply);
+        return;
+    }
+
+    if (!dropped)  // enviamos mensaje de error?
+        return;
+
+    Id dropped_item_id = dropped->getId();
+    int x = character.getPosition().getX();
+    int y = character.getPosition().getY();
+    Orientation orientation = character.getPosition().getOrientation();
+
+    try {
+        this->map_container[character.getMapId()].addItem(dropped_item_id, x, y,
+                                                          orientation);
+    } catch (const ItemCouldNotBeAddedException& e) {
+        // No se pudo efectuar el dropeo. Le devuelvo el item al character.
+        character.takeItem(dropped);
+        Notification* reply = new NotificationReply(ERROR_MSG, e.what());
+        active_clients.notify(caller, reply);
+        return;
+    }
+
+    Id map_id = character.getMapId();
+
+    // Agrego elemento al mapa de dropped items cooldown
+    const std::string key = std::move(_coordinatesToMapKey(x, y));
+    this->dropped_items_lifetime_per_map[map_id].emplace(
+        key, TIME_TO_DISSAPEAR_DROPPED_ITEM);
+
+    // Broadcasteo new item
+    _pushItemDifferentialBroadcast(map_id, x, y, NEW_BROADCAST);
 }
 
 void Game::listConnectedPlayers(const InstanceId caller) {
@@ -456,4 +590,5 @@ const Id Game::getMapId(const InstanceId caller) {
 
     return this->characters.at(caller).getMapId();
 }
+
 //-----------------------------------------------------------------------

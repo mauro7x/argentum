@@ -18,7 +18,7 @@ void DeleteCreatureBroadcast::exec(
     SDL_Point old_pos = creatures.getPos(id);
     creatures.remove(id);
 
-    map.clearTile(old_pos.x, old_pos.y);
+    map.clearTileOcuppant(old_pos.x, old_pos.y);
 }
 
 DeleteCreatureBroadcast::~DeleteCreatureBroadcast() {}

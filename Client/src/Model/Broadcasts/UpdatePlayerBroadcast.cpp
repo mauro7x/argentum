@@ -20,7 +20,7 @@ void UpdatePlayerBroadcast::exec(
     // UPDATE EN EL NUEVO MAPA.
 
     SDL_Point old_pos = player.getPos();
-    map.clearTile(old_pos.x, old_pos.y);
+    map.clearTileOcuppant(old_pos.x, old_pos.y);
     player.update(data);
     map.occupyTile(data.basic_data.gid, data.basic_data.x_tile,
                    data.basic_data.y_tile);

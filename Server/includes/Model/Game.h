@@ -2,6 +2,7 @@
 #define __GAME_H__
 //-----------------------------------------------------------------------------
 #include <cstdint>
+#include <string>
 #include <unordered_map>
 //-----------------------------------------------------------------------------
 #include "../../../Common/includes/MapContainer.h"
@@ -46,12 +47,25 @@ class Game {
     //--------------------------------------------------------------------------
 
     //--------------------------------------------------------------------------
+    // Cooldowns
+    //--------------------------------------------------------------------------
+    std::unordered_map<Id, MapCreaturesInfo> maps_creatures_info;
+
+    // Las claves de los siguientes mapas de cooldown de items droppeados
+    // se obtienen a partir de las coordenadas
+    // del tile que contiene el item droppeado.
+    // e.g: (x = 1, y = 2)   ---> key = "1,2"
+    //     (x = 2, y = 1)   ---> key = "2,1"
+    //     (x = 39, y = 27) ---> key = "39,27"
+    std::unordered_map<Id, std::unordered_map<std::string, int>>
+        dropped_items_lifetime_per_map;
+    //--------------------------------------------------------------------------
+
+    //--------------------------------------------------------------------------
     // Additional attributes
     //--------------------------------------------------------------------------
     InstanceId next_instance_id;
     ActiveClients& active_clients;
-    std::unordered_map<Id, MapCreaturesInfo> maps_creatures_info;
-    int creature_spawn_cooldown;
     //--------------------------------------------------------------------------
 
    public:
@@ -86,9 +100,18 @@ class Game {
                                           BroadcastType broadcast_type);
 
     /*
+     * Construye el broadcast del item droppeado en el mapa cuyas coordenadas
+     * e id de mapa son recibidas.
+     *
+     * Alloca memoria, que luego deberá ser desallocada por el caller.
+     */
+    Notification* _buildItemBroadcast(Id map_id, int x_coord, int y_coord,
+                                      BroadcastType broadcast_type);
+
+    /*
      * Ante actualizaciones (NEW, UPDATE, DELETE) de un jugador,
-     * se invoca este método. Su función es broadcastear dicha actualización,
-     * pusheándola a los clientes activos.
+     * se invoca este método. Su función es broadcastear dicha
+     * actualización, pusheándola a los clientes activos.
      *
      * El atributo send_to_caller indica si dicho broadcast debe ser
      * enviado al jugador que se actualizo o no.
@@ -103,6 +126,15 @@ class Game {
      */
     void _pushCreatureDifferentialBroadcast(InstanceId creature,
                                             BroadcastType broadcast_type);
+
+    /*
+     * Ante actualizaciones (NEW, DELETE) de un item droppeado en el mapa,
+     * se invoca este método. Su función es broadcastear dicha actualización,
+     * pusheándola a los clientes activos.
+     */
+    void _pushItemDifferentialBroadcast(Id map_id, int x_coord,
+                                              int y_coord,
+                                              BroadcastType broadcast_type);
 
     /*
      * Ante la conexión de un nuevo jugador o el cambio de mapa, se invoca
@@ -191,6 +223,12 @@ class Game {
      * alcanzar el número máximo MAX_CREATURES_PER_MAP.
      */
     void spawnNewCreatures(const int it);
+
+    /*
+     * Actualiza el tiempo de vida de los items droppeados en el mapa,
+     * y si alguno de ellos llega a cero los elimina del mapa.
+     */
+    void updateDroppedItemsLifetime(const int it);
 
     //--------------------------------------------------------------------------
 

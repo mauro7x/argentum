@@ -44,9 +44,9 @@ void MapView::occupyTile(InstanceId id, const int x_tile, const int y_tile) {
     current_map.occupyTile(id, x_tile, y_tile);
 }
 
-void MapView::clearTile(const int x_tile, const int y_tile) {
+void MapView::clearTileOcuppant(const int x_tile, const int y_tile) {
     Map& current_map = maps[current_map_id];
-    current_map.clearTile(x_tile, y_tile);
+    current_map.clearTileOcuppant(x_tile, y_tile);
 }
 
 void MapView::renderGround() const {

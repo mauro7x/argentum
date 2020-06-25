@@ -7,7 +7,8 @@ enum Orientation {
     UP_ORIENTATION,
     DOWN_ORIENTATION,
     LEFT_ORIENTATION,
-    RIGHT_ORIENTATION
+    RIGHT_ORIENTATION,
+    N_ORIENTATIONS
 };
 
 //-----------------------------------------------------------------------------
