@@ -2,6 +2,7 @@
 #define __GAME_H__
 //-----------------------------------------------------------------------------
 #include <cstdint>
+#include <string>
 #include <unordered_map>
 //-----------------------------------------------------------------------------
 #include "../../../Common/includes/MapContainer.h"
@@ -46,12 +47,25 @@ class Game {
     //--------------------------------------------------------------------------
 
     //--------------------------------------------------------------------------
+    // Cooldowns
+    //--------------------------------------------------------------------------
+    std::unordered_map<Id, MapCreaturesInfo> maps_creatures_info;
+
+    // Las claves de los siguientes mapas de cooldown de items droppeados
+    // se obtienen a partir de las coordenadas
+    // del tile que contiene el item droppeado.
+    // e.g: (x = 1, y = 2)   ---> key = "1,2"
+    //     (x = 2, y = 1)   ---> key = "2,1"
+    //     (x = 39, y = 27) ---> key = "39,27"
+    std::unordered_map<Id, std::unordered_map<std::string, int>>
+        dropped_items_lifetime_per_map;
+    //--------------------------------------------------------------------------
+
+    //--------------------------------------------------------------------------
     // Additional attributes
     //--------------------------------------------------------------------------
     InstanceId next_instance_id;
     ActiveClients& active_clients;
-    std::unordered_map<Id, MapCreaturesInfo> maps_creatures_info;
-    int creature_spawn_cooldown;
     //--------------------------------------------------------------------------
 
    public:
@@ -71,7 +85,7 @@ class Game {
 
     /*
      * Construye el broadcast del character cuya id es recibida.
-     * 
+     *
      * Alloca memoria, que luego deberá ser desallocada por el caller.
      */
     Notification* _buildPlayerBroadcast(InstanceId id,
@@ -79,17 +93,26 @@ class Game {
 
     /*
      * Construye el broadcast de la creature cuya id es recibida.
-     * 
+     *
      * Alloca memoria, que luego deberá ser desallocada por el caller.
      */
     Notification* _buildCreatureBroadcast(InstanceId id,
                                           BroadcastType broadcast_type);
 
     /*
-     * Ante actualizaciones (NEW, UPDATE, DELETE) de un jugador, 
-     * se invoca este método. Su función es broadcastear dicha actualización,
-     * pusheándola a los clientes activos.
-     * 
+     * Construye el broadcast del item droppeado en el mapa cuyas coordenadas
+     * e id de mapa son recibidas.
+     *
+     * Alloca memoria, que luego deberá ser desallocada por el caller.
+     */
+    Notification* _buildItemBroadcast(Id map_id, int x_coord, int y_coord,
+                                      BroadcastType broadcast_type);
+
+    /*
+     * Ante actualizaciones (NEW, UPDATE, DELETE) de un jugador,
+     * se invoca este método. Su función es broadcastear dicha
+     * actualización, pusheándola a los clientes activos.
+     *
      * El atributo send_to_caller indica si dicho broadcast debe ser
      * enviado al jugador que se actualizo o no.
      */
@@ -97,7 +120,7 @@ class Game {
                                              bool send_to_caller);
 
     /*
-     * Ante actualizaciones (NEW, UPDATE, DELETE) de una criatura, 
+     * Ante actualizaciones (NEW, UPDATE, DELETE) de una criatura,
      * se invoca este método. Su función es broadcastear dicha actualización,
      * pusheándola a los clientes activos.
      */
@@ -105,9 +128,18 @@ class Game {
                                             BroadcastType broadcast_type);
 
     /*
+     * Ante actualizaciones (NEW, DELETE) de un item droppeado en el mapa,
+     * se invoca este método. Su función es broadcastear dicha actualización,
+     * pusheándola a los clientes activos.
+     */
+    void _pushItemDifferentialBroadcast(Id map_id, int x_coord,
+                                              int y_coord,
+                                              BroadcastType broadcast_type);
+
+    /*
      * Ante la conexión de un nuevo jugador o el cambio de mapa, se invoca
      * este método para enviarle a dicho jugador un full broadcast con
-     * toda la información del juego. 
+     * toda la información del juego.
      */
     void _pushFullBroadcast(InstanceId receiver, bool is_new_connection);
 
@@ -155,17 +187,17 @@ class Game {
 
     /*
      * Llamar a este método ante la muerte de una criatura.
-     * 
+     *
      * Recibe el id de instancia de la criatura a eliminar.
-     * 
+     *
      * Efectúa el drop aleatorio de elementos.
-     * 
+     *
      * Lanza Exception si el id especificado no corresponde a ninguna
      * criatura del juego.
      */
     void deleteCreature(const InstanceId id);
 
-    /* 
+    /*
      * Escoge aleatoriamente una criatura entre las disponibles en la config,
      * y deuvelve su Id.
      */
@@ -191,7 +223,13 @@ class Game {
      * alcanzar el número máximo MAX_CREATURES_PER_MAP.
      */
     void spawnNewCreatures(const int it);
-    
+
+    /*
+     * Actualiza el tiempo de vida de los items droppeados en el mapa,
+     * y si alguno de ellos llega a cero los elimina del mapa.
+     */
+    void updateDroppedItemsLifetime(const int it);
+
     //--------------------------------------------------------------------------
 
     //--------------------------------------------------------------------------
@@ -213,7 +251,8 @@ class Game {
 
     void resurrect(const InstanceId caller);
 
-    void list(const InstanceId caller, const uint32_t x_coord, const uint32_t y_coord);
+    void list(const InstanceId caller, const uint32_t x_coord,
+              const uint32_t y_coord);
 
     void depositItemOnBank(const InstanceId caller, const uint32_t x_coord,
                            const uint32_t y_coord, const uint8_t n_slot,
@@ -235,7 +274,8 @@ class Game {
                   const uint32_t amount);
 
     void take(const InstanceId caller);
-    void drop(const InstanceId caller, const uint8_t n_slot, const uint32_t amount);
+    void drop(const InstanceId caller, const uint8_t n_slot,
+              const uint32_t amount);
 
     void listConnectedPlayers(const InstanceId caller);
 
