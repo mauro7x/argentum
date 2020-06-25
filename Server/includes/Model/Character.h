@@ -144,11 +144,14 @@ class Character {
      * que se quiere equipar, y lo equipa.
      * Si no hay item en dicha posicion, no hace nada.
      */
-    void equip(unsigned int inventory_position);
+    void equip(unsigned int n_slot);
 
     /*
      * Equipa un Wearable al Equipment en su slot, almacenando en el
      * inventario el Wearable anterior.
+     * 
+     * Lanza InvalidPositionException si la posicion
+     * especificada es invalida (fuera de rango).
      */
     void equip(Wearable* item);
 
@@ -162,13 +165,13 @@ class Character {
     const unsigned int takeItem(Item* item);
 
     /*
-     * Devuelve el item en la inventory_position especificada.
+     * Devuelve el item en la n_slot especificada.
      * Si no hay un item en dicha posicion, retorna nullptr.
      *
      * Lanza InvalidPositionException si la posicion
      * especificada es invalida (fuera de rango).
      */
-    Item* dropItem(const unsigned int inventory_position);
+    Item* dropItem(const unsigned int n_slot);
 
     //-----------------------------------------------------------------------------
 

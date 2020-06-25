@@ -206,7 +206,10 @@ const unsigned int Character::takeItem(Item* item) {
 
 Item* Character::dropItem(unsigned int position) {
     Item* dropped_item = this->inventory.gatherItem(position);
-    this->broadcast = true;
+
+    if (dropped_item)
+        this->broadcast = true;
+        
     return dropped_item;
 }
 //-----------------------------------------------------------------------------
