@@ -4,9 +4,9 @@
 //-----------------------------------------------------------------------------
 #include <string>
 //-----------------------------------------------------------------------------
+#include "../../../Common/includes/DataStructs.h"
 #include "../../../Common/includes/Protocol.h"
 #include "../../../Common/includes/Socket/SocketWrapper.h"
-#include "../../../Common/includes/UnitData.h"
 #include "../../../Common/includes/json.hpp"
 #include "../../../Common/includes/json_conversion.h"
 #include "../../../Common/includes/types.h"

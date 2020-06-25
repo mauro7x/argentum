@@ -1,15 +1,19 @@
-#ifndef __UNIT_DATA_H__
-#define __UNIT_DATA_H__
+#ifndef __DATA_STRUCTS_H__
+#define __DATA_STRUCTS_H__
 
 //-----------------------------------------------------------------------------
 #include <string>
+//-----------------------------------------------------------------------------
+
 //-----------------------------------------------------------------------------
 #include "Inventory.h"
 #include "Orientation.h"
 #include "types.h"
 //-----------------------------------------------------------------------------
 
-/* Información básica necesaria para cualquier unidad */
+//-----------------------------------------------------------------------------
+
+/* Información básica necesaria para cualquier unidad movible */
 struct UnitData {
     InstanceId gid; /* unit id (ingame)*/
 
@@ -52,4 +56,4 @@ struct ItemData {
 
 //-----------------------------------------------------------------------------
 
-#endif  // __UNIT_DATA_H__
+#endif  // __DATA_STRUCTS_H__

@@ -18,11 +18,11 @@
 
 //-----------------------------------------------------------------------------
 #include "../../../Common/includes/BlockingQueue.h"
+#include "../../../Common/includes/DataStructs.h"
 #include "../../../Common/includes/Exceptions/Exception.h"
 #include "../../../Common/includes/Exceptions/SDLException.h"
 #include "../../../Common/includes/JSON.h"
 #include "../../../Common/includes/NonBlockingQueue.h"
-#include "../../../Common/includes/UnitData.h"
 #include "../../../Common/includes/paths.h"
 //-----------------------------------------------------------------------------
 

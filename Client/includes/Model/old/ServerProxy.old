@@ -8,9 +8,9 @@
 #include <atomic>
 #include <chrono>
 
+#include "../../../Common/includes/DataStructs.h"
 #include "../../../Common/includes/NonBlockingQueue.h"
 #include "../../../Common/includes/Thread.h"
-#include "../../../Common/includes/UnitData.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
