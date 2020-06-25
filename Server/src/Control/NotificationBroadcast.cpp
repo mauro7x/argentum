@@ -23,6 +23,15 @@ NotificationBroadcast::NotificationBroadcast(InstanceId id, CreatureData& data,
     j = data;
 }
 
+NotificationBroadcast::NotificationBroadcast(ItemData& data,
+                                             BroadcastType broadcast_type)
+    : id(0),
+      map(data.map),
+      broadcast_type(broadcast_type),
+      entity_type(ITEM_TYPE) {
+    j = data;
+}
+
 NotificationBroadcast::NotificationBroadcast(
     const NotificationBroadcast& other) {
     this->id = other.id;
