@@ -35,8 +35,8 @@ enum CommandOpcode {
 
     // Objetos
     EQUIP_OBJECT_CMD,
+    UNEQUIP_OBJECT_CMD,
     GRAB_OBJECT_CMD,
-    THROW_OBJECT_CMD,
     THROW_N_OBJECTS_CMD,
 
     // Generales
@@ -44,22 +44,20 @@ enum CommandOpcode {
     SELF_RESURRECT_CMD,
 
     // Interacción con NCPS
+    HELP_NPC_CMD,           /* Cualquier NPC */
     RESURRECT_CMD,          /* Sacerdote */
     HEAL_CMD,               /* Sacerdote */
     LIST_CMD,               /* Banquero y Comerciante */
-    DEPOSIT_OBJECT_CMD,     /* Banquero */
     DEPOSIT_N_OBJECTS_CMD,  /* Banquero */
     DEPOSIT_GOLD_CMD,       /* Banquero */
-    WITHDRAW_OBJECT_CMD,    /* Banquero */
     WITHDRAW_N_OBJECTS_CMD, /* Banquero */
     WITHDRAW_GOLD_CMD,      /* Banquero */
-    BUY_OBJECT_CMD,         /* Comerciante */
     BUY_N_OBJECTS_CMD,      /* Comerciante */
-    SELL_OBJECT_CMD,        /* Comerciante */
     SELL_N_OBJECTS_CMD,     /* Comerciante */
 
     // Comunicación con otros jugadores
     LIST_CONNECTED_PLAYERS_CMD,
+    SEND_GENERAL_MESSAGE_CMD,
     SEND_PRIVATE_MESSAGE_CMD
 
 };

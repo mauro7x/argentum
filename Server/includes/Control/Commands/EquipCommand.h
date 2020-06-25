@@ -3,7 +3,7 @@
 
 #include "Command.h"
 
-// comando para equipar las armas
+// comando para equipar los objetos del inventario
 class EquipCommand : public Command {
    private:
     InstanceId caller;
@@ -17,4 +17,4 @@ class EquipCommand : public Command {
     void exec(Game& game) override;
 };
 
-#endif // __EQUIP_COMMAND_H__
+#endif  // __EQUIP_COMMAND_H__

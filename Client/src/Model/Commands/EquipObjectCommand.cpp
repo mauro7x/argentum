@@ -1,4 +1,4 @@
-#include "../../../includes/Model/Commands/Template.h"
+#include "../../../includes/Model/Commands/EquipObjectCommand.h"
 
 //-----------------------------------------------------------------------------
 // Métodos privados
@@ -8,17 +8,26 @@
 //-----------------------------------------------------------------------------
 // API Pública
 
-Template::Template() : Command() {}
+EquipObjectCommand::EquipObjectCommand(int8_t inventory_slot)
+    : Command(), inventory_slot(inventory_slot) {}
 
-bool Template::send(const SocketWrapper& socket) {
+bool EquipObjectCommand::send(const SocketWrapper& socket) {
     // Enviamos el comando según el protocolo
     if (!(socket << (uint8_t)COMMAND_OPCODE)) {
+        return false;
+    }
+
+    if (!(socket << (uint8_t)EQUIP_OBJECT_CMD)) {
+        return false;
+    }
+
+    if (!(socket << (uint8_t)inventory_slot)) {
         return false;
     }
 
     return true;
 }
 
-Template::~Template() {}
+EquipObjectCommand::~EquipObjectCommand() {}
 
 //-----------------------------------------------------------------------------
