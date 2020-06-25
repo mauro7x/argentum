@@ -456,7 +456,6 @@ void Game::useWeapon(const InstanceId caller, const InstanceId target) {
 }
 
 void Game::equip(const InstanceId caller, const uint8_t n_slot) {
-    // Comando sin testear, puede fallar :3
     if (!this->characters.count(caller)) {
         throw Exception("Game::equip: unknown caller.");
     }
@@ -529,6 +528,8 @@ void Game::take(const InstanceId caller) {
 
 void Game::drop(const InstanceId caller, const uint8_t n_slot,
                 const uint32_t amount) {
+    fprintf(stderr, "Game::drop: dropear slot %i cantidad %i\n", n_slot, amount);
+    return;
     if (!this->characters.count(caller)) {
         throw Exception("Game::equip: unknown caller.");
     }

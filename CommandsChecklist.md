@@ -10,7 +10,7 @@ Marcarlos cuando estén implementados y funcionando!
 | 3 | Empezar a mover a la derecha | X | X | X |
 | 4 | Dejar de mover | X | X | X |
 | 5 | Usar arma principal | X | | |
-| 6 | Equipar objeto | X | | |
+| 6 | Equipar objeto | X | X | X |
 | 7 | Desequipar objeto | X | | |
 | 8 | Tomar | X | | |
 | 9 | Tirar | X | | |
