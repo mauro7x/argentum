@@ -389,29 +389,31 @@ void EventHandler::handleEvent(const SDL_Event& e) {
             int8_t inventory_slot = hud.getInventorySlotClicked(click_pos);
             if (inventory_slot >= 0) {
                 current_selection.inventory_slot_selected = inventory_slot;
-                // algun método que le diga a la hud que lo resalte? por ahora:
-                hud.addMessage(
-                    ">> Has seleccionado un objeto de tu inventario.",
-                    USER_CMD_MSG_COLOR);
+                {  // PROXY
+                    // algun método que le diga a la hud que lo resalte? por
+                    // ahora:
+                    hud.addMessage(
+                        ">> Has seleccionado un objeto de tu inventario.",
+                        USER_CMD_MSG_COLOR);
+                }
             }
 
             break;
         }
 
         case INVENTORY_DOUBLE_CLICK_EV: {
+            _clearSelection();
+
             SDL_Point click_pos = _getClickPos(e);
 
             int8_t inventory_slot = hud.getInventorySlotClicked(click_pos);
             if (inventory_slot >= 0) {
-                fprintf(stderr, "enviando EQUIPAR SLOT %u\n", inventory_slot);
                 commands.push(new EquipObjectCommand(inventory_slot));
                 break;
             }
 
             int8_t equipment_slot = hud.getEquipmentSlotClicked(click_pos);
             if (equipment_slot >= 0) {
-                fprintf(stderr, "enviando DESEQUIPAR SLOT %u\n",
-                        equipment_slot);
                 commands.push(new UnequipObjectCommand(equipment_slot));
                 break;
             }

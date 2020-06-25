@@ -130,16 +130,12 @@ Command* CommandFactory::newCommand(InstanceId caller, uint8_t opcode,
         case EQUIP_OBJECT_CMD: {
             uint8_t n_slot;
             socket >> n_slot;
-            fprintf(stderr, "Se recibio que hay que equipar el slot: %u\n",
-                    n_slot);
             return new EquipCommand(caller, n_slot);
         }
 
         case UNEQUIP_OBJECT_CMD: {
             uint8_t n_slot;
             socket >> n_slot;
-            fprintf(stderr, "Se recibio que hay que desequipar el slot: %u\n",
-                    n_slot);
             return new UnequipCommand(caller, n_slot);
             break;
         }
