@@ -37,6 +37,8 @@
 
 * Idea primitiva: inicializar los sistemas de SDL una sola vez (para la vista de login y para la del game) en Client.cpp con alguna función, por lo que en GameView podemos eliminar la función init y hacer la inicialización leyendo los jsons en el constructor. -Mau, 24/06.
 
+* Hacer alguna animación cuando clickeo un objeto del inventario (selección + doble click). -Mau, 25/06.
+
 ---
 
 ## Common

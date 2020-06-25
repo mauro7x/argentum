@@ -230,7 +230,6 @@ void UserInventory::loadMedia() {
 int8_t UserInventory::getEquipmentSlotClicked(const SDL_Point& click_pos) {
     for (int8_t i = 0; i < N_WEARABLE_ITEMS; i++) {
         if (_wasClicked(click_pos, equipment_slots[i])) {
-            fprintf(stderr, "El slot %i del equipamiento fue clickeado.\n", i);
             return i;
         }
     }
@@ -241,7 +240,6 @@ int8_t UserInventory::getEquipmentSlotClicked(const SDL_Point& click_pos) {
 int8_t UserInventory::getInventorySlotClicked(const SDL_Point& click_pos) {
     for (int8_t i = 0; i < N_INVENTORY_SLOTS; i++) {
         if (_wasClicked(click_pos, inventory_slots[i])) {
-            fprintf(stderr, "El slot %i del inventario fue clickeado.\n", i);
             return i;
         }
     }

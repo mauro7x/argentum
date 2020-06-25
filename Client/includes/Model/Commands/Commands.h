@@ -18,6 +18,7 @@
 #include "StartMovingCommand.h"
 #include "StopMovingCommand.h"
 #include "ThrowNObjectsCommand.h"
+#include "UnequipObjectCommand.h"
 #include "UseMainWeaponCommand.h"
 #include "WithdrawGoldCommand.h"
 #include "WithdrawNObjectsCommand.h"

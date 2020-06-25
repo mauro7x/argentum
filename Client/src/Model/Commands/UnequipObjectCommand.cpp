@@ -1,4 +1,4 @@
-#include "../../../includes/Model/Commands/EquipObjectCommand.h"
+#include "../../../includes/Model/Commands/UnequipObjectCommand.h"
 
 //-----------------------------------------------------------------------------
 // Métodos privados
@@ -8,26 +8,26 @@
 //-----------------------------------------------------------------------------
 // API Pública
 
-EquipObjectCommand::EquipObjectCommand(int8_t inventory_slot)
-    : Command(), inventory_slot(inventory_slot) {}
+UnequipObjectCommand::UnequipObjectCommand(int8_t equipment_slot)
+    : Command(), equipment_slot(equipment_slot) {}
 
-bool EquipObjectCommand::send(const SocketWrapper& socket) {
+bool UnequipObjectCommand::send(const SocketWrapper& socket) {
     // Enviamos el comando según el protocolo
     if (!(socket << (uint8_t)COMMAND_OPCODE)) {
         return false;
     }
 
-    if (!(socket << (uint8_t)EQUIP_OBJECT_CMD)) {
+    if (!(socket << (uint8_t)UNEQUIP_OBJECT_CMD)) {
         return false;
     }
 
-    if (!(socket << (uint8_t)inventory_slot)) {
+    if (!(socket << (uint8_t)equipment_slot)) {
         return false;
     }
 
     return true;
 }
 
-EquipObjectCommand::~EquipObjectCommand() {}
+UnequipObjectCommand::~UnequipObjectCommand() {}
 
 //-----------------------------------------------------------------------------

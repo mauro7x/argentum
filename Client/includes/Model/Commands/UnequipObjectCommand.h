@@ -1,5 +1,5 @@
-#ifndef __EQUIP_OBJECT_COMMAND_H__
-#define __EQUIP_OBJECT_COMMAND_H__
+#ifndef __UNEQUIP_OBJECT_COMMAND_H__
+#define __UNEQUIP_OBJECT_COMMAND_H__
 
 //-----------------------------------------------------------------------------
 #include "../../../../Common/includes/Protocol.h"
@@ -9,13 +9,13 @@
 
 //-----------------------------------------------------------------------------
 
-class EquipObjectCommand : public Command {
+class UnequipObjectCommand : public Command {
    private:
-    int8_t inventory_slot;
+    int8_t equipment_slot;
 
    public:
     /* Constructor */
-    EquipObjectCommand(int8_t inventory_slot);
+    UnequipObjectCommand(int8_t equipment_slot);
 
     //-------------------------------------------------------------------------
 
@@ -25,9 +25,9 @@ class EquipObjectCommand : public Command {
     //-------------------------------------------------------------------------
 
     /* Destructor */
-    ~EquipObjectCommand();
+    ~UnequipObjectCommand();
 };
 
 //-----------------------------------------------------------------------------
 
-#endif  // __EQUIP_OBJECT_COMMAND_H__
+#endif  // __UNEQUIP_OBJECT_COMMAND_H__
