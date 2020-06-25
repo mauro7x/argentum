@@ -1,4 +1,4 @@
-#include "../../../includes/Model/Commands/Template.h"
+#include "../../../includes/Model/Commands/ListConnectedPlayersCommand.h"
 
 //-----------------------------------------------------------------------------
 // Métodos privados
@@ -8,9 +8,9 @@
 //-----------------------------------------------------------------------------
 // API Pública
 
-Template::Template() : Command() {}
+ListConnectedPlayersCommand::ListConnectedPlayersCommand() : Command() {}
 
-bool Template::send(const SocketWrapper& socket) {
+bool ListConnectedPlayersCommand::send(const SocketWrapper& socket) {
     // Enviamos el comando según el protocolo
     if (!(socket << (uint8_t)COMMAND_OPCODE)) {
         return false;
@@ -19,6 +19,6 @@ bool Template::send(const SocketWrapper& socket) {
     return true;
 }
 
-Template::~Template() {}
+ListConnectedPlayersCommand::~ListConnectedPlayersCommand() {}
 
 //-----------------------------------------------------------------------------

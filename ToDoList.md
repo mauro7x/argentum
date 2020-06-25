@@ -45,6 +45,7 @@
 
 * Chat general. Cuando un jugador escribe algo, se debe broadcastear a todos como una notification reply que va en el chat como información. También se puede agregar un campo al PlayerData que sea el string de lo que mandó, y se manda un broadcast normal. -Mau, 23/06.
 
+* Endianness en el socket. -Santi, 25/06.
 
 ---
 

@@ -367,8 +367,11 @@ void EventHandler::handleEvent(const SDL_Event& e) {
                 fprintf(stderr,
                         "NPC seleccionado %i. Aun no se implementó esto!\n",
                         npc);
-                hud.addMessage("NPC seleccionado.", SUCCESS_MSG_COLOR);
 
+                hud.addMessage(
+                    ">> Has seleccionado a un NPC, ahora puedes enviarle "
+                    "comandos.",
+                    USER_CMD_MSG_COLOR);
                 break;
             }
 

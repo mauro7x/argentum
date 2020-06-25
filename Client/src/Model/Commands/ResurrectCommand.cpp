@@ -1,4 +1,4 @@
-#include "../../../includes/Model/Commands/Template.h"
+#include "../../../includes/Model/Commands/ResurrectCommand.h"
 
 //-----------------------------------------------------------------------------
 // Métodos privados
@@ -8,9 +8,9 @@
 //-----------------------------------------------------------------------------
 // API Pública
 
-Template::Template() : Command() {}
+ResurrectCommand::ResurrectCommand() : Command() {}
 
-bool Template::send(const SocketWrapper& socket) {
+bool ResurrectCommand::send(const SocketWrapper& socket) {
     // Enviamos el comando según el protocolo
     if (!(socket << (uint8_t)COMMAND_OPCODE)) {
         return false;
@@ -19,6 +19,6 @@ bool Template::send(const SocketWrapper& socket) {
     return true;
 }
 
-Template::~Template() {}
+ResurrectCommand::~ResurrectCommand() {}
 
 //-----------------------------------------------------------------------------
