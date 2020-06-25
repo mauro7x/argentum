@@ -48,9 +48,13 @@ class MapView {
     MapView& operator=(MapView&& other) = delete;
 
     //-------------------------------------------------------------------------
+    // Métodos de inicialización
 
     /* Carga los archivos necesarios */
     void loadMedia();
+
+    //-------------------------------------------------------------------------
+    // Métodos de escritura
 
     /* Selecciona el mapa indicado por el id */
     void changeMap(const Id id);
@@ -62,7 +66,7 @@ class MapView {
     void clearTile(const int x_tile, const int y_tile);
 
     //-------------------------------------------------------------------------
-    // RENDERIZACIÓN
+    // Métodos de renderizado
 
     /* Renderiza el piso completo */
     void renderGround() const;
@@ -80,9 +84,13 @@ class MapView {
     void renderShadowOutdoor() const;
 
     //-------------------------------------------------------------------------
+    // Métodos de lectura
 
     /* Devuelve el ID de la unidad ocupante de una celda */
     InstanceId getOccupant(const int x, const int y) const;
+
+    /* Devuelve el ID del NPC de una celda */
+    Id getNPC(const int x, const int y) const;
 
     /* Devuelve si la celda dada pertenece a un indoor */
     bool indoor(const int x, const int y) const;
