@@ -251,7 +251,7 @@ void Game::newCreature(const CreatureCfg& init_data, const Id init_map) {
                               spawning_x_coord, spawning_y_coord,
                               init_data.base_health, init_data.base_damage));
 
-    fprintf(stderr, "NEW CREATURE: %s \n", init_data.name.c_str());
+    // fprintf(stderr, "NEW CREATURE: %s \n", init_data.name.c_str());
 
     _pushCreatureDifferentialBroadcast(new_creature_id, NEW_BROADCAST);
 }
@@ -450,8 +450,7 @@ void Game::stopMoving(const InstanceId caller) {
     character.stopMoving();
 }
 
-void Game::useWeapon(const InstanceId caller, const uint32_t x_coord,
-                     const uint32_t y_coord) {
+void Game::useWeapon(const InstanceId caller, const InstanceId target) {
     fprintf(stderr, "Comando useWeapon no implementado.\n");
     return;
 }
@@ -471,6 +470,10 @@ void Game::equip(const InstanceId caller, const uint8_t n_slot) {
         active_clients.notify(caller, reply);
         return;
     }
+}
+
+void Game::unequip(const InstanceId caller, const uint8_t n_slot) {
+    fprintf(stderr, "Comando unequip no implementado.\n");
 }
 
 void Game::meditate(const InstanceId caller) {

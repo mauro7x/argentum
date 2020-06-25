@@ -73,7 +73,7 @@ void Map::_fillTiles(const json& map, const json& tilesets) {
 }
 
 int Map::_tileNumber(const int x, const int y) const {
-    if (!isValid(x, y)) {
+    if (!_isValid(x, y)) {
         throw Exception("Invalid map coordinates. x = %i, y = %i\n", x, y);
     }
     return (y * w + x);
@@ -144,7 +144,7 @@ int Map::getTileHeight() const {
     return TILE_HEIGHT;
 }
 
-bool Map::isValid(const int x, const int y) const {
+bool Map::_isValid(const int x, const int y) const {
     if ((x >= w) || (x < 0) || (y >= h) || (y < 0)) {
         return false;
     } else {

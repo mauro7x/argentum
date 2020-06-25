@@ -242,10 +242,10 @@ class Game {
 
     void stopMoving(const InstanceId caller);
 
-    void useWeapon(const InstanceId caller, const uint32_t x_coord,
-                   const uint32_t y_coord);
+    void useWeapon(const InstanceId caller, const InstanceId target);
 
     void equip(const InstanceId caller, const uint8_t n_slot);
+    void unequip(const InstanceId caller, const uint8_t n_slot);
 
     void meditate(const InstanceId caller);
 

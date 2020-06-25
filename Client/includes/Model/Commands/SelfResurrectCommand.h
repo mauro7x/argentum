@@ -10,9 +10,6 @@
 //-----------------------------------------------------------------------------
 
 class SelfResurrectCommand : public Command {
-   private:
-    // Atributos
-
    public:
     /* Constructor */
     SelfResurrectCommand();

@@ -12,37 +12,19 @@ void UserInventory::_center(SDL_Point& texture_pos, const Texture& texture,
 void UserInventory::_renderEquipment() const {
     SDL_Rect render_quad;
 
-    // Weapon
-    if (equipment[WEAPON]) {
-        render_quad = {equipment_weapon.x, equipment_weapon.y, slot_w, slot_h};
-        const Texture& texture = g_item_sprites[equipment[WEAPON]].texture;
-        g_renderer->render(texture.getTexture(), &render_quad);
-    }
-
-    // Helmet
-    if (equipment[HELMET]) {
-        render_quad = {equipment_helmet.x, equipment_helmet.y, slot_w, slot_h};
-        const Texture& texture = g_item_sprites[equipment[HELMET]].texture;
-        g_renderer->render(texture.getTexture(), &render_quad);
-    }
-
-    // Armour
-    if (equipment[ARMOUR]) {
-        render_quad = {equipment_armour.x, equipment_armour.y, slot_w, slot_h};
-        const Texture& texture = g_item_sprites[equipment[ARMOUR]].texture;
-        g_renderer->render(texture.getTexture(), &render_quad);
-    }
-
-    // Shield
-    if (equipment[SHIELD]) {
-        render_quad = {equipment_shield.x, equipment_shield.y, slot_w, slot_h};
-        const Texture& texture = g_item_sprites[equipment[SHIELD]].texture;
-        g_renderer->render(texture.getTexture(), &render_quad);
+    for (int i = 0; i < N_WEARABLE_ITEMS; i++) {
+        if (equipment[i]) {
+            render_quad = {equipment_slots[i].x, equipment_slots[i].y, slot_w,
+                           slot_h};
+            const Texture& texture = g_item_sprites[equipment[i]].texture;
+            g_renderer->render(texture.getTexture(), &render_quad);
+        }
     }
 }
 
 void UserInventory::_renderInventory() const {
     SDL_Rect render_quad = {0};
+    /*
     int slot_index = 0;
 
     for (int row = 0; row < inventory_rows; row++) {
@@ -70,6 +52,26 @@ void UserInventory::_renderInventory() const {
             }
         }
     }
+    */
+
+    for (int i = 0; i < N_INVENTORY_SLOTS; i++) {
+        if (inventory[i].item) {
+            // Graficamos el item
+            render_quad = {inventory_slots[i].x, inventory_slots[i].y, slot_w,
+                           slot_h};
+            const Texture& item_texture =
+                g_item_sprites[inventory[i].item].texture;
+            g_renderer->render(item_texture.getTexture(), &render_quad);
+
+            // Graficamos la cantidad (corremos un poco manualmente el
+            // render_rect para que quede mas esquinado)
+            const Texture& amount_texture = inventory_quantities[i];
+            render_quad = {inventory_slots[i].x, inventory_slots[i].y - 2,
+                           amount_texture.getWidth(),
+                           amount_texture.getHeight()};
+            g_renderer->render(amount_texture.getTexture(), &render_quad);
+        }
+    }
 }
 
 void UserInventory::_renderGold() const {
@@ -80,6 +82,16 @@ void UserInventory::_renderGold() const {
     render_quad = {excess_gold_pos.x, excess_gold_pos.y, excess_gold.getWidth(),
                    excess_gold.getHeight()};
     g_renderer->render(excess_gold.getTexture(), &render_quad);
+}
+
+bool UserInventory::_wasClicked(const SDL_Point& click_pos,
+                                const SDL_Point& slot_pos) const {
+    if ((click_pos.x > (slot_pos.x + slot_w)) || (click_pos.x < (slot_pos.x)) ||
+        (click_pos.y > (slot_pos.y + slot_h)) || (click_pos.y < (slot_pos.y))) {
+        return false;
+    }
+
+    return true;
 }
 
 //-----------------------------------------------------------------------------
@@ -107,50 +119,57 @@ void UserInventory::init(const json& config) {
     slot_w = config["components"]["slot_w"];
     slot_h = config["components"]["slot_h"];
 
-    // Equipamiento
-    equipment_weapon.x =
-        (int)config["components"]["equipment"]["weapon_offset"]["x"] +
-        render_rect.x;
-    equipment_weapon.y =
-        (int)config["components"]["equipment"]["weapon_offset"]["y"] +
-        render_rect.y;
-
-    equipment_helmet.x =
-        (int)config["components"]["equipment"]["helmet_offset"]["x"] +
-        render_rect.x;
-    equipment_helmet.y =
-        (int)config["components"]["equipment"]["helmet_offset"]["y"] +
-        render_rect.y;
-
-    equipment_armour.x =
-        (int)config["components"]["equipment"]["armour_offset"]["x"] +
-        render_rect.x;
-    equipment_armour.y =
-        (int)config["components"]["equipment"]["armour_offset"]["y"] +
-        render_rect.y;
-
-    equipment_shield.x =
-        (int)config["components"]["equipment"]["shield_offset"]["x"] +
-        render_rect.x;
-    equipment_shield.y =
-        (int)config["components"]["equipment"]["shield_offset"]["y"] +
-        render_rect.y;
-
-    // Inventario
+    // Cargamos el tamaño de fuente del inventario
     quantities_fontsize =
         config["components"]["inventory"]["quantities_fontsize"];
-    first_inventory_slot.x =
-        (int)config["components"]["inventory"]["first_slot_offset"]["x"] +
-        render_rect.x;
-    first_inventory_slot.y =
-        (int)config["components"]["inventory"]["first_slot_offset"]["y"] +
-        render_rect.y;
-    inventory_rows = config["components"]["inventory"]["rows"];
-    slots_per_row = config["components"]["inventory"]["slots_per_row"];
-    offset_between_slots.x =
-        config["components"]["inventory"]["offset_between_slots"]["x"];
-    offset_between_slots.y =
-        config["components"]["inventory"]["offset_between_slots"]["y"];
+
+    // Cargamos los offsets de renderizado del equipamiento
+    {
+        SDL_Point current_pos;
+        current_pos.x =
+            render_rect.x +
+            (int)config["components"]["equipment"]["first_slot_offset"]["x"];
+        current_pos.y =
+            render_rect.y +
+            (int)config["components"]["equipment"]["first_slot_offset"]["y"];
+        int x_offset_between_slots =
+            (int)config["components"]["equipment"]["x_offset_between_slots"];
+
+        for (int i = 0; i < N_WEARABLE_ITEMS; i++) {
+            equipment_slots[i].x = current_pos.x;
+            equipment_slots[i].y = current_pos.y;
+            current_pos.x += x_offset_between_slots;
+        }
+    }
+
+    // Cargamos los offsets de renderizado del inventario
+    {
+        SDL_Point first_pos;
+        first_pos.x =
+            render_rect.x +
+            (int)config["components"]["inventory"]["first_slot_offset"]["x"];
+        first_pos.y =
+            render_rect.y +
+            (int)config["components"]["inventory"]["first_slot_offset"]["y"];
+        int x_offset_between_slots =
+            (int)config["components"]["inventory"]["offset_between_slots"]["x"];
+        int y_offset_between_slots =
+            (int)config["components"]["inventory"]["offset_between_slots"]["y"];
+        int inventory_rows = (int)config["components"]["inventory"]["rows"];
+        int slots_per_row =
+            (int)config["components"]["inventory"]["slots_per_row"];
+
+        int slot_index = 0;
+        for (int row = 0; row < inventory_rows; row++) {
+            for (int col = 0; col < slots_per_row; col++) {
+                slot_index = (row * slots_per_row) + col;
+                inventory_slots[slot_index].x =
+                    first_pos.x + (col * x_offset_between_slots);
+                inventory_slots[slot_index].y =
+                    first_pos.y + (row * y_offset_between_slots);
+            }
+        }
+    }
 
     // Oro seguro
     gold_fontsize = config["components"]["gold"]["fontsize"];
@@ -206,6 +225,26 @@ void UserInventory::loadMedia() {
     excess_gold.loadFromRenderedText(g_renderer, gold_font,
                                      std::to_string(current_excess_gold));
     _center(excess_gold_pos, excess_gold, excess_gold_box);
+}
+
+int8_t UserInventory::getEquipmentSlotClicked(const SDL_Point& click_pos) {
+    for (int8_t i = 0; i < N_WEARABLE_ITEMS; i++) {
+        if (_wasClicked(click_pos, equipment_slots[i])) {
+            return i;
+        }
+    }
+
+    return -1;
+}
+
+int8_t UserInventory::getInventorySlotClicked(const SDL_Point& click_pos) {
+    for (int8_t i = 0; i < N_INVENTORY_SLOTS; i++) {
+        if (_wasClicked(click_pos, inventory_slots[i])) {
+            return i;
+        }
+    }
+
+    return -1;
 }
 
 void UserInventory::update(const int it) {

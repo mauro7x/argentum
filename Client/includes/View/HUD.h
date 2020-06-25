@@ -6,6 +6,7 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+#include <cstdint>
 #include <string>
 //-----------------------------------------------------------------------------
 
@@ -69,6 +70,7 @@ class HUD {
     HUD& operator=(HUD&& other) = delete;
 
     //-------------------------------------------------------------------------
+    // Métodos de inicialización
 
     /* Inicializa recursos */
     void init(const json& config);
@@ -96,6 +98,17 @@ class HUD {
 
     /* Deshabilita la consola */
     void disableInput();
+
+    //-------------------------------------------------------------------------
+    // Métodos de reacción ante eventos
+
+    /* Obtiene el slot del equipamiento que fue clickeado
+     * (retorna -1 si ningún slot fue clickeado) */
+    int8_t getEquipmentSlotClicked(const SDL_Point& click_pos);
+
+    /* Obtiene el slot del inventario que fue clickeado
+     * (retorna -1 si ningún slot fue clickeado) */
+    int8_t getInventorySlotClicked(const SDL_Point& click_pos);
 
     //-------------------------------------------------------------------------
 

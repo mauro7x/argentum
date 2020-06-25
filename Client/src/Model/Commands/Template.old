@@ -12,10 +12,7 @@ Template::Template() : Command() {}
 
 bool Template::send(const SocketWrapper& socket) {
     // Enviamos el comando según el protocolo
-    ssize_t sent = 0;
-
-    sent = (socket << (uint8_t)COMMAND_OPCODE);
-    if (!sent) {
+    if (!(socket << (uint8_t)COMMAND_OPCODE)) {
         return false;
     }
 

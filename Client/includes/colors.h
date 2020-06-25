@@ -22,6 +22,7 @@ struct Color {
 
 //-----------------------------------------------------------------------------
 #define ERROR_MSG_COLOR Color(199, 12, 12, 255)
+#define WARNING_MSG_COLOR Color(255, 109, 5, 255)
 #define INFO_MSG_COLOR Color(255, 255, 255, 255)
 #define SUCCESS_MSG_COLOR Color(120, 235, 91, 255)
 #define LIST_MSG_COLOR Color(247, 223, 134, 255)

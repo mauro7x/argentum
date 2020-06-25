@@ -13,12 +13,11 @@ StartMovingCommand::StartMovingCommand(MovingDirection dir)
 
 bool StartMovingCommand::send(const SocketWrapper& socket) {
     // Enviamos el comando según el protocolo
-    ssize_t sent = 0;
-
-    sent = (socket << (uint8_t)COMMAND_OPCODE);
-    if (!sent) {
+    if (!(socket << (uint8_t)COMMAND_OPCODE)) {
         return false;
     }
+
+    ssize_t sent = 0;
 
     switch (dir) {
         case UP_DIR: {
