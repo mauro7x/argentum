@@ -384,20 +384,21 @@ void EventHandler::handleEvent(const SDL_Event& e) {
         }
 
         case INVENTORY_SINGLE_CLICK_EV: {
-            _clearSelection();
             SDL_Point click_pos = _getClickPos(e);
 
             int8_t inventory_slot = hud.getInventorySlotClicked(click_pos);
             if (inventory_slot > 0) {
                 current_selection.inventory_slot_selected = inventory_slot;
-                // algun método que le diga a la hud que lo resalte?
+                // algun método que le diga a la hud que lo resalte? por ahora:
+                hud.addMessage(
+                    ">> Has seleccionado un objeto de tu inventario.",
+                    USER_CMD_MSG_COLOR);
             }
 
             break;
         }
 
         case INVENTORY_DOUBLE_CLICK_EV: {
-            _clearSelection();
             SDL_Point click_pos = _getClickPos(e);
 
             int8_t inventory_slot = hud.getInventorySlotClicked(click_pos);

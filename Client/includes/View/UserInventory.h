@@ -77,6 +77,10 @@ class UserInventory : public HUDComponent {
     /* Renderiza el oro del jugador */
     void _renderGold() const;
 
+    /* Chequea si el slot fue clickeado */
+    bool _wasClicked(const SDL_Point& click_pos,
+                     const SDL_Point& slot_pos) const;
+
    public:
     /* Constructor */
     UserInventory(const Renderer* renderer,

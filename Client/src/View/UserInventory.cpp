@@ -84,6 +84,16 @@ void UserInventory::_renderGold() const {
     g_renderer->render(excess_gold.getTexture(), &render_quad);
 }
 
+bool UserInventory::_wasClicked(const SDL_Point& click_pos,
+                                const SDL_Point& slot_pos) const {
+    if ((click_pos.x > (slot_pos.x + slot_w)) || (click_pos.x < (slot_pos.x)) ||
+        (click_pos.y > (slot_pos.y + slot_h)) || (click_pos.y < (slot_pos.y))) {
+        return false;
+    }
+
+    return true;
+}
+
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -218,10 +228,24 @@ void UserInventory::loadMedia() {
 }
 
 int8_t UserInventory::getEquipmentSlotClicked(const SDL_Point& click_pos) {
+    for (int8_t i = 0; i < N_WEARABLE_ITEMS; i++) {
+        if (_wasClicked(click_pos, equipment_slots[i])) {
+            fprintf(stderr, "El slot %i del equipamiento fue clickeado.\n", i);
+            return i;
+        }
+    }
+
     return -1;
 }
 
 int8_t UserInventory::getInventorySlotClicked(const SDL_Point& click_pos) {
+    for (int8_t i = 0; i < N_INVENTORY_SLOTS; i++) {
+        if (_wasClicked(click_pos, inventory_slots[i])) {
+            fprintf(stderr, "El slot %i del inventario fue clickeado.\n", i);
+            return i;
+        }
+    }
+
     return -1;
 }
 
