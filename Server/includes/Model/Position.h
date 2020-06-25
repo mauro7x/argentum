@@ -37,6 +37,9 @@ class Position {
     /* Devuelve la coordenada y de la posición del character */
     const int getY() const;
 
+    /* Devuelve la orientacion del character */
+    const Orientation getOrientation() const;
+
     /* Devuelve el Id del mapa en el que se encuentra */
     const Id getMapId() const;
 
