@@ -207,6 +207,7 @@ class Game {
     void useWeapon(const InstanceId caller, const InstanceId target);
 
     void equip(const InstanceId caller, const uint8_t n_slot);
+    void unequip(const InstanceId caller, const uint8_t n_slot);
 
     void meditate(const InstanceId caller);
 

@@ -17,6 +17,7 @@
 #include "../../includes/Control/Commands/StartMovingUpCommand.h"
 #include "../../includes/Control/Commands/StopMovingCommand.h"
 #include "../../includes/Control/Commands/TakeCommand.h"
+#include "../../includes/Control/Commands/UnequipCommand.h"
 #include "../../includes/Control/Commands/UseWeaponCommand.h"
 #include "../../includes/Control/Commands/WithdrawGoldFromBankCommand.h"
 
@@ -67,15 +68,6 @@ Command* CommandFactory::newCommand(InstanceId caller, uint8_t opcode,
             return new UseWeaponCommand(caller, target_id);
         }
 
-        case BUY_OBJECT_CMD: {
-            uint32_t x_coord, y_coord;
-            Id item_id;
-            socket >> x_coord;
-            socket >> y_coord;
-            socket >> item_id;
-            return new BuyItemCommand(caller, x_coord, y_coord, item_id, 1);
-        }
-
         case BUY_N_OBJECTS_CMD: {
             uint32_t x_coord, y_coord, amount;
             Id item_id;
@@ -85,15 +77,6 @@ Command* CommandFactory::newCommand(InstanceId caller, uint8_t opcode,
             socket >> amount;
             return new BuyItemCommand(caller, x_coord, y_coord, item_id,
                                       amount);
-        }
-
-        case SELL_OBJECT_CMD: {
-            uint32_t x_coord, y_coord;
-            uint8_t n_slot;
-            socket >> x_coord;
-            socket >> y_coord;
-            socket >> n_slot;
-            return new SellItemCommand(caller, x_coord, y_coord, n_slot, 1);
         }
 
         case SELL_N_OBJECTS_CMD: {
@@ -125,16 +108,6 @@ Command* CommandFactory::newCommand(InstanceId caller, uint8_t opcode,
                                                    amount);
         }
 
-        case DEPOSIT_OBJECT_CMD: {
-            uint32_t x_coord, y_coord;
-            uint8_t n_slot;
-            socket >> x_coord;
-            socket >> y_coord;
-            socket >> n_slot;
-            return new DepositItemOnBankCommand(caller, x_coord, y_coord,
-                                                n_slot, 1);
-        }
-
         case DEPOSIT_N_OBJECTS_CMD: {
             uint32_t x_coord, y_coord, amount;
             uint8_t n_slot;
@@ -144,12 +117,6 @@ Command* CommandFactory::newCommand(InstanceId caller, uint8_t opcode,
             socket >> amount;
             return new DepositItemOnBankCommand(caller, x_coord, y_coord,
                                                 n_slot, amount);
-        }
-
-        case THROW_OBJECT_CMD: {
-            uint8_t n_slot;
-            socket >> n_slot;
-            return new DropCommand(caller, n_slot, 1);
         }
 
         case THROW_N_OBJECTS_CMD: {
@@ -163,7 +130,18 @@ Command* CommandFactory::newCommand(InstanceId caller, uint8_t opcode,
         case EQUIP_OBJECT_CMD: {
             uint8_t n_slot;
             socket >> n_slot;
+            fprintf(stderr, "Se recibio que hay que equipar el slot: %u\n",
+                    n_slot);
             return new EquipCommand(caller, n_slot);
+        }
+
+        case UNEQUIP_OBJECT_CMD: {
+            uint8_t n_slot;
+            socket >> n_slot;
+            fprintf(stderr, "Se recibio que hay que desequipar el slot: %u\n",
+                    n_slot);
+            return new UnequipCommand(caller, n_slot);
+            break;
         }
 
         case LIST_CMD: {

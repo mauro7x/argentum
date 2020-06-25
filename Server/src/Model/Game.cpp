@@ -380,6 +380,10 @@ void Game::equip(const InstanceId caller, const uint8_t n_slot) {
     fprintf(stderr, "Comando equip no implementado.\n");
 }
 
+void Game::unequip(const InstanceId caller, const uint8_t n_slot) {
+    fprintf(stderr, "Comando unequip no implementado.\n");
+}
+
 void Game::meditate(const InstanceId caller) {
     fprintf(stderr, "Comando meditate no implementado.\n");
 }
