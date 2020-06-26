@@ -29,7 +29,7 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-#define PLAYER_NICKNAME_COLOR SDL_Color({255, 191, 0, 0})
+#define PLAYER_NICKNAME_COLOR SDL_Color({255, 191, 0, 255})
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -51,6 +51,7 @@ class Player : public Unit {
     TTF_Font* nickname_font = NULL;
     TTF_Font* level_font = NULL;
     Texture info_nickname;
+    Texture info_nickname_shadow;
     Texture info_level;
 
     //-------------------------------------------------------------------------
@@ -82,11 +83,11 @@ class Player : public Unit {
 
     //-------------------------------------------------------------------------
 
+    /* Carga media necesaria (debe llamarse antes de a init) */
+    void loadMedia();
+
     /* Se inicializa con el primer paquete del server */
     void init(const PlayerData& init_data);
-
-    /* Carga media necesaria */
-    void loadMedia();
 
     /* Actualizar información según lo que diga el servidor */
     void update(const PlayerData& updated_data);

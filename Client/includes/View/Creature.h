@@ -12,6 +12,10 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+#define CREATURE_NICKNAME_COLOR SDL_Color({148, 0, 0, 255})
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
 
 class Creature : public Unit {
    private:
@@ -20,18 +24,27 @@ class Creature : public Unit {
     uint32_t health = 0;
 
     // Texturas para el nickname
-    const TTF_Font* g_nickname_font; /* no se debe cerrar */
-    const TTF_Font* g_level_font;    /* no se debe cerrar */
+    TTF_Font* g_nickname_font; /* no se debe cerrar */
+    TTF_Font* g_level_font;    /* no se debe cerrar */
     Texture info_nickname;
+    Texture info_nickname_shadow;
     Texture info_level;
+
+    //-------------------------------------------------------------------------
+    // Métodos privados
 
     /* Copia la data desde el paquete recibido */
     void _copyData(const CreatureData& init_data);
 
+    /* Renderiza la información del personaje */
+    void _renderInfo() const;
+
+    //-------------------------------------------------------------------------
+
    public:
     /* Constructor */
     Creature(Renderer* renderer, UnitSpriteContainer* sprites,
-             const TTF_Font* g_nickname_font, const TTF_Font* g_level_font);
+             TTF_Font* g_nickname_font, TTF_Font* g_level_font);
 
     //-------------------------------------------------------------------------
 

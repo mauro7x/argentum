@@ -16,6 +16,42 @@ void Character::_copyData(const CharacterData& init_data) {
 
     // Inventario
     equipment = init_data.equipment;
+
+    // Nivel
+    level = init_data.level;
+}
+
+void Character::_renderInfo() const {
+    // Primero el nivel
+    SDL_Rect level_quad = {0, 0, info_level.getWidth(), info_level.getHeight()};
+
+    // Centramos las coordenadas
+    level_quad.x = (TILE_WIDTH - level_quad.w) / 2;
+    level_quad.y = (TILE_HEIGHT * (0.8)) - level_quad.h -
+                   g_sprites->get(head_id).clip_h - INFO_SPACE_FROM_HEAD;
+
+    // Le agregamos offsets de la unidad
+    level_quad.x += (int)this->x;
+    level_quad.y += (int)this->y;
+
+    SDL_Rect nick_quad = level_quad;
+
+    g_renderer->renderIfVisible(info_level.getTexture(), &level_quad);
+
+    // Ahora el nickname
+    nick_quad.w = info_nickname.getWidth();
+    nick_quad.h = info_nickname.getHeight();
+    nick_quad.x = (TILE_WIDTH - nick_quad.w) / 2;
+    nick_quad.x += (int)this->x;
+    nick_quad.y -= nick_quad.h;
+
+    // Sombra
+    SDL_Rect nick_quad_bg = nick_quad;
+    nick_quad_bg.y++;
+
+    g_renderer->renderIfVisible(info_nickname_shadow.getTexture(),
+                                &nick_quad_bg);
+    g_renderer->renderIfVisible(info_nickname.getTexture(), &nick_quad);
 }
 
 //-----------------------------------------------------------------------------
@@ -24,8 +60,7 @@ void Character::_copyData(const CharacterData& init_data) {
 // API Pública
 
 Character::Character(Renderer* renderer, UnitSpriteContainer* sprites,
-                     const TTF_Font* g_nickname_font,
-                     const TTF_Font* g_level_font)
+                     TTF_Font* g_nickname_font, TTF_Font* g_level_font)
     : Unit(renderer, sprites),
       g_nickname_font(g_nickname_font),
       g_level_font(g_level_font) {}
@@ -37,6 +72,18 @@ void Character::init(const CharacterData& init_data) {
 
     /* Copiamos la data inicial */
     _copyData(init_data);
+
+    /* Cargamos la info */
+    if (!g_nickname_font || !g_level_font) {
+        throw Exception("Player::init: Fonts not initialized.");
+    }
+
+    info_nickname.loadFromRenderedText(g_renderer, g_nickname_font, nickname,
+                                       CHARACTER_NICKNAME_COLOR);
+    info_nickname_shadow.loadFromRenderedText(
+        g_renderer, g_nickname_font, nickname, SDL_Color({0, 0, 0, 255}));
+    info_level.loadFromRenderedText(g_renderer, g_level_font,
+                                    "Nivel " + std::to_string(level));
 
     /* Seteamos nuestra posición en pixeles para el renderizado */
     x = TILE_WIDTH * data.x_tile;
@@ -50,6 +97,12 @@ void Character::update(const CharacterData& updated_data) {
     if (!state) {
         throw Exception(
             "Character has not been initialized (update requested).");
+    }
+
+    /* Verificamos si hay que modificar la info */
+    if (level != updated_data.level) {
+        info_level.loadFromRenderedText(g_renderer, g_level_font,
+                                        "Nivel " + std::to_string(level));
     }
 
     /* Actualizamos la data */
@@ -94,6 +147,9 @@ void Character::render() const {
     if (equipment[HELMET]) {
         _render(g_sprites->get(equipment[HELMET]));
     }
+
+    // Info
+    _renderInfo();
 }
 
 Character::~Character() {}

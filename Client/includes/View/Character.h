@@ -17,6 +17,10 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+#define CHARACTER_NICKNAME_COLOR SDL_Color({255, 255, 255, 255})
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
 
 class Character : public Unit {
    private:
@@ -24,20 +28,30 @@ class Character : public Unit {
     std::string nickname;
     Id head_id = 0, body_id = 0;
     EquipmentData equipment = {0};
+    uint32_t level = 0;
 
     // Texturas para el nickname
-    const TTF_Font* g_nickname_font; /* no se debe cerrar */
-    const TTF_Font* g_level_font;    /* no se debe cerrar */
+    TTF_Font* g_nickname_font; /* no se debe cerrar */
+    TTF_Font* g_level_font;    /* no se debe cerrar */
     Texture info_nickname;
+    Texture info_nickname_shadow;
     Texture info_level;
+
+    //-------------------------------------------------------------------------
+    // Métodos privados
 
     /* Copia la data desde el paquete recibido */
     void _copyData(const CharacterData& init_data);
 
+    /* Renderiza la información del personaje */
+    void _renderInfo() const;
+
+    //-------------------------------------------------------------------------
+
    public:
     /* Constructor */
     Character(Renderer* renderer, UnitSpriteContainer* sprites,
-              const TTF_Font* g_nickname_font, const TTF_Font* g_level_font);
+              TTF_Font* g_nickname_font, TTF_Font* g_level_font);
 
     //-------------------------------------------------------------------------
 

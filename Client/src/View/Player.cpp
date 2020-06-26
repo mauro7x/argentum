@@ -50,6 +50,12 @@ void Player::_renderInfo() const {
     nick_quad.x += (int)this->x;
     nick_quad.y -= nick_quad.h;
 
+    // Sombra
+    SDL_Rect nick_quad_bg = nick_quad;
+    nick_quad_bg.y++;
+
+    g_renderer->renderIfVisible(info_nickname_shadow.getTexture(),
+                                &nick_quad_bg);
     g_renderer->renderIfVisible(info_nickname.getTexture(), &nick_quad);
 }
 
@@ -58,6 +64,16 @@ void Player::_renderInfo() const {
 
 Player::Player(Renderer* renderer, UnitSpriteContainer* sprites)
     : Unit(renderer, sprites) {}
+
+void Player::loadMedia() {
+    // Fuentes a utilizar
+    nickname_font = TTF_OpenFont(FONT_AUGUSTA_FP, INFO_NAME_FONTSIZE);
+    level_font = TTF_OpenFont(FONT_CINZELBOLD_FP, INFO_LVL_FONTSIZE);
+
+    if (!nickname_font || !level_font) {
+        throw Exception("Player::loadMedia: Error opening TTF_Font/s.");
+    }
+}
 
 void Player::init(const PlayerData& init_data) {
     if (state) {
@@ -72,23 +88,19 @@ void Player::init(const PlayerData& init_data) {
     y = TILE_HEIGHT * data.y_tile;
 
     /* Cargamos la info */
+    if (!nickname_font || !level_font) {
+        throw Exception("Player::init: Fonts not initialized.");
+    }
+
     info_nickname.loadFromRenderedText(g_renderer, nickname_font, nickname,
                                        PLAYER_NICKNAME_COLOR);
+    info_nickname_shadow.loadFromRenderedText(
+        g_renderer, nickname_font, nickname, SDL_Color({0, 0, 0, 255}));
     info_level.loadFromRenderedText(g_renderer, level_font,
                                     "Nivel " + std::to_string(level));
 
     /* Completamos la inicialización */
     state = READY;
-}
-
-void Player::loadMedia() {
-    // Fuentes a utilizar
-    nickname_font = TTF_OpenFont(FONT_AUGUSTA_FP, INFO_NAME_FONTSIZE);
-    level_font = TTF_OpenFont(FONT_CINZELBOLD_FP, INFO_LVL_FONTSIZE);
-
-    if (!nickname_font || !level_font) {
-        throw Exception("Player::loadMedia: Error opening TTF_Font/s.");
-    }
 }
 
 void Player::update(const PlayerData& updated_data) {
