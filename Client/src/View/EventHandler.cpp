@@ -21,8 +21,7 @@ void EventHandler::_clearSelection() {
     current_selection.npc_x_tile = 0;
     current_selection.npc_y_tile = 0;
     current_selection.inventory_slot_selected = -1;
-
-    // algun método que le diga a la hud que saque la selección?
+    hud.clearSelection();
 }
 
 Key EventHandler::_getKey(const SDL_Keycode& key) {
@@ -393,12 +392,7 @@ void EventHandler::handleEvent(const SDL_Event& e) {
             int8_t inventory_slot = hud.getInventorySlotClicked(click_pos);
             if (inventory_slot >= 0) {
                 current_selection.inventory_slot_selected = inventory_slot;
-
-                // PROXY: Algun método que le diga a la hud que lo resalte?
-                // Por ahora:
-                hud.addMessage(
-                    ">> Has seleccionado un objeto de tu inventario.",
-                    USER_CMD_MSG_COLOR);
+                hud.selectItem(inventory_slot);
             }
 
             break;
