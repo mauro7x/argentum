@@ -180,7 +180,9 @@ void Character::consumeMana(const unsigned int points) {
 
 //-----------------------------------------------------------------------------
 void Character::equip(unsigned int inventory_position) {
-    Item* item_to_equip = this->inventory.gatherItem(inventory_position);
+    unsigned int amount = 1;
+    Item* item_to_equip =
+        this->inventory.gatherItem(inventory_position, amount);
 
     if (!item_to_equip)
         return;
@@ -198,18 +200,18 @@ void Character::equip(Wearable* item) {
     this->broadcast = true;
 }
 
-const unsigned int Character::takeItem(Item* item) {
-    const unsigned int position = this->inventory.addItem(item);
+const unsigned int Character::takeItem(Item* item, unsigned int amount) {
+    const unsigned int position = this->inventory.addItem(item, amount);
     this->broadcast = true;
     return position;
 }
 
-Item* Character::dropItem(unsigned int position) {
-    Item* dropped_item = this->inventory.gatherItem(position);
+Item* Character::dropItem(const unsigned int n_slot, unsigned int& amount) {
+    Item* dropped_item = this->inventory.gatherItem(n_slot, amount);
 
     if (dropped_item)
         this->broadcast = true;
-        
+
     return dropped_item;
 }
 //-----------------------------------------------------------------------------

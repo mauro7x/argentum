@@ -275,7 +275,7 @@ class Game {
 
     void take(const InstanceId caller);
     void drop(const InstanceId caller, const uint8_t n_slot,
-              const uint32_t amount);
+              uint32_t amount);
 
     void listConnectedPlayers(const InstanceId caller);
 
