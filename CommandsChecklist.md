@@ -11,7 +11,7 @@ Marcarlos cuando estén implementados y funcionando!
 | 4 | Dejar de mover | X | X | X |
 | 5 | Usar arma principal | X | | |
 | 6 | Equipar objeto | X | X | X |
-| 7 | Desequipar objeto | X | | |
+| 7 | Desequipar objeto | X | X | X |
 | 8 | Tomar | X | X | |
 | 9 | Tirar | X | X | |
 | 10 | Meditar | X | | |
