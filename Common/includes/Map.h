@@ -117,8 +117,7 @@ class Map {
      * Lanza ItemCouldNotBeAddedException si no se encuentra tile
      * libre para que el item lo ocupe dentro del rango DROPPING_RANGE.
      */
-    void addItem(const Id item_id, int& x, int& y,
-                 const Orientation& orientation);
+    void serverAddItem(const Id item_id, int& x, int& y);
 
     /* Elimina al ocupante de una celda */
     void clearTileOccupant(const int x, const int y);

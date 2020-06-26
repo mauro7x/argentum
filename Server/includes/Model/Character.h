@@ -156,22 +156,27 @@ class Character {
     void equip(Wearable* item);
 
     /*
-     * Toma un item y lo agrega al inventario.
-     * Retorna la posicion en la que se agrego el item.
+     * Toma amount items (del mismo tipo) y los agrega al inventario.
+     * Retorna el slot en en el que se agregaron los items.
      *
      * Lanza FullInventoryException si el inventario esta lleno
      * y no pudo agregarse.
      */
-    const unsigned int takeItem(Item* item);
+    const unsigned int takeItem(Item* item, unsigned int amount = 1);
 
     /*
-     * Devuelve el item en la n_slot especificada.
+     * Dropa la cantidad especificada del item en la n_slot
+     * pasada por parámetro.
+     * 
+     * Si la cantidad de items en el slot es menor que amount, 
+     * se configura en amount la cantidad real droppeada. 
+     * 
      * Si no hay un item en dicha posicion, retorna nullptr.
      *
      * Lanza InvalidPositionException si la posicion
      * especificada es invalida (fuera de rango).
      */
-    Item* dropItem(const unsigned int n_slot);
+    Item* dropItem(const unsigned int n_slot, unsigned int& amount);
 
     //-----------------------------------------------------------------------------
 
@@ -323,8 +328,6 @@ class Character {
      * y la llena con sus atributos actuales para su broadcasteo.
      *
      * [No llena los campos: id, nickname]
-     *
-     * ??? EL ID DEL MAPA ???
      */
     void fillBroadcastData(PlayerData& data) const;
 

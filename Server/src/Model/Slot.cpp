@@ -27,18 +27,21 @@ const bool Slot::isEmpty() const {
     return (!this->amount);
 }
 
-void Slot::addItem(Item* item) {
+void Slot::addItem(Item* item, const unsigned int amount) {
     if (this->isEmpty())
         this->item = item;
 
-    ++this->amount;
+    this->amount += amount;
 }
 
-Item* Slot::takeItem() {
+Item* Slot::takeItem(unsigned int& amount_to_take) {
     if (this->isEmpty())
         return nullptr;
+    
+    if (amount_to_take > this->amount)
+        amount_to_take = this->amount;
 
-    --this->amount;
+    this->amount -= amount_to_take;
     Item* item = this->item;
 
     if (this->isEmpty())

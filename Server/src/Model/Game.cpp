@@ -1,5 +1,6 @@
 #include <cstdio>  // debug
 #include <utility>
+#include <string>
 //-----------------------------------------------------------------------------
 #include "../../../Common/includes/Exceptions/Exception.h"
 #include "../../../Common/includes/Protocol.h"
@@ -17,6 +18,7 @@
 #define MAX_CREATURES_PER_MAP 20
 #define TIME_TO_SPAWN_CREATURE 3000           // en ms
 #define TIME_TO_DISSAPEAR_DROPPED_ITEM 15000  // en ms
+#define MAX_DROPPING_ITEMS_AMOUNT 20
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -131,7 +133,7 @@ void Game::_pushItemDifferentialBroadcast(Id map_id, int x_coord, int y_coord,
                                           BroadcastType broadcast_type) {
     Notification* broadcast =
         _buildItemBroadcast(map_id, x_coord, y_coord, broadcast_type);
-        
+
     this->active_clients.sendDifferentialBroadcastToAll(broadcast, 0, false);
 }
 
@@ -393,7 +395,6 @@ void Game::updateDroppedItemsLifetime(const int it) {
                                                DELETE_BROADCAST);
                 dropped_items_iterator =
                     map_iterator->second.erase(dropped_items_iterator);
-                fprintf(stderr, "Borro el item en x=%i, y=%i\n", x, y);
                 continue;
             }
 
@@ -532,19 +533,25 @@ void Game::take(const InstanceId caller) {
 }
 
 void Game::drop(const InstanceId caller, const uint8_t n_slot,
-                const uint32_t amount) {
-    fprintf(stderr, "Game::drop: dropear slot %i cantidad %i\n", n_slot,
-            amount);
-
+                uint32_t amount) {
     if (!this->characters.count(caller)) {
         throw Exception("Game::equip: unknown caller.");
     }
 
+    if (amount > MAX_DROPPING_ITEMS_AMOUNT) {
+        std::string reply_msg = "No puedes dropear más de " +
+                            std::to_string(MAX_DROPPING_ITEMS_AMOUNT) + " items a la vez.";
+        Notification* reply = new NotificationReply(ERROR_MSG, reply_msg.c_str());
+        active_clients.notify(caller, reply);
+        return;
+    }
+
     Character& character = this->characters.at(caller);
+
     Item* dropped;
 
     try {
-        dropped = character.dropItem(n_slot);
+        dropped = character.dropItem(n_slot, amount);
     } catch (const InvalidPositionException& e) {
         Notification* reply = new NotificationReply(ERROR_MSG, e.what());
         active_clients.notify(caller, reply);
@@ -555,30 +562,37 @@ void Game::drop(const InstanceId caller, const uint8_t n_slot,
         return;
 
     Id dropped_item_id = dropped->getId();
-    int x = character.getPosition().getX();
-    int y = character.getPosition().getY();
-    Orientation orientation = character.getPosition().getOrientation();
+    int init_x = character.getPosition().getX();
+    int init_y = character.getPosition().getY();
 
-    try {
-        this->map_container[character.getMapId()].addItem(dropped_item_id, x, y,
-                                                          orientation);
-    } catch (const ItemCouldNotBeAddedException& e) {
-        // No se pudo efectuar el dropeo. Le devuelvo el item al character.
-        character.takeItem(dropped);
-        Notification* reply = new NotificationReply(ERROR_MSG, e.what());
-        active_clients.notify(caller, reply);
-        return;
+    int x = init_x;
+    int y = init_y;
+
+    for (unsigned int dropped_amount = 0; dropped_amount < amount; ++dropped_amount) {
+        try {
+            this->map_container[character.getMapId()].serverAddItem(
+                dropped_item_id, x, y);
+        } catch (const ItemCouldNotBeAddedException& e) {
+            // No se pudo efectuar el dropeo. Le devuelvo el item al character.
+            character.takeItem(dropped, amount - dropped_amount);
+            Notification* reply = new NotificationReply(ERROR_MSG, e.what());
+            active_clients.notify(caller, reply);
+            return;
+        }
+
+        Id map_id = character.getMapId();
+
+        // Agrego elemento al mapa de dropped items cooldown
+        const std::string key = std::move(_coordinatesToMapKey(x, y));
+        this->dropped_items_lifetime_per_map[map_id].emplace(
+            key, TIME_TO_DISSAPEAR_DROPPED_ITEM);
+
+        // Broadcasteo new item
+        _pushItemDifferentialBroadcast(map_id, x, y, NEW_BROADCAST);
+
+        x = init_x;
+        y = init_y;
     }
-
-    Id map_id = character.getMapId();
-
-    // Agrego elemento al mapa de dropped items cooldown
-    const std::string key = std::move(_coordinatesToMapKey(x, y));
-    this->dropped_items_lifetime_per_map[map_id].emplace(
-        key, TIME_TO_DISSAPEAR_DROPPED_ITEM);
-
-    // Broadcasteo new item
-    _pushItemDifferentialBroadcast(map_id, x, y, NEW_BROADCAST);
 }
 
 void Game::listConnectedPlayers(const InstanceId caller) {
