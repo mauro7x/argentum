@@ -29,6 +29,8 @@
 #define HUD_CONSOLE_BASE_FP "../Assets/HUD/Console/base.png"
 #define HUD_USER_INFO_BASE_FP "../Assets/HUD/UserInfo/base.png"
 #define HUD_USER_INVENTORY_BASE_FP "../Assets/HUD/UserInventory/base.png"
+#define HUD_USER_INVENTORY_SELECTED_FP \
+    "../Assets/HUD/UserInventory/selected.png"
 #define HUD_USER_STATS_BASE_FP "../Assets/HUD/UserStats/base.png"
 #define HUD_PROGRESSBAR_BASE_FP "../Assets/HUD/ProgressBar/base.png"
 #define HUD_PROGRESSBAR_BISEL_FP "../Assets/HUD/ProgressBar/bisel.png"
