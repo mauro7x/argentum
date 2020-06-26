@@ -12,8 +12,8 @@ Marcarlos cuando estén implementados y funcionando!
 | 5 | Usar arma principal | X | | |
 | 6 | Equipar objeto | X | X | X |
 | 7 | Desequipar objeto | X | | |
-| 8 | Tomar | X | | |
-| 9 | Tirar | X | | |
+| 8 | Tomar | X | X | |
+| 9 | Tirar | X | X | |
 | 10 | Meditar | X | | |
 | 11 | Resucitar (solo) | X | | |
 | 12 | Listar comandos disponibles del NPC (/help) | X | | |

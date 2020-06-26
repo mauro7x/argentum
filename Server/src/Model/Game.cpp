@@ -1,6 +1,6 @@
 #include <cstdio>  // debug
-#include <utility>
 #include <string>
+#include <utility>
 //-----------------------------------------------------------------------------
 #include "../../../Common/includes/Exceptions/Exception.h"
 #include "../../../Common/includes/Protocol.h"
@@ -529,7 +529,29 @@ void Game::sellItem(const InstanceId caller, const uint32_t x_coord,
 }
 
 void Game::take(const InstanceId caller) {
-    fprintf(stderr, "Comando take no implementado.\n");
+    if (!this->characters.count(caller)) {
+        throw Exception("Game::equip: unknown caller.");
+    }
+
+    Character& character = this->characters.at(caller);
+    Id map_id = character.getMapId();
+    int x_coord = character.getPosition().getX();
+    int y_coord = character.getPosition().getY();
+    Id item_id = this->map_container[map_id].getTile(x_coord, y_coord).item_id;
+
+    if (!item_id)
+        return;  // envio notifiacion?
+
+    try {
+        character.takeItem(this->items[item_id]);
+    } catch (const FullInventoryException& e) {
+        Notification* reply = new NotificationReply(ERROR_MSG, e.what());
+        active_clients.notify(caller, reply);
+        return;
+    }
+
+    this->map_container[map_id].clearTileItem(x_coord, y_coord);
+    _pushItemDifferentialBroadcast(map_id, x_coord, y_coord, DELETE_BROADCAST);
 }
 
 void Game::drop(const InstanceId caller, const uint8_t n_slot,
@@ -540,8 +562,10 @@ void Game::drop(const InstanceId caller, const uint8_t n_slot,
 
     if (amount > MAX_DROPPING_ITEMS_AMOUNT) {
         std::string reply_msg = "No puedes dropear más de " +
-                            std::to_string(MAX_DROPPING_ITEMS_AMOUNT) + " items a la vez.";
-        Notification* reply = new NotificationReply(ERROR_MSG, reply_msg.c_str());
+                                std::to_string(MAX_DROPPING_ITEMS_AMOUNT) +
+                                " items a la vez.";
+        Notification* reply =
+            new NotificationReply(ERROR_MSG, reply_msg.c_str());
         active_clients.notify(caller, reply);
         return;
     }
@@ -568,7 +592,8 @@ void Game::drop(const InstanceId caller, const uint8_t n_slot,
     int x = init_x;
     int y = init_y;
 
-    for (unsigned int dropped_amount = 0; dropped_amount < amount; ++dropped_amount) {
+    for (unsigned int dropped_amount = 0; dropped_amount < amount;
+         ++dropped_amount) {
         try {
             this->map_container[character.getMapId()].serverAddItem(
                 dropped_item_id, x, y);
