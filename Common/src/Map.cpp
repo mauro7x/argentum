@@ -1,6 +1,8 @@
 #include "../includes/Map.h"
 
 #include "../includes/RandomNumberGenerator.h"
+
+#define MAX_FREE_ITEM_TILE_SEARCHING_STEP 30
 //-----------------------------------------------------------------------------
 // Métodos privados
 
@@ -219,74 +221,46 @@ void Map::addItem(const Id item_id, const int x, const int y) {
     tile.item_id = item_id;
 }
 
-void Map::addItem(const Id item_id, int& x, int& y,
-                  const Orientation& orientation) {
+// NO ES EL MEJOR ALGORITMO PERO FUNCIONA ;) -santi
+// (si alguno quiere cambiarlo es bienvenido)
+void Map::serverAddItem(const Id item_id, int& x, int& y) {
     bool empty_tile_found = false;
 
     Tile& tile = this->_getTile(x, y);
-    fprintf(stderr, "Map::addItem DEBUG: intento agregar en x = %i, y = %i\n",
-            x, y);
-    if (!tile.item_id) {
+
+    if (!tile.item_id && !tile.collision && !tile.npc_id) {
         tile.item_id = item_id;
         empty_tile_found = true;
     }
-    // HABRIA QUE PONERLE ALGUN LIMITE A ESTE LOOP DE MAXIMA PROFUNDIDAD.
-    int step = 0;
-    int i = orientation;
-    int _x = x;
-    int _y = y;
+
+    int step = 1;
+    int _x = 0;
+    int _y = 0;
+
     while (!empty_tile_found) {
-        for (int j = 0; j < N_ORIENTATIONS; ++j) {
-            i = (i + j) % N_ORIENTATIONS;
+        for (int x_inc = -1; x_inc <= 1; ++x_inc) {
+            _x = (x + x_inc * step);
 
-            switch (i) {
-                case UP_ORIENTATION: {
-                    if (y == 0)
-                        continue;
+            for (int y_inc = -1; y_inc <= 1; ++y_inc) {
+                _y = (y + y_inc * step);
 
-                    _y = y - 1 * step;
-                    break;
+                if (_x < 0 || _y < 0 || _x > this->w - 1 || _y > this->h - 1)
+                    continue;
+
+                Tile& tile = this->_getTile(_x, _y);
+
+                if (!tile.item_id && !tile.collision && !tile.npc_id) {
+                    tile.item_id = item_id;
+                    empty_tile_found = true;
+                    x = _x;
+                    y = _y;
+                    return;
                 }
-
-                case DOWN_ORIENTATION: {
-                    if (y == this->h)
-                        continue;
-
-                    _y = y + 1 * step;
-                    break;
-                }
-
-                case LEFT_ORIENTATION: {
-                    if (x == 0)
-                        continue;
-
-                    _x = x - 1 * step;
-                    break;
-                }
-
-                case RIGHT_ORIENTATION: {
-                    if (x == this->w)
-                        continue;
-
-                    _x = x + 1 * step;
-                    break;
-                }
-
-                default:
-                    throw(Exception("Map::addItem: Unknown orientation."));
-            }
-
-            Tile& tile = this->_getTile(_x, _y);
-
-            if (!tile.item_id) {
-                tile.item_id = item_id;
-                empty_tile_found = true;
-                x = _x;
-                y = _y;
-                break;
             }
         }
         ++step;
+        if (step == MAX_FREE_ITEM_TILE_SEARCHING_STEP)
+            throw(ItemCouldNotBeAddedException());
     }
 }
 
@@ -303,7 +277,7 @@ void Map::clearTileItem(const int x, const int y) {
 Map::~Map() {}
 
 const char* ItemCouldNotBeAddedException::what() const noexcept {
-    return "No se pudo agregar el item dropeado al mapa.";
+    return "No se pudieron dropear algunos items.";
 }
 
 //-----------------------------------------------------------------------------
