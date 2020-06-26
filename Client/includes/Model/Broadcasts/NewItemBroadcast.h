@@ -1,20 +1,19 @@
-#ifndef __DELETE_CREATURE_BROADCAST_H__
-#define __DELETE_CREATURE_BROADCAST_H__
+#ifndef __NEW_ITEM_BROADCAST_H__
+#define __NEW_ITEM_BROADCAST_H__
 
 //-----------------------------------------------------------------------------
-#include "../../../../Common/includes/types.h"
 #include "Broadcast.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 
-class DeleteCreatureBroadcast : public Broadcast {
+class NewItemBroadcast : public Broadcast {
    private:
-    InstanceId id;
+    ItemData data;
 
    public:
     /* Constructor */
-    DeleteCreatureBroadcast(const InstanceId& id);
+    NewItemBroadcast(const ItemData& data);
 
     //-------------------------------------------------------------------------
 
@@ -26,9 +25,9 @@ class DeleteCreatureBroadcast : public Broadcast {
     //-------------------------------------------------------------------------
 
     /* Destructor */
-    ~DeleteCreatureBroadcast();
+    ~NewItemBroadcast();
 };
 
 //-----------------------------------------------------------------------------
 
-#endif  // __DELETE_CREATURE_BROADCAST_H__
+#endif  // __NEW_ITEM_BROADCAST_H__

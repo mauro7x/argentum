@@ -21,8 +21,10 @@
 //-----------------------------------------------------------------------------
 #include "DeleteCharacterBroadcast.h"
 #include "DeleteCreatureBroadcast.h"
+#include "DeleteItemBroadcast.h"
 #include "NewCharacterBroadcast.h"
 #include "NewCreatureBroadcast.h"
+#include "NewItemBroadcast.h"
 #include "NewPlayerBroadcast.h"
 #include "UpdateCharacterBroadcast.h"
 #include "UpdateCreatureBroadcast.h"

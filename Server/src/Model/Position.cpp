@@ -1,7 +1,8 @@
 #include "../../includes/Model/Position.h"
-#include "../../../Common/includes/Exceptions/Exception.h"
 
 #include <cstdlib>
+
+#include "../../../Common/includes/Exceptions/Exception.h"
 
 #define DEFAULT_ORIENTATION DOWN_ORIENTATION
 
@@ -14,7 +15,7 @@ Position::Position(const Id map, const int init_x_coord, const int init_y_coord,
       map_container(map_container) {}
 
 Position::~Position() {
-    map_container[map].clearTileOcuppant(x, y);
+    map_container[map].clearTileOccupant(x, y);
 }
 
 const int Position::getX() const {
@@ -38,7 +39,7 @@ const unsigned int Position::getDistance(const Position& other) const {
 }
 
 void Position::move() {
-    if (!this->map_container[this->map].moveOcuppant(this->x, this->y,
+    if (!this->map_container[this->map].moveOccupant(this->x, this->y,
                                                      this->orientation))
         throw CollisionWhileMovingException();
 

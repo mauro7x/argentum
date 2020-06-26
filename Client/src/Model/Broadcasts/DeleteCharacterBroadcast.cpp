@@ -18,7 +18,7 @@ void DeleteCharacterBroadcast::exec(
     SDL_Point old_pos = characters.getPos(id);
     characters.remove(id);
 
-    map.clearTileOcuppant(old_pos.x, old_pos.y);
+    map.clearTileOccupant(old_pos.x, old_pos.y);
 }
 
 DeleteCharacterBroadcast::~DeleteCharacterBroadcast() {}

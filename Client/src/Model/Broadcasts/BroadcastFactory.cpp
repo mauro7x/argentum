@@ -41,9 +41,8 @@ Broadcast* BroadcastFactory::newBroadcast(uint8_t broadcast_type,
                 }
 
                 case ITEM_TYPE: {
-                    throw Exception(
-                        "BroadcastFactory::newBroadcast: items not implemented "
-                        "yet.");
+                    ItemData received_data = j.get<ItemData>();
+                    return new NewItemBroadcast(received_data);
                 }
 
                 default: {
@@ -82,8 +81,8 @@ Broadcast* BroadcastFactory::newBroadcast(uint8_t broadcast_type,
 
                 case ITEM_TYPE: {
                     throw Exception(
-                        "BroadcastFactory::newBroadcast: items not implemented "
-                        "yet.");
+                        "BroadcastFactory::newBroadcast: item update received "
+                        "(items does not have updates!).");
                 }
 
                 default: {
@@ -95,13 +94,6 @@ Broadcast* BroadcastFactory::newBroadcast(uint8_t broadcast_type,
         }
 
         case DELETE_BROADCAST: {
-            uint32_t id;
-            if (!(socket >> id)) {
-                throw Exception(
-                    "BroadcastFactory::newBroadcast: incomplete broadcast "
-                    "received.");
-            }
-
             switch (entity_type) {
                 case PLAYER_TYPE: {
                     throw Exception(
@@ -110,17 +102,41 @@ Broadcast* BroadcastFactory::newBroadcast(uint8_t broadcast_type,
                 }
 
                 case CHARACTER_TYPE: {
+                    uint32_t id;
+                    if (!(socket >> id)) {
+                        throw Exception(
+                            "BroadcastFactory::newBroadcast: incomplete "
+                            "broadcast received.");
+                    }
+
                     return new DeleteCharacterBroadcast(id);
                 }
 
                 case CREATURE_TYPE: {
+                    uint32_t id;
+                    if (!(socket >> id)) {
+                        throw Exception(
+                            "BroadcastFactory::newBroadcast: incomplete "
+                            "broadcast received.");
+                    }
                     return new DeleteCreatureBroadcast(id);
                 }
 
                 case ITEM_TYPE: {
-                    throw Exception(
-                        "BroadcastFactory::newBroadcast: items not implemented "
-                        "yet.");
+                    uint32_t x, y;
+                    if (!(socket >> x)) {
+                        throw Exception(
+                            "BroadcastFactory::newBroadcast: incomplete "
+                            "broadcast received.");
+                    }
+
+                    if (!(socket >> y)) {
+                        throw Exception(
+                            "BroadcastFactory::newBroadcast: incomplete "
+                            "broadcast received.");
+                    }
+
+                    return new DeleteItemBroadcast(x, y);
                 }
 
                 default: {

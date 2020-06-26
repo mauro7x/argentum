@@ -8,6 +8,7 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+#include "ItemSpriteContainer.h"
 #include "Renderer.h"
 #include "TileContainer.h"
 //-----------------------------------------------------------------------------
@@ -19,8 +20,10 @@ class MapView {
     const Renderer* g_renderer;
     TileContainer tiles;
     MapContainer maps;
+    const ItemSpriteContainer& item_sprites;
 
     /* Current map info */
+    Map* current_map = NULL;
     Id current_map_id = 0;
     int w_tiles = 0, h_tiles = 0;
 
@@ -33,7 +36,7 @@ class MapView {
 
    public:
     /* Constructor */
-    MapView(const Renderer* renderer);
+    MapView(const Renderer* renderer, const ItemSpriteContainer& item_sprites);
 
     /* Deshabilitamos el constructor por copia. */
     MapView(const MapView&) = delete;
@@ -56,14 +59,23 @@ class MapView {
     //-------------------------------------------------------------------------
     // Métodos de escritura
 
-    /* Selecciona el mapa indicado por el id */
-    void changeMap(const Id id);
+    /* Selecciona el mapa indicado por el id. Si cambia, devuelve true. */
+    bool selectMap(const Id id);
 
     /* Settea el ocupante de una celda */
     void occupyTile(InstanceId id, const int x_tile, const int y_tile);
 
+    /* Settea el item de una celda */
+    void addItem(Id id, const int x_tile, const int y_tile);
+
     /* Libera una celda */
-    void clearTileOcuppant(const int x_tile, const int y_tile);
+    void clearTileOccupant(const int x_tile, const int y_tile);
+
+    /* Libera una celda */
+    void clearTileItem(const int x_tile, const int y_tile);
+
+    /* Limpia el mapa de ocupantes y de items */
+    void clear();
 
     //-------------------------------------------------------------------------
     // Métodos de renderizado
@@ -76,6 +88,9 @@ class MapView {
 
     /* Renderiza una fila determinada de NPCs */
     void renderNPCs(const int row) const;
+
+    /* Renderiza una fila determinada de items droppeados */
+    void renderItems(const int row) const;
 
     /* Renderiza los techos completos */
     void renderRoofs() const;

@@ -84,7 +84,7 @@ Tile& Map::_getTile(const int x, const int y) {
     return tiles.at(tile);
 }
 
-const bool Map::_moveOcuppant(Tile& from_tile, Tile& to_tile) {
+const bool Map::_moveOccupant(Tile& from_tile, Tile& to_tile) {
     if (to_tile.collision || to_tile.occupant_id || to_tile.npc_id) {
         // El tile está ocupado / hay colisión.
         return false;
@@ -149,7 +149,7 @@ const Tile& Map::getTile(const int x, const int y) const {
     return tiles.at(tile);
 }
 
-const bool Map::moveOcuppant(const int x, const int y,
+const bool Map::moveOccupant(const int x, const int y,
                              const Orientation& orientation) {
     Tile& from_tile = _getTile(x, y);
 
@@ -159,7 +159,7 @@ const bool Map::moveOcuppant(const int x, const int y,
             return false;
         }
         Tile& to_tile = _getTile(x, y - 1);
-        return _moveOcuppant(from_tile, to_tile);
+        return _moveOccupant(from_tile, to_tile);
     }
 
     if (orientation == DOWN_ORIENTATION) {
@@ -168,7 +168,7 @@ const bool Map::moveOcuppant(const int x, const int y,
             return false;
         }
         Tile& to_tile = _getTile(x, y + 1);
-        return _moveOcuppant(from_tile, to_tile);
+        return _moveOccupant(from_tile, to_tile);
     }
 
     if (orientation == LEFT_ORIENTATION) {
@@ -177,7 +177,7 @@ const bool Map::moveOcuppant(const int x, const int y,
             return false;
         }
         Tile& to_tile = _getTile(x - 1, y);
-        return _moveOcuppant(from_tile, to_tile);
+        return _moveOccupant(from_tile, to_tile);
     }
 
     if (x + 1 == this->w) {
@@ -185,7 +185,7 @@ const bool Map::moveOcuppant(const int x, const int y,
         return false;
     }
     Tile& to_tile = _getTile(x + 1, y);
-    return _moveOcuppant(from_tile, to_tile);
+    return _moveOccupant(from_tile, to_tile);
 }
 
 void Map::establishEntitySpawningPosition(InstanceId id, int& x, int& y,
@@ -283,7 +283,7 @@ void Map::addItem(const Id item_id, int& x, int& y,
     }
 }
 
-void Map::clearTileOcuppant(const int x, const int y) {
+void Map::clearTileOccupant(const int x, const int y) {
     Tile& tile = this->_getTile(x, y);
     tile.occupant_id = 0;
 }

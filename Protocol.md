@@ -18,22 +18,13 @@ Identificas el mensaje con el primer byte recibido (opcode), y para cada caso se
 
 | OPCODE | TIPO | DIRECCIÓN | ESTRUCTURA (B) |
 |--------|------|-----------|----------------|
-| 0 | Respuesta | S -> C | `OPCODE_REPLY (1) + LENGTH (4) + REPLY (LENGTH)` |
-| 1 | Mensaje privado | S -> C | `SENDER_LENGTH (4) + SENDER (SENDER_LENGTH) + MSG_LENGTH (4) + MSG (MSG_LENGTH)` |
-| 2 | Broadcast | S -> C | `TYPE(1)` |
-| 128 | Comando | C -> S | `OPCODE_CMD (1) + ...` |
-| 129 | Sign-in | C -> S | `USER_LENGTH (4) + USERNAME (USER_LENGTH) + PASS_LENGTH (4) + PASSWORD (PASS_LENGTH)` |
-| 130 | Sign-up | C -> S | `USER_LENGTH (4) + USERNAME (USER_LENGTH) + PASS_LENGTH (4) + PASSWORD (PASS_LENGTH) + RACE (1) + KIND (1)` |
-
-## PROPUESTA (MAU 24/06)
-
-| OPCODE | TIPO | DIRECCIÓN | ESTRUCTURA (B) |
-|--------|------|-----------|----------------|
 | 0 | Mensaje | S -> C | `TYPE (1) + ...` |
 | 1 | Broadcast | S -> C | `TYPE (1) + ...` |
 | 128 | Comando | C -> S | `TYPE (1) + ...` |
 | 129 | Sign-in | C -> S | `USER_LENGTH (4) + USERNAME (USER_LENGTH) + PASS_LENGTH (4) + PASSWORD (PASS_LENGTH)` |
 | 130 | Sign-up | C -> S | `USER_LENGTH (4) + USERNAME (USER_LENGTH) + PASS_LENGTH (4) + PASSWORD (PASS_LENGTH) + RACE (1) + KIND (1)` |
+
+---
 
 ### Message (OP = 0):
 
@@ -48,17 +39,26 @@ Identificas el mensaje con el primer byte recibido (opcode), y para cada caso se
 
 ---
 
-### Broadcast:
+### Broadcast (OP = 1):
     
 | TIPO | DESCRIPCION | ESTRUCTURA (B) |
 |--------|------|----------------|
 | 0 | NEW | `ENTITY_TYPE(1) + LENGTH (4) + BROADCAST (LENGTH)` | 
 | 1 | UPDATE | `ENTITY_TYPE(1) + LENGTH (4) + BROADCAST (LENGTH)` | 
-| 2 | DELETE | `ENTITY_TYPE(1) + ID (4)` | 
+| 2 | DELETE | `ENTITY_TYPE(1) + ...` | 
+
+#### Especialización para DELETE
+
+| TIPO | DESCRIPCION | ESTRUCTURA (B) |
+|--------|------|----------------|
+| 0 | Player | Combinación no válida | 
+| 1 | Character | `ID (4)` | 
+| 2 | Creature | `ID (4)` |
+| 3 | Item | `POS` |
 
 ---
 
-### Comandos (OP = 0)
+### Comandos (OP = 128)
 
 | OPCODE | TIPO | ESTRUCTURA (B) |
 |--------|------|----------------|
@@ -90,16 +90,5 @@ Identificas el mensaje con el primer byte recibido (opcode), y para cada caso se
 
 
 * `POS` = `X (4) + Y (4)`
-
----
-
-## Respuestas (OP = 1)
-
-| OPCODE | TIPO |
-|--------|------|
-| 0 | Error (rojo) |
-| 1 | Informacion (blanco) |
-| 2 | Éxito (verde) |
-| 3 | Lista (amarillo) |
 
 ---

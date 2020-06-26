@@ -54,7 +54,7 @@ class Map {
     /* Devuelve si el tile es válido y es parte del mapa */
     bool _isValid(const int x, const int y) const;
 
-    const bool _moveOcuppant(Tile& from_tile, Tile& to_tile);
+    const bool _moveOccupant(Tile& from_tile, Tile& to_tile);
 
    public:
     /* Constructor */
@@ -87,8 +87,9 @@ class Map {
     /* Obtiene un Tile de solo lectura */
     const Tile& getTile(const int x, const int y) const;
 
-    const bool moveOcuppant(const int x, const int y,
+    const bool moveOccupant(const int x, const int y,
                             const Orientation& orientation);
+
     /*iniciando una posicion para el character*/
     void establishEntitySpawningPosition(InstanceId id, int& x, int& y,
                                          bool is_creature);
@@ -117,7 +118,7 @@ class Map {
                  const Orientation& orientation);
 
     /* Elimina al ocupante de una celda */
-    void clearTileOcuppant(const int x, const int y);
+    void clearTileOccupant(const int x, const int y);
 
     /* Elimina el item de una celda */
     void clearTileItem(const int x, const int y);
