@@ -233,6 +233,8 @@ void Map::addItem(const Id item_id, int& x, int& y,
     // HABRIA QUE PONERLE ALGUN LIMITE A ESTE LOOP DE MAXIMA PROFUNDIDAD.
     int step = 0;
     int i = orientation;
+    int _x = x;
+    int _y = y;
     while (!empty_tile_found) {
         for (int j = 0; j < N_ORIENTATIONS; ++j) {
             i = (i + j) % N_ORIENTATIONS;
@@ -242,7 +244,7 @@ void Map::addItem(const Id item_id, int& x, int& y,
                     if (y == 0)
                         continue;
 
-                    y = y - 1 * step;
+                    _y = y - 1 * step;
                     break;
                 }
 
@@ -250,7 +252,7 @@ void Map::addItem(const Id item_id, int& x, int& y,
                     if (y == this->h)
                         continue;
 
-                    y = y + 1 * step;
+                    _y = y + 1 * step;
                     break;
                 }
 
@@ -258,7 +260,7 @@ void Map::addItem(const Id item_id, int& x, int& y,
                     if (x == 0)
                         continue;
 
-                    x = x - 1 * step;
+                    _x = x - 1 * step;
                     break;
                 }
 
@@ -266,7 +268,7 @@ void Map::addItem(const Id item_id, int& x, int& y,
                     if (x == this->w)
                         continue;
 
-                    x = x + 1 * step;
+                    _x = x + 1 * step;
                     break;
                 }
 
@@ -274,16 +276,13 @@ void Map::addItem(const Id item_id, int& x, int& y,
                     throw(Exception("Map::addItem: Unknown orientation."));
             }
 
-            Tile& tile = this->_getTile(x, y);
-            fprintf(stderr,
-                    "Map::addItem DEBUG: intento agregar en x = %i, y = %i\n",
-                    x, y);
-            fprintf(stderr, "item_id en tile: %i\n", tile.item_id);
+            Tile& tile = this->_getTile(_x, _y);
+
             if (!tile.item_id) {
-                fprintf(stderr, "Se setea el item_id: %i en el tile \n",
-                        item_id);
                 tile.item_id = item_id;
                 empty_tile_found = true;
+                x = _x;
+                y = _y;
                 break;
             }
         }
