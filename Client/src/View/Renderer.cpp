@@ -151,8 +151,7 @@ void Renderer::fillQuad(SDL_Rect* quad, int r, int g, int b, int a) const {
     SDL_RenderFillRect(renderer, quad);
 }
 
-void Renderer::fillQuadIfVisible(SDL_Rect* quad,
-                                 SDL_Color color = {0, 0, 0, 255}) const {
+void Renderer::fillQuadIfVisible(SDL_Rect* quad, SDL_Color color) const {
     if (!initialized) {
         throw Exception("Renderer not initialized.");
     }

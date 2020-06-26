@@ -251,9 +251,7 @@ void MapView::renderShadowOutdoor() const {
                 /* Renderizar una textura negra */
                 render_quad = {(x * TILE_WIDTH), (y * TILE_HEIGHT), TILE_WIDTH,
                                TILE_HEIGHT};
-                float alpha = 1.0;
-                g_renderer->fillQuadIfVisible(&render_quad, 0, 0, 0,
-                                              alpha * 255);
+                g_renderer->fillQuadIfVisible(&render_quad);
             }
         }
     }

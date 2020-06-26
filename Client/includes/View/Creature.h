@@ -13,6 +13,9 @@
 
 //-----------------------------------------------------------------------------
 #define CREATURE_NICKNAME_COLOR SDL_Color({148, 0, 0, 255})
+#define CREATURE_HEALTH_BAR_W 60
+#define CREATURE_HEALTH_BAR_H 8
+#define CREATURE_HEALTH_BAR_COLOR SDL_Color({207, 17, 17, 255})
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -22,14 +25,12 @@ class Creature : public Unit {
     // Datos del monstruo
     std::string name;
     Id creature_id = 0;
-    uint32_t health = 0 /*, level = 0*/;
+    uint32_t health = 0, max_health = 0 /*, level = 0*/;
 
     // Texturas para el nickname
     TTF_Font* g_nickname_font; /* no se debe cerrar */
-    TTF_Font* g_level_font;    /* no se debe cerrar */
     Texture info_nickname;
     Texture info_nickname_shadow;
-    Texture info_level;
 
     //-------------------------------------------------------------------------
     // Métodos privados

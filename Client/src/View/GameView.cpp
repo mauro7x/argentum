@@ -116,10 +116,10 @@ void GameView::_processBroadcasts() {
 }
 
 void GameView::_loopIteration(const int it) {
-    // auto t1 = std::chrono::steady_clock::now();
-
     /* Vaciamos las colas a procesar*/
     _processSDLEvents();
+
+    // auto t1 = std::chrono::steady_clock::now();
     _processMessages();
     _processBroadcasts();
 
@@ -136,9 +136,10 @@ void GameView::_loopIteration(const int it) {
     /* Renderizamos y presentamos la pantalla */
     stage.render();
     hud.render();
+    // auto t2 = std::chrono::steady_clock::now();
+
     renderer.presentScreen();
 
-    // auto t2 = std::chrono::steady_clock::now();
     // std::chrono::duration<float, std::milli> diff = t2 - t1;
     // fprintf(stderr, "Iteration time: %i ms.\n", (int)diff.count());
 }

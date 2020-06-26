@@ -72,6 +72,7 @@ void Creature::fillBroadcastData(CreatureData& data) const {
     data.name = this->name;
     data.creature_id = this->id;
     data.health = this->health_actual;
+    data.max_health = this->health_max;
 }
 
 const bool Creature::mustBeBroadcasted() const {

@@ -11,25 +11,36 @@ void Creature::_copyData(const CreatureData& init_data) {
     name = init_data.name;
     creature_id = init_data.creature_id;
     health = init_data.health;
-    // level = init_data.level;
+    max_health = init_data.max_health;
 }
 
 void Creature::_renderInfo() const {
-    // Primero el nivel
-    SDL_Rect level_quad = {0, 0, info_level.getWidth(), info_level.getHeight()};
+    // Primero la barra de vida
+    float relative_progress = ((float)health) / max_health;
+    SDL_Rect health_bar_bg = {0, 0, CREATURE_HEALTH_BAR_W,
+                              CREATURE_HEALTH_BAR_H};
 
     // Centramos las coordenadas
-    level_quad.x = (TILE_WIDTH - level_quad.w) / 2;
-    level_quad.y = (TILE_HEIGHT * (0.8)) - level_quad.h -
-                   g_sprites->get(creature_id).clip_h - INFO_SPACE_FROM_HEAD;
+    health_bar_bg.x = (TILE_WIDTH - health_bar_bg.w) / 2;
+    health_bar_bg.y = (TILE_HEIGHT * (0.8)) - health_bar_bg.h -
+                      g_sprites->get(creature_id).clip_h - INFO_SPACE_FROM_HEAD;
 
     // Le agregamos offsets de la unidad
-    level_quad.x += (int)this->x;
-    level_quad.y += (int)this->y;
+    health_bar_bg.x += (int)this->x;
+    health_bar_bg.y += (int)this->y;
 
-    SDL_Rect nick_quad = level_quad;
+    SDL_Rect health_bar = health_bar_bg;
+    health_bar.w *= relative_progress;
+    health_bar.x += 1;
+    health_bar.y += 1;
+    health_bar.w -= 2;
+    health_bar.h -= 2;
 
-    g_renderer->renderIfVisible(info_level.getTexture(), &level_quad);
+    SDL_Rect nick_quad = health_bar_bg;
+
+    // renderizar aca las barras
+    g_renderer->fillQuadIfVisible(&health_bar_bg);
+    g_renderer->fillQuadIfVisible(&health_bar, CREATURE_HEALTH_BAR_COLOR);
 
     // Ahora el nickname
     nick_quad.w = info_nickname.getWidth();
@@ -54,9 +65,7 @@ void Creature::_renderInfo() const {
 
 Creature::Creature(Renderer* renderer, UnitSpriteContainer* sprites,
                    TTF_Font* g_nickname_font, TTF_Font* g_level_font)
-    : Unit(renderer, sprites),
-      g_nickname_font(g_nickname_font),
-      g_level_font(g_level_font) {}
+    : Unit(renderer, sprites), g_nickname_font(g_nickname_font) {}
 
 void Creature::init(const CreatureData& init_data) {
     if (state) {
@@ -67,7 +76,7 @@ void Creature::init(const CreatureData& init_data) {
     _copyData(init_data);
 
     /* Cargamos la info */
-    if (!g_nickname_font || !g_level_font) {
+    if (!g_nickname_font) {
         throw Exception("Player::init: Fonts not initialized.");
     }
 
@@ -75,8 +84,6 @@ void Creature::init(const CreatureData& init_data) {
                                        CREATURE_NICKNAME_COLOR);
     info_nickname_shadow.loadFromRenderedText(g_renderer, g_nickname_font, name,
                                               SDL_Color({0, 0, 0, 255}));
-    info_level.loadFromRenderedText(g_renderer, g_level_font,
-                                    "Nivel " + std::to_string(99));
 
     /* Seteamos nuestra posición en pixeles para el renderizado */
     x = TILE_WIDTH * data.x_tile;
@@ -91,14 +98,6 @@ void Creature::update(const CreatureData& updated_data) {
         throw Exception(
             "Creature has not been initialized (update requested).");
     }
-
-    /* Verificamos si hay que modificar la info */
-    /*
-    if (level != updated_data.level) {
-        info_level.loadFromRenderedText(g_renderer, g_level_font,
-                                        "Nivel " + std::to_string(level));
-    }
-    */
 
     /* Actualizamos la data */
     _copyData(updated_data);
