@@ -222,19 +222,26 @@ void Map::occupyTile(InstanceId id, const int x, const int y) {
     tile.occupant_id = id;
 }
 
+void Map::addItem(const Id item_id, const int x, const int y) {
+    Tile& tile = this->_getTile(x, y);
+    tile.item_id = item_id;
+}
+
 void Map::addItem(const Id item_id, int& x, int& y,
                   const Orientation& orientation) {
     bool empty_tile_found = false;
 
     Tile& tile = this->_getTile(x, y);
-    fprintf(stderr, "Map::addItem DEBUG: intento agregar en x = %i, y = %i\n", x, y);
+    fprintf(stderr, "Map::addItem DEBUG: intento agregar en x = %i, y = %i\n",
+            x, y);
     if (!tile.item_id) {
         tile.item_id = item_id;
         empty_tile_found = true;
     }
     // HABRIA QUE PONERLE ALGUN LIMITE A ESTE LOOP DE MAXIMA PROFUNDIDAD.
     while (!empty_tile_found) {
-        for (int i = orientation; i < N_ORIENTATIONS; i = (i + 1) % N_ORIENTATIONS) {
+        for (int i = orientation; i < N_ORIENTATIONS;
+             i = (i + 1) % N_ORIENTATIONS) {
             switch (i) {
                 case UP_ORIENTATION: {
                     if (y == 0)
@@ -263,7 +270,7 @@ void Map::addItem(const Id item_id, int& x, int& y,
                 case RIGHT_ORIENTATION: {
                     if (x == this->w)
                         continue;
-                    
+
                     ++x;
                     break;
                 }
@@ -273,7 +280,9 @@ void Map::addItem(const Id item_id, int& x, int& y,
             }
 
             tile = this->_getTile(x, y);
-            fprintf(stderr, "Map::addItem DEBUG: intento agregar en x = %i, y = %i\n", x, y);
+            fprintf(stderr,
+                    "Map::addItem DEBUG: intento agregar en x = %i, y = %i\n",
+                    x, y);
             if (!tile.item_id) {
                 tile.item_id = item_id;
                 empty_tile_found = true;

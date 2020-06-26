@@ -102,6 +102,9 @@ class Map {
     /* Ocupa una celda con un ocupante */
     void occupyTile(InstanceId id, const int x, const int y);
 
+    /* Pone un item en una celda */
+    void addItem(const Id item_id, const int x, const int y);
+
     /*
      * Busca el tile libre de item más cercano (en la linea direccional de la
      * orientacion recibida) al correspondiente a las coordenadas x e y
