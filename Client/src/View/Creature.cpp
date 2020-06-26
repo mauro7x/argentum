@@ -7,11 +7,11 @@ void Creature::_copyData(const CreatureData& init_data) {
     // Data básica
     data = init_data.basic_data;
 
-    // Ids gráficos
+    // Data del creature
+    name = init_data.name;
     creature_id = init_data.creature_id;
-
-    // Vida
     health = init_data.health;
+    // level = init_data.level;
 }
 
 void Creature::_renderInfo() const {
@@ -71,10 +71,10 @@ void Creature::init(const CreatureData& init_data) {
         throw Exception("Player::init: Fonts not initialized.");
     }
 
-    info_nickname.loadFromRenderedText(g_renderer, g_nickname_font,
-                                       "Un monstruo", CREATURE_NICKNAME_COLOR);
-    info_nickname_shadow.loadFromRenderedText(
-        g_renderer, g_nickname_font, "Un monstruo", SDL_Color({0, 0, 0, 255}));
+    info_nickname.loadFromRenderedText(g_renderer, g_nickname_font, name,
+                                       CREATURE_NICKNAME_COLOR);
+    info_nickname_shadow.loadFromRenderedText(g_renderer, g_nickname_font, name,
+                                              SDL_Color({0, 0, 0, 255}));
     info_level.loadFromRenderedText(g_renderer, g_level_font,
                                     "Nivel " + std::to_string(99));
 

@@ -7,17 +7,11 @@ void Character::_copyData(const CharacterData& init_data) {
     // Data básica
     data = init_data.basic_data;
 
-    // Nombre de usuario
+    // Data del character
     nickname = init_data.nickname;
-
-    // Cuerpo y cabeza
     head_id = init_data.head_id;
     body_id = init_data.body_id;
-
-    // Inventario
     equipment = init_data.equipment;
-
-    // Nivel
     level = init_data.level;
 }
 
