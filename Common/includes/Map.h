@@ -87,6 +87,9 @@ class Map {
     /* Obtiene un Tile de solo lectura */
     const Tile& getTile(const int x, const int y) const;
 
+    /* Devuelve una referencia al NPC_ID (gráfico) para escritura */
+    TileId& getNPC(const int x, const int y);
+
     const bool moveOccupant(const int x, const int y,
                             const Orientation& orientation);
 

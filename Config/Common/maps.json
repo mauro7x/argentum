@@ -40,7 +40,7 @@
         },
         "npcs": {
             "first_gid": 44,
-            "next_first_gid": 47,
+            "next_first_gid": 50,
             "filepath": "../Assets/Maps/Tilesets/03-npcs.json",
             "src": {
                 "dirpath": "../Assets/Tiles/NPCs/",
@@ -55,8 +55,8 @@
             }
         },
         "metadata": {
-            "first_gid": 47,
-            "next_first_gid": 50,
+            "first_gid": 50,
+            "next_first_gid": 53,
             "filepath": "../Assets/Maps/Tilesets/04-metadata.json",
             "src": {
                 "dirpath": "../Assets/Tiles/Metadata/",

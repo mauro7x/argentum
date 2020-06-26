@@ -87,7 +87,7 @@ class EventHandler {
 
     // Componentes externos para el handleo de ciertos eventos
     HUD& hud;
-    const MapView& map;
+    MapView& map;
     const Camera& camera;
     SDL_Rect inventory_box = {0};
     SDL_Rect camera_box = {0};
@@ -144,7 +144,7 @@ class EventHandler {
    public:
     /* Constructor */
     EventHandler(std::atomic_bool& exit, BlockingQueue<Command*>& commands,
-                 HUD& hud, const MapView& map, const Camera& camera);
+                 HUD& hud, MapView& map, const Camera& camera);
 
     /* Inicializa recursos */
     void init(const json& config, const float scale_factor_w,

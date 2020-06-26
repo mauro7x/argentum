@@ -62,6 +62,12 @@ class MapView {
     /* Selecciona el mapa indicado por el id. Si cambia, devuelve true. */
     bool selectMap(const Id id);
 
+    /* Seleccionar un NPC en un tile */
+    void selectNPC(const int x_tile, const int y_tile);
+
+    /* Desselecciona al NPC en un tile */
+    void clearSelectedNPC(const int x_tile, const int y_tile);
+
     /* Settea el ocupante de una celda */
     void occupyTile(InstanceId id, const int x_tile, const int y_tile);
 

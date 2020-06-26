@@ -45,6 +45,24 @@ bool MapView::selectMap(const Id id) {
     return true;
 }
 
+void MapView::selectNPC(const int x_tile, const int y_tile) {
+    if (!current_map) {
+        throw Exception("MapView:: current_map is NULL!");
+    }
+
+    TileId& npc_id = current_map->getNPC(x_tile, y_tile);
+    npc_id++;
+}
+
+void MapView::clearSelectedNPC(const int x_tile, const int y_tile) {
+    if (!current_map) {
+        throw Exception("MapView:: current_map is NULL!");
+    }
+
+    TileId& npc_id = current_map->getNPC(x_tile, y_tile);
+    npc_id--;
+}
+
 void MapView::occupyTile(InstanceId id, const int x_tile, const int y_tile) {
     if (!current_map) {
         throw Exception("MapView:: current_map is NULL!");
