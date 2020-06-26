@@ -110,6 +110,12 @@ class HUD {
      * (retorna -1 si ningún slot fue clickeado) */
     int8_t getInventorySlotClicked(const SDL_Point& click_pos);
 
+    /* Selecciona un item del inventario */
+    void selectItem(uint8_t inventory_slot);
+
+    /* Elimina la selección */
+    void clearSelection();
+
     //-------------------------------------------------------------------------
 
     /* Actualiza su información */

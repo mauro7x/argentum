@@ -55,6 +55,7 @@ class UserInventory : public HUDComponent {
 
     // Texturas a renderizar
     Texture base;
+    Texture selection;
     EquipmentData equipment = {0};
     InventoryData inventory = {0};
     Texture safe_gold, excess_gold;
@@ -63,6 +64,8 @@ class UserInventory : public HUDComponent {
     std::array<Texture, N_INVENTORY_SLOTS> inventory_quantities;
     int current_safe_gold = 0;
     int current_excess_gold = 0;
+    bool item_selected = false;
+    SDL_Point item_selected_pos = {0};
 
     /* Centra una textura en un rectangulo */
     void _center(SDL_Point& texture_pos, const Texture& texture,
@@ -102,6 +105,12 @@ class UserInventory : public HUDComponent {
     /* Obtiene el slot del inventario que fue clickeado
      * (retorna -1 si ningún slot fue clickeado) */
     int8_t getInventorySlotClicked(const SDL_Point& click_pos);
+
+    /* Selecciona un item del inventario */
+    void selectItem(uint8_t inventory_slot);
+
+    /* Elimina la selección */
+    void clearSelection();
 
     /* Actualiza la información que se muestra */
     void update(const int it) override;

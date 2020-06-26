@@ -24,35 +24,6 @@ void UserInventory::_renderEquipment() const {
 
 void UserInventory::_renderInventory() const {
     SDL_Rect render_quad = {0};
-    /*
-    int slot_index = 0;
-
-    for (int row = 0; row < inventory_rows; row++) {
-        for (int col = 0; col < slots_per_row; col++) {
-            slot_index = row * slots_per_row + col;
-            if (inventory[slot_index].item) {
-                // Graficamos el item
-                render_quad = {
-                    first_inventory_slot.x + (col * offset_between_slots.x),
-                    first_inventory_slot.y + (row * offset_between_slots.y),
-                    slot_w, slot_h};
-                const Texture& item_texture =
-                    g_item_sprites[inventory[slot_index].item].texture;
-                g_renderer->render(item_texture.getTexture(), &render_quad);
-
-                // Graficamos la cantidad (corremos un poco manualmente el
-                // render_rect para que quede mas esquinado)
-                const Texture& amount_texture =
-                    inventory_quantities[slot_index];
-                render_quad = {
-                    first_inventory_slot.x + (col * offset_between_slots.x),
-                    first_inventory_slot.y + (row * offset_between_slots.y) - 2,
-                    amount_texture.getWidth(), amount_texture.getHeight()};
-                g_renderer->render(amount_texture.getTexture(), &render_quad);
-            }
-        }
-    }
-    */
 
     for (int i = 0; i < N_INVENTORY_SLOTS; i++) {
         if (inventory[i].item) {
@@ -71,6 +42,13 @@ void UserInventory::_renderInventory() const {
                            amount_texture.getHeight()};
             g_renderer->render(amount_texture.getTexture(), &render_quad);
         }
+    }
+
+    // De existir selección, la renderizamos
+    if (item_selected) {
+        render_quad = {item_selected_pos.x, item_selected_pos.y,
+                       selection.getWidth(), selection.getHeight()};
+        g_renderer->render(selection.getTexture(), &render_quad);
     }
 }
 
@@ -202,6 +180,7 @@ void UserInventory::loadMedia() {
 
     // Cargar media
     base.loadFromFile(g_renderer, HUD_USER_INVENTORY_BASE_FP);
+    selection.loadFromFile(g_renderer, HUD_USER_INVENTORY_SELECTED_FP);
 
     // Fuentes a utilizar
     quantities_font = TTF_OpenFont(FONT_CINZELBOLD_FP, quantities_fontsize);
@@ -245,6 +224,21 @@ int8_t UserInventory::getInventorySlotClicked(const SDL_Point& click_pos) {
     }
 
     return -1;
+}
+
+void UserInventory::selectItem(uint8_t inventory_slot) {
+    if ((inventory_slot >= N_INVENTORY_SLOTS) || (inventory_slot < 0)) {
+        throw Exception("UserInventory::selectItem: out of range.");
+    }
+
+    if (inventory.at(inventory_slot).item) {
+        item_selected = true;
+        item_selected_pos = inventory_slots.at(inventory_slot);
+    }
+}
+
+void UserInventory::clearSelection() {
+    item_selected = false;
 }
 
 void UserInventory::update(const int it) {
