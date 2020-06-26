@@ -79,11 +79,11 @@ class Unit {
     /* Deshabilitamos el operador= para copia.*/
     Unit& operator=(const Unit&) = delete;
 
-    /* Habilitamos el constructor por movimiento. */
-    Unit(Unit&& other);
+    /* Deshabilitamos el constructor por movimiento. */
+    Unit(Unit&& other) = delete;
 
-    /* Habilitamos el operador= para movimiento. */
-    Unit& operator=(Unit&& other);
+    /* Deshabilitamos el operador= para movimiento. */
+    Unit& operator=(Unit&& other) = delete;
 
     //-------------------------------------------------------------------------
 

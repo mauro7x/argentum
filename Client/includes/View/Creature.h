@@ -15,30 +15,23 @@
 
 class Creature : public Unit {
    private:
-    // Cuerpo
+    // Datos del monstruo
     Id creature_id = 0;
-
-    // Vida
     uint32_t health = 0;
+
+    // Texturas para el nickname
+    const TTF_Font* g_nickname_font; /* no se debe cerrar */
+    const TTF_Font* g_level_font;    /* no se debe cerrar */
+    Texture info_nickname;
+    Texture info_level;
 
     /* Copia la data desde el paquete recibido */
     void _copyData(const CreatureData& init_data);
 
    public:
     /* Constructor */
-    Creature(Renderer* renderer, UnitSpriteContainer* sprites);
-
-    /* Deshabilitamos el constructor por copia. */
-    Creature(const Creature&) = delete;
-
-    /* Deshabilitamos el operador= para copia.*/
-    Creature& operator=(const Creature&) = delete;
-
-    /* Habilitamos el constructor por movimiento. */
-    Creature(Creature&& other);
-
-    /* Habilitamos el operador= para movimiento. */
-    Creature& operator=(Creature&& other);
+    Creature(Renderer* renderer, UnitSpriteContainer* sprites,
+             const TTF_Font* g_nickname_font, const TTF_Font* g_level_font);
 
     //-------------------------------------------------------------------------
 

@@ -23,25 +23,12 @@ void Character::_copyData(const CharacterData& init_data) {
 //-----------------------------------------------------------------------------
 // API Pública
 
-Character::Character(Renderer* renderer, UnitSpriteContainer* sprites)
-    : Unit(renderer, sprites) {}
-
-Character::Character(Character&& other) : Unit(std::move(other)) {
-    nickname = other.nickname;
-    head_id = other.head_id;
-    body_id = other.body_id;
-    equipment = other.equipment;
-}
-
-Character& Character::operator=(Character&& other) {
-    Unit::operator=(std::move(other));
-    nickname = other.nickname;
-    head_id = other.head_id;
-    body_id = other.body_id;
-    equipment = other.equipment;
-
-    return *this;
-}
+Character::Character(Renderer* renderer, UnitSpriteContainer* sprites,
+                     const TTF_Font* g_nickname_font,
+                     const TTF_Font* g_level_font)
+    : Unit(renderer, sprites),
+      g_nickname_font(g_nickname_font),
+      g_level_font(g_level_font) {}
 
 void Character::init(const CharacterData& init_data) {
     if (state) {

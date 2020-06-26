@@ -86,6 +86,8 @@ void GameView::_loadMedia() {
     unit_sprites.loadMedia();
     item_sprites.loadMedia();
     player.loadMedia();
+    characters.loadMedia();
+    creatures.loadMedia();
     hud.loadMedia();
     map.loadMedia();
 }
@@ -219,6 +221,8 @@ void GameView::operator()() {
 GameView::~GameView() {
     // Es necesario liberar las fuentes utilizadas antes de llamar a TTF_Quit.
     player.free();
+    characters.free();
+    creatures.free();
     hud.free();
 
     Mix_Quit();

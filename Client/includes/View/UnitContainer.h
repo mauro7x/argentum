@@ -3,6 +3,7 @@
 
 //-----------------------------------------------------------------------------
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -15,6 +16,11 @@
 #include "../../../Common/includes/Exceptions/Exception.h"
 #include "../../../Common/includes/JSON.h"
 #include "../../../Common/includes/types.h"
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+#include "../defs.h"
+#include "../paths.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -31,6 +37,10 @@ class UnitContainer {
     Renderer* g_renderer;
     UnitSpriteContainer* g_sprites;
     std::unordered_map<InstanceId, ConcreteUnit> content;
+
+    // Fuentes
+    TTF_Font* nickname_font = NULL;
+    TTF_Font* level_font = NULL;
 
    public:
     /* Constructor */
@@ -51,15 +61,28 @@ class UnitContainer {
 
     //-------------------------------------------------------------------------
 
+    /* Carga la media necesaria */
+    void loadMedia() {
+        // Fuentes a utilizar
+        nickname_font = TTF_OpenFont(FONT_AUGUSTA_FP, INFO_NAME_FONTSIZE);
+        level_font = TTF_OpenFont(FONT_CINZELBOLD_FP, INFO_LVL_FONTSIZE);
+
+        if (!nickname_font || !level_font) {
+            throw Exception(
+                "UnitContainer::loadMedia: Error opening TTF_Font/s.");
+        }
+    }
+
     /* Agrega una nueva unidad con el id y la data recibida. */
     void add(const InstanceId id, const Data& init_data) {
         if (content.count(id) > 0) {
             throw Exception("ID already taken by another unit (id repeated).");
         }
 
-        ConcreteUnit new_unit(g_renderer, g_sprites);
-        new_unit.init(init_data);
-        content.emplace(id, std::move(new_unit));
+        content.emplace(std::piecewise_construct, std::forward_as_tuple(id),
+                        std::forward_as_tuple(g_renderer, g_sprites,
+                                              nickname_font, level_font));
+        content.at(id).init(init_data);
     }
 
     /* Actualiza la unidad con la data recibida. */
@@ -110,10 +133,25 @@ class UnitContainer {
         content.clear();
     }
 
+    /* Libera recursos */
+    void free() {
+        if (nickname_font) {
+            TTF_CloseFont(nickname_font);
+            nickname_font = NULL;
+        }
+
+        if (level_font) {
+            TTF_CloseFont(level_font);
+            level_font = NULL;
+        }
+    }
+
     //-------------------------------------------------------------------------
 
     /* Destructor */
-    ~UnitContainer() {}
+    ~UnitContainer() {
+        free();
+    }
 };
 
 //-----------------------------------------------------------------------------

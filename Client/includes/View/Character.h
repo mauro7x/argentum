@@ -2,6 +2,11 @@
 #define __CHARACTER_H__
 
 //-----------------------------------------------------------------------------
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
 #include "../../../Common/includes/Exceptions/Exception.h"
 #include "../../../Common/includes/defs.h"
 #include "../../../Common/includes/types.h"
@@ -15,28 +20,24 @@
 
 class Character : public Unit {
    private:
+    // Datos del personaje
     std::string nickname;
     Id head_id = 0, body_id = 0;
     EquipmentData equipment = {0};
+
+    // Texturas para el nickname
+    const TTF_Font* g_nickname_font; /* no se debe cerrar */
+    const TTF_Font* g_level_font;    /* no se debe cerrar */
+    Texture info_nickname;
+    Texture info_level;
 
     /* Copia la data desde el paquete recibido */
     void _copyData(const CharacterData& init_data);
 
    public:
     /* Constructor */
-    Character(Renderer* renderer, UnitSpriteContainer* sprites);
-
-    /* Deshabilitamos el constructor por copia. */
-    Character(const Character&) = delete;
-
-    /* Deshabilitamos el operador= para copia.*/
-    Character& operator=(const Character&) = delete;
-
-    /* Habilitamos el constructor por movimiento. */
-    Character(Character&& other);
-
-    /* Habilitamos el operador= para movimiento. */
-    Character& operator=(Character&& other);
+    Character(Renderer* renderer, UnitSpriteContainer* sprites,
+              const TTF_Font* g_nickname_font, const TTF_Font* g_level_font);
 
     //-------------------------------------------------------------------------
 

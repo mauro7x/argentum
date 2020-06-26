@@ -19,21 +19,12 @@ void Creature::_copyData(const CreatureData& init_data) {
 //-----------------------------------------------------------------------------
 // API Pública
 
-Creature::Creature(Renderer* renderer, UnitSpriteContainer* sprites)
-    : Unit(renderer, sprites) {}
-
-Creature::Creature(Creature&& other) : Unit(std::move(other)) {
-    creature_id = other.creature_id;
-    health = other.health;
-}
-
-Creature& Creature::operator=(Creature&& other) {
-    Unit::operator=(std::move(other));
-    creature_id = other.creature_id;
-    health = other.health;
-
-    return *this;
-}
+Creature::Creature(Renderer* renderer, UnitSpriteContainer* sprites,
+                   const TTF_Font* g_nickname_font,
+                   const TTF_Font* g_level_font)
+    : Unit(renderer, sprites),
+      g_nickname_font(g_nickname_font),
+      g_level_font(g_level_font) {}
 
 void Creature::init(const CreatureData& init_data) {
     if (state) {
