@@ -6,7 +6,8 @@
 #include "../../../Common/includes/RandomNumberGenerator.h"
 //-----------------------------------------------------------------------------
 #include "../../includes/Control/ActiveClients.h"
-#include "../../includes/Control/NotificationBroadcast.h"
+#include "../../includes/Control/EntityBroadcast.h"
+#include "../../includes/Control/ItemBroadcast.h"
 #include "../../includes/Control/NotificationReply.h"
 //-----------------------------------------------------------------------------
 #include "../../includes/Model/Game.h"
@@ -15,7 +16,7 @@
 #define RATE 1000 / 30
 #define MAX_CREATURES_PER_MAP 20
 #define TIME_TO_SPAWN_CREATURE 3000           // en ms
-#define TIME_TO_DISSAPEAR_DROPPED_ITEM 30000  // en ms
+#define TIME_TO_DISSAPEAR_DROPPED_ITEM 15000  // en ms
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -45,7 +46,7 @@ MapCreaturesInfo::MapCreaturesInfo(unsigned int amount_of_creatures,
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-// Métodos de broadcast
+// Funciones auxiliares
 //-----------------------------------------------------------------------------
 
 const std::string _coordinatesToMapKey(int x, int y) {
@@ -56,8 +57,8 @@ void _mapKeyToCoordinates(const std::string& key, int& x, int& y) {
     std::size_t delim = key.find(',');
     x = std::stoi(key.substr(0, delim));
     y = std::stoi(key.substr(delim + 1));
-    fprintf(stderr, "DEBUG _mapKeyToCoordinates: key = %s --> x = %i, y = %i",
-            key.c_str(), x, y);
+    fprintf(stderr, "mapKeyToCoord: key = %s x = %i, y = %i \n", key.c_str(), x,
+            y);
 }
 
 //-----------------------------------------------------------------------------
@@ -76,7 +77,7 @@ Notification* Game::_buildPlayerBroadcast(InstanceId id,
     character.fillBroadcastData(player_data);
 
     Notification* broadcast =
-        new NotificationBroadcast(id, player_data, broadcast_type);
+        new EntityBroadcast(id, player_data, broadcast_type);
 
     return broadcast;
 }
@@ -89,7 +90,7 @@ Notification* Game::_buildCreatureBroadcast(InstanceId id,
     creature.fillBroadcastData(creature_data);
 
     Notification* broadcast =
-        new NotificationBroadcast(id, creature_data, broadcast_type);
+        new EntityBroadcast(id, creature_data, broadcast_type);
 
     return broadcast;
 }
@@ -99,11 +100,10 @@ Notification* Game::_buildItemBroadcast(Id map_id, int x_coord, int y_coord,
     ItemData data;
     data.item_id =
         this->map_container[map_id].getTile(x_coord, y_coord).item_id;
-    data.map = map_id;
     data.x_tile = x_coord;
     data.y_tile = y_coord;
 
-    Notification* broadcast = new NotificationBroadcast(data, broadcast_type);
+    Notification* broadcast = new ItemBroadcast(data, map_id, broadcast_type);
 
     return broadcast;
 }
@@ -133,7 +133,8 @@ void Game::_pushItemDifferentialBroadcast(Id map_id, int x_coord, int y_coord,
                                           BroadcastType broadcast_type) {
     Notification* broadcast =
         _buildItemBroadcast(map_id, x_coord, y_coord, broadcast_type);
-
+    fprintf(stderr, "Construyo item broadcasttype=%i, con x=%i, y=%i, map=%i\n",
+            broadcast_type, x_coord, y_coord, map_id);
     this->active_clients.sendDifferentialBroadcastToAll(broadcast, 0, false);
 }
 
@@ -391,6 +392,12 @@ void Game::updateDroppedItemsLifetime(const int it) {
                 int x, y;
                 _mapKeyToCoordinates(dropped_items_iterator->first, x, y);
                 this->map_container[map_iterator->first].clearTileItem(x, y);
+                _pushItemDifferentialBroadcast(map_iterator->first, x, y,
+                                               DELETE_BROADCAST);
+                dropped_items_iterator =
+                    map_iterator->second.erase(dropped_items_iterator);
+                fprintf(stderr, "Borro el item en x=%i, y=%i\n", x, y);
+                continue;
             }
 
             ++dropped_items_iterator;
@@ -531,10 +538,7 @@ void Game::drop(const InstanceId caller, const uint8_t n_slot,
                 const uint32_t amount) {
     fprintf(stderr, "Game::drop: dropear slot %i cantidad %i\n", n_slot,
             amount);
-    fprintf(stderr,
-            "ITEM BROADCAST AUN NO IMPLEMENTADO EN EL CLIENTE. SIN EFECTO.\n");
-    return;
-    
+
     if (!this->characters.count(caller)) {
         throw Exception("Game::equip: unknown caller.");
     }
@@ -570,7 +574,6 @@ void Game::drop(const InstanceId caller, const uint8_t n_slot,
     }
 
     Id map_id = character.getMapId();
-    fprintf(stderr, "Se agrego al mapa\n");
 
     // Agrego elemento al mapa de dropped items cooldown
     const std::string key = std::move(_coordinatesToMapKey(x, y));

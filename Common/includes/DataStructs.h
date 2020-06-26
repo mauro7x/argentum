@@ -50,7 +50,6 @@ struct CreatureData {
 
 struct ItemData {
     Id item_id;
-    Id map;
     int x_tile, y_tile;
 };
 

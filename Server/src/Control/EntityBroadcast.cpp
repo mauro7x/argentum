@@ -1,11 +1,9 @@
-#include "../../includes/Control/NotificationBroadcast.h"
+#include "../../includes/Control/EntityBroadcast.h"
 
 #include <cstdint>
 #include <vector>
 
-typedef std::vector<uint8_t> Serialized;
-
-NotificationBroadcast::NotificationBroadcast(InstanceId id, PlayerData& data,
+EntityBroadcast::EntityBroadcast(InstanceId id, PlayerData& data,
                                              BroadcastType broadcast_type)
     : id(id),
       map(data.basic_data.map),
@@ -14,7 +12,9 @@ NotificationBroadcast::NotificationBroadcast(InstanceId id, PlayerData& data,
     j = data;
 }
 
-NotificationBroadcast::NotificationBroadcast(InstanceId id, CreatureData& data,
+EntityBroadcast::~EntityBroadcast() {}
+
+EntityBroadcast::EntityBroadcast(InstanceId id, CreatureData& data,
                                              BroadcastType broadcast_type)
     : id(id),
       map(data.basic_data.map),
@@ -23,17 +23,8 @@ NotificationBroadcast::NotificationBroadcast(InstanceId id, CreatureData& data,
     j = data;
 }
 
-NotificationBroadcast::NotificationBroadcast(ItemData& data,
-                                             BroadcastType broadcast_type)
-    : id(0),
-      map(data.map),
-      broadcast_type(broadcast_type),
-      entity_type(ITEM_TYPE) {
-    j = data;
-}
-
-NotificationBroadcast::NotificationBroadcast(
-    const NotificationBroadcast& other) {
+EntityBroadcast::EntityBroadcast(
+    const EntityBroadcast& other) {
     this->id = other.id;
     this->map = other.map;
     this->broadcast_type = other.broadcast_type;
@@ -41,8 +32,8 @@ NotificationBroadcast::NotificationBroadcast(
     this->j = other.j;
 }
 
-NotificationBroadcast& NotificationBroadcast::operator=(
-    const NotificationBroadcast& other) {
+EntityBroadcast& EntityBroadcast::operator=(
+    const EntityBroadcast& other) {
     this->id = other.id;
     this->map = other.map;
     this->broadcast_type = other.broadcast_type;
@@ -51,7 +42,7 @@ NotificationBroadcast& NotificationBroadcast::operator=(
     return *this;
 }
 
-bool NotificationBroadcast::send(const InstanceId sender,
+bool EntityBroadcast::send(const InstanceId sender,
                                  const SocketWrapper& peer) {
     Serialized serialized = json::to_msgpack(j);
 
@@ -62,15 +53,15 @@ bool NotificationBroadcast::send(const InstanceId sender,
         this->entity_type = PLAYER_TYPE;
     }
     size_t send = 0;
-    send = peer << (char)BROADCAST_OPCODE;
+    send = peer << (uint8_t)BROADCAST_OPCODE;
     if (!send) {
         return false;
     }
-    send = peer << (char)broadcast_type;
+    send = peer << (uint8_t)broadcast_type;
     if (!send) {
         return false;
     }
-    send = peer << (char)entity_type;
+    send = peer << (uint8_t)entity_type;
     if (!send) {
         return false;
     }
@@ -88,10 +79,14 @@ bool NotificationBroadcast::send(const InstanceId sender,
     return true;
 }
 
-const Id NotificationBroadcast::getMapId() const {
+const Id EntityBroadcast::getMapId() const {
     return this->map;
 }
 
-const bool NotificationBroadcast::isBroadcast() const {
+const bool EntityBroadcast::isBroadcast() const {
     return true;
+}
+
+const EntityType EntityBroadcast::getEntityType() const {
+    return this->entity_type;
 }

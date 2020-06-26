@@ -1,5 +1,7 @@
 #include "../../includes/Control/ActiveClients.h"
-#include "../../includes/Control/NotificationBroadcast.h"
+
+#include "../../includes/Control/EntityBroadcast.h"
+#include "../../includes/Control/ItemBroadcast.h"
 //-----------------------------------------------------------------------------
 
 ActiveClients::ActiveClients(
@@ -50,8 +52,13 @@ void ActiveClients::sendDifferentialBroadcastToAll(
             continue;
         }
 
-        broadcast_copy =
-            new NotificationBroadcast(*((NotificationBroadcast*)broadcast));
+        if (broadcast->getEntityType() == ITEM_TYPE) {
+            broadcast_copy = 
+                new ItemBroadcast(*((ItemBroadcast*)broadcast));
+        } else {
+            broadcast_copy =
+                new EntityBroadcast(*((EntityBroadcast*)broadcast));
+        }
         it->second->push(broadcast_copy);
         ++it;
     }

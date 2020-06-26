@@ -135,7 +135,7 @@ Broadcast:
     2 opciones:
         encolamos PLAYER IDS + TYPE [NEW, DELETE, UPDATE].
 
-        encolamos NotificationBroadcast
+        encolamos EntityBroadcast
 
 
 
@@ -144,7 +144,7 @@ Broadcast:
     2 opciones:
         encolamos PLAYER IDS.
 
-        encolamos NotificationBroadcast
+        encolamos EntityBroadcast
 
 
 std::map<PlayerId, PlayerData>
