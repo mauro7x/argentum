@@ -24,39 +24,82 @@ SDL_Rect MapView::_getRenderQuad(const Texture& texture, const int x_tile,
 //-----------------------------------------------------------------------------
 // API Pública
 
-MapView::MapView(const Renderer* renderer)
-    : g_renderer(renderer), tiles(renderer) {}
+MapView::MapView(const Renderer* renderer,
+                 const ItemSpriteContainer& item_sprites)
+    : g_renderer(renderer), tiles(renderer), item_sprites(item_sprites) {}
 
 void MapView::loadMedia() {
     tiles.loadMedia();
     maps.loadMaps();
 }
 
-void MapView::changeMap(const Id id) {
+bool MapView::selectMap(const Id id) {
+    if ((current_map_id == id) && (current_map != NULL)) {
+        return false;
+    }
+
     current_map_id = id;
-    const Map& current_map = maps[current_map_id];
-    w_tiles = current_map.getWidthTiles();
-    h_tiles = current_map.getHeightTiles();
+    this->current_map = &maps[current_map_id];
+    w_tiles = current_map->getWidthTiles();
+    h_tiles = current_map->getHeightTiles();
+    return true;
 }
 
 void MapView::occupyTile(InstanceId id, const int x_tile, const int y_tile) {
-    Map& current_map = maps[current_map_id];
-    current_map.occupyTile(id, x_tile, y_tile);
+    if (!current_map) {
+        throw Exception("MapView:: current_map is NULL!");
+    }
+
+    current_map->occupyTile(id, x_tile, y_tile);
 }
 
-void MapView::clearTileOcuppant(const int x_tile, const int y_tile) {
-    Map& current_map = maps[current_map_id];
-    current_map.clearTileOcuppant(x_tile, y_tile);
+void MapView::addItem(Id id, const int x_tile, const int y_tile) {
+    if (!current_map) {
+        throw Exception("MapView:: current_map is NULL!");
+    }
+
+    current_map->addItem(id, x_tile, y_tile);
+}
+
+void MapView::clearTileOccupant(const int x_tile, const int y_tile) {
+    if (!current_map) {
+        throw Exception("MapView:: current_map is NULL!");
+    }
+
+    current_map->clearTileOccupant(x_tile, y_tile);
+}
+
+void MapView::clearTileItem(const int x_tile, const int y_tile) {
+    if (!current_map) {
+        throw Exception("MapView:: current_map is NULL!");
+    }
+
+    current_map->clearTileItem(x_tile, y_tile);
+}
+
+void MapView::clear() {
+    int w_tiles = current_map->getWidthTiles();
+    int h_tiles = current_map->getHeightTiles();
+
+    for (int y = 0; y < h_tiles; y++) {
+        for (int x = 0; x < w_tiles; x++) {
+            current_map->clearTileItem(x, y);
+            current_map->clearTileOccupant(x, y);
+        }
+    }
 }
 
 void MapView::renderGround() const {
-    const Map& current_map = maps[current_map_id];
+    if (!current_map) {
+        throw Exception("MapView:: current_map is NULL!");
+    }
+
     SDL_Rect render_quad = {0};
 
     /* Primera capa */
     for (int y = 0; y < h_tiles; y++) {
         for (int x = 0; x < w_tiles; x++) {
-            const Tile& current_tile = current_map.getTile(x, y);
+            const Tile& current_tile = current_map->getTile(x, y);
 
             if (current_tile.ground_1_id) {
                 const Texture& texture = tiles[current_tile.ground_1_id];
@@ -69,7 +112,7 @@ void MapView::renderGround() const {
     /* Segunda capa */
     for (int y = 0; y < h_tiles; y++) {
         for (int x = 0; x < w_tiles; x++) {
-            const Tile& current_tile = current_map.getTile(x, y);
+            const Tile& current_tile = current_map->getTile(x, y);
 
             if (current_tile.ground_2_id) {
                 const Texture& texture = tiles[current_tile.ground_2_id];
@@ -81,11 +124,14 @@ void MapView::renderGround() const {
 }
 
 void MapView::renderDecoration(const int row) const {
-    const Map& current_map = maps[current_map_id];
+    if (!current_map) {
+        throw Exception("MapView:: current_map is NULL!");
+    }
+
     SDL_Rect render_quad = {0};
 
     for (int x = 0; x < w_tiles; x++) {
-        const Tile& current_tile = current_map.getTile(x, row);
+        const Tile& current_tile = current_map->getTile(x, row);
 
         if (current_tile.decoration_id) {
             const Texture& texture = tiles[current_tile.decoration_id];
@@ -96,11 +142,14 @@ void MapView::renderDecoration(const int row) const {
 }
 
 void MapView::renderNPCs(const int row) const {
-    const Map& current_map = maps[current_map_id];
+    if (!current_map) {
+        throw Exception("MapView:: current_map is NULL!");
+    }
+
     SDL_Rect render_quad = {0};
 
     for (int x = 0; x < w_tiles; x++) {
-        const Tile& current_tile = current_map.getTile(x, row);
+        const Tile& current_tile = current_map->getTile(x, row);
 
         if (current_tile.npc_id) {
             const Texture& texture = tiles[current_tile.npc_id];
@@ -110,13 +159,34 @@ void MapView::renderNPCs(const int row) const {
     }
 }
 
+void MapView::renderItems(const int row) const {
+    if (!current_map) {
+        throw Exception("MapView:: current_map is NULL!");
+    }
+
+    SDL_Rect render_quad = {0};
+
+    for (int x = 0; x < w_tiles; x++) {
+        const Tile& current_tile = current_map->getTile(x, row);
+
+        if (current_tile.item_id) {
+            const Texture& texture = item_sprites[current_tile.item_id].texture;
+            render_quad = _getRenderQuad(texture, x, row);
+            g_renderer->renderIfVisible(texture.getTexture(), &render_quad);
+        }
+    }
+}
+
 void MapView::renderRoofs() const {
-    const Map& current_map = maps[current_map_id];
+    if (!current_map) {
+        throw Exception("MapView:: current_map is NULL!");
+    }
+
     SDL_Rect render_quad = {0};
 
     for (int y = 0; y < h_tiles; y++) {
         for (int x = 0; x < w_tiles; x++) {
-            const Tile& current_tile = current_map.getTile(x, y);
+            const Tile& current_tile = current_map->getTile(x, y);
 
             if (current_tile.roof_id) {
                 const Texture& texture = tiles[current_tile.roof_id];
@@ -128,12 +198,15 @@ void MapView::renderRoofs() const {
 }
 
 void MapView::renderShadowOutdoor() const {
-    const Map& current_map = maps[current_map_id];
+    if (!current_map) {
+        throw Exception("MapView:: current_map is NULL!");
+    }
+
     SDL_Rect render_quad = {0};
 
     for (int y = 0; y < h_tiles; y++) {
         for (int x = 0; x < w_tiles; x++) {
-            const Tile& current_tile = current_map.getTile(x, y);
+            const Tile& current_tile = current_map->getTile(x, y);
 
             if (!(current_tile.indoor)) {
                 /* Renderizar una textura negra */
@@ -148,36 +221,61 @@ void MapView::renderShadowOutdoor() const {
 }
 
 InstanceId MapView::getOccupant(const int x, const int y) const {
-    const Map& current_map = maps[current_map_id];
-    const Tile& current_tile = current_map.getTile(x, y);
+    if (!current_map) {
+        throw Exception("MapView:: current_map is NULL!");
+    }
+
+    const Tile& current_tile = current_map->getTile(x, y);
     return current_tile.occupant_id;
 }
 
 Id MapView::getNPC(const int x, const int y) const {
-    const Map& current_map = maps[current_map_id];
-    const Tile& current_tile = current_map.getTile(x, y);
+    if (!current_map) {
+        throw Exception("MapView:: current_map is NULL!");
+    }
+
+    const Tile& current_tile = current_map->getTile(x, y);
     return current_tile.npc;
 }
 
 bool MapView::indoor(const int x, const int y) const {
-    const Map& current_map = maps[current_map_id];
-    const Tile& current_tile = current_map.getTile(x, y);
+    if (!current_map) {
+        throw Exception("MapView:: current_map is NULL!");
+    }
+
+    const Tile& current_tile = current_map->getTile(x, y);
     return current_tile.indoor;
 }
 
 int MapView::widthInTiles() const {
+    if (!current_map) {
+        throw Exception("MapView:: current_map is NULL!");
+    }
+
     return w_tiles;
 }
 
 int MapView::heightInTiles() const {
+    if (!current_map) {
+        throw Exception("MapView:: current_map is NULL!");
+    }
+
     return h_tiles;
 }
 
 int MapView::widthInPx() const {
+    if (!current_map) {
+        throw Exception("MapView:: current_map is NULL!");
+    }
+
     return w_tiles * TILE_WIDTH;
 }
 
 int MapView::heightInPx() const {
+    if (!current_map) {
+        throw Exception("MapView:: current_map is NULL!");
+    }
+
     return h_tiles * TILE_HEIGHT;
 }
 

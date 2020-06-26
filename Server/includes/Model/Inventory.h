@@ -6,8 +6,8 @@
 #include <exception>
 #include <map>
 
+#include "../../../Common/includes/DataStructs.h"
 #include "../../../Common/includes/Inventory.h"
-#include "../../../Common/includes/UnitData.h"
 #include "Item.h"
 #include "ItemsContainer.h"
 #include "Level.h"

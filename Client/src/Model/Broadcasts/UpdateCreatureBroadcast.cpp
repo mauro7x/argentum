@@ -16,7 +16,7 @@ void UpdateCreatureBroadcast::exec(
     UnitContainer<Character, CharacterData>& characters,
     UnitContainer<Creature, CreatureData>& creatures) {
     SDL_Point old_pos = creatures.getPos(data.basic_data.gid);
-    map.clearTileOcuppant(old_pos.x, old_pos.y);
+    map.clearTileOccupant(old_pos.x, old_pos.y);
     creatures.update(data.basic_data.gid, data);
     map.occupyTile(data.basic_data.gid, data.basic_data.x_tile,
                    data.basic_data.y_tile);

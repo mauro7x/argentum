@@ -3,8 +3,8 @@
 
 #include <array>
 
+#include "../../../Common/includes/DataStructs.h"
 #include "../../../Common/includes/Inventory.h"
-#include "../../../Common/includes/UnitData.h"
 #include "ItemsContainer.h"
 #include "Wearable.h"
 

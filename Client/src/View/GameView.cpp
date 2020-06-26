@@ -169,7 +169,7 @@ GameView::GameView(BlockingQueue<Command*>& commands,
 
       // Componentes de la vista
       hud(&renderer, item_sprites, player),
-      map(&renderer),
+      map(&renderer, item_sprites),
 
       // Otros
       stage(map, player, characters, creatures),

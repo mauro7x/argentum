@@ -30,4 +30,4 @@ class UpdateCreatureBroadcast : public Broadcast {
 
 //-----------------------------------------------------------------------------
 
-#endif  // __UPDATE_CREATUR_BROADCAST_H__
+#endif  // __UPDATE_CREATURE_BROADCAST_H__

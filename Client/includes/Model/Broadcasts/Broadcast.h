@@ -2,7 +2,7 @@
 #define __BROADCAST_H__
 
 //-----------------------------------------------------------------------------
-#include "../../../../Common/includes/UnitData.h"
+#include "../../../../Common/includes/DataStructs.h"
 #include "../../View/Character.h"
 #include "../../View/Creature.h"
 #include "../../View/MapView.h"

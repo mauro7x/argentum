@@ -2,10 +2,10 @@
 #define __CREATURE_H__
 
 //-----------------------------------------------------------------------------
+#include "../../../Common/includes/DataStructs.h"
 #include "../../../Common/includes/MapContainer.h"
 #include "../../../Common/includes/Orientation.h"
 #include "../../../Common/includes/types.h"
-#include "../../../Common/includes/UnitData.h"
 //-----------------------------------------------------------------------------
 #include "config_structs.h"
 //-----------------------------------------------------------------------------

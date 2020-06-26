@@ -7,10 +7,10 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+#include "../../../../Common/includes/DataStructs.h"
 #include "../../../../Common/includes/JSON.h"
 #include "../../../../Common/includes/Protocol.h"
 #include "../../../../Common/includes/Socket/SocketWrapper.h"
-#include "../../../../Common/includes/UnitData.h"
 #include "../../../../Common/includes/json_conversion.h"
 //-----------------------------------------------------------------------------
 
@@ -21,8 +21,10 @@
 //-----------------------------------------------------------------------------
 #include "DeleteCharacterBroadcast.h"
 #include "DeleteCreatureBroadcast.h"
+#include "DeleteItemBroadcast.h"
 #include "NewCharacterBroadcast.h"
 #include "NewCreatureBroadcast.h"
+#include "NewItemBroadcast.h"
 #include "NewPlayerBroadcast.h"
 #include "UpdateCharacterBroadcast.h"
 #include "UpdateCreatureBroadcast.h"

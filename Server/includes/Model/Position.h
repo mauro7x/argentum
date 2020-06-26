@@ -3,9 +3,9 @@
 
 #include <exception>
 
+#include "../../../Common/includes/DataStructs.h"
 #include "../../../Common/includes/MapContainer.h"
 #include "../../../Common/includes/Orientation.h"
-#include "../../../Common/includes/UnitData.h"
 #include "../../../Common/includes/types.h"
 
 class Position {

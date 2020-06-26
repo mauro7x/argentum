@@ -1,4 +1,4 @@
-#include "../../../includes/Model/Broadcasts/DeleteCreatureBroadcast.h"
+#include "../../../includes/Model/Broadcasts/DeleteItemBroadcast.h"
 
 //-----------------------------------------------------------------------------
 // Métodos privados
@@ -8,19 +8,16 @@
 //-----------------------------------------------------------------------------
 // API Pública
 
-DeleteCreatureBroadcast::DeleteCreatureBroadcast(const InstanceId& id)
-    : Broadcast(), id(id) {}
+DeleteItemBroadcast::DeleteItemBroadcast(const int x, const int y)
+    : Broadcast(), x(x), y(y) {}
 
-void DeleteCreatureBroadcast::exec(
+void DeleteItemBroadcast::exec(
     MapView& map, Player& player,
     UnitContainer<Character, CharacterData>& characters,
     UnitContainer<Creature, CreatureData>& creatures) {
-    SDL_Point old_pos = creatures.getPos(id);
-    creatures.remove(id);
-
-    map.clearTileOccupant(old_pos.x, old_pos.y);
+    map.clearTileItem(x, y);
 }
 
-DeleteCreatureBroadcast::~DeleteCreatureBroadcast() {}
+DeleteItemBroadcast::~DeleteItemBroadcast() {}
 
 //-----------------------------------------------------------------------------

@@ -6,13 +6,13 @@
 #include "Equipment.h"
 #include "Inventory.h"
 #include "Item.h"
+#include "ItemsContainer.h"
 #include "Kind.h"
 #include "Level.h"
 #include "Position.h"
 #include "Race.h"
 #include "States.h"
 #include "Wearable.h"
-#include "ItemsContainer.h"
 //-----------------------------------------------------------------------------
 #include "../../../Common/includes/MapContainer.h"
 #include "../../../Common/includes/Orientation.h"
@@ -20,7 +20,7 @@
 //-----------------------------------------------------------------------------
 #include "config_structs.h"
 //-----------------------------------------------------------------------------
-#include "../../../Common/includes/UnitData.h"
+#include "../../../Common/includes/DataStructs.h"
 //-----------------------------------------------------------------------------
 
 /*
@@ -149,7 +149,7 @@ class Character {
     /*
      * Equipa un Wearable al Equipment en su slot, almacenando en el
      * inventario el Wearable anterior.
-     * 
+     *
      * Lanza InvalidPositionException si la posicion
      * especificada es invalida (fuera de rango).
      */
