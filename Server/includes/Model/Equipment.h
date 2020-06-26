@@ -43,6 +43,17 @@ class Equipment {
     Wearable* add(Wearable* item);
 
     /*
+     * Elimina el wearable en la posición n_slot del container,
+     * y lo devuelve.
+     *
+     * En caso de no haber wearable en dicha posición, retorna nullptr.
+     *
+     * Lanza InvalidEquipmentSlotNumberException si el n_slot
+     * recibido como argumento es inválido.
+     */
+    Wearable* remove(unsigned int n_slot);
+
+    /*
      * Devuelve los puntos de daño que causan
      * los elementos de ataque que el personaje lleva.
      *
@@ -71,8 +82,11 @@ class Equipment {
     const unsigned int getDefensePoints(Character& defender);
 
     void fillBroadcastData(PlayerData& data) const;
+};
 
-    void debug() const;  // Para testear
+class InvalidEquipmentSlotNumberException : public std::exception {
+   public:
+    virtual const char* what() const noexcept;
 };
 
 #endif

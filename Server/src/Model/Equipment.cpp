@@ -25,6 +25,15 @@ Wearable* Equipment::add(Wearable* item) {
     return prev_item;
 }
 
+Wearable* Equipment::remove(unsigned int n_slot) {
+    if (n_slot > this->container.size())
+        throw InvalidEquipmentSlotNumberException();
+    
+    Wearable* item = this->container[n_slot];
+    this->container[n_slot] = nullptr;
+    return item;
+}
+
 const unsigned int Equipment::useAttackItem(Character& attacker) {
     if (!this->container[WEAPON]) {
         return 0;
@@ -64,12 +73,7 @@ void Equipment::fillBroadcastData(PlayerData& data) const {
     }
 }
 
-void Equipment::debug() const {
-    std::cout << "Equipment:" << std::endl;
-    for (unsigned int i = 0; i < this->container.size(); ++i) {
-        if (this->container[i]) {
-            std::cout << "Posicion " << i << ": ";
-            std::cout << this->container[i]->what() << std::endl;
-        }
-    }
+const char* InvalidEquipmentSlotNumberException::what() const noexcept {
+    return "El numero de slot del equipamiento especificado es inválido.";
 }
+

@@ -50,9 +50,6 @@ const uint8_t Inventory::_getNextFreeSlot() const {
 }
 
 const uint8_t Inventory::addItem(Item* item, const unsigned int amount) {
-    if (this->occupied_slots >= this->slots.size())
-        throw FullInventoryException();
-
     uint8_t n_slot;
     const Id item_id = item->getId();
 
@@ -62,6 +59,9 @@ const uint8_t Inventory::addItem(Item* item, const unsigned int amount) {
         this->slots[n_slot].addItem(item, amount);
         return n_slot;
     }
+
+    if (this->occupied_slots >= this->slots.size())
+        throw FullInventoryException();
 
     // Busco un slot libre y lo agrego.
     n_slot = _getNextFreeSlot();
@@ -76,7 +76,7 @@ const uint8_t Inventory::addItem(Item* item, const unsigned int amount) {
 
 Item* Inventory::gatherItem(const uint8_t n_slot, unsigned int& amount) {
     if (n_slot >= N_INVENTORY_SLOTS)
-        throw InvalidPositionException();
+        throw InvalidInventorySlotNumberException();
 
     Slot& slot = this->slots[n_slot];
 
@@ -168,8 +168,8 @@ const char* FullInventoryException::what() const noexcept {
     return "No puede agregar más elementos al inventario.";
 }
 
-const char* InvalidPositionException::what() const noexcept {
-    return "La posición del inventario especificada es inválida.";
+const char* InvalidInventorySlotNumberException::what() const noexcept {
+    return "El numero de slot del inventario especificado es inválido.";
 }
 
 const char* InsufficientGoldException::what() const noexcept {

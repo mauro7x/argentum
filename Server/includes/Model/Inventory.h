@@ -77,7 +77,7 @@ class Inventory {
      *
      * En caso de no haber, retorna nullptr.
      *
-     * Lanza InvalidPositionException si la posicion
+     * Lanza InvalidInventorySlotNumberException si la posicion
      * especificada es invalida (fuera de rango).
      */
     Item* gatherItem(const uint8_t n_slot, unsigned int& amount);
@@ -121,7 +121,7 @@ class FullInventoryException : public std::exception {
     virtual const char* what() const noexcept;
 };
 
-class InvalidPositionException : public std::exception {
+class InvalidInventorySlotNumberException : public std::exception {
    public:
     virtual const char* what() const noexcept;
 };

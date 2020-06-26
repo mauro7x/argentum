@@ -150,10 +150,22 @@ class Character {
      * Equipa un Wearable al Equipment en su slot, almacenando en el
      * inventario el Wearable anterior.
      *
-     * Lanza InvalidPositionException si la posicion
+     * Lanza InvalidInventorySlotNumberException si la posicion
      * especificada es invalida (fuera de rango).
      */
     void equip(Wearable* item);
+
+    /*
+     * Recibe la posición del item en el equipamiento
+     * que se quiere desequipar.
+     * 
+     * Si no hay item en dicha posición, no hace nada.
+     * 
+     * Lanza FullInventoryException si no hay espacio en
+     * el inventario para el elemento desequipado, no pudiendo
+     * efectuarse el comando.
+     */
+    void unequip(unsigned int n_slot);
 
     /*
      * Toma amount items (del mismo tipo) y los agrega al inventario.
@@ -173,7 +185,7 @@ class Character {
      * 
      * Si no hay un item en dicha posicion, retorna nullptr.
      *
-     * Lanza InvalidPositionException si la posicion
+     * Lanza InvalidInventorySlotNumberException si la posicion
      * especificada es invalida (fuera de rango).
      */
     Item* dropItem(const unsigned int n_slot, unsigned int& amount);

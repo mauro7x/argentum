@@ -200,6 +200,23 @@ void Character::equip(Wearable* item) {
     this->broadcast = true;
 }
 
+void Character::unequip(unsigned int n_slot) {
+    Wearable* unequipped_item = this->equipment.remove(n_slot);
+
+    if (!unequipped_item)
+        return;
+
+    try {
+        this->inventory.addItem((Item*)unequipped_item, 1);
+    } catch (FullInventoryException()) {
+        // No se pudo agregar al inventario => lo devolvemos al equipment
+        this->equipment.add(unequipped_item);
+        throw FullInventoryException();
+    }
+
+    this->broadcast = true;
+}
+
 const unsigned int Character::takeItem(Item* item, unsigned int amount) {
     const unsigned int position = this->inventory.addItem(item, amount);
     this->broadcast = true;

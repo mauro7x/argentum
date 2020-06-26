@@ -470,7 +470,7 @@ void Game::equip(const InstanceId caller, const uint8_t n_slot) {
 
     try {
         character.equip(n_slot);
-    } catch (const InvalidPositionException& e) {
+    } catch (const InvalidInventorySlotNumberException& e) {
         Notification* reply = new NotificationReply(ERROR_MSG, e.what());
         active_clients.notify(caller, reply);
         return;
@@ -478,7 +478,22 @@ void Game::equip(const InstanceId caller, const uint8_t n_slot) {
 }
 
 void Game::unequip(const InstanceId caller, const uint8_t n_slot) {
-    fprintf(stderr, "Comando unequip no implementado.\n");
+    if (!this->characters.count(caller)) {
+        throw Exception("Game::unequip: unknown caller.");
+    }
+
+    fprintf(stderr, "unequip n_slot: %i \n", n_slot);
+
+    Character& character = this->characters.at(caller);
+
+    try {
+        character.unequip(n_slot);
+    } catch (const std::exception& e) {
+        // FullInventoryException e InvalidEquipmentSlotNumberException
+        Notification* reply = new NotificationReply(ERROR_MSG, e.what());
+        active_clients.notify(caller, reply);
+        return;
+    }
 }
 
 void Game::meditate(const InstanceId caller) {
@@ -576,7 +591,7 @@ void Game::drop(const InstanceId caller, const uint8_t n_slot,
 
     try {
         dropped = character.dropItem(n_slot, amount);
-    } catch (const InvalidPositionException& e) {
+    } catch (const InvalidInventorySlotNumberException& e) {
         Notification* reply = new NotificationReply(ERROR_MSG, e.what());
         active_clients.notify(caller, reply);
         return;
