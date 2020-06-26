@@ -2,6 +2,11 @@
 #define __PLAYER_H__
 
 //-----------------------------------------------------------------------------
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
 #include <array>
 #include <fstream>
 //-----------------------------------------------------------------------------
@@ -14,13 +19,24 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+#include "../defs.h"
+#include "../paths.h"
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+#include "Texture.h"
 #include "Unit.h"
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+#define PLAYER_NICKNAME_COLOR SDL_Color({255, 191, 0, 0})
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 
 class Player : public Unit {
    private:
+    // Datos del jugador
     std::string nickname;
     Id head_id = 0, body_id = 0;
     EquipmentData equipment = {0};
@@ -31,8 +47,22 @@ class Player : public Unit {
     uint32_t safe_gold = 0, excess_gold = 0;
     uint32_t level = 0, exp = 0, levelup_exp = 0;
 
+    // Texturas para el nickname
+    TTF_Font* nickname_font = NULL;
+    TTF_Font* level_font = NULL;
+    Texture info_nickname;
+    Texture info_level;
+
+    //-------------------------------------------------------------------------
+    // Métodos privados
+
     /* Copia la data desde el paquete recibido */
     void _copyData(const PlayerData& init_data);
+
+    /* Renderiza la información del personaje */
+    void _renderInfo() const;
+
+    //-------------------------------------------------------------------------
 
    public:
     /* Constructor */
@@ -55,11 +85,17 @@ class Player : public Unit {
     /* Se inicializa con el primer paquete del server */
     void init(const PlayerData& init_data);
 
+    /* Carga media necesaria */
+    void loadMedia();
+
     /* Actualizar información según lo que diga el servidor */
     void update(const PlayerData& updated_data);
 
     /* Renderizarse si se encuentra dentro de la cámara */
     void render() const override;
+
+    /* Libera recursos */
+    void free();
 
     /* Obtiene la posición y dimensiones en pixeles */
     SDL_Rect getBox() const;

@@ -37,7 +37,8 @@
 
 * Idea primitiva: inicializar los sistemas de SDL una sola vez (para la vista de login y para la del game) en Client.cpp con alguna función, por lo que en GameView podemos eliminar la función init y hacer la inicialización leyendo los jsons en el constructor. -Mau, 24/06.
 
-* Hacer alguna animación cuando clickeo un objeto del inventario (selección + doble click). -Mau, 25/06.
+* ~~Hacer alguna animación cuando clickeo un objeto del inventario (selección + doble click). -Mau, 25/06.~~
+    * **UPDATE:** done. -Mau, 26/06.
 
 ---
 
@@ -45,7 +46,7 @@
 
 * En muchos de los usos que le di a unordered_map habilité el constructor por movimiento porque no sabía que con emplace se podía evitar. Cambiar esto para todos los casos donde realmente no sea necesario moverlo. -Mau, 21/06.
 
-* Chat general. Cuando un jugador escribe algo, se debe broadcastear a todos como una notification reply que va en el chat como información. También se puede agregar un campo al PlayerData que sea el string de lo que mandó, y se manda un broadcast normal. -Mau, 23/06.
+* Chat general. Cuando un jugador escribe algo, se debe broadcastear a todos como una notification reply que va en el chat gral. -Mau, 23/06.
 
 * Endianness en el socket. -Santi, 25/06.
 

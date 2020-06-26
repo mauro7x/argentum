@@ -25,4 +25,12 @@ enum ExpectedArgs { NAME, EXPECTED_ARGC };
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+// Configuración de información de las unidades
+
+#define INFO_SPACE_FROM_HEAD 10 /* px */
+#define INFO_NAME_FONTSIZE 16   /* fontsize del nickname + lvl de c/ unidad */
+#define INFO_LVL_FONTSIZE 10    /* fontsize del nickname + lvl de c/ unidad */
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
 #endif  // __CLIENT_DEFS_H__
