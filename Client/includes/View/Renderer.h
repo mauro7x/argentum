@@ -85,8 +85,8 @@ class Renderer {
                   int a = 0xFF) const;
 
     /* Rellena el rectangulo si es visible por la camara */
-    void fillQuadIfVisible(SDL_Rect* quad, int r = 0, int g = 0, int b = 0,
-                           int a = 0xFF) const;
+    void fillQuadIfVisible(SDL_Rect* quad,
+                           SDL_Color color = {0, 0, 0, 255}) const;
 
     //-------------------------------------------------------------------------
 
