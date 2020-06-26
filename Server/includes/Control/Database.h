@@ -2,15 +2,14 @@
 #define __DATABASE_H__
 
 //-----------------------------------------------------------------------------
-#include <mutex>
-#include <string>
-#include <unordered_map>
-#include <cstring>
 #include <algorithm>
+#include <cstring>
 #include <fstream>
 #include <iostream>
 #include <limits>
-#include <cstring>
+#include <mutex>
+#include <string>
+#include <unordered_map>
 
 //-----------------------------------------------------------------------------
 
@@ -23,12 +22,11 @@
 
 //-----------------------------------------------------------------------------
 
-struct PlayerInfo{
+struct PlayerInfo {
     char username[8] = {0};
     char password[8] = {0};
     size_t position;
 };
-
 
 class Database {
    private:
@@ -36,14 +34,23 @@ class Database {
     size_t file_pointer;
     std::mutex m;
     std::unordered_map<std::string, CharacterCfg> clients; /* user: data */
-    std::unordered_map<std::string, size_t> data_index; /*user:data_index */
+    std::unordered_map<std::string, size_t> data_index;    /*user:data_index */
     std::unordered_map<std::string, std::string> player_infos; /*user:pass*/
 
-    std::fstream file_info;
-    std::fstream file_data;
     //-------------------------------------------------------------------------
     // Métodos privados
-    void _fillInfo (std::fstream& file);
+    /* Llenar las infos de cada jugador al map */
+    void _fillInfo();
+
+    /* Obtener el dato del jugador */
+    void _getPlayerData(const std::string& username);
+
+    /* Guardar info del jugador */
+    void _persistPlayerInfo(const std::string& username);
+
+    /* crear datos iniciales para el jugador nuevo*/
+    void _createDataInicial(const std::string& username, Id race, Id kind);
+
     //-------------------------------------------------------------------------
 
    public:
@@ -77,8 +84,10 @@ class Database {
     // El retorno va a tener que ser PlayerData en un futuro, por ahora proxy.
     void signUp(const std::string& username, const std::string& password,
                 Id race, Id kind, CharacterCfg& character_data);
-
     //-------------------------------------------------------------------------
+
+    /* Guardar los datos del jugador */
+    void persistPlayerData(const std::string& username);
 
     /* Destructor */
     ~Database();
