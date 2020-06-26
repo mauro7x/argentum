@@ -149,6 +149,11 @@ const Tile& Map::getTile(const int x, const int y) const {
     return tiles.at(tile);
 }
 
+TileId& Map::getNPC(const int x, const int y) {
+    Tile& tile = _getTile(x, y);
+    return tile.npc_id;
+}
+
 const bool Map::moveOccupant(const int x, const int y,
                              const Orientation& orientation) {
     Tile& from_tile = _getTile(x, y);

@@ -17,6 +17,11 @@ void EventHandler::_bindKeycodes() {
 }
 
 void EventHandler::_clearSelection() {
+    if (current_selection.npc_selected) {
+        map.clearSelectedNPC(current_selection.npc_x_tile,
+                             current_selection.npc_y_tile);
+    }
+
     current_selection.npc_selected = false;
     current_selection.npc_x_tile = 0;
     current_selection.npc_y_tile = 0;
@@ -253,7 +258,7 @@ SDL_Point EventHandler::_clickToTile(const SDL_Event& e) const {
 
 EventHandler::EventHandler(std::atomic_bool& exit,
                            BlockingQueue<Command*>& commands, HUD& hud,
-                           const MapView& map, const Camera& camera)
+                           MapView& map, const Camera& camera)
     : exit(exit),
       commands(commands),
       hud(hud),
@@ -373,13 +378,17 @@ void EventHandler::handleEvent(const SDL_Event& e) {
             // Si el tile tiene un NPC, lo seleccionamos para futuros comandos
             Id npc = map.getNPC(tile.x, tile.y);
             if (npc) {
+                if (current_selection.npc_selected) {
+                    map.clearSelectedNPC(current_selection.npc_x_tile,
+                                         current_selection.npc_y_tile);
+                }
+
                 current_selection.npc_selected = true;
                 current_selection.npc_x_tile = tile.x;
                 current_selection.npc_y_tile = tile.y;
-                hud.addMessage(
-                    ">> Has seleccionado a un NPC, ahora puedes enviarle "
-                    "comandos.",
-                    USER_CMD_MSG_COLOR);
+
+                map.selectNPC(current_selection.npc_x_tile,
+                              current_selection.npc_y_tile);
                 break;
             }
 
