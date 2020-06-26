@@ -57,8 +57,6 @@ void _mapKeyToCoordinates(const std::string& key, int& x, int& y) {
     std::size_t delim = key.find(',');
     x = std::stoi(key.substr(0, delim));
     y = std::stoi(key.substr(delim + 1));
-    fprintf(stderr, "mapKeyToCoord: key = %s x = %i, y = %i \n", key.c_str(), x,
-            y);
 }
 
 //-----------------------------------------------------------------------------
