@@ -231,15 +231,18 @@ void Map::addItem(const Id item_id, int& x, int& y,
         empty_tile_found = true;
     }
     // HABRIA QUE PONERLE ALGUN LIMITE A ESTE LOOP DE MAXIMA PROFUNDIDAD.
+    int step = 0;
+    int i = orientation;
     while (!empty_tile_found) {
-        for (int i = orientation; i < N_ORIENTATIONS;
-             i = (i + 1) % N_ORIENTATIONS) {
+        for (int j = 0; j < N_ORIENTATIONS; ++j) {
+            i = (i + j) % N_ORIENTATIONS;
+
             switch (i) {
                 case UP_ORIENTATION: {
                     if (y == 0)
                         continue;
 
-                    --y;
+                    y = y - 1 * step;
                     break;
                 }
 
@@ -247,7 +250,7 @@ void Map::addItem(const Id item_id, int& x, int& y,
                     if (y == this->h)
                         continue;
 
-                    ++y;
+                    y = y + 1 * step;
                     break;
                 }
 
@@ -255,7 +258,7 @@ void Map::addItem(const Id item_id, int& x, int& y,
                     if (x == 0)
                         continue;
 
-                    --x;
+                    x = x - 1 * step;
                     break;
                 }
 
@@ -263,7 +266,7 @@ void Map::addItem(const Id item_id, int& x, int& y,
                     if (x == this->w)
                         continue;
 
-                    ++x;
+                    x = x + 1 * step;
                     break;
                 }
 
@@ -271,18 +274,20 @@ void Map::addItem(const Id item_id, int& x, int& y,
                     throw(Exception("Map::addItem: Unknown orientation."));
             }
 
-            tile = this->_getTile(x, y);
+            Tile& tile = this->_getTile(x, y);
             fprintf(stderr,
                     "Map::addItem DEBUG: intento agregar en x = %i, y = %i\n",
                     x, y);
             fprintf(stderr, "item_id en tile: %i\n", tile.item_id);
             if (!tile.item_id) {
-                fprintf(stderr, "Se setea el item en el tile \n");
+                fprintf(stderr, "Se setea el item_id: %i en el tile \n",
+                        item_id);
                 tile.item_id = item_id;
                 empty_tile_found = true;
                 break;
             }
         }
+        ++step;
     }
 }
 
