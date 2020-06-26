@@ -131,8 +131,7 @@ void Game::_pushItemDifferentialBroadcast(Id map_id, int x_coord, int y_coord,
                                           BroadcastType broadcast_type) {
     Notification* broadcast =
         _buildItemBroadcast(map_id, x_coord, y_coord, broadcast_type);
-    fprintf(stderr, "Construyo item broadcasttype=%i, con x=%i, y=%i, map=%i\n",
-            broadcast_type, x_coord, y_coord, map_id);
+        
     this->active_clients.sendDifferentialBroadcastToAll(broadcast, 0, false);
 }
 

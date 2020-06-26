@@ -14,6 +14,8 @@ ItemBroadcast::~ItemBroadcast() {}
 
 ItemBroadcast::ItemBroadcast(const ItemBroadcast& other) {
     this->map = other.map;
+    this->x_coord = other.x_coord;
+    this->y_coord = other.y_coord;
     this->broadcast_type = other.broadcast_type;
     this->entity_type = other.entity_type;
     this->j = other.j;
@@ -21,6 +23,8 @@ ItemBroadcast::ItemBroadcast(const ItemBroadcast& other) {
 
 ItemBroadcast& ItemBroadcast::operator=(const ItemBroadcast& other) {
     this->map = other.map;
+    this->x_coord = other.x_coord;
+    this->y_coord = other.y_coord;
     this->broadcast_type = other.broadcast_type;
     this->entity_type = other.entity_type;
     this->j = other.j;
