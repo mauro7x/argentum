@@ -28,9 +28,7 @@ void Stage::render() const {
         InstanceId unit_id;
 
         for (int row = 0; row < map_rows; row++) {
-            g_map.renderDecoration(row);
-            g_map.renderNPCs(row);
-            g_map.renderItems(row);
+            g_map.renderRow(row);
 
             for (int col = 0; col < map_cols; col++) {
                 unit_id = g_map.getOccupant(col, row);

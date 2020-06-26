@@ -479,8 +479,6 @@ Command* InputParser::_parsePMInput(const std::string& message_input) const {
         return NULL;
     }
 
-    fprintf(stderr, "Enviando mensaje [%s] a [%s]\n", content.c_str(),
-            receiver.c_str());
     return new SendPMCommand(receiver, content);
 }
 
@@ -539,7 +537,6 @@ Command* InputParser::parse(const std::string& input, std::string& reply) {
         }
 
         default: {
-            fprintf(stderr, "Enviando mensaje general [%s]\n", input.c_str());
             return new SendGeneralMessageCommand(input);
         }
     }

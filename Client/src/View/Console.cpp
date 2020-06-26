@@ -64,12 +64,14 @@ void Console::_renderInputBox() const {
 }
 
 void Console::_renderOutputBox() const {
-    SDL_Rect render_quad = {output_box.x, output_box.h, 0, 0};
+    SDL_Rect render_quad;
+    int y = output_box.h;
 
     for (auto& message : messages) {
-        render_quad.w = message.getWidth();
-        render_quad.h = message.getHeight();
-        render_quad.y -= render_quad.h;
+        y -= message.getHeight();
+        render_quad = {output_box.x, y, message.getWidth(),
+                       message.getHeight()};
+
         g_renderer->render(message.getTexture(), &render_quad);
     }
 }

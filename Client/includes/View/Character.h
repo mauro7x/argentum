@@ -2,6 +2,11 @@
 #define __CHARACTER_H__
 
 //-----------------------------------------------------------------------------
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
 #include "../../../Common/includes/Exceptions/Exception.h"
 #include "../../../Common/includes/defs.h"
 #include "../../../Common/includes/types.h"
@@ -12,31 +17,41 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+#define CHARACTER_NICKNAME_COLOR SDL_Color({255, 255, 255, 255})
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
 
 class Character : public Unit {
    private:
+    // Datos del personaje
     std::string nickname;
     Id head_id = 0, body_id = 0;
     EquipmentData equipment = {0};
+    uint32_t level = 0;
+
+    // Texturas para el nickname
+    TTF_Font* g_nickname_font; /* no se debe cerrar */
+    TTF_Font* g_level_font;    /* no se debe cerrar */
+    Texture info_nickname;
+    Texture info_nickname_shadow;
+    Texture info_level;
+
+    //-------------------------------------------------------------------------
+    // Métodos privados
 
     /* Copia la data desde el paquete recibido */
     void _copyData(const CharacterData& init_data);
 
+    /* Renderiza la información del personaje */
+    void _renderInfo() const;
+
+    //-------------------------------------------------------------------------
+
    public:
     /* Constructor */
-    Character(Renderer* renderer, UnitSpriteContainer* sprites);
-
-    /* Deshabilitamos el constructor por copia. */
-    Character(const Character&) = delete;
-
-    /* Deshabilitamos el operador= para copia.*/
-    Character& operator=(const Character&) = delete;
-
-    /* Habilitamos el constructor por movimiento. */
-    Character(Character&& other);
-
-    /* Habilitamos el operador= para movimiento. */
-    Character& operator=(Character&& other);
+    Character(Renderer* renderer, UnitSpriteContainer* sprites,
+              TTF_Font* g_nickname_font, TTF_Font* g_level_font);
 
     //-------------------------------------------------------------------------
 

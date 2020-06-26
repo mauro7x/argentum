@@ -123,6 +123,40 @@ void MapView::renderGround() const {
     }
 }
 
+void MapView::renderRow(const int row) const {
+    if (!current_map) {
+        throw Exception("MapView:: current_map is NULL!");
+    }
+
+    SDL_Rect render_quad = {0};
+
+    for (int x = 0; x < w_tiles; x++) {
+        const Tile& current_tile = current_map->getTile(x, row);
+
+        // Decoración
+        if (current_tile.decoration_id) {
+            const Texture& texture = tiles[current_tile.decoration_id];
+            render_quad = _getRenderQuad(texture, x, row);
+            g_renderer->renderIfVisible(texture.getTexture(), &render_quad);
+        }
+
+        // NPCs
+        if (current_tile.npc_id) {
+            const Texture& texture = tiles[current_tile.npc_id];
+            render_quad = _getRenderQuad(texture, x, row);
+            g_renderer->renderIfVisible(texture.getTexture(), &render_quad);
+        }
+
+        // Items
+        if (current_tile.item_id) {
+            const Texture& texture = item_sprites[current_tile.item_id].texture;
+            render_quad = _getRenderQuad(texture, x, row);
+            g_renderer->renderIfVisible(texture.getTexture(), &render_quad);
+        }
+    }
+}
+
+/*
 void MapView::renderDecoration(const int row) const {
     if (!current_map) {
         throw Exception("MapView:: current_map is NULL!");
@@ -140,7 +174,9 @@ void MapView::renderDecoration(const int row) const {
         }
     }
 }
+*/
 
+/*
 void MapView::renderNPCs(const int row) const {
     if (!current_map) {
         throw Exception("MapView:: current_map is NULL!");
@@ -158,7 +194,9 @@ void MapView::renderNPCs(const int row) const {
         }
     }
 }
+*/
 
+/*
 void MapView::renderItems(const int row) const {
     if (!current_map) {
         throw Exception("MapView:: current_map is NULL!");
@@ -176,6 +214,7 @@ void MapView::renderItems(const int row) const {
         }
     }
 }
+*/
 
 void MapView::renderRoofs() const {
     if (!current_map) {
@@ -212,9 +251,7 @@ void MapView::renderShadowOutdoor() const {
                 /* Renderizar una textura negra */
                 render_quad = {(x * TILE_WIDTH), (y * TILE_HEIGHT), TILE_WIDTH,
                                TILE_HEIGHT};
-                float alpha = 1.0;
-                g_renderer->fillQuadIfVisible(&render_quad, 0, 0, 0,
-                                              alpha * 255);
+                g_renderer->fillQuadIfVisible(&render_quad);
             }
         }
     }

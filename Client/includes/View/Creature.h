@@ -12,33 +12,41 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+#define CREATURE_NICKNAME_COLOR SDL_Color({148, 0, 0, 255})
+#define CREATURE_HEALTH_BAR_W 60
+#define CREATURE_HEALTH_BAR_H 8
+#define CREATURE_HEALTH_BAR_COLOR SDL_Color({207, 17, 17, 255})
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
 
 class Creature : public Unit {
    private:
-    // Cuerpo
+    // Datos del monstruo
+    std::string name;
     Id creature_id = 0;
+    uint32_t health = 0, max_health = 0 /*, level = 0*/;
 
-    // Vida
-    uint32_t health = 0;
+    // Texturas para el nickname
+    TTF_Font* g_nickname_font; /* no se debe cerrar */
+    Texture info_nickname;
+    Texture info_nickname_shadow;
+
+    //-------------------------------------------------------------------------
+    // Métodos privados
 
     /* Copia la data desde el paquete recibido */
     void _copyData(const CreatureData& init_data);
 
+    /* Renderiza la información del personaje */
+    void _renderInfo() const;
+
+    //-------------------------------------------------------------------------
+
    public:
     /* Constructor */
-    Creature(Renderer* renderer, UnitSpriteContainer* sprites);
-
-    /* Deshabilitamos el constructor por copia. */
-    Creature(const Creature&) = delete;
-
-    /* Deshabilitamos el operador= para copia.*/
-    Creature& operator=(const Creature&) = delete;
-
-    /* Habilitamos el constructor por movimiento. */
-    Creature(Creature&& other);
-
-    /* Habilitamos el operador= para movimiento. */
-    Creature& operator=(Creature&& other);
+    Creature(Renderer* renderer, UnitSpriteContainer* sprites,
+             TTF_Font* g_nickname_font, TTF_Font* g_level_font);
 
     //-------------------------------------------------------------------------
 

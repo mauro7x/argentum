@@ -31,21 +31,23 @@ struct CharacterData {
     std::string nickname;
     Id head_id, body_id;
     EquipmentData equipment;
+    uint32_t level;
 };
 
 struct PlayerData : public CharacterData {
     uint32_t health, max_health;
     uint32_t mana, max_mana;
     uint32_t safe_gold, excess_gold;
-    uint32_t level, exp, levelup_exp;
+    uint32_t exp, levelup_exp;
 
     InventoryData inventory;
 };
 
 struct CreatureData {
     UnitData basic_data;
+    std::string name;
     Id creature_id;
-    uint32_t health;
+    uint32_t health, max_health /*, level*/;
 };
 
 struct ItemData {

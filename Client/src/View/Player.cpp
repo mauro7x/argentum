@@ -26,11 +26,54 @@ void Player::_copyData(const PlayerData& init_data) {
     levelup_exp = init_data.levelup_exp;
 }
 
+void Player::_renderInfo() const {
+    // Primero el nivel
+    SDL_Rect level_quad = {0, 0, info_level.getWidth(), info_level.getHeight()};
+
+    // Centramos las coordenadas
+    level_quad.x = (TILE_WIDTH - level_quad.w) / 2;
+    level_quad.y = (TILE_HEIGHT * (0.8)) - level_quad.h -
+                   g_sprites->get(head_id).clip_h - INFO_SPACE_FROM_HEAD;
+
+    // Le agregamos offsets de la unidad
+    level_quad.x += (int)this->x;
+    level_quad.y += (int)this->y;
+
+    SDL_Rect nick_quad = level_quad;
+
+    g_renderer->renderIfVisible(info_level.getTexture(), &level_quad);
+
+    // Ahora el nickname
+    nick_quad.w = info_nickname.getWidth();
+    nick_quad.h = info_nickname.getHeight();
+    nick_quad.x = (TILE_WIDTH - nick_quad.w) / 2;
+    nick_quad.x += (int)this->x;
+    nick_quad.y -= nick_quad.h;
+
+    // Sombra
+    SDL_Rect nick_quad_bg = nick_quad;
+    nick_quad_bg.y++;
+
+    g_renderer->renderIfVisible(info_nickname_shadow.getTexture(),
+                                &nick_quad_bg);
+    g_renderer->renderIfVisible(info_nickname.getTexture(), &nick_quad);
+}
+
 //-----------------------------------------------------------------------------
 // API Pública
 
 Player::Player(Renderer* renderer, UnitSpriteContainer* sprites)
     : Unit(renderer, sprites) {}
+
+void Player::loadMedia() {
+    // Fuentes a utilizar
+    nickname_font = TTF_OpenFont(FONT_AUGUSTA_FP, INFO_NAME_FONTSIZE);
+    level_font = TTF_OpenFont(FONT_CINZELBOLD_FP, INFO_LVL_FONTSIZE);
+
+    if (!nickname_font || !level_font) {
+        throw Exception("Player::loadMedia: Error opening TTF_Font/s.");
+    }
+}
 
 void Player::init(const PlayerData& init_data) {
     if (state) {
@@ -44,6 +87,18 @@ void Player::init(const PlayerData& init_data) {
     x = TILE_WIDTH * data.x_tile;
     y = TILE_HEIGHT * data.y_tile;
 
+    /* Cargamos la info */
+    if (!nickname_font || !level_font) {
+        throw Exception("Player::init: Fonts not initialized.");
+    }
+
+    info_nickname.loadFromRenderedText(g_renderer, nickname_font, nickname,
+                                       PLAYER_NICKNAME_COLOR);
+    info_nickname_shadow.loadFromRenderedText(
+        g_renderer, nickname_font, nickname, SDL_Color({0, 0, 0, 255}));
+    info_level.loadFromRenderedText(g_renderer, level_font,
+                                    "Nivel " + std::to_string(level));
+
     /* Completamos la inicialización */
     state = READY;
 }
@@ -51,6 +106,12 @@ void Player::init(const PlayerData& init_data) {
 void Player::update(const PlayerData& updated_data) {
     if (!state) {
         throw Exception("Player has not been initialized (update requested).");
+    }
+
+    /* Verificamos si hay que modificar la info */
+    if (level != updated_data.level) {
+        info_level.loadFromRenderedText(g_renderer, level_font,
+                                        "Nivel " + std::to_string(level));
     }
 
     /* Actualizamos la data */
@@ -93,6 +154,21 @@ void Player::render() const {
     // Casco
     if (equipment[HELMET]) {
         _render(g_sprites->get(equipment[HELMET]));
+    }
+
+    // Info
+    _renderInfo();
+}
+
+void Player::free() {
+    if (nickname_font) {
+        TTF_CloseFont(nickname_font);
+        nickname_font = NULL;
+    }
+
+    if (level_font) {
+        TTF_CloseFont(level_font);
+        level_font = NULL;
     }
 }
 
@@ -159,6 +235,8 @@ const uint32_t& Player::getLvlUpExp() const {
 
 //-------------------------------------------------------------------------
 
-Player::~Player() {}
+Player::~Player() {
+    free();
+}
 
 //-----------------------------------------------------------------------------

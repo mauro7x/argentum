@@ -83,14 +83,17 @@ class MapView {
     /* Renderiza el piso completo */
     void renderGround() const;
 
+    /* Renderiza la decoración, los npcs, y los items */
+    void renderRow(const int row) const;
+
     /* Renderiza una fila determinada de decoración */
-    void renderDecoration(const int row) const;
+    // void renderDecoration(const int row) const;
 
     /* Renderiza una fila determinada de NPCs */
-    void renderNPCs(const int row) const;
+    // void renderNPCs(const int row) const;
 
     /* Renderiza una fila determinada de items droppeados */
-    void renderItems(const int row) const;
+    // void renderItems(const int row) const;
 
     /* Renderiza los techos completos */
     void renderRoofs() const;

@@ -124,7 +124,7 @@ Unit::Unit() {}
 
 Unit::Unit(Renderer* renderer, UnitSpriteContainer* sprites)
     : g_renderer(renderer), g_sprites(sprites) {}
-
+/*
 Unit::Unit(Unit&& other) {
     g_renderer = other.g_renderer;
     other.g_renderer = NULL;
@@ -155,7 +155,7 @@ Unit& Unit::operator=(Unit&& other) {
     current_animation_frame = other.current_animation_frame;
 
     return *this;
-}
+}*/
 
 void Unit::act(const int it) {
     if (!state) {

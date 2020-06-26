@@ -32,8 +32,11 @@ void to_json(json& j, const CreatureData& data) {
              {"x_tile", data.basic_data.x_tile},
              {"y_tile", data.basic_data.y_tile},
              {"orientation", data.basic_data.orientation},
+             {"name", data.name},
              {"creature_id", data.creature_id},
-             {"health", data.health}};
+             {"health", data.health},
+             {"max_health", data.max_health}/*,
+             {"level", data.level}*/};
 }
 
 void to_json(json& j, const ItemData& data) {
@@ -75,8 +78,11 @@ void from_json(const json& j, CreatureData& data) {
     j.at("x_tile").get_to(data.basic_data.x_tile);
     j.at("y_tile").get_to(data.basic_data.y_tile);
     j.at("orientation").get_to(data.basic_data.orientation);
+    j.at("name").get_to(data.name);
     j.at("creature_id").get_to(data.creature_id);
     j.at("health").get_to(data.health);
+    j.at("max_health").get_to(data.max_health);
+    /*j.at("level").get_to(data.level);*/
 }
 
 void from_json(const json& j, ItemData& data) {
