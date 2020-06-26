@@ -275,9 +275,12 @@ void Map::addItem(const Id item_id, int& x, int& y,
             fprintf(stderr,
                     "Map::addItem DEBUG: intento agregar en x = %i, y = %i\n",
                     x, y);
+            fprintf(stderr, "item_id en tile: %i\n", tile.item_id);
             if (!tile.item_id) {
+                fprintf(stderr, "Se setea el item en el tile \n");
                 tile.item_id = item_id;
                 empty_tile_found = true;
+                break;
             }
         }
     }
