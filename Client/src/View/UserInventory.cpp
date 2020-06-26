@@ -20,6 +20,13 @@ void UserInventory::_renderEquipment() const {
             g_renderer->render(texture.getTexture(), &render_quad);
         }
     }
+
+    // Animamos el slot si es necesario
+    if (current_animate_slot) {
+        render_quad = {animate_slot_pos.x, animate_slot_pos.y,
+                       selection.getWidth(), selection.getHeight()};
+        g_renderer->render(selection.getTexture(), &render_quad);
+    }
 }
 
 void UserInventory::_renderInventory() const {
@@ -208,7 +215,10 @@ void UserInventory::loadMedia() {
 
 int8_t UserInventory::getEquipmentSlotClicked(const SDL_Point& click_pos) {
     for (int8_t i = 0; i < N_WEARABLE_ITEMS; i++) {
-        if (_wasClicked(click_pos, equipment_slots[i])) {
+        if (_wasClicked(click_pos, equipment_slots[i]) && (equipment[i])) {
+            current_animate_slot = EQUIPMENT_UNEQUIP_ANIMATION_ITS + 1;
+            animate_slot_pos = equipment_slots.at(i);
+
             return i;
         }
     }
@@ -218,7 +228,7 @@ int8_t UserInventory::getEquipmentSlotClicked(const SDL_Point& click_pos) {
 
 int8_t UserInventory::getInventorySlotClicked(const SDL_Point& click_pos) {
     for (int8_t i = 0; i < N_INVENTORY_SLOTS; i++) {
-        if (_wasClicked(click_pos, inventory_slots[i])) {
+        if (_wasClicked(click_pos, inventory_slots[i]) && (inventory[i].item)) {
             return i;
         }
     }
@@ -272,6 +282,11 @@ void UserInventory::update(const int it) {
         excess_gold.loadFromRenderedText(g_renderer, gold_font,
                                          std::to_string(current_excess_gold));
         _center(excess_gold_pos, excess_gold, excess_gold_box);
+    }
+
+    // Cooldown de las animaciones
+    if (current_animate_slot) {
+        current_animate_slot--;
     }
 }
 
