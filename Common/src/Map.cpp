@@ -136,14 +136,6 @@ int Map::getHeightTiles() const {
     return h;
 }
 
-int Map::getTileWidth() const {
-    return TILE_WIDTH;
-}
-
-int Map::getTileHeight() const {
-    return TILE_HEIGHT;
-}
-
 bool Map::_isValid(const int x, const int y) const {
     if ((x >= w) || (x < 0) || (y >= h) || (y < 0)) {
         return false;

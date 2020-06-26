@@ -84,12 +84,6 @@ class Map {
     /* Devuelve la altura en tiles */
     int getHeightTiles() const;
 
-    /* Devuelve la anchura de un tile */
-    int getTileWidth() const;
-
-    /* Devuelve la altura de un tile */
-    int getTileHeight() const;
-
     /* Obtiene un Tile de solo lectura */
     const Tile& getTile(const int x, const int y) const;
 
