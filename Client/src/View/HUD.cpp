@@ -114,6 +114,14 @@ int8_t HUD::getInventorySlotClicked(const SDL_Point& click_pos) {
     return user_inventory.getInventorySlotClicked(click_pos);
 }
 
+void HUD::selectItem(uint8_t inventory_slot) {
+    user_inventory.selectItem(inventory_slot);
+}
+
+void HUD::clearSelection() {
+    user_inventory.clearSelection();
+}
+
 void HUD::update(const int it) {
     if (!initialized) {
         throw Exception("HUD not initialized.");
