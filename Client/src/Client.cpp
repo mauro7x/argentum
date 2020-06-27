@@ -80,8 +80,13 @@ void Client::_initComponents() {
 // Contextos
 
 void Client::_launchHomeCtx() {
-    fprintf(stderr, "Lanzando home_context\n");
-    current_context = GAME_CTX;
+    HomeView home_view(current_context, socket);
+    home_view.run();
+}
+
+void Client::_launchConnectionCtx() {
+    ConnectionView connection_view(current_context, socket);
+    connection_view.run();
 }
 
 void Client::_launchGameCtx() {
@@ -116,6 +121,11 @@ void Client::launch() {
         switch (current_context) {
             case HOME_CTX: {
                 _launchHomeCtx();
+                break;
+            }
+
+            case CONNECTION_CTX: {
+                _launchConnectionCtx();
                 break;
             }
 
