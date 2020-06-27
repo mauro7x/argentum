@@ -78,7 +78,7 @@ class MapView {
     void occupyTile(InstanceId id, const int x_tile, const int y_tile);
 
     /* Settea el item de una celda */
-    void addItem(Id id, const int x_tile, const int y_tile);
+    void addItem(Id id, uint32_t amount, const int x_tile, const int y_tile);
 
     /* Libera una celda */
     void clearTileOccupant(const int x_tile, const int y_tile);
@@ -97,15 +97,6 @@ class MapView {
 
     /* Renderiza la decoración, los npcs, y los items */
     void renderRow(const int row) const;
-
-    /* Renderiza una fila determinada de decoración */
-    // void renderDecoration(const int row) const;
-
-    /* Renderiza una fila determinada de NPCs */
-    // void renderNPCs(const int row) const;
-
-    /* Renderiza una fila determinada de items droppeados */
-    // void renderItems(const int row) const;
 
     /* Renderiza los techos completos */
     void renderRoofs() const;

@@ -74,12 +74,13 @@ void MapView::occupyTile(InstanceId id, const int x_tile, const int y_tile) {
     current_map->occupyTile(id, x_tile, y_tile);
 }
 
-void MapView::addItem(Id id, const int x_tile, const int y_tile) {
+void MapView::addItem(Id id, uint32_t amount, const int x_tile,
+                      const int y_tile) {
     if (!current_map) {
         throw Exception("MapView:: current_map is NULL!");
     }
 
-    current_map->addItem(id, x_tile, y_tile);
+    current_map->setItem(id, amount, x_tile, y_tile);
 }
 
 void MapView::clearTileOccupant(const int x_tile, const int y_tile) {

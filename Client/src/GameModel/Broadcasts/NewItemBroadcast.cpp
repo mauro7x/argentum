@@ -14,7 +14,7 @@ NewItemBroadcast::NewItemBroadcast(const ItemData& data)
 void NewItemBroadcast::exec(MapView& map, Player& player,
                             UnitContainer<Character, CharacterData>& characters,
                             UnitContainer<Creature, CreatureData>& creatures) {
-    map.addItem(data.item_id, data.x_tile, data.y_tile);
+    map.addItem(data.item_id, data.amount, data.x_tile, data.y_tile);
 }
 
 NewItemBroadcast::~NewItemBroadcast() {}

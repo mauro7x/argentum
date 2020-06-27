@@ -101,7 +101,8 @@ class Map {
     void occupyTile(InstanceId id, const int x, const int y);
 
     /* Pone un item en una celda */
-    void addItem(const Id item_id, const int x, const int y);
+    void setItem(const Id item_id, const uint32_t amount, const int x,
+                 const int y);
 
     /*
      * Busca el tile libre de item más cercano (en la linea direccional de la
@@ -120,7 +121,7 @@ class Map {
     void addItem(const Id item_id, const uint32_t amount, int& x, int& y);
 
     /* Devuelve si las coordenadas recibidas están dentro de una zona segura */
-    const bool isSafeZone(const int x, const int y) const; 
+    const bool isSafeZone(const int x, const int y) const;
 
     /* Elimina al ocupante de una celda */
     void clearTileOccupant(const int x, const int y);

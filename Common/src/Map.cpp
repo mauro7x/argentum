@@ -222,15 +222,16 @@ void Map::occupyTile(InstanceId id, const int x, const int y) {
     tile.occupant_id = id;
 }
 
-void Map::addItem(const Id item_id, const int x, const int y) {
+void Map::setItem(const Id item_id, const uint32_t amount, const int x,
+                  const int y) {
     Tile& tile = this->_getTile(x, y);
     tile.item_id = item_id;
+    tile.item_amount = amount;
 }
 
 // NO ES EL MEJOR ALGORITMO PERO FUNCIONA ;) -santi
 // (si alguno quiere cambiarlo es bienvenido)
-void Map::addItem(const Id item_id, const uint32_t amount, int& x,
-                        int& y) {
+void Map::addItem(const Id item_id, const uint32_t amount, int& x, int& y) {
     bool empty_tile_found = false;
 
     Tile& tile = this->_getTile(x, y);
