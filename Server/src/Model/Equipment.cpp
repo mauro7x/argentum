@@ -64,6 +64,16 @@ void Equipment::fillBroadcastData(PlayerData& data) const {
     }
 }
 
+void Equipment::fillPersistenceData(CharacterCfg& data) const {
+    for (int i = 0; i < N_WEARABLE_ITEMS; ++i) {
+        if (!this->container[i]) {
+            data.equipment[i] = 0;
+        } else {
+            data.equipment[i] = this->container[i]->getId();
+        }
+    }
+}
+
 void Equipment::debug() const {
     std::cout << "Equipment:" << std::endl;
     for (unsigned int i = 0; i < this->container.size(); ++i) {

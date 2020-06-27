@@ -110,6 +110,8 @@ class Inventory {
      */
     void fillBroadcastData(PlayerData& data) const;
 
+    void fillPersistenceData(CharacterCfg& data) const;
+
     void debug() const;  // Para testear.
 };
 
