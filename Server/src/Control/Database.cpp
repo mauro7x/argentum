@@ -51,30 +51,37 @@ void Database::_persistPlayerInfo(const std::string& username) {
     file_info.close();
 }
 
-void Database::_createDataInicial(const std::string& username, Id race, Id kind) {
+void Database::_createDataInicial(const std::string& username, Id race,
+                                  Id kind) {
     clients.emplace(username, CharacterCfg());
+    clients[username].map = 0;
+    clients[username].x_tile = 0;
+    clients[username].y_tile = 0;
+    std::strncpy(clients[username].nickname, username.c_str(),
+                 sizeof(clients[username].nickname)-1);
     clients[username].race = race;
     clients[username].kind = kind;
     clients[username].state = ALIVE;
-    clients[username].equipment = {1100, 1302, 1402, 0};
+    clients[username].equipment = {0, 0, 0, 0};
     clients[username].inventory = {
-        InventorySlot({1000, 1}),   InventorySlot({1001, 1}),
-        InventorySlot({1102, 2}),   InventorySlot({1300, 9000}),
-        InventorySlot({1401, 454}), InventorySlot({1500, 1}),
-        InventorySlot({1400, 1}),   InventorySlot({1301, 1}),
-        InventorySlot({0, 0}),      InventorySlot({0, 0}),
-        InventorySlot({0, 0}),      InventorySlot({0, 0}),
-        InventorySlot({0, 0}),      InventorySlot({0, 0}),
-        InventorySlot({0, 0}),      InventorySlot({0, 0})};
-    clients[username].health = 50;
-    clients[username].mana = 100;
-    clients[username].safe_gold = 100;
-    clients[username].excess_gold = 50;
-    clients[username].level = 10;
-    clients[username].exp = 100;
+        InventorySlot({0, 0}), InventorySlot({0, 0}), InventorySlot({0, 0}),
+        InventorySlot({0, 0}), InventorySlot({0, 0}), InventorySlot({0, 0}),
+        InventorySlot({0, 0}), InventorySlot({0, 0}), InventorySlot({0, 0}),
+        InventorySlot({0, 0}), InventorySlot({0, 0}), InventorySlot({0, 0}),
+        InventorySlot({0, 0}), InventorySlot({0, 0}), InventorySlot({0, 0}),
+        InventorySlot({0, 0})};
+    clients[username].health =
+        races[race].initial_health + kinds[kind].initial_health;
+    clients[username].mana =
+        races[race].initial_health + kinds[kind].initial_mana;
+    clients[username].safe_gold = 0;
+    clients[username].excess_gold = 0;
+    clients[username].level = 1;
+    clients[username].exp = 0;
+    clients[username].new_created = true;
 }
 
-void Database::_getPlayerData(const std::string& username){
+void Database::_getPlayerData(const std::string& username) {
     clients.emplace(username, CharacterCfg());
     size_t position = data_index[username];
     fprintf(stderr, "position es : %ld\n", position);
@@ -152,7 +159,7 @@ void Database::signUp(const std::string& username, const std::string& password,
     _persistPlayerInfo(username);
     // Crear un nuevo jugador (por ahora, proxy)
     _createDataInicial(username, race, kind);
-    
+
     persistPlayerData(username);
     character_data = clients[username];
     file_pointer += sizeof(clients[username]);
@@ -162,7 +169,7 @@ void Database::signUp(const std::string& username, const std::string& password,
     fprintf(stderr, "Has creado tu personaje. Bienvenido, %s\n",
             username.c_str());
 }
-void Database::persistPlayerData(const std::string& username){
+void Database::persistPlayerData(const std::string& username) {
     fprintf(stderr, "antes de guardar\n");
     fprintf(stderr, "race: %d\n", clients[username].race);
     fprintf(stderr, "exp: %d\n", clients[username].exp);
