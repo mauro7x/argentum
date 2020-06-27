@@ -42,7 +42,7 @@ class Character {
     unsigned int health, mana;
     const unsigned int intelligence, constitution, strength, agility;
     unsigned int max_health, max_mana;
-    char nickname[8];
+    char nickname[NICKNAME_MAX_LENGTH];
     Race race;
     Kind kind;
     State* state;
@@ -326,13 +326,18 @@ class Character {
      * Recibe una estructura de broadcast de tipo PlayerData,
      * y la llena con sus atributos actuales para su broadcasteo.
      *
-     * [No llena los campos: id, nickname]
+     * [No llena los campos: id]
      *
      * ??? EL ID DEL MAPA ???
      */
     void fillBroadcastData(PlayerData& data) const;
 
     //-----------------------------------------------------------------------------
+
+    /*
+     * Recibe una referencia de characterCfg , y llenar los datos.
+     */
+    void fillPersistenceData(CharacterCfg& data) const;
 
     void debug();
 };

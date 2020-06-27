@@ -49,8 +49,9 @@ Character::Character(const CharacterCfg& init_data, const RaceCfg& race,
       broadcast(false) {
     // SI EL JUGADOR ESTA PERSISTIDO Y NO ES NUEVO, LLENAR TODO LO QUE SE TIENE
     // QUE LLENAR.
-        std::string name = init_data.nickname;
-        std::strncpy(nickname, name.c_str(), sizeof(init_data.nickname)-1);
+    std::string name = init_data.nickname;
+    std::strncpy(nickname, name.c_str(),
+                 sizeof(char) * NICKNAME_MAX_LENGTH - 1);
     this->updateLevelDependantAttributes();  // Set max_health, max_mana,
 }  // max_inventory_gold.
 
@@ -119,7 +120,7 @@ void Character::_updateMovement(const unsigned int it) {
     }
 }
 
-std::string Character::getNickname(){
+std::string Character::getNickname() {
     return nickname;
 }
 
@@ -362,6 +363,8 @@ void Character::fillBroadcastData(PlayerData& data) const {
     data.head_id = this->race.head_id;
     data.body_id = this->race.body_id;
 
+    data.nickname = this->nickname;
+
     data.health = this->health;
     data.max_health = this->max_health;
     data.mana = this->mana;
@@ -373,6 +376,31 @@ void Character::fillBroadcastData(PlayerData& data) const {
     this->inventory.fillBroadcastData(data);
     // Llena equipment, helmet_id, armour_id, shield_id, weapon_id;
     this->equipment.fillBroadcastData(data);
+}
+
+void Character::fillPersistenceData(CharacterCfg& data) const {
+    // llenar map x_tile, y_tile;
+    this->position.fillPersistenceData(data);
+    std::string name = this->nickname;
+    std::strncpy(data.nickname, name.c_str(),
+                 sizeof(char) * NICKNAME_MAX_LENGTH - 1);
+    data.race = this->race.id;
+    data.kind = this->kind.id;
+    
+    //aca verifica el estado del character, hay que mejorar!
+    if (!this->health) {
+        data.state = DEAD;
+    } else {
+        data.state = ALIVE;
+    }
+    this->level.fillPersistenceData(data);
+    this->equipment.fillPersistenceData(data);
+    this->inventory.fillPersistenceData(data);
+    data.health = this->health;
+    data.mana = this->mana;
+    data.new_created = false;
+
+
 }
 //-----------------------------------------------------------------------------
 
