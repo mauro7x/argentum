@@ -105,8 +105,7 @@ Notification* Game::_buildItemBroadcast(Id map_id, int x_coord, int y_coord,
     data.y_tile = y_coord;
     data.amount = tile.item_amount;
 
-        Notification* broadcast =
-            new ItemBroadcast(data, map_id, broadcast_type);
+    Notification* broadcast = new ItemBroadcast(data, map_id, broadcast_type);
 
     return broadcast;
 }
@@ -459,6 +458,36 @@ void Game::stopMoving(const InstanceId caller) {
     character.stopMoving();
 }
 
+void Game::_dropAllItems(Character& dropper) {
+    std::vector<DroppingSlot> dropped_items;
+    dropper.dropAllItems(dropped_items);
+
+    Id map_id = dropper.getMapId();
+    int init_x = dropper.getPosition().getX();
+    int init_y = dropper.getPosition().getY();
+
+    for (unsigned int i = 0; i < dropped_items.size(); ++i) {
+        int x = init_x;  // para no degenerar el dropeo en diagonal
+        int y = init_y;  // para no degenerar el dropeo en diagonal
+
+        try {
+            this->map_container[map_id].addItem(dropped_items[i].item,
+                                                dropped_items[i].amount, x, y);
+        } catch (const ItemCouldNotBeAddedException& e) {
+            // No se pudo efectuar el dropeo. Cancelo.
+            return;
+        }
+
+        // Agrego elemento al mapa de dropped items cooldown
+        const std::string key = std::move(_coordinatesToMapKey(x, y));
+        this->dropped_items_lifetime_per_map[map_id].emplace(
+            key, TIME_TO_DISSAPEAR_DROPPED_ITEM);
+
+        // Broadcasteo new item
+        _pushItemDifferentialBroadcast(map_id, x, y, NEW_BROADCAST);
+    }
+}
+
 void Game::_useWeaponOnCharacter(const InstanceId caller,
                                  const InstanceId target) {
     Character& attacker = this->characters.at(caller);
@@ -483,7 +512,7 @@ void Game::_useWeaponOnCharacter(const InstanceId caller,
 
     // Verificamos si murió, en cuyo caso dropea todo.
     if (effective_damage && !attacked.getHealth()) {
-        // attacked.dropEverything();
+        _dropAllItems(attacked);
     }
 
     // FALTA DISCRIMINAR CASOS: no infligir danio, baculo curativo.
@@ -620,7 +649,8 @@ void Game::take(const InstanceId caller) {
 
     try {
         character.takeItem(this->items[item_id], amount);
-    } catch (const FullInventoryException& e) {
+    } catch (const std::exception& e) {
+        // FullInventoryException, StateCantTakeItemException
         Notification* reply = new NotificationReply(ERROR_MSG, e.what());
         active_clients.notify(caller, reply);
         return;
@@ -652,11 +682,10 @@ void Game::drop(const InstanceId caller, const uint8_t n_slot,
 
     if (!dropped)  // enviamos mensaje de error?
         return;
-    
+
     if (amount < asked_amount) {
-        std::string reply_msg = "Se dropearon únicamente " +
-                                std::to_string(amount) +
-                                " items.";
+        std::string reply_msg =
+            "Se dropearon únicamente " + std::to_string(amount) + " items.";
         Notification* reply =
             new NotificationReply(INFO_MSG, reply_msg.c_str());
         active_clients.notify(caller, reply);
@@ -665,10 +694,10 @@ void Game::drop(const InstanceId caller, const uint8_t n_slot,
     Id dropped_item_id = dropped->getId();
     int x = character.getPosition().getX();
     int y = character.getPosition().getY();
+    Id map_id = character.getMapId();
 
     try {
-        this->map_container[character.getMapId()].addItem(dropped_item_id,
-                                                          amount, x, y);
+        this->map_container[map_id].addItem(dropped_item_id, amount, x, y);
     } catch (const ItemCouldNotBeAddedException& e) {
         // No se pudo efectuar el dropeo. Le devuelvo el item al character.
         character.takeItem(dropped, amount);
@@ -676,8 +705,6 @@ void Game::drop(const InstanceId caller, const uint8_t n_slot,
         active_clients.notify(caller, reply);
         return;
     }
-
-    Id map_id = character.getMapId();
 
     // Agrego elemento al mapa de dropped items cooldown
     const std::string key = std::move(_coordinatesToMapKey(x, y));

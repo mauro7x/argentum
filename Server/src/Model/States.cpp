@@ -32,6 +32,10 @@ void Alive::beAttacked() const {
     // Puede ser atacacdo
 }
 
+void Alive::takeItem() const {
+    // Puede tomar items
+}
+
 Dead::Dead(const Race& race_data)
     : State(race_data.dead_head_id, race_data.dead_body_id) {}
 
@@ -47,10 +51,19 @@ void Dead::beAttacked() const {
     throw AttackedStateCantBeAttackedException();
 }
 
+void Dead::takeItem() const {
+    // No puede tomar items
+    throw StateCantTakeItemException();
+}
+
 const char* AttackedStateCantBeAttackedException::what() const noexcept {
     return "No puedes atacar a ese jugador. Ya está muerto";
 }
 
 const char* AttackerStateCantAttackException::what() const noexcept {
     return "No puedes atacar. Estás muerto.";
+}
+
+const char* StateCantTakeItemException::what() const noexcept {
+    return "No puedes tomar items. Estás muerto.";
 }

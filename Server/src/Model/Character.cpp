@@ -218,6 +218,7 @@ void Character::unequip(unsigned int n_slot) {
 }
 
 const unsigned int Character::takeItem(Item* item, unsigned int amount) {
+    this->state->takeItem();
     const unsigned int position = this->inventory.addItem(item, amount);
     this->broadcast = true;
     return position;
@@ -338,9 +339,12 @@ const unsigned int Character::receiveAttack(const unsigned int damage,
 void Character::die() {
     delete this->state;
     this->state = new Dead(this->race);
-    // DROPEAR ORO EN EXCESO E ITEMS DEL INVENTARIO
-    // CAMBIAR HEAD_ID Y BODY_ID A LAS DE UN FANTASMA.
     this->broadcast = true;
+}
+
+void Character::dropAllItems(std::vector<DroppingSlot>& dropped_items) {
+    this->equipment.dropAll(dropped_items);
+    this->inventory.dropAll(dropped_items);
 }
 //-----------------------------------------------------------------------------
 

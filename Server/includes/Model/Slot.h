@@ -20,8 +20,10 @@ class Slot {
     Slot(const Slot&) = delete;
     Slot& operator=(const Slot&) = delete;
 
+    /* Devuelve si el slot está vacío */
     const bool isEmpty() const;
 
+    /* Agrega el item y la cantidad al slot */
     void addItem(Item* item_id, const unsigned int amount);
 
     /*
@@ -34,7 +36,13 @@ class Slot {
      */
     Item* takeItem(unsigned int& amount);
 
+    /* Vacía el slot */
+    void clearSlot();
+
+    /* Devuelve la id del item que contiene el slot */
     const Id getItemId() const;
+
+    /* Devuelve la cantidad del item que hay en el slot */
     const unsigned int getAmount() const;
 };
 

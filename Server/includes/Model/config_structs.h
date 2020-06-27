@@ -5,20 +5,20 @@
 #include <cstdint>
 #include <string>
 
-#include "../../../Common/includes/types.h"
 #include "../../../Common/includes/Inventory.h"
 #include "../../../Common/includes/Orientation.h"
+#include "../../../Common/includes/types.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 #ifndef __SPELL_TYPE_H__
 #define __SPELL_TYPE_H__
-enum SpellType {ATTACKING, HEALING};
+enum SpellType { ATTACKING, HEALING };
 #endif
 //-----------------------------------------------------------------------------
 #ifndef __POTION_TYPE_H__
 #define __POTION_TYPE_H__
-enum PotionType {HEALTH, MANA};
+enum PotionType { HEALTH, MANA };
 #endif
 //-----------------------------------------------------------------------------
 
@@ -93,11 +93,11 @@ struct RaceCfg {
     uint8_t max_mana_factor;
     uint8_t health_recovery_factor;
     uint8_t mana_recovery_factor;
-    
+
     // Atributos iniciales
     uint8_t initial_mana;
     uint8_t initial_health;
-    
+
     // Modificadores
     int intelligence;
     int constitution;
@@ -143,7 +143,7 @@ struct NPCCfg {
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-enum StateType {DEAD, ALIVE};
+enum StateType { DEAD, ALIVE };
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -171,4 +171,13 @@ struct CreatureCfg {
     unsigned int base_health;
 };
 //-----------------------------------------------------------------------------
+struct DroppingSlot {
+    Id item;
+    uint32_t amount;
+
+    DroppingSlot(Id item, uint32_t amount) : item(item), amount(amount) {}
+    ~DroppingSlot() {}
+};
+//-----------------------------------------------------------------------------
+
 #endif  // __CONFIG_STRUCTS_H__

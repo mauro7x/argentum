@@ -2,11 +2,13 @@
 #define __EQUIPMENT_H__
 
 #include <array>
+#include <vector>
 
 #include "../../../Common/includes/DataStructs.h"
 #include "../../../Common/includes/Inventory.h"
 #include "ItemsContainer.h"
 #include "Wearable.h"
+#include "config_structs.h"
 
 class Character;  // Forward declaration p/evitar circular dependences.
 
@@ -52,6 +54,12 @@ class Equipment {
      * recibido como argumento es inválido.
      */
     Wearable* remove(unsigned int n_slot);
+
+    /*
+     * Vacía el equipment, dropeando todos los wearables en el vector 
+     * recibido por parámetro.
+     */
+    void dropAll(std::vector<DroppingSlot>& dropped_items);
 
     /*
      * Devuelve los puntos de daño que causan

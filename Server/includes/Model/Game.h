@@ -231,6 +231,11 @@ class Game {
 
     //--------------------------------------------------------------------------
 
+    void _dropAllItems(Character& dropper);
+
+    void _useWeaponOnCharacter(const InstanceId caller,
+                               const InstanceId target);
+
     //--------------------------------------------------------------------------
     // Comandos
     //--------------------------------------------------------------------------
@@ -241,8 +246,7 @@ class Game {
 
     void stopMoving(const InstanceId caller);
 
-    void _useWeaponOnCharacter(const InstanceId caller,
-                               const InstanceId target);
+    
     void useWeapon(const InstanceId caller, const InstanceId target);
 
     void equip(const InstanceId caller, const uint8_t n_slot);
@@ -275,6 +279,7 @@ class Game {
                   const uint32_t amount);
 
     void take(const InstanceId caller);
+
     void drop(const InstanceId caller, const uint8_t n_slot, uint32_t amount);
 
     void listConnectedPlayers(const InstanceId caller);

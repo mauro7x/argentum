@@ -5,6 +5,7 @@
 #include <cstdio>
 #include <exception>
 #include <map>
+#include <vector>
 
 #include "../../../Common/includes/DataStructs.h"
 #include "../../../Common/includes/Inventory.h"
@@ -12,6 +13,7 @@
 #include "ItemsContainer.h"
 #include "Level.h"
 #include "Slot.h"
+#include "config_structs.h"
 
 /*
  * El Inventario es un contenedor que guarda Items,
@@ -108,6 +110,12 @@ class Inventory {
      * guardar todo el oro por llegar al limite de capacidad.
      */
     void addGold(const uint32_t amount);
+
+    /*
+     * Vacía el inventario, dropeando todos los items en el vector 
+     * recibido por parámetro.
+     */
+    void dropAll(std::vector<DroppingSlot>& dropped_items);
 
     /*
      * Llena los campos safe_gold, excess_gold e

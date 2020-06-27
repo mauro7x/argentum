@@ -26,6 +26,7 @@ class State {
 
     virtual void attack() const = 0;
     virtual void beAttacked() const = 0;
+    virtual void takeItem() const = 0;
 
     void fillBroadcastData(PlayerData& data);
 };
@@ -52,6 +53,7 @@ class Alive : public State {
 
     virtual void attack() const override;
     virtual void beAttacked() const override;
+    virtual void takeItem() const override;
 };
 
 /*
@@ -71,6 +73,7 @@ class Dead : public State {
 
     virtual void attack() const override;
     virtual void beAttacked() const override;
+    virtual void takeItem() const override;
 };
 
 class AttackedStateCantBeAttackedException : public std::exception {
@@ -81,6 +84,11 @@ class AttackedStateCantBeAttackedException : public std::exception {
 class AttackerStateCantAttackException : public std::exception {
    public:
     virtual const char* what() const noexcept;
+};
+
+class StateCantTakeItemException : public std::exception {
+    public:
+     virtual const char* what() const noexcept;
 };
 
 #endif

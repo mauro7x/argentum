@@ -151,6 +151,25 @@ void Inventory::gatherGold(const uint32_t amount) {
     }
 }
 
+void Inventory::dropAll(std::vector<DroppingSlot>& dropped_items) {
+    for (unsigned int i = 0; i < slots.size(); ++i) {
+        Slot& slot = slots[i];
+        Id item_id = slot.getItemId();
+
+        if (!item_id)
+            continue;
+
+        uint32_t amount = slot.getAmount();
+
+        dropped_items.emplace_back(item_id, amount);
+
+        slot.clearSlot();
+
+        this->id_slot_map.erase(item_id);
+        --this->occupied_slots;
+    }
+}
+
 void Inventory::fillBroadcastData(PlayerData& data) const {
     data.safe_gold = this->safe_gold;
     data.excess_gold = this->excess_gold;

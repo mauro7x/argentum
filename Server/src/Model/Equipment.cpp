@@ -6,7 +6,7 @@
 
 Equipment::Equipment(const EquipmentData& init_data,
                      ItemsContainer& items_container) {
-    // Inicializo array de wearables con nullptr.
+    // Inicializo array de wearables con los datos o nullptr.
     for (unsigned int i = 0; i < container.size(); ++i) {
         if (!init_data[i]) {
             this->container[i] = nullptr;
@@ -32,6 +32,17 @@ Wearable* Equipment::remove(unsigned int n_slot) {
     Wearable* item = this->container[n_slot];
     this->container[n_slot] = nullptr;
     return item;
+}
+
+void Equipment::dropAll(std::vector<DroppingSlot>& dropped_items) {
+    for (unsigned int i = 0; i < container.size(); ++i) {
+        if (!container[i])
+            continue;
+
+        Id item_id = container[i]->getId();
+        dropped_items.emplace_back(item_id, 1);
+        container[i] = nullptr;
+    }
 }
 
 const unsigned int Equipment::useAttackItem(Character& attacker) {

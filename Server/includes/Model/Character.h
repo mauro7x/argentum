@@ -2,6 +2,7 @@
 #define __CHARACTER_H__
 //-----------------------------------------------------------------------------
 #include <exception>
+#include <vector>
 //-----------------------------------------------------------------------------
 #include "Equipment.h"
 #include "Inventory.h"
@@ -296,6 +297,12 @@ class Character {
      * jugador a Dead.
      */
     void die();
+
+    /*
+     * Recibe un vector en el que dropeará todos sus elementos,
+     * tanto en equipment como en inventory.
+     */
+    void dropAllItems(std::vector<DroppingSlot>& dropped_items);
 
     //-----------------------------------------------------------------------------
 

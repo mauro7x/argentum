@@ -50,6 +50,11 @@ Item* Slot::takeItem(unsigned int& amount_to_take) {
     return item;
 }
 
+void Slot::clearSlot() {
+    this->item = nullptr;
+    this->amount = 0;
+}
+
 const Id Slot::getItemId() const {
     if (!item) {
         return 0;
@@ -57,6 +62,7 @@ const Id Slot::getItemId() const {
 
     return this->item->getId();
 }
+
 const unsigned int Slot::getAmount() const {
     return this->amount;
 }
