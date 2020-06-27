@@ -158,9 +158,9 @@ class Character {
     /*
      * Recibe la posición del item en el equipamiento
      * que se quiere desequipar.
-     * 
+     *
      * Si no hay item en dicha posición, no hace nada.
-     * 
+     *
      * Lanza FullInventoryException si no hay espacio en
      * el inventario para el elemento desequipado, no pudiendo
      * efectuarse el comando.
@@ -179,10 +179,10 @@ class Character {
     /*
      * Dropa la cantidad especificada del item en la n_slot
      * pasada por parámetro.
-     * 
-     * Si la cantidad de items en el slot es menor que amount, 
-     * se configura en amount la cantidad real droppeada. 
-     * 
+     *
+     * Si la cantidad de items en el slot es menor que amount,
+     * se configura en amount la cantidad real droppeada.
+     *
      * Si no hay un item en dicha posicion, retorna nullptr.
      *
      * Lanza InvalidInventorySlotNumberException si la posicion
@@ -282,9 +282,12 @@ class Character {
      *
      *       InsufficientManaException si no puede usar el hechizo debido a
      * déficit de maná.
+     * 
+     *       AttackerStateCantAttackException si el jugador no puede atacar
+     * debido a su estado (muerto)
      *
-     *       ActualStateCantBeAttackedException si el jugador al que se quiere
-     * atacar tiene un estado en el que no puede ser atacado.
+     *       AttackedStateCantBeAttackedException si el jugador al que se
+     * quiere atacar no puede atacar debido a su estado (muerto).
      */
     const unsigned int attack(Character& attacked);
 
@@ -350,32 +353,32 @@ class Character {
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-class InsufficientManaException : std::exception {
+class InsufficientManaException : public std::exception {
    public:
     virtual const char* what() const noexcept;
 };
 
-class OutOfRangeAttackException : std::exception {
+class CantAttackInSafeZoneException : public std::exception {
    public:
     virtual const char* what() const noexcept;
 };
 
-class NewbiesCantBeAttackedException : std::exception {
+class OutOfRangeAttackException : public std::exception {
    public:
     virtual const char* what() const noexcept;
 };
 
-class TooHighLevelDifferenceOnAttackException : std::exception {
+class NewbiesCantBeAttackedException : public std::exception {
    public:
     virtual const char* what() const noexcept;
 };
 
-class ActualStateCantBeAttackedException : std::exception {
+class TooHighLevelDifferenceOnAttackException : public std::exception {
    public:
     virtual const char* what() const noexcept;
 };
 
-class KindCantDoMagicException : std::exception {
+class KindCantDoMagicException : public std::exception {
    public:
     virtual const char* what() const noexcept;
 };
