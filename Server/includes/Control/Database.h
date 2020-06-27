@@ -17,6 +17,7 @@
 #include "../../../Common/includes/Exceptions/Exception.h"
 #include "../../../Common/includes/Exceptions/LoginException.h"
 #include "../Model/config_structs.h"
+#include "../Model/Config.h"
 #include "../paths.h"
 //-----------------------------------------------------------------------------
 
@@ -30,6 +31,8 @@ struct PlayerInfo {
 
 class Database {
    private:
+    Config<RaceCfg> races;
+    Config<KindCfg> kinds;
     bool initialized;
     size_t file_pointer;
     std::mutex m;
