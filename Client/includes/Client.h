@@ -70,6 +70,13 @@ class Client {
     void _launchGameCtx();
 
     //-----------------------------------------------------------------------------
+    // Auxiliares
+
+    /* Finaliza ordenadamente los recursos del GameCtx */
+    void _finishGameCtx(BlockingQueue<Command*>& commands, CommandDispatcher& command_dispatcher/*,
+                 Receiver& receiver*/);
+
+    //-----------------------------------------------------------------------------
 
     /* Cierra sistemas de SDL */
     void _quitSDL();

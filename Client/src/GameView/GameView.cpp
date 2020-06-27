@@ -13,7 +13,14 @@ void GameView::_func(const int it) {
 //-----------------------------------------------------------------------------
 // API Pública
 
-GameView::GameView() : ConstantRateFunc(RATE) {}
+GameView::GameView(BlockingQueue<Command*>& commands,
+                   NonBlockingQueue<Broadcast*>& broadcasts,
+                   NonBlockingQueue<Message*>& messages, Renderer& renderer)
+    : ConstantRateFunc(RATE),
+      commands(commands),
+      broadcasts(broadcasts),
+      messages(messages),
+      renderer(renderer) {}
 
 GameView::~GameView() {}
 

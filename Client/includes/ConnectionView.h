@@ -33,11 +33,6 @@ class ConnectionView : public ConstantRateFunc {
     /* Constructor */
     ConnectionView(Context& current_context, const SocketWrapper& socket);
 
-    //-----------------------------------------------------------------------------
-    // Métodos de la API pública
-
-    //-----------------------------------------------------------------------------
-
     /* Destructor */
     ~ConnectionView();
 };

@@ -38,11 +38,6 @@ class HomeView : public ConstantRateFunc {
     /* Constructor */
     HomeView(Context& current_context, SocketWrapper& socket);
 
-    //-----------------------------------------------------------------------------
-    // Métodos de la API pública
-
-    //-----------------------------------------------------------------------------
-
     /* Destructor */
     ~HomeView();
 };

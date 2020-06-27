@@ -2,19 +2,45 @@
 #define __GAME_VIEW_H__
 
 //-----------------------------------------------------------------------------
-#include "../../../Common/includes/Socket/SocketWrapper.h"
+#include "../../../Common/includes/BlockingQueue.h"
+#include "../../../Common/includes/DataStructs.h"
+#include "../../../Common/includes/Exceptions/Exception.h"
+#include "../../../Common/includes/JSON.h"
+#include "../../../Common/includes/NonBlockingQueue.h"
+#include "../../../Common/includes/paths.h"
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+#include "../SDL/Renderer.h"
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+#include "../GameModel/Broadcasts/Broadcast.h"
+#include "../GameModel/Commands/Command.h"
+#include "../GameModel/Messages/Message.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 #include "../ConstantRateFunc.h"
 #include "../contexts.h"
 #include "../defs.h"
+#include "../paths.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 
 class GameView : public ConstantRateFunc {
    private:
+    // Comunicación entre hilos
+    BlockingQueue<Command*>& commands;
+    NonBlockingQueue<Broadcast*>& broadcasts;
+    NonBlockingQueue<Message*>& messages;
+
+    // Componentes SDL principales
+    // Window window;
+    // Camera camera;
+    Renderer& renderer;
+
     //-----------------------------------------------------------------------------
     // Métodos privados
 
@@ -25,12 +51,9 @@ class GameView : public ConstantRateFunc {
 
    public:
     /* Constructor */
-    GameView();
-
-    //-----------------------------------------------------------------------------
-    // Métodos de la API pública
-
-    //-----------------------------------------------------------------------------
+    GameView(BlockingQueue<Command*>& commands,
+             NonBlockingQueue<Broadcast*>& broadcasts,
+             NonBlockingQueue<Message*>& messages, Renderer& renderer);
 
     /* Destructor */
     ~GameView();

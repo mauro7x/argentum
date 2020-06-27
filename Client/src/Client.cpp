@@ -102,20 +102,43 @@ void Client::_launchGameCtx() {
     NonBlockingQueue<Message*> messages;
 
     // Hilos de ejecución
-    GameView game_view;
+    GameView game_view(commands, broadcasts, messages, renderer);
     CommandDispatcher command_dispatcher(socket, commands, game_view);
 
     // Lanzamos la ejecución
     command_dispatcher.start();
-    game_view.run();
 
+    try {
+        game_view.run();
+    } catch (const Exception& e) {
+        _finishGameCtx(commands, command_dispatcher);
+        throw e;
+    } catch (const std::exception& e) {
+        _finishGameCtx(commands, command_dispatcher);
+        throw e;
+    } catch (...) {
+        _finishGameCtx(commands, command_dispatcher);
+        throw;
+    }
+
+    // Finalizamos la ejecución
+    _finishGameCtx(commands, command_dispatcher);
+
+    // Luego de que el game termina, salimos
+    current_context = EXIT_CTX;
+    fprintf(stderr, "Finaliza GAME.\n");
+}
+
+//-----------------------------------------------------------------------------
+// Auxiliares
+
+void Client::_finishGameCtx(BlockingQueue<Command*>& commands,
+                            CommandDispatcher& command_dispatcher) {
     // Terminamos la ejecución
     commands.close();
     socket.shutdown();
     command_dispatcher.join();
-    current_context = EXIT_CTX;
-
-    fprintf(stderr, "Finaliza GAME.\n");
+    // receiver.join();
 }
 
 //-----------------------------------------------------------------------------
