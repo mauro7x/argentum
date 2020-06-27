@@ -19,7 +19,6 @@
 .vscode
 build
 Testing
-Client.old
 
 # Cpplint ---------------------------------------------------------------------
 cpplint.py
