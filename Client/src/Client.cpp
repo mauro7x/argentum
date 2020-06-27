@@ -101,28 +101,33 @@ void Client::_launchGameCtx() {
     NonBlockingQueue<Broadcast*> broadcasts;
     NonBlockingQueue<Message*> messages;
 
-    // Hilos de ejecución
+    // Recibimos el primer paquete
+    _receiveFirstPackage(broadcasts);
+
+    // Componentes del GameCtx
     GameView game_view(commands, broadcasts, messages, renderer);
     CommandDispatcher command_dispatcher(socket, commands, game_view);
+    Receiver receiver(socket, broadcasts, messages, game_view);
 
     // Lanzamos la ejecución
     command_dispatcher.start();
+    receiver.start();
 
     try {
         game_view.run();
     } catch (const Exception& e) {
-        _finishGameCtx(commands, command_dispatcher);
+        _finishGameCtx(commands, command_dispatcher, receiver);
         throw e;
     } catch (const std::exception& e) {
-        _finishGameCtx(commands, command_dispatcher);
+        _finishGameCtx(commands, command_dispatcher, receiver);
         throw e;
     } catch (...) {
-        _finishGameCtx(commands, command_dispatcher);
+        _finishGameCtx(commands, command_dispatcher, receiver);
         throw;
     }
 
     // Finalizamos la ejecución
-    _finishGameCtx(commands, command_dispatcher);
+    _finishGameCtx(commands, command_dispatcher, receiver);
 
     // Luego de que el game termina, salimos
     current_context = EXIT_CTX;
@@ -132,13 +137,69 @@ void Client::_launchGameCtx() {
 //-----------------------------------------------------------------------------
 // Auxiliares
 
+void Client::_receiveFirstPackage(
+    NonBlockingQueue<Broadcast*>& broadcasts) const {
+    uint8_t opcode = 0, entity_type = 0;
+    size_t received;
+
+    // Recibimos el primer paquete según el procolo:
+    // OP (1) - BROADCAST_OP (1) - ENTITY_TYPE (1) - LENGTH (4) - DATA (LENGTH)
+
+    received = (socket >> opcode);
+    if (!received) {
+        throw Exception(
+            "LogInProxy::_receiveFirstPackage: incomplete first package data "
+            "(socket was closed).");
+    } else if (opcode != BROADCAST_OPCODE) {
+        throw Exception(
+            "LogInProxy::_receiveFirstPackage: received another package before "
+            "the initial data.");
+    }
+
+    received = (socket >> opcode);
+    if (!received) {
+        throw Exception(
+            "LogInProxy::_receiveFirstPackage: incomplete first package data "
+            "(socket was closed).");
+    } else if (opcode != NEW_BROADCAST) {
+        throw Exception(
+            "LogInProxy::_receiveFirstPackage: received another package before "
+            "the initial data.");
+    }
+
+    received = (socket >> entity_type);
+    if (!received) {
+        throw Exception(
+            "LogInProxy::_receiveFirstPackage: incomplete first package data "
+            "(socket was closed).");
+    } else if (entity_type != PLAYER_TYPE) {
+        throw Exception(
+            "LogInProxy::_receiveFirstPackage: received another package before "
+            "the initial data.");
+    }
+
+    std::vector<uint8_t> serialized_data;
+    received = (socket >> serialized_data);
+    if (!received) {
+        throw Exception(
+            "LogInProxy::_receiveFirstPackage: incomplete first package data "
+            "(socket was closed).");
+    }
+
+    PlayerData received_data;
+    json j = json::from_msgpack(serialized_data);
+    received_data = j.get<PlayerData>();
+    broadcasts.push(new NewPlayerBroadcast(received_data));
+}
+
 void Client::_finishGameCtx(BlockingQueue<Command*>& commands,
-                            CommandDispatcher& command_dispatcher) {
+                            CommandDispatcher& command_dispatcher,
+                            Receiver& receiver) {
     // Terminamos la ejecución
     commands.close();
     socket.shutdown();
     command_dispatcher.join();
-    // receiver.join();
+    receiver.join();
 }
 
 //-----------------------------------------------------------------------------

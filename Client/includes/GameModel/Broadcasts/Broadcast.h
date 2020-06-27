@@ -2,12 +2,12 @@
 #define __BROADCAST_H__
 
 //-----------------------------------------------------------------------------
-//#include "../../../../Common/includes/DataStructs.h"
-//#include "../../View/Character.h"
-//#include "../../View/Creature.h"
-//#include "../../View/MapView.h"
-//#include "../../View/Player.h"
-//#include "../../View/UnitContainer.h"
+#include "../../../../Common/includes/DataStructs.h"
+#include "../../GameView/Character.h"
+#include "../../GameView/Creature.h"
+#include "../../GameView/MapView.h"
+#include "../../GameView/Player.h"
+#include "../../GameView/UnitContainer.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -37,9 +37,9 @@ class Broadcast {
     //-------------------------------------------------------------------------
 
     /* Ejecución polimórfica del broadcast */
-    virtual void exec(/*MapView& map, Player& player,
+    virtual void exec(MapView& map, Player& player,
                       UnitContainer<Character, CharacterData>& characters,
-                      UnitContainer<Creature, CreatureData>& creatures*/) = 0;
+                      UnitContainer<Creature, CreatureData>& creatures) = 0;
 
     //-------------------------------------------------------------------------
 

@@ -18,10 +18,13 @@
 
 //-----------------------------------------------------------------------------
 #include "../../Common/includes/BlockingQueue.h"
+#include "../../Common/includes/DataStructs.h"
 #include "../../Common/includes/Exceptions/Exception.h"
 #include "../../Common/includes/JSON.h"
 #include "../../Common/includes/NonBlockingQueue.h"
+#include "../../Common/includes/Protocol.h"
 #include "../../Common/includes/Socket/SocketWrapper.h"
+#include "../../Common/includes/json_conversion.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -35,6 +38,7 @@
 #include "GameModel/CommandDispatcher.h"
 #include "GameModel/Commands/Command.h"
 #include "GameModel/Messages/Message.h"
+#include "GameModel/Receiver.h"
 #include "GameView/GameView.h"
 #include "HomeView.h"
 //-----------------------------------------------------------------------------
@@ -72,9 +76,13 @@ class Client {
     //-----------------------------------------------------------------------------
     // Auxiliares
 
+    /* Recibe el primer paquete del GameCtx */
+    void _receiveFirstPackage(NonBlockingQueue<Broadcast*>& broadcasts) const;
+
     /* Finaliza ordenadamente los recursos del GameCtx */
-    void _finishGameCtx(BlockingQueue<Command*>& commands, CommandDispatcher& command_dispatcher/*,
-                 Receiver& receiver*/);
+    void _finishGameCtx(BlockingQueue<Command*>& commands,
+                        CommandDispatcher& command_dispatcher,
+                        Receiver& receiver);
 
     //-----------------------------------------------------------------------------
 

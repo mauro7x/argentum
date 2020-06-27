@@ -1,4 +1,4 @@
-#include "../../includes/Model/Receiver.h"
+#include "../../includes/GameModel/Receiver.h"
 
 //-----------------------------------------------------------------------------
 // Métodos privados
@@ -40,8 +40,11 @@ void Receiver::_receiveBroadcast() const {
 
 Receiver::Receiver(const SocketWrapper& socket,
                    NonBlockingQueue<Broadcast*>& broadcasts,
-                   NonBlockingQueue<Message*>& messages, std::atomic_bool& exit)
-    : socket(socket), broadcasts(broadcasts), messages(messages), exit(exit) {}
+                   NonBlockingQueue<Message*>& messages, GameView& game_view)
+    : socket(socket),
+      broadcasts(broadcasts),
+      messages(messages),
+      game_view(game_view) {}
 
 void Receiver::run() {
     try {
@@ -72,7 +75,7 @@ void Receiver::run() {
     }
 
     // Avisamos que se cerró el socket y que hay que terminar
-    exit = true;
+    game_view.quit();
 }
 
 Receiver::~Receiver() {}

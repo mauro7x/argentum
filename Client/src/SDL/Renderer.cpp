@@ -126,6 +126,14 @@ void Renderer::fillQuad(SDL_Rect* quad, SDL_Color color) const {
     _setDrawColor();
 }
 
+float Renderer::getWidthScaleFactor() const {
+    return scale_factor_w;
+}
+
+float Renderer::getHeightScaleFactor() const {
+    return scale_factor_h;
+}
+
 Renderer::~Renderer() {
     if (renderer) {
         SDL_DestroyRenderer(renderer);

@@ -6,5 +6,168 @@
     },
     "renderer": {
         "vsync": false
+    },
+    "camera": {
+        "w": 672,
+        "h": 384,
+        "offset": {
+            "x": 7,
+            "y": 149
+        }
+    },
+    "hud": {
+        "w": 960,
+        "h": 540,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "console": {
+            "w": 672,
+            "h": 135,
+            "offset": {
+                "x": 7,
+                "y": 7
+            },
+            "components": {
+                "output_box": {
+                    "fontsize": 12,
+                    "w": 662,
+                    "h": 108,
+                    "offset": {
+                        "x": 5,
+                        "y": 0
+                    }
+                },
+                "input_box": {
+                    "fontsize": 16,
+                    "w": 657,
+                    "h": 20,
+                    "offset": {
+                        "x": 5,
+                        "y": 115
+                    }
+                }
+            }
+        },
+        "user_info": {
+            "w": 267,
+            "h": 114,
+            "offset": {
+                "x": 686,
+                "y": 7
+            },
+            "components": {
+                "lvl": {
+                    "fontsize": 30,
+                    "w": 36,
+                    "h": 36,
+                    "offset": {
+                        "x": 27,
+                        "y": 17
+                    }
+                },
+                "nickname": {
+                    "fontsize": 40,
+                    "w": 177,
+                    "h": 50,
+                    "offset": {
+                        "x": 70,
+                        "y": 10
+                    }
+                },
+                "xp_bar": {
+                    "offset": {
+                        "x": 20,
+                        "y": 84
+                    },
+                    "color": {
+                        "r": 45,
+                        "g": 102,
+                        "b": 37,
+                        "a": 255
+                    }
+                }
+            }
+        },
+        "user_inventory": {
+            "w": 267,
+            "h": 294,
+            "offset": {
+                "x": 686,
+                "y": 128
+            },
+            "components": {
+                "slot_w": 32,
+                "slot_h": 32,
+                "equipment": {
+                    "first_slot_offset": {
+                        "x": 32,
+                        "y": 39
+                    },
+                    "x_offset_between_slots": 57
+                },
+                "inventory": {
+                    "quantities_fontsize": 12,
+                    "first_slot_offset": {
+                        "x": 20,
+                        "y": 122
+                    },
+                    "rows": 3,
+                    "slots_per_row": 6,
+                    "offset_between_slots": {
+                        "x": 39,
+                        "y": 39
+                    }
+                },
+                "gold": {
+                    "fontsize": 20,
+                    "w": 73,
+                    "h": 23,
+                    "safe_gold_offset": {
+                        "x": 60,
+                        "y": 261
+                    },
+                    "excess_gold_offset": {
+                        "x": 174,
+                        "y": 261
+                    }
+                }
+            }
+        },
+        "user_stats": {
+            "w": 267,
+            "h": 104,
+            "offset": {
+                "x": 686,
+                "y": 429
+            },
+            "components": {
+                "health_bar": {
+                    "offset": {
+                        "x": 20,
+                        "y": 30
+                    },
+                    "color": {
+                        "r": 207,
+                        "g": 21,
+                        "b": 8,
+                        "a": 255
+                    }
+                },
+                "mana_bar": {
+                    "offset": {
+                        "x": 20,
+                        "y": 74
+                    },
+                    "color": {
+                        "r": 17,
+                        "g": 46,
+                        "b": 128,
+                        "a": 255
+                    }
+                }
+            }
+        }
     }
 }

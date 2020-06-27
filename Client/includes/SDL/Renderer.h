@@ -83,6 +83,12 @@ class Renderer {
     /* Rellena el rectangulo */
     void fillQuad(SDL_Rect* quad, SDL_Color color = {0, 0, 0, 255}) const;
 
+    /* Obtiene el factor de escala en W */
+    float getWidthScaleFactor() const;
+
+    /* Obtiene el factor de escala en H */
+    float getHeightScaleFactor() const;
+
     //-------------------------------------------------------------------------
 
     /* Destructor */

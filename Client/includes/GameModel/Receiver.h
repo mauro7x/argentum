@@ -2,7 +2,6 @@
 #define __RECEIVER_H__
 
 //-----------------------------------------------------------------------------
-#include <atomic>
 #include <cstdint>
 #include <exception>
 //-----------------------------------------------------------------------------
@@ -16,6 +15,7 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+#include "../GameView/GameView.h"
 #include "Broadcasts/Broadcast.h"
 #include "Broadcasts/BroadcastFactory.h"
 #include "Messages/Message.h"
@@ -29,7 +29,7 @@ class Receiver : public Thread {
     const SocketWrapper& socket;              /* SÓLO LECTURA (RECV) */
     NonBlockingQueue<Broadcast*>& broadcasts; /* Broadcasts a recibir */
     NonBlockingQueue<Message*>& messages;     /* Mensajes a recibir */
-    std::atomic_bool& exit; /* flag de ejecución compartido */
+    GameView& game_view;
 
     //-----------------------------------------------------------------------------
     // Métodos privados
@@ -46,7 +46,7 @@ class Receiver : public Thread {
     /* Constructor */
     Receiver(const SocketWrapper& socket,
              NonBlockingQueue<Broadcast*>& broadcasts,
-             NonBlockingQueue<Message*>& messages, std::atomic_bool& exit);
+             NonBlockingQueue<Message*>& messages, GameView& game_view);
 
     /* Deshabilitamos el constructor por copia. */
     Receiver(const Receiver&) = delete;
