@@ -23,6 +23,7 @@ enum PotionType {HEALTH, MANA};
 //-----------------------------------------------------------------------------
 
 #define AMOUNT_OF_DEFFENCE_TYPES 3
+#define NICKNAME_MAX_LENGTH 8
 
 //-----------------------------------------------------------------------------
 // Objetos
@@ -148,7 +149,7 @@ enum StateType {DEAD, ALIVE};
 struct CharacterCfg {
     Id map;
     int x_tile, y_tile;   
-    char nickname[8];
+    char nickname[NICKNAME_MAX_LENGTH];
     
     Id race;
     Id kind;

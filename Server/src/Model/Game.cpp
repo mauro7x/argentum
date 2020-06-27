@@ -56,7 +56,6 @@ Notification* Game::_buildPlayerBroadcast(InstanceId id,
     player_data.basic_data.gid = id;
     // llenar nickname
     Character& character = this->characters.at(id);
-    player_data.nickname = character.getNickname();
     character.fillBroadcastData(player_data);
 
     Notification* broadcast =
@@ -163,6 +162,9 @@ const InstanceId Game::newCharacter(const CharacterCfg& init_data) {
     Id new_character_id = this->next_instance_id;
     ++this->next_instance_id;
 
+    fprintf(stderr, "deberia espawnear en map: %i, x: %i, y: %i\n",
+            init_data.map, init_data.x_tile, init_data.y_tile);
+
     const Id spawning_map_id = this->map_container.getCharacterSpawningMap();
     int spawning_x_coord;
     int spawning_y_coord;
@@ -204,15 +206,17 @@ void Game::newCreature(const CreatureCfg& init_data, const Id init_map) {
     _pushCreatureDifferentialBroadcast(new_creature_id, NEW_BROADCAST);
 }
 
-void Game::deleteCharacter(const InstanceId id) {
+void Game::deleteCharacter(const InstanceId id, Database& database) {
     if (!this->characters.count(id)) {
         throw Exception("deleteCharacter: Unknown character id [", id, "]");
     }
-
+    Character& character = characters.at(id);
     _pushCharacterDifferentialBroadcast(id, DELETE_BROADCAST, false);
 
+    CharacterCfg character_data;
     // PERSISTIR ESTADO DEL JUGADOR
-    //caracterCfg = character[id].fill_persistent_data(~~~`);
+    character.fillPersistenceData(character_data);
+    database.changePlayerData(character_data.nickname,character_data);
     this->characters.erase(id);
 }
 

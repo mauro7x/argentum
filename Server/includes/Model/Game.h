@@ -8,6 +8,7 @@
 #include "../../../Common/includes/types.h"
 //-----------------------------------------------------------------------------
 #include "../../includes/Control/Notification.h"
+#include "../../includes/Control/Database.h"
 //-----------------------------------------------------------------------------
 #include "Character.h"
 #include "Config.h"
@@ -151,7 +152,7 @@ class Game {
      * Lanza Exception si el id especificado no corresponde a ningún
      * character en el juego.
      */
-    void deleteCharacter(const InstanceId id);
+    void deleteCharacter(const InstanceId id, Database& database);
 
     /*
      * Llamar a este método ante la muerte de una criatura.
