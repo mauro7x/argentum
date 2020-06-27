@@ -55,8 +55,8 @@ Notification* Game::_buildPlayerBroadcast(InstanceId id,
     PlayerData player_data;
     player_data.basic_data.gid = id;
     // llenar nickname
-    player_data.nickname = "dummynick";
     Character& character = this->characters.at(id);
+    player_data.nickname = character.getNickname();
     character.fillBroadcastData(player_data);
 
     Notification* broadcast =
