@@ -146,6 +146,10 @@ enum StateType {DEAD, ALIVE};
 
 //-----------------------------------------------------------------------------
 struct CharacterCfg {
+    Id map;
+    int x_tile, y_tile;   
+    char nickname[8];
+    
     Id race;
     Id kind;
 
@@ -160,6 +164,7 @@ struct CharacterCfg {
     uint32_t excess_gold;
     uint32_t level;
     uint32_t exp;
+    bool new_created;
 };
 
 struct CreatureCfg {
