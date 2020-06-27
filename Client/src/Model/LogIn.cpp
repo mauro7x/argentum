@@ -40,8 +40,8 @@ void LogInProxy::_login() const {
             throw Exception("error in LogInProxt send password");
         }
 
-        std::cout << "[DEBUG] Hostname ingresado: " << username << "\n";
-        std::cout << "[DEBUG] Puerto ingresado: " << password << "\n";
+        std::cout << "[DEBUG] Username ingresado: " << username << "\n";
+        std::cout << "[DEBUG] Password ingresado: " << password << "\n";
 
         if (opcode == "signup") {
             std::string race, kind;
