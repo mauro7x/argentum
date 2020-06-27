@@ -14,6 +14,7 @@
 #include "ConstantRateFunc.h"
 #include "contexts.h"
 #include "defs.h"
+#include "paths.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -26,8 +27,16 @@ class HomeView : public ConstantRateFunc {
     // Conexión
     SocketWrapper& socket;
 
+    // Componentes
+
     //-----------------------------------------------------------------------------
     // Métodos privados
+
+    /* Inicializa recursos internos */
+    void _init();
+
+    /* Carga la media necesaria */
+    void _loadMedia();
 
     /* Iteración del loop */
     void _func(const int it) override;

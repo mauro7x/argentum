@@ -3,6 +3,14 @@
 //-----------------------------------------------------------------------------
 // Métodos privados
 
+void HomeView::_init() {
+    // init
+}
+
+void HomeView::_loadMedia() {
+    // init
+}
+
 void HomeView::_func(const int it) {
     // Proxy por ahora
     std::string hostname, port, try_again;
@@ -49,9 +57,10 @@ void HomeView::_func(const int it) {
 // API Pública
 
 HomeView::HomeView(Context& current_context, SocketWrapper& socket)
-    : ConstantRateFunc(RATE),
-      current_context(current_context),
-      socket(socket) {}
+    : ConstantRateFunc(RATE), current_context(current_context), socket(socket) {
+    _init();
+    _loadMedia();
+}
 
 HomeView::~HomeView() {}
 
