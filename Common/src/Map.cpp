@@ -69,6 +69,7 @@ void Map::_fillTiles(const json& map, const json& tilesets) {
         tile.occupant_id = 0;
 
         tile.item_id = 0;
+        tile.item_amount = 0;
 
         tiles.push_back(tile);
     }
@@ -228,13 +229,15 @@ void Map::addItem(const Id item_id, const int x, const int y) {
 
 // NO ES EL MEJOR ALGORITMO PERO FUNCIONA ;) -santi
 // (si alguno quiere cambiarlo es bienvenido)
-void Map::serverAddItem(const Id item_id, int& x, int& y) {
+void Map::addItem(const Id item_id, const uint32_t amount, int& x,
+                        int& y) {
     bool empty_tile_found = false;
 
     Tile& tile = this->_getTile(x, y);
 
     if (!tile.item_id && !tile.collision && !tile.npc_id) {
         tile.item_id = item_id;
+        tile.item_amount = amount;
         empty_tile_found = true;
     }
 
@@ -256,6 +259,7 @@ void Map::serverAddItem(const Id item_id, int& x, int& y) {
 
                 if (!tile.item_id && !tile.collision && !tile.npc_id) {
                     tile.item_id = item_id;
+                    tile.item_amount = amount;
                     empty_tile_found = true;
                     x = _x;
                     y = _y;
@@ -281,6 +285,7 @@ void Map::clearTileOccupant(const int x, const int y) {
 void Map::clearTileItem(const int x, const int y) {
     Tile& tile = this->_getTile(x, y);
     tile.item_id = 0;
+    tile.item_amount = 0;
 }
 
 Map::~Map() {}

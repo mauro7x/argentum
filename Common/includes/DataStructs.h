@@ -53,6 +53,7 @@ struct CreatureData {
 struct ItemData {
     Id item_id;
     int x_tile, y_tile;
+    uint32_t amount;
 };
 
 //-----------------------------------------------------------------------------

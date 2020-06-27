@@ -117,7 +117,7 @@ class Map {
      * Lanza ItemCouldNotBeAddedException si no se encuentra tile
      * libre para que el item lo ocupe dentro del rango DROPPING_RANGE.
      */
-    void serverAddItem(const Id item_id, int& x, int& y);
+    void addItem(const Id item_id, const uint32_t amount, int& x, int& y);
 
     /* Devuelve si las coordenadas recibidas están dentro de una zona segura */
     const bool isSafeZone(const int x, const int y) const; 
