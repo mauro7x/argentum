@@ -86,6 +86,8 @@ struct RaceCfg {
 
     Id head_id;
     Id body_id;
+    Id dead_head_id;
+    Id dead_body_id;
 
     uint8_t max_health_factor;
     uint8_t max_mana_factor;
