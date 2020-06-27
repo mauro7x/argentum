@@ -24,9 +24,14 @@
 //-----------------------------------------------------------------------------
 
 struct PlayerInfo {
-    char username[8] = {0};
-    char password[8] = {0};
-    size_t position;
+    char username[NICKNAME_MAX_LENGTH] = {0};
+    char password[NICKNAME_MAX_LENGTH] = {0};
+    size_t index;
+};
+
+struct DataIndex{
+    char password[NICKNAME_MAX_LENGTH] = {0};
+    size_t index;
 };
 
 class Database {
@@ -37,8 +42,7 @@ class Database {
     size_t file_pointer;
     std::mutex m;
     std::unordered_map<std::string, CharacterCfg> clients; /* user: data */
-    std::unordered_map<std::string, size_t> data_index;    /*user:data_index */
-    std::unordered_map<std::string, std::string> player_infos; /*user:pass*/
+    std::unordered_map<std::string, DataIndex> data_index;    /*user:data_index */
 
     //-------------------------------------------------------------------------
     // Métodos privados
@@ -54,6 +58,8 @@ class Database {
     /* crear datos iniciales para el jugador nuevo*/
     void _createDataInicial(const std::string& username, Id race, Id kind);
 
+    /* Guardar los datos del jugador al archivo*/
+    void _persistPlayerData(CharacterCfg& data);
     //-------------------------------------------------------------------------
 
    public:
@@ -89,8 +95,8 @@ class Database {
                 Id race, Id kind, CharacterCfg& character_data);
     //-------------------------------------------------------------------------
 
-    /* Guardar los datos del jugador */
-    void persistPlayerData(const std::string& username);
+    /* Guardar los datos del jugador al map*/
+    void changePlayerData(const std::string& nickname, CharacterCfg& data);
 
     /* Destructor */
     ~Database();
