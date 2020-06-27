@@ -42,6 +42,7 @@ class Character {
     unsigned int health, mana;
     const unsigned int intelligence, constitution, strength, agility;
     unsigned int max_health, max_mana;
+    char nickname[8];
     Race race;
     Kind kind;
     State* state;
@@ -267,6 +268,12 @@ class Character {
      * atacar tiene un estado en el que no puede ser atacado.
      */
     const unsigned int attack(Character& attacked);
+
+    /* 
+     * Devuelve el nickname del caracter;
+     */
+    std::string getNickname();
+
 
     /*
      * Cuando health es cero, se llama a este método. Cambia el estado del

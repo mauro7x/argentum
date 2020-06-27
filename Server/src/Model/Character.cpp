@@ -29,7 +29,6 @@ Character::Character(const CharacterCfg& init_data, const RaceCfg& race,
       constitution(kind.constitution + race.constitution),
       strength(kind.strength + race.strength),
       agility(kind.agility + race.agility),
-
       race(race),
       kind(kind),
 
@@ -50,7 +49,8 @@ Character::Character(const CharacterCfg& init_data, const RaceCfg& race,
       broadcast(false) {
     // SI EL JUGADOR ESTA PERSISTIDO Y NO ES NUEVO, LLENAR TODO LO QUE SE TIENE
     // QUE LLENAR.
-
+        std::string name = init_data.nickname;
+        std::strncpy(nickname, name.c_str(), sizeof(init_data.nickname)-1);
     this->updateLevelDependantAttributes();  // Set max_health, max_mana,
 }  // max_inventory_gold.
 
@@ -117,6 +117,10 @@ void Character::_updateMovement(const unsigned int it) {
 
         this->moving_cooldown_time += TIME_TO_MOVE_A_TILE;
     }
+}
+
+std::string Character::getNickname(){
+    return nickname;
 }
 
 //-----------------------------------------------------------------------------
