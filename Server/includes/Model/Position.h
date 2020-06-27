@@ -54,6 +54,8 @@ class Position {
      */
     void move();
 
+    const bool isInSafeZone() const;
+
     /*
      * Llena los campos x_tile, y_tile y orientation del
      * PlayerData para su broadcast.
@@ -61,7 +63,7 @@ class Position {
     void fillBroadcastData(UnitData& data) const;
 };
 
-class CollisionWhileMovingException : std::exception {
+class CollisionWhileMovingException : public std::exception {
    public:
     virtual const char* what() const noexcept;
 };

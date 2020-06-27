@@ -69,6 +69,10 @@ void Position::changeOrientation(Orientation orientation) {
     this->orientation = orientation;
 }
 
+const bool Position::isInSafeZone() const {
+    return map_container[map].isSafeZone(x, y);
+}
+
 void Position::fillBroadcastData(UnitData& data) const {
     data.map = this->map;
     data.x_tile = this->x;
