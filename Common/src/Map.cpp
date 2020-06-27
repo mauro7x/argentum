@@ -269,6 +269,10 @@ void Map::serverAddItem(const Id item_id, int& x, int& y) {
     }
 }
 
+const bool Map::isSafeZone(const int x, const int y) const {
+    return this->getTile(x, y).safe_zone;
+}
+
 void Map::clearTileOccupant(const int x, const int y) {
     Tile& tile = this->_getTile(x, y);
     tile.occupant_id = 0;
