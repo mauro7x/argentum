@@ -141,6 +141,40 @@
         ],
         "body": [
             {
+                "gid": 2200,
+                "clip_w": 29,
+                "clip_h": 32,
+                "up_row_col_clips": [
+                    1,
+                    0,
+                    3
+                ],
+                "down_row_col_clips": [
+                    0,
+                    0,
+                    3
+                ],
+                "left_row_col_clips": [
+                    2,
+                    0,
+                    3
+                ],
+                "right_row_col_clips": [
+                    3,
+                    0,
+                    3
+                ],
+                "change_every_n_frames": 6,
+                "color_key": {
+                    "is_needed": true,
+                    "color": {
+                        "r": 0,
+                        "g": 0,
+                        "b": 0
+                    }
+                }
+            },
+            {
                 "gid": 2100,
                 "clip_w": 25,
                 "clip_h": 45,
