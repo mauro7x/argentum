@@ -1,0 +1,81 @@
+#ifndef __CLIENT_H__
+#define __CLIENT_H__
+
+//-----------------------------------------------------------------------------
+#include <stdio.h>  // debugging
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+// Sistemas de SDL
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_mixer.h>
+#include <SDL2/SDL_ttf.h>
+
+#include "SDL/Renderer.h"
+#include "SDL/Window.h"
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+#include "../../Common/includes/Exceptions/Exception.h"
+#include "../../Common/includes/JSON.h"
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+#include "defs.h"
+#include "paths.h"
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+
+class Client {
+   private:
+    // Componentes SDL
+    Window window;
+    Renderer renderer;
+
+    //-----------------------------------------------------------------------------
+    // Métodos privados
+
+    /* Inicializa sistemas de SDL */
+    void _initSDL();
+
+    /* Inicializa componentes internas */
+    void _initComponents();
+
+    /* Cierra sistemas de SDL */
+    void _quitSDL();
+
+    //-----------------------------------------------------------------------------
+
+   public:
+    /* Constructor */
+    Client();
+
+    /* Deshabilitamos el constructor por copia. */
+    Client(const Client&) = delete;
+
+    /* Deshabilitamos el operador= para copia.*/
+    Client& operator=(const Client&) = delete;
+
+    /* Deshabilitamos el constructor por movimiento. */
+    Client(Client&& other) = delete;
+
+    /* Deshabilitamos el operador= para movimiento. */
+    Client& operator=(Client&& other) = delete;
+
+    //-----------------------------------------------------------------------------
+    // Métodos de la API pública
+
+    /* Ejecuta el cliente */
+    void launch();
+
+    //-----------------------------------------------------------------------------
+
+    /* Destructor */
+    ~Client();
+};
+
+//-----------------------------------------------------------------------------
+
+#endif  // __CLIENT_H__

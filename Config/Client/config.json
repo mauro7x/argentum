@@ -1,0 +1,10 @@
+{
+    "window": {
+        "title": "Argentum Online",
+        "w": 960,
+        "h": 540
+    },
+    "renderer": {
+        "vsync": false
+    }
+}

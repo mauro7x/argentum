@@ -11,7 +11,7 @@
 // ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
-#include "../includes/Model/Client.h"
+#include "../includes/Client.h"
 #include "../includes/defs.h"
 // ----------------------------------------------------------------------------
 
@@ -25,7 +25,7 @@ int main(int argc, char* argv[]) {
 
     try {
         Client client;
-        client.run();
+        client.launch();
 
     } catch (const std::exception& e) {
         fprintf(stderr, "%s\n", e.what());
