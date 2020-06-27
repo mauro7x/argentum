@@ -76,6 +76,21 @@ void Client::_initComponents() {
     }
 }
 
+//-----------------------------------------------------------------------------
+// Contextos
+
+void Client::_launchHomeCtx() {
+    fprintf(stderr, "Lanzando home_context\n");
+    current_context = GAME_CTX;
+}
+
+void Client::_launchGameCtx() {
+    fprintf(stderr, "Lanzando game_context\n");
+    current_context = EXIT_CTX;
+}
+
+//-----------------------------------------------------------------------------
+
 void Client::_quitSDL() {
     Mix_Quit();
     TTF_Quit();
@@ -88,13 +103,38 @@ void Client::_quitSDL() {
 //-----------------------------------------------------------------------------
 // API Pública
 
-Client::Client() : renderer(window) {
+Client::Client() : renderer(window), current_context(HOME_CTX) {
     _initSDL();
     _initComponents();
 }
 
 void Client::launch() {
-    fprintf(stderr, "launching...\n");
+    // Iniciamos la ejecución launcheando HOME_CTX
+    _launchHomeCtx();
+
+    while (current_context != EXIT_CTX) {
+        switch (current_context) {
+            case HOME_CTX: {
+                _launchHomeCtx();
+                break;
+            }
+
+            case GAME_CTX: {
+                _launchGameCtx();
+                break;
+            }
+
+            case EXIT_CTX: {
+                break;
+            }
+
+            default: {
+                throw Exception("Client::launch: unknown context.");
+            }
+        }
+    }
+
+    // salir ordenadamente
 }
 
 Client::~Client() {

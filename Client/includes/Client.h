@@ -22,7 +22,7 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-#include "defs.h"
+#include "contexts.h"
 #include "paths.h"
 //-----------------------------------------------------------------------------
 
@@ -34,6 +34,9 @@ class Client {
     Window window;
     Renderer renderer;
 
+    // Contexto actual
+    Context current_context;
+
     //-----------------------------------------------------------------------------
     // Métodos privados
 
@@ -42,6 +45,14 @@ class Client {
 
     /* Inicializa componentes internas */
     void _initComponents();
+
+    //-----------------------------------------------------------------------------
+    // Contextos
+
+    void _launchHomeCtx();
+    void _launchGameCtx();
+
+    //-----------------------------------------------------------------------------
 
     /* Cierra sistemas de SDL */
     void _quitSDL();
