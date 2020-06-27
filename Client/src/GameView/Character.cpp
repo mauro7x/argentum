@@ -21,8 +21,14 @@ void Character::_renderInfo() const {
 
     // Centramos las coordenadas
     level_quad.x = (TILE_WIDTH - level_quad.w) / 2;
-    level_quad.y = (TILE_HEIGHT * (0.8)) - level_quad.h -
-                   g_sprites->get(head_id).clip_h - INFO_SPACE_FROM_HEAD;
+    int unit_height;
+    if (head_id) {
+        unit_height = g_sprites->get(head_id).clip_h;
+    } else {
+        unit_height = g_sprites->get(body_id).clip_h;
+    }
+    level_quad.y = (TILE_HEIGHT * (0.8)) - level_quad.h - unit_height -
+                   INFO_SPACE_FROM_HEAD;
 
     // Le agregamos offsets de la unidad
     level_quad.x += (int)this->x;

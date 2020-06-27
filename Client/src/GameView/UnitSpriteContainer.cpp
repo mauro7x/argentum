@@ -80,7 +80,7 @@ void UnitSpriteContainer::loadMedia() {
 
 const UnitSprite& UnitSpriteContainer::get(const Id id) const {
     if (content.count(id) == 0) {
-        throw Exception("Unknown sprite id.");
+        throw Exception("Unknown sprite id: %u", id);
     }
 
     return content.at(id);

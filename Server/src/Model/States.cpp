@@ -33,7 +33,7 @@ void Alive::beAttacked() const {
 }
 
 Dead::Dead(const Race& race_data)
-    : State(race_data.dead_head_id, race_data.dead_head_id) {}
+    : State(race_data.dead_head_id, race_data.dead_body_id) {}
 
 Dead::~Dead() {}
 
