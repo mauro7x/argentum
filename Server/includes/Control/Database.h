@@ -16,8 +16,8 @@
 //-----------------------------------------------------------------------------
 #include "../../../Common/includes/Exceptions/Exception.h"
 #include "../../../Common/includes/Exceptions/LoginException.h"
-#include "../Model/config_structs.h"
 #include "../Model/Config.h"
+#include "../Model/config_structs.h"
 #include "../paths.h"
 //-----------------------------------------------------------------------------
 
@@ -29,7 +29,7 @@ struct PlayerInfo {
     size_t index;
 };
 
-struct DataIndex{
+struct DataIndex {
     char password[NICKNAME_MAX_LENGTH] = {0};
     size_t index;
 };
@@ -41,8 +41,7 @@ class Database {
     bool initialized;
     size_t file_pointer;
     std::mutex m;
-    std::unordered_map<std::string, CharacterCfg> clients; /* user: data */
-    std::unordered_map<std::string, DataIndex> data_index;    /*user:data_index */
+    std::unordered_map<std::string, DataIndex> data_index; /*user:data_index */
 
     //-------------------------------------------------------------------------
     // Métodos privados
@@ -50,16 +49,16 @@ class Database {
     void _fillInfo();
 
     /* Obtener el dato del jugador */
-    void _getPlayerData(const std::string& username);
+    void _getPlayerData(const std::string& username,
+                        CharacterCfg& character_data);
 
     /* Guardar info del jugador */
     void _persistPlayerInfo(const std::string& username);
 
     /* crear datos iniciales para el jugador nuevo*/
-    void _createDataInicial(const std::string& username, Id race, Id kind);
+    void _createDataInicial(const std::string& username, Id race, Id kind,
+                            CharacterCfg& character_data);
 
-    /* Guardar los datos del jugador al archivo*/
-    void _persistPlayerData(CharacterCfg& data);
     //-------------------------------------------------------------------------
 
    public:
@@ -95,8 +94,8 @@ class Database {
                 Id race, Id kind, CharacterCfg& character_data);
     //-------------------------------------------------------------------------
 
-    /* Guardar los datos del jugador al map*/
-    void changePlayerData(const std::string& nickname, CharacterCfg& data);
+    /* Guardar los datos del jugador al archivo*/
+    void persistPlayerData(CharacterCfg& data);
 
     /* Destructor */
     ~Database();
