@@ -1,6 +1,5 @@
 #ifndef __CLIENT_DEFS_H__
 #define __CLIENT_DEFS_H__
-//-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 // Argumentos esperados en la invocación
@@ -18,7 +17,7 @@ enum ExpectedArgs { NAME, EXPECTED_ARGC };
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-// Configuración de la vista principal
+// Configuración del frame-rate
 
 #define FPS 60            /* frames/s */
 #define RATE (1000 / FPS) /* ms/frame */
@@ -32,5 +31,4 @@ enum ExpectedArgs { NAME, EXPECTED_ARGC };
 #define INFO_LVL_FONTSIZE 10    /* fontsize del nickname + lvl de c/ unidad */
 //-----------------------------------------------------------------------------
 
-//-----------------------------------------------------------------------------
 #endif  // __CLIENT_DEFS_H__

@@ -10,6 +10,8 @@
 
 //-----------------------------------------------------------------------------
 
+/* COLA DISEÑADA PARA OBJETOS ALOCADOS EN EL HEAP, SIENDO T SUS PUNTEROS */
+
 template <class T>
 class BlockingQueue {
    private:
@@ -43,8 +45,8 @@ class BlockingQueue {
     }
 
     /* Extrae un objeto de la cola. Si la misma está vacía pone a dormir al
-     * thread solicitante. Si la misma está vacía y además cerrada, lanza
-     * excepción. */
+     * thread solicitante.
+     * Si la misma está vacía y además cerrada, retorna NULL */
     T pop() {
         std::unique_lock<std::mutex> l(m);
         while (queue.empty()) {
@@ -60,24 +62,23 @@ class BlockingQueue {
         return t;
     }
 
-    /**
-     * Descripción: cierra la cola definitivamente, notificando a todos
-     * los threads que esperan por la condition-variable.
-     *
-     * Parámetros: -
-     *
-     * Retorno: -
-     */
+    /* Cierra la cola definitivamente, notificando a todos los threads que
+     * esperan por la condition-variable */
     void close() {
         std::unique_lock<std::mutex> l(m);
         permanently_closed = true;
         cv.notify_all();
     }
 
-    /**
-     * Descripción: destructor.
-     */
-    ~BlockingQueue() {}
+    /* Destructor */
+    ~BlockingQueue() {
+        // Sólo tiene sentido si T es un puntero
+        while (!queue.empty()) {
+            T t = queue.front();
+            queue.pop();
+            delete t;
+        }
+    }
 };
 
 //-----------------------------------------------------------------------------
