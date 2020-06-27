@@ -80,18 +80,42 @@ void Client::_initComponents() {
 // Contextos
 
 void Client::_launchHomeCtx() {
+    fprintf(stderr, "Inicia HOME.\n");
     HomeView home_view(current_context, socket);
     home_view.run();
+    fprintf(stderr, "Finaliza HOME.\n");
 }
 
 void Client::_launchConnectionCtx() {
+    fprintf(stderr, "Inicia CONNECTION.\n");
     ConnectionView connection_view(current_context, socket);
     connection_view.run();
+    fprintf(stderr, "Finaliza CONNECTION.\n");
 }
 
 void Client::_launchGameCtx() {
-    fprintf(stderr, "Lanzando game_context\n");
+    fprintf(stderr, "Inicia GAME.\n");
+
+    // Colas (thread-safe) de comunicación entre hilos
+    BlockingQueue<Command*> commands;
+    NonBlockingQueue<Broadcast*> broadcasts;
+    NonBlockingQueue<Message*> messages;
+
+    // Hilos de ejecución
+    GameView game_view;
+    CommandDispatcher command_dispatcher(socket, commands, game_view);
+
+    // Lanzamos la ejecución
+    command_dispatcher.start();
+    game_view.run();
+
+    // Terminamos la ejecución
+    commands.close();
+    socket.shutdown();
+    command_dispatcher.join();
     current_context = EXIT_CTX;
+
+    fprintf(stderr, "Finaliza GAME.\n");
 }
 
 //-----------------------------------------------------------------------------

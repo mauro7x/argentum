@@ -4,8 +4,6 @@
 // Métodos privados
 
 void HomeView::_func(const int it) {
-    fprintf(stderr, "Inicia HomeView.\n");
-
     // Proxy por ahora
     std::string hostname, port, try_again;
     bool connected = false;
@@ -33,7 +31,7 @@ void HomeView::_func(const int it) {
             std::getline(std::cin, try_again);
             if (try_again != "y") {
                 current_context = EXIT_CTX;
-                stop();
+                quit();
                 break;
             }
         }
@@ -41,10 +39,8 @@ void HomeView::_func(const int it) {
 
     if (connected) {
         current_context = CONNECTION_CTX;
-        stop();
+        quit();
     }
-
-    fprintf(stderr, "Finaliza HomeView.\n");
 }
 
 //-----------------------------------------------------------------------------

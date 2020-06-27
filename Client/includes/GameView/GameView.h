@@ -1,26 +1,20 @@
-#ifndef __CONNECTION_VIEW_H__
-#define __CONNECTION_VIEW_H__
+#ifndef __GAME_VIEW_H__
+#define __GAME_VIEW_H__
 
 //-----------------------------------------------------------------------------
-#include "../../Common/includes/Socket/SocketWrapper.h"
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
-#include "ConstantRateFunc.h"
-#include "contexts.h"
-#include "defs.h"
+#include "../../../Common/includes/Socket/SocketWrapper.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+#include "../ConstantRateFunc.h"
+#include "../contexts.h"
+#include "../defs.h"
+//-----------------------------------------------------------------------------
 
-class ConnectionView : public ConstantRateFunc {
+//-----------------------------------------------------------------------------
+
+class GameView : public ConstantRateFunc {
    private:
-    // Contexto global actual
-    Context& current_context;
-
-    // Conexión
-    const SocketWrapper& socket;
-
     //-----------------------------------------------------------------------------
     // Métodos privados
 
@@ -31,7 +25,7 @@ class ConnectionView : public ConstantRateFunc {
 
    public:
     /* Constructor */
-    ConnectionView(Context& current_context, const SocketWrapper& socket);
+    GameView();
 
     //-----------------------------------------------------------------------------
     // Métodos de la API pública
@@ -39,9 +33,9 @@ class ConnectionView : public ConstantRateFunc {
     //-----------------------------------------------------------------------------
 
     /* Destructor */
-    ~ConnectionView();
+    ~GameView();
 };
 
 //-----------------------------------------------------------------------------
 
-#endif  // __CONNECTION_VIEW_H__
+#endif  // __GAME_VIEW_H__

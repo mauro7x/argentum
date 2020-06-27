@@ -1,11 +1,10 @@
-#include "../includes/ConnectionView.h"
+#include "../../includes/GameView/GameView.h"
 
 //-----------------------------------------------------------------------------
 // Métodos privados
 
-void ConnectionView::_func(const int it) {
+void GameView::_func(const int it) {
     // Proxy
-    current_context = GAME_CTX;
     quit();
 }
 
@@ -14,12 +13,8 @@ void ConnectionView::_func(const int it) {
 //-----------------------------------------------------------------------------
 // API Pública
 
-ConnectionView::ConnectionView(Context& current_context,
-                               const SocketWrapper& socket)
-    : ConstantRateFunc(RATE),
-      current_context(current_context),
-      socket(socket) {}
+GameView::GameView() : ConstantRateFunc(RATE) {}
 
-ConnectionView::~ConnectionView() {}
+GameView::~GameView() {}
 
 //-----------------------------------------------------------------------------

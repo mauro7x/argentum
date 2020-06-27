@@ -17,8 +17,10 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+#include "../../Common/includes/BlockingQueue.h"
 #include "../../Common/includes/Exceptions/Exception.h"
 #include "../../Common/includes/JSON.h"
+#include "../../Common/includes/NonBlockingQueue.h"
 #include "../../Common/includes/Socket/SocketWrapper.h"
 //-----------------------------------------------------------------------------
 
@@ -29,6 +31,11 @@
 
 //-----------------------------------------------------------------------------
 #include "ConnectionView.h"
+#include "GameModel/Broadcasts/Broadcast.h"
+#include "GameModel/CommandDispatcher.h"
+#include "GameModel/Commands/Command.h"
+#include "GameModel/Messages/Message.h"
+#include "GameView/GameView.h"
 #include "HomeView.h"
 //-----------------------------------------------------------------------------
 

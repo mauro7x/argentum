@@ -46,7 +46,7 @@ void ConstantRateFunc::run() {
     }
 }
 
-void ConstantRateFunc::stop() {
+void ConstantRateFunc::quit() {
     this->exit = true;
 }
 

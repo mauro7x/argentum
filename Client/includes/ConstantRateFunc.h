@@ -45,7 +45,7 @@ class ConstantRateFunc {
     void run();
 
     /* Detiene el loop (thread-safe) */
-    void stop();
+    void quit();
 
     //-----------------------------------------------------------------------------
 
