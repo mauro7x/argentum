@@ -61,7 +61,7 @@ void ClientLogin::run() {
         init_data.mana = 100;
         init_data.safe_gold = 100;
         init_data.excess_gold = 50;
-        init_data.level = 10;
+        init_data.level = 20;
         init_data.exp = 100;
 
         new_connections.push(new NewConnection(peer, init_data));

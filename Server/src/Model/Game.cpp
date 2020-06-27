@@ -456,9 +456,63 @@ void Game::stopMoving(const InstanceId caller) {
     character.stopMoving();
 }
 
+void Game::_useWeaponOnCharacter(const InstanceId caller,
+                                 const InstanceId target) {
+    Character& attacker = this->characters.at(caller);
+    Character& attacked = this->characters.at(target);
+
+    unsigned int effective_damage = 0;
+
+    try {
+        effective_damage = attacker.attack(attacked);
+    } catch (const std::exception& e) {
+        /*
+         * Atrapo excepciones: OutOfRangeAttackException,
+         * KindCantDoMagicException,
+         * TooHighLevelDifferenceOnAttackException,
+         * NewbiesCantBeAttackedException, InsufficientManaException,
+         * AttackedActualStateCantBeAttackedException
+         */
+        Notification* reply = new NotificationReply(ERROR_MSG, e.what());
+        active_clients.notify(caller, reply);
+        return;
+    }
+
+    // Verificamos si murió, en cuyo caso dropea todo.
+    if (effective_damage && !attacked.getHealth()) {
+        // attacked.dropEverything();
+    }
+
+    // FALTA DISCRIMINAR CASOS: no infligir danio, baculo curativo.
+    std::string reply_msg =
+        "Le has infligido " + std::to_string(effective_damage) + " de daño.";
+    Notification* reply = new NotificationReply(SUCCESS_MSG, reply_msg.c_str());
+    active_clients.notify(caller, reply);
+
+    reply_msg =
+        "Has recibido " + std::to_string(effective_damage) + " de daño.";
+    reply = new NotificationReply(SUCCESS_MSG, reply_msg.c_str());
+    active_clients.notify(target, reply);
+}
+
 void Game::useWeapon(const InstanceId caller, const InstanceId target) {
-    fprintf(stderr, "Comando useWeapon no implementado.\n");
-    return;
+    if (!this->characters.count(caller)) {
+        throw Exception("Game::useWeapon: unknown caller.");
+    }
+
+    if (this->characters.count(target)) {
+        // Está atacando a un character.
+        _useWeaponOnCharacter(caller, target);
+        return;
+    }
+
+    if (this->creatures.count(target)) {
+        fprintf(stderr,
+                "Game::useWeapon: ataque a criaturas no implementado.\n");
+        return;
+    }
+
+    // Excepcion. target invalido.
 }
 
 void Game::equip(const InstanceId caller, const uint8_t n_slot) {

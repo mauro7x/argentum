@@ -119,6 +119,9 @@ class Map {
      */
     void serverAddItem(const Id item_id, int& x, int& y);
 
+    /* Devuelve si las coordenadas recibidas están dentro de una zona segura */
+    const bool isSafeZone(const int x, const int y) const; 
+
     /* Elimina al ocupante de una celda */
     void clearTileOccupant(const int x, const int y);
 

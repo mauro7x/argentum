@@ -132,9 +132,8 @@ class Game {
      * se invoca este método. Su función es broadcastear dicha actualización,
      * pusheándola a los clientes activos.
      */
-    void _pushItemDifferentialBroadcast(Id map_id, int x_coord,
-                                              int y_coord,
-                                              BroadcastType broadcast_type);
+    void _pushItemDifferentialBroadcast(Id map_id, int x_coord, int y_coord,
+                                        BroadcastType broadcast_type);
 
     /*
      * Ante la conexión de un nuevo jugador o el cambio de mapa, se invoca
@@ -242,6 +241,8 @@ class Game {
 
     void stopMoving(const InstanceId caller);
 
+    void _useWeaponOnCharacter(const InstanceId caller,
+                               const InstanceId target);
     void useWeapon(const InstanceId caller, const InstanceId target);
 
     void equip(const InstanceId caller, const uint8_t n_slot);
@@ -274,8 +275,7 @@ class Game {
                   const uint32_t amount);
 
     void take(const InstanceId caller);
-    void drop(const InstanceId caller, const uint8_t n_slot,
-              uint32_t amount);
+    void drop(const InstanceId caller, const uint8_t n_slot, uint32_t amount);
 
     void listConnectedPlayers(const InstanceId caller);
 
