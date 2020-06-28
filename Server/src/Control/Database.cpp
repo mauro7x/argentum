@@ -176,15 +176,15 @@ void Database::persistPlayerData(CharacterCfg& data) {
     fprintf(stderr, "antes de guardar\n");
     fprintf(stderr, "race: %d\n", data.race);
     fprintf(stderr, "exp: %d\n", data.exp);
-    std::fstream file_data(PLAYER_DATA_FILEPATH);
-    file_data.seekg(data_index[data.nickname].index, std::ios::beg);
+    std::ofstream file_data(PLAYER_DATA_FILEPATH);
+    file_data.seekp(data_index[data.nickname].index, std::ios::beg);
     file_data.write(reinterpret_cast<char*>(&data), sizeof(data));
-    CharacterCfg character;
-    file_data.seekg(data_index[data.nickname].index, std::ios::beg);
-    file_data.read(reinterpret_cast<char*>(&character), sizeof(character));
-    fprintf(stderr, "despues de guardar\n");
-    fprintf(stderr, "race: %d\n", character.race);
-    fprintf(stderr, "exp: %d\n", character.exp);
+    // CharacterCfg character;
+    // file_data.seekg(data_index[data.nickname].index, std::ios::beg);
+    // file_data.read(reinterpret_cast<char*>(&character), sizeof(character));
+    // fprintf(stderr, "despues de guardar\n");
+    // fprintf(stderr, "race: %d\n", character.race);
+    // fprintf(stderr, "exp: %d\n", character.exp);
 }
 
 Database::~Database() {}
