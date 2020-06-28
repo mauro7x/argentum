@@ -153,6 +153,8 @@ struct CharacterCfg {
     
     Id race;
     Id kind;
+    Id head_id;
+    Id body_id;
 
     StateType state;
 
