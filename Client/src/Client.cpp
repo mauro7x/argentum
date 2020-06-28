@@ -81,8 +81,10 @@ void Client::_initComponents() {
 
 void Client::_launchHomeCtx() {
     fprintf(stderr, "Inicia HOME.\n");
-    HomeView home_view(current_context, socket);
+
+    HomeView home_view(current_context, renderer, socket);
     home_view.run();
+
     fprintf(stderr, "Finaliza HOME.\n");
 }
 

@@ -7,6 +7,41 @@
     "renderer": {
         "vsync": false
     },
+    "homeview": {
+        "fontsize": 12,
+        "hostname": {
+            "w": 240,
+            "h": 30,
+            "offset": {
+                "x": 30,
+                "y": 250
+            }
+        },
+        "port": {
+            "w": 240,
+            "h": 30,
+            "offset": {
+                "x": 30,
+                "y": 300
+            }
+        },
+        "connect": {
+            "w": 120,
+            "h": 40,
+            "offset": {
+                "x": 88,
+                "y": 350
+            }
+        },
+        "info": {
+            "fontsize": 14,
+            "w": 240,
+            "offset": {
+                "x": 30,
+                "y": 410
+            }
+        }
+    },
     "camera": {
         "w": 672,
         "h": 384,
