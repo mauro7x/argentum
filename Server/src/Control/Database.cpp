@@ -5,6 +5,9 @@
 
 void Database::_fillInfo() {
     std::ifstream file_info(PLAYER_INFO_FILEPATH);
+    if (!file_info.is_open()) {
+        return;
+    }
     file_info.seekg(0, std::ios::end);
     size_t size = file_info.tellg();
     file_info.seekg(0, std::ios::beg);
@@ -31,17 +34,14 @@ void Database::_persistPlayerInfo(const std::string& username) {
     std::strncpy(player_info.password, password.c_str(),
                  sizeof(char) * NICKNAME_MAX_LENGTH - 1);
     player_info.index = file_pointer;
-    std::fstream file_info(PLAYER_INFO_FILEPATH);
-    file_info.seekg(0, std::ios::end);
+    std::ofstream file_info(PLAYER_INFO_FILEPATH);
+    file_info.seekp(0, std::ios::end);
     file_info.write(reinterpret_cast<char*>(&player_info), sizeof(player_info));
-    PlayerInfo player_;
-    file_info.seekp(0, std::ios::beg);
-    file_info.read(reinterpret_cast<char*>(&player_), sizeof(player_));
     file_info.close();
 }
 
-void Database::_createDataInicial(const std::string& username, Id race,
-                                  Id kind, CharacterCfg& character_data) {
+void Database::_createDataInicial(const std::string& username, Id race, Id kind,
+                                  CharacterCfg& character_data) {
     character_data.map = 0;
     character_data.x_tile = 0;
     character_data.y_tile = 0;
@@ -60,8 +60,7 @@ void Database::_createDataInicial(const std::string& username, Id race,
         InventorySlot({0, 0})};
     character_data.health =
         races[race].initial_health + kinds[kind].initial_health;
-    character_data.mana =
-        races[race].initial_health + kinds[kind].initial_mana;
+    character_data.mana = races[race].initial_health + kinds[kind].initial_mana;
     character_data.safe_gold = 0;
     character_data.excess_gold = 0;
     character_data.level = 1;
@@ -91,9 +90,11 @@ void Database::init() {
     }
 
     std::ifstream file_data(PLAYER_DATA_FILEPATH);
-    file_data.seekg(0, std::ios::end);
-    file_pointer = file_data.tellg();
-    file_data.close();
+    if (file_data.is_open()) {
+        file_data.seekg(0, std::ios::end);
+        file_pointer = file_data.tellg();
+        file_data.close();
+    }
     _fillInfo();
 
     initialized = true;
@@ -158,6 +159,7 @@ void Database::persistPlayerData(CharacterCfg& data) {
     std::ofstream file_data(PLAYER_DATA_FILEPATH);
     file_data.seekp(data_index[data.nickname].index, std::ios::beg);
     file_data.write(reinterpret_cast<char*>(&data), sizeof(data));
+    file_data.close();
 }
 
 Database::~Database() {}
