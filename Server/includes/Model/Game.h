@@ -236,6 +236,10 @@ class Game {
     void _useWeaponOnCharacter(const InstanceId caller,
                                const InstanceId target);
 
+    void _sendCharacterAttackNotifications(const int damage, const bool eluded,
+                                           const InstanceId caller,
+                                           const InstanceId target);
+
     //--------------------------------------------------------------------------
     // Comandos
     //--------------------------------------------------------------------------
@@ -246,7 +250,6 @@ class Game {
 
     void stopMoving(const InstanceId caller);
 
-    
     void useWeapon(const InstanceId caller, const InstanceId target);
 
     void equip(const InstanceId caller, const uint8_t n_slot);

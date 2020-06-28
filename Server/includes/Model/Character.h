@@ -279,6 +279,8 @@ class Character {
      * Lanza:
      *       OutOfRangeAttackException si el otro jugador está fuera del rango
      * del arma.
+     * 
+     *       CantAttackWithoutWeapon si no tiene arma equipada para atacar.
      *
      *       AttackCooldownTimeNotElapsedException si el cooldown de uso del
      * arma todavía no pasó.
@@ -380,6 +382,11 @@ class InsufficientManaException : public std::exception {
 };
 
 class CantAttackInSafeZoneException : public std::exception {
+   public:
+    virtual const char* what() const noexcept;
+};
+
+class CantAttackWithoutWeaponException : public std::exception {
    public:
     virtual const char* what() const noexcept;
 };

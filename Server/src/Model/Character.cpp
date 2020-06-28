@@ -258,6 +258,10 @@ const bool Character::attack(Character& attacked, int& damage) {
     // Delego si puedo atacar en mi estado.
     this->state->attack();
 
+    // Verifico si tiene arma de ataque.
+    if (!this->equipment.hasAWeaponEquipped())
+        throw CantAttackWithoutWeaponException();
+
     // Verifico cooldown de arma de ataque.
     if (this->attack_cooldown)
         throw AttackCooldownTimeNotElapsedException();
@@ -431,6 +435,10 @@ const char* CantAttackItselfException::what() const noexcept {
 
 const char* OutOfRangeAttackException::what() const noexcept {
     return "El jugador al que quieres atacar está fuera del rango de tu arma.";
+}
+
+const char* CantAttackWithoutWeaponException::what() const noexcept {
+    return "No puedes atacar sin arma.";
 }
 
 const char* NewbiesCantBeAttackedException::what() const noexcept {

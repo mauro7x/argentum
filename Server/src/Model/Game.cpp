@@ -488,6 +488,39 @@ void Game::_dropAllItems(Character& dropper) {
     }
 }
 
+void Game::_sendCharacterAttackNotifications(const int damage,
+                                             const bool eluded,
+                                             const InstanceId caller,
+                                             const InstanceId target) {
+    std::string msg_to_attacked, msg_to_attacker;
+
+    if (damage > 0) {
+        msg_to_attacker =
+            "Le has infligido " + std::to_string(damage) + " de daño.";
+        msg_to_attacked =
+            "Has recibido " + std::to_string(damage) + " de daño.";
+    } else if (damage < 0) {
+        msg_to_attacker =
+            "Le has curado " + std::to_string(damage) + " puntos de vida.";
+        msg_to_attacked =
+            "Te han curado " + std::to_string(damage) + " puntos de vida.";
+    } else if (eluded) {
+        msg_to_attacker = "Tu ataque fue eludido.";
+        msg_to_attacked = "Has eludido un ataque.";
+    } else {
+        msg_to_attacker =
+            "No le has causado daño, la defensa absorbió el ataque.";
+        msg_to_attacked = "Tu defensa absorbió todo el daño del ataque.";
+    }
+
+    Notification* reply =
+        new NotificationReply(INFO_MSG, msg_to_attacker.c_str());
+    active_clients.notify(caller, reply);
+
+    reply = new NotificationReply(INFO_MSG, msg_to_attacked.c_str());
+    active_clients.notify(target, reply);
+}
+
 void Game::_useWeaponOnCharacter(const InstanceId caller,
                                  const InstanceId target) {
     Character& attacker = this->characters.at(caller);
@@ -502,6 +535,7 @@ void Game::_useWeaponOnCharacter(const InstanceId caller,
         /*
          * Atrapo excepciones:
          * OutOfRangeAttackException,
+         * CantAttackWithoutWeaponException,
          * KindCantDoMagicException,
          * TooHighLevelDifferenceOnAttackException,
          * NewbiesCantBeAttackedException, InsufficientManaException,
@@ -519,31 +553,7 @@ void Game::_useWeaponOnCharacter(const InstanceId caller,
         _dropAllItems(attacked);
     }
 
-    std::string msg_to_attacked, msg_to_attacker;
-
-    if (damage > 0) {
-        msg_to_attacker =
-            "Le has infligido " + std::to_string(damage) + " de daño.";
-        msg_to_attacked =
-            "Has recibido " + std::to_string(damage) + " de daño.";
-    } else if (damage < 0) {
-        msg_to_attacker =
-            "Le has curado " + std::to_string(damage) + " puntos de vida.";
-        msg_to_attacked =
-            "Te han curado " + std::to_string(damage) + " puntos de vida.";
-    } else if (eluded) {
-        msg_to_attacker = "Tu ataque fue eludido.";
-        msg_to_attacked = "Has eludido un ataque.";
-    } else {
-        msg_to_attacker = "No le has causado daño, la defensa absorbió el ataque.";
-        msg_to_attacked = "Tu defensa absorbió todo el daño del ataque.";
-    }
-
-    Notification* reply = new NotificationReply(INFO_MSG, msg_to_attacker.c_str());
-    active_clients.notify(caller, reply);
-
-    reply = new NotificationReply(INFO_MSG, msg_to_attacked.c_str());
-    active_clients.notify(target, reply);
+    _sendCharacterAttackNotifications(damage, eluded, caller, target);
 }
 
 void Game::useWeapon(const InstanceId caller, const InstanceId target) {
