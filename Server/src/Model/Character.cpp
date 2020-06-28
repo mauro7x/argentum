@@ -318,7 +318,7 @@ const bool Character::attack(Character& attacked, int& damage) {
         damage = damage * CRITICAL_ATTACK_DAMAGE_MODIFIER;
 
     // El atacado recibe el daño del ataque.
-    const bool eluded = attacked.receiveAttack(damage, critical_attack);
+    const bool eluded = !attacked.receiveAttack(damage, critical_attack);
 
     // Actualizo exp.
     this->level.onAttackUpdate(*this, damage, attacked.getLevel());
@@ -341,6 +341,7 @@ const bool Character::receiveAttack(int& damage, const bool eludible) {
     }
 
     const unsigned int defense_points = this->equipment.getDefensePoints(*this);
+
     damage = std::max(0, (int)(damage - defense_points));
 
     this->health = std::max(0, (int)(this->health - damage));
