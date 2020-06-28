@@ -139,6 +139,10 @@ void Database::signUp(const std::string& username, const std::string& password,
         throw LoginException(
             "El nombre de usuario solicitado se encuentra en uso.");
     }
+    // check if race o kind is valid
+    if (races.count(race) == 0 || kinds.count(kind) == 0){
+        throw Exception("Id de race o/y de kind invalido/s.");
+    }
     data_index.emplace(username, DataIndex());
     data_index[username].index = file_pointer;
     std::strncpy(data_index[username].password, password.c_str(),
