@@ -213,7 +213,7 @@ void Game::deleteCharacter(const InstanceId id, Database& database) {
     Character& character = characters.at(id);
     _pushCharacterDifferentialBroadcast(id, DELETE_BROADCAST, false);
 
-    CharacterCfg character_data;
+    CharacterCfg character_data = {};
     // PERSISTIR ESTADO DEL JUGADOR
     character.fillPersistenceData(character_data);
     database.persistPlayerData(character_data);

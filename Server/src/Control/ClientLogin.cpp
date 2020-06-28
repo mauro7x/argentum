@@ -22,7 +22,7 @@ CharacterCfg ClientLogin::_login() {
     uint8_t opcode;
     size_t received;
     std::string username, password;
-    CharacterCfg character_data;
+    CharacterCfg character_data = {};
     //enviar info kind race;
     while (!connected) {
         received = peer >> opcode;
@@ -102,7 +102,7 @@ void ClientLogin::run() {
         // que agregamos la petición de crear jugador a la cola y terminamos
 
         // esta data deberia venir el login
-        CharacterCfg init_data;
+        CharacterCfg init_data = {};
         init_data = _login();
         new_connections.push(new NewConnection(peer, init_data));
 
