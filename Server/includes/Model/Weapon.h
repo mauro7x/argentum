@@ -6,7 +6,7 @@
 
 class Weapon: public Wearable {
     private:
-        const unsigned int attack_range;
+        const unsigned int range;
         const unsigned int min_damage;
         const unsigned int max_damage;
         const unsigned int cooldown;
@@ -19,13 +19,18 @@ class Weapon: public Wearable {
         Weapon& operator=(const Weapon&) = delete;
         Weapon(Weapon&&) = delete;
         Weapon& operator=(Weapon&&) = delete;
-
-        // IMPLEMENTAR Metodos comodamente en base
-        // a los metodos definidos del Character/Inventory/Equipment.
-        // Mantener abstraccion Item y Wearable.
         
-        virtual const unsigned int use(Character& user) override;
-        virtual const unsigned int getRange() const override;
+        /*
+         * Setea el cooldown de uso de arma en el character
+         * y retorna los puntos de daño que causa.
+         */
+        const unsigned int use(Character& user) override;
+
+        /* Devuelve el rango del arma */
+        const unsigned int getRange() const override;
+
+        /* Devuelve si es curativa [always false] */
+        const bool isHealing() const override;
 };
 
 #endif

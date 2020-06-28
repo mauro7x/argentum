@@ -253,7 +253,7 @@ void Character::doMagic() {
     }
 }
 
-const unsigned int Character::attack(Character& attacked) {
+const int Character::attack(Character& attacked) {
     // Delego si puedo atacar en mi estado.
     this->state->attack();
 
@@ -267,10 +267,20 @@ const unsigned int Character::attack(Character& attacked) {
 
     const unsigned int weapon_range = this->equipment.getAttackRange();
 
-    // Si el arma no es de ataque, es curativa [range 0].
-    if (weapon_range == 0) {
-        return this->equipment.useAttackItem(*this);
+    // Si el arma es curativa, obtengo sus puntos y curo.
+    if (this->equipment.isWeaponHealing()) {
+        unsigned int healing_points = this->equipment.useAttackItem(*this);
+        attacked.recoverHealth(healing_points);
+
+        // Devuelvo valor negativo -> puntos curativos.
+        return -healing_points;
     }
+
+    // Es un arma de ataque.
+
+    // Verifico que no se quiera hacer daño a sí mismo
+    if (this == &attacked)
+        throw CantAttackItselfException();
 
     // Verifico si dado el estado del otro jugador puedo atacarlo.
     attacked.beAttacked();
@@ -281,26 +291,24 @@ const unsigned int Character::attack(Character& attacked) {
     }
 
     if (!(Formulas::canAttackByLevel(this->level.getLevel(),
-                                     attacked.getLevel()))) {
+                                     attacked.getLevel())))
         throw TooHighLevelDifferenceOnAttackException();
-    }
 
     // Se trata de un ataque de daño.
     // Nos fijamos si el atacado está en el rango del arma.
     // Si no lo está, lanzamos excepción.
     const unsigned int distance =
         this->position.getDistance(attacked.getPosition());
-    if (distance > weapon_range) {
+
+    if (distance > weapon_range)
         throw OutOfRangeAttackException();
-    }
 
     // Está dentro del rango. Se define si el ataque es critico y se obtienen
     // los correspondientes puntos de daño.
     bool critical_attack = Formulas::isCriticalAttack();
     unsigned int potential_damage = this->equipment.useAttackItem(*this);
-    if (critical_attack) {
+    if (critical_attack)
         potential_damage = potential_damage * CRITICAL_ATTACK_DAMAGE_MODIFIER;
-    }
 
     // El atacado recibe el daño del ataque.
     const unsigned int effective_damage =
@@ -310,10 +318,9 @@ const unsigned int Character::attack(Character& attacked) {
     this->level.onAttackUpdate(*this, effective_damage, attacked.getLevel());
 
     // Si murio, sumamos la exp. necesaria
-    if (!attacked.getHealth()) {
+    if (!attacked.getHealth())
         this->level.onKillUpdate(*this, attacked.getMaxHealth(),
                                  attacked.getLevel());
-    }
 
     this->broadcast = true;
 
@@ -421,6 +428,10 @@ const char* InsufficientManaException::what() const noexcept {
 
 const char* CantAttackInSafeZoneException::what() const noexcept {
     return "No se puede atacar en una zona segura.";
+}
+
+const char* CantAttackItselfException::what() const noexcept {
+    return "No puedes hacerte daño a ti mismo.";
 }
 
 const char* OutOfRangeAttackException::what() const noexcept {

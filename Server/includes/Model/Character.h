@@ -268,7 +268,7 @@ class Character {
      * Efectua un ataque a otro jugador, usando el arma que tiene equipada.
      *
      * Retorna los puntos de daño efectivos que generó. Si no tiene arma
-     * equipada, o el arma es curativa, retorna 0.
+     * equipada, retorna 0.
      *
      * Si el arma tiene efecto sobre el jugador [e.g: es un baculo curativo],
      * i.e tiene rango cero, se usa inmediatamente.
@@ -286,6 +286,9 @@ class Character {
      *
      *       KindCantDoMagicException si la clase del character no puede hacer
      * magia e intenta usar un hechizo.
+     * 
+     *       CantAttackItselfException si quieren lanzar un ataque dañino sobre
+     * sí mismo.
      *
      *       TooHighLevelDifferenceOnAttackException si la diferencia de niveles
      * es más alta de la permitida para un ataque.
@@ -302,7 +305,7 @@ class Character {
      *       AttackedStateCantBeAttackedException si el jugador al que se
      * quiere atacar no puede atacar debido a su estado (muerto).
      */
-    const unsigned int attack(Character& attacked);
+    const int attack(Character& attacked);
 
     /*
      * Cuando health es cero, se llama a este método. Cambia el estado del
@@ -378,6 +381,11 @@ class InsufficientManaException : public std::exception {
 };
 
 class CantAttackInSafeZoneException : public std::exception {
+   public:
+    virtual const char* what() const noexcept;
+};
+
+class CantAttackItselfException : public std::exception {
    public:
     virtual const char* what() const noexcept;
 };

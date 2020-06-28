@@ -499,12 +499,14 @@ void Game::_useWeaponOnCharacter(const InstanceId caller,
         effective_damage = attacker.attack(attacked);
     } catch (const std::exception& e) {
         /*
-         * Atrapo excepciones: OutOfRangeAttackException,
+         * Atrapo excepciones: 
+         * OutOfRangeAttackException,
          * KindCantDoMagicException,
          * TooHighLevelDifferenceOnAttackException,
          * NewbiesCantBeAttackedException, InsufficientManaException,
          * AttackedActualStateCantBeAttackedException,
-         * AttackCooldownTimeNotElapsedException
+         * AttackCooldownTimeNotElapsedException,
+         * CantAttackItselfException
          */
         Notification* reply = new NotificationReply(ERROR_MSG, e.what());
         active_clients.notify(caller, reply);

@@ -4,12 +4,18 @@
 #include "../../includes/Model/Character.h"  // Evito circular dependences.
 
 Spell::Spell(const int id, const std::string name,
-             const unsigned int mana_usage_cost, const unsigned int cooldown)
+             const unsigned int mana_usage_cost, const unsigned int range,
+             const unsigned int cooldown)
     : id(id),
       name(name),
       mana_usage_cost(mana_usage_cost),
+      range(range),
       cooldown(cooldown) {}
 Spell::~Spell() {}
+
+const unsigned int Spell::getRange() const {
+    return this->range;
+}
 
 Spell* SpellFactory::newSpell(const SpellCfg& data) {
     if (data.type == ATTACKING) {
@@ -22,8 +28,8 @@ Spell* SpellFactory::newSpell(const SpellCfg& data) {
 }
 
 AttackingSpell::AttackingSpell(const SpellCfg& data)
-    : Spell(data.id, data.name, data.mana_usage_cost, data.cooldown),
-      attack_range(data.attack_range),
+    : Spell(data.id, data.name, data.mana_usage_cost, data.range,
+            data.cooldown),
       min_damage(data.min_damage),
       max_damage(data.max_damage) {}
 AttackingSpell::~AttackingSpell() {}
@@ -39,12 +45,13 @@ const unsigned int AttackingSpell::cast(Character& caster) {
     return random_number_generator(min_damage, max_damage);
 }
 
-const unsigned int AttackingSpell::getRange() const {
-    return this->attack_range;
+const bool AttackingSpell::isHealing() const {
+    return false;
 }
 
 HealingSpell::HealingSpell(const SpellCfg& data)
-    : Spell(data.id, data.name, data.mana_usage_cost, data.cooldown),
+    : Spell(data.id, data.name, data.mana_usage_cost, data.range,
+            data.cooldown),
       recovery_points(data.recovery_points) {}
 HealingSpell::~HealingSpell() {}
 
@@ -55,15 +62,13 @@ const unsigned int HealingSpell::cast(Character& caster) {
 
     caster.setAttackCooldown(this->cooldown);
 
-    caster.recoverHealth(this->recovery_points);
-
-    return 0;  // No hace daño otro jugador.
-}
-
-const unsigned int HealingSpell::getRange() const {
-    return 0;  // Se lanza sobre si mismo.
+    return this->recovery_points;
 }
 
 const char* UnknownSpellTypeException::what() const noexcept {
     return "El tipo de hechizo especificado en SpellCfg es inválido.";
+}
+
+const bool HealingSpell::isHealing() const {
+    return true;
 }

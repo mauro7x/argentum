@@ -32,21 +32,23 @@ class Wand: public Wearable {
         /*
          * Castea el spell.
          * 
-         * Retorna los puntos de ataque que provoca el hechizo.
-         * Si es un hechizo curativo, retorna 0.
+         * Retorna los puntos de ataque/curación que provoca el hechizo.
          * 
          * Lanza InsufficientManaException si el user no tiene
          * suficiente mana para castearlo.
+         * 
+         *       KindCantDoMagicException si el user no puede hacer magia
+         * debido a su kind.
          */
         virtual const unsigned int use(Character& user) override;
 
         /*
          * Devuelve el rango del hechizo.
-         * 
-         * Si es un hechizo curativo, el rango es 0, dado que se
-         * castea sobre si mismo.
          */
         const unsigned int getRange() const override;
+
+        /* Devuelve si el hechizo es curativo o no */
+        const bool isHealing() const override;
 };
 
 #endif

@@ -16,8 +16,3 @@ const WearableType Wearable::getType() const {
 void Wearable::equip(Character& character) {
     character.equip(this);
 }
-
-const unsigned int Wearable::getRange() const {
-    return 0; // Defensas no tienen rango.
-              // Las armas overridean este metodo.
-}

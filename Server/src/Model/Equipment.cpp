@@ -74,6 +74,13 @@ const unsigned int Equipment::getDefensePoints(Character& defender) {
     return defense_points;
 }
 
+const bool Equipment::isWeaponHealing() const {
+    if (!this->container[WEAPON])
+        return false;
+        
+    return this->container[WEAPON]->isHealing();
+}
+
 void Equipment::fillBroadcastData(PlayerData& data) const {
     for (int i = 0; i < N_WEARABLE_ITEMS; ++i) {
         if (!this->container[i]) {

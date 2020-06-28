@@ -4,24 +4,30 @@
 #include "Wearable.h"
 #include "config_structs.h"
 
-class Defence: public Wearable {
-    private:
-        unsigned int min_defence, max_defence;
-        
-    public:
-        Defence(const DefenceCfg& data);
-        ~Defence();
+class Defence : public Wearable {
+   private:
+    unsigned int min_defence, max_defence;
 
-        Defence(const Defence&) = delete;
-        Defence& operator=(const Defence&) = delete;
-        Defence(Defence&&) = delete;
-        Defence& operator=(Defence&&) = delete;
+   public:
+    Defence(const DefenceCfg& data);
+    ~Defence();
 
-        // IMPLEMENTAR Metodos comodamente en base
-        // a los metodos definidos del Character/Inventory/Equipment.
-        // Mantener abstraccion Item y Wearable.
+    Defence(const Defence&) = delete;
+    Defence& operator=(const Defence&) = delete;
+    Defence(Defence&&) = delete;
+    Defence& operator=(Defence&&) = delete;
 
-        virtual const unsigned int use(Character& user) override;
+    /* Devuelve los puntos de defensa que absorbe. */
+    const unsigned int use(Character& user) override;
+
+    /* Lanza excepción. La defensa no tiene rango */
+    const unsigned int getRange() const override;
+
+    /* 
+     * Lanza excepción. La defensa no es curativa. 
+     * (solo absorbe puntos de daño)
+     */
+    const bool isHealing() const override;
 };
 
 #endif

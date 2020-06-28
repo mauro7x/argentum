@@ -89,6 +89,9 @@ class Equipment {
      */
     const unsigned int getDefensePoints(Character& defender);
 
+    /* Devuelve si el arma equipada es curativa o no */
+    const bool isWeaponHealing() const;
+
     void fillBroadcastData(PlayerData& data) const;
 };
 
