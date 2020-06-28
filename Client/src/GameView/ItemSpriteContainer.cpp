@@ -48,6 +48,7 @@ void ItemSpriteContainer::loadMedia() {
     _loadSpritesFromJson(sprites["weapons"], dirpath);
     _loadSpritesFromJson(sprites["wands"], dirpath);
     _loadSpritesFromJson(sprites["potions"], dirpath);
+    _loadSpritesFromJson(sprites["others"], dirpath);
 }
 
 const ItemSprite& ItemSpriteContainer::get(const Id id) const {

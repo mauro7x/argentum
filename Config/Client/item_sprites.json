@@ -220,5 +220,18 @@
                 }
             }
         }
+    ],
+    "others": [
+        {
+            "gid": 2000,
+            "color_key": {
+                "is_needed": true,
+                "color": {
+                    "r": 0,
+                    "g": 0,
+                    "b": 0
+                }
+            }
+        }
     ]
 }
