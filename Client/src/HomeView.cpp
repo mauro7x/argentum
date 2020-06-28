@@ -386,7 +386,7 @@ void HomeView::_handleConnectButtonPressed() {
         return;
     }
 
-    current_context = GAME_CTX;
+    current_context = CONNECTION_CTX;
     quit();
 }
 
