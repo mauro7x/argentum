@@ -159,43 +159,8 @@ void HomeView::_func(const int it) {
     /* Actualizamos el cooldown del cursor */
     _updateCursorAnimation(it);
 
+    /* Presentamos la pantalla */
     renderer.presentScreen();
-
-    /*
-    // Proxy por ahora
-    std::string hostname, port, try_again;
-    bool connected = false;
-
-    std::cout << "Bienvenido a Argentum Online.\n";
-
-    while (!connected) {
-        std::cout << "\n> Ingrese los datos que se le soliciten para "
-                     "conectarse al "
-                     "servidor.\n";
-        std::cout << "\t> Hostname: ";
-        std::getline(std::cin, hostname);
-        std::cout << "\t> Puerto: ";
-        std::getline(std::cin, port);
-
-        std::cout << "[DEBUG] Hostname ingresado: " << hostname << "\n";
-        std::cout << "[DEBUG] Puerto ingresado: " << port << "\n";
-
-        try {
-            socket = std::move(SocketWrapper(hostname, port));
-            connected = true;
-        } catch (const Exception& e) {
-            std::cout << "\n> Conexión fallida. Ingrese 'y' para volver a "
-                         "intentar, o presione enter para salir: \n";
-            std::getline(std::cin, try_again);
-            if (try_again != "y") {
-                current_context = EXIT_CTX;
-                quit();
-                break;
-            }
-        }
-
-    }
-    */
 }
 
 //-----------------------------------------------------------------------------
@@ -364,14 +329,13 @@ void HomeView::_handleEvent(const SDL_Event& e) {
 void HomeView::_handleConnectButtonPressed() {
     if (current_hostname.empty() || current_port.empty()) {
         info_msg.loadFromRenderedText(&renderer, info_font,
-                                      "Debes completar ambos campos",
+                                      HOMEVIEW_INVALID_INPUT_MSG,
                                       SDL_Color(HOMEVIEW_ERROR_COLOR));
         _setInfoPos();
         return;
     }
 
-    info_msg.loadFromRenderedText(&renderer, info_font,
-                                  "Intentando establecer conexion...",
+    info_msg.loadFromRenderedText(&renderer, info_font, HOMEVIEW_CONNECTING_MSG,
                                   SDL_Color(HOMEVIEW_FONT_COLOR));
     _setInfoPos();
 
@@ -380,7 +344,7 @@ void HomeView::_handleConnectButtonPressed() {
         socket = std::move(SocketWrapper(current_hostname, current_port));
     } catch (const Exception& e) {
         info_msg.loadFromRenderedText(&renderer, info_font,
-                                      "No se pudo establecer conexion",
+                                      HOMEVIEW_ERROR_CONNECTING_MSG,
                                       SDL_Color(HOMEVIEW_ERROR_COLOR));
         _setInfoPos();
         return;
