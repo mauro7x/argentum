@@ -87,7 +87,8 @@ struct RaceCfg {
 
     Id head_id;
     Id body_id;
-
+    std::vector<int> head_ids;
+    std::vector<int> body_ids;
     uint8_t max_health_factor;
     uint8_t max_mana_factor;
     uint8_t health_recovery_factor;
