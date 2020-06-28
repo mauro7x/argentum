@@ -52,8 +52,10 @@ class Character {
     Position position;
 
     bool is_moving;
-    int moving_cooldown_time;
+    int moving_cooldown;
     unsigned int attribute_update_time_elapsed;
+
+    int attack_cooldown;
 
     bool broadcast;
 
@@ -224,6 +226,14 @@ class Character {
     //-----------------------------------------------------------------------------
 
     /*
+     * Metodo llamado al usar el arma equipada.
+     *
+     * Setea el cooldown de ataque. El arma no podrá volver a utilizarse
+     * en tanto no haya pasado el tiempo de cooldown.
+     */
+    void setAttackCooldown(const unsigned int cooldown);
+
+    /*
      * Metodo llamado al usar báculos.
      *
      * Lanza KindCantDoMagicException si el Kind no puede hacer magia.
@@ -271,6 +281,9 @@ class Character {
      *       OutOfRangeAttackException si el otro jugador está fuera del rango
      * del arma.
      *
+     *       AttackCooldownTimeNotElapsedException si el cooldown de uso del
+     * arma todavía no pasó.
+     *
      *       KindCantDoMagicException si la clase del character no puede hacer
      * magia e intenta usar un hechizo.
      *
@@ -282,7 +295,7 @@ class Character {
      *
      *       InsufficientManaException si no puede usar el hechizo debido a
      * déficit de maná.
-     * 
+     *
      *       AttackerStateCantAttackException si el jugador no puede atacar
      * debido a su estado (muerto)
      *
@@ -375,6 +388,11 @@ class OutOfRangeAttackException : public std::exception {
 };
 
 class NewbiesCantBeAttackedException : public std::exception {
+   public:
+    virtual const char* what() const noexcept;
+};
+
+class AttackCooldownTimeNotElapsedException : public std::exception {
    public:
     virtual const char* what() const noexcept;
 };

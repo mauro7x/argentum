@@ -26,11 +26,13 @@ class Spell {
         const int id;
         const std::string name;
         const unsigned int mana_usage_cost;
+        const unsigned int cooldown;
 
     public:
         Spell(const int id,
               const std::string name,
-              const unsigned int mana_usage_cost);
+              const unsigned int mana_usage_cost,
+              const unsigned int cooldown);
         virtual ~Spell();
 
         /*
@@ -56,7 +58,7 @@ class SpellFactory {
 
 class AttackingSpell: public Spell {
     private:
-        const unsigned int attack_distance;
+        const unsigned int attack_range;
         const unsigned int min_damage, max_damage;
 
     public:

@@ -503,7 +503,8 @@ void Game::_useWeaponOnCharacter(const InstanceId caller,
          * KindCantDoMagicException,
          * TooHighLevelDifferenceOnAttackException,
          * NewbiesCantBeAttackedException, InsufficientManaException,
-         * AttackedActualStateCantBeAttackedException
+         * AttackedActualStateCantBeAttackedException,
+         * AttackCooldownTimeNotElapsedException
          */
         Notification* reply = new NotificationReply(ERROR_MSG, e.what());
         active_clients.notify(caller, reply);

@@ -31,9 +31,10 @@ struct WeaponCfg {
     Id id;
     std::string name;
     unsigned int price;
-    unsigned int attack_distance;
+    unsigned int attack_range;
     unsigned int min_damage;
     unsigned int max_damage;
+    unsigned int cooldown;
 };
 
 struct WandCfg {
@@ -48,9 +49,10 @@ struct SpellCfg {
     std::string name;
     SpellType type;
     unsigned int mana_usage_cost;
+    unsigned int cooldown;
 
     // ATTACK SPELL ONLY
-    unsigned int attack_distance;
+    unsigned int attack_range;
     unsigned int min_damage;
     unsigned int max_damage;
 

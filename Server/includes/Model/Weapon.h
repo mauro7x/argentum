@@ -6,9 +6,10 @@
 
 class Weapon: public Wearable {
     private:
-        const unsigned int attack_distance;
+        const unsigned int attack_range;
         const unsigned int min_damage;
         const unsigned int max_damage;
+        const unsigned int cooldown;
 
     public:
         Weapon(const WeaponCfg& data);

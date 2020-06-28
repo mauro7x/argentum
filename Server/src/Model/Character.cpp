@@ -1,5 +1,5 @@
 #include <math.h>
-
+#include <string>
 #include <algorithm>
 //-----------------------------------------------------------------------------
 #include "../../includes/Model/Character.h"
@@ -10,7 +10,7 @@
 #define CRITICAL_ATTACK_DAMAGE_MODIFIER 2
 #define RATE 1000 / 30                  // ms.
 #define TIME_TO_MOVE_A_TILE 200         // ms
-#define TIME_TO_UPDATE_ATTRIBUTES 5000  // ms
+#define TIME_TO_UPDATE_ATTRIBUTES 1000  // ms
 
 #define DEFAULT_MOVING_ORIENTATION DOWN_ORIENTATION
 //-----------------------------------------------------------------------------
@@ -44,15 +44,15 @@ Character::Character(const CharacterCfg& init_data, const RaceCfg& race,
       position(init_map, init_x_coord, init_y_coord, map_container),
 
       is_moving(false),
-      moving_cooldown_time(0),
+      moving_cooldown(0),
       attribute_update_time_elapsed(0),
 
-      broadcast(false) {
-    // SI EL JUGADOR ESTA PERSISTIDO Y NO ES NUEVO, LLENAR TODO LO QUE SE TIENE
-    // QUE LLENAR.
+      attack_cooldown(0),
 
+      broadcast(false) {
     this->updateLevelDependantAttributes();  // Set max_health, max_mana,
-}  // max_inventory_gold.
+                                             // max_inventory_gold.
+}
 
 Character::~Character() {
     delete state;
@@ -64,10 +64,13 @@ void Character::act(const unsigned int it) {
     if (is_moving) {
         _updateMovement(it);
     } else {
-        if (moving_cooldown_time > 0) {
-            moving_cooldown_time = std::max(moving_cooldown_time - RATE, 0);
+        if (moving_cooldown > 0) {
+            moving_cooldown = std::max(moving_cooldown - RATE, 0);
         }
     }
+
+    if (attack_cooldown > 0)
+        attack_cooldown = std::max(attack_cooldown - RATE, 0);
 
     _updateTimeDependantAttributes(it);
 }
@@ -108,14 +111,14 @@ void Character::_updateTimeDependantAttributes(const unsigned int it) {
 }
 
 void Character::_updateMovement(const unsigned int it) {
-    this->moving_cooldown_time -= it * RATE;
+    this->moving_cooldown -= it * RATE;
 
-    while (this->moving_cooldown_time <= 0) {
+    while (this->moving_cooldown <= 0) {
         this->broadcast = true;
 
         this->position.move();
 
-        this->moving_cooldown_time += TIME_TO_MOVE_A_TILE;
+        this->moving_cooldown += TIME_TO_MOVE_A_TILE;
     }
 }
 
@@ -234,6 +237,11 @@ Item* Character::dropItem(const unsigned int n_slot, unsigned int& amount) {
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+
+void Character::setAttackCooldown(const unsigned int cooldown) {
+    this->attack_cooldown += cooldown;
+}
+
 void Character::beAttacked() {
     // Delego en mi estado si puedo ser atacado.
     this->state->beAttacked();
@@ -246,8 +254,12 @@ void Character::doMagic() {
 }
 
 const unsigned int Character::attack(Character& attacked) {
-    // Delego si puedo atacar en mi estado
+    // Delego si puedo atacar en mi estado.
     this->state->attack();
+
+    // Verifico cooldown de arma de ataque.
+    if (this->attack_cooldown)
+        throw AttackCooldownTimeNotElapsedException();
 
     // Verifico si alguno atacante o atacado está en zona segura.
     if (this->position.isInSafeZone() || attacked.getPosition().isInSafeZone())
@@ -417,6 +429,10 @@ const char* OutOfRangeAttackException::what() const noexcept {
 
 const char* NewbiesCantBeAttackedException::what() const noexcept {
     return "No puedes atacar a jugador newbie.";
+}
+
+const char* AttackCooldownTimeNotElapsedException::what() const noexcept {
+    return "No puedes usar el arma todavía. Cooldown.";
 }
 
 const char* TooHighLevelDifferenceOnAttackException::what() const noexcept {
