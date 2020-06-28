@@ -40,6 +40,8 @@
 * ~~Hacer alguna animación cuando clickeo un objeto del inventario (selección + doble click). -Mau, 25/06.~~
     * **UPDATE:** done. -Mau, 26/06.
 
+* Poder tomar elementos haciendo click en el tile que los contiene. -Santi ;)
+
 ---
 
 ## Common
