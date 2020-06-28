@@ -149,7 +149,7 @@ enum StateType {DEAD, ALIVE};
 struct CharacterCfg {
     Id map;
     int x_tile, y_tile;   
-    char nickname[NICKNAME_MAX_LENGTH];
+    char nickname[NICKNAME_MAX_LENGTH] = {0};
     
     Id race;
     Id kind;

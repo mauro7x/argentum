@@ -42,7 +42,7 @@ class Character {
     unsigned int health, mana;
     const unsigned int intelligence, constitution, strength, agility;
     unsigned int max_health, max_mana;
-    char nickname[NICKNAME_MAX_LENGTH];
+    char nickname[NICKNAME_MAX_LENGTH] = {0};
     Race race;
     Kind kind;
     State* state;
