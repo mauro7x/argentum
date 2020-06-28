@@ -45,9 +45,9 @@ void HomeView::_loadMedia() {
                                         HOMEVIEW_CONNECT_BUTTON_PRESSED_FP);
 
     // Cargamos la/s fuente/s a usar
-    input_font = TTF_OpenFont(HOMEVIEW_INPUT_FONT, input_fontsize);
-    cursor_font = TTF_OpenFont(HOMEVIEW_CURSOR_FONT, input_fontsize);
-    info_font = TTF_OpenFont(HOMEVIEW_INFO_FONT, info_fontsize);
+    input_font = TTF_OpenFont(VIEWS_INPUT_FONT, input_fontsize);
+    cursor_font = TTF_OpenFont(VIEWS_CURSOR_FONT, input_fontsize);
+    info_font = TTF_OpenFont(VIEWS_INFO_FONT, info_fontsize);
 
     if (!input_font || !cursor_font || !info_font) {
         throw Exception("HomeView::loadMedia: Error opening TTF_Font/s.");
@@ -55,14 +55,14 @@ void HomeView::_loadMedia() {
 
     // Cargamos los input_text vacíos
     hostname.loadFromRenderedText(&renderer, input_font, " ",
-                                  SDL_Color(HOMEVIEW_FONT_COLOR));
+                                  SDL_Color(VIEWS_FONT_COLOR));
     port.loadFromRenderedText(&renderer, input_font, " ",
-                              SDL_Color(HOMEVIEW_FONT_COLOR));
+                              SDL_Color(VIEWS_FONT_COLOR));
     _setInputPos();
 
     // Cargamos el cursor
     cursor.loadFromRenderedText(&renderer, cursor_font, "|",
-                                SDL_Color(HOMEVIEW_FONT_COLOR));
+                                SDL_Color(VIEWS_FONT_COLOR));
 
     // Cargamos vacío el msg de información
     info_msg.loadFromRenderedText(&renderer, info_font, " ");
@@ -185,11 +185,11 @@ void HomeView::_handleEvent(const SDL_Event& e) {
                     if (!current_hostname.empty()) {
                         hostname.loadFromRenderedText(
                             &renderer, input_font, current_hostname,
-                            SDL_Color(HOMEVIEW_FONT_COLOR));
+                            SDL_Color(VIEWS_FONT_COLOR));
                     } else {
                         hostname.loadFromRenderedText(
                             &renderer, input_font, " ",
-                            SDL_Color(HOMEVIEW_FONT_COLOR));
+                            SDL_Color(VIEWS_FONT_COLOR));
                     }
 
                     break;
@@ -202,13 +202,12 @@ void HomeView::_handleEvent(const SDL_Event& e) {
                     _setInfoPos();
 
                     if (!current_port.empty()) {
-                        port.loadFromRenderedText(
-                            &renderer, input_font, current_port,
-                            SDL_Color(HOMEVIEW_FONT_COLOR));
+                        port.loadFromRenderedText(&renderer, input_font,
+                                                  current_port,
+                                                  SDL_Color(VIEWS_FONT_COLOR));
                     } else {
-                        port.loadFromRenderedText(
-                            &renderer, input_font, " ",
-                            SDL_Color(HOMEVIEW_FONT_COLOR));
+                        port.loadFromRenderedText(&renderer, input_font, " ",
+                                                  SDL_Color(VIEWS_FONT_COLOR));
                     }
 
                     break;
@@ -249,13 +248,13 @@ void HomeView::_handleEvent(const SDL_Event& e) {
 
         case SDL_TEXTINPUT: {
             if (hostname_active) {
-                if (current_hostname.size() < HOMEVIEW_MAX_INPUT_SIZE) {
+                if (current_hostname.size() < VIEWS_MAX_INPUT_SIZE) {
                     current_hostname += e.text.text;
 
                     // Re-renderizamos
-                    hostname.loadFromRenderedText(
-                        &renderer, input_font, current_hostname,
-                        SDL_Color(HOMEVIEW_FONT_COLOR));
+                    hostname.loadFromRenderedText(&renderer, input_font,
+                                                  current_hostname,
+                                                  SDL_Color(VIEWS_FONT_COLOR));
                     _setInputPos();
 
                     // Activamos el cursor
@@ -263,7 +262,7 @@ void HomeView::_handleEvent(const SDL_Event& e) {
                 } else {
                     info_msg.loadFromRenderedText(
                         &renderer, info_font, HOMEVIEW_MAX_INPUT_MSG,
-                        SDL_Color(HOMEVIEW_WARNING_COLOR));
+                        SDL_Color(VIEWS_WARNING_COLOR));
                     _setInfoPos();
                 }
 
@@ -271,13 +270,13 @@ void HomeView::_handleEvent(const SDL_Event& e) {
             }
 
             if (port_active) {
-                if (current_port.size() < HOMEVIEW_MAX_INPUT_SIZE) {
+                if (current_port.size() < VIEWS_MAX_INPUT_SIZE) {
                     current_port += e.text.text;
 
                     // Re-renderizamos
                     port.loadFromRenderedText(&renderer, input_font,
                                               current_port,
-                                              SDL_Color(HOMEVIEW_FONT_COLOR));
+                                              SDL_Color(VIEWS_FONT_COLOR));
                     _setInputPos();
 
                     // Activamos el cursor
@@ -285,7 +284,7 @@ void HomeView::_handleEvent(const SDL_Event& e) {
                 } else {
                     info_msg.loadFromRenderedText(
                         &renderer, info_font, HOMEVIEW_MAX_INPUT_MSG,
-                        SDL_Color(HOMEVIEW_WARNING_COLOR));
+                        SDL_Color(VIEWS_WARNING_COLOR));
                     _setInfoPos();
                 }
 
@@ -352,13 +351,13 @@ void HomeView::_handleConnectButtonPressed() {
     if (current_hostname.empty() || current_port.empty()) {
         info_msg.loadFromRenderedText(&renderer, info_font,
                                       HOMEVIEW_INVALID_INPUT_MSG,
-                                      SDL_Color(HOMEVIEW_WARNING_COLOR));
+                                      SDL_Color(VIEWS_WARNING_COLOR));
         _setInfoPos();
         return;
     }
 
     info_msg.loadFromRenderedText(&renderer, info_font, HOMEVIEW_CONNECTING_MSG,
-                                  SDL_Color(HOMEVIEW_FONT_COLOR));
+                                  SDL_Color(VIEWS_FONT_COLOR));
     _setInfoPos();
 
     // intentar conexión
@@ -367,7 +366,7 @@ void HomeView::_handleConnectButtonPressed() {
     } catch (const Exception& e) {
         info_msg.loadFromRenderedText(&renderer, info_font,
                                       HOMEVIEW_ERROR_CONNECTING_MSG,
-                                      SDL_Color(HOMEVIEW_ERROR_COLOR));
+                                      SDL_Color(VIEWS_ERROR_COLOR));
         _setInfoPos();
         return;
     }
@@ -378,11 +377,11 @@ void HomeView::_handleConnectButtonPressed() {
 
 void HomeView::_setInputPos() {
     // Centramos solo verticalmente
-    hostname_pos.x = hostname_box.x + HOMEVIEW_INPUT_TEXTBOX_X_OFFSET;
+    hostname_pos.x = hostname_box.x + VIEWS_INPUT_TEXTBOX_X_OFFSET;
     hostname_pos.y =
         hostname_box.y + (hostname_box.h - hostname.getHeight()) / 2;
 
-    port_pos.x = port_box.x + HOMEVIEW_INPUT_TEXTBOX_X_OFFSET;
+    port_pos.x = port_box.x + VIEWS_INPUT_TEXTBOX_X_OFFSET;
     port_pos.y = port_box.y + (port_box.h - port.getHeight()) / 2;
 }
 
@@ -392,19 +391,33 @@ void HomeView::_setInfoPos() {
     info_pos.y = info_box.y;
 }
 
+SDL_Point HomeView::_getMousePos(const SDL_Event& e) const {
+    return SDL_Point({((int)(e.button.x / renderer.getWidthScaleFactor())),
+                      ((int)(e.button.y / renderer.getHeightScaleFactor()))});
+}
+
+bool HomeView::_inside(const SDL_Point& pos, const SDL_Rect& box) const {
+    if ((pos.x > (box.x + box.w)) || (pos.x < (box.x)) ||
+        (pos.y > (box.y + box.h)) || (pos.y < (box.y))) {
+        return false;
+    }
+
+    return true;
+}
+
 void HomeView::_updateCursorAnimation(const int it) {
     if (hostname_active || port_active) {
         cursor_cooldown -= it;
         while (cursor_cooldown <= 0) {
             _switchCursorVisibility();
-            cursor_cooldown += HOMEVIEW_ITERATIONS_TO_SWITCH_CURSOR;
+            cursor_cooldown += VIEWS_ITERATIONS_TO_SWITCH_CURSOR;
         }
     }
 }
 
 void HomeView::_resetCursorCooldown() {
     show_cursor = true;
-    cursor_cooldown = HOMEVIEW_ITERATIONS_TO_SWITCH_CURSOR;
+    cursor_cooldown = VIEWS_ITERATIONS_TO_SWITCH_CURSOR;
 }
 
 void HomeView::_switchCursorVisibility() {
@@ -448,20 +461,6 @@ HomeView::~HomeView() {
     }
 
     SDL_StopTextInput();
-}
-
-SDL_Point HomeView::_getMousePos(const SDL_Event& e) const {
-    return SDL_Point({((int)(e.button.x / renderer.getWidthScaleFactor())),
-                      ((int)(e.button.y / renderer.getHeightScaleFactor()))});
-}
-
-bool HomeView::_inside(const SDL_Point& pos, const SDL_Rect& box) const {
-    if ((pos.x > (box.x + box.w)) || (pos.x < (box.x)) ||
-        (pos.y > (box.y + box.h)) || (pos.y < (box.y))) {
-        return false;
-    }
-
-    return true;
 }
 
 //-----------------------------------------------------------------------------

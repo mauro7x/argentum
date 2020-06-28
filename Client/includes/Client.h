@@ -71,6 +71,7 @@ class Client {
 
     void _launchHomeCtx();
     void _launchConnectionCtx();
+    void _launchSignUpCtx();
     void _launchGameCtx();
 
     //-----------------------------------------------------------------------------

@@ -19,7 +19,24 @@
 #define HOMEVIEW_CONNECT_BUTTON_FP "../Assets/Views/HomeView/BotonConectar.png"
 #define HOMEVIEW_CONNECT_BUTTON_PRESSED_FP \
     "../Assets/Views/HomeView/BotonConectarPresionado.png"
+//-----------------------------------------------------------------------------
 
+//-----------------------------------------------------------------------------
+// ConnectionView assets
+
+#define CONNECTIONVIEW_BG_FP "../Assets/Views/ConnectionView/ConnectionView.png"
+#define CONNECTIONVIEW_TEXTBOX_FP \
+    "../Assets/Views/ConnectionView/BarraNoClickeada.png"
+#define CONNECTIONVIEW_TEXTBOX_ACTIVE_FP \
+    "../Assets/Views/ConnectionView/BarraClickeada.png"
+#define CONNECTIONVIEW_PLAY_BUTTON_FP \
+    "../Assets/Views/ConnectionView/BotonJugar.png"
+#define CONNECTIONVIEW_PLAY_BUTTON_PRESSED_FP \
+    "../Assets/Views/ConnectionView/BotonJugarPresionado.png"
+#define CONNECTIONVIEW_SIGNUP_BUTTON_FP \
+    "../Assets/Views/ConnectionView/BotonCrear.png"
+#define CONNECTIONVIEW_SIGNUP_BUTTON_PRESSED_FP \
+    "../Assets/Views/ConnectionView/BotonCrearPresionado.png"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------

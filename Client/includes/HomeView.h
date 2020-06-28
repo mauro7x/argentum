@@ -7,7 +7,6 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-#include <iostream>
 #include <string>
 //-----------------------------------------------------------------------------
 
@@ -29,26 +28,6 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-// Fuentes
-#define HOMEVIEW_INPUT_FONT FONT_SANFORD_FP
-#define HOMEVIEW_CURSOR_FONT FONT_SANFORD_FP
-#define HOMEVIEW_INFO_FONT FONT_FORCEDSQUARE_FP
-
-// Lógica
-#define HOMEVIEW_MAX_INPUT_SIZE 20
-#define HOMEVIEW_INPUT_TEXTBOX_X_OFFSET 5
-#define HOMEVIEW_CURSOR_TIME_ANIMATION 500
-#define HOMEVIEW_ITERATIONS_TO_SWITCH_CURSOR \
-    (HOMEVIEW_CURSOR_TIME_ANIMATION / RATE)
-
-// Colores
-#define HOMEVIEW_FONT_COLOR \
-    { 0, 0, 0, 255 }
-#define HOMEVIEW_ERROR_COLOR \
-    { 219, 4, 4, 255 }
-#define HOMEVIEW_WARNING_COLOR \
-    { 255, 145, 0, 255 }
-
 // Mensajes
 #define HOMEVIEW_INVALID_INPUT_MSG "DEBES COMPLETAR AMBOS CAMPOS"
 #define HOMEVIEW_CONNECTING_MSG "INTENTANDO ESTABLECER CONEXION..."
@@ -74,7 +53,7 @@ class HomeView : public ConstantRateFunc {
     bool port_active = false;
     bool connect_button_over = false;
     bool show_cursor = false;
-    int cursor_cooldown = HOMEVIEW_ITERATIONS_TO_SWITCH_CURSOR;
+    int cursor_cooldown = VIEWS_ITERATIONS_TO_SWITCH_CURSOR;
 
     // Contenido
     std::string current_hostname;
