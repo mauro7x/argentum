@@ -179,6 +179,9 @@ void HomeView::_handleEvent(const SDL_Event& e) {
                 if (hostname_active && !current_hostname.empty()) {
                     current_hostname.pop_back();
 
+                    info_msg.loadFromRenderedText(&renderer, info_font, " ");
+                    _setInfoPos();
+
                     if (!current_hostname.empty()) {
                         hostname.loadFromRenderedText(
                             &renderer, input_font, current_hostname,
@@ -194,6 +197,9 @@ void HomeView::_handleEvent(const SDL_Event& e) {
 
                 if (port_active && !current_port.empty()) {
                     current_port.pop_back();
+
+                    info_msg.loadFromRenderedText(&renderer, info_font, " ");
+                    _setInfoPos();
 
                     if (!current_port.empty()) {
                         port.loadFromRenderedText(
@@ -223,6 +229,9 @@ void HomeView::_handleEvent(const SDL_Event& e) {
             }
 
             if (e.key.keysym.sym == SDLK_TAB) {
+                info_msg.loadFromRenderedText(&renderer, info_font, " ");
+                _setInfoPos();
+
                 if (hostname_active) {
                     hostname_active = false;
                     port_active = true;
@@ -251,6 +260,11 @@ void HomeView::_handleEvent(const SDL_Event& e) {
 
                     // Activamos el cursor
                     _resetCursorCooldown();
+                } else {
+                    info_msg.loadFromRenderedText(
+                        &renderer, info_font, HOMEVIEW_MAX_INPUT_MSG,
+                        SDL_Color(HOMEVIEW_WARNING_COLOR));
+                    _setInfoPos();
                 }
 
                 break;
@@ -268,6 +282,11 @@ void HomeView::_handleEvent(const SDL_Event& e) {
 
                     // Activamos el cursor
                     _resetCursorCooldown();
+                } else {
+                    info_msg.loadFromRenderedText(
+                        &renderer, info_font, HOMEVIEW_MAX_INPUT_MSG,
+                        SDL_Color(HOMEVIEW_WARNING_COLOR));
+                    _setInfoPos();
                 }
 
                 break;
@@ -291,6 +310,9 @@ void HomeView::_handleEvent(const SDL_Event& e) {
             if (e.button.button != SDL_BUTTON_LEFT) {
                 break;
             }
+
+            info_msg.loadFromRenderedText(&renderer, info_font, " ");
+            _setInfoPos();
 
             SDL_Point mouse_pos = _getMousePos(e);
             show_cursor = false;
@@ -330,7 +352,7 @@ void HomeView::_handleConnectButtonPressed() {
     if (current_hostname.empty() || current_port.empty()) {
         info_msg.loadFromRenderedText(&renderer, info_font,
                                       HOMEVIEW_INVALID_INPUT_MSG,
-                                      SDL_Color(HOMEVIEW_ERROR_COLOR));
+                                      SDL_Color(HOMEVIEW_WARNING_COLOR));
         _setInfoPos();
         return;
     }

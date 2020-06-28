@@ -46,11 +46,14 @@
     { 0, 0, 0, 255 }
 #define HOMEVIEW_ERROR_COLOR \
     { 219, 4, 4, 255 }
+#define HOMEVIEW_WARNING_COLOR \
+    { 255, 145, 0, 255 }
 
 // Mensajes
 #define HOMEVIEW_INVALID_INPUT_MSG "DEBES COMPLETAR AMBOS CAMPOS"
 #define HOMEVIEW_CONNECTING_MSG "INTENTANDO ESTABLECER CONEXION..."
 #define HOMEVIEW_ERROR_CONNECTING_MSG "NO SE PUDO ESTABLECER CONEXION"
+#define HOMEVIEW_MAX_INPUT_MSG "SE ALCANZO EL LIMITE DE CARACTERES"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
