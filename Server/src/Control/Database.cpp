@@ -11,7 +11,6 @@ void Database::_fillInfo() {
     size_t size_actual = 0;
     PlayerInfo player_info;
     while (size_actual < size) {
-        fprintf(stderr, "empieza la escritura\n");
         file_info.read(reinterpret_cast<char*>(&player_info),
                        sizeof(player_info));
         data_index.emplace(player_info.username, DataIndex());
@@ -19,17 +18,12 @@ void Database::_fillInfo() {
         std::string password = player_info.password;
         std::strncpy(data_index[player_info.username].password,
                      password.c_str(), sizeof(char) * NICKNAME_MAX_LENGTH - 1);
-        // fprintf(stderr,"usuario es : %s\n",player_info.username);
-        // fprintf(stderr,"contrasenia es : %s\n", player_info.password);
-        // fprintf(stderr,"file_pointer es : %ld\n",file_pointer);
         size_actual += sizeof(player_info);
     }
-    fprintf(stderr, "termina la escritura\n");
     file_info.close();
 }
 
 void Database::_persistPlayerInfo(const std::string& username) {
-    fprintf(stderr, "la posicion es : %ld\n", data_index[username].index);
     PlayerInfo player_info;
     std::strncpy(player_info.username, username.c_str(),
                  sizeof(char) * NICKNAME_MAX_LENGTH - 1);
@@ -37,21 +31,12 @@ void Database::_persistPlayerInfo(const std::string& username) {
     std::strncpy(player_info.password, password.c_str(),
                  sizeof(char) * NICKNAME_MAX_LENGTH - 1);
     player_info.index = file_pointer;
-    fprintf(stderr, "usuario es : %s\n", player_info.username);
-    fprintf(stderr, "contrasenia es : %s\n", player_info.password);
-    fprintf(stderr, "file_pointer es : %ld\n", player_info.index);
     std::fstream file_info(PLAYER_INFO_FILEPATH);
     file_info.seekg(0, std::ios::end);
-    fprintf(stderr, "antes de write\n");
     file_info.write(reinterpret_cast<char*>(&player_info), sizeof(player_info));
-    fprintf(stderr, "despues de write\n");
     PlayerInfo player_;
     file_info.seekp(0, std::ios::beg);
     file_info.read(reinterpret_cast<char*>(&player_), sizeof(player_));
-    fprintf(stderr, "despues de guardar\n");
-    fprintf(stderr, "usuario es : %s\n", player_.username);
-    fprintf(stderr, "contrasenia es : %s\n", player_.password);
-    fprintf(stderr, "file_pointer es : %ld\n", player_.index);
     file_info.close();
 }
 
@@ -87,13 +72,10 @@ void Database::_createDataInicial(const std::string& username, Id race,
 void Database::_getPlayerData(const std::string& username,
                               CharacterCfg& character_data) {
     size_t position = data_index[username].index;
-    fprintf(stderr, "position es : %ld\n", position);
     std::ifstream file_data(PLAYER_DATA_FILEPATH);
     file_data.seekg(position, std::ios::beg);
     file_data.read(reinterpret_cast<char*>(&character_data),
                    sizeof(character_data));
-    fprintf(stderr, "race es : %d\n", character_data.race);
-    fprintf(stderr, "id es : %d\n", character_data.kind);
 }
 //-----------------------------------------------------------------------------
 
@@ -173,18 +155,9 @@ void Database::signUp(const std::string& username, const std::string& password,
             username.c_str());
 }
 void Database::persistPlayerData(CharacterCfg& data) {
-    fprintf(stderr, "antes de guardar\n");
-    fprintf(stderr, "race: %d\n", data.race);
-    fprintf(stderr, "exp: %d\n", data.exp);
     std::ofstream file_data(PLAYER_DATA_FILEPATH);
     file_data.seekp(data_index[data.nickname].index, std::ios::beg);
     file_data.write(reinterpret_cast<char*>(&data), sizeof(data));
-    // CharacterCfg character;
-    // file_data.seekg(data_index[data.nickname].index, std::ios::beg);
-    // file_data.read(reinterpret_cast<char*>(&character), sizeof(character));
-    // fprintf(stderr, "despues de guardar\n");
-    // fprintf(stderr, "race: %d\n", character.race);
-    // fprintf(stderr, "exp: %d\n", character.exp);
 }
 
 Database::~Database() {}
