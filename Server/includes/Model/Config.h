@@ -71,6 +71,11 @@ class Config {
         }
     }
 
+    /* encontrar si existe tal id en config */
+    size_t count(Id id) const {
+        return config.count
+    }
+
     /* Conocer la cantidad de Ts que tenemos */
     size_t size() const {
         return config.size();
