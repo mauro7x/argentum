@@ -217,11 +217,10 @@ void Character::unequip(unsigned int n_slot) {
     this->broadcast = true;
 }
 
-const unsigned int Character::takeItem(Item* item, unsigned int amount) {
+void Character::takeItem(Item* item, unsigned int amount) {
     this->state->takeItem();
-    const unsigned int position = this->inventory.addItem(item, amount);
+    this->inventory.addItem(item, amount);
     this->broadcast = true;
-    return position;
 }
 
 Item* Character::dropItem(const unsigned int n_slot, unsigned int& amount) {

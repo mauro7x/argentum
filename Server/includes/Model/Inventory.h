@@ -94,12 +94,11 @@ class Inventory {
 
     /*
      * Agrega amount items (del mismo tipo) al inventario.
-     * Retorna el numero de slot en el que se agregaron.
      *
      * Lanza FullInventoryException si el inventario esta
      * lleno y no se puede agregar.
      */
-    const uint8_t addItem(Item* item, const unsigned int amount);
+    void addItem(Item* item, const unsigned int amount);
 
     /*
      * Agrega amount de gold al inventario, llenando primero

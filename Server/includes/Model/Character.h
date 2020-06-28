@@ -170,12 +170,11 @@ class Character {
 
     /*
      * Toma amount items (del mismo tipo) y los agrega al inventario.
-     * Retorna el slot en en el que se agregaron los items.
      *
      * Lanza FullInventoryException si el inventario esta lleno
      * y no pudo agregarse.
      */
-    const unsigned int takeItem(Item* item, unsigned int amount = 1);
+    void takeItem(Item* item, unsigned int amount = 1);
 
     /*
      * Dropa la cantidad especificada del item en la n_slot

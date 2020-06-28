@@ -175,6 +175,21 @@ void Config<PotionCfg>::_parseFile() {
 }
 
 template <>
+void Config<OtherItemsCfg>::_parseFile() {
+    json j = JSON::loadJsonFile(ITEMS_CONFIG_FILEPATH);
+
+    int size = j["others"].size();
+    for (int i = 0; i < size; i++) {
+        OtherItemsCfg item;
+
+        item.id = j["others"][i]["id"];
+        item.name = j["others"][i]["name"];
+
+        config[item.id] = item;
+    }
+}
+
+template <>
 void Config<CreatureCfg>::_parseFile() {
     json j = JSON::loadJsonFile(CREATURES_CONFIG_FILEPATH);
 

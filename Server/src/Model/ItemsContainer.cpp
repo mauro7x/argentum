@@ -3,6 +3,7 @@
 #include "../../../Common/includes/Exceptions/Exception.h"
 #include "../../includes/Model/Config.h"
 #include "../../includes/Model/Defence.h"
+#include "../../includes/Model/GoldBag.h"
 #include "../../includes/Model/Potion.h"
 #include "../../includes/Model/Wand.h"
 #include "../../includes/Model/Weapon.h"
@@ -13,6 +14,7 @@ ItemsContainer::ItemsContainer() {
     Config<SpellCfg> spells;
     Config<DefenceCfg> defences;
     Config<PotionCfg> potions;
+    Config<OtherItemsCfg> others;
 
     std::vector<Id> weapons_id;
     weapons.gatherIds(weapons_id);
@@ -54,6 +56,13 @@ ItemsContainer::ItemsContainer() {
             std::piecewise_construct, std::forward_as_tuple(id),
             std::forward_as_tuple(PotionFactory::newPotion(potions[id])));
     }
+
+    std::vector<Id> others_id;
+    others.gatherIds(others_id);
+
+    this->container.emplace(
+        std::piecewise_construct, std::forward_as_tuple(GOLD_BAG_ID),
+        std::forward_as_tuple(new GoldBag(others[GOLD_BAG_ID])));
 }
 
 ItemsContainer::~ItemsContainer() {

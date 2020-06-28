@@ -49,15 +49,20 @@ const uint8_t Inventory::_getNextFreeSlot() const {
     return n_slot;
 }
 
-const uint8_t Inventory::addItem(Item* item, const unsigned int amount) {
+void Inventory::addItem(Item* item, const unsigned int amount) {
     uint8_t n_slot;
     const Id item_id = item->getId();
+
+    if (item_id == GOLD_BAG_ID) {
+        addGold(amount);
+        return;
+    }
 
     // Me fijo si ya hay algún slot de este item.
     if (this->id_slot_map.count(item_id)) {
         n_slot = this->id_slot_map[item_id];
         this->slots[n_slot].addItem(item, amount);
-        return n_slot;
+        return;
     }
 
     if (this->occupied_slots >= this->slots.size())
@@ -70,8 +75,6 @@ const uint8_t Inventory::addItem(Item* item, const unsigned int amount) {
 
     this->id_slot_map[item_id] = n_slot;
     ++this->occupied_slots;
-
-    return n_slot;
 }
 
 Item* Inventory::gatherItem(const uint8_t n_slot, unsigned int& amount) {
@@ -165,8 +168,14 @@ void Inventory::dropAll(std::vector<DroppingSlot>& dropped_items) {
 
         slot.clearSlot();
 
-        this->id_slot_map.erase(item_id);
-        --this->occupied_slots;
+        id_slot_map.erase(item_id);
+        --occupied_slots;
+    }
+
+    // Dropeo oro en exceso.
+    if (excess_gold) {
+        dropped_items.emplace_back(GOLD_BAG_ID, excess_gold);
+        excess_gold = 0;
     }
 }
 

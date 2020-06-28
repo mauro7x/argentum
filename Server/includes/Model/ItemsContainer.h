@@ -7,6 +7,8 @@
 
 #include "Item.h"
 
+#define GOLD_BAG_ID 2000
+
 /*
  * Contenedor de Items del juego.
  * 
