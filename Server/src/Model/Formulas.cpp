@@ -16,7 +16,7 @@ const unsigned int Formulas::calculateAttackXPGain(
     const unsigned int damage, const unsigned int attacked_level,
     const unsigned int attacker_level) {
     return damage *
-           std::max(attacked_level - attacker_level + 10, (unsigned int)0);
+           std::max((int)(attacked_level - attacker_level + 10), 0);
 }
 
 const unsigned int Formulas::calculateKillXPGain(
@@ -24,7 +24,7 @@ const unsigned int Formulas::calculateKillXPGain(
     const unsigned int attacker_level) {
     RandomNumberGenerator random_number_generator;
     return random_number_generator(0, 0.1) * attacked_max_health *
-           std::max(attacked_level - attacker_level + 10, (unsigned int)0);
+           std::max((int)(attacked_level - attacker_level + 10), 0);
 }
 
 const bool Formulas::isNewbie(const unsigned int level) {
@@ -68,7 +68,7 @@ const bool Formulas::isCriticalAttack() {
 
 const bool Formulas::canAttackByLevel(const unsigned int attacker_level,
                                       const unsigned int attacked_level) {
-    return (abs((int)attacker_level - (int)attacked_level) <= 10);
+    return (abs((int)(attacker_level - attacked_level)) <= 10);
 }
 
 // Inventory

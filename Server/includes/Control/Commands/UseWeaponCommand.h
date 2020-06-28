@@ -7,15 +7,13 @@ class UseWeaponCommand : public Command {
    private:
     InstanceId caller;
 
-    const uint32_t x_coord;
-    const uint32_t y_coord;
+    const InstanceId target;
 
    public:
-    UseWeaponCommand(InstanceId caller, const uint32_t x_coord,
-                     const uint32_t y_coord);
+    UseWeaponCommand(InstanceId caller, const InstanceId target);
     ~UseWeaponCommand();
 
     void exec(Game& game) override;
 };
 
-#endif // __USE_WEAPON_COMMAND_H__
+#endif  // __USE_WEAPON_COMMAND_H__

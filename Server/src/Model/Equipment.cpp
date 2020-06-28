@@ -6,7 +6,7 @@
 
 Equipment::Equipment(const EquipmentData& init_data,
                      ItemsContainer& items_container) {
-    // Inicializo array de wearables con nullptr.
+    // Inicializo array de wearables con los datos o nullptr.
     for (unsigned int i = 0; i < container.size(); ++i) {
         if (!init_data[i]) {
             this->container[i] = nullptr;
@@ -23,6 +23,26 @@ Wearable* Equipment::add(Wearable* item) {
     Wearable* prev_item = this->container[type];
     this->container[type] = item;
     return prev_item;
+}
+
+Wearable* Equipment::remove(unsigned int n_slot) {
+    if (n_slot > this->container.size())
+        throw InvalidEquipmentSlotNumberException();
+    
+    Wearable* item = this->container[n_slot];
+    this->container[n_slot] = nullptr;
+    return item;
+}
+
+void Equipment::dropAll(std::vector<DroppingSlot>& dropped_items) {
+    for (unsigned int i = 0; i < container.size(); ++i) {
+        if (!container[i])
+            continue;
+
+        Id item_id = container[i]->getId();
+        dropped_items.emplace_back(item_id, 1);
+        container[i] = nullptr;
+    }
 }
 
 const unsigned int Equipment::useAttackItem(Character& attacker) {
@@ -74,12 +94,7 @@ void Equipment::fillPersistenceData(CharacterCfg& data) const {
     }
 }
 
-void Equipment::debug() const {
-    std::cout << "Equipment:" << std::endl;
-    for (unsigned int i = 0; i < this->container.size(); ++i) {
-        if (this->container[i]) {
-            std::cout << "Posicion " << i << ": ";
-            std::cout << this->container[i]->what() << std::endl;
-        }
-    }
+const char* InvalidEquipmentSlotNumberException::what() const noexcept {
+    return "El numero de slot del equipamiento especificado es inválido.";
 }
+

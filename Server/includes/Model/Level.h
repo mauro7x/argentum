@@ -1,10 +1,10 @@
 #ifndef __LEVEL_H__
 #define __LEVEL_H__
 
-#include "../../../Common/includes/UnitData.h"
+#include "../../../Common/includes/DataStructs.h"
 #include "config_structs.h"
 
-class Character; // Forward declaration para evitar circular dependences.
+class Character;  // Forward declaration para evitar circular dependences.
 
 class Level {
     private:

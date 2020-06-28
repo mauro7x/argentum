@@ -149,7 +149,12 @@ void ClientConnection::join() {
         receiver.join();
     }
 
-    peer.shutdown();
+    try {
+        peer.shutdown();
+    } catch (const Exception& e) {
+        fprintf(stderr, "CLIENTE %i: error in socket::shutdown. Aborting.\n",
+                id);
+    }
 }
 
 void ClientConnection::changeMap(Id map) {

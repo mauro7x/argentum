@@ -3,9 +3,9 @@
 
 #include <exception>
 
+#include "../../../Common/includes/DataStructs.h"
 #include "../../../Common/includes/MapContainer.h"
 #include "../../../Common/includes/Orientation.h"
-#include "../../../Common/includes/UnitData.h"
 #include "../../../Common/includes/types.h"
 #include "config_structs.h"
 
@@ -38,6 +38,9 @@ class Position {
     /* Devuelve la coordenada y de la posición del character */
     const int getY() const;
 
+    /* Devuelve la orientacion del character */
+    const Orientation getOrientation() const;
+
     /* Devuelve el Id del mapa en el que se encuentra */
     const Id getMapId() const;
 
@@ -52,6 +55,8 @@ class Position {
      */
     void move();
 
+    const bool isInSafeZone() const;
+
     /*
      * Llena los campos x_tile, y_tile y orientation del
      * PlayerData para su broadcast.
@@ -65,7 +70,7 @@ class Position {
 
 };
 
-class CollisionWhileMovingException : std::exception {
+class CollisionWhileMovingException : public std::exception {
    public:
     virtual const char* what() const noexcept;
 };

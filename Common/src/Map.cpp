@@ -1,6 +1,8 @@
 #include "../includes/Map.h"
 
 #include "../includes/RandomNumberGenerator.h"
+
+#define MAX_FREE_ITEM_TILE_SEARCHING_STEP 30
 //-----------------------------------------------------------------------------
 // Métodos privados
 
@@ -65,15 +67,16 @@ void Map::_fillTiles(const json& map, const json& tilesets) {
 
         /* Ocupantes */
         tile.occupant_id = 0;
-        
+
         tile.item_id = 0;
+        tile.item_amount = 0;
 
         tiles.push_back(tile);
     }
 }
 
 int Map::_tileNumber(const int x, const int y) const {
-    if (!isValid(x, y)) {
+    if (!_isValid(x, y)) {
         throw Exception("Invalid map coordinates. x = %i, y = %i\n", x, y);
     }
     return (y * w + x);
@@ -84,7 +87,7 @@ Tile& Map::_getTile(const int x, const int y) {
     return tiles.at(tile);
 }
 
-const bool Map::_moveOcuppant(Tile& from_tile, Tile& to_tile) {
+const bool Map::_moveOccupant(Tile& from_tile, Tile& to_tile) {
     if (to_tile.collision || to_tile.occupant_id || to_tile.npc_id) {
         // El tile está ocupado / hay colisión.
         return false;
@@ -136,15 +139,7 @@ int Map::getHeightTiles() const {
     return h;
 }
 
-int Map::getTileWidth() const {
-    return TILE_WIDTH;
-}
-
-int Map::getTileHeight() const {
-    return TILE_HEIGHT;
-}
-
-bool Map::isValid(const int x, const int y) const {
+bool Map::_isValid(const int x, const int y) const {
     if ((x >= w) || (x < 0) || (y >= h) || (y < 0)) {
         return false;
     } else {
@@ -157,7 +152,12 @@ const Tile& Map::getTile(const int x, const int y) const {
     return tiles.at(tile);
 }
 
-const bool Map::moveOcuppant(const int x, const int y,
+TileId& Map::getNPC(const int x, const int y) {
+    Tile& tile = _getTile(x, y);
+    return tile.npc_id;
+}
+
+const bool Map::moveOccupant(const int x, const int y,
                              const Orientation& orientation) {
     Tile& from_tile = _getTile(x, y);
 
@@ -167,7 +167,7 @@ const bool Map::moveOcuppant(const int x, const int y,
             return false;
         }
         Tile& to_tile = _getTile(x, y - 1);
-        return _moveOcuppant(from_tile, to_tile);
+        return _moveOccupant(from_tile, to_tile);
     }
 
     if (orientation == DOWN_ORIENTATION) {
@@ -176,7 +176,7 @@ const bool Map::moveOcuppant(const int x, const int y,
             return false;
         }
         Tile& to_tile = _getTile(x, y + 1);
-        return _moveOcuppant(from_tile, to_tile);
+        return _moveOccupant(from_tile, to_tile);
     }
 
     if (orientation == LEFT_ORIENTATION) {
@@ -185,7 +185,7 @@ const bool Map::moveOcuppant(const int x, const int y,
             return false;
         }
         Tile& to_tile = _getTile(x - 1, y);
-        return _moveOcuppant(from_tile, to_tile);
+        return _moveOccupant(from_tile, to_tile);
     }
 
     if (x + 1 == this->w) {
@@ -193,7 +193,7 @@ const bool Map::moveOcuppant(const int x, const int y,
         return false;
     }
     Tile& to_tile = _getTile(x + 1, y);
-    return _moveOcuppant(from_tile, to_tile);
+    return _moveOccupant(from_tile, to_tile);
 }
 
 void Map::establishEntitySpawningPosition(InstanceId id, int& x, int& y,
@@ -222,11 +222,77 @@ void Map::occupyTile(InstanceId id, const int x, const int y) {
     tile.occupant_id = id;
 }
 
-void Map::clearTile(const int x, const int y) {
+void Map::setItem(const Id item_id, const uint32_t amount, const int x,
+                  const int y) {
+    Tile& tile = this->_getTile(x, y);
+    tile.item_id = item_id;
+    tile.item_amount = amount;
+}
+
+// NO ES EL MEJOR ALGORITMO PERO FUNCIONA ;) -santi
+// (si alguno quiere cambiarlo es bienvenido)
+void Map::addItem(const Id item_id, const uint32_t amount, int& x, int& y) {
+    bool empty_tile_found = false;
+
+    Tile& tile = this->_getTile(x, y);
+
+    if (!tile.item_id && !tile.collision && !tile.npc_id) {
+        tile.item_id = item_id;
+        tile.item_amount = amount;
+        empty_tile_found = true;
+    }
+
+    int step = 1;
+    int _x = 0;
+    int _y = 0;
+
+    while (!empty_tile_found) {
+        for (int x_inc = -1; x_inc <= 1; ++x_inc) {
+            _x = (x + x_inc * step);
+
+            for (int y_inc = -1; y_inc <= 1; ++y_inc) {
+                _y = (y + y_inc * step);
+
+                if (_x < 0 || _y < 0 || _x > this->w - 1 || _y > this->h - 1)
+                    continue;
+
+                Tile& tile = this->_getTile(_x, _y);
+
+                if (!tile.item_id && !tile.collision && !tile.npc_id) {
+                    tile.item_id = item_id;
+                    tile.item_amount = amount;
+                    empty_tile_found = true;
+                    x = _x;
+                    y = _y;
+                    return;
+                }
+            }
+        }
+        ++step;
+        if (step == MAX_FREE_ITEM_TILE_SEARCHING_STEP)
+            throw(ItemCouldNotBeAddedException());
+    }
+}
+
+const bool Map::isSafeZone(const int x, const int y) const {
+    return this->getTile(x, y).safe_zone;
+}
+
+void Map::clearTileOccupant(const int x, const int y) {
     Tile& tile = this->_getTile(x, y);
     tile.occupant_id = 0;
 }
 
+void Map::clearTileItem(const int x, const int y) {
+    Tile& tile = this->_getTile(x, y);
+    tile.item_id = 0;
+    tile.item_amount = 0;
+}
+
 Map::~Map() {}
+
+const char* ItemCouldNotBeAddedException::what() const noexcept {
+    return "No se pudieron dropear algunos items.";
+}
 
 //-----------------------------------------------------------------------------

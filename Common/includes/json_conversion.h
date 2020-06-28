@@ -1,8 +1,8 @@
 #ifndef __JSON_CONVERSION_H__
 #define __JSON_CONVERSION_H__
 
+#include "DataStructs.h"
 #include "json.hpp"
-#include "UnitData.h"
 
 using json = nlohmann::json;
 
@@ -16,4 +16,4 @@ void from_json(const json& j, PlayerData& data);
 void from_json(const json& j, CreatureData& data);
 void from_json(const json& j, ItemData& data);
 
-#endif // __JSON_CONVERSION_H__
+#endif  // __JSON_CONVERSION_H__

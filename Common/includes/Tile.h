@@ -25,6 +25,7 @@ struct Tile {
     /* Ocupantes */
     InstanceId occupant_id;
     Id item_id;
+    uint32_t item_amount;
 };
 
 //-----------------------------------------------------------------------------

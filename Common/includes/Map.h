@@ -2,6 +2,7 @@
 #define __MAP_H__
 
 //-----------------------------------------------------------------------------
+#include <exception>
 #include <vector>
 //-----------------------------------------------------------------------------
 
@@ -12,6 +13,8 @@
 #include "Tile.h"
 #include "defs.h"
 #include "types.h"
+//-----------------------------------------------------------------------------
+#define DROPPING_RANGE 3
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -48,7 +51,10 @@ class Map {
     /* Obtiene un tile modificable */
     Tile& _getTile(const int x, const int y);
 
-    const bool _moveOcuppant(Tile& from_tile, Tile& to_tile);
+    /* Devuelve si el tile es válido y es parte del mapa */
+    bool _isValid(const int x, const int y) const;
+
+    const bool _moveOccupant(Tile& from_tile, Tile& to_tile);
 
    public:
     /* Constructor */
@@ -78,20 +84,15 @@ class Map {
     /* Devuelve la altura en tiles */
     int getHeightTiles() const;
 
-    /* Devuelve la anchura de un tile */
-    int getTileWidth() const;
-
-    /* Devuelve la altura de un tile */
-    int getTileHeight() const;
-
-    /* Devuelve si el tile es válido y es parte del mapa */
-    bool isValid(const int x, const int y) const;
-
     /* Obtiene un Tile de solo lectura */
     const Tile& getTile(const int x, const int y) const;
 
-    const bool moveOcuppant(const int x, const int y,
+    /* Devuelve una referencia al NPC_ID (gráfico) para escritura */
+    TileId& getNPC(const int x, const int y);
+
+    const bool moveOccupant(const int x, const int y,
                             const Orientation& orientation);
+
     /*iniciando una posicion para el character*/
     void establishEntitySpawningPosition(InstanceId id, int& x, int& y,
                                          bool is_creature);
@@ -99,13 +100,44 @@ class Map {
     /* Ocupa una celda con un ocupante */
     void occupyTile(InstanceId id, const int x, const int y);
 
+    /* Pone un item en una celda */
+    void setItem(const Id item_id, const uint32_t amount, const int x,
+                 const int y);
+
+    /*
+     * Busca el tile libre de item más cercano (en la linea direccional de la
+     * orientacion recibida) al correspondiente a las coordenadas x e y
+     * recibidas
+     *
+     * Agrega dicho item a ese tile libre buscado y cambia
+     * los valores de x e y con las coordenadas del mismo.
+     *
+     * Dicha búsqueda se realiza hasta DROPPING_RANGE tiles aldeaños,
+     * en la línea de orientación recibida.
+     *
+     * Lanza ItemCouldNotBeAddedException si no se encuentra tile
+     * libre para que el item lo ocupe dentro del rango DROPPING_RANGE.
+     */
+    void addItem(const Id item_id, const uint32_t amount, int& x, int& y);
+
+    /* Devuelve si las coordenadas recibidas están dentro de una zona segura */
+    const bool isSafeZone(const int x, const int y) const;
+
     /* Elimina al ocupante de una celda */
-    void clearTile(const int x, const int y);
+    void clearTileOccupant(const int x, const int y);
+
+    /* Elimina el item de una celda */
+    void clearTileItem(const int x, const int y);
 
     //-------------------------------------------------------------------------
 
     /* Destructor */
     ~Map();
+};
+
+class ItemCouldNotBeAddedException : public std::exception {
+   public:
+    virtual const char* what() const noexcept;
 };
 
 //-----------------------------------------------------------------------------

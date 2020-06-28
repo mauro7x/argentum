@@ -32,15 +32,18 @@ void to_json(json& j, const CreatureData& data) {
              {"x_tile", data.basic_data.x_tile},
              {"y_tile", data.basic_data.y_tile},
              {"orientation", data.basic_data.orientation},
+             {"name", data.name},
              {"creature_id", data.creature_id},
-             {"health", data.health}};
+             {"health", data.health},
+             {"max_health", data.max_health}/*,
+             {"level", data.level}*/};
 }
 
 void to_json(json& j, const ItemData& data) {
     j = json{{"item_id", data.item_id},
-             {"map", data.map},
              {"x_tile", data.x_tile},
-             {"y_tile", data.y_tile}};
+             {"y_tile", data.y_tile},
+             {"amount", data.amount}};
 }
 
 void from_json(const json& j, InventorySlot& data) {
@@ -76,13 +79,16 @@ void from_json(const json& j, CreatureData& data) {
     j.at("x_tile").get_to(data.basic_data.x_tile);
     j.at("y_tile").get_to(data.basic_data.y_tile);
     j.at("orientation").get_to(data.basic_data.orientation);
+    j.at("name").get_to(data.name);
     j.at("creature_id").get_to(data.creature_id);
     j.at("health").get_to(data.health);
+    j.at("max_health").get_to(data.max_health);
+    /*j.at("level").get_to(data.level);*/
 }
 
 void from_json(const json& j, ItemData& data) {
     j.at("item_id").get_to(data.item_id);
-    j.at("map").get_to(data.map);
     j.at("x_tile").get_to(data.x_tile);
     j.at("y_tile").get_to(data.y_tile);
+    j.at("amount").get_to(data.amount);
 }

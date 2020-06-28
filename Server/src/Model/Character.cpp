@@ -10,7 +10,7 @@
 #define CRITICAL_ATTACK_DAMAGE_MODIFIER 2
 #define RATE 1000 / 30                  // ms.
 #define TIME_TO_MOVE_A_TILE 200         // ms
-#define TIME_TO_UPDATE_ATTRIBUTES 1000  // ms
+#define TIME_TO_UPDATE_ATTRIBUTES 5000  // ms
 
 #define DEFAULT_MOVING_ORIENTATION DOWN_ORIENTATION
 //-----------------------------------------------------------------------------
@@ -32,7 +32,7 @@ Character::Character(const CharacterCfg& init_data, const RaceCfg& race,
       race(race),
       kind(kind),
 
-      state(StateFactory::newState(init_data.state)),
+      state(StateFactory::newState(init_data.state, this->race)),
 
       level(init_data.level, init_data.exp),
 
@@ -158,7 +158,7 @@ void Character::stopMoving() {
 
 //-----------------------------------------------------------------------------
 void Character::recoverHealth(const unsigned int points) {
-    if (!points)
+    if (!points || !health)
         return;
 
     this->health = std::min(this->health + points, max_health);
@@ -185,7 +185,9 @@ void Character::consumeMana(const unsigned int points) {
 
 //-----------------------------------------------------------------------------
 void Character::equip(unsigned int inventory_position) {
-    Item* item_to_equip = this->inventory.gatherItem(inventory_position);
+    unsigned int amount = 1;
+    Item* item_to_equip =
+        this->inventory.gatherItem(inventory_position, amount);
 
     if (!item_to_equip)
         return;
@@ -203,24 +205,44 @@ void Character::equip(Wearable* item) {
     this->broadcast = true;
 }
 
-const unsigned int Character::takeItem(Item* item) {
-    const unsigned int position = this->inventory.addItem(item);
+void Character::unequip(unsigned int n_slot) {
+    Wearable* unequipped_item = this->equipment.remove(n_slot);
+
+    if (!unequipped_item)
+        return;
+
+    try {
+        this->inventory.addItem((Item*)unequipped_item, 1);
+    } catch (FullInventoryException()) {
+        // No se pudo agregar al inventario => lo devolvemos al equipment
+        this->equipment.add(unequipped_item);
+        throw FullInventoryException();
+    }
+
+    this->broadcast = true;
+}
+
+const unsigned int Character::takeItem(Item* item, unsigned int amount) {
+    this->state->takeItem();
+    const unsigned int position = this->inventory.addItem(item, amount);
     this->broadcast = true;
     return position;
 }
 
-Item* Character::dropItem(unsigned int position) {
-    Item* dropped_item = this->inventory.gatherItem(position);
-    this->broadcast = true;
+Item* Character::dropItem(const unsigned int n_slot, unsigned int& amount) {
+    Item* dropped_item = this->inventory.gatherItem(n_slot, amount);
+
+    if (dropped_item)
+        this->broadcast = true;
+
     return dropped_item;
 }
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 void Character::beAttacked() {
-    if (!this->state->canBeAttacked()) {
-        throw ActualStateCantBeAttackedException();
-    }
+    // Delego en mi estado si puedo ser atacado.
+    this->state->beAttacked();
 }
 
 void Character::doMagic() {
@@ -230,6 +252,13 @@ void Character::doMagic() {
 }
 
 const unsigned int Character::attack(Character& attacked) {
+    // Delego si puedo atacar en mi estado
+    this->state->attack();
+
+    // Verifico si alguno atacante o atacado está en zona segura.
+    if (this->position.isInSafeZone() || attacked.getPosition().isInSafeZone())
+        throw CantAttackInSafeZoneException();
+
     const unsigned int weapon_range = this->equipment.getAttackRange();
 
     // Si el arma no es de ataque, es curativa [range 0].
@@ -298,9 +327,9 @@ const unsigned int Character::receiveAttack(const unsigned int damage,
     }
 
     const unsigned int defense_points = this->equipment.getDefensePoints(*this);
-    damage_received = std::max((unsigned int)0, damage - defense_points);
+    damage_received = std::max(0, (int)(damage - defense_points));
 
-    this->health = std::max((unsigned int)0, this->health - damage_received);
+    this->health = std::max(0, (int)(this->health - damage_received));
 
     if (this->health == 0) {
         // MORIR
@@ -314,10 +343,13 @@ const unsigned int Character::receiveAttack(const unsigned int damage,
 
 void Character::die() {
     delete this->state;
-    this->state = new Dead();
-    // DROPEAR ORO EN EXCESO E ITEMS DEL INVENTARIO
-    // CAMBIAR HEAD_ID Y BODY_ID A LAS DE UN FANTASMA.
+    this->state = new Dead(this->race);
     this->broadcast = true;
+}
+
+void Character::dropAllItems(std::vector<DroppingSlot>& dropped_items) {
+    this->equipment.dropAll(dropped_items);
+    this->inventory.dropAll(dropped_items);
 }
 //-----------------------------------------------------------------------------
 
@@ -360,8 +392,7 @@ void Character::fillBroadcastData(PlayerData& data) const {
     // Llena map_id, x_tile, y_tile, orientation.
     this->position.fillBroadcastData(data.basic_data);
 
-    data.head_id = this->race.head_id;
-    data.body_id = this->race.body_id;
+    this->state->fillBroadcastData(data);
 
     data.nickname = this->nickname;
 
@@ -409,6 +440,10 @@ const char* InsufficientManaException::what() const noexcept {
     return "No tienes suficiente maná.";
 }
 
+const char* CantAttackInSafeZoneException::what() const noexcept {
+    return "No se puede atacar en una zona segura.";
+}
+
 const char* OutOfRangeAttackException::what() const noexcept {
     return "El jugador al que quieres atacar está fuera del rango de tu arma.";
 }
@@ -419,10 +454,6 @@ const char* NewbiesCantBeAttackedException::what() const noexcept {
 
 const char* TooHighLevelDifferenceOnAttackException::what() const noexcept {
     return "No puedes atacar. La diferencia de niveles es mayor a 12.";
-}
-
-const char* ActualStateCantBeAttackedException::what() const noexcept {
-    return "El jugador no puede ser atacado debido a su estado.";
 }
 
 const char* KindCantDoMagicException::what() const noexcept {

@@ -2,11 +2,13 @@
 #define __EQUIPMENT_H__
 
 #include <array>
+#include <vector>
 
+#include "../../../Common/includes/DataStructs.h"
 #include "../../../Common/includes/Inventory.h"
-#include "../../../Common/includes/UnitData.h"
 #include "ItemsContainer.h"
 #include "Wearable.h"
+#include "config_structs.h"
 
 class Character;  // Forward declaration p/evitar circular dependences.
 
@@ -43,6 +45,23 @@ class Equipment {
     Wearable* add(Wearable* item);
 
     /*
+     * Elimina el wearable en la posición n_slot del container,
+     * y lo devuelve.
+     *
+     * En caso de no haber wearable en dicha posición, retorna nullptr.
+     *
+     * Lanza InvalidEquipmentSlotNumberException si el n_slot
+     * recibido como argumento es inválido.
+     */
+    Wearable* remove(unsigned int n_slot);
+
+    /*
+     * Vacía el equipment, dropeando todos los wearables en el vector 
+     * recibido por parámetro.
+     */
+    void dropAll(std::vector<DroppingSlot>& dropped_items);
+
+    /*
      * Devuelve los puntos de daño que causan
      * los elementos de ataque que el personaje lleva.
      *
@@ -73,8 +92,11 @@ class Equipment {
     void fillBroadcastData(PlayerData& data) const;
 
     void fillPersistenceData(CharacterCfg& data) const;
+};
 
-    void debug() const;  // Para testear
+class InvalidEquipmentSlotNumberException : public std::exception {
+   public:
+    virtual const char* what() const noexcept;
 };
 
 #endif

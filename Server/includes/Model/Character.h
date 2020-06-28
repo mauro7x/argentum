@@ -2,17 +2,18 @@
 #define __CHARACTER_H__
 //-----------------------------------------------------------------------------
 #include <exception>
+#include <vector>
 //-----------------------------------------------------------------------------
 #include "Equipment.h"
 #include "Inventory.h"
 #include "Item.h"
+#include "ItemsContainer.h"
 #include "Kind.h"
 #include "Level.h"
 #include "Position.h"
 #include "Race.h"
 #include "States.h"
 #include "Wearable.h"
-#include "ItemsContainer.h"
 //-----------------------------------------------------------------------------
 #include "../../../Common/includes/MapContainer.h"
 #include "../../../Common/includes/Orientation.h"
@@ -20,7 +21,7 @@
 //-----------------------------------------------------------------------------
 #include "config_structs.h"
 //-----------------------------------------------------------------------------
-#include "../../../Common/includes/UnitData.h"
+#include "../../../Common/includes/DataStructs.h"
 //-----------------------------------------------------------------------------
 
 /*
@@ -145,31 +146,51 @@ class Character {
      * que se quiere equipar, y lo equipa.
      * Si no hay item en dicha posicion, no hace nada.
      */
-    void equip(unsigned int inventory_position);
+    void equip(unsigned int n_slot);
 
     /*
      * Equipa un Wearable al Equipment en su slot, almacenando en el
      * inventario el Wearable anterior.
+     *
+     * Lanza InvalidInventorySlotNumberException si la posicion
+     * especificada es invalida (fuera de rango).
      */
     void equip(Wearable* item);
 
     /*
-     * Toma un item y lo agrega al inventario.
-     * Retorna la posicion en la que se agrego el item.
+     * Recibe la posición del item en el equipamiento
+     * que se quiere desequipar.
+     *
+     * Si no hay item en dicha posición, no hace nada.
+     *
+     * Lanza FullInventoryException si no hay espacio en
+     * el inventario para el elemento desequipado, no pudiendo
+     * efectuarse el comando.
+     */
+    void unequip(unsigned int n_slot);
+
+    /*
+     * Toma amount items (del mismo tipo) y los agrega al inventario.
+     * Retorna el slot en en el que se agregaron los items.
      *
      * Lanza FullInventoryException si el inventario esta lleno
      * y no pudo agregarse.
      */
-    const unsigned int takeItem(Item* item);
+    const unsigned int takeItem(Item* item, unsigned int amount = 1);
 
     /*
-     * Devuelve el item en la inventory_position especificada.
+     * Dropa la cantidad especificada del item en la n_slot
+     * pasada por parámetro.
+     *
+     * Si la cantidad de items en el slot es menor que amount,
+     * se configura en amount la cantidad real droppeada.
+     *
      * Si no hay un item en dicha posicion, retorna nullptr.
      *
-     * Lanza InvalidPositionException si la posicion
+     * Lanza InvalidInventorySlotNumberException si la posicion
      * especificada es invalida (fuera de rango).
      */
-    Item* dropItem(const unsigned int inventory_position);
+    Item* dropItem(const unsigned int n_slot, unsigned int& amount);
 
     //-----------------------------------------------------------------------------
 
@@ -263,9 +284,12 @@ class Character {
      *
      *       InsufficientManaException si no puede usar el hechizo debido a
      * déficit de maná.
+     * 
+     *       AttackerStateCantAttackException si el jugador no puede atacar
+     * debido a su estado (muerto)
      *
-     *       ActualStateCantBeAttackedException si el jugador al que se quiere
-     * atacar tiene un estado en el que no puede ser atacado.
+     *       AttackedStateCantBeAttackedException si el jugador al que se
+     * quiere atacar no puede atacar debido a su estado (muerto).
      */
     const unsigned int attack(Character& attacked);
 
@@ -280,6 +304,12 @@ class Character {
      * jugador a Dead.
      */
     void die();
+
+    /*
+     * Recibe un vector en el que dropeará todos sus elementos,
+     * tanto en equipment como en inventory.
+     */
+    void dropAllItems(std::vector<DroppingSlot>& dropped_items);
 
     //-----------------------------------------------------------------------------
 
@@ -326,9 +356,7 @@ class Character {
      * Recibe una estructura de broadcast de tipo PlayerData,
      * y la llena con sus atributos actuales para su broadcasteo.
      *
-     * [No llena los campos: id]
-     *
-     * ??? EL ID DEL MAPA ???
+     * [No llena los campos: id, nickname]
      */
     void fillBroadcastData(PlayerData& data) const;
 
@@ -344,32 +372,32 @@ class Character {
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-class InsufficientManaException : std::exception {
+class InsufficientManaException : public std::exception {
    public:
     virtual const char* what() const noexcept;
 };
 
-class OutOfRangeAttackException : std::exception {
+class CantAttackInSafeZoneException : public std::exception {
    public:
     virtual const char* what() const noexcept;
 };
 
-class NewbiesCantBeAttackedException : std::exception {
+class OutOfRangeAttackException : public std::exception {
    public:
     virtual const char* what() const noexcept;
 };
 
-class TooHighLevelDifferenceOnAttackException : std::exception {
+class NewbiesCantBeAttackedException : public std::exception {
    public:
     virtual const char* what() const noexcept;
 };
 
-class ActualStateCantBeAttackedException : std::exception {
+class TooHighLevelDifferenceOnAttackException : public std::exception {
    public:
     virtual const char* what() const noexcept;
 };
 
-class KindCantDoMagicException : std::exception {
+class KindCantDoMagicException : public std::exception {
    public:
     virtual const char* what() const noexcept;
 };

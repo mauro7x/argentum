@@ -22,6 +22,8 @@ struct Race {
 
         const Id head_id;
         const Id body_id;
+        const Id dead_head_id;
+        const Id dead_body_id;
 
         const unsigned int max_health_factor;
         const unsigned int max_mana_factor;

@@ -2,6 +2,8 @@
 
 #include <cstdlib>
 
+#include "../../../Common/includes/Exceptions/Exception.h"
+
 #define DEFAULT_ORIENTATION DOWN_ORIENTATION
 
 Position::Position(const Id map, const int init_x_coord, const int init_y_coord,
@@ -13,7 +15,7 @@ Position::Position(const Id map, const int init_x_coord, const int init_y_coord,
       map_container(map_container) {}
 
 Position::~Position() {
-    map_container[map].clearTile(x, y);
+    map_container[map].clearTileOccupant(x, y);
 }
 
 const int Position::getX() const {
@@ -22,6 +24,10 @@ const int Position::getX() const {
 
 const int Position::getY() const {
     return this->y;
+}
+
+const Orientation Position::getOrientation() const {
+    return this->orientation;
 }
 
 const Id Position::getMapId() const {
@@ -33,7 +39,7 @@ const unsigned int Position::getDistance(const Position& other) const {
 }
 
 void Position::move() {
-    if (!this->map_container[this->map].moveOcuppant(this->x, this->y,
+    if (!this->map_container[this->map].moveOccupant(this->x, this->y,
                                                      this->orientation))
         throw CollisionWhileMovingException();
 
@@ -53,11 +59,18 @@ void Position::move() {
         case LEFT_ORIENTATION:
             this->x -= 1;
             break;
+
+        default:
+            throw Exception("Position::move: unknown orientation.");
     }
 }
 
 void Position::changeOrientation(Orientation orientation) {
     this->orientation = orientation;
+}
+
+const bool Position::isInSafeZone() const {
+    return map_container[map].isSafeZone(x, y);
 }
 
 void Position::fillBroadcastData(UnitData& data) const {

@@ -15,7 +15,7 @@ Inventory::Inventory(const InventoryData& init_data, uint32_t init_safe_gold,
         if (!init_data[i].item || !init_data[i].amount) {
             continue;
         }
-        
+
         Id item_id = init_data[i].item;
         uint32_t amount = init_data[i].amount;
 
@@ -49,24 +49,24 @@ const uint8_t Inventory::_getNextFreeSlot() const {
     return n_slot;
 }
 
-const uint8_t Inventory::addItem(Item* item) {
-    if (this->occupied_slots >= this->slots.size())
-        throw FullInventoryException();
-
+const uint8_t Inventory::addItem(Item* item, const unsigned int amount) {
     uint8_t n_slot;
     const Id item_id = item->getId();
 
     // Me fijo si ya hay algún slot de este item.
     if (this->id_slot_map.count(item_id)) {
         n_slot = this->id_slot_map[item_id];
-        this->slots[n_slot].addItem(item);
+        this->slots[n_slot].addItem(item, amount);
         return n_slot;
     }
+
+    if (this->occupied_slots >= this->slots.size())
+        throw FullInventoryException();
 
     // Busco un slot libre y lo agrego.
     n_slot = _getNextFreeSlot();
 
-    this->slots[n_slot].addItem(item);
+    this->slots[n_slot].addItem(item, amount);
 
     this->id_slot_map[item_id] = n_slot;
     ++this->occupied_slots;
@@ -74,16 +74,16 @@ const uint8_t Inventory::addItem(Item* item) {
     return n_slot;
 }
 
-Item* Inventory::gatherItem(const uint8_t n_slot) {
+Item* Inventory::gatherItem(const uint8_t n_slot, unsigned int& amount) {
     if (n_slot >= N_INVENTORY_SLOTS)
-        throw InvalidPositionException();
+        throw InvalidInventorySlotNumberException();
 
     Slot& slot = this->slots[n_slot];
 
     if (slot.isEmpty())
         return nullptr;
 
-    Item* item = slot.takeItem();
+    Item* item = slot.takeItem(amount);
 
     if (slot.isEmpty()) {
         this->id_slot_map.erase(item->getId());
@@ -151,6 +151,25 @@ void Inventory::gatherGold(const uint32_t amount) {
     }
 }
 
+void Inventory::dropAll(std::vector<DroppingSlot>& dropped_items) {
+    for (unsigned int i = 0; i < slots.size(); ++i) {
+        Slot& slot = slots[i];
+        Id item_id = slot.getItemId();
+
+        if (!item_id)
+            continue;
+
+        uint32_t amount = slot.getAmount();
+
+        dropped_items.emplace_back(item_id, amount);
+
+        slot.clearSlot();
+
+        this->id_slot_map.erase(item_id);
+        --this->occupied_slots;
+    }
+}
+
 void Inventory::fillBroadcastData(PlayerData& data) const {
     data.safe_gold = this->safe_gold;
     data.excess_gold = this->excess_gold;
@@ -181,8 +200,8 @@ const char* FullInventoryException::what() const noexcept {
     return "No puede agregar más elementos al inventario.";
 }
 
-const char* InvalidPositionException::what() const noexcept {
-    return "La posición del inventario especificada es inválida.";
+const char* InvalidInventorySlotNumberException::what() const noexcept {
+    return "El numero de slot del inventario especificado es inválido.";
 }
 
 const char* InsufficientGoldException::what() const noexcept {
@@ -191,14 +210,4 @@ const char* InsufficientGoldException::what() const noexcept {
 
 const char* GoldMaximumCapacityReachedException::what() const noexcept {
     return "No puedes recoger más oro. Límite de capacidad alcanzado.";
-}
-
-void Inventory::debug() const {
-    // std::cout << "Inventory: [" << this->items_quantity << " elements]" <<
-    // std::endl; for (unsigned int i = 0; i < this->container.size(); ++i) {
-    //     if (this->container[i]) {
-    //         std::cout << "Posicion " << i << ": ";
-    //         std::cout << this->container[i]->what() << std::endl;
-    //     }
-    // }
 }

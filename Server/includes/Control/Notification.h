@@ -13,6 +13,8 @@
 #include "../../../Common/includes/types.h"
 //-----------------------------------------------------------------------------
 
+typedef std::vector<uint8_t> Serialized;
+
 //-----------------------------------------------------------------------------
 /* Notificación abstracta que se sabe enviar por un socket. Tener en cuenta que
  * los atributos particulares que necesite cada notificación para enviarse deben
@@ -42,6 +44,8 @@ class Notification {
     virtual bool send(const InstanceId sender, const SocketWrapper& peer) = 0;
 
     virtual const bool isBroadcast() const;
+
+    virtual const EntityType getEntityType() const;
 
     virtual const Id getMapId() const;
 

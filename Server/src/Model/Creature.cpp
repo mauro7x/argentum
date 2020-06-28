@@ -69,8 +69,10 @@ unsigned int Creature::getMaxHealth() {
 
 void Creature::fillBroadcastData(CreatureData& data) const {
     this->position.fillBroadcastData(data.basic_data);
+    data.name = this->name;
     data.creature_id = this->id;
     data.health = this->health_actual;
+    data.max_health = this->health_max;
 }
 
 const bool Creature::mustBeBroadcasted() const {

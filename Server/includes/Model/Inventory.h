@@ -5,13 +5,15 @@
 #include <cstdio>
 #include <exception>
 #include <map>
+#include <vector>
 
+#include "../../../Common/includes/DataStructs.h"
 #include "../../../Common/includes/Inventory.h"
-#include "../../../Common/includes/UnitData.h"
 #include "Item.h"
 #include "ItemsContainer.h"
 #include "Level.h"
 #include "Slot.h"
+#include "config_structs.h"
 
 /*
  * El Inventario es un contenedor que guarda Items,
@@ -69,13 +71,18 @@ class Inventory {
     void updateMaxAmountsOfGold();
 
     /*
-     * Obtiene el item en la posicion especificada.
+     * Obtiene la cantidad especificada del item en la n_slot
+     * pasada por parámetro.
+     *
+     * Si la cantidad de items en el slot es menor que amount,
+     * se configura en amount la cantidad real droppeada.
+     *
      * En caso de no haber, retorna nullptr.
      *
-     * Lanza InvalidPositionException si la posicion
+     * Lanza InvalidInventorySlotNumberException si la posicion
      * especificada es invalida (fuera de rango).
      */
-    Item* gatherItem(const uint8_t n_slot);
+    Item* gatherItem(const uint8_t n_slot, unsigned int& amount);
 
     /*
      * Obtiene amount de gold del inventario.
@@ -86,13 +93,13 @@ class Inventory {
     void gatherGold(const uint32_t amount);
 
     /*
-     * Agrega un item al inventario.
-     * Retorna la posicion en la que se agrego.
+     * Agrega amount items (del mismo tipo) al inventario.
+     * Retorna el numero de slot en el que se agregaron.
      *
      * Lanza FullInventoryException si el inventario esta
      * lleno y no se puede agregar.
      */
-    const uint8_t addItem(Item* item);
+    const uint8_t addItem(Item* item, const unsigned int amount);
 
     /*
      * Agrega amount de gold al inventario, llenando primero
@@ -103,6 +110,12 @@ class Inventory {
      * guardar todo el oro por llegar al limite de capacidad.
      */
     void addGold(const uint32_t amount);
+
+    /*
+     * Vacía el inventario, dropeando todos los items en el vector 
+     * recibido por parámetro.
+     */
+    void dropAll(std::vector<DroppingSlot>& dropped_items);
 
     /*
      * Llena los campos safe_gold, excess_gold e
@@ -120,7 +133,7 @@ class FullInventoryException : public std::exception {
     virtual const char* what() const noexcept;
 };
 
-class InvalidPositionException : public std::exception {
+class InvalidInventorySlotNumberException : public std::exception {
    public:
     virtual const char* what() const noexcept;
 };
