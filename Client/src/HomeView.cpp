@@ -364,7 +364,7 @@ void HomeView::_handleEvent(const SDL_Event& e) {
 void HomeView::_handleConnectButtonPressed() {
     if (current_hostname.empty() || current_port.empty()) {
         info_msg.loadFromRenderedText(&renderer, info_font,
-                                      "Debes completar ambos campos.",
+                                      "Debes completar ambos campos",
                                       SDL_Color(HOMEVIEW_ERROR_COLOR));
         _setInfoPos();
         return;
@@ -380,7 +380,7 @@ void HomeView::_handleConnectButtonPressed() {
         socket = std::move(SocketWrapper(current_hostname, current_port));
     } catch (const Exception& e) {
         info_msg.loadFromRenderedText(&renderer, info_font,
-                                      "No se pudo establecer conexion.",
+                                      "No se pudo establecer conexion",
                                       SDL_Color(HOMEVIEW_ERROR_COLOR));
         _setInfoPos();
         return;
