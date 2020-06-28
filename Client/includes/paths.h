@@ -48,7 +48,7 @@
 #define FONT_CINZELBOLD_FP "../Assets/Fonts/CinzelBold.ttf"
 #define FONT_SANFORD_FP "../Assets/Fonts/Sanford.ttf"
 // #define FONT_ANCIENTMEDIUM_FP "../Assets/Fonts/AncientMedium.ttf"
-#define FONT_IMAGINE_FP "../Assets/Fonts/Imagine.ttf"
+#define FONT_FORCEDSQUARE_FP "../Assets/Fonts/ForcedSquare.ttf"
 //-----------------------------------------------------------------------------
 
 #endif  // __CLIENT_PATHS_H__
