@@ -1,6 +1,7 @@
 #include <math.h>
-#include <string>
+
 #include <algorithm>
+#include <string>
 //-----------------------------------------------------------------------------
 #include "../../includes/Model/Character.h"
 #include "../../includes/Model/Formulas.h"
@@ -253,7 +254,7 @@ void Character::doMagic() {
     }
 }
 
-const int Character::attack(Character& attacked) {
+const bool Character::attack(Character& attacked, int& damage) {
     // Delego si puedo atacar en mi estado.
     this->state->attack();
 
@@ -269,11 +270,12 @@ const int Character::attack(Character& attacked) {
 
     // Si el arma es curativa, obtengo sus puntos y curo.
     if (this->equipment.isWeaponHealing()) {
-        unsigned int healing_points = this->equipment.useAttackItem(*this);
+        int healing_points = this->equipment.useAttackItem(*this);
         attacked.recoverHealth(healing_points);
 
         // Devuelvo valor negativo -> puntos curativos.
-        return -healing_points;
+        damage = -healing_points;
+        return false;
     }
 
     // Es un arma de ataque.
@@ -305,17 +307,17 @@ const int Character::attack(Character& attacked) {
 
     // Está dentro del rango. Se define si el ataque es critico y se obtienen
     // los correspondientes puntos de daño.
+    damage = this->equipment.useAttackItem(*this);
+
     bool critical_attack = Formulas::isCriticalAttack();
-    unsigned int potential_damage = this->equipment.useAttackItem(*this);
     if (critical_attack)
-        potential_damage = potential_damage * CRITICAL_ATTACK_DAMAGE_MODIFIER;
+        damage = damage * CRITICAL_ATTACK_DAMAGE_MODIFIER;
 
     // El atacado recibe el daño del ataque.
-    const unsigned int effective_damage =
-        attacked.receiveAttack(potential_damage, critical_attack);
+    const bool eluded = attacked.receiveAttack(damage, critical_attack);
 
     // Actualizo exp.
-    this->level.onAttackUpdate(*this, effective_damage, attacked.getLevel());
+    this->level.onAttackUpdate(*this, damage, attacked.getLevel());
 
     // Si murio, sumamos la exp. necesaria
     if (!attacked.getHealth())
@@ -324,34 +326,27 @@ const int Character::attack(Character& attacked) {
 
     this->broadcast = true;
 
-    return effective_damage;
+    return eluded;
 }
 
-const unsigned int Character::receiveAttack(const unsigned int damage,
-                                            const bool eludible) {
-    unsigned int damage_received = 0;
-
-    if (eludible) {
-        const bool is_eluded = Formulas::isAttackEluded(this->agility);
-        if (is_eluded) {
-            // El ataque es esquivado, no se recibe daño
-            return damage_received;
-        }
+const bool Character::receiveAttack(int& damage, const bool eludible) {
+    if (eludible && Formulas::isAttackEluded(this->agility)) {
+        // El ataque es esquivado, no se recibe daño
+        damage = 0;
+        return false;
     }
 
     const unsigned int defense_points = this->equipment.getDefensePoints(*this);
-    damage_received = std::max(0, (int)(damage - defense_points));
+    damage = std::max(0, (int)(damage - defense_points));
 
-    this->health = std::max(0, (int)(this->health - damage_received));
+    this->health = std::max(0, (int)(this->health - damage));
 
-    if (this->health == 0) {
-        // MORIR
+    if (this->health == 0)
         this->die();
-    }
 
     this->broadcast = true;
 
-    return damage_received;
+    return true;
 }
 
 void Character::die() {

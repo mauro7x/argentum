@@ -252,17 +252,16 @@ class Character {
     /*
      * Efectúa la recepción del ataque de otro jugador.
      *
-     * Retorna los puntos de daño que efectivamente recibe.
+     * Recibe por referencia los potenciales puntos de daño, y setea en dicha
+     * referencia los puntos de daño efectivos.
      *
-     * Si el ataque es eludible, puede esquivarlo y no recibir daño alguno,
-     * por lo que retorna 0.
+     * Retorna true si el ataque fue esquivado, false si fue recibido.
      *
      * Si no lo puede esquivar, absorbe lo que puede con su defensa, siendo
      * el daño efectivo el causado menos el absorbido por la defensa.
      *
      */
-    const unsigned int receiveAttack(const unsigned int damage,
-                                     const bool eludible);
+    const bool receiveAttack(int& damage, const bool eludible);
 
     /*
      * Efectua un ataque a otro jugador, usando el arma que tiene equipada.
@@ -286,7 +285,7 @@ class Character {
      *
      *       KindCantDoMagicException si la clase del character no puede hacer
      * magia e intenta usar un hechizo.
-     * 
+     *
      *       CantAttackItselfException si quieren lanzar un ataque dañino sobre
      * sí mismo.
      *
@@ -305,7 +304,7 @@ class Character {
      *       AttackedStateCantBeAttackedException si el jugador al que se
      * quiere atacar no puede atacar debido a su estado (muerto).
      */
-    const int attack(Character& attacked);
+    const bool attack(Character& attacked, int& damage);
 
     /*
      * Cuando health es cero, se llama a este método. Cambia el estado del

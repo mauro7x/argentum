@@ -17,7 +17,7 @@
 #define RATE 1000 / 30
 #define MAX_CREATURES_PER_MAP 20
 #define TIME_TO_SPAWN_CREATURE 3000           // en ms
-#define TIME_TO_DISSAPEAR_DROPPED_ITEM 15000  // en ms
+#define TIME_TO_DISSAPEAR_DROPPED_ITEM 25000  // en ms
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -493,13 +493,14 @@ void Game::_useWeaponOnCharacter(const InstanceId caller,
     Character& attacker = this->characters.at(caller);
     Character& attacked = this->characters.at(target);
 
-    unsigned int effective_damage = 0;
+    int damage = 0;
+    bool eluded = false;
 
     try {
-        effective_damage = attacker.attack(attacked);
+        eluded = attacker.attack(attacked, damage);
     } catch (const std::exception& e) {
         /*
-         * Atrapo excepciones: 
+         * Atrapo excepciones:
          * OutOfRangeAttackException,
          * KindCantDoMagicException,
          * TooHighLevelDifferenceOnAttackException,
@@ -514,19 +515,34 @@ void Game::_useWeaponOnCharacter(const InstanceId caller,
     }
 
     // Verificamos si murió, en cuyo caso dropea todo.
-    if (effective_damage && !attacked.getHealth()) {
+    if (damage > 0 && !attacked.getHealth()) {
         _dropAllItems(attacked);
     }
 
-    // FALTA DISCRIMINAR CASOS: no infligir danio, baculo curativo.
-    std::string reply_msg =
-        "Le has infligido " + std::to_string(effective_damage) + " de daño.";
-    Notification* reply = new NotificationReply(SUCCESS_MSG, reply_msg.c_str());
+    std::string msg_to_attacked, msg_to_attacker;
+
+    if (damage > 0) {
+        msg_to_attacker =
+            "Le has infligido " + std::to_string(damage) + " de daño.";
+        msg_to_attacked =
+            "Has recibido " + std::to_string(damage) + " de daño.";
+    } else if (damage < 0) {
+        msg_to_attacker =
+            "Le has curado " + std::to_string(damage) + " puntos de vida.";
+        msg_to_attacked =
+            "Te han curado " + std::to_string(damage) + " puntos de vida.";
+    } else if (eluded) {
+        msg_to_attacker = "Tu ataque fue eludido.";
+        msg_to_attacked = "Has eludido un ataque.";
+    } else {
+        msg_to_attacker = "No le has causado daño, la defensa absorbió el ataque.";
+        msg_to_attacked = "Tu defensa absorbió todo el daño del ataque.";
+    }
+
+    Notification* reply = new NotificationReply(INFO_MSG, msg_to_attacker.c_str());
     active_clients.notify(caller, reply);
 
-    reply_msg =
-        "Has recibido " + std::to_string(effective_damage) + " de daño.";
-    reply = new NotificationReply(SUCCESS_MSG, reply_msg.c_str());
+    reply = new NotificationReply(INFO_MSG, msg_to_attacked.c_str());
     active_clients.notify(target, reply);
 }
 
