@@ -4,6 +4,7 @@
 //-----------------------------------------------------------------------------
 #include <cstdint>
 #include <string>
+#include <vector>
 
 #include "../../../Common/includes/types.h"
 #include "../../../Common/includes/Inventory.h"
@@ -85,10 +86,8 @@ struct RaceCfg {
     Id id;
     std::string name;
 
-    Id head_id;
-    Id body_id;
-    std::vector<int> head_ids;
-    std::vector<int> body_ids;
+    std::vector<Id> head_ids;
+    std::vector<Id> body_ids;
     uint8_t max_health_factor;
     uint8_t max_mana_factor;
     uint8_t health_recovery_factor;
