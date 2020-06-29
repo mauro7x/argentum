@@ -2,8 +2,6 @@
     {
         "id": 100,
         "name": "Humano",
-        "head_id": 2000,
-        "body_id": 2100,
         "head_ids":[2000, 2000],
         "body_ids":[2100, 2100],
         "max_health_factor": 10,
@@ -20,8 +18,6 @@
     {
         "id": 101,
         "name": "Elfo",
-        "head_id": 2001,
-        "body_id": 2101,
         "head_ids":[2001, 2001],
         "body_ids":[2101, 2101],
         "max_health_factor": 10,
@@ -38,8 +34,6 @@
     {
         "id": 102,
         "name": "Enano",
-        "head_id": 2002,
-        "body_id": 2100,
         "head_ids":[2002, 2002],
         "body_ids":[2100, 2100],
         "max_health_factor": 10,
@@ -56,8 +50,6 @@
     {
         "id": 103,
         "name": "Gnomo",
-        "head_id": 2003,
-        "body_id": 2100,
         "head_ids":[2003, 2003],
         "body_ids":[2100, 2100],
         "max_health_factor": 10,
