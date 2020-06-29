@@ -23,18 +23,18 @@ CharacterCfg ClientLogin::_login() {
     size_t received;
     std::string username, password;
     CharacterCfg character_data = {};
-    //enviar info kind race;
+    // enviar info kind race;
     while (!connected) {
         received = peer >> opcode;
-        if (! received) {
+        if (!received) {
             throw Exception("socket is closed");
         }
         received = peer >> username;
-        if (! received) {
+        if (!received) {
             throw Exception("socket is closed");
         }
         received = peer >> password;
-        if (! received) {
+        if (!received) {
             throw Exception("socket is closed");
         }
         switch (opcode) {
@@ -44,37 +44,50 @@ CharacterCfg ClientLogin::_login() {
                     connected = true;
                 } catch (const Exception& e) {
                     NotificationReply reply(ERROR_REPLY, e.what());
-                    reply.send(0,peer);
+                    reply.send(0, peer);
                 }
 
                 break;
             case SIGN_UP_OPCODE:
-                uint32_t race, kind;
+                uint32_t race, kind, head_id, body_id;
                 received = peer >> race;
-                if (! received) {
+                if (!received) {
                     throw Exception("socket is closed");
                 }
                 received = peer >> kind;
-                if (! received) {
+                if (!received) {
                     throw Exception("socket is closed");
-                }                
+                }
+                received = peer >> head_id;
+                if (!received) {
+                    throw Exception("socket is closed");
+                }
+                received = peer >> body_id;
+                if (!received) {
+                    throw Exception("socket is closed");
+                }
+
                 try {
-                    database.signUp(username, password, race, kind, character_data);
-                    connected = true;
+                    database.signUp(username, password, race, kind, head_id,
+                                    body_id, character_data);
+                    std::string msg_create =
+                        "Personaje fue creado exitosamente!";
+                    NotificationReply reply_create(SUCCESS_REPLY, msg_create);
+                    reply_create.send(0, peer);
                 } catch (const Exception& e) {
                     NotificationReply reply(ERROR_REPLY, e.what());
-                    reply.send(0,peer);
+                    reply.send(0, peer);
                 }
                 break;
 
             default:
-                throw Exception("Opcode invalid") ;
+                throw Exception("Opcode invalid");
                 break;
         }
     }
-    std::string msg = "entrando al juego";
+    std::string msg = "Entrando al juego !";
     NotificationReply reply(SUCCESS_REPLY, msg);
-    reply.send(0,peer);
+    reply.send(0, peer);
     return character_data;
 }
 //-----------------------------------------------------------------------------
