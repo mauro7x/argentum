@@ -388,6 +388,8 @@ void Character::fillPersistenceData(CharacterCfg& data) const {
                  sizeof(char) * NICKNAME_MAX_LENGTH - 1);
     data.race = this->race.id;
     data.kind = this->kind.id;
+    data.head_id = this->head_id;
+    data.body_id = this->body_id;
     
     //aca verifica el estado del character, hay que mejorar!
     if (!this->health) {
