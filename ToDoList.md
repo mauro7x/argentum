@@ -55,5 +55,7 @@
 
 * Endianness en el socket. -Santi, 25/06.
 
+* Agregarle a los items wearable un campo "info" que cuando el cliente les haga click derecho se imprima por consola. -Mau, 28/06.
+
 ---
 
