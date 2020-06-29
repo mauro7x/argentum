@@ -14,10 +14,6 @@
 #include "../../includes/Model/Game.h"
 //-----------------------------------------------------------------------------
 #define FIRST_INSTANCE_ID 1
-#define RATE 1000 / 30
-#define MAX_CREATURES_PER_MAP 20
-#define TIME_TO_SPAWN_CREATURE 3000           // en ms
-#define TIME_TO_DISSAPEAR_DROPPED_ITEM 25000  // en ms
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -506,8 +502,7 @@ void Game::_sendCharacterAttackNotifications(const int damage,
         msg_to_attacked = "Tu defensa absorbió todo el daño del ataque.";
     }
 
-    Notification* reply =
-        new Reply(INFO_MSG, msg_to_attacker.c_str());
+    Notification* reply = new Reply(INFO_MSG, msg_to_attacker.c_str());
     active_clients.notify(caller, reply);
 
     if (caller == target)
@@ -522,8 +517,7 @@ void Game::_sendCreatureAttackNotifications(const int damage,
     std::string msg_to_attacker = "Has atacado a la criatura, provocando " +
                                   std::to_string(damage) + " de daño.";
 
-    Notification* reply =
-        new Reply(INFO_MSG, msg_to_attacker.c_str());
+    Notification* reply = new Reply(INFO_MSG, msg_to_attacker.c_str());
     active_clients.notify(caller, reply);
 }
 
@@ -565,7 +559,7 @@ void Game::_useWeapon(const InstanceId caller, const InstanceId target,
         _sendCreatureAttackNotifications(damage, caller);
     else
         _sendCharacterAttackNotifications(damage, eluded, caller, target);
-} 
+}
 
 void Game::useWeapon(const InstanceId caller, const InstanceId target) {
     if (!this->characters.count(caller)) {
@@ -726,8 +720,7 @@ void Game::drop(const InstanceId caller, const uint8_t n_slot,
     if (amount < asked_amount) {
         std::string reply_msg =
             "Se dropearon únicamente " + std::to_string(amount) + " items.";
-        Notification* reply =
-            new Reply(INFO_MSG, reply_msg.c_str());
+        Notification* reply = new Reply(INFO_MSG, reply_msg.c_str());
         active_clients.notify(caller, reply);
     }
 
