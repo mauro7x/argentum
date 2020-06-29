@@ -1,5 +1,5 @@
-#ifndef __TEXTBOX_H__
-#define __TEXTBOX_H__
+#ifndef __SELECTION_INPUT_BOX_H__
+#define __SELECTION_INPUT_BOX_H__
 
 //-----------------------------------------------------------------------------
 #include <string>
@@ -11,26 +11,32 @@
 
 //-----------------------------------------------------------------------------
 
-struct TextBox {
-    // Flag de animación
-    bool is_active;
+struct SelectionInputBox {
+    // Flags de animación
+    bool prev_over;
+    bool next_over;
 
     // Offsets de renderizado
-    SDL_Rect render_box;
-    SDL_Point render_pos;
-
-    // Texto contenido
-    std::string s_content;
+    SDL_Rect prev_box;
+    SDL_Rect next_box;
+    SDL_Rect bar_box;
 
     // Texturas
-    Texture base;
-    Texture active;
-    Texture content;
+    Texture prev;
+    Texture prev_pressed;
+    Texture next;
+    Texture next_pressed;
+    Texture bar;
 
     // Constructor por defecto
-    TextBox() : is_active(false), render_box({0}), render_pos({0}) {}
+    SelectionInputBox()
+        : prev_over(false),
+          next_over(false),
+          prev_box({0}),
+          next_box({0}),
+          bar_box({0}) {}
 };
 
 //-----------------------------------------------------------------------------
 
-#endif  // __TEXTBOX_H__
+#endif  // __SELECTION_INPUT_BOX_H__

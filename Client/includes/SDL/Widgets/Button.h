@@ -8,13 +8,18 @@
 //-----------------------------------------------------------------------------
 
 struct Button {
+    // Flag de animación
     bool mouse_over;
+
+    // Offset de renderizado
     SDL_Rect render_box;
+
+    // Texturas
     Texture base;
     Texture pressed;
 
     // Constructor por defecto
-    Button() : mouse_over(false) {}
+    Button() : mouse_over(false), render_box({0}) {}
 };
 
 //-----------------------------------------------------------------------------

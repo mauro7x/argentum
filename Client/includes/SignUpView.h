@@ -28,6 +28,7 @@
 #include "SDL/Renderer.h"
 #include "SDL/Texture.h"
 #include "SDL/Widgets/Button.h"
+#include "SDL/Widgets/SelectionInputBox.h"
 #include "SDL/Widgets/TextBox.h"
 //-----------------------------------------------------------------------------
 
@@ -45,21 +46,6 @@
 #define SIGNUPVIEW_MAX_INPUT_MSG "LONGITUD MAXIMA ALCANZADA"
 
 #define SIGNUPVIEW_CREATING_MSG "CREANDO PERSONAJE..."
-
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
-
-struct SelectionInputBox {
-    // Flags de animación
-    bool prev_over = false;
-    bool next_over = false;
-
-    // Offsets de renderizado
-    SDL_Rect prev_box = {0};
-    SDL_Rect next_box = {0};
-    SDL_Rect bar_box = {0};
-};
 
 //-----------------------------------------------------------------------------
 
@@ -111,16 +97,12 @@ class SignUpView : public ConstantRateFunc {
     TextBox password_txtbx;
     Button goback_btn;
     Button create_btn;
+    SelectionInputBox race_sibx, kind_sibx, head_sibx, body_sibx;
 
     // Offsets de renderizado
-    SDL_Point race_pos = {0};
-    SDL_Point kind_pos = {0};
     SDL_Rect preview_box = {0};
     SDL_Rect info_box = {0};
     SDL_Point info_pos = {0};
-
-    // Barras de selección (sólo lectura)
-    SelectionInputBox race_box, kind_box, head_box, body_box;
 
     // Fuentes a utilizar
     int input_fontsize = 0;
@@ -132,12 +114,6 @@ class SignUpView : public ConstantRateFunc {
     // Texturas estáticas a renderizar
     Texture bg;
     Texture cursor;
-    Texture prev;
-    Texture prev_pressed;
-    Texture next;
-    Texture next_pressed;
-    Texture bar;
-    Texture small_bar;
 
     // Texturas dinámicas
     Texture info_msg;

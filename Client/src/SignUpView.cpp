@@ -34,90 +34,98 @@ void SignUpView::_init() {
 
     // Race
     {
-        race_box.prev_box.x =
+        race_sibx.prev_box.x =
             config["signupview"]["race"]["prev"]["offset"]["x"];
-        race_box.prev_box.y =
+        race_sibx.prev_box.y =
             config["signupview"]["race"]["prev"]["offset"]["y"];
-        race_box.prev_box.w = config["signupview"]["race"]["prev"]["w"];
-        race_box.prev_box.h = config["signupview"]["race"]["prev"]["h"];
+        race_sibx.prev_box.w = config["signupview"]["race"]["prev"]["w"];
+        race_sibx.prev_box.h = config["signupview"]["race"]["prev"]["h"];
 
-        race_box.bar_box.x = config["signupview"]["race"]["bar"]["offset"]["x"];
-        race_box.bar_box.y = config["signupview"]["race"]["bar"]["offset"]["y"];
-        race_box.bar_box.w = config["signupview"]["race"]["bar"]["w"];
-        race_box.bar_box.h = config["signupview"]["race"]["bar"]["h"];
+        race_sibx.bar_box.x =
+            config["signupview"]["race"]["bar"]["offset"]["x"];
+        race_sibx.bar_box.y =
+            config["signupview"]["race"]["bar"]["offset"]["y"];
+        race_sibx.bar_box.w = config["signupview"]["race"]["bar"]["w"];
+        race_sibx.bar_box.h = config["signupview"]["race"]["bar"]["h"];
 
-        race_box.next_box.x =
+        race_sibx.next_box.x =
             config["signupview"]["race"]["next"]["offset"]["x"];
-        race_box.next_box.y =
+        race_sibx.next_box.y =
             config["signupview"]["race"]["next"]["offset"]["y"];
-        race_box.next_box.w = config["signupview"]["race"]["next"]["w"];
-        race_box.next_box.h = config["signupview"]["race"]["next"]["h"];
+        race_sibx.next_box.w = config["signupview"]["race"]["next"]["w"];
+        race_sibx.next_box.h = config["signupview"]["race"]["next"]["h"];
     }
 
     // Kind
     {
-        kind_box.prev_box.x =
+        kind_sibx.prev_box.x =
             config["signupview"]["kind"]["prev"]["offset"]["x"];
-        kind_box.prev_box.y =
+        kind_sibx.prev_box.y =
             config["signupview"]["kind"]["prev"]["offset"]["y"];
-        kind_box.prev_box.w = config["signupview"]["kind"]["prev"]["w"];
-        kind_box.prev_box.h = config["signupview"]["kind"]["prev"]["h"];
+        kind_sibx.prev_box.w = config["signupview"]["kind"]["prev"]["w"];
+        kind_sibx.prev_box.h = config["signupview"]["kind"]["prev"]["h"];
 
-        kind_box.bar_box.x = config["signupview"]["kind"]["bar"]["offset"]["x"];
-        kind_box.bar_box.y = config["signupview"]["kind"]["bar"]["offset"]["y"];
-        kind_box.bar_box.w = config["signupview"]["kind"]["bar"]["w"];
-        kind_box.bar_box.h = config["signupview"]["kind"]["bar"]["h"];
+        kind_sibx.bar_box.x =
+            config["signupview"]["kind"]["bar"]["offset"]["x"];
+        kind_sibx.bar_box.y =
+            config["signupview"]["kind"]["bar"]["offset"]["y"];
+        kind_sibx.bar_box.w = config["signupview"]["kind"]["bar"]["w"];
+        kind_sibx.bar_box.h = config["signupview"]["kind"]["bar"]["h"];
 
-        kind_box.next_box.x =
+        kind_sibx.next_box.x =
             config["signupview"]["kind"]["next"]["offset"]["x"];
-        kind_box.next_box.y =
+        kind_sibx.next_box.y =
             config["signupview"]["kind"]["next"]["offset"]["y"];
-        kind_box.next_box.w = config["signupview"]["kind"]["next"]["w"];
-        kind_box.next_box.h = config["signupview"]["kind"]["next"]["h"];
+        kind_sibx.next_box.w = config["signupview"]["kind"]["next"]["w"];
+        kind_sibx.next_box.h = config["signupview"]["kind"]["next"]["h"];
     }
 
     // Head
     {
-        head_box.prev_box.x =
+        head_sibx.prev_box.x =
             config["signupview"]["head"]["prev"]["offset"]["x"];
-        head_box.prev_box.y =
+        head_sibx.prev_box.y =
             config["signupview"]["head"]["prev"]["offset"]["y"];
-        head_box.prev_box.w = config["signupview"]["head"]["prev"]["w"];
-        head_box.prev_box.h = config["signupview"]["head"]["prev"]["h"];
+        head_sibx.prev_box.w = config["signupview"]["head"]["prev"]["w"];
+        head_sibx.prev_box.h = config["signupview"]["head"]["prev"]["h"];
 
-        head_box.bar_box.x = config["signupview"]["head"]["bar"]["offset"]["x"];
-        head_box.bar_box.y = config["signupview"]["head"]["bar"]["offset"]["y"];
-        head_box.bar_box.w = config["signupview"]["head"]["bar"]["w"];
-        head_box.bar_box.h = config["signupview"]["head"]["bar"]["h"];
+        head_sibx.bar_box.x =
+            config["signupview"]["head"]["bar"]["offset"]["x"];
+        head_sibx.bar_box.y =
+            config["signupview"]["head"]["bar"]["offset"]["y"];
+        head_sibx.bar_box.w = config["signupview"]["head"]["bar"]["w"];
+        head_sibx.bar_box.h = config["signupview"]["head"]["bar"]["h"];
 
-        head_box.next_box.x =
+        head_sibx.next_box.x =
             config["signupview"]["head"]["next"]["offset"]["x"];
-        head_box.next_box.y =
+        head_sibx.next_box.y =
             config["signupview"]["head"]["next"]["offset"]["y"];
-        head_box.next_box.w = config["signupview"]["head"]["next"]["w"];
-        head_box.next_box.h = config["signupview"]["head"]["next"]["h"];
+        head_sibx.next_box.w = config["signupview"]["head"]["next"]["w"];
+        head_sibx.next_box.h = config["signupview"]["head"]["next"]["h"];
     }
 
     // Body
     {
-        body_box.prev_box.x =
+        body_sibx.prev_box.x =
             config["signupview"]["body"]["prev"]["offset"]["x"];
-        body_box.prev_box.y =
+        body_sibx.prev_box.y =
             config["signupview"]["body"]["prev"]["offset"]["y"];
-        body_box.prev_box.w = config["signupview"]["body"]["prev"]["w"];
-        body_box.prev_box.h = config["signupview"]["body"]["prev"]["h"];
+        body_sibx.prev_box.w = config["signupview"]["body"]["prev"]["w"];
+        body_sibx.prev_box.h = config["signupview"]["body"]["prev"]["h"];
 
-        body_box.bar_box.x = config["signupview"]["body"]["bar"]["offset"]["x"];
-        body_box.bar_box.y = config["signupview"]["body"]["bar"]["offset"]["y"];
-        body_box.bar_box.w = config["signupview"]["body"]["bar"]["w"];
-        body_box.bar_box.h = config["signupview"]["body"]["bar"]["h"];
+        body_sibx.bar_box.x =
+            config["signupview"]["body"]["bar"]["offset"]["x"];
+        body_sibx.bar_box.y =
+            config["signupview"]["body"]["bar"]["offset"]["y"];
+        body_sibx.bar_box.w = config["signupview"]["body"]["bar"]["w"];
+        body_sibx.bar_box.h = config["signupview"]["body"]["bar"]["h"];
 
-        body_box.next_box.x =
+        body_sibx.next_box.x =
             config["signupview"]["body"]["next"]["offset"]["x"];
-        body_box.next_box.y =
+        body_sibx.next_box.y =
             config["signupview"]["body"]["next"]["offset"]["y"];
-        body_box.next_box.w = config["signupview"]["body"]["next"]["w"];
-        body_box.next_box.h = config["signupview"]["body"]["next"]["h"];
+        body_sibx.next_box.w = config["signupview"]["body"]["next"]["w"];
+        body_sibx.next_box.h = config["signupview"]["body"]["next"]["h"];
     }
 
     // Preview
@@ -169,11 +177,11 @@ void SignUpView::_loadPreviewData() {
             data.texture.loadFromRenderedText(&renderer, input_font, name,
                                               SDL_Color(VIEWS_FONT_COLOR));
             data.texture_pos.x =
-                race_box.bar_box.x +
-                (race_box.bar_box.w - data.texture.getWidth()) / 2;
+                race_sibx.bar_box.x +
+                (race_sibx.bar_box.w - data.texture.getWidth()) / 2;
             data.texture_pos.y =
-                race_box.bar_box.y +
-                (race_box.bar_box.h - data.texture.getHeight()) / 2;
+                race_sibx.bar_box.y +
+                (race_sibx.bar_box.h - data.texture.getHeight()) / 2;
 
             // Llenamos los sprites de head y body
             size_t n_heads = races[i]["head_ids"].size();
@@ -184,11 +192,11 @@ void SignUpView::_loadPreviewData() {
                     &renderer, input_font, std::to_string(j + 1),
                     SDL_Color(VIEWS_FONT_COLOR));
                 head_data.texture_pos.x =
-                    head_box.bar_box.x +
-                    (head_box.bar_box.w - head_data.texture.getWidth()) / 2;
+                    head_sibx.bar_box.x +
+                    (head_sibx.bar_box.w - head_data.texture.getWidth()) / 2;
                 head_data.texture_pos.y =
-                    head_box.bar_box.y +
-                    (head_box.bar_box.h - head_data.texture.getHeight()) / 2;
+                    head_sibx.bar_box.y +
+                    (head_sibx.bar_box.h - head_data.texture.getHeight()) / 2;
             }
 
             size_t n_bodies = races[i]["body_ids"].size();
@@ -199,11 +207,11 @@ void SignUpView::_loadPreviewData() {
                     &renderer, input_font, std::to_string(j + 1),
                     SDL_Color(VIEWS_FONT_COLOR));
                 body_data.texture_pos.x =
-                    body_box.bar_box.x +
-                    (body_box.bar_box.w - body_data.texture.getWidth()) / 2;
+                    body_sibx.bar_box.x +
+                    (body_sibx.bar_box.w - body_data.texture.getWidth()) / 2;
                 body_data.texture_pos.y =
-                    body_box.bar_box.y +
-                    (body_box.bar_box.h - body_data.texture.getHeight()) / 2;
+                    body_sibx.bar_box.y +
+                    (body_sibx.bar_box.h - body_data.texture.getHeight()) / 2;
             }
         }
     }
@@ -222,11 +230,11 @@ void SignUpView::_loadPreviewData() {
             data.texture.loadFromRenderedText(&renderer, input_font, name,
                                               SDL_Color(VIEWS_FONT_COLOR));
             data.texture_pos.x =
-                kind_box.bar_box.x +
-                (kind_box.bar_box.w - data.texture.getWidth()) / 2;
+                kind_sibx.bar_box.x +
+                (kind_sibx.bar_box.w - data.texture.getWidth()) / 2;
             data.texture_pos.y =
-                kind_box.bar_box.y +
-                (kind_box.bar_box.h - data.texture.getHeight()) / 2;
+                kind_sibx.bar_box.y +
+                (kind_sibx.bar_box.h - data.texture.getHeight()) / 2;
         }
     }
 }
@@ -253,7 +261,7 @@ void SignUpView::_loadMedia() {
 
     // Cargamos las imagenes estáticas
 
-    // TextBoxs
+    // TextBoxes
     {
         username_txtbx.base.loadFromFile(&renderer, SIGNUPVIEW_TEXTBOX_FP);
         password_txtbx.base.loadFromFile(&renderer, SIGNUPVIEW_TEXTBOX_FP);
@@ -264,18 +272,42 @@ void SignUpView::_loadMedia() {
                                            SIGNUPVIEW_TEXTBOX_ACTIVE_FP);
     }
 
-    // SelectionBox
+    // SelectionBoxes
     {
-        prev.loadFromFile(&renderer, SIGNUPVIEW_SELECTIONBOX_PREV_FP);
-        prev_pressed.loadFromFile(&renderer,
-                                  SIGNUPVIEW_SELECTIONBOX_PREV_PRESSED_FP);
+        race_sibx.prev.loadFromFile(&renderer, SIGNUPVIEW_SELECTIONBOX_PREV_FP);
+        kind_sibx.prev.loadFromFile(&renderer, SIGNUPVIEW_SELECTIONBOX_PREV_FP);
+        head_sibx.prev.loadFromFile(&renderer, SIGNUPVIEW_SELECTIONBOX_PREV_FP);
+        body_sibx.prev.loadFromFile(&renderer, SIGNUPVIEW_SELECTIONBOX_PREV_FP);
 
-        next.loadFromFile(&renderer, SIGNUPVIEW_SELECTIONBOX_NEXT_FP);
-        next_pressed.loadFromFile(&renderer,
-                                  SIGNUPVIEW_SELECTIONBOX_NEXT_PRESSED_FP);
+        race_sibx.prev_pressed.loadFromFile(
+            &renderer, SIGNUPVIEW_SELECTIONBOX_PREV_PRESSED_FP);
+        kind_sibx.prev_pressed.loadFromFile(
+            &renderer, SIGNUPVIEW_SELECTIONBOX_PREV_PRESSED_FP);
+        head_sibx.prev_pressed.loadFromFile(
+            &renderer, SIGNUPVIEW_SELECTIONBOX_PREV_PRESSED_FP);
+        body_sibx.prev_pressed.loadFromFile(
+            &renderer, SIGNUPVIEW_SELECTIONBOX_PREV_PRESSED_FP);
 
-        bar.loadFromFile(&renderer, SIGNUPVIEW_SELECTIONBOX_BAR_FP);
-        small_bar.loadFromFile(&renderer, SIGNUPVIEW_SELECTIONBOX_SMALL_BAR_FP);
+        race_sibx.next.loadFromFile(&renderer, SIGNUPVIEW_SELECTIONBOX_NEXT_FP);
+        kind_sibx.next.loadFromFile(&renderer, SIGNUPVIEW_SELECTIONBOX_NEXT_FP);
+        head_sibx.next.loadFromFile(&renderer, SIGNUPVIEW_SELECTIONBOX_NEXT_FP);
+        body_sibx.next.loadFromFile(&renderer, SIGNUPVIEW_SELECTIONBOX_NEXT_FP);
+
+        race_sibx.next_pressed.loadFromFile(
+            &renderer, SIGNUPVIEW_SELECTIONBOX_NEXT_PRESSED_FP);
+        kind_sibx.next_pressed.loadFromFile(
+            &renderer, SIGNUPVIEW_SELECTIONBOX_NEXT_PRESSED_FP);
+        head_sibx.next_pressed.loadFromFile(
+            &renderer, SIGNUPVIEW_SELECTIONBOX_NEXT_PRESSED_FP);
+        body_sibx.next_pressed.loadFromFile(
+            &renderer, SIGNUPVIEW_SELECTIONBOX_NEXT_PRESSED_FP);
+
+        race_sibx.bar.loadFromFile(&renderer, SIGNUPVIEW_SELECTIONBOX_BAR_FP);
+        kind_sibx.bar.loadFromFile(&renderer, SIGNUPVIEW_SELECTIONBOX_BAR_FP);
+        head_sibx.bar.loadFromFile(&renderer,
+                                   SIGNUPVIEW_SELECTIONBOX_SMALL_BAR_FP);
+        body_sibx.bar.loadFromFile(&renderer,
+                                   SIGNUPVIEW_SELECTIONBOX_SMALL_BAR_FP);
     }
 
     // Botones
@@ -352,22 +384,22 @@ void SignUpView::_render() const {
 
     // Renderizamos race
     {
-        render_quad = race_box.prev_box;
-        if (race_box.prev_over) {
-            renderer.render(prev_pressed.getTexture(), &render_quad);
+        render_quad = race_sibx.prev_box;
+        if (race_sibx.prev_over) {
+            renderer.render(race_sibx.prev_pressed.getTexture(), &render_quad);
         } else {
-            renderer.render(prev.getTexture(), &render_quad);
+            renderer.render(race_sibx.prev.getTexture(), &render_quad);
         }
 
-        render_quad = race_box.next_box;
-        if (race_box.next_over) {
-            renderer.render(next_pressed.getTexture(), &render_quad);
+        render_quad = race_sibx.next_box;
+        if (race_sibx.next_over) {
+            renderer.render(race_sibx.next_pressed.getTexture(), &render_quad);
         } else {
-            renderer.render(next.getTexture(), &render_quad);
+            renderer.render(race_sibx.next.getTexture(), &render_quad);
         }
 
-        render_quad = race_box.bar_box;
-        renderer.render(bar.getTexture(), &render_quad);
+        render_quad = race_sibx.bar_box;
+        renderer.render(race_sibx.bar.getTexture(), &render_quad);
 
         const RaceData& current_race = races_data.getCurrentValue();
         render_quad = {current_race.texture_pos.x, current_race.texture_pos.y,
@@ -378,22 +410,22 @@ void SignUpView::_render() const {
 
     // Renderizamos kind
     {
-        render_quad = kind_box.prev_box;
-        if (kind_box.prev_over) {
-            renderer.render(prev_pressed.getTexture(), &render_quad);
+        render_quad = kind_sibx.prev_box;
+        if (kind_sibx.prev_over) {
+            renderer.render(kind_sibx.prev_pressed.getTexture(), &render_quad);
         } else {
-            renderer.render(prev.getTexture(), &render_quad);
+            renderer.render(kind_sibx.prev.getTexture(), &render_quad);
         }
 
-        render_quad = kind_box.next_box;
-        if (kind_box.next_over) {
-            renderer.render(next_pressed.getTexture(), &render_quad);
+        render_quad = kind_sibx.next_box;
+        if (kind_sibx.next_over) {
+            renderer.render(kind_sibx.next_pressed.getTexture(), &render_quad);
         } else {
-            renderer.render(next.getTexture(), &render_quad);
+            renderer.render(kind_sibx.next.getTexture(), &render_quad);
         }
 
-        render_quad = kind_box.bar_box;
-        renderer.render(bar.getTexture(), &render_quad);
+        render_quad = kind_sibx.bar_box;
+        renderer.render(kind_sibx.bar.getTexture(), &render_quad);
 
         const SelectionBoxData& current_kind = kinds_data.getCurrentValue();
         render_quad = {current_kind.texture_pos.x, current_kind.texture_pos.y,
@@ -404,22 +436,22 @@ void SignUpView::_render() const {
 
     // Renderizamos head
     {
-        render_quad = head_box.prev_box;
-        if (head_box.prev_over) {
-            renderer.render(prev_pressed.getTexture(), &render_quad);
+        render_quad = head_sibx.prev_box;
+        if (head_sibx.prev_over) {
+            renderer.render(head_sibx.prev_pressed.getTexture(), &render_quad);
         } else {
-            renderer.render(prev.getTexture(), &render_quad);
+            renderer.render(head_sibx.prev.getTexture(), &render_quad);
         }
 
-        render_quad = head_box.next_box;
-        if (head_box.next_over) {
-            renderer.render(next_pressed.getTexture(), &render_quad);
+        render_quad = head_sibx.next_box;
+        if (head_sibx.next_over) {
+            renderer.render(head_sibx.next_pressed.getTexture(), &render_quad);
         } else {
-            renderer.render(next.getTexture(), &render_quad);
+            renderer.render(head_sibx.next.getTexture(), &render_quad);
         }
 
-        render_quad = head_box.bar_box;
-        renderer.render(small_bar.getTexture(), &render_quad);
+        render_quad = head_sibx.bar_box;
+        renderer.render(head_sibx.bar.getTexture(), &render_quad);
 
         const SelectionBoxData& current_head =
             races_data.getCurrentValue().head_ids.getCurrentValue();
@@ -431,22 +463,22 @@ void SignUpView::_render() const {
 
     // Renderizamos body
     {
-        render_quad = body_box.prev_box;
-        if (body_box.prev_over) {
-            renderer.render(prev_pressed.getTexture(), &render_quad);
+        render_quad = body_sibx.prev_box;
+        if (body_sibx.prev_over) {
+            renderer.render(body_sibx.prev_pressed.getTexture(), &render_quad);
         } else {
-            renderer.render(prev.getTexture(), &render_quad);
+            renderer.render(body_sibx.prev.getTexture(), &render_quad);
         }
 
-        render_quad = body_box.next_box;
-        if (body_box.next_over) {
-            renderer.render(next_pressed.getTexture(), &render_quad);
+        render_quad = body_sibx.next_box;
+        if (body_sibx.next_over) {
+            renderer.render(body_sibx.next_pressed.getTexture(), &render_quad);
         } else {
-            renderer.render(next.getTexture(), &render_quad);
+            renderer.render(body_sibx.next.getTexture(), &render_quad);
         }
 
-        render_quad = body_box.bar_box;
-        renderer.render(small_bar.getTexture(), &render_quad);
+        render_quad = body_sibx.bar_box;
+        renderer.render(body_sibx.bar.getTexture(), &render_quad);
 
         const SelectionBoxData& current_body =
             races_data.getCurrentValue().body_ids.getCurrentValue();
@@ -686,52 +718,52 @@ void SignUpView::_handleEvent(const SDL_Event& e) {
 
             // Botones de selection-boxes
 
-            if (_inside(mouse_pos, race_box.prev_box)) {
-                race_box.prev_over = true;
+            if (_inside(mouse_pos, race_sibx.prev_box)) {
+                race_sibx.prev_over = true;
             } else {
-                race_box.prev_over = false;
+                race_sibx.prev_over = false;
             }
 
-            if (_inside(mouse_pos, race_box.next_box)) {
-                race_box.next_over = true;
+            if (_inside(mouse_pos, race_sibx.next_box)) {
+                race_sibx.next_over = true;
             } else {
-                race_box.next_over = false;
+                race_sibx.next_over = false;
             }
 
-            if (_inside(mouse_pos, kind_box.prev_box)) {
-                kind_box.prev_over = true;
+            if (_inside(mouse_pos, kind_sibx.prev_box)) {
+                kind_sibx.prev_over = true;
             } else {
-                kind_box.prev_over = false;
+                kind_sibx.prev_over = false;
             }
 
-            if (_inside(mouse_pos, kind_box.next_box)) {
-                kind_box.next_over = true;
+            if (_inside(mouse_pos, kind_sibx.next_box)) {
+                kind_sibx.next_over = true;
             } else {
-                kind_box.next_over = false;
+                kind_sibx.next_over = false;
             }
 
-            if (_inside(mouse_pos, head_box.prev_box)) {
-                head_box.prev_over = true;
+            if (_inside(mouse_pos, head_sibx.prev_box)) {
+                head_sibx.prev_over = true;
             } else {
-                head_box.prev_over = false;
+                head_sibx.prev_over = false;
             }
 
-            if (_inside(mouse_pos, head_box.next_box)) {
-                head_box.next_over = true;
+            if (_inside(mouse_pos, head_sibx.next_box)) {
+                head_sibx.next_over = true;
             } else {
-                head_box.next_over = false;
+                head_sibx.next_over = false;
             }
 
-            if (_inside(mouse_pos, body_box.prev_box)) {
-                body_box.prev_over = true;
+            if (_inside(mouse_pos, body_sibx.prev_box)) {
+                body_sibx.prev_over = true;
             } else {
-                body_box.prev_over = false;
+                body_sibx.prev_over = false;
             }
 
-            if (_inside(mouse_pos, body_box.next_box)) {
-                body_box.next_over = true;
+            if (_inside(mouse_pos, body_sibx.next_box)) {
+                body_sibx.next_over = true;
             } else {
-                body_box.next_over = false;
+                body_sibx.next_over = false;
             }
 
             break;
@@ -765,42 +797,42 @@ void SignUpView::_handleEvent(const SDL_Event& e) {
             }
 
             // Click en los botones de SelectionBox
-            if (_inside(mouse_pos, race_box.next_box)) {
+            if (_inside(mouse_pos, race_sibx.next_box)) {
                 races_data.next();
                 break;
             }
 
-            if (_inside(mouse_pos, race_box.prev_box)) {
+            if (_inside(mouse_pos, race_sibx.prev_box)) {
                 races_data.prev();
                 break;
             }
 
-            if (_inside(mouse_pos, kind_box.next_box)) {
+            if (_inside(mouse_pos, kind_sibx.next_box)) {
                 kinds_data.next();
                 break;
             }
 
-            if (_inside(mouse_pos, kind_box.prev_box)) {
+            if (_inside(mouse_pos, kind_sibx.prev_box)) {
                 kinds_data.prev();
                 break;
             }
 
-            if (_inside(mouse_pos, head_box.next_box)) {
+            if (_inside(mouse_pos, head_sibx.next_box)) {
                 races_data.getCurrentValue().head_ids.next();
                 break;
             }
 
-            if (_inside(mouse_pos, head_box.prev_box)) {
+            if (_inside(mouse_pos, head_sibx.prev_box)) {
                 races_data.getCurrentValue().head_ids.prev();
                 break;
             }
 
-            if (_inside(mouse_pos, body_box.next_box)) {
+            if (_inside(mouse_pos, body_sibx.next_box)) {
                 races_data.getCurrentValue().body_ids.next();
                 break;
             }
 
-            if (_inside(mouse_pos, body_box.prev_box)) {
+            if (_inside(mouse_pos, body_sibx.prev_box)) {
                 races_data.getCurrentValue().body_ids.prev();
                 break;
             }
