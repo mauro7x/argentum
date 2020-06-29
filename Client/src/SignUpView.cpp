@@ -130,10 +130,10 @@ void SignUpView::_init() {
 
     // Preview
     {
-        preview_box.x = config["signupview"]["preview"]["offset"]["x"];
-        preview_box.y = config["signupview"]["preview"]["offset"]["y"];
-        preview_box.w = config["signupview"]["preview"]["w"];
-        preview_box.h = config["signupview"]["preview"]["h"];
+        preview_tile.x = config["signupview"]["preview"]["offset"]["x"];
+        preview_tile.y = config["signupview"]["preview"]["offset"]["y"];
+        preview_tile.w = config["signupview"]["preview"]["w"];
+        preview_tile.h = config["signupview"]["preview"]["h"];
     }
 
     // Goback button
@@ -486,6 +486,23 @@ void SignUpView::_render() const {
                        current_body.texture.getWidth(),
                        current_body.texture.getHeight()};
         renderer.render(current_body.texture.getTexture(), &render_quad);
+    }
+
+    // Renderizamos la preview
+    {
+        // Body
+        Id body_id = races_data.getCurrentValue().body_ids.getCurrentValue().id;
+        if (body_id) {
+            const UnitSprite& sprite = sprites[body_id];
+            _renderSprite(sprite);
+        }
+
+        // Head
+        Id head_id = races_data.getCurrentValue().head_ids.getCurrentValue().id;
+        if (head_id) {
+            const UnitSprite& sprite = sprites[head_id];
+            _renderSprite(sprite);
+        }
     }
 
     // Renderizamos botones
@@ -878,6 +895,20 @@ void SignUpView::_handleCreateButtonPressed() {
 void SignUpView::_handleGoBackButtonPressed() {
     current_context = CONNECTION_CTX;
     quit();
+}
+
+void SignUpView::_renderSprite(const UnitSprite& sprite) const {
+    // Centramos el sprite en el tile
+    int x = preview_tile.x + (preview_tile.w - (sprite.clip_w)) / 2;
+    int y = preview_tile.y + (preview_tile.h * (0.8)) - (sprite.clip_h);
+
+    // Armamos los SDL_Rect de renderizado
+    SDL_Rect render_quad, render_clip;
+    render_quad = {x, y, (int)(sprite.clip_w), (int)(sprite.clip_h)};
+    render_clip = {0, 0, sprite.clip_w, sprite.clip_h};
+
+    // Renderizamos
+    renderer.render(sprite.texture.getTexture(), &render_quad, &render_clip);
 }
 
 void SignUpView::_setInputPos() {

@@ -98,7 +98,7 @@ class SignUpView : public ConstantRateFunc {
     RoundRobinList<SelectionBoxData> kinds_data;
 
     // Offsets de renderizado
-    SDL_Rect preview_box = {0};
+    SDL_Rect preview_tile = {0};
     SDL_Rect info_box = {0};
     SDL_Point info_pos = {0};
 
@@ -148,6 +148,9 @@ class SignUpView : public ConstantRateFunc {
 
     /* Handler del boton crear personaje */
     void _handleGoBackButtonPressed();
+
+    /* Renderiza un sprite en la ventana de preview */
+    void _renderSprite(const UnitSprite& sprite) const;
 
     /* Settea la posición de renderizado de los input_texts */
     void _setInputPos();
