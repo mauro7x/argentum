@@ -7,13 +7,21 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+#include <iterator>
+#include <list>
 #include <string>
+#include <vector>
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 #include "../../Common/includes/JSON.h"
 #include "../../Common/includes/Socket/SocketWrapper.h"
 #include "../../Common/includes/defs.h"
+#include "../../Common/includes/types.h"
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+#include "GameView/UnitSpriteContainer.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -23,6 +31,7 @@
 
 //-----------------------------------------------------------------------------
 #include "ConstantRateFunc.h"
+#include "RoundRobinList.h"
 #include "contexts.h"
 #include "defs.h"
 #include "paths.h"
@@ -54,6 +63,18 @@ struct SelectionInputBox {
 
 //-----------------------------------------------------------------------------
 
+struct SelectionBoxData {
+    Id id;
+    SDL_Point texture_pos;
+    Texture texture;
+
+    SelectionBoxData(Id id) : id(id), texture_pos({0}), texture() {}
+};
+
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+
 class SignUpView : public ConstantRateFunc {
    private:
     // Contexto global actual
@@ -64,6 +85,9 @@ class SignUpView : public ConstantRateFunc {
 
     // Conexión
     const SocketWrapper& socket;
+
+    // Sprites
+    UnitSpriteContainer sprites;
 
     // Flags internos
     bool username_active = false;
@@ -76,12 +100,16 @@ class SignUpView : public ConstantRateFunc {
     // Contenido
     std::string current_username;
     std::string current_password;
+    RoundRobinList<SelectionBoxData> races_data;
+    RoundRobinList<SelectionBoxData> kinds_data;
 
     // Offsets de renderizado
     SDL_Rect username_box = {0};
     SDL_Point username_pos = {0};
     SDL_Rect password_box = {0};
     SDL_Point password_pos = {0};
+    SDL_Point race_pos = {0};
+    SDL_Point kind_pos = {0};
     SDL_Rect preview_box = {0};
     SDL_Rect goback_box = {0};
     SDL_Rect create_box = {0};
@@ -89,7 +117,7 @@ class SignUpView : public ConstantRateFunc {
     SDL_Point info_pos = {0};
 
     // Barras de selección (sólo lectura)
-    SelectionInputBox race, kind, head, body;
+    SelectionInputBox race_box, kind_box, head_box, body_box;
 
     // Fuentes a utilizar
     int input_fontsize = 0;
@@ -125,6 +153,9 @@ class SignUpView : public ConstantRateFunc {
     /* Inicializa recursos internos */
     void _init();
 
+    /* Inicializa la data necesaria para la preview */
+    void _loadPreviewData();
+
     /* Carga la media necesaria */
     void _loadMedia();
 
@@ -151,6 +182,9 @@ class SignUpView : public ConstantRateFunc {
 
     /* Settea la posición de renderizado de los input_texts */
     void _setInputPos();
+
+    /* Settea la posición de renderizado de los selection-boxs */
+    void _setSelectionBoxPos();
 
     /* Settea la posición de renderizado del mensaje de información */
     void _setInfoPos();

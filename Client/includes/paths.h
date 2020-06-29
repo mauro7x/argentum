@@ -7,6 +7,7 @@
 #define CONFIG_FILEPATH "../Config/Client/config.json"
 #define USER_CONFIG_FILEPATH "../Config/Client/user_config.json"
 #define UNIT_SPRITES_FILEPATH "../Config/Client/unit_sprites.json"
+#define SIGNUP_DATA_FILEPATH "../Config/Client/signup_data.json"
 #define ITEM_SPRITES_FILEPATH "../Config/Client/item_sprites.json"
 //-----------------------------------------------------------------------------
 
