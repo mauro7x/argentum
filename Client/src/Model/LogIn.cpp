@@ -44,7 +44,7 @@ void LogInProxy::_login() const {
         std::cout << "[DEBUG] Password ingresado: " << password << "\n";
 
         if (opcode == "signup") {
-            std::string race, kind;
+            std::string race, kind, head_id, body_id;
             std::cout << "\n> Ingrese race y kind para crear el personaje \n";
             std::cout << "\t> Race: ";
             std::getline(std::cin, race);
@@ -55,6 +55,18 @@ void LogInProxy::_login() const {
             std::cout << "\t> Kind: ";
             std::getline(std::cin, kind);
             sended = socket << uint32_t(std::stoi(kind));
+            if (!sended) {
+                throw Exception("error in LogInProxt send kind");
+            }
+            std::cout << "\t> Head_id: ";
+            std::getline(std::cin, head_id);
+            sended = socket << uint32_t(std::stoi(head_id));
+            if (!sended) {
+                throw Exception("error in LogInProxt send kind");
+            }
+            std::cout << "\t> Body_id: ";
+            std::getline(std::cin, body_id);
+            sended = socket << uint32_t(std::stoi(body_id));
             if (!sended) {
                 throw Exception("error in LogInProxt send kind");
             }
