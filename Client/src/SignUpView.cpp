@@ -237,6 +237,86 @@ void SignUpView::_render() const {
         renderer.render(password.getTexture(), &render_quad);
     }
 
+    // Renderizamos race
+    {
+        render_quad = race.prev_box;
+        if (race.prev_over) {
+            renderer.render(prev_pressed.getTexture(), &render_quad);
+        } else {
+            renderer.render(prev.getTexture(), &render_quad);
+        }
+
+        render_quad = race.next_box;
+        if (race.next_over) {
+            renderer.render(next_pressed.getTexture(), &render_quad);
+        } else {
+            renderer.render(next.getTexture(), &render_quad);
+        }
+
+        render_quad = race.bar_box;
+        renderer.render(bar.getTexture(), &render_quad);
+    }
+
+    // Renderizamos kind
+    {
+        render_quad = kind.prev_box;
+        if (kind.prev_over) {
+            renderer.render(prev_pressed.getTexture(), &render_quad);
+        } else {
+            renderer.render(prev.getTexture(), &render_quad);
+        }
+
+        render_quad = kind.next_box;
+        if (kind.next_over) {
+            renderer.render(next_pressed.getTexture(), &render_quad);
+        } else {
+            renderer.render(next.getTexture(), &render_quad);
+        }
+
+        render_quad = kind.bar_box;
+        renderer.render(bar.getTexture(), &render_quad);
+    }
+
+    // Renderizamos head
+    {
+        render_quad = head.prev_box;
+        if (head.prev_over) {
+            renderer.render(prev_pressed.getTexture(), &render_quad);
+        } else {
+            renderer.render(prev.getTexture(), &render_quad);
+        }
+
+        render_quad = head.next_box;
+        if (head.next_over) {
+            renderer.render(next_pressed.getTexture(), &render_quad);
+        } else {
+            renderer.render(next.getTexture(), &render_quad);
+        }
+
+        render_quad = head.bar_box;
+        renderer.render(small_bar.getTexture(), &render_quad);
+    }
+
+    // Renderizamos body
+    {
+        render_quad = body.prev_box;
+        if (body.prev_over) {
+            renderer.render(prev_pressed.getTexture(), &render_quad);
+        } else {
+            renderer.render(prev.getTexture(), &render_quad);
+        }
+
+        render_quad = body.next_box;
+        if (body.next_over) {
+            renderer.render(next_pressed.getTexture(), &render_quad);
+        } else {
+            renderer.render(next.getTexture(), &render_quad);
+        }
+
+        render_quad = body.bar_box;
+        renderer.render(small_bar.getTexture(), &render_quad);
+    }
+
     // Renderizamos botones
     {
         render_quad = goback_box;
