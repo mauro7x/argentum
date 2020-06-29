@@ -24,14 +24,18 @@
 //-----------------------------------------------------------------------------
 
 struct PlayerInfo {
-    char username[NICKNAME_MAX_LENGTH] = {0};
-    char password[NICKNAME_MAX_LENGTH] = {0};
+    char username[NICKNAME_MAX_LENGTH];
+    char password[NICKNAME_MAX_LENGTH];
     size_t index;
+
+    PlayerInfo() : username{0}, password{0}, index{0} {}
 };
 
 struct DataIndex {
-    char password[NICKNAME_MAX_LENGTH] = {0};
+    char password[NICKNAME_MAX_LENGTH];
     size_t index;
+
+    DataIndex(size_t index) : password{0}, index(index) {}
 };
 
 class Database {

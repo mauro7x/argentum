@@ -36,9 +36,6 @@ class ClientLogin : public Thread {
     //-------------------------------------------------------------------------
     // Métodos privados
 
-    /* Proxy para el login */
-    void _loginProxy();
-
     /* Ejecutar el proceso de login de un jugador
      * genera un nuevo character config si es un usuario nuevo,
      * si el usuario ya esta creado, devuelvo los datos correspondes.

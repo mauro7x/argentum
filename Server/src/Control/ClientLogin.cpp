@@ -20,51 +20,64 @@
 CharacterCfg ClientLogin::_login() {
     bool connected = false;
     uint8_t opcode;
-    size_t received;
+    // size_t received;
     std::string username, password;
-    CharacterCfg character_data = {};
+    CharacterCfg character_data;
     // enviar info kind race;
+
     while (!connected) {
-        received = peer >> opcode;
-        if (!received) {
-            throw Exception("socket is closed");
+        if (!(peer >> opcode)) {
+            throw Exception(
+                "ClientLogin::_login: socket was closed before expected.");
         }
-        received = peer >> username;
-        if (!received) {
-            throw Exception("socket is closed");
+
+        if (!(peer >> username)) {
+            throw Exception(
+                "ClientLogin::_login: socket was closed before expected.");
         }
-        received = peer >> password;
-        if (!received) {
-            throw Exception("socket is closed");
+
+        if (!(peer >> password)) {
+            throw Exception(
+                "ClientLogin::_login: socket was closed before expected.");
         }
         switch (opcode) {
-            case SIGN_IN_OPCODE:
+            case SIGN_IN_OPCODE: {
                 try {
                     database.signIn(username, password, character_data);
                     connected = true;
-                } catch (const Exception& e) {
+                } catch (const LoginException& e) {
                     Reply reply(ERROR_REPLY, e.what());
                     reply.send(0, peer);
                 }
 
                 break;
-            case SIGN_UP_OPCODE:
+            }
+
+            case SIGN_UP_OPCODE: {
                 uint32_t race, kind, head_id, body_id;
-                received = peer >> race;
-                if (!received) {
-                    throw Exception("socket is closed");
+
+                if (!(peer >> race)) {
+                    throw Exception(
+                        "ClientLogin::_login: socket was closed before "
+                        "expected.");
                 }
-                received = peer >> kind;
-                if (!received) {
-                    throw Exception("socket is closed");
+
+                if (!(peer >> kind)) {
+                    throw Exception(
+                        "ClientLogin::_login: socket was closed before "
+                        "expected.");
                 }
-                received = peer >> head_id;
-                if (!received) {
-                    throw Exception("socket is closed");
+
+                if (!(peer >> head_id)) {
+                    throw Exception(
+                        "ClientLogin::_login: socket was closed before "
+                        "expected.");
                 }
-                received = peer >> body_id;
-                if (!received) {
-                    throw Exception("socket is closed");
+
+                if (!(peer >> body_id)) {
+                    throw Exception(
+                        "ClientLogin::_login: socket was closed before "
+                        "expected.");
                 }
 
                 try {
@@ -74,15 +87,17 @@ CharacterCfg ClientLogin::_login() {
                         "Personaje fue creado exitosamente!";
                     Reply reply_create(SUCCESS_REPLY, msg_create);
                     reply_create.send(0, peer);
-                } catch (const Exception& e) {
+                } catch (const LoginException& e) {
                     Reply reply(ERROR_REPLY, e.what());
                     reply.send(0, peer);
                 }
                 break;
+            }
 
-            default:
-                throw Exception("Opcode invalid");
-                break;
+            default: {
+                throw Exception(
+                    "ClientLogin::_login: invalid opcode received.");
+            }
         }
     }
     std::string msg = "Entrando al juego !";
@@ -107,16 +122,7 @@ void ClientLogin::run() {
         // Comienza la ejecución del clientlogin
         fprintf(stderr, "Inicia la ejecución del clientlogin.\n");
 
-        // Loggear al usuario o crear al usuario
-        // por ahora proxy:
-        // _loginProxy();
-
-        // En este punto, vamos a tener la data del jugador conectado, por lo
-        // que agregamos la petición de crear jugador a la cola y terminamos
-
-        // esta data deberia venir el login
-        CharacterCfg init_data = {};
-        init_data = _login();
+        CharacterCfg init_data = _login();
         new_connections.push(new NewConnection(peer, init_data));
 
         // ACA NO SE DEBERÍA HACER NADA QUE FALLE, PORQUE EL SOCKET YA NO
