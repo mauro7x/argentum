@@ -45,6 +45,8 @@ class Character {
     char nickname[NICKNAME_MAX_LENGTH] = {0};
     Race race;
     Kind kind;
+    Id head_id;
+    Id body_id;
     State* state;
     Level level;
     Inventory inventory;

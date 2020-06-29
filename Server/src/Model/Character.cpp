@@ -31,6 +31,8 @@ Character::Character(const CharacterCfg& init_data, const RaceCfg& race,
       agility(kind.agility + race.agility),
       race(race),
       kind(kind),
+      head_id(init_data.head_id),
+      body_id(init_data.body_id),
 
       state(StateFactory::newState(init_data.state)),
 
@@ -360,8 +362,8 @@ void Character::fillBroadcastData(PlayerData& data) const {
     // Llena map_id, x_tile, y_tile, orientation.
     this->position.fillBroadcastData(data.basic_data);
 
-    data.head_id = this->race.head_id;
-    data.body_id = this->race.body_id;
+    data.head_id = this->head_id;
+    data.body_id = this->body_id;
 
     data.nickname = this->nickname;
 
