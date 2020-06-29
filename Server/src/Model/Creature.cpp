@@ -135,7 +135,7 @@ const unsigned int Creature::getLevel() const {
     // IMPLEMENTAR NIVEL!!!!
     // IMPLEMENTAR NIVEL!!!!
     // IMPLEMENTAR NIVEL!!!!
-    return 20;
+    return 0;
 }
 
 const Id Creature::getMapId() const {

@@ -296,8 +296,9 @@ const bool Character::attack(Attackable* attacked, int& damage) {
         throw NewbiesCantBeAttackedException();
     }
 
-    if (!(Formulas::canAttackByLevel(this->level.getLevel(),
-                                     attacked->getLevel())))
+    const unsigned int attacked_level = attacked->getLevel();
+    if (attacked_level &&
+        !(Formulas::canAttackByLevel(this->level.getLevel(), attacked_level)))
         throw TooHighLevelDifferenceOnAttackException();
 
     // Se trata de un ataque de daño.
