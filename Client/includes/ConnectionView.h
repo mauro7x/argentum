@@ -19,6 +19,8 @@
 //-----------------------------------------------------------------------------
 #include "SDL/Renderer.h"
 #include "SDL/Texture.h"
+#include "SDL/Widgets/Button.h"
+#include "SDL/Widgets/TextBox.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -49,24 +51,16 @@ class ConnectionView : public ConstantRateFunc {
     const SocketWrapper& socket;
 
     // Flags internos
-    bool username_active = false;
-    bool password_active = false;
-    bool play_button_over = false;
-    bool signup_button_over = false;
     bool show_cursor = false;
     int cursor_cooldown = VIEWS_ITERATIONS_TO_SWITCH_CURSOR;
 
-    // Contenido
-    std::string current_username;
-    std::string current_password;
+    // Widgets
+    Button signup_btn;
+    Button play_btn;
+    TextBox username_txtbx;
+    TextBox password_txtbx;
 
     // Offsets de renderizado
-    SDL_Rect username_box = {0};
-    SDL_Point username_pos = {0};
-    SDL_Rect password_box = {0};
-    SDL_Point password_pos = {0};
-    SDL_Rect play_box = {0};
-    SDL_Rect signup_box = {0};
     SDL_Rect info_box = {0};
     SDL_Point info_pos = {0};
 
@@ -79,17 +73,9 @@ class ConnectionView : public ConstantRateFunc {
 
     // Texturas a renderizar
     Texture bg;
-    Texture input_inactive_box;
-    Texture input_active_box;
     Texture cursor;
-    Texture play_button;
-    Texture play_button_pressed;
-    Texture signup_button;
-    Texture signup_button_pressed;
 
     // Texturas dinámicas
-    Texture username;
-    Texture password;
     Texture info_msg;
 
     //-----------------------------------------------------------------------------

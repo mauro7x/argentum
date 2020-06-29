@@ -88,16 +88,16 @@ class SignUpView : public ConstantRateFunc {
     bool show_cursor = false;
     int cursor_cooldown = VIEWS_ITERATIONS_TO_SWITCH_CURSOR;
 
-    // Contenido
-    RoundRobinList<RaceData> races_data;
-    RoundRobinList<SelectionBoxData> kinds_data;
-
     // Widgets
     TextBox username_txtbx;
     TextBox password_txtbx;
     Button goback_btn;
     Button create_btn;
     SelectionInputBox race_sibx, kind_sibx, head_sibx, body_sibx;
+
+    // Contenido
+    RoundRobinList<RaceData> races_data;
+    RoundRobinList<SelectionBoxData> kinds_data;
 
     // Offsets de renderizado
     SDL_Rect preview_box = {0};

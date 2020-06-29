@@ -10,46 +10,71 @@ void ConnectionView::_init() {
     input_fontsize = config["connectionview"]["fontsize"];
     info_fontsize = config["connectionview"]["info"]["fontsize"];
 
-    // Offsets de renderizado
-    username_box.x = config["connectionview"]["username"]["offset"]["x"];
-    username_box.y = config["connectionview"]["username"]["offset"]["y"];
-    username_box.w = config["connectionview"]["username"]["w"];
-    username_box.h = config["connectionview"]["username"]["h"];
+    // TextBoxes
+    {
+        username_txtbx.render_box.x =
+            config["connectionview"]["username"]["offset"]["x"];
+        username_txtbx.render_box.y =
+            config["connectionview"]["username"]["offset"]["y"];
+        username_txtbx.render_box.w = config["connectionview"]["username"]["w"];
+        username_txtbx.render_box.h = config["connectionview"]["username"]["h"];
 
-    password_box.x = config["connectionview"]["password"]["offset"]["x"];
-    password_box.y = config["connectionview"]["password"]["offset"]["y"];
-    password_box.w = config["connectionview"]["password"]["w"];
-    password_box.h = config["connectionview"]["password"]["h"];
+        password_txtbx.render_box.x =
+            config["connectionview"]["password"]["offset"]["x"];
+        password_txtbx.render_box.y =
+            config["connectionview"]["password"]["offset"]["y"];
+        password_txtbx.render_box.w = config["connectionview"]["password"]["w"];
+        password_txtbx.render_box.h = config["connectionview"]["password"]["h"];
+    }
 
-    signup_box.x = config["connectionview"]["signup"]["offset"]["x"];
-    signup_box.y = config["connectionview"]["signup"]["offset"]["y"];
-    signup_box.w = config["connectionview"]["signup"]["w"];
-    signup_box.h = config["connectionview"]["signup"]["h"];
+    // Botones
+    {
+        signup_btn.render_box.x =
+            config["connectionview"]["signup"]["offset"]["x"];
+        signup_btn.render_box.y =
+            config["connectionview"]["signup"]["offset"]["y"];
+        signup_btn.render_box.w = config["connectionview"]["signup"]["w"];
+        signup_btn.render_box.h = config["connectionview"]["signup"]["h"];
 
-    play_box.x = config["connectionview"]["play"]["offset"]["x"];
-    play_box.y = config["connectionview"]["play"]["offset"]["y"];
-    play_box.w = config["connectionview"]["play"]["w"];
-    play_box.h = config["connectionview"]["play"]["h"];
+        play_btn.render_box.x = config["connectionview"]["play"]["offset"]["x"];
+        play_btn.render_box.y = config["connectionview"]["play"]["offset"]["y"];
+        play_btn.render_box.w = config["connectionview"]["play"]["w"];
+        play_btn.render_box.h = config["connectionview"]["play"]["h"];
+    }
 
-    info_box.x = config["connectionview"]["info"]["offset"]["x"];
-    info_box.y = config["connectionview"]["info"]["offset"]["y"];
-    info_box.w = config["connectionview"]["info"]["w"];
+    // Mensajes
+    {
+        info_box.x = config["connectionview"]["info"]["offset"]["x"];
+        info_box.y = config["connectionview"]["info"]["offset"]["y"];
+        info_box.w = config["connectionview"]["info"]["w"];
+    }
 }
 
 void ConnectionView::_loadMedia() {
     // Cargamos el background
     bg.loadFromFile(&renderer, CONNECTIONVIEW_BG_FP);
 
-    // Cargamos las imagenes estáticas
-    input_inactive_box.loadFromFile(&renderer, CONNECTIONVIEW_TEXTBOX_FP);
-    input_active_box.loadFromFile(&renderer, CONNECTIONVIEW_TEXTBOX_ACTIVE_FP);
+    // Cargamos las texturas de los text-boxes
+    {
+        username_txtbx.base.loadFromFile(&renderer, CONNECTIONVIEW_TEXTBOX_FP);
+        password_txtbx.base.loadFromFile(&renderer, CONNECTIONVIEW_TEXTBOX_FP);
 
-    play_button.loadFromFile(&renderer, CONNECTIONVIEW_PLAY_BUTTON_FP);
-    play_button_pressed.loadFromFile(&renderer,
-                                     CONNECTIONVIEW_PLAY_BUTTON_PRESSED_FP);
-    signup_button.loadFromFile(&renderer, CONNECTIONVIEW_SIGNUP_BUTTON_FP);
-    signup_button_pressed.loadFromFile(&renderer,
-                                       CONNECTIONVIEW_SIGNUP_BUTTON_PRESSED_FP);
+        username_txtbx.active.loadFromFile(&renderer,
+                                           CONNECTIONVIEW_TEXTBOX_ACTIVE_FP);
+        password_txtbx.active.loadFromFile(&renderer,
+                                           CONNECTIONVIEW_TEXTBOX_ACTIVE_FP);
+    }
+
+    // Cargamos las texturas de los botones
+    {
+        play_btn.base.loadFromFile(&renderer, CONNECTIONVIEW_PLAY_BUTTON_FP);
+        play_btn.pressed.loadFromFile(&renderer,
+                                      CONNECTIONVIEW_PLAY_BUTTON_PRESSED_FP);
+        signup_btn.base.loadFromFile(&renderer,
+                                     CONNECTIONVIEW_SIGNUP_BUTTON_FP);
+        signup_btn.pressed.loadFromFile(
+            &renderer, CONNECTIONVIEW_SIGNUP_BUTTON_PRESSED_FP);
+    }
 
     // Cargamos la/s fuente/s a usar
     input_font = TTF_OpenFont(VIEWS_INPUT_FONT, input_fontsize);
@@ -61,10 +86,10 @@ void ConnectionView::_loadMedia() {
     }
 
     // Cargamos los input_text vacíos
-    username.loadFromRenderedText(&renderer, input_font, " ",
-                                  SDL_Color(VIEWS_FONT_COLOR));
-    password.loadFromRenderedText(&renderer, input_font, " ",
-                                  SDL_Color(VIEWS_FONT_COLOR));
+    username_txtbx.content.loadFromRenderedText(&renderer, input_font, " ",
+                                                SDL_Color(VIEWS_FONT_COLOR));
+    password_txtbx.content.loadFromRenderedText(&renderer, input_font, " ",
+                                                SDL_Color(VIEWS_FONT_COLOR));
     _setInputPos();
 
     // Cargamos el cursor
@@ -89,43 +114,45 @@ void ConnectionView::_render() const {
     renderer.render(bg.getTexture(), &render_quad);
 
     // Renderizamos el username
-    render_quad = username_box;
-    if (username_active) {
-        renderer.render(input_active_box.getTexture(), &render_quad);
+    render_quad = username_txtbx.render_box;
+    if (username_txtbx.is_active) {
+        renderer.render(username_txtbx.active.getTexture(), &render_quad);
     } else {
-        renderer.render(input_inactive_box.getTexture(), &render_quad);
+        renderer.render(username_txtbx.base.getTexture(), &render_quad);
     }
 
-    render_quad = {username_pos.x, username_pos.y, username.getWidth(),
-                   username.getHeight()};
-    renderer.render(username.getTexture(), &render_quad);
+    render_quad = {username_txtbx.render_pos.x, username_txtbx.render_pos.y,
+                   username_txtbx.content.getWidth(),
+                   username_txtbx.content.getHeight()};
+    renderer.render(username_txtbx.content.getTexture(), &render_quad);
 
     // Renderizamos la contraseña
-    render_quad = password_box;
-    if (password_active) {
-        renderer.render(input_active_box.getTexture(), &render_quad);
+    render_quad = password_txtbx.render_box;
+    if (password_txtbx.is_active) {
+        renderer.render(password_txtbx.active.getTexture(), &render_quad);
     } else {
-        renderer.render(input_inactive_box.getTexture(), &render_quad);
+        renderer.render(password_txtbx.base.getTexture(), &render_quad);
     }
 
-    render_quad = {password_pos.x, password_pos.y, password.getWidth(),
-                   password.getHeight()};
-    renderer.render(password.getTexture(), &render_quad);
+    render_quad = {password_txtbx.render_pos.x, password_txtbx.render_pos.y,
+                   password_txtbx.content.getWidth(),
+                   password_txtbx.content.getHeight()};
+    renderer.render(password_txtbx.content.getTexture(), &render_quad);
 
     // Renderizamos el boton de jugar
-    render_quad = play_box;
-    if (play_button_over) {
-        renderer.render(play_button_pressed.getTexture(), &render_quad);
+    render_quad = play_btn.render_box;
+    if (play_btn.mouse_over) {
+        renderer.render(play_btn.pressed.getTexture(), &render_quad);
     } else {
-        renderer.render(play_button.getTexture(), &render_quad);
+        renderer.render(play_btn.base.getTexture(), &render_quad);
     }
 
     // Renderizamos el boton de crear personaje
-    render_quad = signup_box;
-    if (signup_button_over) {
-        renderer.render(signup_button_pressed.getTexture(), &render_quad);
+    render_quad = signup_btn.render_box;
+    if (signup_btn.mouse_over) {
+        renderer.render(signup_btn.pressed.getTexture(), &render_quad);
     } else {
-        renderer.render(signup_button.getTexture(), &render_quad);
+        renderer.render(signup_btn.base.getTexture(), &render_quad);
     }
 
     // Renderizamos el mensaje de información
@@ -135,27 +162,31 @@ void ConnectionView::_render() const {
 
     // Renderizamos el cursor
     if (show_cursor) {
-        if (username_active) {
-            if (!current_username.empty()) {
-                render_quad = {username_pos.x + username.getWidth(),
-                               username_pos.y, cursor.getWidth(),
+        if (username_txtbx.is_active) {
+            if (!username_txtbx.s_content.empty()) {
+                render_quad = {username_txtbx.render_pos.x +
+                                   username_txtbx.content.getWidth(),
+                               username_txtbx.render_pos.y, cursor.getWidth(),
                                cursor.getHeight()};
             } else {
-                render_quad = {username_pos.x, username_pos.y,
-                               cursor.getWidth(), cursor.getHeight()};
+                render_quad = {username_txtbx.render_pos.x,
+                               username_txtbx.render_pos.y, cursor.getWidth(),
+                               cursor.getHeight()};
             }
 
             renderer.render(cursor.getTexture(), &render_quad);
         }
 
-        if (password_active) {
-            if (!current_password.empty()) {
-                render_quad = {password_pos.x + password.getWidth(),
-                               password_pos.y, cursor.getWidth(),
+        if (password_txtbx.is_active) {
+            if (!password_txtbx.s_content.empty()) {
+                render_quad = {password_txtbx.render_pos.x +
+                                   password_txtbx.content.getWidth(),
+                               password_txtbx.render_pos.y, cursor.getWidth(),
                                cursor.getHeight()};
             } else {
-                render_quad = {password_pos.x, password_pos.y,
-                               cursor.getWidth(), cursor.getHeight()};
+                render_quad = {password_txtbx.render_pos.x,
+                               password_txtbx.render_pos.y, cursor.getWidth(),
+                               cursor.getHeight()};
             }
 
             renderer.render(cursor.getTexture(), &render_quad);
@@ -193,18 +224,19 @@ void ConnectionView::_handleEvent(const SDL_Event& e) {
 
         case SDL_KEYDOWN: {
             if (e.key.keysym.sym == SDLK_BACKSPACE) {
-                if (username_active && !current_username.empty()) {
-                    current_username.pop_back();
+                if (username_txtbx.is_active &&
+                    !username_txtbx.s_content.empty()) {
+                    username_txtbx.s_content.pop_back();
 
                     info_msg.loadFromRenderedText(&renderer, info_font, " ");
                     _setInfoPos();
 
-                    if (!current_username.empty()) {
-                        username.loadFromRenderedText(
-                            &renderer, input_font, current_username,
+                    if (!username_txtbx.s_content.empty()) {
+                        username_txtbx.content.loadFromRenderedText(
+                            &renderer, input_font, username_txtbx.s_content,
                             SDL_Color(VIEWS_FONT_COLOR));
                     } else {
-                        username.loadFromRenderedText(
+                        username_txtbx.content.loadFromRenderedText(
                             &renderer, input_font, " ",
                             SDL_Color(VIEWS_FONT_COLOR));
                     }
@@ -212,18 +244,19 @@ void ConnectionView::_handleEvent(const SDL_Event& e) {
                     break;
                 }
 
-                if (password_active && !current_password.empty()) {
-                    current_password.pop_back();
+                if (password_txtbx.is_active &&
+                    !password_txtbx.s_content.empty()) {
+                    password_txtbx.s_content.pop_back();
 
                     info_msg.loadFromRenderedText(&renderer, info_font, " ");
                     _setInfoPos();
 
-                    if (!current_password.empty()) {
-                        password.loadFromRenderedText(
-                            &renderer, input_font, current_password,
+                    if (!password_txtbx.s_content.empty()) {
+                        password_txtbx.content.loadFromRenderedText(
+                            &renderer, input_font, password_txtbx.s_content,
                             SDL_Color(VIEWS_FONT_COLOR));
                     } else {
-                        password.loadFromRenderedText(
+                        password_txtbx.content.loadFromRenderedText(
                             &renderer, input_font, " ",
                             SDL_Color(VIEWS_FONT_COLOR));
                     }
@@ -249,14 +282,14 @@ void ConnectionView::_handleEvent(const SDL_Event& e) {
                 info_msg.loadFromRenderedText(&renderer, info_font, " ");
                 _setInfoPos();
 
-                if (username_active) {
-                    username_active = false;
-                    password_active = true;
+                if (username_txtbx.is_active) {
+                    username_txtbx.is_active = false;
+                    password_txtbx.is_active = true;
                     _resetCursorCooldown();
-                } else if (password_active) {
-                    password_active = false;
+                } else if (password_txtbx.is_active) {
+                    password_txtbx.is_active = false;
                 } else {
-                    username_active = true;
+                    username_txtbx.is_active = true;
                     _resetCursorCooldown();
                 }
             }
@@ -265,14 +298,14 @@ void ConnectionView::_handleEvent(const SDL_Event& e) {
         }
 
         case SDL_TEXTINPUT: {
-            if (username_active) {
-                if (current_username.size() < VIEWS_MAX_INPUT_SIZE) {
-                    current_username += e.text.text;
+            if (username_txtbx.is_active) {
+                if (username_txtbx.s_content.size() < VIEWS_MAX_INPUT_SIZE) {
+                    username_txtbx.s_content += e.text.text;
 
                     // Re-renderizamos
-                    username.loadFromRenderedText(&renderer, input_font,
-                                                  current_username,
-                                                  SDL_Color(VIEWS_FONT_COLOR));
+                    username_txtbx.content.loadFromRenderedText(
+                        &renderer, input_font, username_txtbx.s_content,
+                        SDL_Color(VIEWS_FONT_COLOR));
                     _setInputPos();
 
                     // Activamos el cursor
@@ -287,14 +320,14 @@ void ConnectionView::_handleEvent(const SDL_Event& e) {
                 break;
             }
 
-            if (password_active) {
-                if (current_password.size() < VIEWS_MAX_INPUT_SIZE) {
-                    current_password += e.text.text;
+            if (password_txtbx.is_active) {
+                if (password_txtbx.s_content.size() < VIEWS_MAX_INPUT_SIZE) {
+                    password_txtbx.s_content += e.text.text;
 
                     // Re-renderizamos
-                    password.loadFromRenderedText(&renderer, input_font,
-                                                  current_password,
-                                                  SDL_Color(VIEWS_FONT_COLOR));
+                    password_txtbx.content.loadFromRenderedText(
+                        &renderer, input_font, password_txtbx.s_content,
+                        SDL_Color(VIEWS_FONT_COLOR));
                     _setInputPos();
 
                     // Activamos el cursor
@@ -314,16 +347,16 @@ void ConnectionView::_handleEvent(const SDL_Event& e) {
 
         case SDL_MOUSEMOTION: {
             SDL_Point mouse_pos = _getMousePos(e);
-            if (_inside(mouse_pos, play_box)) {
-                play_button_over = true;
+            if (_inside(mouse_pos, play_btn.render_box)) {
+                play_btn.mouse_over = true;
             } else {
-                play_button_over = false;
+                play_btn.mouse_over = false;
             }
 
-            if (_inside(mouse_pos, signup_box)) {
-                signup_button_over = true;
+            if (_inside(mouse_pos, signup_btn.render_box)) {
+                signup_btn.mouse_over = true;
             } else {
-                signup_button_over = false;
+                signup_btn.mouse_over = false;
             }
 
             break;
@@ -341,29 +374,29 @@ void ConnectionView::_handleEvent(const SDL_Event& e) {
             show_cursor = false;
 
             // Click en el textbox del username
-            if (_inside(mouse_pos, username_box)) {
-                username_active = true;
+            if (_inside(mouse_pos, username_txtbx.render_box)) {
+                username_txtbx.is_active = true;
                 _resetCursorCooldown();
             } else {
-                username_active = false;
+                username_txtbx.is_active = false;
             }
 
             // Click en el textbox del password
-            if (_inside(mouse_pos, password_box)) {
-                password_active = true;
+            if (_inside(mouse_pos, password_txtbx.render_box)) {
+                password_txtbx.is_active = true;
                 _resetCursorCooldown();
             } else {
-                password_active = false;
+                password_txtbx.is_active = false;
             }
 
             // Click en el botón de jugar
-            if (_inside(mouse_pos, play_box)) {
+            if (_inside(mouse_pos, play_btn.render_box)) {
                 _handlePlayButtonPressed();
                 break;
             }
 
             // Click en el botón de crear cuenta
-            if (_inside(mouse_pos, signup_box)) {
+            if (_inside(mouse_pos, signup_btn.render_box)) {
                 _handleSignUpButtonPressed();
                 break;
             }
@@ -378,7 +411,7 @@ void ConnectionView::_handleEvent(const SDL_Event& e) {
 }
 
 void ConnectionView::_handlePlayButtonPressed() {
-    if (current_username.empty() || current_password.empty()) {
+    if (username_txtbx.s_content.empty() || password_txtbx.s_content.empty()) {
         info_msg.loadFromRenderedText(&renderer, info_font,
                                       CONNECTIONVIEW_INVALID_INPUT_MSG,
                                       SDL_Color(VIEWS_ERROR_COLOR));
@@ -404,13 +437,17 @@ void ConnectionView::_handleSignUpButtonPressed() {
 
 void ConnectionView::_setInputPos() {
     // Centramos solo verticalmente
-    username_pos.x = username_box.x + VIEWS_INPUT_TEXTBOX_X_OFFSET;
-    username_pos.y =
-        username_box.y + (username_box.h - username.getHeight()) / 2;
+    username_txtbx.render_pos.x =
+        username_txtbx.render_box.x + VIEWS_INPUT_TEXTBOX_X_OFFSET;
+    username_txtbx.render_pos.y =
+        username_txtbx.render_box.y +
+        (username_txtbx.render_box.h - username_txtbx.content.getHeight()) / 2;
 
-    password_pos.x = password_box.x + VIEWS_INPUT_TEXTBOX_X_OFFSET;
-    password_pos.y =
-        password_box.y + (password_box.h - password.getHeight()) / 2;
+    password_txtbx.render_pos.x =
+        password_txtbx.render_box.x + VIEWS_INPUT_TEXTBOX_X_OFFSET;
+    password_txtbx.render_pos.y =
+        password_txtbx.render_box.y +
+        (password_txtbx.render_box.h - password_txtbx.content.getHeight()) / 2;
 }
 
 void ConnectionView::_setInfoPos() {
@@ -434,7 +471,7 @@ bool ConnectionView::_inside(const SDL_Point& pos, const SDL_Rect& box) const {
 }
 
 void ConnectionView::_updateCursorAnimation(const int it) {
-    if (username_active || password_active) {
+    if (username_txtbx.is_active || password_txtbx.is_active) {
         cursor_cooldown -= it;
         while (cursor_cooldown <= 0) {
             _switchCursorVisibility();
