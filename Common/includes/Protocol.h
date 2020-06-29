@@ -9,9 +9,8 @@
 
 enum Opcode {
     // Server -> Client opcodes
-    // REPLY_OPCODE = 0,
-    // PRIVATE_MESSAGE_OPCODE,
-    MESSAGE_OPCODE = 0,
+    CONNECTION_ACK_OPCODE = 0,
+    MESSAGE_OPCODE,
     BROADCAST_OPCODE,
 
     // Client -> Server opcodes
@@ -62,11 +61,13 @@ enum CommandOpcode {
 
 };
 
-enum ReplyOpcode {
-    ERROR_REPLY,   /* Rojo */
-    INFO_REPLY,    /* Blanco */
-    SUCCESS_REPLY, /* Verde */
-    LIST_REPLY     /* Amarillo */
+enum ConnectionAckType {
+    // Distintos estados
+    SUCCESS_ACK = 0,
+    ERROR_INVALID_USERNAME_ACK,
+    ERROR_INVALID_PASSWORD_ACK,
+    ERROR_USERNAME_CONNECTED_ACK,
+    ERROR_USERNAME_TAKEN_ACK
 };
 
 enum MessageType {

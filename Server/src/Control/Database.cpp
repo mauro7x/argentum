@@ -41,7 +41,7 @@ void Database::_persistPlayerInfo(const std::string& username) {
     std::strncpy(player_info.password, password.c_str(),
                  sizeof(char) * NICKNAME_MAX_LENGTH - 1);
     player_info.index = file_pointer;
-    std::ofstream file_info(PLAYER_INFO_FILEPATH);
+    std::ofstream file_info(PLAYER_INFO_FILEPATH, std::ios_base::app);
     file_info.seekp(0, std::ios::end);
     file_info.write(reinterpret_cast<char*>(&player_info), sizeof(player_info));
     file_info.close();
@@ -130,19 +130,20 @@ void Database::init() {
     initialized = true;
 }
 
-void Database::signIn(const std::string& username, const std::string& password,
-                      CharacterCfg& character_data) {
+ConnectionAckType Database::signIn(const std::string& username,
+                                   const std::string& password,
+                                   CharacterCfg& character_data) {
     std::unique_lock<std::mutex> l(m);
     if (!initialized) {
         throw Exception("Database:: not initialized.");
     }
 
     if (data_index.count(username) == 0) {
-        throw LoginException("Usuario inexistente");
+        return ERROR_INVALID_USERNAME_ACK;
     }
 
     if (data_index.at(username).password != password) {
-        throw LoginException("Contraseña incorrecta");
+        return ERROR_INVALID_PASSWORD_ACK;
     }
 
     _getPlayerData(username, character_data);
@@ -154,18 +155,21 @@ void Database::signIn(const std::string& username, const std::string& password,
     /* chequear que el jugador no esté conectado ya (por ahora no podemos)
     throw LoginException("El usuario solicitado se encuentra conectado.");
     */
+
+    return SUCCESS_ACK;
 }
 
-void Database::signUp(const std::string& username, const std::string& password,
-                      Id race, Id kind, Id head_id, Id body_id,
-                      CharacterCfg& character_data) {
+ConnectionAckType Database::signUp(const std::string& username,
+                                   const std::string& password, Id race,
+                                   Id kind, Id head_id, Id body_id,
+                                   CharacterCfg& character_data) {
     std::unique_lock<std::mutex> l(m);
     if (!initialized) {
         throw Exception("Database:: not initialized.");
     }
 
     if (data_index.count(username) > 0) {
-        throw LoginException("Nombre de usuario en uso");
+        return ERROR_USERNAME_TAKEN_ACK;
     }
 
     // check if race o kind is valid
@@ -183,7 +187,10 @@ void Database::signUp(const std::string& username, const std::string& password,
                        std::forward_as_tuple(file_pointer));
 
     std::strncpy(data_index.at(username).password, password.c_str(),
-                 sizeof(char) * NICKNAME_MAX_LENGTH - 1);
+                 sizeof(char) * (NICKNAME_MAX_LENGTH - 1));
+    data_index.at(username)
+        .password[sizeof(data_index.at(username).password) - 1] = 0;
+
     _persistPlayerInfo(username);
     _createDataInicial(username, race, kind, head_id, body_id, character_data);
     persistPlayerData(character_data);
@@ -193,10 +200,12 @@ void Database::signUp(const std::string& username, const std::string& password,
     // para debug:
     fprintf(stderr, "Database:: personaje creado. Username: [%s]\n",
             username.c_str());
+
+    return SUCCESS_ACK;
 }
 
 void Database::persistPlayerData(CharacterCfg& data) {
-    std::ofstream file_data(PLAYER_DATA_FILEPATH);
+    std::ofstream file_data(PLAYER_DATA_FILEPATH, std::ios_base::app);
     file_data.seekp(data_index.at(data.nickname).index, std::ios::beg);
     file_data.write(reinterpret_cast<char*>(&data), sizeof(data));
     file_data.close();

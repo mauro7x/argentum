@@ -156,34 +156,34 @@ enum StateType { DEAD, ALIVE };
 
 //-----------------------------------------------------------------------------
 struct CharacterCfg {
-    Id map;
-    int x_tile, y_tile;
+    Id map = 0;
+    int x_tile = 0, y_tile = 0;
     char nickname[NICKNAME_MAX_LENGTH] = {0};
 
-    Id race;
-    Id kind;
-    Id head_id;
-    Id body_id;
+    Id race = 0;
+    Id kind = 0;
+    Id head_id = 0;
+    Id body_id = 0;
 
-    StateType state;
+    StateType state = ALIVE;
 
-    EquipmentData equipment;
-    InventoryData inventory;
+    EquipmentData equipment = {0};
+    InventoryData inventory = {0};
 
-    uint32_t health;
-    uint32_t mana;
-    uint32_t safe_gold;
-    uint32_t excess_gold;
-    uint32_t level;
-    uint32_t exp;
-    bool new_created;
+    uint32_t health = 0;
+    uint32_t mana = 0;
+    uint32_t safe_gold = 0;
+    uint32_t excess_gold = 0;
+    uint32_t level = 0;
+    uint32_t exp = 0;
+    bool new_created = true;
 };
 
 struct CreatureCfg {
-    Id id;
+    Id id = 0;
     std::string name;
-    unsigned int base_damage;
-    unsigned int base_health;
+    unsigned int base_damage = 0;
+    unsigned int base_health = 0;
 };
 //-----------------------------------------------------------------------------
 struct DroppingSlot {

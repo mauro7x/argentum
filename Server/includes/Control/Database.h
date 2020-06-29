@@ -16,6 +16,7 @@
 //-----------------------------------------------------------------------------
 #include "../../../Common/includes/Exceptions/Exception.h"
 #include "../../../Common/includes/Exceptions/LoginException.h"
+#include "../../../Common/includes/Protocol.h"
 #include "../Model/Config.h"
 #include "../Model/config_structs.h"
 #include "../paths.h"
@@ -93,16 +94,18 @@ class Database {
     /* Inicializa variables internas */
     void init();
 
-    /* Intento de un cliente para loggearse (PROXY) */
-    // El retorno va a tener que ser PlayerData en un futuro, por ahora proxy.
-    void signIn(const std::string& username, const std::string& password,
-                CharacterCfg& character_data);
+    /* Intenta loggear al cliente. Devuelve 0 en caso de éxito, en caso
+     * contrario devuelve el CONNECTION_ACK_TYPE correspondiente. */
+    ConnectionAckType signIn(const std::string& username,
+                             const std::string& password,
+                             CharacterCfg& character_data);
 
-    /* Un cliente crea un usuario nuevo (PROXY) */
-    // El retorno va a tener que ser PlayerData en un futuro, por ahora proxy.
-    void signUp(const std::string& username, const std::string& password,
-                Id race, Id kind, Id head_id, Id body_id,
-                CharacterCfg& character_data);
+    /* Intenta crear al personaje nuevo. Devuelve 0 en caso de éxito, en caso
+     * contrario devuelve el CONNECTION_ACK_TYPE correspondiente. */
+    ConnectionAckType signUp(const std::string& username,
+                             const std::string& password, Id race, Id kind,
+                             Id head_id, Id body_id,
+                             CharacterCfg& character_data);
     //-------------------------------------------------------------------------
 
     /* Guardar los datos del jugador al archivo*/

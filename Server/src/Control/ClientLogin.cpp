@@ -42,12 +42,23 @@ CharacterCfg ClientLogin::_login() {
         }
         switch (opcode) {
             case SIGN_IN_OPCODE: {
-                try {
+                ConnectionAckType status =
                     database.signIn(username, password, character_data);
+                if (status == SUCCESS_ACK) {
                     connected = true;
-                } catch (const LoginException& e) {
-                    Reply reply(ERROR_REPLY, e.what());
-                    reply.send(0, peer);
+                }
+
+                // Le enviamos el ack al cliente
+                if (!(peer << (uint8_t)CONNECTION_ACK_OPCODE)) {
+                    throw Exception(
+                        "ClientLogin::_login: socket was closed before "
+                        "expected.");
+                }
+
+                if (!(peer << (uint8_t)status)) {
+                    throw Exception(
+                        "ClientLogin::_login: socket was closed before "
+                        "expected.");
                 }
 
                 break;
@@ -80,17 +91,23 @@ CharacterCfg ClientLogin::_login() {
                         "expected.");
                 }
 
-                try {
+                ConnectionAckType status =
                     database.signUp(username, password, race, kind, head_id,
                                     body_id, character_data);
-                    std::string msg_create =
-                        "Personaje fue creado exitosamente!";
-                    Reply reply_create(SUCCESS_REPLY, msg_create);
-                    reply_create.send(0, peer);
-                } catch (const LoginException& e) {
-                    Reply reply(ERROR_REPLY, e.what());
-                    reply.send(0, peer);
+
+                // Le enviamos el ack al cliente
+                if (!(peer << (uint8_t)CONNECTION_ACK_OPCODE)) {
+                    throw Exception(
+                        "ClientLogin::_login: socket was closed before "
+                        "expected.");
                 }
+
+                if (!(peer << (uint8_t)status)) {
+                    throw Exception(
+                        "ClientLogin::_login: socket was closed before "
+                        "expected.");
+                }
+
                 break;
             }
 
@@ -100,9 +117,7 @@ CharacterCfg ClientLogin::_login() {
             }
         }
     }
-    std::string msg = "Entrando al juego !";
-    Reply reply(SUCCESS_REPLY, msg);
-    reply.send(0, peer);
+
     return character_data;
 }
 //-----------------------------------------------------------------------------

@@ -888,13 +888,90 @@ void SignUpView::_handleCreateButtonPressed() {
                                   SDL_Color(VIEWS_FONT_COLOR));
     _setInfoPos();
 
-    // INTENTAR CREAR EL PERSONAJE
-    fprintf(stderr, "intentar crear personaje. aun no implementado\n");
+    // Intentamos crear el personaje pidiendole al server
+    _tryToCreate();
 }
 
 void SignUpView::_handleGoBackButtonPressed() {
     current_context = CONNECTION_CTX;
     quit();
+}
+
+void SignUpView::_tryToCreate() {
+    // Enviamos la solicitud de conexión de acuerdo al protocolo
+    if (!(socket << (uint8_t)SIGN_UP_OPCODE)) {
+        throw Exception("SignUpView::_tryToCreate: socket was closed.");
+    }
+
+    if (!(socket << username_txtbx.s_content)) {
+        throw Exception("SignUpView::_tryToCreate: socket was closed.");
+    }
+
+    if (!(socket << password_txtbx.s_content)) {
+        throw Exception("SignUpView::_tryToCreate: socket was closed.");
+    }
+
+    if (!(socket << (uint32_t)races_data.getCurrentValue().id)) {
+        throw Exception("SignUpView::_tryToCreate: socket was closed.");
+    }
+
+    if (!(socket << (uint32_t)kinds_data.getCurrentValue().id)) {
+        throw Exception("SignUpView::_tryToCreate: socket was closed.");
+    }
+
+    if (!(socket << (uint32_t)races_data.getCurrentValue()
+                        .head_ids.getCurrentValue()
+                        .id)) {
+        throw Exception("SignUpView::_tryToCreate: socket was closed.");
+    }
+
+    if (!(socket << (uint32_t)races_data.getCurrentValue()
+                        .body_ids.getCurrentValue()
+                        .id)) {
+        throw Exception("SignUpView::_tryToCreate: socket was closed.");
+    }
+
+    // Esperamos la respuesta
+    uint8_t received_opcode;
+
+    if (!(socket >> received_opcode)) {
+        throw Exception("SignUpView::_tryToCreate: socket was closed.");
+    }
+
+    if (received_opcode != CONNECTION_ACK_OPCODE) {
+        throw Exception("SignUpView::_tryToCreate: unknown opcode received.");
+    }
+
+    uint8_t ack_type;
+
+    if (!(socket >> ack_type)) {
+        throw Exception("SignUpView::_tryToCreate: socket was closed.");
+    }
+
+    switch (ack_type) {
+        case SUCCESS_ACK: {
+            info_msg.loadFromRenderedText(&renderer, info_font,
+                                          SIGNUPVIEW_SUCCESS_MSG,
+                                          SDL_Color(VIEWS_SUCCESS_COLOR));
+            _setInfoPos();
+            break;
+        }
+
+        case ERROR_USERNAME_TAKEN_ACK: {
+            info_msg.loadFromRenderedText(&renderer, info_font,
+                                          SIGNUPVIEW_USERNAME_TAKEN,
+                                          SDL_Color(VIEWS_ERROR_COLOR));
+            _setInfoPos();
+            break;
+        }
+
+        default: {
+            throw Exception(
+                "SignUpView::_tryToCreate: unknown message type "
+                "received.");
+            break;
+        }
+    }
 }
 
 void SignUpView::_renderSprite(const UnitSprite& sprite) const {

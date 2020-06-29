@@ -11,7 +11,9 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+#include "../../Common/includes/Exceptions/Exception.h"
 #include "../../Common/includes/JSON.h"
+#include "../../Common/includes/Protocol.h"
 #include "../../Common/includes/Socket/SocketWrapper.h"
 #include "../../Common/includes/defs.h"
 //-----------------------------------------------------------------------------
@@ -35,6 +37,9 @@
 #define CONNECTIONVIEW_INVALID_INPUT_MSG "DEBES COMPLETAR AMBOS CAMPOS"
 #define CONNECTIONVIEW_CONNECTING_MSG "CONECTANDO..."
 #define CONNECTIONVIEW_MAX_INPUT_MSG "SE ALCANZO EL LIMITE DE CARACTERES"
+#define CONNECTIONVIEW_INVALID_USERNAME_MSG "NOMBRE DE USUARIO INEXISTENTE"
+#define CONNECTIONVIEW_INVALID_PASSWORD_MSG "CONTRASEÑA INCORRECTA"
+#define CONNECTIONVIEW_USERNAME_CONNECTED_MSG "EL USUARIO YA ESTÁ CONECTADO"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -105,6 +110,9 @@ class ConnectionView : public ConstantRateFunc {
 
     /* Handler del boton crear personaje */
     void _handleSignUpButtonPressed();
+
+    /* Envia una solicitud de login al servidor y aguarda respuesta */
+    void _tryToConnect();
 
     /* Settea la posición de renderizado de los input_texts */
     void _setInputPos();
