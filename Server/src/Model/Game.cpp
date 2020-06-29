@@ -252,7 +252,8 @@ void Game::newCreature(const CreatureCfg& init_data, const Id init_map) {
         std::piecewise_construct, std::forward_as_tuple(new_creature_id),
         std::forward_as_tuple(init_data, map_container, init_map,
                               spawning_x_coord, spawning_y_coord,
-                              init_data.base_health, init_data.base_damage));
+                              init_data.base_health, init_data.base_damage,
+                              items));
 
     // fprintf(stderr, "NEW CREATURE: %s \n", init_data.name.c_str());
 
@@ -338,9 +339,8 @@ void Game::actCreatures(const int it) {
         it_creatures->second.act(it);
 
         if (it_creatures->second.mustBeBroadcasted()) {
-            fprintf(stderr, "\n\n ERROR: ACA NO DEBERIA ENTRAR TODAVIA \n\n");
-            _pushCharacterDifferentialBroadcast(it_creatures->first,
-                                                UPDATE_BROADCAST, true);
+            _pushCreatureDifferentialBroadcast(it_creatures->first,
+                                               UPDATE_BROADCAST);
         }
 
         // it_creatures->second.debug();
@@ -458,13 +458,13 @@ void Game::stopMoving(const InstanceId caller) {
     character.stopMoving();
 }
 
-void Game::_dropAllItems(Character& dropper) {
+void Game::_dropAllItems(Attackable* dropper) {
     std::vector<DroppingSlot> dropped_items;
-    dropper.dropAllItems(dropped_items);
+    dropper->dropAllItems(dropped_items);
 
-    Id map_id = dropper.getMapId();
-    int init_x = dropper.getPosition().getX();
-    int init_y = dropper.getPosition().getY();
+    Id map_id = dropper->getMapId();
+    int init_x = dropper->getPosition().getX();
+    int init_y = dropper->getPosition().getY();
 
     for (unsigned int i = 0; i < dropped_items.size(); ++i) {
         int x = init_x;  // para no degenerar el dropeo en diagonal
@@ -501,9 +501,9 @@ void Game::_sendCharacterAttackNotifications(const int damage,
             "Has recibido " + std::to_string(damage) + " de daño.";
     } else if (damage < 0) {
         msg_to_attacker =
-            "Le has curado " + std::to_string(damage) + " puntos de vida.";
+            "Le has curado " + std::to_string(-damage) + " puntos de vida.";
         msg_to_attacked =
-            "Te han curado " + std::to_string(damage) + " puntos de vida.";
+            "Te han curado " + std::to_string(-damage) + " puntos de vida.";
     } else if (eluded) {
         msg_to_attacker = "Tu ataque fue eludido.";
         msg_to_attacked = "Has eludido un ataque.";
@@ -516,6 +516,9 @@ void Game::_sendCharacterAttackNotifications(const int damage,
     Notification* reply =
         new NotificationReply(INFO_MSG, msg_to_attacker.c_str());
     active_clients.notify(caller, reply);
+
+    if (caller == target)
+        return;
 
     reply = new NotificationReply(INFO_MSG, msg_to_attacked.c_str());
     active_clients.notify(target, reply);
@@ -530,7 +533,7 @@ void Game::_useWeaponOnCharacter(const InstanceId caller,
     bool eluded = false;
 
     try {
-        eluded = attacker.attack(attacked, damage);
+        eluded = attacker.attack(&attacked, damage);
     } catch (const std::exception& e) {
         /*
          * Atrapo excepciones:
@@ -550,10 +553,49 @@ void Game::_useWeaponOnCharacter(const InstanceId caller,
 
     // Verificamos si murió, en cuyo caso dropea todo.
     if (damage > 0 && !attacked.getHealth()) {
-        _dropAllItems(attacked);
+        _dropAllItems(&attacked);
     }
 
     _sendCharacterAttackNotifications(damage, eluded, caller, target);
+}
+
+void Game::_useWeaponOnCreature(const InstanceId caller,
+                                const InstanceId target) {
+    Character& attacker = this->characters.at(caller);
+    Creature& attacked = this->creatures.at(target);
+
+    int damage = 0;
+
+    try {
+        attacker.attack(&attacked, damage);
+    } catch (const std::exception& e) {
+        /*
+         * Atrapo excepciones:
+         * OutOfRangeAttackException,
+         * CantAttackWithoutWeaponException,
+         * KindCantDoMagicException,
+         * InsufficientManaException,
+         * AttackCooldownTimeNotElapsedException,
+         * CantAttackItselfException
+         * CantRecoverCreaturesHealthException
+         */
+        Notification* reply = new NotificationReply(ERROR_MSG, e.what());
+        active_clients.notify(caller, reply);
+        return;
+    }
+
+    // Verificamos si murió.
+    if (damage > 0 && !attacked.getHealth()) {
+        _dropAllItems(&attacked);
+        deleteCreature(target);
+    }
+
+    std::string msg_to_attacker = "Has atacado a la criatura, provocando " +
+                                  std::to_string(damage) + " de daño.";
+
+    Notification* reply =
+        new NotificationReply(INFO_MSG, msg_to_attacker.c_str());
+    active_clients.notify(caller, reply);
 }
 
 void Game::useWeapon(const InstanceId caller, const InstanceId target) {
@@ -568,8 +610,7 @@ void Game::useWeapon(const InstanceId caller, const InstanceId target) {
     }
 
     if (this->creatures.count(target)) {
-        fprintf(stderr,
-                "Game::useWeapon: ataque a criaturas no implementado.\n");
+        _useWeaponOnCreature(caller, target);
         return;
     }
 

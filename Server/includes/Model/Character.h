@@ -4,6 +4,8 @@
 #include <exception>
 #include <vector>
 //-----------------------------------------------------------------------------
+#include "Attackable.h"
+#include "Creature.h"
 #include "Equipment.h"
 #include "Inventory.h"
 #include "Item.h"
@@ -36,7 +38,7 @@
  *  -Tiene un Equipamiento con los elementos de ataque y defensa que
  * porta.
  */
-class Character {
+class Character : public Attackable {
    private:
     //-----------------------------------------------------------------------------
 
@@ -210,7 +212,7 @@ class Character {
      * Aumenta los puntos de vida en los points especificados,
      * siempre y cuando el limite de health no se supere.
      */
-    void recoverHealth(const unsigned int points);
+    void recoverHealth(const unsigned int points) override;
 
     /*
      * Si hay suficiente mana, consume mana_points de mana.
@@ -247,7 +249,7 @@ class Character {
      * Lanza StateOfCharacterCantBeAttackedException si el estado
      * actual no permite al character ser atacado.
      */
-    void beAttacked();
+    void beAttacked() override;
 
     /*
      * Efectúa la recepción del ataque de otro jugador.
@@ -261,7 +263,7 @@ class Character {
      * el daño efectivo el causado menos el absorbido por la defensa.
      *
      */
-    const bool receiveAttack(int& damage, const bool eludible);
+    const bool receiveAttack(int& damage, const bool eludible) override;
 
     /*
      * Efectua un ataque a otro jugador, usando el arma que tiene equipada.
@@ -279,7 +281,7 @@ class Character {
      * Lanza:
      *       OutOfRangeAttackException si el otro jugador está fuera del rango
      * del arma.
-     * 
+     *
      *       CantAttackWithoutWeapon si no tiene arma equipada para atacar.
      *
      *       AttackCooldownTimeNotElapsedException si el cooldown de uso del
@@ -306,7 +308,7 @@ class Character {
      *       AttackedStateCantBeAttackedException si el jugador al que se
      * quiere atacar no puede atacar debido a su estado (muerto).
      */
-    const bool attack(Character& attacked, int& damage);
+    const bool attack(Attackable* attacked, int& damage);
 
     /*
      * Cuando health es cero, se llama a este método. Cambia el estado del
@@ -318,7 +320,7 @@ class Character {
      * Recibe un vector en el que dropeará todos sus elementos,
      * tanto en equipment como en inventory.
      */
-    void dropAllItems(std::vector<DroppingSlot>& dropped_items);
+    void dropAllItems(std::vector<DroppingSlot>& dropped_items) override;
 
     //-----------------------------------------------------------------------------
 
@@ -327,22 +329,22 @@ class Character {
     //-----------------------------------------------------------------------------
 
     /* Retorna si el character es newbie o no. */
-    const bool isNewbie() const;
+    const bool isNewbie() const override;
 
     /* Retorna la posición del character. */
-    const Position& getPosition() const;
+    const Position& getPosition() const override;
 
     /* Retorna el nivel del character. */
-    const unsigned int getLevel() const;
+    const unsigned int getLevel() const override;
 
     /* Retorna la health del character. */
-    const unsigned int getHealth() const;
+    const unsigned int getHealth() const override;
 
     /* Retorna el health máxima del character. */
-    const unsigned int getMaxHealth() const;
+    const unsigned int getMaxHealth() const override;
 
     /* Retorna el id del mapa en el que se encuentra */
-    const Id getMapId() const;
+    const Id getMapId() const override;
 
     //-----------------------------------------------------------------------------
 

@@ -15,15 +15,14 @@ const unsigned int Formulas::calculateLevelUpXP(const unsigned int level) {
 const unsigned int Formulas::calculateAttackXPGain(
     const unsigned int damage, const unsigned int attacked_level,
     const unsigned int attacker_level) {
-    return damage *
-           std::max((int)(attacked_level - attacker_level + 10), 0);
+    return damage * std::max((int)(attacked_level - attacker_level + 10), 0);
 }
 
 const unsigned int Formulas::calculateKillXPGain(
     const unsigned int attacked_max_health, const unsigned int attacked_level,
     const unsigned int attacker_level) {
-    RandomNumberGenerator random_number_generator;
-    return random_number_generator(0, 0.1) * attacked_max_health *
+    RandomNumberGenerator gen;
+    return gen(0, 0.1) * attacked_max_health *
            std::max((int)(attacked_level - attacker_level + 10), 0);
 }
 
@@ -57,13 +56,13 @@ const unsigned int Formulas::calculateManaTimeRecovery(
 }
 
 const bool Formulas::isAttackEluded(const unsigned int agility) {
-    RandomNumberGenerator random_number_generator;
-    return (std::pow(random_number_generator(0, 1), agility) < 0.001);
+    RandomNumberGenerator gen;
+    return (std::pow(gen(0, 1), agility) < 0.001);
 }
 
 const bool Formulas::isCriticalAttack() {
-    RandomNumberGenerator random_number_generator;
-    return (random_number_generator(0, 1) < 0.1);
+    RandomNumberGenerator gen;
+    return (gen(0, 1) < 0.1);
 }
 
 const bool Formulas::canAttackByLevel(const unsigned int attacker_level,
@@ -79,4 +78,11 @@ const unsigned int Formulas::calculateMaxSafeGold(const unsigned int level) {
 const unsigned int Formulas::calculateMaxExcessGold(
     const unsigned int max_safe_gold) {
     return max_safe_gold * 0.5;
+}
+
+// Creature
+const unsigned int Formulas::calculateGoldDroppingAmount(
+    const unsigned int max_health) {
+    RandomNumberGenerator gen;
+    return gen(0.01, 0.2) * max_health;
 }

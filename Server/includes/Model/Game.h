@@ -231,10 +231,12 @@ class Game {
 
     //--------------------------------------------------------------------------
 
-    void _dropAllItems(Character& dropper);
+    void _dropAllItems(Attackable* dropper);
 
     void _useWeaponOnCharacter(const InstanceId caller,
                                const InstanceId target);
+
+    void _useWeaponOnCreature(const InstanceId caller, const InstanceId target);
 
     void _sendCharacterAttackNotifications(const int damage, const bool eluded,
                                            const InstanceId caller,

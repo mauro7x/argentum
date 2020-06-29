@@ -254,7 +254,7 @@ void Character::doMagic() {
     }
 }
 
-const bool Character::attack(Character& attacked, int& damage) {
+const bool Character::attack(Attackable* attacked, int& damage) {
     // Delego si puedo atacar en mi estado.
     this->state->attack();
 
@@ -267,7 +267,7 @@ const bool Character::attack(Character& attacked, int& damage) {
         throw AttackCooldownTimeNotElapsedException();
 
     // Verifico si alguno atacante o atacado está en zona segura.
-    if (this->position.isInSafeZone() || attacked.getPosition().isInSafeZone())
+    if (this->position.isInSafeZone() || attacked->getPosition().isInSafeZone())
         throw CantAttackInSafeZoneException();
 
     const unsigned int weapon_range = this->equipment.getAttackRange();
@@ -275,7 +275,7 @@ const bool Character::attack(Character& attacked, int& damage) {
     // Si el arma es curativa, obtengo sus puntos y curo.
     if (this->equipment.isWeaponHealing()) {
         int healing_points = this->equipment.useAttackItem(*this);
-        attacked.recoverHealth(healing_points);
+        attacked->recoverHealth(healing_points);
 
         // Devuelvo valor negativo -> puntos curativos.
         damage = -healing_points;
@@ -285,26 +285,26 @@ const bool Character::attack(Character& attacked, int& damage) {
     // Es un arma de ataque.
 
     // Verifico que no se quiera hacer daño a sí mismo
-    if (this == &attacked)
+    if (this == attacked)
         throw CantAttackItselfException();
 
     // Verifico si dado el estado del otro jugador puedo atacarlo.
-    attacked.beAttacked();
+    attacked->beAttacked();
 
     // Verificacion de diferencia de niveles entre jugadores y newbie.
-    if (attacked.isNewbie()) {
+    if (attacked->isNewbie()) {
         throw NewbiesCantBeAttackedException();
     }
 
     if (!(Formulas::canAttackByLevel(this->level.getLevel(),
-                                     attacked.getLevel())))
+                                     attacked->getLevel())))
         throw TooHighLevelDifferenceOnAttackException();
 
     // Se trata de un ataque de daño.
     // Nos fijamos si el atacado está en el rango del arma.
     // Si no lo está, lanzamos excepción.
     const unsigned int distance =
-        this->position.getDistance(attacked.getPosition());
+        this->position.getDistance(attacked->getPosition());
 
     if (distance > weapon_range)
         throw OutOfRangeAttackException();
@@ -318,15 +318,15 @@ const bool Character::attack(Character& attacked, int& damage) {
         damage = damage * CRITICAL_ATTACK_DAMAGE_MODIFIER;
 
     // El atacado recibe el daño del ataque.
-    const bool eluded = !attacked.receiveAttack(damage, critical_attack);
+    const bool eluded = !attacked->receiveAttack(damage, critical_attack);
 
     // Actualizo exp.
-    this->level.onAttackUpdate(*this, damage, attacked.getLevel());
+    this->level.onAttackUpdate(*this, damage, attacked->getLevel());
 
     // Si murio, sumamos la exp. necesaria
-    if (!attacked.getHealth())
-        this->level.onKillUpdate(*this, attacked.getMaxHealth(),
-                                 attacked.getLevel());
+    if (!attacked->getHealth())
+        this->level.onKillUpdate(*this, attacked->getMaxHealth(),
+                                 attacked->getLevel());
 
     this->broadcast = true;
 
