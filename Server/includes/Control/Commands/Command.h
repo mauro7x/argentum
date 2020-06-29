@@ -1,6 +1,7 @@
 #ifndef __COMMAND_H__
 #define __COMMAND_H__
-
+//-----------------------------------------------------------------------------
+#include <exception>
 //-----------------------------------------------------------------------------
 #include "../../../../Common/includes/BlockingQueue.h"
 #include "../../../../Common/includes/Protocol.h"
@@ -48,6 +49,11 @@ class CommandFactory {
    public:
     static Command* newCommand(InstanceId caller, uint8_t opcode,
                                SocketWrapper& socket);
+};
+
+class UnknownCommandException : public std::exception {
+   public:
+    virtual const char* what() const noexcept;
 };
 
 //-----------------------------------------------------------------------------

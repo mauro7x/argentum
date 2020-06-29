@@ -100,17 +100,10 @@ void ClientConnection::_receiveCommand() {
     try {
         Command* cmd = CommandFactory::newCommand(id, opcode_cmd, peer);
         commands.push(cmd);
-    } catch (const Exception& e) {
+    } catch (const UnknownCommandException& e) {
         // Comando desconocido. Envio error.
-
-        // Mau: por qué catchear una excepción implica que el mensaje fue
-        // desconocido? Si se cierra el socket y lanza excepción de socket
-        // cerrado, por qué mandarle esto? Quizás alcanza con dejar que la
-        // execepción que se genera en newCommand se propague al main del
-        // receiver y corte la ejecución.
-
-        NotificationReply* reply_error =
-            new NotificationReply(ERROR_MSG, e.what());
+        Reply* reply_error =
+            new Reply(ERROR_MSG, e.what());
         this->notifications.push(reply_error);
     }
 }

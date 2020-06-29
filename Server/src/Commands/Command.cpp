@@ -148,7 +148,11 @@ Command* CommandFactory::newCommand(InstanceId caller, uint8_t opcode,
         }
 
         default: {
-            throw Exception("Unknown command received.\n");
+            throw UnknownCommandException();
         }
     }
+}
+
+const char* UnknownCommandException::what() const noexcept {
+    return "Unknown command received.\n";
 }
