@@ -1,5 +1,5 @@
-#ifndef __CONNECTION_VIEW_H__
-#define __CONNECTION_VIEW_H__
+#ifndef __SIGNUP_VIEW_H__
+#define __SIGNUP_VIEW_H__
 
 //-----------------------------------------------------------------------------
 #include <SDL2/SDL.h>
@@ -30,14 +30,31 @@
 
 //-----------------------------------------------------------------------------
 // Mensajes
-#define CONNECTIONVIEW_INVALID_INPUT_MSG "DEBES COMPLETAR AMBOS CAMPOS"
-#define CONNECTIONVIEW_CONNECTING_MSG "CONECTANDO..."
-#define CONNECTIONVIEW_MAX_INPUT_MSG "SE ALCANZO EL LIMITE DE CARACTERES"
-//-----------------------------------------------------------------------------
+#define SIGNUPVIEW_INVALID_INPUT_MSG "CAMPOS INCOMPLETOS"
+#define SIGNUPVIEW_MAX_INPUT_MSG "LONGITUD MAXIMA ALCANZADA"
+
+#define SIGNUPVIEW_CREATING_MSG "CREANDO PERSONAJE..."
 
 //-----------------------------------------------------------------------------
 
-class ConnectionView : public ConstantRateFunc {
+//-----------------------------------------------------------------------------
+
+struct SelectionInputBox {
+    // Flags de animación
+    bool prev_over = false;
+    bool next_over = false;
+
+    // Offsets de renderizado
+    SDL_Rect prev_box = {0};
+    SDL_Rect next_box = {0};
+    SDL_Rect bar_box = {0};
+};
+
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+
+class SignUpView : public ConstantRateFunc {
    private:
     // Contexto global actual
     Context& current_context;
@@ -51,8 +68,8 @@ class ConnectionView : public ConstantRateFunc {
     // Flags internos
     bool username_active = false;
     bool password_active = false;
-    bool play_button_over = false;
-    bool signup_button_over = false;
+    bool goback_button_over = false;
+    bool create_button_over = false;
     bool show_cursor = false;
     int cursor_cooldown = VIEWS_ITERATIONS_TO_SWITCH_CURSOR;
 
@@ -65,10 +82,14 @@ class ConnectionView : public ConstantRateFunc {
     SDL_Point username_pos = {0};
     SDL_Rect password_box = {0};
     SDL_Point password_pos = {0};
-    SDL_Rect play_box = {0};
-    SDL_Rect signup_box = {0};
+    SDL_Rect preview_box = {0};
+    SDL_Rect goback_box = {0};
+    SDL_Rect create_box = {0};
     SDL_Rect info_box = {0};
     SDL_Point info_pos = {0};
+
+    // Barras de selección (sólo lectura)
+    SelectionInputBox race, kind, head, body;
 
     // Fuentes a utilizar
     int input_fontsize = 0;
@@ -77,15 +98,21 @@ class ConnectionView : public ConstantRateFunc {
     TTF_Font* cursor_font = NULL;
     TTF_Font* info_font = NULL;
 
-    // Texturas a renderizar
+    // Texturas estáticas a renderizar
     Texture bg;
     Texture input_inactive_box;
     Texture input_active_box;
     Texture cursor;
-    Texture play_button;
-    Texture play_button_pressed;
-    Texture signup_button;
-    Texture signup_button_pressed;
+    Texture goback_button;
+    Texture goback_button_pressed;
+    Texture create_button;
+    Texture create_button_pressed;
+    Texture prev;
+    Texture prev_pressed;
+    Texture next;
+    Texture next_pressed;
+    Texture bar;
+    Texture small_bar;
 
     // Texturas dinámicas
     Texture username;
@@ -117,10 +144,10 @@ class ConnectionView : public ConstantRateFunc {
     void _handleEvent(const SDL_Event& e);
 
     /* Handler del boton jugar */
-    void _handlePlayButtonPressed();
+    void _handleCreateButtonPressed();
 
     /* Handler del boton crear personaje */
-    void _handleSignUpButtonPressed();
+    void _handleGoBackButtonPressed();
 
     /* Settea la posición de renderizado de los input_texts */
     void _setInputPos();
@@ -147,13 +174,13 @@ class ConnectionView : public ConstantRateFunc {
 
    public:
     /* Constructor */
-    ConnectionView(Context& current_context, Renderer& renderer,
-                   const SocketWrapper& socket);
+    SignUpView(Context& current_context, Renderer& renderer,
+               const SocketWrapper& socket);
 
     /* Destructor */
-    ~ConnectionView();
+    ~SignUpView();
 };
 
 //-----------------------------------------------------------------------------
 
-#endif  // ____CONNECTION_VIEW_H__
+#endif  // ____SIGNUP_VIEW_H__

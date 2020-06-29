@@ -40,6 +40,37 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+// SignUpView assets
+
+#define SIGNUPVIEW_BG_FP "../Assets/Views/SignUpView/SignUpView.png"
+#define SIGNUPVIEW_TEXTBOX_FP "../Assets/Views/SignUpView/BarraNoClickeada.png"
+#define SIGNUPVIEW_TEXTBOX_ACTIVE_FP \
+    "../Assets/Views/SignUpView/BarraClickeada.png"
+
+#define SIGNUPVIEW_SELECTIONBOX_BAR_FP \
+    "../Assets/Views/SignUpView/BarraSoloLectura.png"
+#define SIGNUPVIEW_SELECTIONBOX_SMALL_BAR_FP \
+    "../Assets/Views/SignUpView/BarraSoloLecturaChica.png"
+
+#define SIGNUPVIEW_SELECTIONBOX_PREV_FP \
+    "../Assets/Views/SignUpView/BotonPrev.png"
+#define SIGNUPVIEW_SELECTIONBOX_PREV_PRESSED_FP \
+    "../Assets/Views/SignUpView/BotonPrevPresionado.png"
+
+#define SIGNUPVIEW_SELECTIONBOX_NEXT_FP \
+    "../Assets/Views/SignUpView/BotonNext.png"
+#define SIGNUPVIEW_SELECTIONBOX_NEXT_PRESSED_FP \
+    "../Assets/Views/SignUpView/BotonNextPresionado.png"
+
+#define SIGNUPVIEW_GOBACK_BUTTON_FP "../Assets/Views/SignUpView/BotonVolver.png"
+#define SIGNUPVIEW_GOBACK_BUTTON_PRESSED_FP \
+    "../Assets/Views/SignUpView/BotonVolverPresionado.png"
+#define SIGNUPVIEW_CREATE_BUTTON_FP "../Assets/Views/SignUpView/BotonCrear.png"
+#define SIGNUPVIEW_CREATE_BUTTON_PRESSED_FP \
+    "../Assets/Views/SignUpView/BotonCrearPresionado.png"
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
 // HUD
 
 #define HUD_UPPER_LAYER_FP "../Assets/HUD/UpperLayer.png"

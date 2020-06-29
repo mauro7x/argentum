@@ -77,15 +77,15 @@ class HomeView : public ConstantRateFunc {
 
     // Texturas a renderizar
     Texture bg;
-    Texture hostname;
-    Texture hostname_inactive_box;
-    Texture hostname_active_box;
-    Texture port;
-    Texture port_inactive_box;
-    Texture port_active_box;
+    Texture input_inactive_box;
+    Texture input_active_box;
     Texture cursor;
     Texture connect_button;
     Texture connect_button_pressed;
+
+    // Texturas dinámicas
+    Texture hostname;
+    Texture port;
     Texture info_msg;
 
     //-----------------------------------------------------------------------------

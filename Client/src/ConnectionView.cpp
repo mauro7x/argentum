@@ -41,12 +41,9 @@ void ConnectionView::_loadMedia() {
     bg.loadFromFile(&renderer, CONNECTIONVIEW_BG_FP);
 
     // Cargamos las imagenes estáticas
-    username_inactive_box.loadFromFile(&renderer, CONNECTIONVIEW_TEXTBOX_FP);
-    username_active_box.loadFromFile(&renderer,
-                                     CONNECTIONVIEW_TEXTBOX_ACTIVE_FP);
-    password_inactive_box.loadFromFile(&renderer, CONNECTIONVIEW_TEXTBOX_FP);
-    password_active_box.loadFromFile(&renderer,
-                                     CONNECTIONVIEW_TEXTBOX_ACTIVE_FP);
+    input_inactive_box.loadFromFile(&renderer, CONNECTIONVIEW_TEXTBOX_FP);
+    input_active_box.loadFromFile(&renderer, CONNECTIONVIEW_TEXTBOX_ACTIVE_FP);
+
     play_button.loadFromFile(&renderer, CONNECTIONVIEW_PLAY_BUTTON_FP);
     play_button_pressed.loadFromFile(&renderer,
                                      CONNECTIONVIEW_PLAY_BUTTON_PRESSED_FP);
@@ -94,9 +91,9 @@ void ConnectionView::_render() const {
     // Renderizamos el username
     render_quad = username_box;
     if (username_active) {
-        renderer.render(username_active_box.getTexture(), &render_quad);
+        renderer.render(input_active_box.getTexture(), &render_quad);
     } else {
-        renderer.render(username_inactive_box.getTexture(), &render_quad);
+        renderer.render(input_inactive_box.getTexture(), &render_quad);
     }
 
     render_quad = {username_pos.x, username_pos.y, username.getWidth(),
@@ -106,9 +103,9 @@ void ConnectionView::_render() const {
     // Renderizamos la contraseña
     render_quad = password_box;
     if (password_active) {
-        renderer.render(password_active_box.getTexture(), &render_quad);
+        renderer.render(input_active_box.getTexture(), &render_quad);
     } else {
-        renderer.render(password_inactive_box.getTexture(), &render_quad);
+        renderer.render(input_inactive_box.getTexture(), &render_quad);
     }
 
     render_quad = {password_pos.x, password_pos.y, password.getWidth(),
@@ -384,7 +381,7 @@ void ConnectionView::_handlePlayButtonPressed() {
     if (current_username.empty() || current_password.empty()) {
         info_msg.loadFromRenderedText(&renderer, info_font,
                                       CONNECTIONVIEW_INVALID_INPUT_MSG,
-                                      SDL_Color(VIEWS_WARNING_COLOR));
+                                      SDL_Color(VIEWS_ERROR_COLOR));
         _setInfoPos();
         return;
     }

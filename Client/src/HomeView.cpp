@@ -36,10 +36,8 @@ void HomeView::_loadMedia() {
     bg.loadFromFile(&renderer, HOMEVIEW_BG_FP);
 
     // Cargamos las imagenes estáticas
-    hostname_inactive_box.loadFromFile(&renderer, HOMEVIEW_TEXTBOX_FP);
-    hostname_active_box.loadFromFile(&renderer, HOMEVIEW_TEXTBOX_ACTIVE_FP);
-    port_inactive_box.loadFromFile(&renderer, HOMEVIEW_TEXTBOX_FP);
-    port_active_box.loadFromFile(&renderer, HOMEVIEW_TEXTBOX_ACTIVE_FP);
+    input_inactive_box.loadFromFile(&renderer, HOMEVIEW_TEXTBOX_FP);
+    input_active_box.loadFromFile(&renderer, HOMEVIEW_TEXTBOX_ACTIVE_FP);
     connect_button.loadFromFile(&renderer, HOMEVIEW_CONNECT_BUTTON_FP);
     connect_button_pressed.loadFromFile(&renderer,
                                         HOMEVIEW_CONNECT_BUTTON_PRESSED_FP);
@@ -84,9 +82,9 @@ void HomeView::_render() const {
     // Renderizamos el hostname
     render_quad = hostname_box;
     if (hostname_active) {
-        renderer.render(hostname_active_box.getTexture(), &render_quad);
+        renderer.render(input_active_box.getTexture(), &render_quad);
     } else {
-        renderer.render(hostname_inactive_box.getTexture(), &render_quad);
+        renderer.render(input_inactive_box.getTexture(), &render_quad);
     }
 
     render_quad = {hostname_pos.x, hostname_pos.y, hostname.getWidth(),
@@ -96,9 +94,9 @@ void HomeView::_render() const {
     // Renderizamos el puerto
     render_quad = port_box;
     if (port_active) {
-        renderer.render(port_active_box.getTexture(), &render_quad);
+        renderer.render(input_active_box.getTexture(), &render_quad);
     } else {
-        renderer.render(port_inactive_box.getTexture(), &render_quad);
+        renderer.render(input_inactive_box.getTexture(), &render_quad);
     }
 
     render_quad = {port_pos.x, port_pos.y, port.getWidth(), port.getHeight()};
@@ -351,7 +349,7 @@ void HomeView::_handleConnectButtonPressed() {
     if (current_hostname.empty() || current_port.empty()) {
         info_msg.loadFromRenderedText(&renderer, info_font,
                                       HOMEVIEW_INVALID_INPUT_MSG,
-                                      SDL_Color(VIEWS_WARNING_COLOR));
+                                      SDL_Color(VIEWS_ERROR_COLOR));
         _setInfoPos();
         return;
     }

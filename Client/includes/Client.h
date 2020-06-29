@@ -41,6 +41,7 @@
 #include "GameModel/Receiver.h"
 #include "GameView/GameView.h"
 #include "HomeView.h"
+#include "SignUpView.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------

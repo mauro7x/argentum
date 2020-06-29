@@ -95,10 +95,8 @@ void Client::_launchConnectionCtx() {
 
 void Client::_launchSignUpCtx() {
     fprintf(stderr, "Inicia SIGNUP.\n");
-
-    // implementar
-    current_context = EXIT_CTX;
-
+    SignUpView signup_view(current_context, renderer, socket);
+    signup_view.run();
     fprintf(stderr, "Finaliza SIGNUP.\n");
 }
 
