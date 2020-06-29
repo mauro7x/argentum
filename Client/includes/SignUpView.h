@@ -27,6 +27,8 @@
 //-----------------------------------------------------------------------------
 #include "SDL/Renderer.h"
 #include "SDL/Texture.h"
+#include "SDL/Widgets/Button.h"
+#include "SDL/Widgets/TextBox.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -97,29 +99,23 @@ class SignUpView : public ConstantRateFunc {
     UnitSpriteContainer sprites;
 
     // Flags internos
-    bool username_active = false;
-    bool password_active = false;
-    bool goback_button_over = false;
-    bool create_button_over = false;
     bool show_cursor = false;
     int cursor_cooldown = VIEWS_ITERATIONS_TO_SWITCH_CURSOR;
 
     // Contenido
-    std::string current_username;
-    std::string current_password;
     RoundRobinList<RaceData> races_data;
     RoundRobinList<SelectionBoxData> kinds_data;
 
+    // Widgets
+    TextBox username_txtbx;
+    TextBox password_txtbx;
+    Button goback_btn;
+    Button create_btn;
+
     // Offsets de renderizado
-    SDL_Rect username_box = {0};
-    SDL_Point username_pos = {0};
-    SDL_Rect password_box = {0};
-    SDL_Point password_pos = {0};
     SDL_Point race_pos = {0};
     SDL_Point kind_pos = {0};
     SDL_Rect preview_box = {0};
-    SDL_Rect goback_box = {0};
-    SDL_Rect create_box = {0};
     SDL_Rect info_box = {0};
     SDL_Point info_pos = {0};
 
@@ -135,13 +131,7 @@ class SignUpView : public ConstantRateFunc {
 
     // Texturas estáticas a renderizar
     Texture bg;
-    Texture input_inactive_box;
-    Texture input_active_box;
     Texture cursor;
-    Texture goback_button;
-    Texture goback_button_pressed;
-    Texture create_button;
-    Texture create_button_pressed;
     Texture prev;
     Texture prev_pressed;
     Texture next;
@@ -150,8 +140,6 @@ class SignUpView : public ConstantRateFunc {
     Texture small_bar;
 
     // Texturas dinámicas
-    Texture username;
-    Texture password;
     Texture info_msg;
 
     //-----------------------------------------------------------------------------
