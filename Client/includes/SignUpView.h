@@ -89,10 +89,8 @@ class SignUpView : public ConstantRateFunc {
     int cursor_cooldown = VIEWS_ITERATIONS_TO_SWITCH_CURSOR;
 
     // Widgets
-    TextBox username_txtbx;
-    TextBox password_txtbx;
-    Button goback_btn;
-    Button create_btn;
+    TextBox username_txtbx, password_txtbx;
+    Button goback_btn, create_btn;
     SelectionInputBox race_sibx, kind_sibx, head_sibx, body_sibx;
 
     // Contenido

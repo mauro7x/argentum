@@ -55,10 +55,8 @@ class ConnectionView : public ConstantRateFunc {
     int cursor_cooldown = VIEWS_ITERATIONS_TO_SWITCH_CURSOR;
 
     // Widgets
-    Button signup_btn;
-    Button play_btn;
-    TextBox username_txtbx;
-    TextBox password_txtbx;
+    Button signup_btn, play_btn;
+    TextBox username_txtbx, password_txtbx;
 
     // Offsets de renderizado
     SDL_Rect info_box = {0};

@@ -18,6 +18,8 @@
 //-----------------------------------------------------------------------------
 #include "SDL/Renderer.h"
 #include "SDL/Texture.h"
+#include "SDL/Widgets/Button.h"
+#include "SDL/Widgets/TextBox.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -49,22 +51,14 @@ class HomeView : public ConstantRateFunc {
     SocketWrapper& socket;
 
     // Flags internos
-    bool hostname_active = false;
-    bool port_active = false;
-    bool connect_button_over = false;
     bool show_cursor = false;
     int cursor_cooldown = VIEWS_ITERATIONS_TO_SWITCH_CURSOR;
 
-    // Contenido
-    std::string current_hostname;
-    std::string current_port;
+    // Widgets
+    Button connect_btn;
+    TextBox hostname_txtbx, port_txtbx;
 
     // Offsets de renderizado
-    SDL_Rect hostname_box = {0};
-    SDL_Point hostname_pos = {0};
-    SDL_Rect port_box = {0};
-    SDL_Point port_pos = {0};
-    SDL_Rect connect_box = {0};
     SDL_Rect info_box = {0};
     SDL_Point info_pos = {0};
 
@@ -77,15 +71,9 @@ class HomeView : public ConstantRateFunc {
 
     // Texturas a renderizar
     Texture bg;
-    Texture input_inactive_box;
-    Texture input_active_box;
     Texture cursor;
-    Texture connect_button;
-    Texture connect_button_pressed;
 
     // Texturas dinámicas
-    Texture hostname;
-    Texture port;
     Texture info_msg;
 
     //-----------------------------------------------------------------------------
