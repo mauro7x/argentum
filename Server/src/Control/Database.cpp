@@ -41,6 +41,7 @@ void Database::_persistPlayerInfo(const std::string& username) {
 }
 
 void Database::_createDataInicial(const std::string& username, Id race, Id kind,
+                                  Id head_id, Id body_id,
                                   CharacterCfg& character_data) {
     character_data.map = 0;
     character_data.x_tile = 0;
@@ -49,6 +50,8 @@ void Database::_createDataInicial(const std::string& username, Id race, Id kind,
                  sizeof(char) * NICKNAME_MAX_LENGTH - 1);
     character_data.race = race;
     character_data.kind = kind;
+    character_data.head_id = head_id;
+    character_data.body_id = body_id;
     character_data.state = ALIVE;
     character_data.equipment = {0, 0, 0, 0};
     character_data.inventory = {
@@ -75,6 +78,26 @@ void Database::_getPlayerData(const std::string& username,
     file_data.seekg(position, std::ios::beg);
     file_data.read(reinterpret_cast<char*>(&character_data),
                    sizeof(character_data));
+}
+
+bool Database::_checkHeadId(Id race, Id head_id) {
+    bool valid = false;
+    for (size_t i = 0; i < races[race].head_ids.size(); i++) {
+        if (head_id == races[race].head_ids[i]) {
+            valid = true;
+        }
+    }
+    return valid;
+}
+
+bool Database::_checkBodyId(Id race, Id body_id) {
+    bool valid = false;
+    for (size_t i = 0; i < races[race].body_ids.size(); i++) {
+        if (body_id == races[race].body_ids[i]) {
+            valid = true;
+        }
+    }
+    return valid;
 }
 //-----------------------------------------------------------------------------
 
@@ -129,7 +152,8 @@ void Database::signIn(const std::string& username, const std::string& password,
 }
 
 void Database::signUp(const std::string& username, const std::string& password,
-                      Id race, Id kind, CharacterCfg& character_data) {
+                      Id race, Id kind, Id head_id, Id body_id,
+                      CharacterCfg& character_data) {
     std::unique_lock<std::mutex> l(m);
     if (!initialized) {
         throw Exception("Database not initialized.");
@@ -140,16 +164,21 @@ void Database::signUp(const std::string& username, const std::string& password,
             "El nombre de usuario solicitado se encuentra en uso.");
     }
     // check if race o kind is valid
-    if (races.count(race) == 0 || kinds.count(kind) == 0){
+    if (races.count(race) == 0 || kinds.count(kind) == 0) {
         throw Exception("Id de race o/y de kind invalido/s.");
     }
+
+    if (!_checkHeadId(race, head_id) || !_checkBodyId(race, body_id)) {
+        throw Exception("Id de head o/y de body invalido/s.");
+    }
+
     data_index.emplace(username, DataIndex());
     data_index[username].index = file_pointer;
     std::strncpy(data_index[username].password, password.c_str(),
                  sizeof(char) * NICKNAME_MAX_LENGTH - 1);
     _persistPlayerInfo(username);
     // Crear un nuevo jugador (por ahora, proxy)
-    _createDataInicial(username, race, kind, character_data);
+    _createDataInicial(username, race, kind, head_id, body_id, character_data);
 
     persistPlayerData(character_data);
     file_pointer += sizeof(character_data);

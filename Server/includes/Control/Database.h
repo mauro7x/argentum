@@ -57,8 +57,14 @@ class Database {
 
     /* crear datos iniciales para el jugador nuevo*/
     void _createDataInicial(const std::string& username, Id race, Id kind,
+                            Id head_id, Id body_id,
                             CharacterCfg& character_data);
 
+    /* chequear si head_id es valido */
+    bool _checkHeadId(Id race, Id head_id);
+
+    /* chequear si body_id es valido */
+    bool _checkBodyId(Id race, Id body_id);
     //-------------------------------------------------------------------------
 
    public:
@@ -91,7 +97,8 @@ class Database {
     /* Un cliente crea un usuario nuevo (PROXY) */
     // El retorno va a tener que ser PlayerData en un futuro, por ahora proxy.
     void signUp(const std::string& username, const std::string& password,
-                Id race, Id kind, CharacterCfg& character_data);
+                Id race, Id kind, Id head_id, Id body_id,
+                CharacterCfg& character_data);
     //-------------------------------------------------------------------------
 
     /* Guardar los datos del jugador al archivo*/
