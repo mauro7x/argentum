@@ -50,8 +50,14 @@ class UnitSpriteContainer {
 
     //-------------------------------------------------------------------------
 
-    /* Carga las texturas de los tiles */
+    /* Carga todas las texturas de las unidades */
     void loadMedia();
+
+    /* Carga solo las texturas de cabezas */
+    void loadHeadsMedia();
+
+    /* Carga solo las texturas de cuerpos */
+    void loadBodiesMedia();
 
     /* Obtiene el sprite correspondiente */
     const UnitSprite& get(const Id id) const;
