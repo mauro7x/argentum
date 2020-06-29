@@ -50,9 +50,16 @@ class ItemsContainer {
      */
     Item* operator[](const Id item_id);
 
+    /* Devuelve un vector con todos los id de armas disponibles */
     const std::vector<Id>& getWeaponsId() const;
+
+    /* Devuelve un vector con todos los id de báculos disponibles */
     const std::vector<Id>& getWandsId() const;
+
+    /* Devuelve un vector con todos los id de defensas disponibles */
     const std::vector<Id>& getDefencesId() const;
+
+    /* Devuelve un vector con todos los id de pociones disponibles */
     const std::vector<Id>& getPotionsId() const;
 };
 
