@@ -161,7 +161,7 @@ void SignUpView::_loadPreviewData() {
             new_id = (Id)races[i]["id"];
             name = (std::string)races[i]["name"];
             races_data.emplaceBack(new_id);
-            SelectionBoxData& data = races_data.back();
+            RaceData& data = races_data.back();
             data.texture.loadFromRenderedText(&renderer, input_font, name,
                                               SDL_Color(VIEWS_FONT_COLOR));
             data.texture_pos.x =
@@ -170,6 +170,37 @@ void SignUpView::_loadPreviewData() {
             data.texture_pos.y =
                 race_box.bar_box.y +
                 (race_box.bar_box.h - data.texture.getHeight()) / 2;
+
+            // Llenamos los sprites de head y body
+            size_t n_heads = races[i]["head_ids"].size();
+            for (size_t j = 0; j < n_heads; j++) {
+                data.head_ids.emplaceBack((Id)races[i]["head_ids"][j]);
+                SelectionBoxData& head_data = data.head_ids.back();
+                head_data.texture.loadFromRenderedText(
+                    &renderer, input_font, std::to_string(j + 1),
+                    SDL_Color(VIEWS_FONT_COLOR));
+                head_data.texture_pos.x =
+                    head_box.bar_box.x +
+                    (head_box.bar_box.w - head_data.texture.getWidth()) / 2;
+                head_data.texture_pos.y =
+                    head_box.bar_box.y +
+                    (head_box.bar_box.h - head_data.texture.getHeight()) / 2;
+            }
+
+            size_t n_bodies = races[i]["body_ids"].size();
+            for (size_t j = 0; j < n_bodies; j++) {
+                data.body_ids.emplaceBack((Id)races[i]["body_ids"][j]);
+                SelectionBoxData& body_data = data.body_ids.back();
+                body_data.texture.loadFromRenderedText(
+                    &renderer, input_font, std::to_string(j + 1),
+                    SDL_Color(VIEWS_FONT_COLOR));
+                body_data.texture_pos.x =
+                    body_box.bar_box.x +
+                    (body_box.bar_box.w - body_data.texture.getWidth()) / 2;
+                body_data.texture_pos.y =
+                    body_box.bar_box.y +
+                    (body_box.bar_box.h - body_data.texture.getHeight()) / 2;
+            }
         }
     }
 
@@ -327,7 +358,7 @@ void SignUpView::_render() const {
         render_quad = race_box.bar_box;
         renderer.render(bar.getTexture(), &render_quad);
 
-        const SelectionBoxData& current_race = races_data.getCurrentValue();
+        const RaceData& current_race = races_data.getCurrentValue();
         render_quad = {current_race.texture_pos.x, current_race.texture_pos.y,
                        current_race.texture.getWidth(),
                        current_race.texture.getHeight()};
@@ -378,6 +409,13 @@ void SignUpView::_render() const {
 
         render_quad = head_box.bar_box;
         renderer.render(small_bar.getTexture(), &render_quad);
+
+        const SelectionBoxData& current_head =
+            races_data.getCurrentValue().head_ids.getCurrentValue();
+        render_quad = {current_head.texture_pos.x, current_head.texture_pos.y,
+                       current_head.texture.getWidth(),
+                       current_head.texture.getHeight()};
+        renderer.render(current_head.texture.getTexture(), &render_quad);
     }
 
     // Renderizamos body
@@ -398,6 +436,13 @@ void SignUpView::_render() const {
 
         render_quad = body_box.bar_box;
         renderer.render(small_bar.getTexture(), &render_quad);
+
+        const SelectionBoxData& current_body =
+            races_data.getCurrentValue().body_ids.getCurrentValue();
+        render_quad = {current_body.texture_pos.x, current_body.texture_pos.y,
+                       current_body.texture.getWidth(),
+                       current_body.texture.getHeight()};
+        renderer.render(current_body.texture.getTexture(), &render_quad);
     }
 
     // Renderizamos botones
@@ -724,22 +769,22 @@ void SignUpView::_handleEvent(const SDL_Event& e) {
             }
 
             if (_inside(mouse_pos, head_box.next_box)) {
-                fprintf(stderr, "Click en HEAD NEXT\n");
+                races_data.getCurrentValue().head_ids.next();
                 break;
             }
 
             if (_inside(mouse_pos, head_box.prev_box)) {
-                fprintf(stderr, "Click en HEAD PREV\n");
+                races_data.getCurrentValue().head_ids.prev();
                 break;
             }
 
             if (_inside(mouse_pos, body_box.next_box)) {
-                fprintf(stderr, "Click en BODY NEXT\n");
+                races_data.getCurrentValue().body_ids.next();
                 break;
             }
 
             if (_inside(mouse_pos, body_box.prev_box)) {
-                fprintf(stderr, "Click en BODY PREV\n");
+                races_data.getCurrentValue().body_ids.prev();
                 break;
             }
 

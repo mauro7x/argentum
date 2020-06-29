@@ -68,7 +68,14 @@ struct SelectionBoxData {
     SDL_Point texture_pos;
     Texture texture;
 
-    SelectionBoxData(Id id) : id(id), texture_pos({0}), texture() {}
+    SelectionBoxData(Id id) : id(id), texture_pos({0}) {}
+};
+
+struct RaceData : public SelectionBoxData {
+    RoundRobinList<SelectionBoxData> head_ids;
+    RoundRobinList<SelectionBoxData> body_ids;
+
+    RaceData(Id id) : SelectionBoxData(id) {}
 };
 
 //-----------------------------------------------------------------------------
@@ -100,7 +107,7 @@ class SignUpView : public ConstantRateFunc {
     // Contenido
     std::string current_username;
     std::string current_password;
-    RoundRobinList<SelectionBoxData> races_data;
+    RoundRobinList<RaceData> races_data;
     RoundRobinList<SelectionBoxData> kinds_data;
 
     // Offsets de renderizado

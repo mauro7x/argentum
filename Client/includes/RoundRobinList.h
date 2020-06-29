@@ -82,7 +82,7 @@ class RoundRobinList {
     }
 
     /* Obtiene el valor actual */
-    const T& getCurrentValue() const {
+    T& getCurrentValue() const {
         return *it;
     }
 
