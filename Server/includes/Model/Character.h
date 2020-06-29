@@ -40,7 +40,7 @@
  */
 class Character : public Attackable {
    private:
-    //-----------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
     unsigned int health, mana;
     const unsigned int intelligence, constitution, strength, agility;
@@ -61,9 +61,9 @@ class Character : public Attackable {
 
     bool broadcast;
 
-    //-----------------------------------------------------------------------------
-
-    //-----------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
+    // Métodos auxiliares para las actualizaciones dependientes del tiempo.
+    //--------------------------------------------------------------------------
 
     /*
      * Recibe la cantidad de segundos que pasaron desde la última vez que se
@@ -82,10 +82,68 @@ class Character : public Attackable {
      */
     void _updateMovement(const unsigned int it);
 
-    //-----------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
+
+    //--------------------------------------------------------------------------
+    // Métodos auxiliares para las acciones.
+    //--------------------------------------------------------------------------
+
+    /*
+     * Verifican que se cumplan los requisitos para poder usar el arma.
+     *
+     * Estos son: - estado que pueda atacar [vivo]
+     *            - que tenga un arma equipada
+     *            - que el arma no esté en cooldown
+     *            - que no estén ni el target ni this en zona segura
+     *            - que el target esté dentro del rango del arma
+     *
+     * Lanza la excepción correspondiente si no se cumple algun requisito.
+     */
+    void _checkPriorToUseWeaponConditions(Attackable* target) const;
+
+    /*
+     * Verifican que se cumplan los requisitos para poder usar el arma de
+     * ataque.
+     *
+     * Estos son: - que no se quiera atacar a sí mismo
+     *            - que el target esté en un estado que pueda ser atacado [vivo]
+     *            - que el target no sea newbie
+     *            - que haya fair play [diferencia de niveles adecuada]
+     *
+     * Lanza la excepción correspondiente si no se cumple algun requisito.
+     */
+    void _checkPriorToUseAttackWeaponConditions(Attackable* target) const;
+
+    /*
+     * Efectúa el uso del arma curativa.
+     *
+     * Retorna false [no se eluden nunca].
+     *
+     * Lanza InsufficientManaException si se trata de un báculo y el
+     * jugador no tiene maná suficiente.
+     *
+     * Lanza KindCantDoMagicException si el kind del character no puede
+     * hacer magia y lanzar hechizos.
+     */
+    const bool _useHealingWeapon(Attackable* target, int& damage);
+
+    /*
+     * Efectúa el uso del arma de ataque.
+     *
+     * Retorna si el ataque fue eludido por el target o no.
+     *
+     * Lanza InsufficientManaException si se trata de un báculo y el
+     * jugador no tiene maná suficiente.
+     *
+     * Lanza KindCantDoMagicException si el kind del character no puede
+     * hacer magia y lanzar hechizos.
+     */
+    const bool _useAttackWeapon(Attackable* target, int& damage);
+
+    //--------------------------------------------------------------------------
 
    public:
-    //-----------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
     Character(const CharacterCfg& init_data, const RaceCfg& race,
               const KindCfg& kind, MapContainer& map_container,
@@ -98,11 +156,11 @@ class Character : public Attackable {
     Character(Character&&) = delete;
     Character& operator=(Character&&) = delete;
 
-    //-----------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
-    //-----------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     // Actualización de atributos.
-    //-----------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
     /*
      * Recibe la cantidad de iteraciones que ocurrieron desde la última
@@ -125,24 +183,36 @@ class Character : public Attackable {
      */
     void updateLevelDependantAttributes();
 
-    //-----------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
-    //-----------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     //  Movimiento
-    //-----------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
+    /*
+     * Los movimientos se efectúan en act. Acá se controlan.
+     */
+
+    /* Setea moving en true y la orientación en UP. */
     void startMovingUp();
+
+    /* Setea moving en true y la orientación en DOWN. */
     void startMovingDown();
+
+    /* Setea moving en true y la orientación en RIGHT. */
     void startMovingRight();
+
+    /* Setea moving en true y la orientación en LEFT. */
     void startMovingLeft();
 
+    /* Setea moving en false. */
     void stopMoving();
 
-    //-----------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
-    //-----------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     //  Manejo de items
-    //-----------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
     /*
      * Recibe la posicion del item en el inventario
@@ -194,11 +264,19 @@ class Character : public Attackable {
      */
     Item* dropItem(const unsigned int n_slot, unsigned int& amount);
 
-    //-----------------------------------------------------------------------------
+    /* 
+     * Se llama a este método cuando el jugador muere.
+     * 
+     * Recibe un vector en el que dropeará todos sus elementos,
+     * tanto en equipment como en inventory.
+     */
+    void dropAllItems(std::vector<DroppingSlot>& dropped_items) override;
 
-    //-----------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
+
+    //--------------------------------------------------------------------------
     // Modificación de maná y vida.
-    //-----------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
     /*
      * Efectua la accion curativa de las pociones de mana.
@@ -221,11 +299,11 @@ class Character : public Attackable {
      */
     void consumeMana(const unsigned int mana_points);
 
-    //-----------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
-    //-----------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     // Ataque y defensa
-    //-----------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
     /*
      * Metodo llamado al usar el arma equipada.
@@ -268,15 +346,12 @@ class Character : public Attackable {
     /*
      * Efectua un ataque a otro jugador, usando el arma que tiene equipada.
      *
-     * Retorna los puntos de daño efectivos que generó. Si no tiene arma
-     * equipada, retorna 0.
+     * Establece en la variable damage los puntos de daño (>= 0) si se trata
+     * de un ataque, o los puntos de curación (<= 0) si se trata de un arma
+     * curativa.
      *
-     * Si el arma tiene efecto sobre el jugador [e.g: es un baculo curativo],
-     * i.e tiene rango cero, se usa inmediatamente.
-     *
-     * Si el arma es de daño, se verifica si el otro jugador está dentro del
-     * rango de dicha arma, y se efectúa el ataque al recibir el atacado los
-     * puntos de daño.
+     * Retorna si el ataque fue eludido o no. Los usos curativos nunca son
+     * eludidos.
      *
      * Lanza:
      *       OutOfRangeAttackException si el otro jugador está fuera del rango
@@ -308,7 +383,7 @@ class Character : public Attackable {
      *       AttackedStateCantBeAttackedException si el jugador al que se
      * quiere atacar no puede atacar debido a su estado (muerto).
      */
-    const bool attack(Attackable* attacked, int& damage);
+    const bool useWeapon(Attackable* target, int& damage);
 
     /*
      * Cuando health es cero, se llama a este método. Cambia el estado del
@@ -316,17 +391,11 @@ class Character : public Attackable {
      */
     void die();
 
-    /*
-     * Recibe un vector en el que dropeará todos sus elementos,
-     * tanto en equipment como en inventory.
-     */
-    void dropAllItems(std::vector<DroppingSlot>& dropped_items) override;
+    //--------------------------------------------------------------------------
 
-    //-----------------------------------------------------------------------------
-
-    //-----------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     // Obtención de estado
-    //-----------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
     /* Retorna si el character es newbie o no. */
     const bool isNewbie() const override;
@@ -346,11 +415,11 @@ class Character : public Attackable {
     /* Retorna el id del mapa en el que se encuentra */
     const Id getMapId() const override;
 
-    //-----------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
-    //-----------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     // Broadcast control
-    //-----------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
     /*
      * Retorna si el character debe ser broadcasteado
@@ -371,7 +440,7 @@ class Character : public Attackable {
      */
     void fillBroadcastData(PlayerData& data) const;
 
-    //-----------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
     void debug();
 };

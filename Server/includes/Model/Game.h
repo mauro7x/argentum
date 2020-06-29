@@ -68,17 +68,6 @@ class Game {
     ActiveClients& active_clients;
     //--------------------------------------------------------------------------
 
-   public:
-    //--------------------------------------------------------------------------
-    Game(ActiveClients& active_clients);
-    ~Game();
-
-    Game(const Game&) = delete;
-    Game& operator=(const Game&) = delete;
-    Game(Game&& other) = delete;
-    Game& operator=(Game&& other) = delete;
-    //--------------------------------------------------------------------------
-
     //--------------------------------------------------------------------------
     // Métodos de broadcast
     //--------------------------------------------------------------------------
@@ -142,8 +131,51 @@ class Game {
      */
     void _pushFullBroadcast(InstanceId receiver, bool is_new_connection);
 
-    /* método provisorio */
-    void broadcastNewCharacter(InstanceId id);
+    //--------------------------------------------------------------------------
+
+    //--------------------------------------------------------------------------
+    // Métodos auxiliares para creación de criaturas.
+    //--------------------------------------------------------------------------
+
+    /*
+     * Escoge aleatoriamente una criatura entre las disponibles en la config,
+     * y deuvelve su Id.
+     */
+    const Id _randomSelectCreature() const;
+
+    /*
+     * Recibe un mapa en el cual spawnea una criatura aleatoria.
+     */
+    void _spawnNewCreature(const Id spawning_map);
+
+    //--------------------------------------------------------------------------
+
+    //--------------------------------------------------------------------------
+    // Métodos auxiliares para los comandos.
+    //--------------------------------------------------------------------------
+
+    void _dropAllItems(Attackable* dropper);
+
+    void _useWeapon(const InstanceId caller, const InstanceId target,
+                    Attackable* attacked, const bool target_is_creature);
+
+    void _sendCharacterAttackNotifications(const int damage, const bool eluded,
+                                           const InstanceId caller,
+                                           const InstanceId target);
+
+    void _sendCreatureAttackNotifications(const int damage,
+                                          const InstanceId caller);
+
+   public:
+    //--------------------------------------------------------------------------
+
+    Game(ActiveClients& active_clients);
+    ~Game();
+
+    Game(const Game&) = delete;
+    Game& operator=(const Game&) = delete;
+    Game(Game&& other) = delete;
+    Game& operator=(Game&& other) = delete;
 
     //--------------------------------------------------------------------------
 
@@ -163,6 +195,9 @@ class Game {
      * Lanza Exception si alguno de los id no mapea a ninguna raza/clase.
      */
     const InstanceId newCharacter(const CharacterCfg& init_data);
+
+    /* Una vez se agrega el cliente a active clients, se llama a este método. */
+    void broadcastNewCharacter(InstanceId id);
 
     /*
      * Recibe un struct CreatureCfg con toda la información necesaria
@@ -196,17 +231,6 @@ class Game {
      */
     void deleteCreature(const InstanceId id);
 
-    /*
-     * Escoge aleatoriamente una criatura entre las disponibles en la config,
-     * y deuvelve su Id.
-     */
-    const Id _randomSelectCreature() const;
-
-    /*
-     * Recibe un mapa en el cual spawnea una criatura aleatoria.
-     */
-    void _spawnNewCreature(const Id spawning_map);
-
     //--------------------------------------------------------------------------
 
     //--------------------------------------------------------------------------
@@ -230,17 +254,6 @@ class Game {
     void updateDroppedItemsLifetime(const int it);
 
     //--------------------------------------------------------------------------
-
-    void _dropAllItems(Attackable* dropper);
-
-    void _useWeaponOnCharacter(const InstanceId caller,
-                               const InstanceId target);
-
-    void _useWeaponOnCreature(const InstanceId caller, const InstanceId target);
-
-    void _sendCharacterAttackNotifications(const int damage, const bool eluded,
-                                           const InstanceId caller,
-                                           const InstanceId target);
 
     //--------------------------------------------------------------------------
     // Comandos
@@ -293,5 +306,13 @@ class Game {
 
     const Id getMapId(const InstanceId caller);
 };
+
+//-----------------------------------------------------------------------------
+// Funciones auxiliares
+//-----------------------------------------------------------------------------
+
+const std::string _coordinatesToMapKey(int x, int y);
+void _mapKeyToCoordinates(const std::string& key, int& x, int& y);
+
 //-----------------------------------------------------------------------------
 #endif  // __GAME_H__

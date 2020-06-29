@@ -21,6 +21,7 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+
 Game::Game(ActiveClients& active_clients)
     : next_instance_id(FIRST_INSTANCE_ID), active_clients(active_clients) {
     map_container.loadMaps();
@@ -37,28 +38,13 @@ Game::Game(ActiveClients& active_clients)
 Game::~Game() {
     // PERSISTIR TODO ANTES QUE SE DESTRUYA
 }
+
 //-----------------------------------------------------------------------------
 
 MapCreaturesInfo::MapCreaturesInfo(unsigned int amount_of_creatures,
                                    int creature_spawning_cooldown)
     : amount_of_creatures(amount_of_creatures),
       creature_spawning_cooldown(creature_spawning_cooldown) {}
-
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
-// Funciones auxiliares
-//-----------------------------------------------------------------------------
-
-const std::string _coordinatesToMapKey(int x, int y) {
-    return std::move(std::to_string(x) + "," + std::to_string(y));
-}
-
-void _mapKeyToCoordinates(const std::string& key, int& x, int& y) {
-    std::size_t delim = key.find(',');
-    x = std::stoi(key.substr(0, delim));
-    y = std::stoi(key.substr(delim + 1));
-}
 
 //-----------------------------------------------------------------------------
 
@@ -277,9 +263,12 @@ void Game::deleteCreature(const InstanceId id) {
         throw Exception("deleteCreature: Unknown creature id [", id, "]");
     }
 
+    Creature& creature = this->creatures.at(id);
+
     _pushCreatureDifferentialBroadcast(id, DELETE_BROADCAST);
 
-    // DROPEAR ITEMS Y HACER SU BROADCAST
+    // Restamos en uno la cantidad de criaturas en ese mapa.
+    --this->maps_creatures_info.at(creature.getMapId()).amount_of_creatures;
 
     this->creatures.erase(id);
 }
@@ -524,16 +513,25 @@ void Game::_sendCharacterAttackNotifications(const int damage,
     active_clients.notify(target, reply);
 }
 
-void Game::_useWeaponOnCharacter(const InstanceId caller,
-                                 const InstanceId target) {
+void Game::_sendCreatureAttackNotifications(const int damage,
+                                            const InstanceId caller) {
+    std::string msg_to_attacker = "Has atacado a la criatura, provocando " +
+                                  std::to_string(damage) + " de daño.";
+
+    Notification* reply =
+        new NotificationReply(INFO_MSG, msg_to_attacker.c_str());
+    active_clients.notify(caller, reply);
+}
+
+void Game::_useWeapon(const InstanceId caller, const InstanceId target,
+                      Attackable* attacked, const bool target_is_creature) {
     Character& attacker = this->characters.at(caller);
-    Character& attacked = this->characters.at(target);
 
     int damage = 0;
     bool eluded = false;
 
     try {
-        eluded = attacker.attack(&attacked, damage);
+        eluded = attacker.useWeapon(attacked, damage);
     } catch (const std::exception& e) {
         /*
          * Atrapo excepciones:
@@ -552,51 +550,18 @@ void Game::_useWeaponOnCharacter(const InstanceId caller,
     }
 
     // Verificamos si murió, en cuyo caso dropea todo.
-    if (damage > 0 && !attacked.getHealth()) {
-        _dropAllItems(&attacked);
+    if (damage > 0 && !attacked->getHealth()) {
+        _dropAllItems(attacked);
+
+        if (target_is_creature)
+            deleteCreature(target);
     }
 
-    _sendCharacterAttackNotifications(damage, eluded, caller, target);
-}
-
-void Game::_useWeaponOnCreature(const InstanceId caller,
-                                const InstanceId target) {
-    Character& attacker = this->characters.at(caller);
-    Creature& attacked = this->creatures.at(target);
-
-    int damage = 0;
-
-    try {
-        attacker.attack(&attacked, damage);
-    } catch (const std::exception& e) {
-        /*
-         * Atrapo excepciones:
-         * OutOfRangeAttackException,
-         * CantAttackWithoutWeaponException,
-         * KindCantDoMagicException,
-         * InsufficientManaException,
-         * AttackCooldownTimeNotElapsedException,
-         * CantAttackItselfException
-         * CantRecoverCreaturesHealthException
-         */
-        Notification* reply = new NotificationReply(ERROR_MSG, e.what());
-        active_clients.notify(caller, reply);
-        return;
-    }
-
-    // Verificamos si murió.
-    if (damage > 0 && !attacked.getHealth()) {
-        _dropAllItems(&attacked);
-        deleteCreature(target);
-    }
-
-    std::string msg_to_attacker = "Has atacado a la criatura, provocando " +
-                                  std::to_string(damage) + " de daño.";
-
-    Notification* reply =
-        new NotificationReply(INFO_MSG, msg_to_attacker.c_str());
-    active_clients.notify(caller, reply);
-}
+    if (target_is_creature)
+        _sendCreatureAttackNotifications(damage, caller);
+    else
+        _sendCharacterAttackNotifications(damage, eluded, caller, target);
+} 
 
 void Game::useWeapon(const InstanceId caller, const InstanceId target) {
     if (!this->characters.count(caller)) {
@@ -604,13 +569,14 @@ void Game::useWeapon(const InstanceId caller, const InstanceId target) {
     }
 
     if (this->characters.count(target)) {
-        // Está atacando a un character.
-        _useWeaponOnCharacter(caller, target);
+        Character& attacked = this->characters.at(target);
+        _useWeapon(caller, target, &attacked, false);
         return;
     }
 
     if (this->creatures.count(target)) {
-        _useWeaponOnCreature(caller, target);
+        Creature& attacked = this->creatures.at(target);
+        _useWeapon(caller, target, &attacked, true);
         return;
     }
 
@@ -788,11 +754,12 @@ void Game::drop(const InstanceId caller, const uint8_t n_slot,
 void Game::listConnectedPlayers(const InstanceId caller) {
     fprintf(stderr, "Comando list no implementado.\n");
 }
-//-----------------------------------------------------------------------
 
-//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
 // Getters de atributos
-//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 
 const Id Game::getMapId(const InstanceId caller) {
     if (!this->characters.count(caller)) {
@@ -802,4 +769,20 @@ const Id Game::getMapId(const InstanceId caller) {
     return this->characters.at(caller).getMapId();
 }
 
-//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+// Funciones auxiliares
+//-----------------------------------------------------------------------------
+
+const std::string _coordinatesToMapKey(int x, int y) {
+    return std::move(std::to_string(x) + "," + std::to_string(y));
+}
+
+void _mapKeyToCoordinates(const std::string& key, int& x, int& y) {
+    std::size_t delim = key.find(',');
+    x = std::stoi(key.substr(0, delim));
+    y = std::stoi(key.substr(delim + 1));
+}
+
+//-----------------------------------------------------------------------------
