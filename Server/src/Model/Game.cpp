@@ -21,6 +21,7 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+
 Game::Game(ActiveClients& active_clients)
     : next_instance_id(FIRST_INSTANCE_ID), active_clients(active_clients) {
     map_container.loadMaps();
@@ -37,28 +38,13 @@ Game::Game(ActiveClients& active_clients)
 Game::~Game() {
     // PERSISTIR TODO ANTES QUE SE DESTRUYA
 }
+
 //-----------------------------------------------------------------------------
 
 MapCreaturesInfo::MapCreaturesInfo(unsigned int amount_of_creatures,
                                    int creature_spawning_cooldown)
     : amount_of_creatures(amount_of_creatures),
       creature_spawning_cooldown(creature_spawning_cooldown) {}
-
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
-// Funciones auxiliares
-//-----------------------------------------------------------------------------
-
-const std::string _coordinatesToMapKey(int x, int y) {
-    return std::move(std::to_string(x) + "," + std::to_string(y));
-}
-
-void _mapKeyToCoordinates(const std::string& key, int& x, int& y) {
-    std::size_t delim = key.find(',');
-    x = std::stoi(key.substr(0, delim));
-    y = std::stoi(key.substr(delim + 1));
-}
 
 //-----------------------------------------------------------------------------
 
@@ -252,7 +238,8 @@ void Game::newCreature(const CreatureCfg& init_data, const Id init_map) {
         std::piecewise_construct, std::forward_as_tuple(new_creature_id),
         std::forward_as_tuple(init_data, map_container, init_map,
                               spawning_x_coord, spawning_y_coord,
-                              init_data.base_health, init_data.base_damage));
+                              init_data.base_health, init_data.base_damage,
+                              items));
 
     // fprintf(stderr, "NEW CREATURE: %s \n", init_data.name.c_str());
 
@@ -276,9 +263,12 @@ void Game::deleteCreature(const InstanceId id) {
         throw Exception("deleteCreature: Unknown creature id [", id, "]");
     }
 
+    Creature& creature = this->creatures.at(id);
+
     _pushCreatureDifferentialBroadcast(id, DELETE_BROADCAST);
 
-    // DROPEAR ITEMS Y HACER SU BROADCAST
+    // Restamos en uno la cantidad de criaturas en ese mapa.
+    --this->maps_creatures_info.at(creature.getMapId()).amount_of_creatures;
 
     this->creatures.erase(id);
 }
@@ -338,9 +328,8 @@ void Game::actCreatures(const int it) {
         it_creatures->second.act(it);
 
         if (it_creatures->second.mustBeBroadcasted()) {
-            fprintf(stderr, "\n\n ERROR: ACA NO DEBERIA ENTRAR TODAVIA \n\n");
-            _pushCharacterDifferentialBroadcast(it_creatures->first,
-                                                UPDATE_BROADCAST, true);
+            _pushCreatureDifferentialBroadcast(it_creatures->first,
+                                               UPDATE_BROADCAST);
         }
 
         // it_creatures->second.debug();
@@ -458,13 +447,13 @@ void Game::stopMoving(const InstanceId caller) {
     character.stopMoving();
 }
 
-void Game::_dropAllItems(Character& dropper) {
+void Game::_dropAllItems(Attackable* dropper) {
     std::vector<DroppingSlot> dropped_items;
-    dropper.dropAllItems(dropped_items);
+    dropper->dropAllItems(dropped_items);
 
-    Id map_id = dropper.getMapId();
-    int init_x = dropper.getPosition().getX();
-    int init_y = dropper.getPosition().getY();
+    Id map_id = dropper->getMapId();
+    int init_x = dropper->getPosition().getX();
+    int init_y = dropper->getPosition().getY();
 
     for (unsigned int i = 0; i < dropped_items.size(); ++i) {
         int x = init_x;  // para no degenerar el dropeo en diagonal
@@ -488,20 +477,66 @@ void Game::_dropAllItems(Character& dropper) {
     }
 }
 
-void Game::_useWeaponOnCharacter(const InstanceId caller,
-                                 const InstanceId target) {
+void Game::_sendCharacterAttackNotifications(const int damage,
+                                             const bool eluded,
+                                             const InstanceId caller,
+                                             const InstanceId target) {
+    std::string msg_to_attacked, msg_to_attacker;
+
+    if (damage > 0) {
+        msg_to_attacker =
+            "Le has infligido " + std::to_string(damage) + " de daño.";
+        msg_to_attacked =
+            "Has recibido " + std::to_string(damage) + " de daño.";
+    } else if (damage < 0) {
+        msg_to_attacker =
+            "Le has curado " + std::to_string(-damage) + " puntos de vida.";
+        msg_to_attacked =
+            "Te han curado " + std::to_string(-damage) + " puntos de vida.";
+    } else if (eluded) {
+        msg_to_attacker = "Tu ataque fue eludido.";
+        msg_to_attacked = "Has eludido un ataque.";
+    } else {
+        msg_to_attacker =
+            "No le has causado daño, la defensa absorbió el ataque.";
+        msg_to_attacked = "Tu defensa absorbió todo el daño del ataque.";
+    }
+
+    Notification* reply =
+        new NotificationReply(INFO_MSG, msg_to_attacker.c_str());
+    active_clients.notify(caller, reply);
+
+    if (caller == target)
+        return;
+
+    reply = new NotificationReply(INFO_MSG, msg_to_attacked.c_str());
+    active_clients.notify(target, reply);
+}
+
+void Game::_sendCreatureAttackNotifications(const int damage,
+                                            const InstanceId caller) {
+    std::string msg_to_attacker = "Has atacado a la criatura, provocando " +
+                                  std::to_string(damage) + " de daño.";
+
+    Notification* reply =
+        new NotificationReply(INFO_MSG, msg_to_attacker.c_str());
+    active_clients.notify(caller, reply);
+}
+
+void Game::_useWeapon(const InstanceId caller, const InstanceId target,
+                      Attackable* attacked, const bool target_is_creature) {
     Character& attacker = this->characters.at(caller);
-    Character& attacked = this->characters.at(target);
 
     int damage = 0;
     bool eluded = false;
 
     try {
-        eluded = attacker.attack(attacked, damage);
+        eluded = attacker.useWeapon(attacked, damage);
     } catch (const std::exception& e) {
         /*
          * Atrapo excepciones:
          * OutOfRangeAttackException,
+         * CantAttackWithoutWeaponException,
          * KindCantDoMagicException,
          * TooHighLevelDifferenceOnAttackException,
          * NewbiesCantBeAttackedException, InsufficientManaException,
@@ -515,36 +550,18 @@ void Game::_useWeaponOnCharacter(const InstanceId caller,
     }
 
     // Verificamos si murió, en cuyo caso dropea todo.
-    if (damage > 0 && !attacked.getHealth()) {
+    if (damage > 0 && !attacked->getHealth()) {
         _dropAllItems(attacked);
+
+        if (target_is_creature)
+            deleteCreature(target);
     }
 
-    std::string msg_to_attacked, msg_to_attacker;
-
-    if (damage > 0) {
-        msg_to_attacker =
-            "Le has infligido " + std::to_string(damage) + " de daño.";
-        msg_to_attacked =
-            "Has recibido " + std::to_string(damage) + " de daño.";
-    } else if (damage < 0) {
-        msg_to_attacker =
-            "Le has curado " + std::to_string(damage) + " puntos de vida.";
-        msg_to_attacked =
-            "Te han curado " + std::to_string(damage) + " puntos de vida.";
-    } else if (eluded) {
-        msg_to_attacker = "Tu ataque fue eludido.";
-        msg_to_attacked = "Has eludido un ataque.";
-    } else {
-        msg_to_attacker = "No le has causado daño, la defensa absorbió el ataque.";
-        msg_to_attacked = "Tu defensa absorbió todo el daño del ataque.";
-    }
-
-    Notification* reply = new NotificationReply(INFO_MSG, msg_to_attacker.c_str());
-    active_clients.notify(caller, reply);
-
-    reply = new NotificationReply(INFO_MSG, msg_to_attacked.c_str());
-    active_clients.notify(target, reply);
-}
+    if (target_is_creature)
+        _sendCreatureAttackNotifications(damage, caller);
+    else
+        _sendCharacterAttackNotifications(damage, eluded, caller, target);
+} 
 
 void Game::useWeapon(const InstanceId caller, const InstanceId target) {
     if (!this->characters.count(caller)) {
@@ -552,14 +569,14 @@ void Game::useWeapon(const InstanceId caller, const InstanceId target) {
     }
 
     if (this->characters.count(target)) {
-        // Está atacando a un character.
-        _useWeaponOnCharacter(caller, target);
+        Character& attacked = this->characters.at(target);
+        _useWeapon(caller, target, &attacked, false);
         return;
     }
 
     if (this->creatures.count(target)) {
-        fprintf(stderr,
-                "Game::useWeapon: ataque a criaturas no implementado.\n");
+        Creature& attacked = this->creatures.at(target);
+        _useWeapon(caller, target, &attacked, true);
         return;
     }
 
@@ -737,11 +754,12 @@ void Game::drop(const InstanceId caller, const uint8_t n_slot,
 void Game::listConnectedPlayers(const InstanceId caller) {
     fprintf(stderr, "Comando list no implementado.\n");
 }
-//-----------------------------------------------------------------------
 
-//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
 // Getters de atributos
-//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 
 const Id Game::getMapId(const InstanceId caller) {
     if (!this->characters.count(caller)) {
@@ -751,4 +769,20 @@ const Id Game::getMapId(const InstanceId caller) {
     return this->characters.at(caller).getMapId();
 }
 
-//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+// Funciones auxiliares
+//-----------------------------------------------------------------------------
+
+const std::string _coordinatesToMapKey(int x, int y) {
+    return std::move(std::to_string(x) + "," + std::to_string(y));
+}
+
+void _mapKeyToCoordinates(const std::string& key, int& x, int& y) {
+    std::size_t delim = key.find(',');
+    x = std::stoi(key.substr(0, delim));
+    y = std::stoi(key.substr(delim + 1));
+}
+
+//-----------------------------------------------------------------------------

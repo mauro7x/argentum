@@ -74,6 +74,10 @@ const unsigned int Equipment::getDefensePoints(Character& defender) {
     return defense_points;
 }
 
+const bool Equipment::hasAWeaponEquipped() const {
+    return (this->container[WEAPON] != nullptr);
+}
+
 const bool Equipment::isWeaponHealing() const {
     if (!this->container[WEAPON])
         return false;

@@ -16,7 +16,6 @@ ItemsContainer::ItemsContainer() {
     Config<PotionCfg> potions;
     Config<OtherItemsCfg> others;
 
-    std::vector<Id> weapons_id;
     weapons.gatherIds(weapons_id);
 
     for (unsigned int i = 0; i < weapons_id.size(); ++i) {
@@ -26,7 +25,6 @@ ItemsContainer::ItemsContainer() {
                                 std::forward_as_tuple(new Weapon(weapons[id])));
     }
 
-    std::vector<Id> wands_id;
     wands.gatherIds(wands_id);
 
     for (unsigned int i = 0; i < wands_id.size(); ++i) {
@@ -37,7 +35,6 @@ ItemsContainer::ItemsContainer() {
                                     wands[id], spells[wands[id].spell_id])));
     }
 
-    std::vector<Id> defences_id;
     defences.gatherIds(defences_id);
 
     for (unsigned int i = 0; i < defences_id.size(); ++i) {
@@ -47,7 +44,6 @@ ItemsContainer::ItemsContainer() {
             std::forward_as_tuple(new Defence(defences[id])));
     }
 
-    std::vector<Id> potions_id;
     potions.gatherIds(potions_id);
 
     for (unsigned int i = 0; i < potions_id.size(); ++i) {
@@ -80,4 +76,20 @@ Item* ItemsContainer::operator[](const Id item_id) {
         throw Exception("Trying to acces an invalid item ID.");
 
     return this->container.at(item_id);
+}
+
+const std::vector<Id>& ItemsContainer::getWeaponsId() const {
+    return this->weapons_id;
+}
+
+const std::vector<Id>& ItemsContainer::getWandsId() const {
+    return this->wands_id;
+}
+
+const std::vector<Id>& ItemsContainer::getDefencesId() const {
+    return this->defences_id;
+}
+
+const std::vector<Id>& ItemsContainer::getPotionsId() const {
+    return this->potions_id;
 }

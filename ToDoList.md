@@ -45,6 +45,8 @@
 
 * Separar config.json en varios. (homeview_config.json, etc...). -Mau, 28/06.
 
+* Poder tomar elementos haciendo click en el tile que los contiene. -Santi ;)
+
 ---
 
 ## Common

@@ -1,5 +1,4 @@
 #include <math.h>
-
 #include <algorithm>
 #include <string>
 //-----------------------------------------------------------------------------
@@ -9,7 +8,7 @@
 #include <iostream>  //sacar
 //-----------------------------------------------------------------------------
 #define CRITICAL_ATTACK_DAMAGE_MODIFIER 2
-#define RATE 1000 / 30                  // ms.
+#define RATE 1000 / 30                  // ms
 #define TIME_TO_MOVE_A_TILE 200         // ms
 #define TIME_TO_UPDATE_ATTRIBUTES 1000  // ms
 
@@ -17,6 +16,7 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+
 Character::Character(const CharacterCfg& init_data, const RaceCfg& race,
                      const KindCfg& kind, MapContainer& map_container,
                      const Id init_map, const int init_x_coord,
@@ -58,9 +58,13 @@ Character::Character(const CharacterCfg& init_data, const RaceCfg& race,
 Character::~Character() {
     delete state;
 }
+
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+// Actualización de atributos
+//-----------------------------------------------------------------------------
+
 void Character::act(const unsigned int it) {
     if (is_moving) {
         _updateMovement(it);
@@ -156,6 +160,9 @@ void Character::stopMoving() {
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+// Modificación de maná y vida.
+//-----------------------------------------------------------------------------
+
 void Character::recoverHealth(const unsigned int points) {
     if (!points || !health)
         return;
@@ -180,9 +187,13 @@ void Character::consumeMana(const unsigned int points) {
     this->mana -= points;
     this->broadcast = true;
 }
+
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+// Manejo de items.
+//-----------------------------------------------------------------------------
+
 void Character::equip(unsigned int inventory_position) {
     unsigned int amount = 1;
     Item* item_to_equip =
@@ -235,8 +246,16 @@ Item* Character::dropItem(const unsigned int n_slot, unsigned int& amount) {
 
     return dropped_item;
 }
+
+void Character::dropAllItems(std::vector<DroppingSlot>& dropped_items) {
+    this->equipment.dropAll(dropped_items);
+    this->inventory.dropAll(dropped_items);
+}
+
 //-----------------------------------------------------------------------------
 
+//-----------------------------------------------------------------------------
+// Ataque y defensa.
 //-----------------------------------------------------------------------------
 
 void Character::setAttackCooldown(const unsigned int cooldown) {
@@ -254,58 +273,67 @@ void Character::doMagic() {
     }
 }
 
-const bool Character::attack(Character& attacked, int& damage) {
+void Character::_checkPriorToUseWeaponConditions(Attackable* target) const {
     // Delego si puedo atacar en mi estado.
     this->state->attack();
+
+    // Verifico si tiene arma de ataque.
+    if (!this->equipment.hasAWeaponEquipped())
+        throw CantAttackWithoutWeaponException();
 
     // Verifico cooldown de arma de ataque.
     if (this->attack_cooldown)
         throw AttackCooldownTimeNotElapsedException();
 
     // Verifico si alguno atacante o atacado está en zona segura.
-    if (this->position.isInSafeZone() || attacked.getPosition().isInSafeZone())
+    if (this->position.isInSafeZone() || target->getPosition().isInSafeZone())
         throw CantAttackInSafeZoneException();
 
-    const unsigned int weapon_range = this->equipment.getAttackRange();
-
-    // Si el arma es curativa, obtengo sus puntos y curo.
-    if (this->equipment.isWeaponHealing()) {
-        int healing_points = this->equipment.useAttackItem(*this);
-        attacked.recoverHealth(healing_points);
-
-        // Devuelvo valor negativo -> puntos curativos.
-        damage = -healing_points;
-        return false;
-    }
-
-    // Es un arma de ataque.
-
-    // Verifico que no se quiera hacer daño a sí mismo
-    if (this == &attacked)
-        throw CantAttackItselfException();
-
-    // Verifico si dado el estado del otro jugador puedo atacarlo.
-    attacked.beAttacked();
-
-    // Verificacion de diferencia de niveles entre jugadores y newbie.
-    if (attacked.isNewbie()) {
-        throw NewbiesCantBeAttackedException();
-    }
-
-    if (!(Formulas::canAttackByLevel(this->level.getLevel(),
-                                     attacked.getLevel())))
-        throw TooHighLevelDifferenceOnAttackException();
-
-    // Se trata de un ataque de daño.
     // Nos fijamos si el atacado está en el rango del arma.
     // Si no lo está, lanzamos excepción.
+    const unsigned int weapon_range = this->equipment.getAttackRange();
     const unsigned int distance =
-        this->position.getDistance(attacked.getPosition());
+        this->position.getDistance(target->getPosition());
 
     if (distance > weapon_range)
         throw OutOfRangeAttackException();
+}
 
-    // Está dentro del rango. Se define si el ataque es critico y se obtienen
+void Character::_checkPriorToUseAttackWeaponConditions(
+    Attackable* target) const {
+    // Verificación de que no se quiera hacer daño a sí mismo
+    if (this == target)
+        throw CantAttackItselfException();
+
+    // Verificación si dado el estado del otro jugador se puede atacarlo.
+    target->beAttacked();
+
+    // Verificación de si el jugador es newbie.
+    if (target->isNewbie())
+        throw NewbiesCantBeAttackedException();
+
+    // Verificación de diferencia de niveles entre jugadores.
+    const unsigned int target_level = target->getLevel();
+
+    if (target_level &&
+        !(Formulas::canAttackByLevel(this->level.getLevel(), target_level)))
+        throw TooHighLevelDifferenceOnAttackException();
+}
+
+const bool Character::_useHealingWeapon(Attackable* target, int& damage) {
+    // Si el arma es curativa, obtengo sus puntos y curo.
+    int healing_points = this->equipment.useAttackItem(*this);
+    target->recoverHealth(healing_points);
+
+    // Establezco valor negativo de daño -> puntos curativos.
+    damage = -healing_points;
+    return false;
+}
+
+const bool Character::_useAttackWeapon(Attackable* target, int& damage) {
+    _checkPriorToUseAttackWeaponConditions(target);
+
+    // Se define si el ataque es critico y se obtienen
     // los correspondientes puntos de daño.
     damage = this->equipment.useAttackItem(*this);
 
@@ -314,19 +342,29 @@ const bool Character::attack(Character& attacked, int& damage) {
         damage = damage * CRITICAL_ATTACK_DAMAGE_MODIFIER;
 
     // El atacado recibe el daño del ataque.
-    const bool eluded = attacked.receiveAttack(damage, critical_attack);
+    const bool eluded = !target->receiveAttack(damage, critical_attack);
 
-    // Actualizo exp.
-    this->level.onAttackUpdate(*this, damage, attacked.getLevel());
+    // Sumamos exp. de ataque.
+    this->level.onAttackUpdate(*this, damage, target->getLevel());
 
-    // Si murio, sumamos la exp. necesaria
-    if (!attacked.getHealth())
-        this->level.onKillUpdate(*this, attacked.getMaxHealth(),
-                                 attacked.getLevel());
+    // Si murió, sumamos la exp. de muerte.
+    if (!target->getHealth())
+        this->level.onKillUpdate(*this, target->getMaxHealth(),
+                                 target->getLevel());
 
     this->broadcast = true;
 
     return eluded;
+}
+
+const bool Character::useWeapon(Attackable* target, int& damage) {
+    _checkPriorToUseWeaponConditions(target);
+
+    if (this->equipment.isWeaponHealing())
+        return _useHealingWeapon(target, damage);
+
+    // Es un arma de ataque.
+    return _useAttackWeapon(target, damage);
 }
 
 const bool Character::receiveAttack(int& damage, const bool eludible) {
@@ -337,6 +375,7 @@ const bool Character::receiveAttack(int& damage, const bool eludible) {
     }
 
     const unsigned int defense_points = this->equipment.getDefensePoints(*this);
+
     damage = std::max(0, (int)(damage - defense_points));
 
     this->health = std::max(0, (int)(this->health - damage));
@@ -355,13 +394,12 @@ void Character::die() {
     this->broadcast = true;
 }
 
-void Character::dropAllItems(std::vector<DroppingSlot>& dropped_items) {
-    this->equipment.dropAll(dropped_items);
-    this->inventory.dropAll(dropped_items);
-}
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+// Obtención de estado.
+//-----------------------------------------------------------------------------
+
 const Position& Character::getPosition() const {
     return this->position;
 }
@@ -385,9 +423,13 @@ const bool Character::isNewbie() const {
 const Id Character::getMapId() const {
     return this->position.getMapId();
 }
+
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+// Control de broadcast.
+//-----------------------------------------------------------------------------
+
 const bool Character::mustBeBroadcasted() const {
     return this->broadcast;
 }
@@ -414,9 +456,11 @@ void Character::fillBroadcastData(PlayerData& data) const {
     // Llena equipment, helmet_id, armour_id, shield_id, weapon_id;
     this->equipment.fillBroadcastData(data);
 }
+
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+
 const char* InsufficientManaException::what() const noexcept {
     return "No tienes suficiente maná.";
 }
@@ -431,6 +475,10 @@ const char* CantAttackItselfException::what() const noexcept {
 
 const char* OutOfRangeAttackException::what() const noexcept {
     return "El jugador al que quieres atacar está fuera del rango de tu arma.";
+}
+
+const char* CantAttackWithoutWeaponException::what() const noexcept {
+    return "No puedes atacar sin arma.";
 }
 
 const char* NewbiesCantBeAttackedException::what() const noexcept {
@@ -448,9 +496,11 @@ const char* TooHighLevelDifferenceOnAttackException::what() const noexcept {
 const char* KindCantDoMagicException::what() const noexcept {
     return "Tu clase no puede lanzar hechizos.";
 }
+
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+
 void Character::debug() {
     std::cout << "**Character debug:**" << std::endl;
     // this->inventory.debug();
@@ -460,4 +510,5 @@ void Character::debug() {
     std::cout << "position: x = " << this->position.getX()
               << " y = " << this->position.getY() << std::endl;
 }
+
 //-----------------------------------------------------------------------------

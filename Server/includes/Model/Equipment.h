@@ -89,6 +89,9 @@ class Equipment {
      */
     const unsigned int getDefensePoints(Character& defender);
 
+    /* Devuelve si tiene un arma equipada o no */
+    const bool hasAWeaponEquipped() const;
+
     /* Devuelve si el arma equipada es curativa o no */
     const bool isWeaponHealing() const;
 
