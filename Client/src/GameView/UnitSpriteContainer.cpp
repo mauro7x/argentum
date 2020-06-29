@@ -78,6 +78,20 @@ void UnitSpriteContainer::loadMedia() {
     _loadSpritesFromJson(sprites["creature"], dirpath);
 }
 
+void UnitSpriteContainer::loadHeadsMedia() {
+    json sprites = JSON::loadJsonFile(UNIT_SPRITES_FILEPATH);
+
+    std::string dirpath = sprites["dirpath"];
+    _loadSpritesFromJson(sprites["pj"]["head"], dirpath);
+}
+
+void UnitSpriteContainer::loadBodiesMedia() {
+    json sprites = JSON::loadJsonFile(UNIT_SPRITES_FILEPATH);
+
+    std::string dirpath = sprites["dirpath"];
+    _loadSpritesFromJson(sprites["pj"]["body"], dirpath);
+}
+
 const UnitSprite& UnitSpriteContainer::get(const Id id) const {
     if (content.count(id) == 0) {
         throw Exception("Unknown sprite id: %u", id);

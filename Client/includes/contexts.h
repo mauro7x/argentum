@@ -8,7 +8,7 @@
  * hasta que decida salir del juego.
  */
 
-enum Context { HOME_CTX, CONNECTION_CTX, GAME_CTX, EXIT_CTX };
+enum Context { HOME_CTX, CONNECTION_CTX, SIGNUP_CTX, GAME_CTX, EXIT_CTX };
 
 //-----------------------------------------------------------------------------
 

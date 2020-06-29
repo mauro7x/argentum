@@ -81,18 +81,23 @@ void Client::_initComponents() {
 
 void Client::_launchHomeCtx() {
     fprintf(stderr, "Inicia HOME.\n");
-
     HomeView home_view(current_context, renderer, socket);
     home_view.run();
-
     fprintf(stderr, "Finaliza HOME.\n");
 }
 
 void Client::_launchConnectionCtx() {
     fprintf(stderr, "Inicia CONNECTION.\n");
-    ConnectionView connection_view(current_context, socket);
+    ConnectionView connection_view(current_context, renderer, socket);
     connection_view.run();
     fprintf(stderr, "Finaliza CONNECTION.\n");
+}
+
+void Client::_launchSignUpCtx() {
+    fprintf(stderr, "Inicia SIGNUP.\n");
+    SignUpView signup_view(current_context, renderer, socket);
+    signup_view.run();
+    fprintf(stderr, "Finaliza SIGNUP.\n");
 }
 
 void Client::_launchGameCtx() {
@@ -239,12 +244,13 @@ void Client::launch() {
                 break;
             }
 
-            case GAME_CTX: {
-                _launchGameCtx();
+            case SIGNUP_CTX: {
+                _launchSignUpCtx();
                 break;
             }
 
-            case EXIT_CTX: {
+            case GAME_CTX: {
+                _launchGameCtx();
                 break;
             }
 
@@ -254,7 +260,8 @@ void Client::launch() {
         }
     }
 
-    // salir ordenadamente
+    // Salir ordenadamente
+    socket.shutdown();
 }
 
 Client::~Client() {

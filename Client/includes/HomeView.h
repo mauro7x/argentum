@@ -7,7 +7,6 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-#include <iostream>
 #include <string>
 //-----------------------------------------------------------------------------
 
@@ -19,6 +18,8 @@
 //-----------------------------------------------------------------------------
 #include "SDL/Renderer.h"
 #include "SDL/Texture.h"
+#include "SDL/Widgets/Button.h"
+#include "SDL/Widgets/TextBox.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -29,23 +30,11 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-// Fuentes
-#define HOMEVIEW_INPUT_FONT FONT_CINZELBOLD_FP
-#define HOMEVIEW_CURSOR_FONT FONT_SANFORD_FP
-#define HOMEVIEW_INFO_FONT FONT_IMAGINE_FP
-
-// Lógica
-#define HOMEVIEW_MAX_INPUT_SIZE 22
-#define HOMEVIEW_INPUT_TEXTBOX_X_OFFSET 5
-#define HOMEVIEW_CURSOR_TIME_ANIMATION 500
-#define HOMEVIEW_ITERATIONS_TO_SWITCH_CURSOR \
-    (HOMEVIEW_CURSOR_TIME_ANIMATION / RATE)
-
-// Colores
-#define HOMEVIEW_FONT_COLOR \
-    { 0, 0, 0, 255 }
-#define HOMEVIEW_ERROR_COLOR \
-    { 219, 4, 4, 255 }
+// Mensajes
+#define HOMEVIEW_INVALID_INPUT_MSG "DEBES COMPLETAR AMBOS CAMPOS"
+#define HOMEVIEW_CONNECTING_MSG "INTENTANDO ESTABLECER CONEXION..."
+#define HOMEVIEW_ERROR_CONNECTING_MSG "NO SE PUDO ESTABLECER CONEXION"
+#define HOMEVIEW_MAX_INPUT_MSG "SE ALCANZO EL LIMITE DE CARACTERES"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -62,22 +51,14 @@ class HomeView : public ConstantRateFunc {
     SocketWrapper& socket;
 
     // Flags internos
-    bool hostname_active = false;
-    bool port_active = false;
-    bool connect_button_over = false;
     bool show_cursor = false;
-    int cursor_cooldown = HOMEVIEW_ITERATIONS_TO_SWITCH_CURSOR;
+    int cursor_cooldown = VIEWS_ITERATIONS_TO_SWITCH_CURSOR;
 
-    // Contenido
-    std::string current_hostname;
-    std::string current_port;
+    // Widgets
+    Button connect_btn;
+    TextBox hostname_txtbx, port_txtbx;
 
     // Offsets de renderizado
-    SDL_Rect hostname_box = {0};
-    SDL_Point hostname_pos = {0};
-    SDL_Rect port_box = {0};
-    SDL_Point port_pos = {0};
-    SDL_Rect connect_box = {0};
     SDL_Rect info_box = {0};
     SDL_Point info_pos = {0};
 
@@ -90,15 +71,9 @@ class HomeView : public ConstantRateFunc {
 
     // Texturas a renderizar
     Texture bg;
-    Texture hostname;
-    Texture hostname_inactive_box;
-    Texture hostname_active_box;
-    Texture port;
-    Texture port_inactive_box;
-    Texture port_active_box;
     Texture cursor;
-    Texture connect_button;
-    Texture connect_button_pressed;
+
+    // Texturas dinámicas
     Texture info_msg;
 
     //-----------------------------------------------------------------------------

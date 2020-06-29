@@ -166,7 +166,12 @@ void ClientConnection::stop() {
     notifications.close();
 
     // Para detener al receiver
-    peer.shutdown();
+    try {
+        peer.shutdown();
+    } catch (const Exception& e) {
+        fprintf(stderr, "CLIENTE %i: error in socket::shutdown. Aborting.\n",
+                id);
+    }
     peer.close();
 }
 

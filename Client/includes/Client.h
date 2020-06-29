@@ -41,6 +41,7 @@
 #include "GameModel/Receiver.h"
 #include "GameView/GameView.h"
 #include "HomeView.h"
+#include "SignUpView.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -71,6 +72,7 @@ class Client {
 
     void _launchHomeCtx();
     void _launchConnectionCtx();
+    void _launchSignUpCtx();
     void _launchGameCtx();
 
     //-----------------------------------------------------------------------------
