@@ -12,6 +12,6 @@ float RandomNumberGenerator::operator()(float min,
     // Agrego seed al generador
     std::mt19937 generator(rd());
     // Defino el rango
-    std::uniform_int_distribution<> distribution(min, max);
+    std::uniform_real_distribution<> distribution(min, max);
     return distribution(generator);
 }
