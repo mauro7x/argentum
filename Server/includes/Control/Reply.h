@@ -1,5 +1,5 @@
-#ifndef __NOTIFICATION_REPLY_H
-#define __NOTIFICATION_REPLY_H
+#ifndef __REPLY_H__
+#define __REPLY_H__
 
 //-----------------------------------------------------------------------------
 #include <string>
@@ -18,17 +18,17 @@
 /* Notificación de reply en carga de responder las respuestas del servidor
  * respecto a los comandos recibidos*/
 
-class NotificationReply : public Notification {
+class Reply : public Notification {
    private:
     uint8_t message_type;
     std::string reply;
 
    public:
     /* Constructor por defult */
-    NotificationReply();
+    Reply();
 
     /* Constructor */
-    NotificationReply(uint8_t message_type, std::string reply);
+    Reply(uint8_t message_type, std::string reply);
 
     //-----------------------------------------------------------------------------
 
@@ -38,7 +38,7 @@ class NotificationReply : public Notification {
     //-----------------------------------------------------------------------------
 
     /* Destructor */
-    virtual ~NotificationReply() {}
+    virtual ~Reply() {}
 };
 
-#endif  //__NOTIFICATION_REPLY_H
+#endif  //__REPLY_H__

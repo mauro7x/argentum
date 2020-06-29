@@ -9,7 +9,7 @@
 #include "../../includes/Control/ActiveClients.h"
 #include "../../includes/Control/EntityBroadcast.h"
 #include "../../includes/Control/ItemBroadcast.h"
-#include "../../includes/Control/NotificationReply.h"
+#include "../../includes/Control/Reply.h"
 //-----------------------------------------------------------------------------
 #include "../../includes/Model/Game.h"
 //-----------------------------------------------------------------------------
@@ -305,7 +305,7 @@ void Game::actCharacters(const int it) {
             it_characters->second.act(it);
         } catch (const CollisionWhileMovingException& e) {
             it_characters->second.stopMoving();
-            Notification* reply = new NotificationReply(ERROR_MSG, e.what());
+            Notification* reply = new Reply(ERROR_MSG, e.what());
             active_clients.notify(it_characters->first, reply);
         }
 
@@ -503,13 +503,13 @@ void Game::_sendCharacterAttackNotifications(const int damage,
     }
 
     Notification* reply =
-        new NotificationReply(INFO_MSG, msg_to_attacker.c_str());
+        new Reply(INFO_MSG, msg_to_attacker.c_str());
     active_clients.notify(caller, reply);
 
     if (caller == target)
         return;
 
-    reply = new NotificationReply(INFO_MSG, msg_to_attacked.c_str());
+    reply = new Reply(INFO_MSG, msg_to_attacked.c_str());
     active_clients.notify(target, reply);
 }
 
@@ -519,7 +519,7 @@ void Game::_sendCreatureAttackNotifications(const int damage,
                                   std::to_string(damage) + " de daño.";
 
     Notification* reply =
-        new NotificationReply(INFO_MSG, msg_to_attacker.c_str());
+        new Reply(INFO_MSG, msg_to_attacker.c_str());
     active_clients.notify(caller, reply);
 }
 
@@ -544,7 +544,7 @@ void Game::_useWeapon(const InstanceId caller, const InstanceId target,
          * AttackCooldownTimeNotElapsedException,
          * CantAttackItselfException
          */
-        Notification* reply = new NotificationReply(ERROR_MSG, e.what());
+        Notification* reply = new Reply(ERROR_MSG, e.what());
         active_clients.notify(caller, reply);
         return;
     }
@@ -593,7 +593,7 @@ void Game::equip(const InstanceId caller, const uint8_t n_slot) {
     try {
         character.equip(n_slot);
     } catch (const InvalidInventorySlotNumberException& e) {
-        Notification* reply = new NotificationReply(ERROR_MSG, e.what());
+        Notification* reply = new Reply(ERROR_MSG, e.what());
         active_clients.notify(caller, reply);
         return;
     }
@@ -612,7 +612,7 @@ void Game::unequip(const InstanceId caller, const uint8_t n_slot) {
         character.unequip(n_slot);
     } catch (const std::exception& e) {
         // FullInventoryException e InvalidEquipmentSlotNumberException
-        Notification* reply = new NotificationReply(ERROR_MSG, e.what());
+        Notification* reply = new Reply(ERROR_MSG, e.what());
         active_clients.notify(caller, reply);
         return;
     }
@@ -687,7 +687,7 @@ void Game::take(const InstanceId caller) {
         character.takeItem(this->items[item_id], amount);
     } catch (const std::exception& e) {
         // FullInventoryException, StateCantTakeItemException
-        Notification* reply = new NotificationReply(ERROR_MSG, e.what());
+        Notification* reply = new Reply(ERROR_MSG, e.what());
         active_clients.notify(caller, reply);
         return;
     }
@@ -711,7 +711,7 @@ void Game::drop(const InstanceId caller, const uint8_t n_slot,
     try {
         dropped = character.dropItem(n_slot, amount);
     } catch (const InvalidInventorySlotNumberException& e) {
-        Notification* reply = new NotificationReply(ERROR_MSG, e.what());
+        Notification* reply = new Reply(ERROR_MSG, e.what());
         active_clients.notify(caller, reply);
         return;
     }
@@ -723,7 +723,7 @@ void Game::drop(const InstanceId caller, const uint8_t n_slot,
         std::string reply_msg =
             "Se dropearon únicamente " + std::to_string(amount) + " items.";
         Notification* reply =
-            new NotificationReply(INFO_MSG, reply_msg.c_str());
+            new Reply(INFO_MSG, reply_msg.c_str());
         active_clients.notify(caller, reply);
     }
 
@@ -737,7 +737,7 @@ void Game::drop(const InstanceId caller, const uint8_t n_slot,
     } catch (const ItemCouldNotBeAddedException& e) {
         // No se pudo efectuar el dropeo. Le devuelvo el item al character.
         character.takeItem(dropped, amount);
-        Notification* reply = new NotificationReply(ERROR_MSG, e.what());
+        Notification* reply = new Reply(ERROR_MSG, e.what());
         active_clients.notify(caller, reply);
         return;
     }
