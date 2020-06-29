@@ -29,6 +29,8 @@ class State {
     virtual void takeItem() const = 0;
 
     void fillBroadcastData(PlayerData& data);
+
+    void fillPersistenceData(CharacterCfg& data);
 };
 
 class StateFactory {
@@ -87,8 +89,8 @@ class AttackerStateCantAttackException : public std::exception {
 };
 
 class StateCantTakeItemException : public std::exception {
-    public:
-     virtual const char* what() const noexcept;
+   public:
+    virtual const char* what() const noexcept;
 };
 
 #endif

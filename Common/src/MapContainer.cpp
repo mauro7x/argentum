@@ -55,7 +55,7 @@ std::vector<Id> MapContainer::getMapsId() const {
         ++it;
     }
 
-    return std::move(maps_id);
+    return maps_id;
 }
 
 const Id MapContainer::getCharacterSpawningMap() const {

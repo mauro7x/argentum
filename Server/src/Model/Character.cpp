@@ -1,4 +1,5 @@
 #include <math.h>
+
 #include <algorithm>
 #include <string>
 //-----------------------------------------------------------------------------
@@ -7,11 +8,6 @@
 //-----------------------------------------------------------------------------
 #include <iostream>  //sacar
 //-----------------------------------------------------------------------------
-#define CRITICAL_ATTACK_DAMAGE_MODIFIER 2
-#define RATE 1000 / 30                  // ms
-#define TIME_TO_MOVE_A_TILE 200         // ms
-#define TIME_TO_UPDATE_ATTRIBUTES 1000  // ms
-
 #define DEFAULT_MOVING_ORIENTATION DOWN_ORIENTATION
 //-----------------------------------------------------------------------------
 
@@ -30,8 +26,7 @@ Character::Character(const CharacterCfg& init_data, const RaceCfg& race,
       constitution(kind.constitution + race.constitution),
       strength(kind.strength + race.strength),
       agility(kind.agility + race.agility),
-
-      race(race),
+      race(race, init_data.head_id, init_data.body_id),
       kind(kind),
 
       state(StateFactory::newState(init_data.state, this->race)),
@@ -47,10 +42,11 @@ Character::Character(const CharacterCfg& init_data, const RaceCfg& race,
       is_moving(false),
       moving_cooldown(0),
       attribute_update_time_elapsed(0),
-
       attack_cooldown(0),
-
       broadcast(false) {
+    std::string name = init_data.nickname;
+    std::strncpy(nickname, name.c_str(),
+                 sizeof(char) * NICKNAME_MAX_LENGTH - 1);
     this->updateLevelDependantAttributes();  // Set max_health, max_mana,
                                              // max_inventory_gold.
 }
@@ -123,8 +119,12 @@ void Character::_updateMovement(const unsigned int it) {
 
         this->position.move();
 
-        this->moving_cooldown += TIME_TO_MOVE_A_TILE;
+        this->moving_cooldown += UNIT_TIME_TO_MOVE;
     }
+}
+
+std::string Character::getNickname() {
+    return nickname;
 }
 
 //-----------------------------------------------------------------------------
@@ -441,9 +441,9 @@ void Character::beBroadcasted() {
 void Character::fillBroadcastData(PlayerData& data) const {
     // Llena map_id, x_tile, y_tile, orientation.
     this->position.fillBroadcastData(data.basic_data);
-
     this->state->fillBroadcastData(data);
 
+    data.nickname = this->nickname;
     data.health = this->health;
     data.max_health = this->max_health;
     data.mana = this->mana;
@@ -457,6 +457,29 @@ void Character::fillBroadcastData(PlayerData& data) const {
     this->equipment.fillBroadcastData(data);
 }
 
+void Character::fillPersistenceData(CharacterCfg& data) const {
+    // llenar map x_tile, y_tile;
+    this->position.fillPersistenceData(data);
+    this->state->fillPersistenceData(data);
+    std::string name = this->nickname;
+    std::strncpy(data.nickname, name.c_str(),
+                 sizeof(char) * NICKNAME_MAX_LENGTH - 1);
+    data.race = this->race.id;
+    data.kind = this->kind.id;
+
+    // aca verifica el estado del character, hay que mejorar!
+    if (!this->health) {
+        data.state = DEAD;
+    } else {
+        data.state = ALIVE;
+    }
+    this->level.fillPersistenceData(data);
+    this->equipment.fillPersistenceData(data);
+    this->inventory.fillPersistenceData(data);
+    data.health = this->health;
+    data.mana = this->mana;
+    data.new_created = false;
+}
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------

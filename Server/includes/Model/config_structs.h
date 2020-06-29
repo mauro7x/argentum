@@ -4,6 +4,7 @@
 //-----------------------------------------------------------------------------
 #include <cstdint>
 #include <string>
+#include <vector>
 
 #include "../../../Common/includes/Inventory.h"
 #include "../../../Common/includes/Orientation.h"
@@ -23,6 +24,7 @@ enum PotionType { HEALTH, MANA };
 //-----------------------------------------------------------------------------
 
 #define AMOUNT_OF_DEFFENCE_TYPES 3
+#define NICKNAME_MAX_LENGTH 8
 
 //-----------------------------------------------------------------------------
 // Objetos
@@ -90,11 +92,10 @@ struct OtherItemsCfg {
 struct RaceCfg {
     Id id;
     std::string name;
-
-    Id head_id;
-    Id body_id;
     Id dead_head_id;
     Id dead_body_id;
+    std::vector<Id> head_ids;
+    std::vector<Id> body_ids;
 
     uint8_t max_health_factor;
     uint8_t max_mana_factor;
@@ -155,8 +156,14 @@ enum StateType { DEAD, ALIVE };
 
 //-----------------------------------------------------------------------------
 struct CharacterCfg {
+    Id map;
+    int x_tile, y_tile;
+    char nickname[NICKNAME_MAX_LENGTH] = {0};
+
     Id race;
     Id kind;
+    Id head_id;
+    Id body_id;
 
     StateType state;
 
@@ -169,6 +176,7 @@ struct CharacterCfg {
     uint32_t excess_gold;
     uint32_t level;
     uint32_t exp;
+    bool new_created;
 };
 
 struct CreatureCfg {

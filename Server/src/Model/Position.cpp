@@ -80,6 +80,13 @@ void Position::fillBroadcastData(UnitData& data) const {
     data.orientation = this->orientation;
 }
 
+void Position::fillPersistenceData(CharacterCfg& data) const {
+    data.map = this->map;
+    data.x_tile = this->x;
+    data.y_tile = this->y;
+}
+
+
 const char* CollisionWhileMovingException::what() const noexcept {
     return "No puedes moverte en esa dirección.";
 }

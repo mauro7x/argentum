@@ -426,8 +426,8 @@ void ConnectionView::_handlePlayButtonPressed() {
 
     // INTENTAR CONECTAR CON EL SERVER
     // (mandar msj de login con username y password)
-    current_context = GAME_CTX;
-    quit();
+    // current_context = GAME_CTX;
+    // quit();
 }
 
 void ConnectionView::_handleSignUpButtonPressed() {

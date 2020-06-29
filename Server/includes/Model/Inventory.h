@@ -111,7 +111,7 @@ class Inventory {
     void addGold(const uint32_t amount);
 
     /*
-     * Vacía el inventario, dropeando todos los items en el vector 
+     * Vacía el inventario, dropeando todos los items en el vector
      * recibido por parámetro.
      */
     void dropAll(std::vector<DroppingSlot>& dropped_items);
@@ -121,6 +121,8 @@ class Inventory {
      * inventory de PlayerData para su broadcast.
      */
     void fillBroadcastData(PlayerData& data) const;
+
+    void fillPersistenceData(CharacterCfg& data) const;
 };
 
 class FullInventoryException : public std::exception {

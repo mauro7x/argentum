@@ -22,7 +22,7 @@ Identificas el mensaje con el primer byte recibido (opcode), y para cada caso se
 | 1 | Broadcast | S -> C | `TYPE (1) + ...` |
 | 128 | Comando | C -> S | `TYPE (1) + ...` |
 | 129 | Sign-in | C -> S | `USER_LENGTH (4) + USERNAME (USER_LENGTH) + PASS_LENGTH (4) + PASSWORD (PASS_LENGTH)` |
-| 130 | Sign-up | C -> S | `USER_LENGTH (4) + USERNAME (USER_LENGTH) + PASS_LENGTH (4) + PASSWORD (PASS_LENGTH) + RACE (1) + KIND (1)` |
+| 130 | Sign-up | C -> S | `USER_LENGTH (4) + USERNAME (USER_LENGTH) + PASS_LENGTH (4) + PASSWORD (PASS_LENGTH) + RACE (4) + KIND (4) + HEAD_ID (4) + BODY_ID (4)` |
 
 ---
 
