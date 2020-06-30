@@ -13,6 +13,19 @@ Message::Message(std::string from_nickname, std::string message,
     : from_nickname(from_nickname),
       message(message),
       message_type(message_type) {}
+    
+Message::Message(const Message& other) {
+    this->from_nickname = other.from_nickname;
+    this->message = other.message;
+    this->message_type = other.message_type;
+}
+
+Message& Message::operator=(const Message& other) {
+    this->from_nickname = other.from_nickname;
+    this->message = other.message;
+    this->message_type = other.message_type;
+    return *this;
+}
 
 bool Message::send(const InstanceId sender, const SocketWrapper& peer) {
     try {

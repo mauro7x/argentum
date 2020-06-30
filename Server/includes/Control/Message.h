@@ -14,8 +14,8 @@ receiver corresponde*/
 
 class Message : public Notification {
    private:
-    const std::string from_nickname;
-    const std::string message;
+    std::string from_nickname;
+    std::string message;
 
     MessageType message_type;
 
@@ -23,6 +23,12 @@ class Message : public Notification {
     /* Constructor */
     Message(const std::string from_nickname, const std::string message,
             const MessageType message_type);
+
+    /* Habilitamos el constructor por copia. */
+    Message(const Message& other);
+
+    /* Habilitamos el operador= para copia.*/
+    Message& operator=(const Message& other);
 
     //-----------------------------------------------------------------------------
 
