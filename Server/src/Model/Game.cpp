@@ -786,9 +786,15 @@ void Game::sendPrivateMessage(const InstanceId caller,
     const std::string& caller_nickname =
         this->characters.at(caller).getNickname();
 
-    Notification* notification =
+    Notification* receiver_notification =
         new Message(caller_nickname, message, PRIVATE_MSG);
-    this->active_clients.notify(destinatary_id, notification);
+    this->active_clients.notify(destinatary_id, receiver_notification);
+
+    std::string caller_msg = "A " + to_nickname;
+
+    Notification* sender_notification =
+        new Message(caller_msg, message, PRIVATE_MSG);
+    this->active_clients.notify(caller, sender_notification);
 }
 
 void Game::sendGeneralMessage(const InstanceId caller,
