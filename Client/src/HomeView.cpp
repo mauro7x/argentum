@@ -356,6 +356,9 @@ void HomeView::_handleEvent(const SDL_Event& e) {
             break;
         }
     }
+
+    // Propagamos el evento al mixer
+    mixer.handleEvent(e);
 }
 
 void HomeView::_handleConnectButtonPressed() {
@@ -450,11 +453,12 @@ void HomeView::_switchCursorVisibility() {
 //-----------------------------------------------------------------------------
 // API Pública
 
-HomeView::HomeView(Context& current_context, Renderer& renderer,
-                   SocketWrapper& socket)
+HomeView::HomeView(Context& current_context, const Renderer& renderer,
+                   Mixer& mixer, SocketWrapper& socket)
     : ConstantRateFunc(RATE),
       current_context(current_context),
       renderer(renderer),
+      mixer(mixer),
       socket(socket) {
     _init();
     _loadMedia();

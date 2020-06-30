@@ -1,10 +1,8 @@
 {
     "music": {
-        "home_fp": "../Assets/Audio/home.wav",
-        "maps": {
-            "dirpath": "../Assets/Audio/Maps/",
-            "quantity": 1
-        }
+        "dirpath": "../Assets/Audio/Music/",
+        "extension": ".mp3",
+        "songs": 4
     },
     "chunks": {}
 }

@@ -64,16 +64,15 @@ void Client::_initComponents() {
     scale_factor_h = (float)new_h / original_h;
 
     /* Iniciamos la ventana */
-    {
-        std::string title = config["window"]["title"];
-        window.init(fullscreen, new_w, new_h, title.c_str());
-    }
+    std::string title = config["window"]["title"];
+    window.init(fullscreen, new_w, new_h, title.c_str());
 
     /* Iniciamos el renderer */
-    {
-        bool vsync = config["renderer"]["vsync"];
-        renderer.init(vsync, scale_factor_w, scale_factor_h);
-    }
+    bool vsync = config["renderer"]["vsync"];
+    renderer.init(vsync, scale_factor_w, scale_factor_h);
+
+    /* Inicializamos el mixer */
+    mixer.init();
 }
 
 //-----------------------------------------------------------------------------
@@ -81,7 +80,8 @@ void Client::_initComponents() {
 
 void Client::_launchHomeCtx() {
     fprintf(stderr, "Inicia HOME.\n");
-    HomeView home_view(current_context, renderer, socket);
+    HomeView home_view(current_context, renderer, mixer, socket);
+    mixer.playMusic(true);
     home_view.run();
     fprintf(stderr, "Finaliza HOME.\n");
 }
