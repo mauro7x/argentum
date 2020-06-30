@@ -47,7 +47,6 @@ void Database::_persistPlayerInfo(const std::string& username) {
     // Lo guardamos al final
     std::ofstream file_info(PLAYER_INFO_FILEPATH,
                             std::fstream::app | std::fstream::binary);
-    // file_info.seekp(0, std::fstream::end);  // no debería ser necesario
     file_info.write(reinterpret_cast<char*>(&player_info), sizeof(player_info));
     file_info.close();
 }
@@ -133,7 +132,6 @@ void Database::init() {
         file_info.seekg(0, std::fstream::end);
         size_t size = file_info.tellg();
         // Chequeamos que sea multiplo del size que necesitamos
-
         if ((size % sizeof(PlayerInfo))) {
             fprintf(stderr, "Debug (info_data) | size: %lu, sizeof: %lu\n",
                     size, sizeof(PlayerInfo));
@@ -220,7 +218,6 @@ ConnectionAckType Database::signUp(const std::string& username,
 
     std::strncpy(new_data.password, password.c_str(),
                  sizeof(new_data.password) - 1);
-    // new_data.password[sizeof(data_index.at(username).password) - 1] = 0;
 
     _persistPlayerInfo(username);
     _createDataInicial(username, race, kind, head_id, body_id, character_data);
