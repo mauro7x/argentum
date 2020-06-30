@@ -15,8 +15,8 @@
 
 class SendPMCommand : public Command {
    private:
-    const std::string& receiver;
-    const std::string& content;
+    const std::string receiver;
+    const std::string content;
 
    public:
     /* Constructor */
