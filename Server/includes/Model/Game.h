@@ -77,6 +77,11 @@ class Game {
     //--------------------------------------------------------------------------
 
     //--------------------------------------------------------------------------
+    // Game entities
+    //--------------------------------------------------------------------------
+    int data_persist_cooldown;
+    //--------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     // Métodos de broadcast
     //--------------------------------------------------------------------------
 
@@ -255,6 +260,10 @@ class Game {
      */
     void spawnNewCreatures(const int it);
 
+    /*
+     * Guardar los datos del jugador periodicamente segun TIME_TO_SAVE_DATA.
+     */
+    void persistPeriodicData(Database& database, const int it);
     /*
      * Actualiza el tiempo de vida de los items droppeados en el mapa,
      * y si alguno de ellos llega a cero los elimina del mapa.

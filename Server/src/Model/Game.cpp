@@ -20,7 +20,10 @@
 //-----------------------------------------------------------------------------
 
 Game::Game(ActiveClients& active_clients)
-    : bank(items), next_instance_id(FIRST_INSTANCE_ID), active_clients(active_clients) {
+    : bank(items),
+      next_instance_id(FIRST_INSTANCE_ID),
+      active_clients(active_clients),
+      data_persist_cooldown(TIME_TO_PERSIST_DATA) {
     map_container.loadMaps();
 
     std::vector<Id> maps_id = std::move(this->map_container.getMapsId());
@@ -354,6 +357,21 @@ void Game::spawnNewCreatures(const int it) {
         }
 
         ++iterator;
+    }
+}
+
+void Game::persistPeriodicData(Database& database, const int it) {
+    std::unordered_map<InstanceId, Character>::iterator it_characters =
+        this->characters.begin();
+    data_persist_cooldown -= it * RATE;
+    if (data_persist_cooldown <= 0) {
+        while (it_characters != this->characters.end()) {
+            CharacterCfg character_data = {};
+            it_characters->second.fillPersistenceData(character_data);
+            database.persistPlayerData(character_data, false);
+            ++it_characters;
+        }
+        data_persist_cooldown = TIME_TO_PERSIST_DATA;
     }
 }
 

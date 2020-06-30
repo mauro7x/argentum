@@ -75,6 +75,7 @@ void Engine::_loopIteration(int it) {
     game.actCharacters(it);
     game.actCreatures(it);
     game.spawnNewCreatures(it);
+    game.persistPeriodicData(database, it);
     game.updateDroppedItemsLifetime(it);
     _processFinishedConnections();
 }

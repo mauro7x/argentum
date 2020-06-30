@@ -26,7 +26,7 @@ void Database::_fillInfo() {
                            std::forward_as_tuple(player_info.index));
 
         DataIndex& new_data_idx = data_index.at(player_info.username);
-        std::strncpy(new_data_idx.password, player_info.password,
+        std::memcpy(new_data_idx.password, player_info.password,
                      sizeof(new_data_idx.password) - 1);
 
         size_actual += sizeof(player_info);
@@ -40,7 +40,7 @@ void Database::_persistPlayerInfo(const std::string& username) {
     // Llenamos los campos
     std::strncpy(player_info.username, username.c_str(),
                  sizeof(player_info.username) - 1);
-    std::strncpy(player_info.password, data_index.at(username).password,
+    std::memcpy(player_info.password, data_index.at(username).password,
                  sizeof(player_info.password) - 1);
     player_info.index = file_pointer;
 
