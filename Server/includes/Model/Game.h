@@ -12,6 +12,8 @@
 #include "../../includes/Control/Notification.h"
 #include "../defs.h"
 //-----------------------------------------------------------------------------
+#include "Bank.h"
+#include "BankAccount.h"
 #include "Character.h"
 #include "Config.h"
 #include "Creature.h"
@@ -44,8 +46,11 @@ class Game {
     //--------------------------------------------------------------------------
     MapContainer map_container;
     ItemsContainer items;
+
     std::unordered_map<InstanceId, Character> characters;
     std::unordered_map<InstanceId, Creature> creatures;
+
+    Bank bank;
     //--------------------------------------------------------------------------
 
     //--------------------------------------------------------------------------
@@ -308,9 +313,8 @@ class Game {
     void sendPrivateMessage(const InstanceId caller,
                             const std::string to_nickname,
                             const std::string message);
-    
-    void sendGeneralMessage(const InstanceId caller,
-                            const std::string message);
+
+    void sendGeneralMessage(const InstanceId caller, const std::string message);
 
     //-------------------------------------------------------------------------
 

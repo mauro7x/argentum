@@ -20,7 +20,7 @@
 //-----------------------------------------------------------------------------
 
 Game::Game(ActiveClients& active_clients)
-    : next_instance_id(FIRST_INSTANCE_ID), active_clients(active_clients) {
+    : bank(items), next_instance_id(FIRST_INSTANCE_ID), active_clients(active_clients) {
     map_container.loadMaps();
 
     std::vector<Id> maps_id = std::move(this->map_container.getMapsId());
