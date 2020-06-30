@@ -117,8 +117,9 @@ void Player::update(const PlayerData& updated_data) {
 
     /* Verificamos si hay que modificar la info */
     if (level != updated_data.level) {
-        info_level.loadFromRenderedText(g_renderer, level_font,
-                                        "Nivel " + std::to_string(level));
+        info_level.loadFromRenderedText(
+            g_renderer, level_font,
+            "Nivel " + std::to_string(updated_data.level));
     }
 
     /* Actualizamos la data */
