@@ -1,17 +1,19 @@
 #ifndef __EQUIPMENT_H__
 #define __EQUIPMENT_H__
-
+//-----------------------------------------------------------------------------
 #include <array>
 #include <vector>
-
+//-----------------------------------------------------------------------------
 #include "../../../Common/includes/DataStructs.h"
 #include "../../../Common/includes/Inventory.h"
 #include "ItemsContainer.h"
 #include "Wearable.h"
 #include "config_structs.h"
-
+//-----------------------------------------------------------------------------
+#define FIST_ID 1005
+//-----------------------------------------------------------------------------
 class Character;  // Forward declaration p/evitar circular dependences.
-
+//-----------------------------------------------------------------------------
 /*
  * Contiene los items con los que el jugador
  * esta equipado.
@@ -24,6 +26,7 @@ class Character;  // Forward declaration p/evitar circular dependences.
 class Equipment {
    private:
     std::array<Wearable*, N_WEARABLE_ITEMS> container;
+    Wearable* fist;
 
    public:
     Equipment(const EquipmentData& init_data, ItemsContainer& items_container);

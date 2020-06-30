@@ -4,11 +4,9 @@
 
 #include "../../includes/Model/Character.h"
 
-#define FIST_DAMAGE 20
-#define FIST_RANGE 1
-
 Equipment::Equipment(const EquipmentData& init_data,
-                     ItemsContainer& items_container) {
+                     ItemsContainer& items_container)
+    : fist((Wearable*)items_container[FIST_ID]) {
     // Inicializo array de wearables con los datos o nullptr.
     for (unsigned int i = 0; i < container.size(); ++i) {
         if (!init_data[i]) {
@@ -50,14 +48,14 @@ void Equipment::dropAll(std::vector<DroppingSlot>& dropped_items) {
 
 const unsigned int Equipment::useAttackItem(Character& attacker) {
     if (!this->container[WEAPON]) {
-        return FIST_DAMAGE;
+        return fist->use(attacker);
     }
     return this->container[WEAPON]->use(attacker);
 }
 
 const unsigned int Equipment::getAttackRange() const {
     if (!this->container[WEAPON]) {
-        return FIST_RANGE;
+        return fist->getRange();
     }
     return this->container[WEAPON]->getRange();
 }

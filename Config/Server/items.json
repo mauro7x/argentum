@@ -44,6 +44,15 @@
             "min_damage": 40,
             "max_damage": 80,
             "cooldown": 2000
+        },
+        {
+            "id": 1005,
+            "name": "Puño",
+            "price": 0,
+            "range": 1,
+            "min_damage": 10,
+            "max_damage": 20,
+            "cooldown": 500
         }
     ],
     "wands": [

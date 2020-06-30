@@ -9,7 +9,6 @@
 #include <iostream>  //sacar
 //-----------------------------------------------------------------------------
 #define DEFAULT_MOVING_ORIENTATION DOWN_ORIENTATION
-#define FIST_COOLDOWN 500
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -348,7 +347,7 @@ const bool Character::_useHealingWeapon(Attackable* target, int& damage) {
 const bool Character::_useAttackWeapon(Attackable* target, int& damage) {
     _checkPriorToUseAttackWeaponConditions(target);
 
-    // Obtenemos el danio del arma. Si no, usa el puño.
+    // Obtenemos el danio del arma.
     damage = this->equipment.useAttackItem(*this);
 
     // Se define si el ataque es critico
@@ -366,9 +365,6 @@ const bool Character::_useAttackWeapon(Attackable* target, int& damage) {
     if (!target->getHealth())
         this->level.onKillUpdate(*this, target->getMaxHealth(),
                                  target->getLevel());
-
-    if (!this->equipment.hasAWeaponEquipped())
-        setAttackCooldown(FIST_COOLDOWN);
 
     this->broadcast = true;
 
