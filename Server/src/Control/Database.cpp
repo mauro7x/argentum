@@ -74,7 +74,10 @@ void Database::_createInitialData(const std::string& username, Id race, Id kind,
         InventorySlot({0, 0})};
     character_data.health =
         races[race].initial_health + kinds[kind].initial_health;
-    character_data.mana = races[race].initial_health + kinds[kind].initial_mana;
+    character_data.mana =
+        (kinds[kind].initial_mana)
+            ? races[race].initial_mana + kinds[kind].initial_mana
+            : 0;
     character_data.safe_gold = 0;
     character_data.excess_gold = 0;
     character_data.level = 1;
