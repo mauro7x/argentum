@@ -26,6 +26,7 @@ Character::Character(const CharacterCfg& init_data, const RaceCfg& race,
       constitution(kind.constitution + race.constitution),
       strength(kind.strength + race.strength),
       agility(kind.agility + race.agility),
+      nickname(init_data.nickname),
       race(race, init_data.head_id, init_data.body_id),
       kind(kind),
 
@@ -44,9 +45,6 @@ Character::Character(const CharacterCfg& init_data, const RaceCfg& race,
       attribute_update_time_elapsed(0),
       attack_cooldown(0),
       broadcast(false) {
-    std::string name = init_data.nickname;
-    std::strncpy(nickname, name.c_str(),
-                 sizeof(char) * NICKNAME_MAX_LENGTH - 1);
     this->updateLevelDependantAttributes();  // Set max_health, max_mana,
                                              // max_inventory_gold.
 }
@@ -461,9 +459,7 @@ void Character::fillPersistenceData(CharacterCfg& data) const {
     // llenar map x_tile, y_tile;
     this->position.fillPersistenceData(data);
     this->state->fillPersistenceData(data);
-    std::string name = this->nickname;
-    std::strncpy(data.nickname, name.c_str(),
-                 sizeof(char) * NICKNAME_MAX_LENGTH - 1);
+    std::strncpy(data.nickname, nickname.c_str(), sizeof(data.nickname) - 1);
     data.race = this->race.id;
     data.kind = this->kind.id;
 

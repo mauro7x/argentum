@@ -254,7 +254,7 @@ void Game::deleteCharacter(const InstanceId id, Database& database) {
     CharacterCfg character_data = {};
     // PERSISTIR ESTADO DEL JUGADOR
     character.fillPersistenceData(character_data);
-    database.persistPlayerData(character_data);
+    database.persistPlayerData(character_data, true);
     this->characters.erase(id);
 }
 

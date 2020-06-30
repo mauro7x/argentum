@@ -17,6 +17,7 @@
 #include "../../../Common/includes/Exceptions/Exception.h"
 #include "../../../Common/includes/Exceptions/LoginException.h"
 #include "../../../Common/includes/Protocol.h"
+#include "../../../Common/includes/defs.h"
 #include "../Model/Config.h"
 #include "../Model/config_structs.h"
 #include "../paths.h"
@@ -25,18 +26,19 @@
 //-----------------------------------------------------------------------------
 
 struct PlayerInfo {
-    char username[NICKNAME_MAX_LENGTH];
-    char password[NICKNAME_MAX_LENGTH];
+    char username[MAX_USERNAME_SIZE + 1] = {0};
+    char password[MAX_PASSWORD_SIZE + 1] = {0};
     size_t index;
 
-    PlayerInfo() : username{0}, password{0}, index{0} {}
+    PlayerInfo() : index{0} {}
 };
 
 struct DataIndex {
-    char password[NICKNAME_MAX_LENGTH];
+    char password[MAX_USERNAME_SIZE + 1] = {0};
+    bool connected;
     size_t index;
 
-    DataIndex(size_t index) : password{0}, index(index) {}
+    DataIndex(size_t index) : connected(false), index(index) {}
 };
 
 class Database {
@@ -108,8 +110,9 @@ class Database {
                              CharacterCfg& character_data);
     //-------------------------------------------------------------------------
 
-    /* Guardar los datos del jugador al archivo*/
-    void persistPlayerData(CharacterCfg& data);
+    /* Guardar los datos del jugador al archivo. Si el flag disconnected aparte
+     * está en true, se marca como desconectado */
+    void persistPlayerData(CharacterCfg& data, bool disconnected = false);
 
     /* Destructor */
     ~Database();

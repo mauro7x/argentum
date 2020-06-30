@@ -47,7 +47,7 @@ class Character : public Attackable {
     unsigned int health, mana;
     const unsigned int intelligence, constitution, strength, agility;
     unsigned int max_health, max_mana;
-    char nickname[NICKNAME_MAX_LENGTH] = {0};
+    std::string nickname;
     Race race;
     Kind kind;
 

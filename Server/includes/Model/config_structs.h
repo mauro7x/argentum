@@ -8,6 +8,7 @@
 
 #include "../../../Common/includes/Inventory.h"
 #include "../../../Common/includes/Orientation.h"
+#include "../../../Common/includes/defs.h"
 #include "../../../Common/includes/types.h"
 //-----------------------------------------------------------------------------
 
@@ -24,7 +25,6 @@ enum PotionType { HEALTH, MANA };
 //-----------------------------------------------------------------------------
 
 #define AMOUNT_OF_DEFFENCE_TYPES 3
-#define NICKNAME_MAX_LENGTH 8
 
 //-----------------------------------------------------------------------------
 // Objetos
@@ -158,7 +158,7 @@ enum StateType { DEAD, ALIVE };
 struct CharacterCfg {
     Id map = 0;
     int x_tile = 0, y_tile = 0;
-    char nickname[NICKNAME_MAX_LENGTH] = {0};
+    char nickname[MAX_USERNAME_SIZE + 1] = {0};
 
     Id race = 0;
     Id kind = 0;

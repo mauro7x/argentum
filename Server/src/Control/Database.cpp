@@ -4,13 +4,17 @@
 // Métodos privados
 
 void Database::_fillInfo() {
-    std::ifstream file_info(PLAYER_INFO_FILEPATH);
+    std::ifstream file_info(PLAYER_INFO_FILEPATH, std::fstream::binary);
     if (!file_info.is_open()) {
-        return;
+        throw Exception("Database::_fillInfo: error opening info file.");
     }
-    file_info.seekg(0, std::ios::end);
+
+    // Calculamos el size de lectura
+    file_info.seekg(0, std::fstream::end);
     size_t size = file_info.tellg();
-    file_info.seekg(0, std::ios::beg);
+
+    // Volvemos al inicio
+    file_info.seekg(0, std::fstream::beg);
     size_t size_actual = 0;
     PlayerInfo player_info;
     while (size_actual < size) {
@@ -21,10 +25,9 @@ void Database::_fillInfo() {
                            std::forward_as_tuple(player_info.username),
                            std::forward_as_tuple(player_info.index));
 
-        std::string password = player_info.password;
-
-        std::strncpy(data_index.at(player_info.username).password,
-                     password.c_str(), sizeof(char) * NICKNAME_MAX_LENGTH - 1);
+        DataIndex& new_data_idx = data_index.at(player_info.username);
+        std::strncpy(new_data_idx.password, player_info.password,
+                     sizeof(new_data_idx.password) - 1);
 
         size_actual += sizeof(player_info);
     }
@@ -34,15 +37,17 @@ void Database::_fillInfo() {
 void Database::_persistPlayerInfo(const std::string& username) {
     PlayerInfo player_info;
 
+    // Llenamos los campos
     std::strncpy(player_info.username, username.c_str(),
-                 sizeof(char) * NICKNAME_MAX_LENGTH - 1);
-
-    std::string password = data_index.at(username).password;
-    std::strncpy(player_info.password, password.c_str(),
-                 sizeof(char) * NICKNAME_MAX_LENGTH - 1);
+                 sizeof(player_info.username) - 1);
+    std::strncpy(player_info.password, data_index.at(username).password,
+                 sizeof(player_info.password) - 1);
     player_info.index = file_pointer;
-    std::ofstream file_info(PLAYER_INFO_FILEPATH, std::ios_base::app);
-    file_info.seekp(0, std::ios::end);
+
+    // Lo guardamos al final
+    std::ofstream file_info(PLAYER_INFO_FILEPATH,
+                            std::fstream::app | std::fstream::binary);
+    // file_info.seekp(0, std::fstream::end);  // no debería ser necesario
     file_info.write(reinterpret_cast<char*>(&player_info), sizeof(player_info));
     file_info.close();
 }
@@ -54,7 +59,7 @@ void Database::_createDataInicial(const std::string& username, Id race, Id kind,
     character_data.x_tile = 0;
     character_data.y_tile = 0;
     std::strncpy(character_data.nickname, username.c_str(),
-                 sizeof(char) * NICKNAME_MAX_LENGTH - 1);
+                 sizeof(character_data.nickname) - 1);
     character_data.race = race;
     character_data.kind = kind;
     character_data.head_id = head_id;
@@ -80,9 +85,9 @@ void Database::_createDataInicial(const std::string& username, Id race, Id kind,
 
 void Database::_getPlayerData(const std::string& username,
                               CharacterCfg& character_data) {
-    size_t position = data_index.at(username).index;
-    std::ifstream file_data(PLAYER_DATA_FILEPATH);
-    file_data.seekg(position, std::ios::beg);
+    std::streampos position = data_index.at(username).index;
+    std::ifstream file_data(PLAYER_DATA_FILEPATH, std::fstream::binary);
+    file_data.seekg(position);
     file_data.read(reinterpret_cast<char*>(&character_data),
                    sizeof(character_data));
 }
@@ -119,12 +124,39 @@ void Database::init() {
         throw Exception("Database already initialized.");
     }
 
-    std::ifstream file_data(PLAYER_DATA_FILEPATH);
-    if (file_data.is_open()) {
-        file_data.seekg(0, std::ios::end);
+    // En caso de que los archivos no existan, los creamos
+    {
+        // Archivo de índices
+        std::fstream file_info(PLAYER_INFO_FILEPATH,
+                               std::fstream::in | std::fstream::out |
+                                   std::fstream::app | std::fstream::binary);
+        file_info.seekg(0, std::fstream::end);
+        size_t size = file_info.tellg();
+        // Chequeamos que sea multiplo del size que necesitamos
+
+        if ((size % sizeof(PlayerInfo))) {
+            fprintf(stderr, "Debug (info_data) | size: %lu, sizeof: %lu\n",
+                    size, sizeof(PlayerInfo));
+            throw Exception("Database::_fillInfo: invalid index file size.");
+        }
+        file_info.close();
+
+        // Archivo de data (actualizamos nuestro file pointer)
+        std::fstream file_data(PLAYER_DATA_FILEPATH,
+                               std::fstream::in | std::fstream::out |
+                                   std::fstream::app | std::fstream::binary);
+        file_data.seekg(0, std::fstream::end);
         file_pointer = file_data.tellg();
+        // Chequeamos que sea multiplo del size que necesitamos
+        if ((file_pointer % sizeof(CharacterCfg))) {
+            fprintf(stderr, "Debug (info_data) | fp: %lu, sizeof: %lu\n",
+                    file_pointer, sizeof(CharacterCfg));
+            throw Exception("Database::_fillInfo: invalid data file size.");
+        }
         file_data.close();
     }
+
+    // Llenamos la data del archivo de info
     _fillInfo();
 
     initialized = true;
@@ -146,15 +178,14 @@ ConnectionAckType Database::signIn(const std::string& username,
         return ERROR_INVALID_PASSWORD_ACK;
     }
 
+    if (data_index.at(username).connected) {
+        return ERROR_USERNAME_CONNECTED_ACK;
+    }
+
     _getPlayerData(username, character_data);
 
-    // en caso de que haya llegado aca, devolver data
-    // proxy:
-    fprintf(stderr, "Bienvenido, %s\n", username.c_str());
-
-    /* chequear que el jugador no esté conectado ya (por ahora no podemos)
-    throw LoginException("El usuario solicitado se encuentra conectado.");
-    */
+    // Lo marcamos como conectado
+    data_index.at(username).connected = true;
 
     return SUCCESS_ACK;
 }
@@ -181,34 +212,36 @@ ConnectionAckType Database::signUp(const std::string& username,
         throw Exception("Database::signUp: invalid head/body id received.");
     }
 
-    // cambiar por std piecewise
+    // Lo construimos
     data_index.emplace(std::piecewise_construct,
                        std::forward_as_tuple(username),
                        std::forward_as_tuple(file_pointer));
+    DataIndex& new_data = data_index.at(username);
 
-    std::strncpy(data_index.at(username).password, password.c_str(),
-                 sizeof(char) * (NICKNAME_MAX_LENGTH - 1));
-    data_index.at(username)
-        .password[sizeof(data_index.at(username).password) - 1] = 0;
+    std::strncpy(new_data.password, password.c_str(),
+                 sizeof(new_data.password) - 1);
+    // new_data.password[sizeof(data_index.at(username).password) - 1] = 0;
 
     _persistPlayerInfo(username);
     _createDataInicial(username, race, kind, head_id, body_id, character_data);
     persistPlayerData(character_data);
-    file_pointer += sizeof(character_data);
-
-    // en caso de que haya llegado aca, devolver data
-    // para debug:
-    fprintf(stderr, "Database:: personaje creado. Username: [%s]\n",
-            username.c_str());
+    file_pointer += sizeof(CharacterCfg);
 
     return SUCCESS_ACK;
 }
 
-void Database::persistPlayerData(CharacterCfg& data) {
-    std::ofstream file_data(PLAYER_DATA_FILEPATH, std::ios_base::app);
-    file_data.seekp(data_index.at(data.nickname).index, std::ios::beg);
+void Database::persistPlayerData(CharacterCfg& data, bool disconnect) {
+    std::fstream file_data(PLAYER_DATA_FILEPATH, std::fstream::in |
+                                                     std::fstream::out |
+                                                     std::fstream::binary);
+    std::streampos idx = data_index.at(data.nickname).index;
+    file_data.seekp(idx, std::fstream::beg);
     file_data.write(reinterpret_cast<char*>(&data), sizeof(data));
     file_data.close();
+
+    if (disconnect) {
+        data_index.at(data.nickname).connected = false;
+    }
 }
 
 Database::~Database() {}
