@@ -9,6 +9,7 @@
 #include <iostream>  //sacar
 //-----------------------------------------------------------------------------
 #define DEFAULT_MOVING_ORIENTATION DOWN_ORIENTATION
+#define FIST_COOLDOWN 500
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -295,10 +296,6 @@ void Character::_checkPriorToUseWeaponConditions(Attackable* target) const {
     // Delego si puedo atacar en mi estado.
     this->state->attack();
 
-    // Verifico si tiene arma de ataque.
-    if (!this->equipment.hasAWeaponEquipped())
-        throw CantAttackWithoutWeaponException();
-
     // Verifico cooldown de arma de ataque.
     if (this->attack_cooldown)
         throw AttackCooldownTimeNotElapsedException();
@@ -351,10 +348,10 @@ const bool Character::_useHealingWeapon(Attackable* target, int& damage) {
 const bool Character::_useAttackWeapon(Attackable* target, int& damage) {
     _checkPriorToUseAttackWeaponConditions(target);
 
-    // Se define si el ataque es critico y se obtienen
-    // los correspondientes puntos de daño.
+    // Obtenemos el danio del arma. Si no, usa el puño.
     damage = this->equipment.useAttackItem(*this);
 
+    // Se define si el ataque es critico
     bool critical_attack = Formulas::isCriticalAttack();
     if (critical_attack)
         damage = damage * CRITICAL_ATTACK_DAMAGE_MODIFIER;
@@ -369,6 +366,9 @@ const bool Character::_useAttackWeapon(Attackable* target, int& damage) {
     if (!target->getHealth())
         this->level.onKillUpdate(*this, target->getMaxHealth(),
                                  target->getLevel());
+
+    if (!this->equipment.hasAWeaponEquipped())
+        setAttackCooldown(FIST_COOLDOWN);
 
     this->broadcast = true;
 
@@ -522,10 +522,6 @@ const char* CantAttackItselfException::what() const noexcept {
 
 const char* OutOfRangeAttackException::what() const noexcept {
     return "El jugador al que quieres atacar está fuera del rango de tu arma.";
-}
-
-const char* CantAttackWithoutWeaponException::what() const noexcept {
-    return "No puedes atacar sin arma.";
 }
 
 const char* NewbiesCantBeAttackedException::what() const noexcept {

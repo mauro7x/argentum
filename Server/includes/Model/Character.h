@@ -494,11 +494,6 @@ class CantAttackInSafeZoneException : public std::exception {
     virtual const char* what() const noexcept;
 };
 
-class CantAttackWithoutWeaponException : public std::exception {
-   public:
-    virtual const char* what() const noexcept;
-};
-
 class CantAttackItselfException : public std::exception {
    public:
     virtual const char* what() const noexcept;
