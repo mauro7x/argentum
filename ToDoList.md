@@ -55,6 +55,9 @@
     * Ponerle un shortcut.
     * medium.
 
+* Agregar el mensaje del chat general en la cabeza del character por un periodo breve de tiempo. -Mau, 30/06.
+    * low.
+
 ---
 
 ## Common
