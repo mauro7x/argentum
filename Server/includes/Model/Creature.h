@@ -93,7 +93,7 @@ class Creature : public Attackable {
     const Position& getPosition() const override;
 
     /* Lanza CantRecoverCreaturesHealthException */
-    void recoverHealth(const unsigned int points) override;
+    const bool recoverHealth(const unsigned int points) override;
 
     /*
      * Si muere la criatura, se llama a este método.

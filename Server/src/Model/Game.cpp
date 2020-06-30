@@ -587,7 +587,10 @@ void Game::equip(const InstanceId caller, const uint8_t n_slot) {
 
     try {
         character.equip(n_slot);
-    } catch (const InvalidInventorySlotNumberException& e) {
+    } catch (const std::exception& e) {
+        // InvalidInventorySlotNumberException,
+        // KindCantDoMagicException,
+        // PotionHasNoPointsToRecoverException
         Notification* reply = new Reply(ERROR_MSG, e.what());
         active_clients.notify(caller, reply);
         return;

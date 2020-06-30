@@ -224,15 +224,18 @@ class Character : public Attackable {
      * Recibe la posicion del item en el inventario
      * que se quiere equipar, y lo equipa.
      * Si no hay item en dicha posicion, no hace nada.
+     *
+     * Lanza InvalidInventorySlotNumberException si la posicion
+     * especificada es invalida (fuera de rango).
+     *
+     * Lanza KindCantDoMagicException si el personaje se equipa
+     * una poción de maná cuando no puede hacer magia.
      */
     void equip(unsigned int n_slot);
 
     /*
      * Equipa un Wearable al Equipment en su slot, almacenando en el
      * inventario el Wearable anterior.
-     *
-     * Lanza InvalidInventorySlotNumberException si la posicion
-     * especificada es invalida (fuera de rango).
      */
     void equip(Wearable* item);
 
@@ -285,18 +288,22 @@ class Character : public Attackable {
     //--------------------------------------------------------------------------
 
     /*
-     * Efectua la accion curativa de las pociones de mana.
+     * Efectua la acción curativa de las pociones de maná.
      * Aumenta los puntos de mana en los points especificados,
-     * siempre y cuando el limite de mana no se supere.
+     * siempre y cuando el límite de mana no se supere.
+     * 
+     * Retorna si aumentó el maná o no.
      */
-    void recoverMana(const unsigned int points);
+    const bool recoverMana(const unsigned int points);
 
     /*
-     * Efectua la accion curativa de las pociones/hechizos de vida.
+     * Efectua la acción curativa de las pociones/hechizos de vida.
      * Aumenta los puntos de vida en los points especificados,
-     * siempre y cuando el limite de health no se supere.
+     * siempre y cuando el límite de health no se supere.
+     * 
+     * Retorna si aumentó la vida o no.
      */
-    void recoverHealth(const unsigned int points) override;
+    const bool recoverHealth(const unsigned int points) override;
 
     /*
      * Si hay suficiente mana, consume mana_points de mana.
@@ -502,11 +509,6 @@ class AttackCooldownTimeNotElapsedException : public std::exception {
 };
 
 class TooHighLevelDifferenceOnAttackException : public std::exception {
-   public:
-    virtual const char* what() const noexcept;
-};
-
-class KindCantDoMagicException : public std::exception {
    public:
     virtual const char* what() const noexcept;
 };

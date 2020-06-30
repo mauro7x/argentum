@@ -66,7 +66,7 @@ const bool Creature::isNewbie() const {
     return false;
 }
 
-void Creature::recoverHealth(const unsigned int points) {
+const bool Creature::recoverHealth(const unsigned int points) {
     throw CantRecoverCreaturesHealthException();
 }
 

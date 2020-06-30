@@ -163,20 +163,22 @@ void Character::stopMoving() {
 // Modificación de maná y vida.
 //-----------------------------------------------------------------------------
 
-void Character::recoverHealth(const unsigned int points) {
-    if (!points || !health)
-        return;
+const bool Character::recoverHealth(const unsigned int points) {
+    if (!points || !health || this->health == this->max_health)
+        return false;
 
     this->health = std::min(this->health + points, max_health);
     this->broadcast = true;
+    return true;
 }
 
-void Character::recoverMana(const unsigned int points) {
-    if (!points)
-        return;
+const bool Character::recoverMana(const unsigned int points) {
+    if (!points || !health || this->mana == this->max_mana)
+        return false;
 
     this->mana = std::min(this->mana + points, max_mana);
     this->broadcast = true;
+    return true;
 }
 
 void Character::consumeMana(const unsigned int points) {
@@ -203,6 +205,8 @@ void Character::equip(unsigned int inventory_position) {
         return;
 
     item_to_equip->equip(*this);
+
+    this->broadcast = true;
 }
 
 void Character::equip(Wearable* item) {
@@ -268,9 +272,7 @@ void Character::beAttacked() {
 }
 
 void Character::doMagic() {
-    if (!this->kind.canDoMagic()) {
-        throw KindCantDoMagicException();
-    }
+    this->kind.doMagic();
 }
 
 void Character::_checkPriorToUseWeaponConditions(Attackable* target) const {
@@ -516,10 +518,6 @@ const char* AttackCooldownTimeNotElapsedException::what() const noexcept {
 
 const char* TooHighLevelDifferenceOnAttackException::what() const noexcept {
     return "No puedes atacar. La diferencia de niveles es mayor a 12.";
-}
-
-const char* KindCantDoMagicException::what() const noexcept {
-    return "Tu clase no puede lanzar hechizos.";
 }
 
 //-----------------------------------------------------------------------------
