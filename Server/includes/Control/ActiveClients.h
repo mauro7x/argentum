@@ -21,7 +21,8 @@
 
 class ActiveClients {
    private:
-    std::unordered_map<InstanceId, ClientConnection*> content;
+    // std::unordered_map<InstanceId, ClientConnection*> content;
+    std::unordered_map<InstanceId, ClientConnection> content;
     NonBlockingQueue<Command*>& commands;
     NonBlockingQueue<InstanceId*>& finished_connections;
 
