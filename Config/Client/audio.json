@@ -1,0 +1,10 @@
+{
+    "music": {
+        "home_fp": "../Assets/Audio/home.wav",
+        "maps": {
+            "dirpath": "../Assets/Audio/Maps/",
+            "quantity": 1
+        }
+    },
+    "chunks": {}
+}

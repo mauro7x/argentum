@@ -9,6 +9,7 @@
 #define UNIT_SPRITES_FILEPATH "../Config/Client/unit_sprites.json"
 #define SIGNUP_DATA_FILEPATH "../Config/Client/signup_data.json"
 #define ITEM_SPRITES_FILEPATH "../Config/Client/item_sprites.json"
+#define AUDIO_FILEPATH "../Config/Client/audio.json"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
