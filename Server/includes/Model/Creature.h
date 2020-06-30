@@ -59,7 +59,7 @@ class Creature : public Attackable {
     /* Deshabilitamos el constructor por movimiento. */
     Creature(Creature&&) = delete;
 
-    /* Habilitamos el operador= para movimiento. */
+    /* Deshabilitamos el operador= para movimiento. */
     Creature& operator=(Creature&&) = delete;
 
     /*
