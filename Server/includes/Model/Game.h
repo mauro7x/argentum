@@ -302,6 +302,13 @@ class Game {
 
     void listConnectedPlayers(const InstanceId caller);
 
+    void sendPrivateMessage(const InstanceId caller,
+                            const std::string to_nickname,
+                            const std::string message);
+    
+    void sendGeneralMessage(const InstanceId caller,
+                            const std::string message);
+
     //-------------------------------------------------------------------------
 
     const Id getMapId(const InstanceId caller);

@@ -9,6 +9,7 @@
 #include "../../includes/Control/ActiveClients.h"
 #include "../../includes/Control/EntityBroadcast.h"
 #include "../../includes/Control/ItemBroadcast.h"
+#include "../../includes/Control/Message.h"
 #include "../../includes/Control/Reply.h"
 //-----------------------------------------------------------------------------
 #include "../../includes/Model/Game.h"
@@ -502,8 +503,7 @@ void Game::_sendCharacterAttackNotifications(const int damage,
         msg_to_attacked = "Tu defensa absorbió todo el daño del ataque.";
     }
 
-    Notification* reply =
-        new Reply(INFO_MSG, msg_to_attacker.c_str());
+    Notification* reply = new Reply(INFO_MSG, msg_to_attacker.c_str());
     active_clients.notify(caller, reply);
 
     if (caller == target)
@@ -518,8 +518,7 @@ void Game::_sendCreatureAttackNotifications(const int damage,
     std::string msg_to_attacker = "Has atacado a la criatura, provocando " +
                                   std::to_string(damage) + " de daño.";
 
-    Notification* reply =
-        new Reply(INFO_MSG, msg_to_attacker.c_str());
+    Notification* reply = new Reply(INFO_MSG, msg_to_attacker.c_str());
     active_clients.notify(caller, reply);
 }
 
@@ -561,7 +560,7 @@ void Game::_useWeapon(const InstanceId caller, const InstanceId target,
         _sendCreatureAttackNotifications(damage, caller);
     else
         _sendCharacterAttackNotifications(damage, eluded, caller, target);
-} 
+}
 
 void Game::useWeapon(const InstanceId caller, const InstanceId target) {
     if (!this->characters.count(caller)) {
@@ -722,8 +721,7 @@ void Game::drop(const InstanceId caller, const uint8_t n_slot,
     if (amount < asked_amount) {
         std::string reply_msg =
             "Se dropearon únicamente " + std::to_string(amount) + " items.";
-        Notification* reply =
-            new Reply(INFO_MSG, reply_msg.c_str());
+        Notification* reply = new Reply(INFO_MSG, reply_msg.c_str());
         active_clients.notify(caller, reply);
     }
 
@@ -753,6 +751,31 @@ void Game::drop(const InstanceId caller, const uint8_t n_slot,
 
 void Game::listConnectedPlayers(const InstanceId caller) {
     fprintf(stderr, "Comando list no implementado.\n");
+}
+
+void Game::sendPrivateMessage(const InstanceId caller,
+                              const std::string to_nickname,
+                              const std::string message) {
+    if (!this->characters.count(caller))
+        throw Exception("Game::sendPrivateMessage: unknown caller.");
+
+    // InstanceId destinatary_id = ;
+
+    // std::string& caller_nickname = this->characters.at(caller).getNickname();
+
+    // Notification* notification = new Message(caller_nickname, message, PRIVATE_MSG);
+    // this->active_clients.notify(destinatary_id, notification);
+}
+
+void Game::sendGeneralMessage(const InstanceId caller,
+                              const std::string message) {
+    // if (!this->characters.count(caller))
+    //     throw Exception("Game::sendPrivateMessage: unknown caller.");
+    
+    // std::string& caller_nickname = this->characters.at(caller).getNickname();
+
+    // Notification* message = new Message(caller_nickname, message, GENERAL_MSG);
+    // this->active_clients.
 }
 
 //-----------------------------------------------------------------------------
