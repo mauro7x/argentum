@@ -81,12 +81,14 @@ void Mixer::handleEvent(const SDL_Event& e) {
             }
 
             case SDLK_LEFT: {
+                stopMusic();
                 music.prev();
                 playMusic();
                 break;
             }
 
             case SDLK_RIGHT: {
+                stopMusic();
                 music.next();
                 playMusic();
                 break;
@@ -130,6 +132,7 @@ void Mixer::fadeOutMusic() const {
 void Mixer::stopMusic() const {
     /* Siempre retorna 0 por documentación, no podemos chequear errores */
     Mix_HaltMusic();
+    Mix_RewindMusic();
 }
 
 void Mixer::musicFinishedCallback() {
