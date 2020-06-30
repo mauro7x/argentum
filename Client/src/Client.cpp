@@ -5,7 +5,7 @@
 
 void Client::_initSDL() {
     /* Iniciamos el sistema de SDL */
-    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
         throw Exception("Error in function SDL_Init()\nSDL_Error: %s",
                         SDL_GetError());
     }
