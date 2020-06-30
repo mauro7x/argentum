@@ -16,9 +16,10 @@ void ActiveClients::add(const InstanceId id, const Id map,
         throw Exception("ActiveClients::add: repeated client id.");
     }
 
-    content.emplace(id, new ClientConnection(id, map, peer,
-                                             finished_connections, commands));
-    content.at(id)->start();
+    content.emplace(
+        std::piecewise_construct, std::forward_as_tuple(id),
+        std::forward_as_tuple(id, map, peer, finished_connections, commands));
+    content.at(id).start();
 }
 
 void ActiveClients::remove(const InstanceId id) {
@@ -26,8 +27,7 @@ void ActiveClients::remove(const InstanceId id) {
         throw Exception("ActiveClients::remove: invalid client id.");
     }  // considerar tambien el caso en que su conexión no haya terminado
 
-    content.at(id)->join(); /* join NO bloqueante, pues la conexión terminó */
-    delete content.at(id);
+    content.at(id).join(); /* join NO bloqueante, pues la conexión terminó */
     content.erase(id);
 }
 
@@ -36,18 +36,17 @@ void ActiveClients::notify(const InstanceId& id, Notification* notification) {
         throw Exception("ActiveClients::notify: invalid client id.");
     }
 
-    content.at(id)->push(notification);
+    content.at(id).push(notification);
 }
 
 void ActiveClients::sendDifferentialBroadcastToAll(
     Notification* broadcast, const InstanceId updated_client,
     const bool send_to_updated_client) {
-    std::unordered_map<InstanceId, ClientConnection*>::iterator it =
-        this->content.begin();
+    auto it = content.begin();
 
     Notification* broadcast_copy;
 
-    while (it != this->content.end()) {
+    while (it != content.end()) {
         if (it->first == updated_client && (!send_to_updated_client)) {
             ++it;
             continue;
@@ -59,7 +58,7 @@ void ActiveClients::sendDifferentialBroadcastToAll(
             broadcast_copy =
                 new EntityBroadcast(*((EntityBroadcast*)broadcast));
         }
-        it->second->push(broadcast_copy);
+        it->second.push(broadcast_copy);
         ++it;
     }
 
@@ -68,8 +67,7 @@ void ActiveClients::sendDifferentialBroadcastToAll(
 
 void ActiveClients::sendMessageToAll(Notification* message,
                                      const InstanceId sender) {
-    std::unordered_map<InstanceId, ClientConnection*>::iterator it =
-        this->content.begin();
+    auto it = content.begin();
 
     Notification* message_copy;
 
@@ -79,8 +77,9 @@ void ActiveClients::sendMessageToAll(Notification* message,
         //     continue;
         // }
 
+
         message_copy = new Message(*((Message*)message));
-        it->second->push(message_copy);
+        it->second.push(message_copy);
         ++it;
     }
 
@@ -89,21 +88,13 @@ void ActiveClients::sendMessageToAll(Notification* message,
 
 void ActiveClients::stop() {
     for (auto it = content.begin(); it != content.end(); it++) {
-        it->second->stop();
-        it->second->join();
-        delete it->second;
+        it->second.stop();
+        it->second.join();
     }
 
     content.clear();
 }
 
-ActiveClients::~ActiveClients() {
-    // hacer free de todo el contenido
-    for (auto it = content.begin(); it != content.end(); it++) {
-        delete it->second;
-    }
-
-    content.clear();
-}
+ActiveClients::~ActiveClients() {}
 
 //-----------------------------------------------------------------------------

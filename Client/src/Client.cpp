@@ -5,7 +5,7 @@
 
 void Client::_initSDL() {
     /* Iniciamos el sistema de SDL */
-    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
         throw Exception("Error in function SDL_Init()\nSDL_Error: %s",
                         SDL_GetError());
     }
@@ -64,16 +64,15 @@ void Client::_initComponents() {
     scale_factor_h = (float)new_h / original_h;
 
     /* Iniciamos la ventana */
-    {
-        std::string title = config["window"]["title"];
-        window.init(fullscreen, new_w, new_h, title.c_str());
-    }
+    std::string title = config["window"]["title"];
+    window.init(fullscreen, new_w, new_h, title.c_str());
 
     /* Iniciamos el renderer */
-    {
-        bool vsync = config["renderer"]["vsync"];
-        renderer.init(vsync, scale_factor_w, scale_factor_h);
-    }
+    bool vsync = config["renderer"]["vsync"];
+    renderer.init(vsync, scale_factor_w, scale_factor_h);
+
+    /* Inicializamos el mixer */
+    mixer.init();
 }
 
 //-----------------------------------------------------------------------------
@@ -81,21 +80,22 @@ void Client::_initComponents() {
 
 void Client::_launchHomeCtx() {
     fprintf(stderr, "Inicia HOME.\n");
-    HomeView home_view(current_context, renderer, socket);
+    HomeView home_view(current_context, renderer, mixer, socket);
+    mixer.playMusic(true);
     home_view.run();
     fprintf(stderr, "Finaliza HOME.\n");
 }
 
 void Client::_launchConnectionCtx() {
     fprintf(stderr, "Inicia CONNECTION.\n");
-    ConnectionView connection_view(current_context, renderer, socket);
+    ConnectionView connection_view(current_context, renderer, mixer, socket);
     connection_view.run();
     fprintf(stderr, "Finaliza CONNECTION.\n");
 }
 
 void Client::_launchSignUpCtx() {
     fprintf(stderr, "Inicia SIGNUP.\n");
-    SignUpView signup_view(current_context, renderer, socket);
+    SignUpView signup_view(current_context, renderer, mixer, socket);
     signup_view.run();
     fprintf(stderr, "Finaliza SIGNUP.\n");
 }
@@ -112,7 +112,7 @@ void Client::_launchGameCtx() {
     _receiveFirstPackage(broadcasts);
 
     // Componentes del GameCtx
-    GameView game_view(commands, broadcasts, messages, renderer);
+    GameView game_view(commands, broadcasts, messages, renderer, mixer);
     CommandDispatcher command_dispatcher(socket, commands, game_view);
     Receiver receiver(socket, broadcasts, messages, game_view);
 

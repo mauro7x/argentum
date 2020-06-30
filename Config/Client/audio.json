@@ -1,0 +1,8 @@
+{
+    "music": {
+        "dirpath": "../Assets/Audio/Music/",
+        "extension": ".mp3",
+        "songs": 4
+    },
+    "chunks": {}
+}

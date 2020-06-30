@@ -12,6 +12,7 @@
 #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_ttf.h>
 
+#include "SDL/Mixer.h"
 #include "SDL/Renderer.h"
 #include "SDL/Window.h"
 //-----------------------------------------------------------------------------
@@ -51,6 +52,7 @@ class Client {
     // Componentes SDL
     Window window;
     Renderer renderer;
+    Mixer mixer;
 
     // Contexto actual
     Context current_context;

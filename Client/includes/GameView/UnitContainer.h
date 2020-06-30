@@ -35,7 +35,7 @@
 template <class ConcreteUnit, class Data>
 class UnitContainer {
    private:
-    Renderer* g_renderer;
+    const Renderer* g_renderer;
     const Camera& g_camera;
     UnitSpriteContainer* g_sprites;
     std::unordered_map<InstanceId, ConcreteUnit> content;
@@ -46,7 +46,7 @@ class UnitContainer {
 
    public:
     /* Constructor */
-    UnitContainer(Renderer* renderer, const Camera& camera,
+    UnitContainer(const Renderer* renderer, const Camera& camera,
                   UnitSpriteContainer* sprites)
         : g_renderer(renderer), g_camera(camera), g_sprites(sprites) {}
 

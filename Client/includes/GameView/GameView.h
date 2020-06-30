@@ -15,6 +15,7 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+#include "../SDL/Mixer.h"
 #include "../SDL/Renderer.h"
 //-----------------------------------------------------------------------------
 
@@ -55,7 +56,8 @@ class GameView : public ConstantRateFunc {
     NonBlockingQueue<Message*>& messages;
 
     // Componentes principales
-    Renderer& renderer;
+    const Renderer& renderer;
+    Mixer& mixer;
     Camera camera;
 
     // Contenedores de sprites
@@ -102,7 +104,8 @@ class GameView : public ConstantRateFunc {
     /* Constructor */
     GameView(BlockingQueue<Command*>& commands,
              NonBlockingQueue<Broadcast*>& broadcasts,
-             NonBlockingQueue<Message*>& messages, Renderer& renderer);
+             NonBlockingQueue<Message*>& messages, const Renderer& renderer,
+             Mixer& mixer);
 
     /* Destructor */
     ~GameView();

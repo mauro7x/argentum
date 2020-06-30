@@ -58,7 +58,7 @@ void Character::_renderInfo() const {
 //-----------------------------------------------------------------------------
 // API Pública
 
-Character::Character(Renderer* renderer, const Camera& camera,
+Character::Character(const Renderer* renderer, const Camera& camera,
                      UnitSpriteContainer* sprites, TTF_Font* g_nickname_font,
                      TTF_Font* g_level_font)
     : Unit(renderer, camera, sprites),

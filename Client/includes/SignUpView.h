@@ -26,6 +26,7 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+#include "SDL/Mixer.h"
 #include "SDL/Renderer.h"
 #include "SDL/Texture.h"
 #include "SDL/Widgets/Button.h"
@@ -78,7 +79,8 @@ class SignUpView : public ConstantRateFunc {
     Context& current_context;
 
     // Componentes globales
-    Renderer& renderer;
+    const Renderer& renderer;
+    Mixer& mixer;
 
     // Conexión
     const SocketWrapper& socket;
@@ -185,7 +187,7 @@ class SignUpView : public ConstantRateFunc {
 
    public:
     /* Constructor */
-    SignUpView(Context& current_context, Renderer& renderer,
+    SignUpView(Context& current_context, const Renderer& renderer, Mixer& mixer,
                const SocketWrapper& socket);
 
     /* Destructor */

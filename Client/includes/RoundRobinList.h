@@ -8,10 +8,14 @@
 
 //-----------------------------------------------------------------------------
 
-template <typename T>
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+
+template <class T>
 class RoundRobinList {
    private:
-    typename std::list<T> content;
+    std::list<T> content;
     typename std::list<T>::iterator it;
 
    public:
@@ -42,6 +46,12 @@ class RoundRobinList {
     template <typename... Args>
     void emplaceBack(Args&&... args) {
         content.emplace_back(std::forward<Args>(args)...);
+        it = content.begin();
+    }
+
+    /* Agrega un elemento al final */
+    void pushBack(const T& value) {
+        content.push_back(value);
         it = content.begin();
     }
 
@@ -79,6 +89,21 @@ class RoundRobinList {
             it = content.end();
             it--;
         }
+    }
+
+    /* Devuelve un iterador al inicio de la lista */
+    typename std::list<T>::const_iterator begin() const {
+        return content.begin();
+    }
+
+    /* Devuelve un iterador al final de la lista */
+    typename std::list<T>::const_iterator end() const {
+        return content.end();
+    }
+
+    /* Settea el iterador en el principio */
+    void reset() {
+        it = content.begin();
     }
 
     /* Obtiene el valor actual */

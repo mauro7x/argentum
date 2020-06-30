@@ -16,6 +16,7 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+#include "SDL/Mixer.h"
 #include "SDL/Renderer.h"
 #include "SDL/Texture.h"
 #include "SDL/Widgets/Button.h"
@@ -45,7 +46,8 @@ class HomeView : public ConstantRateFunc {
     Context& current_context;
 
     // Componentes globales
-    Renderer& renderer;
+    const Renderer& renderer;
+    Mixer& mixer;
 
     // Conexión
     SocketWrapper& socket;
@@ -128,7 +130,7 @@ class HomeView : public ConstantRateFunc {
 
    public:
     /* Constructor */
-    HomeView(Context& current_context, Renderer& renderer,
+    HomeView(Context& current_context, const Renderer& renderer, Mixer& mixer,
              SocketWrapper& socket);
 
     /* Destructor */

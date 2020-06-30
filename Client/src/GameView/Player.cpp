@@ -68,7 +68,7 @@ void Player::_renderInfo() const {
 //-----------------------------------------------------------------------------
 // API Pública
 
-Player::Player(Renderer* renderer, const Camera& camera,
+Player::Player(const Renderer* renderer, const Camera& camera,
                UnitSpriteContainer* sprites)
     : Unit(renderer, camera, sprites) {}
 

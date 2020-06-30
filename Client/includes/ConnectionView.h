@@ -19,6 +19,7 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+#include "SDL/Mixer.h"
 #include "SDL/Renderer.h"
 #include "SDL/Texture.h"
 #include "SDL/Widgets/Button.h"
@@ -50,7 +51,8 @@ class ConnectionView : public ConstantRateFunc {
     Context& current_context;
 
     // Componentes globales
-    Renderer& renderer;
+    const Renderer& renderer;
+    Mixer& mixer;
 
     // Conexión
     const SocketWrapper& socket;
@@ -139,8 +141,8 @@ class ConnectionView : public ConstantRateFunc {
 
    public:
     /* Constructor */
-    ConnectionView(Context& current_context, Renderer& renderer,
-                   const SocketWrapper& socket);
+    ConnectionView(Context& current_context, const Renderer& renderer,
+                   Mixer& mixer, const SocketWrapper& socket);
 
     /* Destructor */
     ~ConnectionView();
