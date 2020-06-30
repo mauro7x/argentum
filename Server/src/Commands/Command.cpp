@@ -1,5 +1,7 @@
+#include <vector>
+//-----------------------------------------------------------------------------
 #include "../../includes/Control/Commands/Command.h"
-
+//-----------------------------------------------------------------------------
 #include "../../../Common/includes/Exceptions/Exception.h"
 #include "../../../Common/includes/Protocol.h"
 #include "../../includes/Control/Commands/BuyItemCommand.h"
@@ -7,8 +9,10 @@
 #include "../../includes/Control/Commands/DepositItemOnBankCommand.h"
 #include "../../includes/Control/Commands/DropCommand.h"
 #include "../../includes/Control/Commands/EquipCommand.h"
+#include "../../includes/Control/Commands/GeneralMessageCommand.h"
 #include "../../includes/Control/Commands/ListCommand.h"
 #include "../../includes/Control/Commands/MeditateCommand.h"
+#include "../../includes/Control/Commands/PrivateMessageCommand.h"
 #include "../../includes/Control/Commands/SelfResurrectCommand.h"
 #include "../../includes/Control/Commands/SellItemCommand.h"
 #include "../../includes/Control/Commands/StartMovingDownCommand.h"
@@ -20,7 +24,7 @@
 #include "../../includes/Control/Commands/UnequipCommand.h"
 #include "../../includes/Control/Commands/UseWeaponCommand.h"
 #include "../../includes/Control/Commands/WithdrawGoldFromBankCommand.h"
-
+//-----------------------------------------------------------------------------
 Command::Command() {}
 Command::~Command() {}
 
@@ -145,6 +149,21 @@ Command* CommandFactory::newCommand(InstanceId caller, uint8_t opcode,
             socket >> x_coord;
             socket >> y_coord;
             return new ListCommand(caller, x_coord, y_coord);
+        }
+
+        case SEND_PRIVATE_MESSAGE_CMD: {
+            std::string to_nickname;
+            std::string message;
+            socket >> to_nickname;
+            socket >> message;
+            return new PrivateMessageCommand(caller, std::move(to_nickname),
+                                             std::move(message));
+        }
+
+        case SEND_GENERAL_MESSAGE_CMD: {
+            std::string message;
+            socket >> message;
+            return new GeneralMessageCommand(caller, std::move(message));
         }
 
         default: {

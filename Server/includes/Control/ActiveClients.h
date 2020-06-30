@@ -57,9 +57,16 @@ class ActiveClients {
     /* Notifica a un cliente en particular */
     void notify(const InstanceId& id, Notification* notification);
 
+    /*
+     * Envía un broadcast de actualización de updated_client a todos los
+     * clientes conectados, incluyendo al jugador que se actualizó según
+     * send_to_updated_client.
+     */
     void sendDifferentialBroadcastToAll(Notification* broadcast,
                                         const InstanceId updated_client,
                                         const bool send_to_updated_client);
+
+    void sendMessageToAll(Notification* message, const InstanceId sender);
 
     /* Termina todas las conexiones forzosamente */
     void stop();

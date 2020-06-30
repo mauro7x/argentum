@@ -1,5 +1,5 @@
-#ifndef __NOTIFICATION_MESSAGE_H
-#define __NOTIFICATION_MESSAGE_H
+#ifndef __MESSAGE_H
+#define __MESSAGE_H
 
 //-----------------------------------------------------------------------------
 #include <string>
@@ -12,17 +12,23 @@
 /* Notificación de Message en carga de renviar la mensaje que mande el sender al
 receiver corresponde*/
 
-class NotificationMessage : public Notification {
+class Message : public Notification {
    private:
-    uint32_t sender_length;
-    std::string sender;
-    uint32_t message_length; 
+    std::string from_nickname;
     std::string message;
-    
+
+    MessageType message_type;
+
    public:
     /* Constructor */
-    NotificationMessage(uint32_t sender_length, std::string sender,
-                        uint32_t message_length, std::string message);
+    Message(const std::string from_nickname, const std::string message,
+            const MessageType message_type);
+
+    /* Habilitamos el constructor por copia. */
+    Message(const Message& other);
+
+    /* Habilitamos el operador= para copia.*/
+    Message& operator=(const Message& other);
 
     //-----------------------------------------------------------------------------
 
@@ -32,7 +38,7 @@ class NotificationMessage : public Notification {
     //-----------------------------------------------------------------------------
 
     /* Destructor */
-    virtual ~NotificationMessage() {}
+    virtual ~Message() {}
 };
 
-#endif  //__NOTIFICATION_MESSAGE_H
+#endif  //__MESSAGE_H

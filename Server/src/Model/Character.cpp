@@ -26,7 +26,9 @@ Character::Character(const CharacterCfg& init_data, const RaceCfg& race,
       constitution(kind.constitution + race.constitution),
       strength(kind.strength + race.strength),
       agility(kind.agility + race.agility),
+
       nickname(init_data.nickname),
+
       race(race, init_data.head_id, init_data.body_id),
       kind(kind),
 
@@ -420,6 +422,10 @@ const bool Character::isNewbie() const {
 
 const Id Character::getMapId() const {
     return this->position.getMapId();
+}
+
+const std::string& Character::getNickname() const {
+    return this->nickname;
 }
 
 //-----------------------------------------------------------------------------

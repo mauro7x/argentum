@@ -47,7 +47,9 @@ class Character : public Attackable {
     unsigned int health, mana;
     const unsigned int intelligence, constitution, strength, agility;
     unsigned int max_health, max_mana;
-    std::string nickname;
+
+    const std::string nickname;
+
     Race race;
     Kind kind;
 
@@ -423,6 +425,9 @@ class Character : public Attackable {
 
     /* Retorna el id del mapa en el que se encuentra */
     const Id getMapId() const override;
+
+    /* Retorna el nickname del character */
+    const std::string& getNickname() const;
 
     //--------------------------------------------------------------------------
 

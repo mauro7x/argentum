@@ -1,7 +1,8 @@
 #include "../../includes/Control/ActiveClients.h"
-
+//-----------------------------------------------------------------------------
 #include "../../includes/Control/EntityBroadcast.h"
 #include "../../includes/Control/ItemBroadcast.h"
+#include "../../includes/Control/Message.h"
 //-----------------------------------------------------------------------------
 
 ActiveClients::ActiveClients(
@@ -53,8 +54,7 @@ void ActiveClients::sendDifferentialBroadcastToAll(
         }
 
         if (broadcast->getEntityType() == ITEM_TYPE) {
-            broadcast_copy = 
-                new ItemBroadcast(*((ItemBroadcast*)broadcast));
+            broadcast_copy = new ItemBroadcast(*((ItemBroadcast*)broadcast));
         } else {
             broadcast_copy =
                 new EntityBroadcast(*((EntityBroadcast*)broadcast));
@@ -64,6 +64,27 @@ void ActiveClients::sendDifferentialBroadcastToAll(
     }
 
     delete broadcast;
+}
+
+void ActiveClients::sendMessageToAll(Notification* message,
+                                     const InstanceId sender) {
+    std::unordered_map<InstanceId, ClientConnection*>::iterator it =
+        this->content.begin();
+
+    Notification* message_copy;
+
+     while (it != this->content.end()) {
+        if (it->first == sender) {
+            ++it;
+            continue;
+        }
+
+        message_copy = new Message(*((Message*)message));
+        it->second->push(message_copy);
+        ++it;
+    }
+
+    delete message;
 }
 
 void ActiveClients::stop() {

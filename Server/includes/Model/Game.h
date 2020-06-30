@@ -68,6 +68,7 @@ class Game {
     //--------------------------------------------------------------------------
     InstanceId next_instance_id;
     ActiveClients& active_clients;
+    std::unordered_map<std::string, InstanceId> nickname_id_map;
     //--------------------------------------------------------------------------
 
     //--------------------------------------------------------------------------
@@ -303,6 +304,13 @@ class Game {
     void drop(const InstanceId caller, const uint8_t n_slot, uint32_t amount);
 
     void listConnectedPlayers(const InstanceId caller);
+
+    void sendPrivateMessage(const InstanceId caller,
+                            const std::string to_nickname,
+                            const std::string message);
+    
+    void sendGeneralMessage(const InstanceId caller,
+                            const std::string message);
 
     //-------------------------------------------------------------------------
 
