@@ -66,7 +66,7 @@ class ActiveClients {
                                         const InstanceId updated_client,
                                         const bool send_to_updated_client);
 
-    void sendMessageToAll(Notification* broadcast, const InstanceId);
+    void sendMessageToAll(Notification* message, const InstanceId sender);
 
     /* Termina todas las conexiones forzosamente */
     void stop();
