@@ -119,7 +119,7 @@ void Unit::_render(const UnitSprite& sprite) const {
 //-----------------------------------------------------------------------------
 // API Pública
 
-Unit::Unit(Renderer* renderer, const Camera& camera,
+Unit::Unit(const Renderer* renderer, const Camera& camera,
            UnitSpriteContainer* sprites)
     : g_renderer(renderer), g_camera(camera), g_sprites(sprites) {}
 

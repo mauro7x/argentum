@@ -105,6 +105,9 @@ void ConnectionView::_processSDLEvents() {
     SDL_Event e;
     while (SDL_PollEvent(&e) != 0) {
         _handleEvent(e);
+
+        // Propagamos el evento al mixer
+        mixer.handleEvent(e);
     }
 }
 
@@ -568,11 +571,13 @@ void ConnectionView::_switchCursorVisibility() {
 //-----------------------------------------------------------------------------
 // API Pública
 
-ConnectionView::ConnectionView(Context& current_context, Renderer& renderer,
+ConnectionView::ConnectionView(Context& current_context,
+                               const Renderer& renderer, Mixer& mixer,
                                const SocketWrapper& socket)
     : ConstantRateFunc(RATE),
       current_context(current_context),
       renderer(renderer),
+      mixer(mixer),
       socket(socket) {
     _init();
     _loadMedia();

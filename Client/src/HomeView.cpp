@@ -75,6 +75,9 @@ void HomeView::_processSDLEvents() {
     SDL_Event e;
     while (SDL_PollEvent(&e) != 0) {
         _handleEvent(e);
+
+        // Propagamos el evento al mixer
+        mixer.handleEvent(e);
     }
 }
 
@@ -356,9 +359,6 @@ void HomeView::_handleEvent(const SDL_Event& e) {
             break;
         }
     }
-
-    // Propagamos el evento al mixer
-    mixer.handleEvent(e);
 }
 
 void HomeView::_handleConnectButtonPressed() {

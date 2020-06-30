@@ -68,7 +68,7 @@ class Player : public Unit {
 
    public:
     /* Constructor */
-    Player(Renderer* renderer, const Camera& camera,
+    Player(const Renderer* renderer, const Camera& camera,
            UnitSpriteContainer* sprites);
 
     /* Deshabilitamos el constructor por copia. */

@@ -51,7 +51,7 @@ class Character : public Unit {
 
    public:
     /* Constructor */
-    Character(Renderer* renderer, const Camera& camera,
+    Character(const Renderer* renderer, const Camera& camera,
               UnitSpriteContainer* sprites, TTF_Font* g_nickname_font,
               TTF_Font* g_level_font);
 

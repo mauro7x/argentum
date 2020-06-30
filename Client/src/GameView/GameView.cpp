@@ -31,6 +31,9 @@ void GameView::_processSDLEvents() {
     SDL_Event e;
     while (SDL_PollEvent(&e) != 0) {
         event_handler.handleEvent(e);
+
+        // Propagamos el evento al mixer
+        mixer.handleEvent(e);
     }
 }
 
@@ -86,7 +89,8 @@ void GameView::_func(const int it) {
 
 GameView::GameView(BlockingQueue<Command*>& commands,
                    NonBlockingQueue<Broadcast*>& broadcasts,
-                   NonBlockingQueue<Message*>& messages, Renderer& renderer)
+                   NonBlockingQueue<Message*>& messages,
+                   const Renderer& renderer, Mixer& mixer)
     : ConstantRateFunc(RATE),
       // Comunicación entre hilos
       commands(commands),
@@ -95,6 +99,7 @@ GameView::GameView(BlockingQueue<Command*>& commands,
 
       // Componentes principales
       renderer(renderer),
+      mixer(mixer),
 
       // Contenedores de sprites
       unit_sprites(&renderer),

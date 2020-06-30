@@ -39,7 +39,7 @@ enum UnitState { NOT_INIT, READY, MOVING };
 class Unit {
    protected:
     /* Componentes para renderizar */
-    Renderer* g_renderer;
+    const Renderer* g_renderer;
     const Camera& g_camera;
     UnitSpriteContainer* g_sprites;
 
@@ -70,7 +70,7 @@ class Unit {
 
    public:
     /* Constructor */
-    Unit(Renderer* renderer, const Camera& camera,
+    Unit(const Renderer* renderer, const Camera& camera,
          UnitSpriteContainer* sprites);
 
     /* Deshabilitamos el constructor por copia. */

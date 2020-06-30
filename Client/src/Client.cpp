@@ -88,14 +88,14 @@ void Client::_launchHomeCtx() {
 
 void Client::_launchConnectionCtx() {
     fprintf(stderr, "Inicia CONNECTION.\n");
-    ConnectionView connection_view(current_context, renderer, socket);
+    ConnectionView connection_view(current_context, renderer, mixer, socket);
     connection_view.run();
     fprintf(stderr, "Finaliza CONNECTION.\n");
 }
 
 void Client::_launchSignUpCtx() {
     fprintf(stderr, "Inicia SIGNUP.\n");
-    SignUpView signup_view(current_context, renderer, socket);
+    SignUpView signup_view(current_context, renderer, mixer, socket);
     signup_view.run();
     fprintf(stderr, "Finaliza SIGNUP.\n");
 }
@@ -112,7 +112,7 @@ void Client::_launchGameCtx() {
     _receiveFirstPackage(broadcasts);
 
     // Componentes del GameCtx
-    GameView game_view(commands, broadcasts, messages, renderer);
+    GameView game_view(commands, broadcasts, messages, renderer, mixer);
     CommandDispatcher command_dispatcher(socket, commands, game_view);
     Receiver receiver(socket, broadcasts, messages, game_view);
 
