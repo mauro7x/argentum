@@ -95,10 +95,7 @@ const bool Map::_moveOccupant(Tile& from_tile, Tile& to_tile) {
 
     // Se puede mover.
     to_tile.occupant_id = from_tile.occupant_id;
-    // to_tile.collision = true;
-
     from_tile.occupant_id = 0;
-    // from_tile.collision = false;
 
     return true;
 }
@@ -116,19 +113,6 @@ void Map::init(const json& map, const json& tilesets) {
 
     _checkIfValid(map);
     _fillTiles(map, tilesets);
-}
-
-Map::Map(Map&& other) {
-    this->w = other.w;
-    this->h = other.h;
-    this->tiles = std::move(other.tiles);
-}
-
-Map& Map::operator=(Map&& other) {
-    this->w = other.w;
-    this->h = other.h;
-    this->tiles = std::move(other.tiles);
-    return *this;
 }
 
 int Map::getWidthTiles() const {

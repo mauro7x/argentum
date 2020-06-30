@@ -20,13 +20,14 @@ void MapContainer::loadMaps() {
     maps = JSON::loadJsonFile(MAPS_FILEPATH);
 
     int size = maps["data"].size();
-
+    Id map_id;
     for (int i = 0; i < size; i++) {
         filepath = maps["data"][i]["filepath"];
         map = JSON::loadJsonFile(filepath);
-        Map tmp;
-        tmp.init(map, maps["tilesets"]);
-        content.emplace(maps["data"][i]["id"], std::move(tmp));
+        map_id = (Id)maps["data"][i]["id"];
+        content.emplace(std::piecewise_construct, std::forward_as_tuple(map_id),
+                        std::forward_as_tuple());
+        content.at(map_id).init(map, maps["tilesets"]);
     }
 }
 

@@ -66,11 +66,11 @@ class Map {
     /* Deshabilitamos el operador= para copia.*/
     Map& operator=(const Map&) = delete;
 
-    /* Habilitamos el constructor por movimiento. */
-    Map(Map&& other);
+    /* Deshabilitamos el constructor por movimiento. */
+    Map(Map&& other) = delete;
 
-    /* Habilitamos el operador= para movimiento. */
-    Map& operator=(Map&& other);
+    /* Deshabilitamos el operador= para movimiento. */
+    Map& operator=(Map&& other) = delete;
 
     //-------------------------------------------------------------------------
 
