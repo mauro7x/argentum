@@ -3,21 +3,123 @@
 //-----------------------------------------------------------------------------
 // Métodos privados
 
-void ClientLogin::_loginProxy() {
-    bool connected = false;
+// void ClientLogin::_loginProxy() {
+//     bool connected = false;
 
-    while (!connected) {
-        try {
-            database.signIn("mauro", "123");
-            connected = true;
-        } catch (const LoginException& e) {
-            fprintf(stderr, "LOGIN_ERROR: %s\n", e.what());
-        }
-    }
-}
+//     while (!connected) {
+//         try {
+//             database.signIn("mauro", "123");
+//             connected = true;
+//         } catch (const LoginException& e) {
+//             fprintf(stderr, "LOGIN_ERROR: %s\n", e.what());
+//         }
+//     }
+// }
 
 //-----------------------------------------------------------------------------
+CharacterCfg ClientLogin::_login() {
+    bool connected = false;
+    uint8_t opcode;
+    // size_t received;
+    std::string username, password;
+    CharacterCfg character_data;
+    // enviar info kind race;
 
+    while (!connected) {
+        if (!(peer >> opcode)) {
+            throw Exception(
+                "ClientLogin::_login: socket was closed before expected.");
+        }
+
+        if (!(peer >> username)) {
+            throw Exception(
+                "ClientLogin::_login: socket was closed before expected.");
+        }
+
+        if (!(peer >> password)) {
+            throw Exception(
+                "ClientLogin::_login: socket was closed before expected.");
+        }
+        switch (opcode) {
+            case SIGN_IN_OPCODE: {
+                ConnectionAckType status =
+                    database.signIn(username, password, character_data);
+                if (status == SUCCESS_ACK) {
+                    connected = true;
+                }
+
+                // Le enviamos el ack al cliente
+                if (!(peer << (uint8_t)CONNECTION_ACK_OPCODE)) {
+                    throw Exception(
+                        "ClientLogin::_login: socket was closed before "
+                        "expected.");
+                }
+
+                if (!(peer << (uint8_t)status)) {
+                    throw Exception(
+                        "ClientLogin::_login: socket was closed before "
+                        "expected.");
+                }
+
+                break;
+            }
+
+            case SIGN_UP_OPCODE: {
+                uint32_t race, kind, head_id, body_id;
+
+                if (!(peer >> race)) {
+                    throw Exception(
+                        "ClientLogin::_login: socket was closed before "
+                        "expected.");
+                }
+
+                if (!(peer >> kind)) {
+                    throw Exception(
+                        "ClientLogin::_login: socket was closed before "
+                        "expected.");
+                }
+
+                if (!(peer >> head_id)) {
+                    throw Exception(
+                        "ClientLogin::_login: socket was closed before "
+                        "expected.");
+                }
+
+                if (!(peer >> body_id)) {
+                    throw Exception(
+                        "ClientLogin::_login: socket was closed before "
+                        "expected.");
+                }
+
+                ConnectionAckType status =
+                    database.signUp(username, password, race, kind, head_id,
+                                    body_id, character_data);
+
+                // Le enviamos el ack al cliente
+                if (!(peer << (uint8_t)CONNECTION_ACK_OPCODE)) {
+                    throw Exception(
+                        "ClientLogin::_login: socket was closed before "
+                        "expected.");
+                }
+
+                if (!(peer << (uint8_t)status)) {
+                    throw Exception(
+                        "ClientLogin::_login: socket was closed before "
+                        "expected.");
+                }
+
+                break;
+            }
+
+            default: {
+                throw Exception(
+                    "ClientLogin::_login: invalid opcode received.");
+            }
+        }
+    }
+
+    return character_data;
+}
 //-----------------------------------------------------------------------------
 // API Pública
 
@@ -35,35 +137,7 @@ void ClientLogin::run() {
         // Comienza la ejecución del clientlogin
         fprintf(stderr, "Inicia la ejecución del clientlogin.\n");
 
-        // Loggear al usuario o crear al usuario
-        // por ahora proxy:
-        _loginProxy();
-
-        // En este punto, vamos a tener la data del jugador conectado, por lo
-        // que agregamos la petición de crear jugador a la cola y terminamos
-
-        // esta data deberia venir el login
-        CharacterCfg init_data;
-        init_data.race = 100;
-        init_data.kind = 201;
-        init_data.state = ALIVE;
-        init_data.equipment = {1100, 1302, 1402, 0};
-        init_data.inventory = {
-            InventorySlot({1000, 1}),   InventorySlot({1001, 1}),
-            InventorySlot({1102, 2}),   InventorySlot({1300, 9000}),
-            InventorySlot({1401, 454}), InventorySlot({1500, 1}),
-            InventorySlot({1400, 1}),   InventorySlot({1301, 1}),
-            InventorySlot({0, 0}),      InventorySlot({0, 0}),
-            InventorySlot({0, 0}),      InventorySlot({0, 0}),
-            InventorySlot({0, 0}),      InventorySlot({0, 0}),
-            InventorySlot({0, 0}),      InventorySlot({0, 0})};
-        init_data.health = 50;
-        init_data.mana = 100;
-        init_data.safe_gold = 100;
-        init_data.excess_gold = 50;
-        init_data.level = 20;
-        init_data.exp = 100;
-
+        CharacterCfg init_data = _login();
         new_connections.push(new NewConnection(peer, init_data));
 
         // ACA NO SE DEBERÍA HACER NADA QUE FALLE, PORQUE EL SOCKET YA NO

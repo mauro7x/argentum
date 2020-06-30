@@ -15,6 +15,7 @@
 
 //-----------------------------------------------------------------------------
 #include "../../Common/includes/JSON.h"
+#include "../../Common/includes/Protocol.h"
 #include "../../Common/includes/Socket/SocketWrapper.h"
 #include "../../Common/includes/defs.h"
 #include "../../Common/includes/types.h"
@@ -46,7 +47,8 @@
 #define SIGNUPVIEW_MAX_INPUT_MSG "LONGITUD MAXIMA ALCANZADA"
 
 #define SIGNUPVIEW_CREATING_MSG "CREANDO PERSONAJE..."
-
+#define SIGNUPVIEW_SUCCESS_MSG "TU PERSONAJE FUE CREADO CON ÉXITO"
+#define SIGNUPVIEW_USERNAME_TAKEN "EL NOMBRE DE USUARIO ESTÁ EN USO"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -148,6 +150,9 @@ class SignUpView : public ConstantRateFunc {
 
     /* Handler del boton crear personaje */
     void _handleGoBackButtonPressed();
+
+    /* Intenta crear el personaje mandando el mensaje al servidor */
+    void _tryToCreate();
 
     /* Renderiza un sprite en la ventana de preview */
     void _renderSprite(const UnitSprite& sprite) const;

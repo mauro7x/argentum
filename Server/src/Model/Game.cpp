@@ -15,10 +15,6 @@
 #include "../../includes/Model/Game.h"
 //-----------------------------------------------------------------------------
 #define FIRST_INSTANCE_ID 1
-#define RATE 1000 / 30
-#define MAX_CREATURES_PER_MAP 20
-#define TIME_TO_SPAWN_CREATURE 3000           // en ms
-#define TIME_TO_DISSAPEAR_DROPPED_ITEM 25000  // en ms
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -58,7 +54,6 @@ Notification* Game::_buildPlayerBroadcast(InstanceId id,
     PlayerData player_data;
     player_data.basic_data.gid = id;
     // llenar nickname
-    player_data.nickname = "dummynick";
     Character& character = this->characters.at(id);
     character.fillBroadcastData(player_data);
 
@@ -205,6 +200,9 @@ const InstanceId Game::newCharacter(const CharacterCfg& init_data) {
     Id new_character_id = this->next_instance_id;
     ++this->next_instance_id;
 
+    fprintf(stderr, "deberia espawnear en map: %i, x: %i, y: %i\n",
+            init_data.map, init_data.x_tile, init_data.y_tile);
+
     const Id spawning_map_id = this->map_container.getCharacterSpawningMap();
     int spawning_x_coord;
     int spawning_y_coord;
@@ -247,15 +245,17 @@ void Game::newCreature(const CreatureCfg& init_data, const Id init_map) {
     _pushCreatureDifferentialBroadcast(new_creature_id, NEW_BROADCAST);
 }
 
-void Game::deleteCharacter(const InstanceId id) {
+void Game::deleteCharacter(const InstanceId id, Database& database) {
     if (!this->characters.count(id)) {
         throw Exception("deleteCharacter: Unknown character id [", id, "]");
     }
-
+    Character& character = characters.at(id);
     _pushCharacterDifferentialBroadcast(id, DELETE_BROADCAST, false);
 
+    CharacterCfg character_data = {};
     // PERSISTIR ESTADO DEL JUGADOR
-
+    character.fillPersistenceData(character_data);
+    database.persistPlayerData(character_data, true);
     this->characters.erase(id);
 }
 

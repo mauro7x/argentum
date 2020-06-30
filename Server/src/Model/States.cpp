@@ -10,6 +10,11 @@ void State::fillBroadcastData(PlayerData& data) {
     data.body_id = this->body_id;
 }
 
+void State::fillPersistenceData(CharacterCfg& data) {
+    data.head_id = this->head_id;
+    data.body_id = this->body_id;
+}
+
 State* StateFactory::newState(StateType state, const Race& race_data) {
     if (state == ALIVE)
         return new Alive(race_data);

@@ -7,6 +7,7 @@
 #include "../../../Common/includes/MapContainer.h"
 #include "../../../Common/includes/Orientation.h"
 #include "../../../Common/includes/types.h"
+#include "config_structs.h"
 
 class Position {
    private:
@@ -61,6 +62,12 @@ class Position {
      * PlayerData para su broadcast.
      */
     void fillBroadcastData(UnitData& data) const;
+
+    /*
+     * Llena los campos x_tile, y_tile del CharacterCfg.
+     */
+    void fillPersistenceData(CharacterCfg& data) const;
+
 };
 
 class CollisionWhileMovingException : public std::exception {

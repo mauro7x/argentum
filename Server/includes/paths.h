@@ -13,6 +13,8 @@
 #define NPC_CONFIG_FILEPATH "../Config/Server/npcs.json"
 #define CREATURES_CONFIG_FILEPATH "../Config/Server/creatures.json"
 #define ITEMS_CONFIG_FILEPATH "../Config/Server/items.json"
+#define PLAYER_INFO_FILEPATH "../Config/Server/playerinfo.cfg"
+#define PLAYER_DATA_FILEPATH "../Config/Server/playerdata.cfg"
 
 //-----------------------------------------------------------------------------
 

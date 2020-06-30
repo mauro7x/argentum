@@ -10,6 +10,7 @@
 //-----------------------------------------------------------------------------
 #include "../../../Common/includes/Exceptions/Exception.h"
 #include "../../../Common/includes/JSON.h"
+#include "../../../Common/includes/json_conversion.h"
 #include "../paths.h"
 #include "config_structs.h"
 //-----------------------------------------------------------------------------
@@ -69,6 +70,11 @@ class Config {
             ids.push_back(it->first);
             ++it;
         }
+    }
+
+    /* encontrar si existe tal id en config */
+    size_t count(Id id) const {
+        return config.count(id);
     }
 
     /* Conocer la cantidad de Ts que tenemos */

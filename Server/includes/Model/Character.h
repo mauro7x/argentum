@@ -19,8 +19,10 @@
 //-----------------------------------------------------------------------------
 #include "../../../Common/includes/MapContainer.h"
 #include "../../../Common/includes/Orientation.h"
+#include "../../../Common/includes/defs.h"
 #include "../../../Common/includes/types.h"
 //-----------------------------------------------------------------------------
+#include "../defs.h"
 #include "config_structs.h"
 //-----------------------------------------------------------------------------
 #include "../../../Common/includes/DataStructs.h"
@@ -45,8 +47,10 @@ class Character : public Attackable {
     unsigned int health, mana;
     const unsigned int intelligence, constitution, strength, agility;
     unsigned int max_health, max_mana;
+    std::string nickname;
     Race race;
     Kind kind;
+
     State* state;
     Level level;
     Inventory inventory;
@@ -264,9 +268,9 @@ class Character : public Attackable {
      */
     Item* dropItem(const unsigned int n_slot, unsigned int& amount);
 
-    /* 
+    /*
      * Se llama a este método cuando el jugador muere.
-     * 
+     *
      * Recibe un vector en el que dropeará todos sus elementos,
      * tanto en equipment como en inventory.
      */
@@ -386,6 +390,11 @@ class Character : public Attackable {
     const bool useWeapon(Attackable* target, int& damage);
 
     /*
+     * Devuelve el nickname del caracter;
+     */
+    std::string getNickname();
+
+    /*
      * Cuando health es cero, se llama a este método. Cambia el estado del
      * jugador a Dead.
      */
@@ -436,11 +445,16 @@ class Character : public Attackable {
      * Recibe una estructura de broadcast de tipo PlayerData,
      * y la llena con sus atributos actuales para su broadcasteo.
      *
-     * [No llena los campos: id, nickname]
+     * [No llena los campos: id]
      */
     void fillBroadcastData(PlayerData& data) const;
 
     //--------------------------------------------------------------------------
+
+    /*
+     * Recibe una referencia de characterCfg , y llenar los datos.
+     */
+    void fillPersistenceData(CharacterCfg& data) const;
 
     void debug();
 };

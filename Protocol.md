@@ -18,15 +18,28 @@ Identificas el mensaje con el primer byte recibido (opcode), y para cada caso se
 
 | OPCODE | TIPO | DIRECCIÓN | ESTRUCTURA (B) |
 |--------|------|-----------|----------------|
-| 0 | Mensaje | S -> C | `TYPE (1) + ...` |
-| 1 | Broadcast | S -> C | `TYPE (1) + ...` |
+| 0 | Respuesta a conexión | S -> C | `TYPE (1)` |
+| 1 | Mensaje | S -> C | `TYPE (1) + ...` |
+| 2 | Broadcast | S -> C | `TYPE (1) + ...` |
 | 128 | Comando | C -> S | `TYPE (1) + ...` |
 | 129 | Sign-in | C -> S | `USER_LENGTH (4) + USERNAME (USER_LENGTH) + PASS_LENGTH (4) + PASSWORD (PASS_LENGTH)` |
-| 130 | Sign-up | C -> S | `USER_LENGTH (4) + USERNAME (USER_LENGTH) + PASS_LENGTH (4) + PASSWORD (PASS_LENGTH) + RACE (1) + KIND (1)` |
+| 130 | Sign-up | C -> S | `USER_LENGTH (4) + USERNAME (USER_LENGTH) + PASS_LENGTH (4) + PASSWORD (PASS_LENGTH) + RACE (4) + KIND (4) + HEAD_ID (4) + BODY_ID (4)` |
 
 ---
 
-### Message (OP = 0):
+### Respuesta a conexión (OP = 0):
+
+| OPCODE | TIPO |
+|--------|------|
+| 0 | Exito |
+| 1 | Error: nombre de usuario incorrecto. |
+| 2 | Error: contraseña incorrecta. |
+| 3 | Error: usuario ya conectado. |
+| 4 | Error: nombre de usuario ya existente. |
+
+---
+
+### Message (OP = 1):
 
 | OPCODE | TIPO | ESTRUCTURA (B) |
 |--------|------|----------------|
@@ -39,7 +52,7 @@ Identificas el mensaje con el primer byte recibido (opcode), y para cada caso se
 
 ---
 
-### Broadcast (OP = 1):
+### Broadcast (OP = 2):
     
 | TIPO | DESCRIPCION | ESTRUCTURA (B) |
 |--------|------|----------------|

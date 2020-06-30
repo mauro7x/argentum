@@ -14,10 +14,11 @@ void Config<RaceCfg>::_parseFile() {
 
         race.id = j[i]["id"];
         race.name = j[i]["name"];
-        race.head_id = j[i]["head_id"];
-        race.body_id = j[i]["body_id"];
+        j[i]["head_ids"].get_to(race.head_ids);
+        j[i]["body_ids"].get_to(race.body_ids);
         race.dead_head_id = j[i]["dead_head_id"];
         race.dead_body_id = j[i]["dead_body_id"];
+
         race.max_health_factor = j[i]["max_health_factor"];
         race.max_mana_factor = j[i]["max_mana_factor"];
         race.health_recovery_factor = j[i]["health_recovery_factor"];
