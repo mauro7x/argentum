@@ -152,7 +152,8 @@ Command* CommandFactory::newCommand(InstanceId caller, uint8_t opcode,
         }
 
         case SEND_PRIVATE_MESSAGE_CMD: {
-            std::string to_nickname, message;
+            std::string to_nickname;
+            std::string message;
             socket >> to_nickname;
             socket >> message;
             return new PrivateMessageCommand(caller, std::move(to_nickname),

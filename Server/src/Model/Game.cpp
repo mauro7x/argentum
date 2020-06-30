@@ -191,12 +191,6 @@ void Game::broadcastNewCharacter(InstanceId id) {
 //----------------------------------------------------------------------------
 
 const InstanceId Game::newCharacter(const CharacterCfg& init_data) {
-    // CONTROL DE PLAYER DATA. LLENADO DE CAMPOS FALTANTES.
-    // Establecer id del mapa y posicion en el mapa.
-    // Como viene cargada la estructura?
-    // La posicion en el mapa si es nuevo viene dada o la tengo que
-    // calcular? Y si la posicion que tenia ahora esta ocupada?
-
     Id new_character_id = this->next_instance_id;
     ++this->next_instance_id;
 
@@ -215,6 +209,8 @@ const InstanceId Game::newCharacter(const CharacterCfg& init_data) {
                               this->kinds[init_data.kind], this->map_container,
                               spawning_map_id, spawning_x_coord,
                               spawning_y_coord, this->items));
+
+    this->nickname_id_map[init_data.nickname] = new_character_id;
 
     this->characters.at(new_character_id).debug();
 
@@ -240,8 +236,6 @@ void Game::newCreature(const CreatureCfg& init_data, const Id init_map) {
                               init_data.base_health, init_data.base_damage,
                               items));
 
-    // fprintf(stderr, "NEW CREATURE: %s \n", init_data.name.c_str());
-
     _pushCreatureDifferentialBroadcast(new_creature_id, NEW_BROADCAST);
 }
 
@@ -253,9 +247,11 @@ void Game::deleteCharacter(const InstanceId id, Database& database) {
     _pushCharacterDifferentialBroadcast(id, DELETE_BROADCAST, false);
 
     CharacterCfg character_data = {};
-    // PERSISTIR ESTADO DEL JUGADOR
     character.fillPersistenceData(character_data);
     database.persistPlayerData(character_data, true);
+
+    this->nickname_id_map.erase(character.getNickname());
+
     this->characters.erase(id);
 }
 
@@ -759,23 +755,30 @@ void Game::sendPrivateMessage(const InstanceId caller,
     if (!this->characters.count(caller))
         throw Exception("Game::sendPrivateMessage: unknown caller.");
 
-    // InstanceId destinatary_id = ;
+    if (!this->nickname_id_map.count(to_nickname)) {
+        std::string reply_msg = "No existe jugador con el nickname especificado.";
+        Notification* reply = new Reply(ERROR_MSG, reply_msg.c_str());
+        active_clients.notify(caller, reply);
+        return;
+    }
 
-    // std::string& caller_nickname = this->characters.at(caller).getNickname();
+    InstanceId destinatary_id = this->nickname_id_map.at(to_nickname);
 
-    // Notification* notification = new Message(caller_nickname, message, PRIVATE_MSG);
-    // this->active_clients.notify(destinatary_id, notification);
+    const std::string& caller_nickname = this->characters.at(caller).getNickname();
+
+    Notification* notification = new Message(caller_nickname, message, PRIVATE_MSG);
+    this->active_clients.notify(destinatary_id, notification);
 }
 
 void Game::sendGeneralMessage(const InstanceId caller,
                               const std::string message) {
-    // if (!this->characters.count(caller))
-    //     throw Exception("Game::sendPrivateMessage: unknown caller.");
+    if (!this->characters.count(caller))
+        throw Exception("Game::sendPrivateMessage: unknown caller.");
     
-    // std::string& caller_nickname = this->characters.at(caller).getNickname();
+    const std::string& caller_nickname = this->characters.at(caller).getNickname();
 
-    // Notification* message = new Message(caller_nickname, message, GENERAL_MSG);
-    // this->active_clients.
+    Notification* notification = new Message(caller_nickname, message, GENERAL_MSG);
+    this->active_clients.sendMessageToAll(notification, caller);
 }
 
 //-----------------------------------------------------------------------------
