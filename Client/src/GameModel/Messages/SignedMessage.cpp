@@ -16,7 +16,7 @@ SignedMessage::SignedMessage(const std::string& sender,
 void SignedMessage::update(HUD& hud) const {
     switch (type) {
         case GENERAL_SIGNED_MSG: {
-            hud.addMessage(sender + ": " + content, color);
+            hud.addMessage("(Chat general) " + sender + ": " + content, color);
             break;
         }
 
