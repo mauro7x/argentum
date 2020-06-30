@@ -48,7 +48,7 @@ class ProgressBar {
 
     // Valores
     uint32_t current_value = 0;
-    uint32_t max_value = 1;
+    uint32_t max_value = 0;
 
     // Fuente
     ProgressBarTextType text_type = NONE_PBTEXTYPE;
