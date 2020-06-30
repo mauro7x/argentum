@@ -9,12 +9,12 @@ Marcarlos cuando estén implementados y funcionando!
 | 2 | Empezar a mover a la izquierda | X | X | X |
 | 3 | Empezar a mover a la derecha | X | X | X |
 | 4 | Dejar de mover | X | X | X |
-| 5 | Usar arma principal | X | | |
+| 5 | Usar arma principal | X | X | X |
 | 6 | Equipar objeto | X | X | X |
 | 7 | Desequipar objeto | X | X | X |
-| 8 | Tomar | X | X | |
-| 9 | Tirar | X | X | |
-| 10 | Meditar | X | | |
+| 8 | Tomar | X | X | X |
+| 9 | Tirar | X | X | X |
+| 10 | Meditar | X | X | X |
 | 11 | Resucitar (solo) | X | | |
 | 12 | Listar comandos disponibles del NPC (/help) | X | | |
 | 13 | Resucitar (con sacerdote) | X | | |
@@ -27,5 +27,5 @@ Marcarlos cuando estén implementados y funcionando!
 | 20 | Comprar | X | | |
 | 21 | Vender | X | | |
 | 22 | Listar jugadores conectados | X | | |
-| 23 | Mensaje general | X | | |
-| 24 | Mensaje privado | X | | |
+| 23 | Mensaje general | X | X | X |
+| 24 | Mensaje privado | X | X | X |

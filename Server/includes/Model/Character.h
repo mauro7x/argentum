@@ -59,6 +59,8 @@ class Character : public Attackable {
     Equipment equipment;
     Position position;
 
+    bool meditating;
+
     bool is_moving;
     int moving_cooldown;
     unsigned int attribute_update_time_elapsed;
@@ -291,7 +293,7 @@ class Character : public Attackable {
      * Efectua la acción curativa de las pociones de maná.
      * Aumenta los puntos de mana en los points especificados,
      * siempre y cuando el límite de mana no se supere.
-     * 
+     *
      * Retorna si aumentó el maná o no.
      */
     const bool recoverMana(const unsigned int points);
@@ -300,7 +302,7 @@ class Character : public Attackable {
      * Efectua la acción curativa de las pociones/hechizos de vida.
      * Aumenta los puntos de vida en los points especificados,
      * siempre y cuando el límite de health no se supere.
-     * 
+     *
      * Retorna si aumentó la vida o no.
      */
     const bool recoverHealth(const unsigned int points) override;
@@ -311,6 +313,15 @@ class Character : public Attackable {
      * Lanza InsufficientManaException si no hay suficiente mana.
      */
     void consumeMana(const unsigned int mana_points);
+
+    /*
+     * El character comienza a meditar, acelerando la recuperación de su maná.
+     *
+     * Ante cualquier acción que afecte su estado, dejará de meditar.
+     *
+     * Lanza KindCantMeditateException si su kind no puede meditar.
+     */
+    void meditate();
 
     //--------------------------------------------------------------------------
 

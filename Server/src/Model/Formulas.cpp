@@ -55,6 +55,12 @@ const unsigned int Formulas::calculateManaTimeRecovery(
     return race_factor * seconds_elapsed;
 }
 
+const unsigned int Formulas::calculateManaMeditationTimeRecovery(
+    const unsigned int kind_meditation_factor, const unsigned int intelligence,
+    const unsigned int seconds_elapsed) {
+    return kind_meditation_factor * intelligence * seconds_elapsed;
+}
+
 const bool Formulas::isAttackEluded(const unsigned int agility) {
     RandomNumberGenerator gen;
     return (std::pow(gen(0, 1), agility) < 0.001);

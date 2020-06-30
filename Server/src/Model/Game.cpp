@@ -602,8 +602,6 @@ void Game::unequip(const InstanceId caller, const uint8_t n_slot) {
         throw Exception("Game::unequip: unknown caller.");
     }
 
-    fprintf(stderr, "unequip n_slot: %i \n", n_slot);
-
     Character& character = this->characters.at(caller);
 
     try {
@@ -617,7 +615,24 @@ void Game::unequip(const InstanceId caller, const uint8_t n_slot) {
 }
 
 void Game::meditate(const InstanceId caller) {
-    fprintf(stderr, "Game::meditate no implementado.\n");
+    if (!this->characters.count(caller)) {
+        throw Exception("Game::unequip: unknown caller.");
+    }
+
+    Character& character = this->characters.at(caller);
+
+    try {
+        character.meditate();
+    } catch (const KindCantMeditateException& e) {
+        Notification* reply = new Reply(ERROR_MSG, e.what());
+        active_clients.notify(caller, reply);
+        return;
+    }
+
+    std::string reply_msg =
+        "Has comenzado a meditar. Ante cualquier acción dejarás de hacerlo.";
+    Notification* reply = new Reply(SUCCESS_MSG, reply_msg);
+    active_clients.notify(caller, reply);
 }
 
 void Game::resurrect(const InstanceId caller) {
@@ -759,7 +774,8 @@ void Game::sendPrivateMessage(const InstanceId caller,
         throw Exception("Game::sendPrivateMessage: unknown caller.");
 
     if (!this->nickname_id_map.count(to_nickname)) {
-        std::string reply_msg = "No existe jugador con el nickname especificado.";
+        std::string reply_msg =
+            "No existe jugador con el nickname especificado.";
         Notification* reply = new Reply(ERROR_MSG, reply_msg.c_str());
         active_clients.notify(caller, reply);
         return;
@@ -767,9 +783,11 @@ void Game::sendPrivateMessage(const InstanceId caller,
 
     InstanceId destinatary_id = this->nickname_id_map.at(to_nickname);
 
-    const std::string& caller_nickname = this->characters.at(caller).getNickname();
+    const std::string& caller_nickname =
+        this->characters.at(caller).getNickname();
 
-    Notification* notification = new Message(caller_nickname, message, PRIVATE_MSG);
+    Notification* notification =
+        new Message(caller_nickname, message, PRIVATE_MSG);
     this->active_clients.notify(destinatary_id, notification);
 }
 
@@ -777,10 +795,12 @@ void Game::sendGeneralMessage(const InstanceId caller,
                               const std::string message) {
     if (!this->characters.count(caller))
         throw Exception("Game::sendPrivateMessage: unknown caller.");
-    
-    const std::string& caller_nickname = this->characters.at(caller).getNickname();
 
-    Notification* notification = new Message(caller_nickname, message, GENERAL_MSG);
+    const std::string& caller_nickname =
+        this->characters.at(caller).getNickname();
+
+    Notification* notification =
+        new Message(caller_nickname, message, GENERAL_MSG);
     this->active_clients.sendMessageToAll(notification, caller);
 }
 

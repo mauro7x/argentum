@@ -42,6 +42,8 @@ Character::Character(const CharacterCfg& init_data, const RaceCfg& race,
 
       position(init_map, init_x_coord, init_y_coord, map_container),
 
+      meditating(false),
+
       is_moving(false),
       moving_cooldown(0),
       attribute_update_time_elapsed(0),
@@ -102,6 +104,11 @@ void Character::_updateTimeDependantAttributes(const unsigned int it) {
             this->race.mana_recovery_factor,
             TIME_TO_UPDATE_ATTRIBUTES / 1000);  // en segundos
 
+        if (this->meditating)
+            mana_update += Formulas::calculateManaMeditationTimeRecovery(
+                this->kind.meditation_factor, this->intelligence,
+                TIME_TO_UPDATE_ATTRIBUTES / 1000);  // en segundos
+
         if ((this->health < this->max_health))
             this->recoverHealth(health_update);
         if ((this->mana < this->max_mana))
@@ -134,21 +141,25 @@ std::string Character::getNickname() {
 //-----------------------------------------------------------------------------
 
 void Character::startMovingUp() {
+    this->meditating = false;
     this->position.changeOrientation(UP_ORIENTATION);
     this->is_moving = true;
 }
 
 void Character::startMovingDown() {
+    this->meditating = false;
     this->position.changeOrientation(DOWN_ORIENTATION);
     this->is_moving = true;
 }
 
 void Character::startMovingRight() {
+    this->meditating = false;
     this->position.changeOrientation(RIGHT_ORIENTATION);
     this->is_moving = true;
 }
 
 void Character::startMovingLeft() {
+    this->meditating = false;
     this->position.changeOrientation(LEFT_ORIENTATION);
     this->is_moving = true;
 }
@@ -188,6 +199,11 @@ void Character::consumeMana(const unsigned int points) {
 
     this->mana -= points;
     this->broadcast = true;
+}
+
+void Character::meditate() {
+    this->kind.meditate();
+    this->meditating = true;
 }
 
 //-----------------------------------------------------------------------------
@@ -362,6 +378,8 @@ const bool Character::_useAttackWeapon(Attackable* target, int& damage) {
 const bool Character::useWeapon(Attackable* target, int& damage) {
     _checkPriorToUseWeaponConditions(target);
 
+    this->meditating = false;
+
     if (this->equipment.isWeaponHealing())
         return _useHealingWeapon(target, damage);
 
@@ -370,6 +388,8 @@ const bool Character::useWeapon(Attackable* target, int& damage) {
 }
 
 const bool Character::receiveAttack(int& damage, const bool eludible) {
+    this->meditating = false;
+
     if (eludible && Formulas::isAttackEluded(this->agility)) {
         // El ataque es esquivado, no se recibe daño
         damage = 0;
