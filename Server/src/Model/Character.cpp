@@ -9,6 +9,7 @@
 #include <iostream>  //sacar
 //-----------------------------------------------------------------------------
 #define DEFAULT_MOVING_ORIENTATION DOWN_ORIENTATION
+#define FIST_COOLDOWN 500
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -41,6 +42,8 @@ Character::Character(const CharacterCfg& init_data, const RaceCfg& race,
       equipment(init_data.equipment, items_container),
 
       position(init_map, init_x_coord, init_y_coord, map_container),
+
+      meditating(false),
 
       is_moving(false),
       moving_cooldown(0),
@@ -102,6 +105,11 @@ void Character::_updateTimeDependantAttributes(const unsigned int it) {
             this->race.mana_recovery_factor,
             TIME_TO_UPDATE_ATTRIBUTES / 1000);  // en segundos
 
+        if (this->meditating)
+            mana_update += Formulas::calculateManaMeditationTimeRecovery(
+                this->kind.meditation_factor, this->intelligence,
+                TIME_TO_UPDATE_ATTRIBUTES / 1000);  // en segundos
+
         if ((this->health < this->max_health))
             this->recoverHealth(health_update);
         if ((this->mana < this->max_mana))
@@ -134,21 +142,25 @@ std::string Character::getNickname() {
 //-----------------------------------------------------------------------------
 
 void Character::startMovingUp() {
+    this->meditating = false;
     this->position.changeOrientation(UP_ORIENTATION);
     this->is_moving = true;
 }
 
 void Character::startMovingDown() {
+    this->meditating = false;
     this->position.changeOrientation(DOWN_ORIENTATION);
     this->is_moving = true;
 }
 
 void Character::startMovingRight() {
+    this->meditating = false;
     this->position.changeOrientation(RIGHT_ORIENTATION);
     this->is_moving = true;
 }
 
 void Character::startMovingLeft() {
+    this->meditating = false;
     this->position.changeOrientation(LEFT_ORIENTATION);
     this->is_moving = true;
 }
@@ -163,20 +175,22 @@ void Character::stopMoving() {
 // Modificación de maná y vida.
 //-----------------------------------------------------------------------------
 
-void Character::recoverHealth(const unsigned int points) {
-    if (!points || !health)
-        return;
+const bool Character::recoverHealth(const unsigned int points) {
+    if (!points || !health || this->health == this->max_health)
+        return false;
 
     this->health = std::min(this->health + points, max_health);
     this->broadcast = true;
+    return true;
 }
 
-void Character::recoverMana(const unsigned int points) {
-    if (!points)
-        return;
+const bool Character::recoverMana(const unsigned int points) {
+    if (!points || !health || this->mana == this->max_mana)
+        return false;
 
     this->mana = std::min(this->mana + points, max_mana);
     this->broadcast = true;
+    return true;
 }
 
 void Character::consumeMana(const unsigned int points) {
@@ -186,6 +200,11 @@ void Character::consumeMana(const unsigned int points) {
 
     this->mana -= points;
     this->broadcast = true;
+}
+
+void Character::meditate() {
+    this->kind.meditate();
+    this->meditating = true;
 }
 
 //-----------------------------------------------------------------------------
@@ -203,6 +222,8 @@ void Character::equip(unsigned int inventory_position) {
         return;
 
     item_to_equip->equip(*this);
+
+    this->broadcast = true;
 }
 
 void Character::equip(Wearable* item) {
@@ -268,18 +289,12 @@ void Character::beAttacked() {
 }
 
 void Character::doMagic() {
-    if (!this->kind.canDoMagic()) {
-        throw KindCantDoMagicException();
-    }
+    this->kind.doMagic();
 }
 
 void Character::_checkPriorToUseWeaponConditions(Attackable* target) const {
     // Delego si puedo atacar en mi estado.
     this->state->attack();
-
-    // Verifico si tiene arma de ataque.
-    if (!this->equipment.hasAWeaponEquipped())
-        throw CantAttackWithoutWeaponException();
 
     // Verifico cooldown de arma de ataque.
     if (this->attack_cooldown)
@@ -333,10 +348,10 @@ const bool Character::_useHealingWeapon(Attackable* target, int& damage) {
 const bool Character::_useAttackWeapon(Attackable* target, int& damage) {
     _checkPriorToUseAttackWeaponConditions(target);
 
-    // Se define si el ataque es critico y se obtienen
-    // los correspondientes puntos de daño.
+    // Obtenemos el danio del arma. Si no, usa el puño.
     damage = this->equipment.useAttackItem(*this);
 
+    // Se define si el ataque es critico
     bool critical_attack = Formulas::isCriticalAttack();
     if (critical_attack)
         damage = damage * CRITICAL_ATTACK_DAMAGE_MODIFIER;
@@ -352,6 +367,9 @@ const bool Character::_useAttackWeapon(Attackable* target, int& damage) {
         this->level.onKillUpdate(*this, target->getMaxHealth(),
                                  target->getLevel());
 
+    if (!this->equipment.hasAWeaponEquipped())
+        setAttackCooldown(FIST_COOLDOWN);
+
     this->broadcast = true;
 
     return eluded;
@@ -359,6 +377,8 @@ const bool Character::_useAttackWeapon(Attackable* target, int& damage) {
 
 const bool Character::useWeapon(Attackable* target, int& damage) {
     _checkPriorToUseWeaponConditions(target);
+
+    this->meditating = false;
 
     if (this->equipment.isWeaponHealing())
         return _useHealingWeapon(target, damage);
@@ -368,6 +388,8 @@ const bool Character::useWeapon(Attackable* target, int& damage) {
 }
 
 const bool Character::receiveAttack(int& damage, const bool eludible) {
+    this->meditating = false;
+
     if (eludible && Formulas::isAttackEluded(this->agility)) {
         // El ataque es esquivado, no se recibe daño
         damage = 0;
@@ -502,10 +524,6 @@ const char* OutOfRangeAttackException::what() const noexcept {
     return "El jugador al que quieres atacar está fuera del rango de tu arma.";
 }
 
-const char* CantAttackWithoutWeaponException::what() const noexcept {
-    return "No puedes atacar sin arma.";
-}
-
 const char* NewbiesCantBeAttackedException::what() const noexcept {
     return "No puedes atacar a jugador newbie.";
 }
@@ -516,10 +534,6 @@ const char* AttackCooldownTimeNotElapsedException::what() const noexcept {
 
 const char* TooHighLevelDifferenceOnAttackException::what() const noexcept {
     return "No puedes atacar. La diferencia de niveles es mayor a 12.";
-}
-
-const char* KindCantDoMagicException::what() const noexcept {
-    return "Tu clase no puede lanzar hechizos.";
 }
 
 //-----------------------------------------------------------------------------

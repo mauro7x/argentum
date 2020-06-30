@@ -1,8 +1,8 @@
 #include "../../includes/Model/Potion.h"
-
-#include "../../includes/Model/Character.h"  
-/* Se incluye aca para evitar dependencias
- circulares.*/
+//-----------------------------------------------------------------------------
+#include "../../includes/Model/Character.h"
+#include "../../includes/Model/Kind.h"
+//-----------------------------------------------------------------------------
 
 Potion::Potion(const Id id, std::string name, const unsigned int price,
                const unsigned int recovery_points)
@@ -25,7 +25,10 @@ HealthPotion::HealthPotion(const PotionCfg& data)
 HealthPotion::~HealthPotion() {}
 
 void HealthPotion::equip(Character& equipper) {
-    equipper.recoverHealth(this->recovery_points);
+    if (!equipper.recoverHealth(this->recovery_points)) {
+        equipper.takeItem((Item*) this);
+        throw HealthPotionHasNoPointsToRecoverException();
+    };
 }
 
 ManaPotion::ManaPotion(const PotionCfg& data)
@@ -33,9 +36,28 @@ ManaPotion::ManaPotion(const PotionCfg& data)
 ManaPotion::~ManaPotion() {}
 
 void ManaPotion::equip(Character& equipper) {
-    equipper.recoverMana(this->recovery_points);
+    try {
+        equipper.doMagic();
+    } catch (const KindCantDoMagicException& e) {
+        equipper.takeItem((Item*)this);
+        throw e;
+    }
+    
+    if (!equipper.recoverMana(this->recovery_points)) {
+        equipper.takeItem((Item*) this);
+        throw ManaPotionHasNoPointsToRecoverException();
+    };
 }
 
 const char* UnknownPotionTypeException::what() const noexcept {
     return "El tipo de poción especificado en PotionCfg es inválido.";
 }
+
+const char* HealthPotionHasNoPointsToRecoverException::what() const noexcept {
+    return "Ya tienes la barra de vida llena.";
+}
+
+const char* ManaPotionHasNoPointsToRecoverException::what() const noexcept {
+    return "Ya tienes la barra de maná llena.";
+}
+

@@ -11,16 +11,20 @@ Kind::Kind(const KindCfg& data):
             
 Kind::~Kind() {}
 
-const bool Kind::canDoMagic() const {
-    if (!max_mana_factor) {
-        return false;
-    }
-    return true;
+void Kind::doMagic() const {
+    if (!max_mana_factor)
+        throw KindCantDoMagicException();
 }
 
-const bool Kind::canMeditate() const {
-    if (!meditation_factor) {
-        return false;
-    }
-    return true;
+void Kind::meditate() const {
+    if (!meditation_factor) 
+        throw KindCantMeditateException();
+}
+
+const char* KindCantDoMagicException::what() const noexcept {
+    return "Tu clase no puede hacer magia.";
+}
+
+const char* KindCantMeditateException::what() const noexcept {
+    return "Tu clase no puede meditar.";
 }

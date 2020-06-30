@@ -51,7 +51,7 @@ void Database::_persistPlayerInfo(const std::string& username) {
     file_info.close();
 }
 
-void Database::_createDataInicial(const std::string& username, Id race, Id kind,
+void Database::_createInitialData(const std::string& username, Id race, Id kind,
                                   Id head_id, Id body_id,
                                   CharacterCfg& character_data) {
     character_data.map = 0;
@@ -74,7 +74,10 @@ void Database::_createDataInicial(const std::string& username, Id race, Id kind,
         InventorySlot({0, 0})};
     character_data.health =
         races[race].initial_health + kinds[kind].initial_health;
-    character_data.mana = races[race].initial_health + kinds[kind].initial_mana;
+    character_data.mana =
+        (kinds[kind].initial_mana)
+            ? races[race].initial_mana + kinds[kind].initial_mana
+            : 0;
     character_data.safe_gold = 0;
     character_data.excess_gold = 0;
     character_data.level = 1;
@@ -220,7 +223,7 @@ ConnectionAckType Database::signUp(const std::string& username,
                  sizeof(new_data.password) - 1);
 
     _persistPlayerInfo(username);
-    _createDataInicial(username, race, kind, head_id, body_id, character_data);
+    _createInitialData(username, race, kind, head_id, body_id, character_data);
     persistPlayerData(character_data);
     file_pointer += sizeof(CharacterCfg);
 

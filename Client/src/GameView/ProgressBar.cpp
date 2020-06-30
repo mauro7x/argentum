@@ -4,11 +4,12 @@
 // Métodos privados
 
 void ProgressBar::_renderProgress() const {
-    float relative_progress = ((float)current_value) / max_value;
-
-    SDL_Rect render_quad = render_rect;
-    render_quad.w *= relative_progress;
-    g_renderer->fillQuad(&render_quad, color);
+    if (max_value) {
+        float relative_progress = ((float)current_value) / max_value;
+        SDL_Rect render_quad = render_rect;
+        render_quad.w *= relative_progress;
+        g_renderer->fillQuad(&render_quad, color);
+    }
 }
 
 void ProgressBar::_center(SDL_Point& texture_pos, const Texture& texture,

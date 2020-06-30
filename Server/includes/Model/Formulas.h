@@ -26,6 +26,9 @@ class Formulas {
         const unsigned int race_factor, const unsigned int seconds_elapsed);
     static const unsigned int calculateManaTimeRecovery(
         const unsigned int race_factor, const unsigned int seconds_elapsed);
+    static const unsigned int calculateManaMeditationTimeRecovery(
+        const unsigned int kind_meditation_factor,
+        const unsigned int intelligence, const unsigned int seconds_elapsed);
 
     static const bool isAttackEluded(const unsigned int agility);
     static const bool isCriticalAttack();

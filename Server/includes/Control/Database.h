@@ -62,8 +62,8 @@ class Database {
     /* Guardar info del jugador */
     void _persistPlayerInfo(const std::string& username);
 
-    /* crear datos iniciales para el jugador nuevo*/
-    void _createDataInicial(const std::string& username, Id race, Id kind,
+    /* crear datos iniciales para el jugador nuevo */
+    void _createInitialData(const std::string& username, Id race, Id kind,
                             Id head_id, Id body_id,
                             CharacterCfg& character_data);
 

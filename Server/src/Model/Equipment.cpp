@@ -4,6 +4,9 @@
 
 #include "../../includes/Model/Character.h"
 
+#define FIST_DAMAGE 20
+#define FIST_RANGE 1
+
 Equipment::Equipment(const EquipmentData& init_data,
                      ItemsContainer& items_container) {
     // Inicializo array de wearables con los datos o nullptr.
@@ -47,14 +50,14 @@ void Equipment::dropAll(std::vector<DroppingSlot>& dropped_items) {
 
 const unsigned int Equipment::useAttackItem(Character& attacker) {
     if (!this->container[WEAPON]) {
-        return 0;
+        return FIST_DAMAGE;
     }
     return this->container[WEAPON]->use(attacker);
 }
 
 const unsigned int Equipment::getAttackRange() const {
     if (!this->container[WEAPON]) {
-        return 0;
+        return FIST_RANGE;
     }
     return this->container[WEAPON]->getRange();
 }

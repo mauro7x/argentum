@@ -54,4 +54,14 @@ class ManaPotion: public Potion {
         virtual void equip(Character& equipper) override;
 };
 
+class HealthPotionHasNoPointsToRecoverException : public std::exception {
+   public:
+    virtual const char* what() const noexcept;
+};
+
+class ManaPotionHasNoPointsToRecoverException : public std::exception {
+   public:
+    virtual const char* what() const noexcept;
+};
+
 #endif
