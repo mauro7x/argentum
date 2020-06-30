@@ -81,16 +81,14 @@ void Mixer::handleEvent(const SDL_Event& e) {
             }
 
             case SDLK_LEFT: {
-                fadeOutMusic();
                 music.prev();
-                playMusic(true);
+                playMusic();
                 break;
             }
 
             case SDLK_RIGHT: {
-                fadeOutMusic();
                 music.next();
-                playMusic(true);
+                playMusic();
                 break;
             }
 
