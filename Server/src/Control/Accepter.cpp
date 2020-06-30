@@ -73,7 +73,8 @@ void Accepter::run() {
         fprintf(stderr, "Unknown error.\n");
     }
 
-    // En caso de salir con error, ver si hace falta cortar el server en gral.
+    // Just in case
+    _joinLogins();
 }
 
 void Accepter::stop() {

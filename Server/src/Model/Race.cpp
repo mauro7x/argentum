@@ -1,10 +1,10 @@
 #include "../../includes/Model/Race.h"
 
-Race::Race(const RaceCfg& data)
+Race::Race(const RaceCfg& data, Id head_id, Id body_id)
     : id(data.id),
       name(data.name),
-      head_id(data.head_id),
-      body_id(data.body_id),
+      head_id(head_id),
+      body_id(body_id),
       dead_head_id(data.dead_head_id),
       dead_body_id(data.dead_body_id),
       max_health_factor(data.max_health_factor),

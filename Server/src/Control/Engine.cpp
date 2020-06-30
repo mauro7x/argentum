@@ -36,7 +36,7 @@ void Engine::_processFinishedConnections() {
         fprintf(stderr,
                 "ENGINE: Eliminando una conexión terminada... (1/2).\n");
 
-        game.deleteCharacter(*finished_connection);
+        game.deleteCharacter(*finished_connection, database);
         active_clients.remove(*finished_connection);
         // acá habría que persistir al cliente que se desconecto
 
@@ -57,7 +57,7 @@ void Engine::_freeQueues() {
     {
         InstanceId* p = nullptr;
         while ((p = finished_connections.pop())) {
-            game.deleteCharacter(*p);
+            game.deleteCharacter(*p, database);
         }
     }
 

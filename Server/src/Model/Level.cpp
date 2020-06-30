@@ -59,3 +59,8 @@ void Level::fillBroadcastData(PlayerData& data) const {
     data.exp = this->xp;
     data.levelup_exp = this->level_up_xp;
 }
+
+void Level::fillPersistenceData(CharacterCfg& data) const {
+    data.level = this->level;
+    data.exp = this->xp;
+}

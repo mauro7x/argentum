@@ -28,7 +28,7 @@ Wearable* Equipment::add(Wearable* item) {
 Wearable* Equipment::remove(unsigned int n_slot) {
     if (n_slot > this->container.size())
         throw InvalidEquipmentSlotNumberException();
-    
+
     Wearable* item = this->container[n_slot];
     this->container[n_slot] = nullptr;
     return item;
@@ -81,7 +81,7 @@ const bool Equipment::hasAWeaponEquipped() const {
 const bool Equipment::isWeaponHealing() const {
     if (!this->container[WEAPON])
         return false;
-        
+
     return this->container[WEAPON]->isHealing();
 }
 
@@ -95,7 +95,16 @@ void Equipment::fillBroadcastData(PlayerData& data) const {
     }
 }
 
+void Equipment::fillPersistenceData(CharacterCfg& data) const {
+    for (int i = 0; i < N_WEARABLE_ITEMS; ++i) {
+        if (!this->container[i]) {
+            data.equipment[i] = 0;
+        } else {
+            data.equipment[i] = this->container[i]->getId();
+        }
+    }
+}
+
 const char* InvalidEquipmentSlotNumberException::what() const noexcept {
     return "El numero de slot del equipamiento especificado es inválido.";
 }
-

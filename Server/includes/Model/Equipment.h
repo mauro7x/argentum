@@ -56,7 +56,7 @@ class Equipment {
     Wearable* remove(unsigned int n_slot);
 
     /*
-     * Vacía el equipment, dropeando todos los wearables en el vector 
+     * Vacía el equipment, dropeando todos los wearables en el vector
      * recibido por parámetro.
      */
     void dropAll(std::vector<DroppingSlot>& dropped_items);
@@ -96,6 +96,8 @@ class Equipment {
     const bool isWeaponHealing() const;
 
     void fillBroadcastData(PlayerData& data) const;
+
+    void fillPersistenceData(CharacterCfg& data) const;
 };
 
 class InvalidEquipmentSlotNumberException : public std::exception {

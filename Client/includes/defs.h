@@ -52,6 +52,8 @@ enum ExpectedArgs { NAME, EXPECTED_ARGC };
     { 219, 4, 4, 255 }
 #define VIEWS_WARNING_COLOR \
     { 255, 145, 0, 255 }
+#define VIEWS_SUCCESS_COLOR \
+    { 120, 235, 91, 255 }
 //-----------------------------------------------------------------------------
 
 #endif  // __CLIENT_DEFS_H__

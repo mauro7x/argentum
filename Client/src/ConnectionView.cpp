@@ -424,15 +424,85 @@ void ConnectionView::_handlePlayButtonPressed() {
                                   SDL_Color(VIEWS_FONT_COLOR));
     _setInfoPos();
 
-    // INTENTAR CONECTAR CON EL SERVER
-    // (mandar msj de login con username y password)
-    current_context = GAME_CTX;
-    quit();
+    // Intentamos conectaros con el server
+    _tryToConnect();
 }
 
 void ConnectionView::_handleSignUpButtonPressed() {
     current_context = SIGNUP_CTX;
     quit();
+}
+
+void ConnectionView::_tryToConnect() {
+    // Enviamos la solicitud de conexión de acuerdo al protocolo
+    if (!(socket << (uint8_t)SIGN_IN_OPCODE)) {
+        throw Exception("ConnectionView::_tryToConnect: socket was closed.");
+    }
+
+    if (!(socket << username_txtbx.s_content)) {
+        throw Exception("ConnectionView::_tryToConnect: socket was closed.");
+    }
+
+    if (!(socket << password_txtbx.s_content)) {
+        throw Exception("ConnectionView::_tryToConnect: socket was closed.");
+    }
+
+    // Esperamos la respuesta
+    uint8_t received_opcode;
+
+    if (!(socket >> received_opcode)) {
+        throw Exception("ConnectionView::_tryToConnect: socket was closed.");
+    }
+
+    if (received_opcode != CONNECTION_ACK_OPCODE) {
+        throw Exception(
+            "ConnectionView::_tryToConnect: unknown opcode received.");
+    }
+
+    uint8_t ack_type;
+
+    if (!(socket >> ack_type)) {
+        throw Exception("ConnectionView::_tryToConnect: socket was closed.");
+    }
+
+    switch (ack_type) {
+        case SUCCESS_ACK: {
+            current_context = GAME_CTX;
+            quit();
+            break;
+        }
+
+        case ERROR_INVALID_USERNAME_ACK: {
+            info_msg.loadFromRenderedText(&renderer, info_font,
+                                          CONNECTIONVIEW_INVALID_USERNAME_MSG,
+                                          SDL_Color(VIEWS_ERROR_COLOR));
+            _setInfoPos();
+            break;
+        }
+
+        case ERROR_INVALID_PASSWORD_ACK: {
+            info_msg.loadFromRenderedText(&renderer, info_font,
+                                          CONNECTIONVIEW_INVALID_PASSWORD_MSG,
+                                          SDL_Color(VIEWS_ERROR_COLOR));
+            _setInfoPos();
+            break;
+        }
+
+        case ERROR_USERNAME_CONNECTED_ACK: {
+            info_msg.loadFromRenderedText(&renderer, info_font,
+                                          CONNECTIONVIEW_USERNAME_CONNECTED_MSG,
+                                          SDL_Color(VIEWS_ERROR_COLOR));
+            _setInfoPos();
+            break;
+        }
+
+        default: {
+            throw Exception(
+                "ConnectionView::_tryToConnect: unknown message type "
+                "received.");
+            break;
+        }
+    }
 }
 
 void ConnectionView::_setInputPos() {

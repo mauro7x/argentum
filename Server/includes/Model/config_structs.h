@@ -4,9 +4,11 @@
 //-----------------------------------------------------------------------------
 #include <cstdint>
 #include <string>
+#include <vector>
 
 #include "../../../Common/includes/Inventory.h"
 #include "../../../Common/includes/Orientation.h"
+#include "../../../Common/includes/defs.h"
 #include "../../../Common/includes/types.h"
 //-----------------------------------------------------------------------------
 
@@ -90,11 +92,10 @@ struct OtherItemsCfg {
 struct RaceCfg {
     Id id;
     std::string name;
-
-    Id head_id;
-    Id body_id;
     Id dead_head_id;
     Id dead_body_id;
+    std::vector<Id> head_ids;
+    std::vector<Id> body_ids;
 
     uint8_t max_health_factor;
     uint8_t max_mana_factor;
@@ -155,27 +156,34 @@ enum StateType { DEAD, ALIVE };
 
 //-----------------------------------------------------------------------------
 struct CharacterCfg {
-    Id race;
-    Id kind;
+    Id map = 0;
+    int x_tile = 0, y_tile = 0;
+    char nickname[MAX_USERNAME_SIZE + 1] = {0};
 
-    StateType state;
+    Id race = 0;
+    Id kind = 0;
+    Id head_id = 0;
+    Id body_id = 0;
 
-    EquipmentData equipment;
-    InventoryData inventory;
+    StateType state = ALIVE;
 
-    uint32_t health;
-    uint32_t mana;
-    uint32_t safe_gold;
-    uint32_t excess_gold;
-    uint32_t level;
-    uint32_t exp;
+    EquipmentData equipment = {0};
+    InventoryData inventory = {0};
+
+    uint32_t health = 0;
+    uint32_t mana = 0;
+    uint32_t safe_gold = 0;
+    uint32_t excess_gold = 0;
+    uint32_t level = 0;
+    uint32_t exp = 0;
+    bool new_created = true;
 };
 
 struct CreatureCfg {
-    Id id;
+    Id id = 0;
     std::string name;
-    unsigned int base_damage;
-    unsigned int base_health;
+    unsigned int base_damage = 0;
+    unsigned int base_health = 0;
 };
 //-----------------------------------------------------------------------------
 struct DroppingSlot {
