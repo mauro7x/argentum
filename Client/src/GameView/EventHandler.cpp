@@ -353,6 +353,7 @@ void EventHandler::handleEvent(const SDL_Event& e) {
             std::string reply;
             Command* cmd = input_parser.parse(input, reply);
             if (cmd) {
+                // ver si esto queda o si lo volamos, quizas es medio pesado
                 hud.addMessage(">> " + input, USER_CMD_MSG_COLOR);
                 commands.push(cmd);
             } else if (!reply.empty()) {
