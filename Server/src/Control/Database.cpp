@@ -71,7 +71,7 @@ void Database::_createInitialData(const std::string& username, Id race, Id kind,
         InventorySlot({0, 0}), InventorySlot({0, 0}), InventorySlot({0, 0}),
         InventorySlot({0, 0}), InventorySlot({0, 0}), InventorySlot({0, 0}),
         InventorySlot({0, 0}), InventorySlot({0, 0}), InventorySlot({0, 0}),
-        InventorySlot({0, 0})};
+        InventorySlot({0, 0}), InventorySlot({0, 0}), InventorySlot({0, 0})};
     character_data.bank_gold = 0;
     character_data.bank_account = {
         InventorySlot({0, 0}), InventorySlot({0, 0}), InventorySlot({0, 0}),
