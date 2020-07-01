@@ -7,6 +7,7 @@
 //-----------------------------------------------------------------------------
 #include "../../../Common/includes/types.h"
 //-----------------------------------------------------------------------------
+#include "Item.h"
 #include "ItemsContainer.h"
 #include "config_structs.h"
 //-----------------------------------------------------------------------------
@@ -31,12 +32,15 @@ class BankAccount {
      */
     void deposit(const Id item, const unsigned int amount);
 
-    /* 
-     * Deposita el oro.
-    */
-    void depositGold(const unsigned int amount);
     /*
-     * Retira la cantidad de items especificada de la cuenta.
+     * Deposita el oro.
+     */
+    void depositGold(const unsigned int amount);
+
+    /*
+     * Retira la cantidad especificada de un mismo item de la cuenta.
+     *
+     * Retorna el item.
      *
      * Si la cantidad especificada a tomar es menor a la cantidad presente en la
      * cuenta, se setea el valor de amount al efectivamente retirado.
@@ -46,7 +50,7 @@ class BankAccount {
      * Lanza InvalidItemIdException si no hay items guardados con el Id
      * especificado.
      */
-    void withdraw(const Id item, unsigned int& amount);
+    Item* withdraw(const Id item, unsigned int& amount);
 
     /*
      * Retira la cantidad de oro;
@@ -64,7 +68,17 @@ class BankAccount {
 
 //-----------------------------------------------------------------------------
 
+class NoMoneyAvailableException : public std::exception {
+   public:
+    const char* what() const noexcept;
+};
+
 class InvalidItemIdException : public std::exception {
+   public:
+    const char* what() const noexcept;
+};
+
+class FullBankAccountException : public std::exception {
    public:
     const char* what() const noexcept;
 };
