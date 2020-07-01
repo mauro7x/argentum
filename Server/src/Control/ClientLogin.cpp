@@ -3,20 +3,6 @@
 //-----------------------------------------------------------------------------
 // Métodos privados
 
-// void ClientLogin::_loginProxy() {
-//     bool connected = false;
-
-//     while (!connected) {
-//         try {
-//             database.signIn("mauro", "123");
-//             connected = true;
-//         } catch (const LoginException& e) {
-//             fprintf(stderr, "LOGIN_ERROR: %s\n", e.what());
-//         }
-//     }
-// }
-
-//-----------------------------------------------------------------------------
 CharacterCfg ClientLogin::_login() {
     bool connected = false;
     uint8_t opcode;
@@ -120,6 +106,9 @@ CharacterCfg ClientLogin::_login() {
 
     return character_data;
 }
+
+//-----------------------------------------------------------------------------
+
 //-----------------------------------------------------------------------------
 // API Pública
 
@@ -148,12 +137,10 @@ void ClientLogin::run() {
     } catch (const std::exception& e) {
         // Error grave
         peer.shutdown();
-        peer.close();
         fprintf(stderr, "%s\n", e.what());
     } catch (...) {
         // Error desconocido
         peer.shutdown();
-        peer.close();
         fprintf(stderr, "Unknown error.\n");
     }
 

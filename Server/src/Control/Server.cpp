@@ -33,11 +33,17 @@ void Server::run() {
     } while (input != "q");
 
     // Salimos ordenadamente
+    fprintf(stderr, "DEBUG: Stoppeando al accepter.\n");
     accepter.stop();
+    fprintf(stderr, "DEBUG: Joineando al accepter.\n");
     accepter.join();
+    fprintf(stderr, "DEBUG: Accepter joineado.\n");
 
+    fprintf(stderr, "DEBUG: Stoppeando al accepter.\n");
     engine.stop();
+    fprintf(stderr, "DEBUG: Joineando al engine.\n");
     engine.join();
+    fprintf(stderr, "DEBUG: Engine joineado.\n");
 
     fprintf(stderr, "DEBUG: Termina la ejecución del servidor.\n");
 }

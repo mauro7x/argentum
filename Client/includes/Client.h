@@ -52,7 +52,6 @@ class Client {
     // Componentes SDL
     Window window;
     Renderer renderer;
-    Mixer mixer;
 
     // Contexto actual
     Context current_context;

@@ -30,30 +30,10 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+// Singleton Mixer
 
 class Mixer {
-   private:
-    // Música
-    int music_volume = 0;
-    RoundRobinList<Mix_Music*> music;
-
-    // Chunks
-
-    //-------------------------------------------------------------------------
-    // Métodos privados
-
-    /* Sube el volumen actual de la música */
-    void _increaseMusicVolume();
-
-    /* Baja el volumen actual de la música */
-    void _decreaseMusicVolume();
-
-    //-------------------------------------------------------------------------
-
    public:
-    /* Constructor */
-    Mixer();
-
     /* Deshabilitamos el constructor por copia. */
     Mixer(const Mixer&) = delete;
 
@@ -69,31 +49,74 @@ class Mixer {
     //-------------------------------------------------------------------------
     // Métodos de la API pública
 
+    /* Método para cargar la media necesaria */
+    static void init();
+
+    /* Método para handlear un evento de SDL */
+    static void handleEvent(const SDL_Event& e);
+
+    /* Método para que empiece a sonar la lista de canciones */
+    static void playMusic(bool fade_in);
+
+    /* Callback que se llama cuando termina una canción */
+    static void finishedSongCallback();
+
+    //-------------------------------------------------------------------------
+
+   private:
+    //-------------------------------------------------------------------------
+    // Atributos
+
+    // Música
+    int music_volume = 0;
+    RoundRobinList<Mix_Music*> music;
+
+    // Chunks
+
+    //-------------------------------------------------------------------------
+
+    //-------------------------------------------------------------------------
+    // Singleton
+
+    /* Única instancia */
+    static Mixer& getInstance();
+
+    /* Constructor */
+    Mixer();
+
+    /* Destructor */
+    ~Mixer();
+
+    //-------------------------------------------------------------------------
+
+    //-------------------------------------------------------------------------
+    // Métodos
+
     /* Carga el audio necesario */
-    void init();
+    void _init();
 
     /* Handlea un evento de SDL */
-    void handleEvent(const SDL_Event& e);
+    void _handleEvent(const SDL_Event& e);
 
     //-------------------------------------------------------------------------
     // Música
 
     /* Reproduce música. El flag permite reproducirla con fadein. */
-    void playMusic(bool fade_in = false) const;
+    void _playMusic(bool fade_in = false) const;
 
-    /* Realiza un desvanecimiento de la música actual */
-    void fadeOutMusic() const;
-
-    /* Detiene cualquier música que esté sonando */
-    void stopMusic() const;
+    /* Detiene cualquier música que esté sonando. El flag permite fade-out */
+    void _stopMusic(bool fade_out = false) const;
 
     /* Callback para cuando una canción termina */
-    void musicFinishedCallback();
+    void _musicFinishedCallback();
+
+    /* Sube el volumen actual de la música */
+    void _increaseMusicVolume();
+
+    /* Baja el volumen actual de la música */
+    void _decreaseMusicVolume();
 
     //-------------------------------------------------------------------------
-
-    /* Destructor */
-    ~Mixer();
 };
 
 //-----------------------------------------------------------------------------

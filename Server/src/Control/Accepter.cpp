@@ -28,7 +28,7 @@ void Accepter::_joinFinishedLogins() {
 void Accepter::_joinLogins() {
     for (auto it = client_logins.begin(); it != client_logins.end(); it++) {
         (*it)->stop();
-        (*it)->join(); /* este join ES bloqueante */
+        (*it)->join();
         delete *it;
     }
 

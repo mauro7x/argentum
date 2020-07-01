@@ -52,7 +52,6 @@ class ConnectionView : public ConstantRateFunc {
 
     // Componentes globales
     const Renderer& renderer;
-    Mixer& mixer;
 
     // Conexión
     const SocketWrapper& socket;
@@ -142,7 +141,7 @@ class ConnectionView : public ConstantRateFunc {
    public:
     /* Constructor */
     ConnectionView(Context& current_context, const Renderer& renderer,
-                   Mixer& mixer, const SocketWrapper& socket);
+                   const SocketWrapper& socket);
 
     /* Destructor */
     ~ConnectionView();
