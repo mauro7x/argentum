@@ -267,6 +267,16 @@ Item* Character::dropItem(const unsigned int n_slot, unsigned int& amount) {
     return dropped_item;
 }
 
+void Character::gatherGold(const unsigned int amount) {
+    this->inventory.gatherGold(amount);
+    this->broadcast = true;
+}
+
+void Character::takeGold(unsigned int& amount) {
+    this->inventory.addGold(amount);
+    this->broadcast = true;
+}
+
 void Character::dropAllItems(std::vector<DroppingSlot>& dropped_items) {
     this->equipment.dropAll(dropped_items);
     this->inventory.dropAll(dropped_items);
