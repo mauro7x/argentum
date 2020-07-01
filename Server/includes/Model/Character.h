@@ -276,6 +276,24 @@ class Character : public Attackable {
     Item* dropItem(const unsigned int n_slot, unsigned int& amount);
 
     /*
+     * Toma amount de gold del inventario.
+     *
+     * Lanza InsufficientGoldException si la cantidad de oro que tiene el
+     * jugador en el inventario es menor a amount.
+     */
+    void gatherGold(const unsigned int amount);
+
+    /*
+     * Agrega amount de gold en el inventario [hasta llegar a la máxima
+     * capacidad de oro]. Setea en amount el valor de oro efectivamente
+     * agregado.
+     *
+     * Lanza GoldMaximumCapacityReachedException si se alcanza el límite máximo
+     * de oro que se puede almacenar.
+     */
+    void takeGold(unsigned int& amount);
+
+    /*
      * Se llama a este método cuando el jugador muere.
      *
      * Recibe un vector en el que dropeará todos sus elementos,
