@@ -311,19 +311,23 @@ class Character : public Attackable {
      * Efectua la acción curativa de las pociones de maná.
      * Aumenta los puntos de mana en los points especificados,
      * siempre y cuando el límite de mana no se supere.
+     * 
+     * Setea points en los puntos reales recuperados.
      *
      * Retorna si aumentó el maná o no.
      */
-    const bool recoverMana(const unsigned int points);
+    const bool recoverMana(unsigned int& points);
 
     /*
      * Efectua la acción curativa de las pociones/hechizos de vida.
      * Aumenta los puntos de vida en los points especificados,
      * siempre y cuando el límite de health no se supere.
+     * 
+     * Setea points en los puntos reales recuperados.
      *
      * Retorna si aumentó la vida o no.
      */
-    const bool recoverHealth(const unsigned int points) override;
+    const bool recoverHealth(unsigned int& points) override;
 
     /*
      * Si hay suficiente mana, consume mana_points de mana.

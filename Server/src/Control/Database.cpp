@@ -66,8 +66,8 @@ void Database::_createInitialData(const std::string& username, Id race, Id kind,
     character_data.state = ALIVE;
     character_data.equipment = {0, 0, 0, 0};
     character_data.inventory = {
-        InventorySlot({0, 0}), InventorySlot({0, 0}), InventorySlot({0, 0}),
-        InventorySlot({0, 0}), InventorySlot({0, 0}), InventorySlot({0, 0}),
+        InventorySlot({1500, 2}), InventorySlot({1400, 2}), InventorySlot({1300, 2}),
+        InventorySlot({1100, 2}), InventorySlot({1000, 2}), InventorySlot({0, 0}),
         InventorySlot({0, 0}), InventorySlot({0, 0}), InventorySlot({0, 0}),
         InventorySlot({0, 0}), InventorySlot({0, 0}), InventorySlot({0, 0}),
         InventorySlot({0, 0}), InventorySlot({0, 0}), InventorySlot({0, 0}),
@@ -91,8 +91,8 @@ void Database::_createInitialData(const std::string& username, Id race, Id kind,
         (kinds[kind].initial_mana)
             ? races[race].initial_mana + kinds[kind].initial_mana
             : 0;
-    character_data.safe_gold = 0;
-    character_data.excess_gold = 0;
+    character_data.safe_gold = 10;
+    character_data.excess_gold = 15;
     character_data.level = 1;
     character_data.exp = 0;
     character_data.new_created = true;

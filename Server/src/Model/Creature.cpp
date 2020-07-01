@@ -66,7 +66,7 @@ const bool Creature::isNewbie() const {
     return false;
 }
 
-const bool Creature::recoverHealth(const unsigned int points) {
+const bool Creature::recoverHealth(unsigned int& points) {
     throw CantRecoverCreaturesHealthException();
 }
 
@@ -86,7 +86,6 @@ void Creature::dropAllItems(std::vector<DroppingSlot>& dropped_items) {
 
     acum += DROP_GOLD_PROB;
 
-
     if (prob < acum) {
         dropped_items.emplace_back(
             GOLD_BAG_ID,
@@ -103,7 +102,7 @@ void Creature::dropAllItems(std::vector<DroppingSlot>& dropped_items) {
     }
 
     float choice = gen(0, 3);
-    
+
     if (choice < 1) {
         const std::vector<Id>& weapons = this->items.getWeaponsId();
         dropped_items.emplace_back(weapons[gen(0, weapons.size() - 1)], 1);
@@ -116,7 +115,6 @@ void Creature::dropAllItems(std::vector<DroppingSlot>& dropped_items) {
         return;
     }
 
-    
     const std::vector<Id>& defences = this->items.getDefencesId();
     dropped_items.emplace_back(defences[gen(0, defences.size() - 1)], 1);
     return;
