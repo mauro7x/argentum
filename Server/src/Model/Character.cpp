@@ -465,6 +465,11 @@ void Character::fillBroadcastData(PlayerData& data) const {
     this->position.fillBroadcastData(data.basic_data);
     this->state->fillBroadcastData(data);
 
+    if (race.name == "Enano" || race.name == "Gnomo") {
+        data.is_shorter = true;
+    } else {
+        data.is_shorter = false;
+    }
     data.nickname = this->nickname;
     data.health = this->health;
     data.max_health = this->max_health;

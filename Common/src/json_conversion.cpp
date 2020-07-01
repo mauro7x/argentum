@@ -21,7 +21,8 @@ void to_json(json& j, const PlayerData& data) {
              {"excess_gold", data.excess_gold},
              {"level", data.level},
              {"exp", data.exp},
-             {"levelup_exp", data.levelup_exp}};
+             {"levelup_exp", data.levelup_exp},
+             {"is_shorter", data.is_shorter}};
     j["equipment"] = json(data.equipment);
     j["inventory"] = json(data.inventory);
 }
@@ -69,6 +70,7 @@ void from_json(const json& j, PlayerData& data) {
     j.at("level").get_to(data.level);
     j.at("exp").get_to(data.exp);
     j.at("levelup_exp").get_to(data.levelup_exp);
+    j.at("is_shorter").get_to(data.is_shorter);
     data.equipment = j.at("equipment").get<EquipmentData>();
     data.inventory = j.at("inventory").get<InventoryData>();
 }

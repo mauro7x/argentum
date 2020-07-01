@@ -39,6 +39,7 @@ struct PlayerData : public CharacterData {
     uint32_t mana, max_mana;
     uint32_t safe_gold, excess_gold;
     uint32_t exp, levelup_exp;
+    bool is_shorter;
 
     InventoryData inventory;
 };
