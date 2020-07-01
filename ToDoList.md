@@ -51,9 +51,9 @@
 * Separar config.json en varios. (homeview_config.json, etc...). -Mau, 28/06.
     * low.
 
-* Poder tomar elementos haciendo click en el tile que los contiene. -Santi ;)
-    * Ponerle un shortcut.
-    * medium.
+* ~~Poder tomar elementos haciendo click en el tile que los contiene. -Santi ;)~~
+    * ~~Ponerle un shortcut.~~
+    * **UPDATE:** done! -Mau, 01/07.
 
 * Agregar el mensaje del chat general en la cabeza del character por un periodo breve de tiempo. -Mau, 30/06.
     * low.
