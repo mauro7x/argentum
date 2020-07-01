@@ -3,7 +3,7 @@
 //-----------------------------------------------------------------------------
 // Callback para chain-music
 
-static void callback() {
+static void musicCallback() {
     Mixer::finishedSongCallback();
 }
 
@@ -84,10 +84,10 @@ void Mixer::_init() {
             }
             music.pushBack(song);
         }
-    }
 
-    // Cargamos la función que encadena canciones
-    Mix_HookMusicFinished(callback);
+        // Cargamos la función que encadena canciones
+        Mix_HookMusicFinished(musicCallback);
+    }
 
     // Cargamos los chunks
     /*
@@ -178,14 +178,14 @@ void Mixer::_musicFinishedCallback() {
 
 void Mixer::_increaseMusicVolume() {
     if (music_volume < MIX_MAX_VOLUME) {
-        music_volume += VOLUME_LEVEL;
+        music_volume += MUSIC_VOLUME_LEVEL;
         Mix_VolumeMusic(music_volume);
     }
 }
 
 void Mixer::_decreaseMusicVolume() {
     if (music_volume > 0) {
-        music_volume -= VOLUME_LEVEL;
+        music_volume -= MUSIC_VOLUME_LEVEL;
         Mix_VolumeMusic(music_volume);
     }
 }
