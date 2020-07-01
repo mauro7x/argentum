@@ -127,18 +127,23 @@ void ClientLogin::run() {
         fprintf(stderr, "Inicia la ejecución del clientlogin.\n");
 
         CharacterCfg init_data = _login();
-        new_connections.push(new NewConnection(peer, init_data));
 
-        // ACA NO SE DEBERÍA HACER NADA QUE FALLE, PORQUE EL SOCKET YA NO
-        // ES NUESTRO, ASI QUE OJO
+        // Si llegamos acá, el cliente ya se loggeo y podemos transferir
+        // el socket con seguridad.
+
+        new_connections.push(new NewConnection(peer, init_data));
 
         // Finaliza la ejecución
         fprintf(stderr, "Finaliza la ejecución del clientlogin.\n");
     } catch (const std::exception& e) {
         // Error grave
+        peer.shutdown();
+        peer.close();
         fprintf(stderr, "%s\n", e.what());
     } catch (...) {
         // Error desconocido
+        peer.shutdown();
+        peer.close();
         fprintf(stderr, "Unknown error.\n");
     }
 
@@ -150,8 +155,15 @@ bool ClientLogin::isRunning() const {
 }
 
 void ClientLogin::stop() {
-    peer.shutdown();
-    peer.close();
+    if (is_running) {
+        // Soy consciente de que en este punto puede existir una RC muuy
+        // oportuna, en el caso en que se cierre el server justo en el mismo
+        // instante en que un cliente abandone la instancia de login. En este
+        // caso, no habrá problema ya que el socket está preparado para hacer el
+        // shutdown/close sólo si es necesario. -Mau.
+        peer.shutdown();
+        peer.close();
+    }
 }
 
 ClientLogin::~ClientLogin() {}
