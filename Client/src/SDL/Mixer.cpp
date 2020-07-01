@@ -10,6 +10,15 @@ static void musicCallback() {
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+// Callback para conteo de chunks activos
+
+static void chunkCallback(int channel) {
+    fprintf(stderr, "DEBUG | Mixer: chunk finished.\n");
+}
+
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
 // Singleton
 
 Mixer& Mixer::getInstance() {
@@ -90,11 +99,11 @@ void Mixer::_init() {
     }
 
     // Cargamos los chunks
-    /*
+
     {
-        json& chunks_to_load = audio_to_load["chunks"];
+        // Cargamos la función que lleva un conteo de chunks activos
+        Mix_ChannelFinished(chunkCallback);
     }
-    */
 }
 
 void Mixer::_handleEvent(const SDL_Event& e) {
