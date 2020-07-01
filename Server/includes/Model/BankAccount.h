@@ -8,12 +8,13 @@
 #include "../../../Common/includes/types.h"
 //-----------------------------------------------------------------------------
 #include "ItemsContainer.h"
+#include "config_structs.h"
 //-----------------------------------------------------------------------------
 
 class BankAccount {
    private:
     std::unordered_map<Id, unsigned int> saved_items;
-    
+    unsigned int gold;
     ItemsContainer& items;
 
    public:
@@ -30,6 +31,10 @@ class BankAccount {
      */
     void deposit(const Id item, const unsigned int amount);
 
+    /* 
+     * Deposita el oro.
+    */
+    void depositGold(const unsigned int amount);
     /*
      * Retira la cantidad de items especificada de la cuenta.
      *
@@ -44,10 +49,17 @@ class BankAccount {
     void withdraw(const Id item, unsigned int& amount);
 
     /*
+     * Retira la cantidad de oro;
+     */
+    void withdrawGold(unsigned int& amount);
+
+    /*
      * Escribe en el string recibido los ids de items en la cuenta con su
      * descripción.
      */
     void list(std::string& list) const;
+
+    void fillPersistenceData(CharacterCfg& data) const;
 };
 
 //-----------------------------------------------------------------------------

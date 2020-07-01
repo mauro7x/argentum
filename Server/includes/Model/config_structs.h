@@ -153,7 +153,6 @@ struct NPCCfg {
 //-----------------------------------------------------------------------------
 enum StateType { DEAD, ALIVE };
 //-----------------------------------------------------------------------------
-
 //-----------------------------------------------------------------------------
 struct CharacterCfg {
     Id map = 0;
@@ -169,6 +168,8 @@ struct CharacterCfg {
 
     EquipmentData equipment = {0};
     InventoryData inventory = {0};
+    unsigned int bank_gold = 0;
+    BankAccountData bank_account = {0};
 
     uint32_t health = 0;
     uint32_t mana = 0;
@@ -185,6 +186,8 @@ struct CreatureCfg {
     unsigned int base_damage = 0;
     unsigned int base_health = 0;
 };
+
+
 //-----------------------------------------------------------------------------
 struct DroppingSlot {
     Id item;
@@ -193,6 +196,7 @@ struct DroppingSlot {
     DroppingSlot(Id item, uint32_t amount) : item(item), amount(amount) {}
     ~DroppingSlot() {}
 };
+
 //-----------------------------------------------------------------------------
 
 #endif  // __CONFIG_STRUCTS_H__

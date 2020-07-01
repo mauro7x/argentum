@@ -82,9 +82,15 @@ class Game {
     int data_persist_cooldown;
     //--------------------------------------------------------------------------
     //--------------------------------------------------------------------------
+    // Métodos auxiliares de creacion de entidades;
+    //--------------------------------------------------------------------------
+    /* Llenar la cuenta del banco del game desde datos iniciales. */
+    void _fillBankAccount(const CharacterCfg& init_data);
+
+    //--------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     // Métodos de broadcast
     //--------------------------------------------------------------------------
-
     /*
      * Construye el broadcast del character cuya id es recibida.
      *

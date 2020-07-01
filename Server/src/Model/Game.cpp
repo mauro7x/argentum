@@ -47,6 +47,23 @@ MapCreaturesInfo::MapCreaturesInfo(unsigned int amount_of_creatures,
       creature_spawning_cooldown(creature_spawning_cooldown) {}
 
 //-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+// Métodos auxiliares de creacion de entidades;
+//-----------------------------------------------------------------------------
+void Game::_fillBankAccount(const CharacterCfg& init_data) {
+    BankAccount& account = bank[init_data.nickname];
+    account.depositGold(init_data.bank_gold);
+    for (size_t i = 0; i < init_data.bank_account.size(); i++) {
+        const Id item = init_data.bank_account[i].item;
+        const unsigned int amount = init_data.bank_account[i].amount;
+        if (!item) {
+            break;
+        }
+        account.deposit(item, amount);
+    }
+}
+
+//-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 // Métodos de broadcast
@@ -217,6 +234,9 @@ const InstanceId Game::newCharacter(const CharacterCfg& init_data) {
 
     this->characters.at(new_character_id).debug();
 
+    // llenar banco corresponde;
+    _fillBankAccount(init_data);
+
     return new_character_id;
 }
 
@@ -250,6 +270,7 @@ void Game::deleteCharacter(const InstanceId id, Database& database) {
     _pushCharacterDifferentialBroadcast(id, DELETE_BROADCAST, false);
 
     CharacterCfg character_data = {};
+    bank[character.getNickname()].fillPersistenceData(character_data);
     character.fillPersistenceData(character_data);
     database.persistPlayerData(character_data, true);
 
@@ -367,6 +388,8 @@ void Game::persistPeriodicData(Database& database, const int it) {
     if (data_persist_cooldown <= 0) {
         while (it_characters != this->characters.end()) {
             CharacterCfg character_data = {};
+            bank[it_characters->second.getNickname()].fillPersistenceData(
+                character_data);
             it_characters->second.fillPersistenceData(character_data);
             database.persistPlayerData(character_data, false);
             ++it_characters;

@@ -9,6 +9,7 @@
 
 //-----------------------------------------------------------------------------
 #define N_INVENTORY_SLOTS 18
+#define N_BANK_ACCOUNT_SLOTS 40
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -27,6 +28,7 @@ struct InventorySlot {
 //-----------------------------------------------------------------------------
 typedef std::array<InventorySlot, N_INVENTORY_SLOTS> InventoryData;
 typedef std::array<Id, N_WEARABLE_ITEMS> EquipmentData;
+typedef std::array<InventorySlot, N_BANK_ACCOUNT_SLOTS> BankAccountData;
 //-----------------------------------------------------------------------------
 
 #endif  // __INVENTORY_TYPES_H__
