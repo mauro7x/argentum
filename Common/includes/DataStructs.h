@@ -32,6 +32,7 @@ struct CharacterData {
     Id head_id, body_id;
     EquipmentData equipment;
     uint32_t level;
+    bool is_shorter;
 };
 
 struct PlayerData : public CharacterData {
@@ -39,7 +40,6 @@ struct PlayerData : public CharacterData {
     uint32_t mana, max_mana;
     uint32_t safe_gold, excess_gold;
     uint32_t exp, levelup_exp;
-    bool is_shorter;
 
     InventoryData inventory;
 };

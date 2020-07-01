@@ -28,6 +28,7 @@ struct Race {
     const unsigned int max_mana_factor;
     const unsigned int health_recovery_factor;
     const unsigned int mana_recovery_factor;
+    bool is_shorter;
 
     Race(const RaceCfg& data, Id head_id, Id body_id);
     ~Race();

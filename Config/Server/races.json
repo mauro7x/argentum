@@ -21,7 +21,8 @@
                 "intelligence": 0,
                 "constitution": 2,
                 "strength": 1,
-                "agility": 1
+                "agility": 1,
+                "is_shorter": false
         },
         {
                 "id": 101,
@@ -45,7 +46,8 @@
                 "intelligence": 2,
                 "constitution": 1,
                 "strength": 1,
-                "agility": 3
+                "agility": 3,
+                "is_shorter": false
         },
         {
                 "id": 102,
@@ -69,7 +71,8 @@
                 "intelligence": 1,
                 "constitution": 3,
                 "strength": 3,
-                "agility": 0
+                "agility": 0,
+                "is_shorter": true
         },
         {
                 "id": 103,
@@ -92,6 +95,7 @@
                 "intelligence": 4,
                 "constitution": 1,
                 "strength": 1,
-                "agility": 3
+                "agility": 3,
+                "is_shorter": true
         }
 ]
