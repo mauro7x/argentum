@@ -12,6 +12,7 @@ void EventHandler::_bindKeycodes() {
     keys.emplace(SDLK_a, LEFT_KEY);
     keys.emplace(SDLK_d, RIGHT_KEY);
     keys.emplace(SDLK_RETURN, ENTER_KEY);
+    keys.emplace(SDLK_SPACE, GRAB_THROW_KEY);
     keys.emplace(SDLK_BACKSPACE, DELETE_KEY);
     keys.emplace(SDLK_ESCAPE, ESC_KEY);
 }
@@ -141,6 +142,14 @@ Event EventHandler::_getKeyDownEv(const SDL_Event& e) {
             case ENTER_KEY: {
                 text_input_enabled = true;
                 return START_INPUT_EV;
+            }
+
+            case GRAB_THROW_KEY: {
+                if (current_selection.inventory_slot_selected >= 0) {
+                    return THROW_ITEM_EV;
+                } else {
+                    return GRAB_ITEM_EV;
+                }
             }
 
             case ESC_KEY: {
@@ -328,6 +337,18 @@ void EventHandler::handleEvent(const SDL_Event& e) {
 
         case STOP_MOVING_EV: {
             commands.push(new StopMovingCommand());
+            break;
+        }
+
+        // Agarrar y tirar objetos
+        case GRAB_ITEM_EV: {
+            commands.push(new GrabItemCommand());
+            break;
+        }
+
+        case THROW_ITEM_EV: {
+            commands.push(new ThrowNObjectsCommand(
+                current_selection.inventory_slot_selected, 1));
             break;
         }
 

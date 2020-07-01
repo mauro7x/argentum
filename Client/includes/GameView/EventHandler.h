@@ -49,6 +49,10 @@ enum Event {
     START_MOVING_RIGHT_EV,
     STOP_MOVING_EV,
 
+    /* Teclas especiales */
+    GRAB_ITEM_EV,
+    THROW_ITEM_EV,
+
     /* Interacción con la consola */
     START_INPUT_EV,
     TEXT_INPUT_EV,
@@ -71,6 +75,7 @@ enum Key {
     LEFT_KEY,
     RIGHT_KEY,
     ENTER_KEY,
+    GRAB_THROW_KEY,
     DELETE_KEY,
     ESC_KEY
 };
