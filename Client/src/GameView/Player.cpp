@@ -144,16 +144,6 @@ void Player::render() const {
         _render(g_sprites->get(body_id));
     }
 
-    // Escudo
-    if (equipment[SHIELD]) {
-        _render(g_sprites->get(equipment[SHIELD], is_shorter));
-    }
-
-    // Espada
-    if (equipment[WEAPON]) {
-        _render(g_sprites->get(equipment[WEAPON], is_shorter));
-    }
-
     // Cabeza
     if (head_id) {
         _render(g_sprites->get(head_id));
@@ -162,6 +152,16 @@ void Player::render() const {
     // Casco
     if (equipment[HELMET]) {
         _render(g_sprites->get(equipment[HELMET], is_shorter));
+    }
+
+    // Escudo
+    if (equipment[SHIELD]) {
+        _render(g_sprites->get(equipment[SHIELD], is_shorter));
+    }
+
+    // Espada
+    if (equipment[WEAPON]) {
+        _render(g_sprites->get(equipment[WEAPON], is_shorter));
     }
 
     // Info
