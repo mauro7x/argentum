@@ -174,20 +174,32 @@ void Character::stopMoving() {
 // Modificación de maná y vida.
 //-----------------------------------------------------------------------------
 
-const bool Character::recoverHealth(const unsigned int points) {
+const bool Character::recoverHealth(unsigned int& points) {
     if (!points || !health || this->health == this->max_health)
         return false;
 
-    this->health = std::min(this->health + points, max_health);
+    if (health + points > max_health) {
+        points = max_health - health;
+        health = max_health;
+    } else {
+        health += points;
+    }
+
     this->broadcast = true;
     return true;
 }
 
-const bool Character::recoverMana(const unsigned int points) {
+const bool Character::recoverMana(unsigned int& points) {
     if (!points || !health || this->mana == this->max_mana)
         return false;
+    
+    if (mana + points > max_mana) {
+        points = max_mana - mana;
+        mana = max_mana;
+    } else {
+        mana += points;
+    }
 
-    this->mana = std::min(this->mana + points, max_mana);
     this->broadcast = true;
     return true;
 }
@@ -346,7 +358,7 @@ void Character::_checkPriorToUseAttackWeaponConditions(
 
 const bool Character::_useHealingWeapon(Attackable* target, int& damage) {
     // Si el arma es curativa, obtengo sus puntos y curo.
-    int healing_points = this->equipment.useAttackItem(*this);
+    unsigned int healing_points = this->equipment.useAttackItem(*this);
     target->recoverHealth(healing_points);
 
     // Establezco valor negativo de daño -> puntos curativos.
