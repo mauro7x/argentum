@@ -136,11 +136,9 @@ void ClientLogin::run() {
         fprintf(stderr, "Finaliza la ejecución del clientlogin.\n");
     } catch (const std::exception& e) {
         // Error grave
-        peer.shutdown();
         fprintf(stderr, "%s\n", e.what());
     } catch (...) {
         // Error desconocido
-        peer.shutdown();
         fprintf(stderr, "Unknown error.\n");
     }
 
