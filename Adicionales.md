@@ -2,7 +2,7 @@
 
 ## Comunes
 
-* Mensajes generales, chat general.
+*
 
 ---
 
