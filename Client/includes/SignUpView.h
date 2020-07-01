@@ -80,7 +80,6 @@ class SignUpView : public ConstantRateFunc {
 
     // Componentes globales
     const Renderer& renderer;
-    Mixer& mixer;
 
     // Conexión
     const SocketWrapper& socket;
@@ -187,7 +186,7 @@ class SignUpView : public ConstantRateFunc {
 
    public:
     /* Constructor */
-    SignUpView(Context& current_context, const Renderer& renderer, Mixer& mixer,
+    SignUpView(Context& current_context, const Renderer& renderer,
                const SocketWrapper& socket);
 
     /* Destructor */

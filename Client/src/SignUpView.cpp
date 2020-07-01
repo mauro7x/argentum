@@ -342,7 +342,7 @@ void SignUpView::_processSDLEvents() {
         _handleEvent(e);
 
         // Propagamos el evento al mixer
-        mixer.handleEvent(e);
+        Mixer::handleEvent(e);
     }
 }
 
@@ -1055,11 +1055,11 @@ void SignUpView::_switchCursorVisibility() {
 // API Pública
 
 SignUpView::SignUpView(Context& current_context, const Renderer& renderer,
-                       Mixer& mixer, const SocketWrapper& socket)
+                       const SocketWrapper& socket)
     : ConstantRateFunc(RATE),
       current_context(current_context),
       renderer(renderer),
-      mixer(mixer),
+
       socket(socket),
       sprites(&renderer) {
     _init();
