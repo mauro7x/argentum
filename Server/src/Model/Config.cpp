@@ -29,6 +29,7 @@ void Config<RaceCfg>::_parseFile() {
         race.constitution = j[i]["constitution"];
         race.strength = j[i]["strength"];
         race.agility = j[i]["agility"];
+        race.is_shorter = j[i]["is_shorter"];
 
         config[race.id] = race;
     }

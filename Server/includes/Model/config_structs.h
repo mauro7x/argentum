@@ -111,6 +111,9 @@ struct RaceCfg {
     int constitution;
     int strength;
     int agility;
+
+    //verificar si es shorter
+    bool is_shorter;
 };
 
 //-----------------------------------------------------------------------------
