@@ -4,8 +4,8 @@
 //-----------------------------------------------------------------------------
 #include <atomic>
 #include <exception>
+#include <list>
 #include <string>
-#include <vector>
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -29,7 +29,7 @@ class Accepter : public Thread {
     Database& database;
     NonBlockingQueue<NewConnection*>& new_connections;
     std::atomic_bool keep_accepting;
-    std::vector<ClientLogin*> client_logins;
+    std::list<ClientLogin> client_logins;
 
     //-------------------------------------------------------------------------
     // Métodos privados

@@ -5,34 +5,27 @@
 
 void Accepter::_acceptClient() {
     SocketWrapper peer = std::move(socket.accept());
-    ClientLogin* new_client = new ClientLogin(peer, database, new_connections);
-    new_client->start();
-    client_logins.push_back(new_client);
+    client_logins.emplace_back(peer, database, new_connections);
+    client_logins.back().start();
 }
 
 void Accepter::_joinFinishedLogins() {
-    std::vector<ClientLogin*> tmp;
-
-    for (auto it = client_logins.begin(); it != client_logins.end(); it++) {
-        if (!(*it)->isRunning()) {
-            (*it)->join(); /* este join NO es bloqueante */
-            delete *it;
+    for (auto it = client_logins.begin(); it != client_logins.end();) {
+        if (it->isRunning()) {
+            it->join(); /* este join NO es bloqueante */
+            it = client_logins.erase(it);
         } else {
-            tmp.push_back(*it);
+            it++;
         }
     }
-
-    client_logins.swap(tmp);
 }
 
 void Accepter::_joinLogins() {
-    for (auto it = client_logins.begin(); it != client_logins.end(); it++) {
-        (*it)->stop();
-        (*it)->join();
-        delete *it;
+    for (auto it = client_logins.begin(); it != client_logins.end();) {
+        it->stop();
+        it->join();
+        it = client_logins.erase(it);
     }
-
-    client_logins.clear();
 }
 
 //-----------------------------------------------------------------------------
