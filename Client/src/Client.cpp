@@ -72,7 +72,7 @@ void Client::_initComponents() {
     renderer.init(vsync, scale_factor_w, scale_factor_h);
 
     /* Inicializamos el mixer */
-    mixer.init();
+    Mixer::init();
 }
 
 //-----------------------------------------------------------------------------
@@ -80,22 +80,22 @@ void Client::_initComponents() {
 
 void Client::_launchHomeCtx() {
     fprintf(stderr, "Inicia HOME.\n");
-    HomeView home_view(current_context, renderer, mixer, socket);
-    mixer.playMusic(true);
+    HomeView home_view(current_context, renderer, socket);
+    Mixer::playMusic(true);
     home_view.run();
     fprintf(stderr, "Finaliza HOME.\n");
 }
 
 void Client::_launchConnectionCtx() {
     fprintf(stderr, "Inicia CONNECTION.\n");
-    ConnectionView connection_view(current_context, renderer, mixer, socket);
+    ConnectionView connection_view(current_context, renderer, socket);
     connection_view.run();
     fprintf(stderr, "Finaliza CONNECTION.\n");
 }
 
 void Client::_launchSignUpCtx() {
     fprintf(stderr, "Inicia SIGNUP.\n");
-    SignUpView signup_view(current_context, renderer, mixer, socket);
+    SignUpView signup_view(current_context, renderer, socket);
     signup_view.run();
     fprintf(stderr, "Finaliza SIGNUP.\n");
 }
@@ -112,7 +112,7 @@ void Client::_launchGameCtx() {
     _receiveFirstPackage(broadcasts);
 
     // Componentes del GameCtx
-    GameView game_view(commands, broadcasts, messages, renderer, mixer);
+    GameView game_view(commands, broadcasts, messages, renderer);
     CommandDispatcher command_dispatcher(socket, commands, game_view);
     Receiver receiver(socket, broadcasts, messages, game_view);
 

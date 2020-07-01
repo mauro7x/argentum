@@ -47,7 +47,6 @@ class HomeView : public ConstantRateFunc {
 
     // Componentes globales
     const Renderer& renderer;
-    Mixer& mixer;
 
     // Conexión
     SocketWrapper& socket;
@@ -130,7 +129,7 @@ class HomeView : public ConstantRateFunc {
 
    public:
     /* Constructor */
-    HomeView(Context& current_context, const Renderer& renderer, Mixer& mixer,
+    HomeView(Context& current_context, const Renderer& renderer,
              SocketWrapper& socket);
 
     /* Destructor */

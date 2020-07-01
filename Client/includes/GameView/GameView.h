@@ -57,7 +57,6 @@ class GameView : public ConstantRateFunc {
 
     // Componentes principales
     const Renderer& renderer;
-    Mixer& mixer;
     Camera camera;
 
     // Contenedores de sprites
@@ -104,8 +103,7 @@ class GameView : public ConstantRateFunc {
     /* Constructor */
     GameView(BlockingQueue<Command*>& commands,
              NonBlockingQueue<Broadcast*>& broadcasts,
-             NonBlockingQueue<Message*>& messages, const Renderer& renderer,
-             Mixer& mixer);
+             NonBlockingQueue<Message*>& messages, const Renderer& renderer);
 
     /* Destructor */
     ~GameView();

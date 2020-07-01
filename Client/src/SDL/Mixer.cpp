@@ -1,30 +1,60 @@
 #include "../../includes/SDL/Mixer.h"
 
 //-----------------------------------------------------------------------------
-// Métodos privados
+// Callback para chain-music
 
-void Mixer::_increaseMusicVolume() {
-    if (music_volume < MIX_MAX_VOLUME) {
-        music_volume += VOLUME_LEVEL;
-        Mix_VolumeMusic(music_volume);
-    }
-}
-
-void Mixer::_decreaseMusicVolume() {
-    if (music_volume > 0) {
-        music_volume -= VOLUME_LEVEL;
-        Mix_VolumeMusic(music_volume);
-    }
+static void callback() {
+    Mixer::finishedSongCallback();
 }
 
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-// API Pública
+// Singleton
+
+Mixer& Mixer::getInstance() {
+    static Mixer instance;
+    return instance;
+}
 
 Mixer::Mixer() {}
 
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+// API pública
+
 void Mixer::init() {
+    Mixer::getInstance()._init();
+}
+
+void Mixer::handleEvent(const SDL_Event& e) {
+    Mixer::getInstance()._handleEvent(e);
+}
+
+void Mixer::playMusic(bool fade_in) {
+    Mixer::getInstance()._playMusic(fade_in);
+}
+
+void Mixer::finishedSongCallback() {
+    Mixer& instance = Mixer::getInstance();
+
+    // Avanzamos la canción
+    instance.music.next();
+
+    // Rebobinamos la canción anterior para la próxima
+    Mix_RewindMusic();
+
+    // La ponemos a sonar
+    instance._playMusic(true);
+}
+
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+// Métodos
+
+void Mixer::_init() {
     json audio_to_load = JSON::loadJsonFile(AUDIO_FILEPATH);
 
     // Seteamos el volumen inicial de la música (a la mitad del máximo)
@@ -57,7 +87,7 @@ void Mixer::init() {
     }
 
     // Cargamos la función que encadena canciones
-    // Mix_HookMusicFinished();
+    Mix_HookMusicFinished(callback);
 
     // Cargamos los chunks
     /*
@@ -67,7 +97,7 @@ void Mixer::init() {
     */
 }
 
-void Mixer::handleEvent(const SDL_Event& e) {
+void Mixer::_handleEvent(const SDL_Event& e) {
     if (e.type == SDL_KEYDOWN) {
         switch (e.key.keysym.sym) {
             case SDLK_UP: {
@@ -81,16 +111,22 @@ void Mixer::handleEvent(const SDL_Event& e) {
             }
 
             case SDLK_LEFT: {
-                stopMusic();
+                // Cuando termine la canción, se avanzará a la siguiente, por lo
+                // que para que suene la anterior, rebobinamos 2 veces.
                 music.prev();
-                playMusic();
+                music.prev();
+
+                // Fadeout de la canción actual
+                _stopMusic(true);
                 break;
             }
 
             case SDLK_RIGHT: {
-                stopMusic();
-                music.next();
-                playMusic();
+                // No es necesario avanzar pues cuando la canción termina,
+                // avanza a la siguiente automáticamente (callback).
+
+                // Fadeout de la canción actual
+                _stopMusic(true);
                 break;
             }
 
@@ -101,42 +137,57 @@ void Mixer::handleEvent(const SDL_Event& e) {
     }
 }
 
-void Mixer::playMusic(bool fade_in) const {
+void Mixer::_playMusic(bool fade_in) const {
     if (fade_in) {
-        if (Mix_FadeInMusic(music.getCurrentValue(), -1, FADE_IN_MUSIC_MS)) {
+        if (Mix_FadeInMusic(music.getCurrentValue(), 0, FADE_IN_MUSIC_MS)) {
             throw Exception(
-                "Mixer::playHomeMusic: error in Mix_FadeInMusic. Mixer error: "
+                "Mixer::_playMusic: error in Mix_FadeInMusic. Mixer error: "
                 "%s.",
                 Mix_GetError());
         }
     } else {
-        if (Mix_PlayMusic(music.getCurrentValue(), -1)) {
+        if (Mix_PlayMusic(music.getCurrentValue(), 0)) {
             throw Exception(
-                "Mixer::playHomeMusic: error in Mix_PlayMusic. Mixer error: "
+                "Mixer::_playMusic: error in Mix_PlayMusic. Mixer error: "
                 "%s.",
                 Mix_GetError());
         }
     }
-}
 
-void Mixer::fadeOutMusic() const {
-    /* Documentación: devuelve 1 en caso de éxito, 0 en caso de error. */
-    if (!Mix_FadeOutMusic(FADE_OUT_MUSIC_MS)) {
-        throw Exception(
-            "Mixer::fadeOutMusic: error while fading out music. Mixer error: "
-            "%s.",
-            Mix_GetError());
-    }
-}
-
-void Mixer::stopMusic() const {
-    /* Siempre retorna 0 por documentación, no podemos chequear errores */
-    Mix_HaltMusic();
     Mix_RewindMusic();
 }
 
-void Mixer::musicFinishedCallback() {
+void Mixer::_stopMusic(bool fade_out) const {
+    if (fade_out) {
+        if (!Mix_FadeOutMusic(FADE_OUT_MUSIC_MS)) {
+            throw Exception(
+                "Mixer::_stopMusic: error while fading out music. Mixer "
+                "error: "
+                "%s.",
+                Mix_GetError());
+        }
+    } else {
+        /* Siempre retorna 0 por documentación, no podemos chequear errores */
+        Mix_HaltMusic();
+    }
+}
+
+void Mixer::_musicFinishedCallback() {
     fprintf(stderr, "proxy: la canción terminó.\n");
+}
+
+void Mixer::_increaseMusicVolume() {
+    if (music_volume < MIX_MAX_VOLUME) {
+        music_volume += VOLUME_LEVEL;
+        Mix_VolumeMusic(music_volume);
+    }
+}
+
+void Mixer::_decreaseMusicVolume() {
+    if (music_volume > 0) {
+        music_volume -= VOLUME_LEVEL;
+        Mix_VolumeMusic(music_volume);
+    }
 }
 
 Mixer::~Mixer() {
