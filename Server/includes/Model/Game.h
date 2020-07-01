@@ -39,6 +39,7 @@ class Game {
     Config<RaceCfg> races;
     Config<KindCfg> kinds;
     Config<CreatureCfg> creatures_data;
+    Config<NPCCfg> npcs;
     //--------------------------------------------------------------------------
 
     //--------------------------------------------------------------------------
@@ -85,7 +86,7 @@ class Game {
     // Métodos auxiliares de creacion de entidades;
     //--------------------------------------------------------------------------
     /* Llenar la cuenta del banco del game desde datos iniciales. */
-    void _fillBankAccount(const CharacterCfg& init_data);
+    void _loadBankAccount(const CharacterCfg& init_data);
 
     //--------------------------------------------------------------------------
     //--------------------------------------------------------------------------
@@ -172,6 +173,13 @@ class Game {
     //--------------------------------------------------------------------------
     // Métodos auxiliares para los comandos.
     //--------------------------------------------------------------------------
+
+    const bool _validateBankerPosition(const InstanceId caller,
+                                       const uint32_t x_coord,
+                                       const uint32_t y_coord);
+
+    const bool _dropItem(const InstanceId caller, const uint8_t n_slot,
+                         uint32_t& amount, Item** dropped);
 
     void _dropAllItems(Attackable* dropper);
 
@@ -305,12 +313,12 @@ class Game {
                            uint32_t amount);
     void withdrawItemFromBank(const InstanceId caller, const uint32_t x_coord,
                               const uint32_t y_coord, const uint32_t item_id,
-                              const uint32_t amount);
+                              uint32_t amount);
 
     void depositGoldOnBank(const InstanceId caller, const uint32_t x_coord,
                            const uint32_t y_coord, const uint32_t amount);
     void withdrawGoldFromBank(const InstanceId caller, const uint32_t x_coord,
-                              const uint32_t y_coord, const uint32_t amount);
+                              const uint32_t y_coord, uint32_t amount);
 
     void buyItem(const InstanceId caller, const uint32_t x_coord,
                  const uint32_t y_coord, const uint32_t item_id,

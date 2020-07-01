@@ -16,7 +16,7 @@
 //-----------------------------------------------------------------------------
 #define FIRST_INSTANCE_ID 1
 //-----------------------------------------------------------------------------
-
+#define BANKER_ID 400
 //-----------------------------------------------------------------------------
 
 Game::Game(ActiveClients& active_clients)
@@ -50,7 +50,7 @@ MapCreaturesInfo::MapCreaturesInfo(unsigned int amount_of_creatures,
 //-----------------------------------------------------------------------------
 // Métodos auxiliares de creacion de entidades;
 //-----------------------------------------------------------------------------
-void Game::_fillBankAccount(const CharacterCfg& init_data) {
+void Game::_loadBankAccount(const CharacterCfg& init_data) {
     BankAccount& account = bank[init_data.nickname];
     account.depositGold(init_data.bank_gold);
     for (size_t i = 0; i < init_data.bank_account.size(); i++) {
@@ -73,7 +73,6 @@ Notification* Game::_buildPlayerBroadcast(InstanceId id,
                                           BroadcastType broadcast_type) {
     PlayerData player_data;
     player_data.basic_data.gid = id;
-    // llenar nickname
     Character& character = this->characters.at(id);
     character.fillBroadcastData(player_data);
 
@@ -234,8 +233,7 @@ const InstanceId Game::newCharacter(const CharacterCfg& init_data) {
 
     this->characters.at(new_character_id).debug();
 
-    // llenar banco corresponde;
-    _fillBankAccount(init_data);
+    _loadBankAccount(init_data);
 
     return new_character_id;
 }
@@ -685,26 +683,173 @@ void Game::list(const InstanceId caller, const uint32_t x_coord,
     fprintf(stderr, "Game::list no implementado.\n");
 }
 
+const bool Game::_validateBankerPosition(const InstanceId caller,
+                                         const uint32_t x_coord,
+                                         const uint32_t y_coord) {
+    if (!this->characters.count(caller)) {
+        throw Exception("Game::depositItemOnBank: unknown caller.");
+    }
+    Character& character = this->characters.at(caller);
+
+    // CAMBIAR LO DE LA MACRO BANKER_ID, ES FEO
+    if (this->map_container[character.getMapId()]
+            .getTile(x_coord, y_coord)
+            .npc != BANKER_ID) {
+        fprintf(stderr, "El npc_id del itle es: %i \n",
+                this->map_container[character.getMapId()]
+                    .getTile(x_coord, y_coord)
+                    .npc);
+        std::string reply_msg = "El NPC seleccionado no es un banquero.";
+        Notification* reply = new Reply(ERROR_MSG, reply_msg.c_str());
+        active_clients.notify(caller, reply);
+        return false;
+    }
+
+    return true;
+}
+
 void Game::depositItemOnBank(const InstanceId caller, const uint32_t x_coord,
                              const uint32_t y_coord, const uint8_t n_slot,
                              uint32_t amount) {
-    fprintf(stderr, "Game::depositItemOnBank no implementado.\n");
+    if (!_validateBankerPosition(caller, x_coord, y_coord))
+        return;
+
+    uint32_t asked_amount = amount;
+    Item* to_deposit = nullptr;
+
+    if (!_dropItem(caller, n_slot, amount, &to_deposit))
+        return;
+
+    Character& character = this->characters.at(caller);
+
+    BankAccount& account = this->bank[character.getNickname()];
+
+    try {
+        account.deposit(to_deposit->getId(), amount);
+    } catch (const FullBankAccountException& e) {
+        Notification* reply = new Reply(ERROR_MSG, e.what());
+        active_clients.notify(caller, reply);
+        return;
+    }
+
+    std::string reply_msg = "";
+
+    if (amount < asked_amount)
+        reply_msg += "No tenés suficientes items.";
+
+    reply_msg += "Se ha depositado " + to_deposit->what() + " x" +
+                 std::to_string(amount) + " en el banco";
+
+    Notification* reply = new Reply(INFO_MSG, reply_msg.c_str());
+    active_clients.notify(caller, reply);
+
+    // this->account.debug();
 }
 
 void Game::withdrawItemFromBank(const InstanceId caller, const uint32_t x_coord,
                                 const uint32_t y_coord, const uint32_t item_id,
-                                const uint32_t amount) {
-    fprintf(stderr, "Game::withdrawitemfrombank no implementado.\n");
+                                uint32_t amount) {
+    if (!_validateBankerPosition(caller, x_coord, y_coord))
+        return;
+
+    uint32_t asked_amount = amount;
+    Item* withdrew = nullptr;
+
+    Character& character = this->characters.at(caller);
+
+    BankAccount& account = this->bank[character.getNickname()];
+
+    try {
+        withdrew = account.withdraw(item_id, amount);
+    } catch (const InvalidItemIdException& e) {
+        Notification* reply = new Reply(ERROR_MSG, e.what());
+        active_clients.notify(caller, reply);
+        return;
+    }
+
+    try {
+        character.takeItem(withdrew, amount);
+    } catch (const FullInventoryException& e) {
+        account.deposit(withdrew->getId(), amount);
+        Notification* reply = new Reply(ERROR_MSG, e.what());
+        active_clients.notify(caller, reply);
+        return;
+    }
+
+    std::string reply_msg = "";
+
+    if (asked_amount > amount)
+        reply_msg += "No tenías suficientes items.";
+
+    reply_msg += "Se ha extraído " + withdrew->what() + " x" +
+                 std::to_string(amount) + " del banco";
+
+    Notification* reply = new Reply(INFO_MSG, reply_msg.c_str());
+    active_clients.notify(caller, reply);
 }
 
 void Game::depositGoldOnBank(const InstanceId caller, const uint32_t x_coord,
                              const uint32_t y_coord, const uint32_t amount) {
-    fprintf(stderr, "Game::depositgoldonbank no implementado.\n");
+    if (!_validateBankerPosition(caller, x_coord, y_coord))
+        return;
+
+    Character& character = this->characters.at(caller);
+
+    try {
+        character.gatherGold(amount);
+    } catch (const InsufficientGoldException& e) {
+        Notification* reply = new Reply(ERROR_MSG, e.what());
+        active_clients.notify(caller, reply);
+        return;
+    }
+
+    BankAccount& account = this->bank[character.getNickname()];
+
+    account.depositGold(amount);
+
+    std::string reply_msg =
+        "Se han depositado " + std::to_string(amount) + " de oro en el banco";
+
+    Notification* reply = new Reply(INFO_MSG, reply_msg.c_str());
+    active_clients.notify(caller, reply);
 }
 
 void Game::withdrawGoldFromBank(const InstanceId caller, const uint32_t x_coord,
-                                const uint32_t y_coord, const uint32_t amount) {
-    fprintf(stderr, "Game::withdrawgoldfrombank no implementado.\n");
+                                const uint32_t y_coord, uint32_t amount) {
+    if (!_validateBankerPosition(caller, x_coord, y_coord))
+        return;
+
+    uint32_t asked_amount = amount;
+
+    Character& character = this->characters.at(caller);
+
+    BankAccount& account = this->bank[character.getNickname()];
+
+    try {
+        account.withdrawGold(amount);
+    } catch (const NoMoneyAvailableException& e) {
+        Notification* reply = new Reply(ERROR_MSG, e.what());
+        active_clients.notify(caller, reply);
+        return;
+    }
+
+    std::string reply_msg = "";
+
+    try {
+        character.takeGold(amount);
+    } catch (const GoldMaximumCapacityReachedException& e) {
+        account.depositGold(asked_amount - amount);
+        reply_msg +=
+            "No pudiste extraer todo lo solicitado. No entra más oro en tu "
+            "inventario.";
+    }
+
+    // agregar mensaje si pide extraer mas de lo que tiene
+
+    reply_msg += "Se ha extraído " + std::to_string(amount) + " oro del banco.";
+
+    Notification* reply = new Reply(INFO_MSG, reply_msg.c_str());
+    active_clients.notify(caller, reply);
 }
 
 void Game::buyItem(const InstanceId caller, const uint32_t x_coord,
@@ -740,7 +885,8 @@ void Game::take(const InstanceId caller) {
     try {
         character.takeItem(this->items[item_id], amount);
     } catch (const std::exception& e) {
-        // FullInventoryException, StateCantTakeItemException
+        // FullInventoryException, StateCantTakeItemException,
+        // GoldMaximumCapacityReached.
         Notification* reply = new Reply(ERROR_MSG, e.what());
         active_clients.notify(caller, reply);
         return;
@@ -750,27 +896,31 @@ void Game::take(const InstanceId caller) {
     _pushItemDifferentialBroadcast(map_id, x_coord, y_coord, DELETE_BROADCAST);
 }
 
+const bool Game::_dropItem(const InstanceId caller, const uint8_t n_slot,
+                           uint32_t& amount, Item** dropped) {
+    Character& character = this->characters.at(caller);
+
+    try {
+        *dropped = character.dropItem(n_slot, amount);
+    } catch (const InvalidInventorySlotNumberException& e) {
+        Notification* reply = new Reply(ERROR_MSG, e.what());
+        active_clients.notify(caller, reply);
+        return false;
+    }
+
+    return (*dropped != nullptr);
+}
+
 void Game::drop(const InstanceId caller, const uint8_t n_slot,
                 uint32_t amount) {
-    uint32_t asked_amount = amount;
-
     if (!this->characters.count(caller)) {
         throw Exception("Game::equip: unknown caller.");
     }
 
-    Character& character = this->characters.at(caller);
+    uint32_t asked_amount = amount;
+    Item* dropped = nullptr;
 
-    Item* dropped;
-
-    try {
-        dropped = character.dropItem(n_slot, amount);
-    } catch (const InvalidInventorySlotNumberException& e) {
-        Notification* reply = new Reply(ERROR_MSG, e.what());
-        active_clients.notify(caller, reply);
-        return;
-    }
-
-    if (!dropped)  // enviamos mensaje de error?
+    if (!_dropItem(caller, n_slot, amount, &dropped))
         return;
 
     if (amount < asked_amount) {
@@ -779,6 +929,8 @@ void Game::drop(const InstanceId caller, const uint8_t n_slot,
         Notification* reply = new Reply(INFO_MSG, reply_msg.c_str());
         active_clients.notify(caller, reply);
     }
+
+    Character& character = this->characters.at(caller);
 
     Id dropped_item_id = dropped->getId();
     int x = character.getPosition().getX();
