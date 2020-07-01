@@ -1,5 +1,6 @@
 {
     "dirpath": "../Assets/Sprites/Units/",
+    "shorter_characters_offset": 10000,
     "pj": {
         "head": [
             {
@@ -585,6 +586,40 @@
                 }
             },
             {
+                "gid": 11300,
+                "clip_w": 17,
+                "clip_h": 43,
+                "up_row_col_clips": [
+                    0,
+                    3,
+                    1
+                ],
+                "down_row_col_clips": [
+                    0,
+                    0,
+                    1
+                ],
+                "left_row_col_clips": [
+                    0,
+                    2,
+                    1
+                ],
+                "right_row_col_clips": [
+                    0,
+                    1,
+                    1
+                ],
+                "change_every_n_frames": 1,
+                "color_key": {
+                    "is_needed": true,
+                    "color": {
+                        "r": 0,
+                        "g": 0,
+                        "b": 0
+                    }
+                }
+            },
+            {
                 "gid": 1301,
                 "clip_w": 17,
                 "clip_h": 52,
@@ -619,9 +654,77 @@
                 }
             },
             {
+                "gid": 11301,
+                "clip_w": 17,
+                "clip_h": 43,
+                "up_row_col_clips": [
+                    0,
+                    3,
+                    1
+                ],
+                "down_row_col_clips": [
+                    0,
+                    0,
+                    1
+                ],
+                "left_row_col_clips": [
+                    0,
+                    2,
+                    1
+                ],
+                "right_row_col_clips": [
+                    0,
+                    1,
+                    1
+                ],
+                "change_every_n_frames": 1,
+                "color_key": {
+                    "is_needed": true,
+                    "color": {
+                        "r": 0,
+                        "g": 0,
+                        "b": 0
+                    }
+                }
+            },
+            {
                 "gid": 1302,
                 "clip_w": 17,
                 "clip_h": 64,
+                "up_row_col_clips": [
+                    0,
+                    3,
+                    1
+                ],
+                "down_row_col_clips": [
+                    0,
+                    0,
+                    1
+                ],
+                "left_row_col_clips": [
+                    0,
+                    2,
+                    1
+                ],
+                "right_row_col_clips": [
+                    0,
+                    1,
+                    1
+                ],
+                "change_every_n_frames": 1,
+                "color_key": {
+                    "is_needed": true,
+                    "color": {
+                        "r": 0,
+                        "g": 0,
+                        "b": 0
+                    }
+                }
+            },
+            {
+                "gid": 11302,
+                "clip_w": 17,
+                "clip_h": 55,
                 "up_row_col_clips": [
                     0,
                     3,
@@ -689,6 +792,40 @@
                 }
             },
             {
+                "gid": 11400,
+                "clip_w": 25,
+                "clip_h": 45,
+                "up_row_col_clips": [
+                    1,
+                    0,
+                    6
+                ],
+                "down_row_col_clips": [
+                    0,
+                    0,
+                    6
+                ],
+                "left_row_col_clips": [
+                    2,
+                    0,
+                    5
+                ],
+                "right_row_col_clips": [
+                    3,
+                    0,
+                    5
+                ],
+                "change_every_n_frames": 4,
+                "color_key": {
+                    "is_needed": true,
+                    "color": {
+                        "r": 0,
+                        "g": 0,
+                        "b": 0
+                    }
+                }
+            },
+            {
                 "gid": 1401,
                 "clip_w": 25,
                 "clip_h": 45,
@@ -723,7 +860,75 @@
                 }
             },
             {
+                "gid": 11401,
+                "clip_w": 25,
+                "clip_h": 45,
+                "up_row_col_clips": [
+                    1,
+                    0,
+                    6
+                ],
+                "down_row_col_clips": [
+                    0,
+                    0,
+                    6
+                ],
+                "left_row_col_clips": [
+                    2,
+                    0,
+                    5
+                ],
+                "right_row_col_clips": [
+                    3,
+                    0,
+                    5
+                ],
+                "change_every_n_frames": 4,
+                "color_key": {
+                    "is_needed": true,
+                    "color": {
+                        "r": 0,
+                        "g": 0,
+                        "b": 0
+                    }
+                }
+            },
+            {
                 "gid": 1402,
+                "clip_w": 25,
+                "clip_h": 45,
+                "up_row_col_clips": [
+                    1,
+                    0,
+                    6
+                ],
+                "down_row_col_clips": [
+                    0,
+                    0,
+                    6
+                ],
+                "left_row_col_clips": [
+                    2,
+                    0,
+                    5
+                ],
+                "right_row_col_clips": [
+                    3,
+                    0,
+                    5
+                ],
+                "change_every_n_frames": 4,
+                "color_key": {
+                    "is_needed": true,
+                    "color": {
+                        "r": 0,
+                        "g": 0,
+                        "b": 0
+                    }
+                }
+            },
+            {
+                "gid": 11402,
                 "clip_w": 25,
                 "clip_h": 45,
                 "up_row_col_clips": [
@@ -793,7 +998,75 @@
                 }
             },
             {
+                "gid": 11500,
+                "clip_w": 25,
+                "clip_h": 45,
+                "up_row_col_clips": [
+                    1,
+                    0,
+                    6
+                ],
+                "down_row_col_clips": [
+                    0,
+                    0,
+                    6
+                ],
+                "left_row_col_clips": [
+                    2,
+                    0,
+                    5
+                ],
+                "right_row_col_clips": [
+                    3,
+                    0,
+                    5
+                ],
+                "change_every_n_frames": 4,
+                "color_key": {
+                    "is_needed": true,
+                    "color": {
+                        "r": 0,
+                        "g": 0,
+                        "b": 0
+                    }
+                }
+            },
+            {
                 "gid": 1501,
+                "clip_w": 25,
+                "clip_h": 45,
+                "up_row_col_clips": [
+                    1,
+                    0,
+                    6
+                ],
+                "down_row_col_clips": [
+                    0,
+                    0,
+                    6
+                ],
+                "left_row_col_clips": [
+                    2,
+                    0,
+                    5
+                ],
+                "right_row_col_clips": [
+                    3,
+                    0,
+                    5
+                ],
+                "change_every_n_frames": 4,
+                "color_key": {
+                    "is_needed": true,
+                    "color": {
+                        "r": 0,
+                        "g": 0,
+                        "b": 0
+                    }
+                }
+            },
+            {
+                "gid": 11501,
                 "clip_w": 25,
                 "clip_h": 45,
                 "up_row_col_clips": [
@@ -863,7 +1136,75 @@
                 }
             },
             {
+                "gid": 11000,
+                "clip_w": 25,
+                "clip_h": 45,
+                "up_row_col_clips": [
+                    1,
+                    0,
+                    6
+                ],
+                "down_row_col_clips": [
+                    0,
+                    0,
+                    6
+                ],
+                "left_row_col_clips": [
+                    2,
+                    0,
+                    5
+                ],
+                "right_row_col_clips": [
+                    3,
+                    0,
+                    5
+                ],
+                "change_every_n_frames": 4,
+                "color_key": {
+                    "is_needed": true,
+                    "color": {
+                        "r": 0,
+                        "g": 0,
+                        "b": 0
+                    }
+                }
+            },
+            {
                 "gid": 1001,
+                "clip_w": 25,
+                "clip_h": 45,
+                "up_row_col_clips": [
+                    1,
+                    0,
+                    6
+                ],
+                "down_row_col_clips": [
+                    0,
+                    0,
+                    6
+                ],
+                "left_row_col_clips": [
+                    2,
+                    0,
+                    5
+                ],
+                "right_row_col_clips": [
+                    3,
+                    0,
+                    5
+                ],
+                "change_every_n_frames": 4,
+                "color_key": {
+                    "is_needed": true,
+                    "color": {
+                        "r": 0,
+                        "g": 0,
+                        "b": 0
+                    }
+                }
+            },
+            {
+                "gid": 11001,
                 "clip_w": 25,
                 "clip_h": 45,
                 "up_row_col_clips": [
@@ -931,7 +1272,75 @@
                 }
             },
             {
+                "gid": 11002,
+                "clip_w": 25,
+                "clip_h": 45,
+                "up_row_col_clips": [
+                    1,
+                    0,
+                    6
+                ],
+                "down_row_col_clips": [
+                    0,
+                    0,
+                    6
+                ],
+                "left_row_col_clips": [
+                    2,
+                    0,
+                    5
+                ],
+                "right_row_col_clips": [
+                    3,
+                    0,
+                    5
+                ],
+                "change_every_n_frames": 4,
+                "color_key": {
+                    "is_needed": true,
+                    "color": {
+                        "r": 0,
+                        "g": 0,
+                        "b": 0
+                    }
+                }
+            },
+            {
                 "gid": 1003,
+                "clip_w": 25,
+                "clip_h": 45,
+                "up_row_col_clips": [
+                    1,
+                    0,
+                    6
+                ],
+                "down_row_col_clips": [
+                    0,
+                    0,
+                    6
+                ],
+                "left_row_col_clips": [
+                    2,
+                    0,
+                    5
+                ],
+                "right_row_col_clips": [
+                    3,
+                    0,
+                    5
+                ],
+                "change_every_n_frames": 4,
+                "color_key": {
+                    "is_needed": true,
+                    "color": {
+                        "r": 0,
+                        "g": 0,
+                        "b": 0
+                    }
+                }
+            },
+            {
+                "gid": 11003,
                 "clip_w": 25,
                 "clip_h": 45,
                 "up_row_col_clips": [
@@ -999,7 +1408,75 @@
                 }
             },
             {
+                "gid": 11004,
+                "clip_w": 25,
+                "clip_h": 45,
+                "up_row_col_clips": [
+                    1,
+                    0,
+                    6
+                ],
+                "down_row_col_clips": [
+                    0,
+                    0,
+                    6
+                ],
+                "left_row_col_clips": [
+                    2,
+                    0,
+                    5
+                ],
+                "right_row_col_clips": [
+                    3,
+                    0,
+                    5
+                ],
+                "change_every_n_frames": 4,
+                "color_key": {
+                    "is_needed": true,
+                    "color": {
+                        "r": 0,
+                        "g": 0,
+                        "b": 0
+                    }
+                }
+            },
+            {
                 "gid": 1100,
+                "clip_w": 25,
+                "clip_h": 45,
+                "up_row_col_clips": [
+                    1,
+                    0,
+                    6
+                ],
+                "down_row_col_clips": [
+                    0,
+                    0,
+                    6
+                ],
+                "left_row_col_clips": [
+                    2,
+                    0,
+                    5
+                ],
+                "right_row_col_clips": [
+                    3,
+                    0,
+                    5
+                ],
+                "change_every_n_frames": 4,
+                "color_key": {
+                    "is_needed": true,
+                    "color": {
+                        "r": 0,
+                        "g": 0,
+                        "b": 0
+                    }
+                }
+            },
+            {
+                "gid": 11100,
                 "clip_w": 25,
                 "clip_h": 45,
                 "up_row_col_clips": [
@@ -1067,6 +1544,40 @@
                 }
             },
             {
+                "gid": 11101,
+                "clip_w": 25,
+                "clip_h": 45,
+                "up_row_col_clips": [
+                    1,
+                    0,
+                    6
+                ],
+                "down_row_col_clips": [
+                    0,
+                    0,
+                    6
+                ],
+                "left_row_col_clips": [
+                    2,
+                    0,
+                    5
+                ],
+                "right_row_col_clips": [
+                    3,
+                    0,
+                    5
+                ],
+                "change_every_n_frames": 4,
+                "color_key": {
+                    "is_needed": true,
+                    "color": {
+                        "r": 0,
+                        "g": 0,
+                        "b": 0
+                    }
+                }
+            },
+            {
                 "gid": 1102,
                 "clip_w": 25,
                 "clip_h": 45,
@@ -1101,7 +1612,75 @@
                 }
             },
             {
+                "gid": 11102,
+                "clip_w": 25,
+                "clip_h": 45,
+                "up_row_col_clips": [
+                    1,
+                    0,
+                    6
+                ],
+                "down_row_col_clips": [
+                    0,
+                    0,
+                    6
+                ],
+                "left_row_col_clips": [
+                    2,
+                    0,
+                    5
+                ],
+                "right_row_col_clips": [
+                    3,
+                    0,
+                    5
+                ],
+                "change_every_n_frames": 4,
+                "color_key": {
+                    "is_needed": true,
+                    "color": {
+                        "r": 0,
+                        "g": 0,
+                        "b": 0
+                    }
+                }
+            },
+            {
                 "gid": 1103,
+                "clip_w": 25,
+                "clip_h": 45,
+                "up_row_col_clips": [
+                    1,
+                    0,
+                    6
+                ],
+                "down_row_col_clips": [
+                    0,
+                    0,
+                    6
+                ],
+                "left_row_col_clips": [
+                    2,
+                    0,
+                    5
+                ],
+                "right_row_col_clips": [
+                    3,
+                    0,
+                    5
+                ],
+                "change_every_n_frames": 4,
+                "color_key": {
+                    "is_needed": true,
+                    "color": {
+                        "r": 0,
+                        "g": 0,
+                        "b": 0
+                    }
+                }
+            },
+            {
+                "gid": 11103,
                 "clip_w": 25,
                 "clip_h": 45,
                 "up_row_col_clips": [

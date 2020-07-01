@@ -3,15 +3,15 @@
 //-----------------------------------------------------------------------------
 // Métodos privados
 
-void Creature::_copyData(const CreatureData& init_data) {
+void Creature::_copyData(const CreatureData& data) {
     // Data básica
-    data = init_data.basic_data;
+    this->data = data.basic_data;
 
     // Data del creature
-    name = init_data.name;
-    creature_id = init_data.creature_id;
-    health = init_data.health;
-    max_health = init_data.max_health;
+    this->name = data.name;
+    this->creature_id = data.creature_id;
+    this->health = data.health;
+    this->max_health = data.max_health;
 }
 
 void Creature::_renderInfo() const {

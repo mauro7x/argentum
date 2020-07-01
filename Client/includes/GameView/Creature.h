@@ -37,7 +37,7 @@ class Creature : public Unit {
     // Métodos privados
 
     /* Copia la data desde el paquete recibido */
-    void _copyData(const CreatureData& init_data);
+    void _copyData(const CreatureData& data);
 
     /* Renderiza la información del personaje */
     void _renderInfo() const;

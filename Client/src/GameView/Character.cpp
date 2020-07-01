@@ -3,16 +3,19 @@
 //-----------------------------------------------------------------------------
 // Métodos privados
 
-void Character::_copyData(const CharacterData& init_data) {
+void Character::_copyData(const CharacterData& data) {
     // Data básica
-    data = init_data.basic_data;
+    this->data = data.basic_data;
 
     // Data del character
-    nickname = init_data.nickname;
-    head_id = init_data.head_id;
-    body_id = init_data.body_id;
-    equipment = init_data.equipment;
-    level = init_data.level;
+    this->nickname = data.nickname;
+    this->head_id = data.head_id;
+    this->body_id = data.body_id;
+    this->equipment = data.equipment;
+    this->level = data.level;
+
+    // Si es enano/gnomo
+    this->is_shorter = data.is_shorter;
 }
 
 void Character::_renderInfo() const {
@@ -118,24 +121,21 @@ void Character::render() const {
             "Character has not been initialized (render requested).");
     }
 
-    // Cuerpo
-    if (body_id) {
-        _render(g_sprites->get(body_id));
-    }
-
-    // Armadura
+    // Armadura / cuerpo (si no tiene armadura)
     if (equipment[ARMOUR]) {
-        _render(g_sprites->get(equipment[ARMOUR]));
+        _render(g_sprites->get(equipment[ARMOUR], is_shorter));
+    } else if (body_id) {
+        _render(g_sprites->get(body_id));
     }
 
     // Escudo
     if (equipment[SHIELD]) {
-        _render(g_sprites->get(equipment[SHIELD]));
+        _render(g_sprites->get(equipment[SHIELD], is_shorter));
     }
 
     // Espada
     if (equipment[WEAPON]) {
-        _render(g_sprites->get(equipment[WEAPON]));
+        _render(g_sprites->get(equipment[WEAPON], is_shorter));
     }
 
     // Cabeza
@@ -145,7 +145,7 @@ void Character::render() const {
 
     // Casco
     if (equipment[HELMET]) {
-        _render(g_sprites->get(equipment[HELMET]));
+        _render(g_sprites->get(equipment[HELMET], is_shorter));
     }
 
     // Info

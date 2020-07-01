@@ -29,6 +29,9 @@ class UnitSpriteContainer {
     const Renderer* g_renderer;
     std::unordered_map<Id, UnitSprite> content;
 
+    // Offset para los sprites de los enanos/gnomos
+    size_t shorter_characters_offset = 0;
+
     /* Carga los sprites leyendo datos del json y la textura del dirpath */
     void _loadSpritesFromJson(const json& sprites, const std::string& dirpath);
 
@@ -60,7 +63,7 @@ class UnitSpriteContainer {
     void loadBodiesMedia();
 
     /* Obtiene el sprite correspondiente */
-    const UnitSprite& get(const Id id) const;
+    const UnitSprite& get(Id id, bool is_shorter = false) const;
     const UnitSprite& operator[](const Id id) const;
 
     //-------------------------------------------------------------------------

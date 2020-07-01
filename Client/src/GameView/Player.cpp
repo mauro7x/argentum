@@ -3,27 +3,30 @@
 //-----------------------------------------------------------------------------
 // Métodos privados
 
-void Player::_copyData(const PlayerData& init_data) {
+void Player::_copyData(const PlayerData& data) {
     // Data básica
-    data = init_data.basic_data;
-    nickname = init_data.nickname;
+    this->data = data.basic_data;
+    this->nickname = data.nickname;
 
     // Ids gráficos
-    head_id = init_data.head_id;
-    body_id = init_data.body_id;
-    equipment = init_data.equipment;
-    inventory = init_data.inventory;
+    this->head_id = data.head_id;
+    this->body_id = data.body_id;
+    this->equipment = data.equipment;
+    this->inventory = data.inventory;
 
     // Stats
-    health = init_data.health;
-    max_health = init_data.max_health;
-    mana = init_data.mana;
-    max_mana = init_data.max_mana;
-    safe_gold = init_data.safe_gold;
-    excess_gold = init_data.excess_gold;
-    level = init_data.level;
-    exp = init_data.exp;
-    levelup_exp = init_data.levelup_exp;
+    this->health = data.health;
+    this->max_health = data.max_health;
+    this->mana = data.mana;
+    this->max_mana = data.max_mana;
+    this->safe_gold = data.safe_gold;
+    this->excess_gold = data.excess_gold;
+    this->level = data.level;
+    this->exp = data.exp;
+    this->levelup_exp = data.levelup_exp;
+
+    // Si es enano/gnomo
+    this->is_shorter = data.is_shorter;
 }
 
 void Player::_renderInfo() const {
@@ -134,24 +137,21 @@ void Player::render() const {
         throw Exception("Player has not been initialized (render requested).");
     }
 
-    // Cuerpo
-    if (body_id) {
-        _render(g_sprites->get(body_id));
-    }
-
-    // Armadura
+    // Armadura / cuerpo (si no tiene armadura)
     if (equipment[ARMOUR]) {
-        _render(g_sprites->get(equipment[ARMOUR]));
+        _render(g_sprites->get(equipment[ARMOUR], is_shorter));
+    } else if (body_id) {
+        _render(g_sprites->get(body_id));
     }
 
     // Escudo
     if (equipment[SHIELD]) {
-        _render(g_sprites->get(equipment[SHIELD]));
+        _render(g_sprites->get(equipment[SHIELD], is_shorter));
     }
 
     // Espada
     if (equipment[WEAPON]) {
-        _render(g_sprites->get(equipment[WEAPON]));
+        _render(g_sprites->get(equipment[WEAPON], is_shorter));
     }
 
     // Cabeza
@@ -161,7 +161,7 @@ void Player::render() const {
 
     // Casco
     if (equipment[HELMET]) {
-        _render(g_sprites->get(equipment[HELMET]));
+        _render(g_sprites->get(equipment[HELMET], is_shorter));
     }
 
     // Info

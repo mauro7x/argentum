@@ -38,11 +38,14 @@ class Character : public Unit {
     Texture info_nickname_shadow;
     Texture info_level;
 
+    // Si es enano/gnomo usamos sus sprites
+    bool is_shorter = false;
+
     //-------------------------------------------------------------------------
     // Métodos privados
 
     /* Copia la data desde el paquete recibido */
-    void _copyData(const CharacterData& init_data);
+    void _copyData(const CharacterData& data);
 
     /* Renderiza la información del personaje */
     void _renderInfo() const;

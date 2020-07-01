@@ -68,6 +68,7 @@ UnitSpriteContainer::UnitSpriteContainer(const Renderer* renderer)
 void UnitSpriteContainer::loadMedia() {
     json sprites = JSON::loadJsonFile(UNIT_SPRITES_FILEPATH);
 
+    shorter_characters_offset = sprites["shorter_characters_offset"];
     std::string dirpath = sprites["dirpath"];
     _loadSpritesFromJson(sprites["pj"]["head"], dirpath);
     _loadSpritesFromJson(sprites["pj"]["body"], dirpath);
@@ -92,9 +93,13 @@ void UnitSpriteContainer::loadBodiesMedia() {
     _loadSpritesFromJson(sprites["pj"]["body"], dirpath);
 }
 
-const UnitSprite& UnitSpriteContainer::get(const Id id) const {
+const UnitSprite& UnitSpriteContainer::get(Id id, bool is_shorter) const {
     if (content.count(id) == 0) {
         throw Exception("Unknown sprite id: %u", id);
+    }
+
+    if (is_shorter) {
+        id += shorter_characters_offset;
     }
 
     return content.at(id);
