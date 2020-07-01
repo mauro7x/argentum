@@ -104,11 +104,13 @@ class Inventory {
      * Agrega amount de gold al inventario, llenando primero
      * el oro seguro y luego el oro en exceso, hasta llegar
      * a sus respectivos limites.
+     * 
+     * Setea en amount el oro efectivamente agregado.
      *
      * Lanza GoldMaximumCapacityReachedException si no se pudo
      * guardar todo el oro por llegar al limite de capacidad.
      */
-    void addGold(const uint32_t amount);
+    void addGold(uint32_t& amount);
 
     /*
      * Vacía el inventario, dropeando todos los items en el vector

@@ -72,12 +72,6 @@ void ActiveClients::sendMessageToAll(Notification* message,
     Notification* message_copy;
 
      while (it != this->content.end()) {
-        // if (it->first == sender) {
-        //     ++it;
-        //     continue;
-        // }
-
-
         message_copy = new Message(*((Message*)message));
         it->second.push(message_copy);
         ++it;

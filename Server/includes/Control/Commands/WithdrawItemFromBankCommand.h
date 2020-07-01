@@ -6,7 +6,6 @@
 class WithdrawItemFromBankCommand : public Command {
    private:
     InstanceId caller;
-    char cmd;
 
     const uint32_t x_coord;
     const uint32_t y_coord;
@@ -14,10 +13,10 @@ class WithdrawItemFromBankCommand : public Command {
     const uint32_t amount;
 
    public:
-    WithdrawItemFromBankCommand(InstanceId caller, char cmd,
-                                const uint32_t x_coord, const uint32_t y_coord,
-                                const uint32_t item_id, const uint32_t amount);
-    ~WithdrawItemFromBankCommand() {}
+    WithdrawItemFromBankCommand(InstanceId caller, const uint32_t x_coord,
+                                const uint32_t y_coord, const uint32_t item_id,
+                                const uint32_t amount);
+    ~WithdrawItemFromBankCommand();
 
     void exec(Game& game) override;
 };

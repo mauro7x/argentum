@@ -24,6 +24,7 @@
 #include "../../includes/Control/Commands/UnequipCommand.h"
 #include "../../includes/Control/Commands/UseWeaponCommand.h"
 #include "../../includes/Control/Commands/WithdrawGoldFromBankCommand.h"
+#include "../../includes/Control/Commands/WithdrawItemFromBankCommand.h"
 //-----------------------------------------------------------------------------
 Command::Command() {}
 Command::~Command() {}
@@ -121,6 +122,16 @@ Command* CommandFactory::newCommand(InstanceId caller, uint8_t opcode,
             socket >> amount;
             return new DepositItemOnBankCommand(caller, x_coord, y_coord,
                                                 n_slot, amount);
+        }
+
+        case WITHDRAW_N_OBJECTS_CMD: {
+            uint32_t x_coord, y_coord, item_id, amount;
+            socket >> x_coord;
+            socket >> y_coord;
+            socket >> item_id;
+            socket >> amount;
+            return new WithdrawItemFromBankCommand(caller, x_coord, y_coord,
+                                                   item_id, amount);
         }
 
         case THROW_N_OBJECTS_CMD: {

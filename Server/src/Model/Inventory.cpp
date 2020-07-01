@@ -54,7 +54,8 @@ void Inventory::addItem(Item* item, const unsigned int amount) {
     const Id item_id = item->getId();
 
     if (item_id == GOLD_BAG_ID) {
-        addGold(amount);
+        uint32_t gold_amount = amount;
+        addGold(gold_amount);
         return;
     }
 
@@ -130,12 +131,14 @@ unsigned int Inventory::_gatherGold(const uint32_t amount,
     return gathered_gold;
 }
 
-void Inventory::addGold(const uint32_t amount) {
+void Inventory::addGold(uint32_t& amount) {
     unsigned int remaining =
         _addGold(amount, this->safe_gold, this->max_safe_gold);
 
-    if (_addGold(remaining, this->excess_gold, this->max_excess_gold) > 0) {
+    remaining = _addGold(remaining, this->excess_gold, this->max_excess_gold);
+    if (remaining > 0) {
         // Se llego al limite de capacidad y no se pudo agregar todo el oro
+        amount -= remaining;  // seteo amount con lo que se pudo agregar.
         throw GoldMaximumCapacityReachedException();
     }
 }
