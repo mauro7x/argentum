@@ -4,5 +4,9 @@
         "extension": ".mp3",
         "songs": 4
     },
-    "chunks": {}
+    "chunks": {
+        "dirpath": "../Assets/Audio/Chunks/",
+        "extension": ".wav",
+        "samples": 13
+    }
 }
