@@ -36,6 +36,17 @@ void Inventory::updateMaxAmountsOfGold() {
         Formulas::calculateMaxSafeGold(this->character_level.getLevel());
     this->max_excess_gold =
         Formulas::calculateMaxExcessGold(this->max_safe_gold);
+
+    if (excess_gold && safe_gold < max_safe_gold) {
+        if (safe_gold + excess_gold > max_safe_gold) {
+            unsigned int delta = max_safe_gold - safe_gold;
+            safe_gold = max_safe_gold;
+            excess_gold -= delta;
+        } else {
+            safe_gold += excess_gold;
+            excess_gold = 0;
+        }
+    }
 }
 
 const uint8_t Inventory::_getNextFreeSlot() const {
