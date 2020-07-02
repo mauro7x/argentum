@@ -15,7 +15,7 @@ const unsigned int Weapon::use(Character& user) {
     user.setAttackCooldown(this->cooldown);
     
     RandomNumberGenerator random_number_generator;
-    return random_number_generator(this->min_damage, this->max_damage);
+    return (int)random_number_generator((int)this->min_damage, (int)this->max_damage);
 }
 
 const unsigned int Weapon::getRange() const {

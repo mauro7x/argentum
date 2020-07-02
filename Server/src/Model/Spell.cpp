@@ -42,7 +42,7 @@ const unsigned int AttackingSpell::cast(Character& caster) {
     caster.setAttackCooldown(this->cooldown);
 
     RandomNumberGenerator random_number_generator;
-    return random_number_generator(min_damage, max_damage);
+    return (int)random_number_generator((int)min_damage, (int)max_damage);
 }
 
 const bool AttackingSpell::isHealing() const {

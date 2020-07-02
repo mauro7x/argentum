@@ -2,11 +2,12 @@
 #define __RANDOM_NUMBER_GENERATOR_H__
 
 class RandomNumberGenerator {
-    public:
-        RandomNumberGenerator();
-        ~RandomNumberGenerator();
+   public:
+    RandomNumberGenerator();
+    ~RandomNumberGenerator();
 
-        float operator()(float min, float max);
+    float operator()(float min, float max);
+    int operator()(int min, int max);
 };
 
 #endif

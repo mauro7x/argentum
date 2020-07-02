@@ -22,7 +22,7 @@ const unsigned int Formulas::calculateKillXPGain(
     const unsigned int attacked_max_health, const unsigned int attacked_level,
     const unsigned int attacker_level) {
     RandomNumberGenerator gen;
-    return gen(0, 0.1) * attacked_max_health *
+    return (float)gen((float)0, (float)0.1) * attacked_max_health *
            std::max((int)(attacked_level - attacker_level + 10), 0);
 }
 
@@ -63,12 +63,12 @@ const unsigned int Formulas::calculateManaMeditationTimeRecovery(
 
 const bool Formulas::isAttackEluded(const unsigned int agility) {
     RandomNumberGenerator gen;
-    return (std::pow(gen(0, 1), agility) < 0.001);
+    return (std::pow((float)gen((float)0, (float)1), agility) < 0.001);
 }
 
 const bool Formulas::isCriticalAttack() {
     RandomNumberGenerator gen;
-    return (gen(0, 1) < 0.1);
+    return ((float)gen((float)0, (float)1) < 0.1);
 }
 
 const bool Formulas::canAttackByLevel(const unsigned int attacker_level,
@@ -90,5 +90,5 @@ const unsigned int Formulas::calculateMaxExcessGold(
 const unsigned int Formulas::calculateGoldDroppingAmount(
     const unsigned int max_health) {
     RandomNumberGenerator gen;
-    return gen(0.01, 0.2) * max_health;
+    return (float)gen((float)0.01, (float)0.2) * max_health;
 }
