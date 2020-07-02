@@ -1,4 +1,5 @@
 #include <cstdio>  // debug
+#include <list>
 #include <string>
 #include <utility>
 //-----------------------------------------------------------------------------
@@ -9,6 +10,7 @@
 #include "../../includes/Control/ActiveClients.h"
 #include "../../includes/Control/Notifications/EntityBroadcast.h"
 #include "../../includes/Control/Notifications/ItemBroadcast.h"
+#include "../../includes/Control/Notifications/List.h"
 #include "../../includes/Control/Notifications/Message.h"
 #include "../../includes/Control/Notifications/Reply.h"
 //-----------------------------------------------------------------------------
@@ -684,7 +686,21 @@ void Game::resurrect(const InstanceId caller) {
 
 void Game::list(const InstanceId caller, const uint32_t x_coord,
                 const uint32_t y_coord) {
-    fprintf(stderr, "Game::list no implementado.\n");
+    if (!this->characters.count(caller))
+        throw Exception("Game::list: unknown caller.");
+
+    Character& character = this->characters.at(caller);
+
+    std::string init_msg;
+    std::list<std::string> list_items;
+
+    if (_validateBankerPosition(caller, x_coord, y_coord)) {
+        BankAccount& account = bank[character.getNickname()];
+        account.list(init_msg, list_items);
+        Notification* list = new List(init_msg, list_items);
+        this->active_clients.notify(caller, list);
+        return;
+    }
 }
 
 const bool Game::_validateBankerPosition(const InstanceId caller,
@@ -693,6 +709,7 @@ const bool Game::_validateBankerPosition(const InstanceId caller,
     if (!this->characters.count(caller)) {
         throw Exception("Game::depositItemOnBank: unknown caller.");
     }
+
     Character& character = this->characters.at(caller);
 
     // CAMBIAR LO DE LA MACRO BANKER_ID, ES FEO
@@ -783,7 +800,7 @@ void Game::withdrawItemFromBank(const InstanceId caller, const uint32_t x_coord,
     std::string reply_msg = "";
 
     if (asked_amount > amount)
-        reply_msg += "No tenías suficientes items.";
+        reply_msg += "No tenías tantos items. ";
 
     reply_msg += "Se ha extraído " + withdrew->what() + " x" +
                  std::to_string(amount) + " del banco";
