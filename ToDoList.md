@@ -89,7 +89,8 @@
 
 * Frame-rate del cliente (medium), tick-rate del servidor (medium) en jsons.
 
-* Sonidos de eventos (medium).
+* ~~Sonidos de eventos (medium).~~
+    * **UPDATE:** done. -Mau, 02/07.
 
 * Instalador.
 
