@@ -50,7 +50,7 @@ void Receiver::_receiveEvent() const {
         throw Exception("Receiver::_receiveEvent: incomplete event received.");
     }
 
-    Event* new_event = new Event(event_type, x, y);
+    GameEvent* new_event = new GameEvent(event_type, x, y);
     events.push(new_event);
 }
 
@@ -62,7 +62,7 @@ void Receiver::_receiveEvent() const {
 Receiver::Receiver(const SocketWrapper& socket,
                    NonBlockingQueue<Broadcast*>& broadcasts,
                    NonBlockingQueue<Message*>& messages,
-                   NonBlockingQueue<Event*>& events, GameView& game_view)
+                   NonBlockingQueue<GameEvent*>& events, GameView& game_view)
     : socket(socket),
       broadcasts(broadcasts),
       messages(messages),

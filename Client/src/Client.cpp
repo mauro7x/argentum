@@ -107,7 +107,7 @@ void Client::_launchGameCtx() {
     BlockingQueue<Command*> commands;
     NonBlockingQueue<Broadcast*> broadcasts;
     NonBlockingQueue<Message*> messages;
-    NonBlockingQueue<Event*> events;
+    NonBlockingQueue<GameEvent*> events;
 
     // Recibimos el primer paquete
     _receiveFirstPackage(broadcasts);

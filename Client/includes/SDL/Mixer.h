@@ -7,7 +7,10 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+#include <cmath>
+#include <cstdlib>
 #include <string>
+#include <vector>
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -24,9 +27,14 @@
 // Efectos
 #define FADE_IN_MUSIC_MS 2000
 #define FADE_OUT_MUSIC_MS 2000
+#define MAX_DISTANCE_EFFECT 255
+#define RADTODEG(rad) rad*(180.0 / M_PI)
 
 // Volumen (el máximo volumen es 128)
-#define VOLUME_LEVEL 8
+#define MUSIC_VOLUME_LEVEL 4
+
+// Chunks
+#define MAX_CHUNKS_SIMULTANEOUSLY 3 /* límite para sonidos EXTERNOS */
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -58,8 +66,15 @@ class Mixer {
     /* Método para que empiece a sonar la lista de canciones */
     static void playMusic(bool fade_in);
 
+    /* Método para hacer sonar un chunk */
+    static void playEventSound(uint8_t sound_id, const SDL_Point& player_pos,
+                               const SDL_Point& sound_pos);
+
     /* Callback que se llama cuando termina una canción */
     static void finishedSongCallback();
+
+    /* Callback que se llama cuando termina un chunk */
+    static void finishedChunkCallback();
 
     //-------------------------------------------------------------------------
 
@@ -72,6 +87,9 @@ class Mixer {
     RoundRobinList<Mix_Music*> music;
 
     // Chunks
+    size_t listening_radio = 0;
+    int active_chunks = 0;
+    std::vector<Mix_Chunk*> chunks;
 
     //-------------------------------------------------------------------------
 
@@ -115,6 +133,17 @@ class Mixer {
 
     /* Baja el volumen actual de la música */
     void _decreaseMusicVolume();
+
+    //-------------------------------------------------------------------------
+    // Chunks
+
+    /* Reproduce un chunk si está dentro del listening_radio */
+    void _playChunk(uint8_t sound_id, const SDL_Point& player_pos,
+                    const SDL_Point& sound_pos);
+
+    /* Obtiene el angulo entre dos posiciones según la convención de
+     * SDL_SetPosition */
+    Sint16 _getAngle(const SDL_Point& origin, const SDL_Point& point) const;
 
     //-------------------------------------------------------------------------
 };
