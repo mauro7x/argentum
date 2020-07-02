@@ -5,7 +5,7 @@
 
 #include "../../../Common/includes/types.h"
 
-class Character; // Evito dependencias circulares debido a double dispatch
+class Character;  // Evito dependencias circulares debido a double dispatch
 
 /*
  * Define la abstraccion Item.
@@ -13,21 +13,22 @@ class Character; // Evito dependencias circulares debido a double dispatch
  * en un inventario.
  */
 class Item {
-    protected:
-        const Id id;
-        const std::string name;
-        const unsigned int price;
+   protected:
+    const Id id;
+    const std::string name;
+    const unsigned int price;
 
-    public:
-        Item(const Id id, const std::string name,
-             const unsigned int price);
-        virtual ~Item();
+   public:
+    Item(const Id id, const std::string name, const unsigned int price);
+    virtual ~Item();
 
-        virtual void equip(Character& equipper) = 0;
+    virtual void equip(Character& equipper) = 0;
 
-        virtual const std::string what() const;
+    virtual const std::string what() const;
 
-        const Id getId() const;
+    const Id getId() const;
+
+    const unsigned int getPrice() const;
 };
 
 #endif
