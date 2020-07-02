@@ -241,20 +241,28 @@ Command* InputParser::_parseCommand(const std::string& command_input,
             }
 
             std::string s_id, s_amount, excess;
+            uint32_t id, amount;
             _splitBy(' ', body, s_id, excess);
             _splitBy(' ', excess, s_amount, excess);
 
-            if (s_id.empty() || s_amount.empty() || !excess.empty()) {
+            if (s_id.empty() || !excess.empty() || !_castToUint32(s_id, id)) {
                 (*g_reply) =
-                    "Uso esperado del comando: /retirar <item_id> [<cantidad> "
+                    "ASD Uso esperado del comando: /retirar <item_id> "
+                    "[<cantidad> "
                     "= 1]";
                 return NULL;
             }
 
-            uint32_t id, amount;
-            if (!_castToUint32(s_id, id) || !_castToUint32(s_amount, amount)) {
+            if (s_amount.empty()) {
+                return new WithdrawNObjectsCommand(current_selection.npc_x_tile,
+                                                   current_selection.npc_y_tile,
+                                                   id, 1);
+            }
+
+            if (!_castToUint32(s_amount, amount)) {
                 (*g_reply) =
-                    "Uso esperado del comando: /retirar <item_id> [<cantidad> "
+                    "JKL Uso esperado del comando: /retirar <item_id> "
+                    "[<cantidad> "
                     "= 1]";
                 return NULL;
             }
