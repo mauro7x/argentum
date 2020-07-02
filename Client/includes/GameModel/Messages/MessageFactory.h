@@ -7,6 +7,7 @@
 
 //-----------------------------------------------------------------------------
 #include "../../../../Common/includes/Exceptions/Exception.h"
+#include "../../../../Common/includes/JSON.h"
 #include "../../../../Common/includes/Protocol.h"
 #include "../../../../Common/includes/Socket/SocketWrapper.h"
 //-----------------------------------------------------------------------------
