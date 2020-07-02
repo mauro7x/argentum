@@ -9,7 +9,7 @@
 #include "../../../Common/includes/types.h"
 //-----------------------------------------------------------------------------
 #include "../../includes/Control/Database.h"
-#include "../../includes/Control/Notification.h"
+#include "../../includes/Control/Notifications/Notification.h"
 #include "../defs.h"
 //-----------------------------------------------------------------------------
 #include "Bank.h"

@@ -1,8 +1,8 @@
 #include "../../includes/Control/ActiveClients.h"
 //-----------------------------------------------------------------------------
-#include "../../includes/Control/EntityBroadcast.h"
-#include "../../includes/Control/ItemBroadcast.h"
-#include "../../includes/Control/Message.h"
+#include "../../includes/Control/Notifications/EntityBroadcast.h"
+#include "../../includes/Control/Notifications/ItemBroadcast.h"
+#include "../../includes/Control/Notifications/Message.h"
 //-----------------------------------------------------------------------------
 
 ActiveClients::ActiveClients(

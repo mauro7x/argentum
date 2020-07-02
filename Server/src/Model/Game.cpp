@@ -7,10 +7,10 @@
 #include "../../../Common/includes/RandomNumberGenerator.h"
 //-----------------------------------------------------------------------------
 #include "../../includes/Control/ActiveClients.h"
-#include "../../includes/Control/EntityBroadcast.h"
-#include "../../includes/Control/ItemBroadcast.h"
-#include "../../includes/Control/Message.h"
-#include "../../includes/Control/Reply.h"
+#include "../../includes/Control/Notifications/EntityBroadcast.h"
+#include "../../includes/Control/Notifications/ItemBroadcast.h"
+#include "../../includes/Control/Notifications/Message.h"
+#include "../../includes/Control/Notifications/Reply.h"
 //-----------------------------------------------------------------------------
 #include "../../includes/Model/Game.h"
 //-----------------------------------------------------------------------------
