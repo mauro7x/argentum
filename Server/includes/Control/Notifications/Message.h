@@ -4,6 +4,7 @@
 //-----------------------------------------------------------------------------
 #include <string>
 //-----------------------------------------------------------------------------
+#include "../../../../Common/includes/Protocol.h"
 #include "../../../../Common/includes/Socket/SocketWrapper.h"
 //-----------------------------------------------------------------------------
 #include "Notification.h"
@@ -21,7 +22,7 @@ class Message : public Notification {
 
    public:
     /* Constructor */
-    Message(const std::string from_nickname, const std::string message,
+    Message(const std::string& from_nickname, const std::string& message,
             const MessageType message_type);
 
     /* Habilitamos el constructor por copia. */
@@ -38,7 +39,7 @@ class Message : public Notification {
     //-----------------------------------------------------------------------------
 
     /* Destructor */
-    virtual ~Message() {}
+    virtual ~Message();
 };
 
 #endif  //__MESSAGE_H

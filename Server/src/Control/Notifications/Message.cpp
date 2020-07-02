@@ -8,11 +8,13 @@
 //-----------------------------------------------------------------------------
 // API Pública
 
-Message::Message(std::string from_nickname, std::string message,
+Message::Message(const std::string& from_nickname, const std::string& message,
                  MessageType message_type)
     : from_nickname(from_nickname),
       message(message),
       message_type(message_type) {}
+
+Message::~Message() {}
     
 Message::Message(const Message& other) {
     this->from_nickname = other.from_nickname;

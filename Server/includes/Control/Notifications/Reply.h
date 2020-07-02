@@ -28,7 +28,7 @@ class Reply : public Notification {
     Reply();
 
     /* Constructor */
-    Reply(uint8_t message_type, std::string reply);
+    Reply(const uint8_t message_type, const std::string& reply);
 
     //-----------------------------------------------------------------------------
 
@@ -38,7 +38,7 @@ class Reply : public Notification {
     //-----------------------------------------------------------------------------
 
     /* Destructor */
-    virtual ~Reply() {}
+    virtual ~Reply();
 };
 
 #endif  //__REPLY_H__

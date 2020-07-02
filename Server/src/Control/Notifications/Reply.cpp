@@ -8,11 +8,12 @@
 //-----------------------------------------------------------------------------
 // API Pública
 
-Reply::Reply(uint8_t message_type, std::string reply)
+Reply::Reply(const uint8_t message_type, const std::string& reply)
     : message_type(message_type), reply(reply) {}
 
-bool Reply::send(const InstanceId sender,
-                             const SocketWrapper& peer) {
+Reply::~Reply() {}
+
+bool Reply::send(const InstanceId sender, const SocketWrapper& peer) {
     // Enviamos la notificación según el protocolo
 
     if (!(peer << (uint8_t)MESSAGE_OPCODE)) {
