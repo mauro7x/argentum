@@ -23,7 +23,7 @@ class Attackable {
 
     virtual const Id getMapId() const = 0;
 
-    virtual const bool recoverHealth(const unsigned int points) = 0;
+    virtual const bool recoverHealth(unsigned int& points) = 0;
 
     virtual void beAttacked() = 0;
 

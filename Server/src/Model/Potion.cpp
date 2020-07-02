@@ -25,7 +25,9 @@ HealthPotion::HealthPotion(const PotionCfg& data)
 HealthPotion::~HealthPotion() {}
 
 void HealthPotion::equip(Character& equipper) {
-    if (!equipper.recoverHealth(this->recovery_points)) {
+    unsigned int points = this->recovery_points;
+
+    if (!equipper.recoverHealth(points)) {
         equipper.takeItem((Item*) this);
         throw HealthPotionHasNoPointsToRecoverException();
     };
@@ -42,8 +44,10 @@ void ManaPotion::equip(Character& equipper) {
         equipper.takeItem((Item*)this);
         throw e;
     }
+
+    unsigned int points = this->recovery_points;
     
-    if (!equipper.recoverMana(this->recovery_points)) {
+    if (!equipper.recoverMana(points)) {
         equipper.takeItem((Item*) this);
         throw ManaPotionHasNoPointsToRecoverException();
     };
