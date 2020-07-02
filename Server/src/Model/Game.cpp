@@ -1056,7 +1056,9 @@ const bool Game::_validateIfNPCSellsItem(const InstanceId caller,
     if (it != sellable_items.end())
         return true;
 
-    std::string msg_reply = "El item especificado no está a la venta.";
+    std::string msg_reply =
+        "El item especificado no es válido. [Escriba /listar para ver los "
+        "items válidos].";
     Notification* reply = new Reply(ERROR_MSG, msg_reply);
     active_clients.notify(caller, reply);
     return false;
@@ -1068,13 +1070,15 @@ void Game::buyItem(const InstanceId caller, const uint32_t x_coord,
     if (!this->characters.count(caller))
         throw Exception("Game::buyItem: unknown caller.");
 
+    fprintf(stderr, "buyItem: item_id: %i, amount: %i \n", item_id, amount);
+
     Character& character = this->characters.at(caller);
 
     // Verifico x e y correspondan a la posición de un comerciante o sacerdote.
     Id npc_id = 0;
 
     if (_validatePriestPosition(caller, x_coord, y_coord, false))
-        npc_id = banker;
+        npc_id = priest;
     else if (!_validateMerchantPosition(caller, npc_id, x_coord, y_coord,
                                         false)) {
         // En la posición recibida no hay un npc que venda items.
@@ -1115,8 +1119,55 @@ void Game::buyItem(const InstanceId caller, const uint32_t x_coord,
 
 void Game::sellItem(const InstanceId caller, const uint32_t x_coord,
                     const uint32_t y_coord, const uint8_t n_slot,
-                    const uint32_t amount) {
-    fprintf(stderr, "Game::sellitem no implementado.\n");
+                    uint32_t amount) {
+    if (!this->characters.count(caller))
+        throw Exception("Game::buyItem: unknown caller.");
+
+    Character& character = this->characters.at(caller);
+
+    // Verifico x e y correspondan a la posición de un comerciante o sacerdote.
+    Id npc_id = 0;
+
+    if (_validatePriestPosition(caller, x_coord, y_coord, false))
+        npc_id = priest;
+    else if (!_validateMerchantPosition(caller, npc_id, x_coord, y_coord,
+                                        false)) {
+        // En la posición recibida no hay un npc que venda items.
+        std::string msg_reply = "No seleccionaste a un NPC que compre items.";
+        Notification* reply = new Reply(ERROR_MSG, msg_reply);
+        active_clients.notify(caller, reply);
+        return;
+    }
+
+    // uint32_t asked_amount = amount;
+    Item* to_sell = nullptr;
+
+    if (!_dropItem(caller, n_slot, amount, &to_sell))
+        return;
+
+    if (!_validateIfNPCSellsItem(caller, npc_id, to_sell->getId())) {
+        character.takeItem(to_sell, amount);
+        return;
+    }
+
+    unsigned int total_price = to_sell->getPrice() * amount;
+
+    try {
+        character.takeGold(total_price);
+    } catch (const GoldMaximumCapacityReachedException& e) {
+        unsigned int amount_to_replenish = amount + to_sell->getPrice();
+        if (amount_to_replenish)
+            character.takeItem(to_sell, amount_to_replenish);
+        Notification* reply = new Reply(ERROR_MSG, e.what());
+        active_clients.notify(caller, reply);
+    }
+
+    // si amount < asked_amount avisar.
+
+    std::string reply_msg =
+        "Has vendido " + std::to_string(amount) + " " + to_sell->what();
+    Notification* reply = new Reply(SUCCESS_MSG, reply_msg);
+    active_clients.notify(caller, reply);
 }
 
 void Game::listConnectedPlayers(const InstanceId caller) {

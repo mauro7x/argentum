@@ -347,7 +347,7 @@ class Game {
                  const uint32_t amount);
     void sellItem(const InstanceId caller, const uint32_t x_coord,
                   const uint32_t y_coord, const uint8_t n_slot,
-                  const uint32_t amount);
+                  uint32_t amount);
 
     void take(const InstanceId caller);
 
