@@ -31,7 +31,7 @@ Item* BankAccount::withdraw(const Id item_id, unsigned int& amount) {
 
     if (!saved_amount)
         this->saved_items.erase(item_id);
-    
+
     return items[item_id];
 }
 
@@ -47,19 +47,30 @@ void BankAccount::withdrawGold(unsigned int& amount) {
     }
 }
 
-void BankAccount::list(std::string& list) const {
+void BankAccount::list(std::string& init_msg,
+                       std::list<std::string>& list_items) const {
     if (!saved_items.size()) {
-        list += "No tienes ningún item guardado en el banco.";
+        init_msg = "No tienes ningún item guardado en el banco";
         return;
     }
 
+    init_msg = "Items guardados en tu cuenta bancaria";
+
+    std::string list_item;
+
+    if (gold) {
+        list_item = "Oro: " + std::to_string(gold);
+        list_items.push_back(list_item);
+    }
+    
     std::unordered_map<Id, unsigned int>::const_iterator it =
         saved_items.begin();
 
     for (; it != saved_items.end(); ++it) {
-        list += std::to_string(it->first) + ": ";
-        list += items[it->first]->what() + " ";
-        list += "(" + std::to_string(it->second) + ") ";
+        list_item = std::to_string(it->first) + ": ";
+        list_item += items[it->first]->what() + " ";
+        list_item += "(" + std::to_string(it->second) + ") ";
+        list_items.push_back(list_item);
     }
 }
 

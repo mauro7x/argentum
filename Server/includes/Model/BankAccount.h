@@ -2,6 +2,7 @@
 #define __BANK_ACCOUNT_H__
 //-----------------------------------------------------------------------------
 #include <exception>
+#include <list>
 #include <string>
 #include <unordered_map>
 //-----------------------------------------------------------------------------
@@ -61,7 +62,7 @@ class BankAccount {
      * Escribe en el string recibido los ids de items en la cuenta con su
      * descripción.
      */
-    void list(std::string& list) const;
+    void list(std::string& init_msg, std::list<std::string>& list_items) const;
 
     void fillPersistenceData(CharacterCfg& data) const;
 };
