@@ -36,7 +36,8 @@ void to_json(json& j, const CreatureData& data) {
              {"name", data.name},
              {"creature_id", data.creature_id},
              {"health", data.health},
-             {"max_health", data.max_health}/*,
+             {"max_health", data.max_health},
+             {"movement_speed", data.movement_speed}/*,
              {"level", data.level}*/};
 }
 
@@ -85,6 +86,7 @@ void from_json(const json& j, CreatureData& data) {
     j.at("creature_id").get_to(data.creature_id);
     j.at("health").get_to(data.health);
     j.at("max_health").get_to(data.max_health);
+    j.at("movement_speed").get_to(data.movement_speed);
     /*j.at("level").get_to(data.level);*/
 }
 
