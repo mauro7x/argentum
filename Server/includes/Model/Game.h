@@ -194,6 +194,9 @@ class Game {
                                          const uint32_t y_coord,
                                          const bool reply_if_invalid);
 
+    const bool _validateIfNPCSellsItem(const InstanceId caller, const Id npc_id,
+                                       const Id item_id);
+
     void _listNPCSellableItems(const Id npc_id, std::string& init_msg,
                                std::list<std::string>& item_list);
 

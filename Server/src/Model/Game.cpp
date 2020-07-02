@@ -44,9 +44,6 @@ Game::Game(ActiveClients& active_clients)
         else
             merchants.push_back(npcs_id[i]);
     }
-
-    fprintf(stderr, "Banquero: %i, Sacerdote: %i Comerciantes: %i %i\n", banker,
-            priest, merchants[0], merchants[1]);
 }
 
 Game::~Game() {
@@ -1050,10 +1047,70 @@ void Game::withdrawGoldFromBank(const InstanceId caller, const uint32_t x_coord,
     active_clients.notify(caller, reply);
 }
 
+const bool Game::_validateIfNPCSellsItem(const InstanceId caller,
+                                         const Id npc_id, const Id item_id) {
+    const std::list<Id>& sellable_items = npcs[npc_id].sellable_items;
+    std::list<Id>::const_iterator it =
+        std::find(sellable_items.begin(), sellable_items.end(), item_id);
+
+    if (it != sellable_items.end())
+        return true;
+
+    std::string msg_reply = "El item especificado no está a la venta.";
+    Notification* reply = new Reply(ERROR_MSG, msg_reply);
+    active_clients.notify(caller, reply);
+    return false;
+}
+
 void Game::buyItem(const InstanceId caller, const uint32_t x_coord,
                    const uint32_t y_coord, const uint32_t item_id,
                    const uint32_t amount) {
-    fprintf(stderr, "Game::buyitem no implementado.\n");
+    if (!this->characters.count(caller))
+        throw Exception("Game::buyItem: unknown caller.");
+
+    Character& character = this->characters.at(caller);
+
+    // Verifico x e y correspondan a la posición de un comerciante o sacerdote.
+    Id npc_id = 0;
+
+    if (_validatePriestPosition(caller, x_coord, y_coord, false))
+        npc_id = banker;
+    else if (!_validateMerchantPosition(caller, npc_id, x_coord, y_coord,
+                                        false)) {
+        // En la posición recibida no hay un npc que venda items.
+        std::string msg_reply = "No seleccionaste a un NPC que venda items.";
+        Notification* reply = new Reply(ERROR_MSG, msg_reply);
+        active_clients.notify(caller, reply);
+        return;
+    }
+
+    if (!_validateIfNPCSellsItem(caller, npc_id, item_id))
+        return;
+
+    unsigned int total_price = items[item_id]->getPrice() * amount;
+
+    try {
+        character.gatherGold(total_price);
+    } catch (const InsufficientGoldException& e) {
+        Notification* reply = new Reply(ERROR_MSG, e.what());
+        active_clients.notify(caller, reply);
+        return;
+    }
+
+    try {
+        character.takeItem(this->items[item_id], amount);
+    } catch (const std::exception& e) {
+        // FullInventoryException, StateCantTakeItemException
+        character.takeGold(total_price);
+        Notification* reply = new Reply(ERROR_MSG, e.what());
+        active_clients.notify(caller, reply);
+        return;
+    }
+
+    std::string reply_msg =
+        "Has comprado " + std::to_string(amount) + " " + items[item_id]->what();
+    Notification* reply = new Reply(SUCCESS_MSG, reply_msg);
+    active_clients.notify(caller, reply);
 }
 
 void Game::sellItem(const InstanceId caller, const uint32_t x_coord,
