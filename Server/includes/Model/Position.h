@@ -32,6 +32,12 @@ class Position {
      */
     const unsigned int getDistance(const Position& other) const;
 
+    /*
+     * Devuelve el maximo valor entre las coordenadas de this y 
+     *las de other
+     */
+    const unsigned int getRange(const Position& other) const;
+    
     /* Devuelve la coordenada x de la posición del character */
     const int getX() const;
 
@@ -67,7 +73,6 @@ class Position {
      * Llena los campos x_tile, y_tile del CharacterCfg.
      */
     void fillPersistenceData(CharacterCfg& data) const;
-
 };
 
 class CollisionWhileMovingException : public std::exception {
