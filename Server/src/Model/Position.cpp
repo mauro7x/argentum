@@ -38,6 +38,10 @@ const unsigned int Position::getDistance(const Position& other) const {
     return abs(this->x - other.getX()) + abs(this->y - other.getY());
 }
 
+const unsigned int Position::getRange(const Position& other) const{
+    return std::max(abs(this->x - other.getX()), abs(this->y - other.getY()));
+}
+
 void Position::move() {
     if (!this->map_container[this->map].moveOccupant(this->x, this->y,
                                                      this->orientation))

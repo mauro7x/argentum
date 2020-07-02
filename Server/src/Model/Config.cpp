@@ -205,6 +205,8 @@ void Config<CreatureCfg>::_parseFile() {
         creature.name = j[i]["name"];
         creature.base_damage = j[i]["base_damage"];
         creature.base_health = j[i]["base_health"];
+        creature.visible_range = j[i]["visible_range"];
+        creature.movement_speed = j[i]["movement_speed"];
 
         config[creature.id] = creature;
     }

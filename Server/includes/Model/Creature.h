@@ -9,6 +9,7 @@
 #include "../../../Common/includes/types.h"
 //-----------------------------------------------------------------------------
 #include "Attackable.h"
+#include "Character.h"
 #include "Formulas.h"
 #include "ItemsContainer.h"
 #include "Position.h"
@@ -28,15 +29,42 @@ class Creature : public Attackable {
     uint32_t health;
     uint32_t damage;
     Position position;
+    uint32_t visible_range;
+    int movement_speed;
 
     ItemsContainer& items;
+    std::unordered_map<InstanceId, Character>& characters;
 
-    Orientation moving_orientation;
-    bool moving;
-    unsigned int moving_time_elapsed;
+    bool is_moving;
+    int moving_cooldown;
     unsigned int attribute_update_time_elapsed;
-
+    int attack_cooldown;
     bool broadcast;
+
+    /*
+     * Recorrer todo el map de characteres, si encuentra characteres dentro del
+     * rango visible, si no devuelve 0
+     */
+    InstanceId _getNearestCharacter();
+
+    /*
+     * Verificar si el character esta suficiente cerca para atacar.
+     */
+    bool _attackNearstCharacter(const Position& position_character);
+
+    /*
+     * Determinar la direccion mas lejo y empieza a mover.
+     */
+    void _determinateDirectionAndMove(const Position& position_character);
+
+    /*
+     * Recibe el número de iteraciones que pasaron desde la última vez que
+     * se llamó.
+     *
+     * Actualiza la posición del character según la velocidad de movimiento
+     * establecida.
+     */
+    void _updateMovement(const unsigned int it);
 
    public:
     //-----------------------------------------------------------------------------
@@ -45,7 +73,8 @@ class Creature : public Attackable {
     Creature(const CreatureCfg& data, MapContainer& map_container,
              const Id init_map, const int init_x_coord, const int init_y_coord,
              const uint32_t health, const uint32_t damage,
-             ItemsContainer& items);
+             ItemsContainer& items,
+             std::unordered_map<InstanceId, Character>& characters);
 
     /* Destructor */
     ~Creature();
