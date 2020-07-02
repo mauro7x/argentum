@@ -13,7 +13,7 @@ static void musicCallback() {
 // Callback para conteo de chunks activos
 
 static void chunkCallback(int channel) {
-    fprintf(stderr, "DEBUG | Mixer: chunk finished.\n");
+    Mixer::finishedChunkCallback();
 }
 
 //-----------------------------------------------------------------------------
@@ -45,6 +45,11 @@ void Mixer::playMusic(bool fade_in) {
     Mixer::getInstance()._playMusic(fade_in);
 }
 
+void Mixer::playEventSound(uint8_t sound_id, const SDL_Point& player_pos,
+                           const SDL_Point& sound_pos) {
+    Mixer::getInstance()._playChunk(sound_id, player_pos, sound_pos);
+}
+
 void Mixer::finishedSongCallback() {
     Mixer& instance = Mixer::getInstance();
 
@@ -56,6 +61,10 @@ void Mixer::finishedSongCallback() {
 
     // La ponemos a sonar
     instance._playMusic(true);
+}
+
+void Mixer::finishedChunkCallback() {
+    Mixer::getInstance().active_chunks--;
 }
 
 //-----------------------------------------------------------------------------
@@ -101,12 +110,28 @@ void Mixer::_init() {
     // Cargamos los chunks
 
     {
+        std::string dirpath, extension, filepath;
+        dirpath = audio_to_load["chunks"]["dirpath"];
+        extension = audio_to_load["chunks"]["extension"];
+        listening_radio = (size_t)audio_to_load["chunks"]["listening_radio"];
+        size_t samples = audio_to_load["chunks"]["samples"];
+        chunks.reserve(samples);
+        Mix_Chunk* chunk;
+        for (size_t chunk_idx = 0; chunk_idx < samples; chunk_idx++) {
+            filepath = dirpath + std::to_string(chunk_idx) + extension;
+            chunk = Mix_LoadWAV(filepath.c_str());
+            if (!chunk) {
+                throw Exception(
+                    "Mixer::init: error opening chunk [%s]. Mixer error: "
+                    "%s.",
+                    filepath.c_str(), Mix_GetError());
+            }
+            chunks.push_back(chunk);
+        }
+        chunks.shrink_to_fit();
+
         // Cargamos la función que lleva un conteo de chunks activos
         Mix_ChannelFinished(chunkCallback);
-
-        // debuggeando un toque
-        fprintf(stderr, "There are %d sample chunk deocoders available\n",
-                Mix_GetNumChunkDecoders());
     }
 }
 
@@ -203,10 +228,88 @@ void Mixer::_decreaseMusicVolume() {
     }
 }
 
+void Mixer::_playChunk(uint8_t sound_id, const SDL_Point& player_pos,
+                       const SDL_Point& sound_pos) {
+    if (((sound_pos.x != player_pos.x) || (sound_pos.y != player_pos.y)) &&
+        (active_chunks >= MAX_CHUNKS_SIMULTANEOUSLY)) {
+        // no reproducimos el sonido pues no es prioritario
+        return;
+    }
+
+    size_t distance = std::abs(player_pos.x - sound_pos.x) +
+                      std::abs(player_pos.y - sound_pos.y);
+    if (distance > listening_radio) {
+        // no reproducimos el sonido pues está muy lejos
+        return;
+    }
+
+    // Reproducimos el sonido
+
+    Mix_Chunk* sound = NULL;
+    try {
+        sound = chunks.at(sound_id);
+    } catch (...) {
+        throw Exception("Mixer::_playChunk: invalid sound_id (%u)", sound_id);
+    }
+
+    int channel = Mix_PlayChannel(-1, sound, 0);
+    if (channel < 0) {
+        // No hay más canales disponibles
+        return;
+    }
+
+    active_chunks++;
+
+    // Agregamos efectos
+    Sint16 sdl_angle = _getAngle(player_pos, sound_pos);
+    Uint8 sdl_distance = (distance * MAX_DISTANCE_EFFECT) / listening_radio;
+
+    Mix_SetPosition(channel, sdl_angle, sdl_distance);
+}
+
+Sint16 Mixer::_getAngle(const SDL_Point& origin, const SDL_Point& point) const {
+    SDL_Point centered = {point.x - origin.x, point.y - origin.y};
+
+    if (centered.x >= 0 && centered.y > 0) {
+        // 1C
+        return RADTODEG(std::atan(centered.x / centered.y));
+    }
+
+    if (centered.x > 0 && centered.y == 0) {
+        return 90;
+    }
+
+    if (centered.x > 0 && centered.y < 0) {
+        // 2C
+        return 180 - RADTODEG(std::atan(centered.x / (-centered.y)));
+    }
+
+    if (centered.x < 0 && centered.y < 0) {
+        // 3C
+        return RADTODEG(std::atan(centered.x / centered.y)) + 180;
+    }
+
+    if (centered.x < 0 && centered.y == 0) {
+        return 270;
+    }
+
+    if (centered.x < 0 && centered.y > 0) {
+        // 4C
+        return 360 - RADTODEG(std::atan((-centered.x) / centered.y));
+    }
+
+    return 0;
+}
+
 Mixer::~Mixer() {
     // Liberamos la música
     for (auto it = music.begin(); it != music.end(); it++) {
         Mix_FreeMusic(*it);
+    }
+
+    // Liberamos chunks
+    for (auto it = chunks.begin(); it != chunks.end(); it++) {
+        Mix_FreeChunk(*it);
     }
 }
 

@@ -37,12 +37,10 @@ Identificas el mensaje con el primer byte recibido (opcode), y para cada caso se
 | 4 | Level up |
 | 5 | Muerte |
 | 6 | Resurrección |
-| 7 | Daño sufrido |
-| 8 | Ataque a melee |
-| 9 | Ataque a distancia |
-| 10 | Hechizo de explosión |
-| 11 | Hechizo de curación |
-| 12 | Curación de sacerdote | 
+| 7 | Ataque general |
+| 8 | Hechizo de explosión |
+| 9 | Hechizo de curación |
+| 10 | Curación de sacerdote | 
 
 ### Eventos
 

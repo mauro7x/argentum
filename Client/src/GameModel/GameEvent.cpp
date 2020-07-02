@@ -1,4 +1,4 @@
-#include "../../includes/GameModel/Event.h"
+#include "../../includes/GameModel/GameEvent.h"
 
 //-----------------------------------------------------------------------------
 // Métodos privados
@@ -8,13 +8,14 @@
 //-----------------------------------------------------------------------------
 // API Pública
 
-Event::Event(uint8_t event_type, uint32_t x, uint32_t y)
-    : event_type(event_type), x(x), y(y) {}
+GameEvent::GameEvent(uint8_t event_type, uint32_t x, uint32_t y)
+    : event_type(event_type), event_pos({(int)x, (int)y}) {}
 
-void Event::act(int player_x_tile, int player_y_tile) const {
+void GameEvent::act(const SDL_Point& player_pos) const {
     // Por ahora, sólo reproducimos el sonido
+    Mixer::playEventSound(event_type, player_pos, event_pos);
 }
 
-Event::~Event() {}
+GameEvent::~GameEvent() {}
 
 //-----------------------------------------------------------------------------

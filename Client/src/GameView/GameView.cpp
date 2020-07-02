@@ -54,10 +54,9 @@ void GameView::_processBroadcasts() {
 }
 
 void GameView::_processEvents() {
-    Event* event = NULL;
+    GameEvent* event = NULL;
     while ((event = events.pop())) {
-        SDL_Point player_pos = player.getPos();
-        event->act(player_pos.x, player_pos.y);
+        event->act(player.getPos());
         delete event;
     }
 }
@@ -99,7 +98,8 @@ void GameView::_func(const int it) {
 GameView::GameView(BlockingQueue<Command*>& commands,
                    NonBlockingQueue<Broadcast*>& broadcasts,
                    NonBlockingQueue<Message*>& messages,
-                   NonBlockingQueue<Event*>& events, const Renderer& renderer)
+                   NonBlockingQueue<GameEvent*>& events,
+                   const Renderer& renderer)
     : ConstantRateFunc(RATE),
       // Comunicación entre hilos
       commands(commands),

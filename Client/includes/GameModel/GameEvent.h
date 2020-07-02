@@ -1,5 +1,9 @@
-#ifndef __EVENT_H__
-#define __EVENT_H__
+#ifndef __GAME_EVENT_H__
+#define __GAME_EVENT_H__
+
+//-----------------------------------------------------------------------------
+#include <SDL2/SDL.h>
+//-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 #include <cstdint>
@@ -11,11 +15,10 @@
 
 //-----------------------------------------------------------------------------
 
-class Event {
+class GameEvent {
    private:
     uint8_t event_type;
-    uint32_t x;
-    uint32_t y;
+    const SDL_Point event_pos;
 
     //-----------------------------------------------------------------------------
     // Métodos privados
@@ -23,31 +26,31 @@ class Event {
 
    public:
     /* Constructor */
-    Event(uint8_t event_type, uint32_t x, uint32_t y);
+    GameEvent(uint8_t event_type, uint32_t x, uint32_t y);
 
     /* Deshabilitamos el constructor por copia. */
-    Event(const Event&) = delete;
+    GameEvent(const GameEvent&) = delete;
 
     /* Deshabilitamos el operador= para copia.*/
-    Event& operator=(const Event&) = delete;
+    GameEvent& operator=(const GameEvent&) = delete;
 
     /* Deshabilitamos el constructor por movimiento. */
-    Event(Event&& other) = delete;
+    GameEvent(GameEvent&& other) = delete;
 
     /* Deshabilitamos el operador= para movimiento. */
-    Event& operator=(Event&& other) = delete;
+    GameEvent& operator=(GameEvent&& other) = delete;
 
     //-----------------------------------------------------------------------------
 
     /* Manifestación del evento en el cliente */
-    void act(int player_x_tile, int player_y_tile) const;
+    void act(const SDL_Point& player_pos) const;
 
     //-----------------------------------------------------------------------------
 
     /* Destructor */
-    ~Event();
+    ~GameEvent();
 };
 
 //-----------------------------------------------------------------------------
 
-#endif  // __EVENT_H__
+#endif  // __GAME_EVENT_H__
