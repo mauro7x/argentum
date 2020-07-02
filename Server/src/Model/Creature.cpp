@@ -1,4 +1,6 @@
 #include <algorithm>
+#include <math.h>
+
 //-----------------------------------------------------------------------------
 #include "../../includes/Model/Creature.h"
 #include "../../includes/Model/Formulas.h"
@@ -10,48 +12,151 @@
 Creature::Creature(const CreatureCfg& data, MapContainer& map_container,
                    const Id init_map, const int init_x_coord,
                    const int init_y_coord, const uint32_t health,
-                   const uint32_t damage, ItemsContainer& items)
+                   const uint32_t damage, ItemsContainer& items,
+                   std::unordered_map<InstanceId, Character>& characters)
     : id(data.id),
       name(data.name),
       health_max(data.base_health),
       health(health),
       damage(damage),
       position(init_map, init_x_coord, init_y_coord, map_container),
+      visible_range(data.visible_range),
+      movement_speed(data.movement_speed),
       items(items),
-      moving(false),
-      moving_time_elapsed(0),
+      characters(characters),
+      is_moving(false),
+      moving_cooldown(0),
       attribute_update_time_elapsed(0),
+      attack_cooldown(0),
       broadcast(false) {}
 
 Creature::~Creature() {}
 
+InstanceId Creature::_getNearestCharacter() {
+    InstanceId nearest_id = 0;
+    unsigned int nearest_range = visible_range + 1;
+    std::unordered_map<InstanceId, Character>::iterator it_characters =
+        this->characters.begin();
+    while (it_characters != this->characters.end()) {
+        const unsigned int actual_range =
+            position.getRange(it_characters->second.getPosition());
+        const unsigned int health = it_characters->second.getHealth();
+        if (actual_range <= visible_range) {
+            if (actual_range < nearest_range && health > 0) {
+                nearest_id = it_characters->first;
+                nearest_range = actual_range;
+            }
+        }
+        ++it_characters;
+    }
+    return nearest_id;
+}
+
+bool Creature::_attackNearstCharacter(const Position& position_character) {
+    if (position.getX() == position_character.getX()) {
+        if (position_character.getY() - position.getY() == 1) {
+            this->position.changeOrientation(DOWN_ORIENTATION);
+            // atacar
+            return true;
+        }
+        if (position.getY() - position_character.getY() == 1) {
+            this->position.changeOrientation(UP_ORIENTATION);
+            // atacar
+            return true;
+        }
+    }
+    if (position.getY() == position_character.getY()) {
+        if (position_character.getX() - position.getX() == 1) {
+            this->position.changeOrientation(RIGHT_ORIENTATION);
+            // atacar
+            return true;
+        }
+        if (position.getY() - position_character.getY() == 1) {
+            this->position.changeOrientation(LEFT_ORIENTATION);
+            // atacar
+            return true;
+        }
+    }
+    return false;
+}
+
+void Creature::_determinateDirectionAndMove(
+    const Position& position_character) {
+    if (abs(position_character.getX() - position.getX()) >
+        abs(position_character.getY() - position.getY())) {
+        if (position_character.getX() > position.getX()) {
+            startMovingRight();
+        } else {
+            startMovingLeft();
+        }
+    } else {
+        if (position_character.getY() > position.getY()) {
+            startMovingDown();
+        } else {
+            startMovingUp();
+        }
+    }
+}
+
+void Creature::_updateMovement(const unsigned int it) {
+    this->moving_cooldown -= it * RATE;
+
+    while (this->moving_cooldown <= 0) {
+        this->broadcast = true;
+
+        this->position.move();
+
+        this->moving_cooldown += UNIT_TIME_TO_MOVE;
+    }
+}
+
 void Creature::act(const unsigned int it) {
-    // IMPLEMENTAR
+    InstanceId id = _getNearestCharacter();
+    if (!id) {
+        stopMoving();
+    } else {
+        if (_attackNearstCharacter(characters.at(id).getPosition())) {
+            stopMoving();
+        } else {
+            _determinateDirectionAndMove(characters.at(id).getPosition());
+        }
+    }
+    if (is_moving) {
+        _updateMovement(it);
+    } else {
+        if (moving_cooldown > 0) {
+            moving_cooldown =
+                std::max(moving_cooldown - 1000/movement_speed, 0);
+        }
+    }
+
+    if (attack_cooldown > 0)
+        attack_cooldown = std::max(attack_cooldown - 1000/movement_speed, 0);
 }
 
 void Creature::startMovingUp() {
-    this->moving_orientation = UP_ORIENTATION;
-    this->moving = true;
+    this->position.changeOrientation(UP_ORIENTATION);
+    this->is_moving = true;
 }
 
 void Creature::startMovingDown() {
-    this->moving_orientation = DOWN_ORIENTATION;
-    this->moving = true;
+    this->position.changeOrientation(DOWN_ORIENTATION);
+    this->is_moving = true;
 }
 
 void Creature::startMovingRight() {
-    this->moving_orientation = RIGHT_ORIENTATION;
-    this->moving = true;
+    this->position.changeOrientation(RIGHT_ORIENTATION);
+    this->is_moving = true;
 }
 
 void Creature::startMovingLeft() {
-    this->moving_orientation = LEFT_ORIENTATION;
-    this->moving = true;
+    this->position.changeOrientation(LEFT_ORIENTATION);
+    this->is_moving = true;
 }
 
 void Creature::stopMoving() {
-    this->moving = false;
-    this->moving_time_elapsed = 0;
+    this->is_moving = false;
+    this->moving_cooldown = 0;
 }
 
 const bool Creature::receiveAttack(int& damage, const bool eludible) {
@@ -86,7 +191,6 @@ void Creature::dropAllItems(std::vector<DroppingSlot>& dropped_items) {
 
     acum += DROP_GOLD_PROB;
 
-
     if (prob < acum) {
         dropped_items.emplace_back(
             GOLD_BAG_ID,
@@ -103,7 +207,7 @@ void Creature::dropAllItems(std::vector<DroppingSlot>& dropped_items) {
     }
 
     float choice = gen(0, 3);
-    
+
     if (choice < 1) {
         const std::vector<Id>& weapons = this->items.getWeaponsId();
         dropped_items.emplace_back(weapons[gen(0, weapons.size() - 1)], 1);
@@ -116,7 +220,6 @@ void Creature::dropAllItems(std::vector<DroppingSlot>& dropped_items) {
         return;
     }
 
-    
     const std::vector<Id>& defences = this->items.getDefencesId();
     dropped_items.emplace_back(defences[gen(0, defences.size() - 1)], 1);
     return;
