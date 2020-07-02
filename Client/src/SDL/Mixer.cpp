@@ -103,6 +103,10 @@ void Mixer::_init() {
     {
         // Cargamos la función que lleva un conteo de chunks activos
         Mix_ChannelFinished(chunkCallback);
+
+        // debuggeando un toque
+        fprintf(stderr, "There are %d sample chunk deocoders available\n",
+                Mix_GetNumChunkDecoders());
     }
 }
 

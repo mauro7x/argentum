@@ -72,6 +72,7 @@ class Mixer {
     RoundRobinList<Mix_Music*> music;
 
     // Chunks
+    int active_chunks = 0;
 
     //-------------------------------------------------------------------------
 
