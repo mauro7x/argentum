@@ -1,14 +1,59 @@
 [
     {
         "id": 400,
-        "name": "Banquero"
+        "name": "Banquero",
+        "sellable_items": []
     },
     {
         "id": 401,
-        "name": "Comerciante"
+        "name": "Comerciante de armas, defensas y pociones",
+        "sellable_items": [
+            1000,
+            1001,
+            1002,
+            1003,
+            1004,
+            1300,
+            1301,
+            1302,
+            1400,
+            1401,
+            1402,
+            1500,
+            1501,
+            1600,
+            1601
+        ]
     },
     {
         "id": 402,
-        "name": "Sacerdote"
+        "name": "Sacerdote",
+        "sellable_items": [
+            1100,
+            1101,
+            1102,
+            1103,
+            1600,
+            1601
+        ]
+    },
+    {
+        "id": 403,
+        "name": "Comerciante de armas y defensas",
+        "sellable_items": [
+            1000,
+            1001,
+            1002,
+            1003,
+            1004,
+            1300,
+            1301,
+            1302,
+            1400,
+            1401,
+            1402,
+            1500,
+            1501
+        ]
     }
 ]
