@@ -68,12 +68,12 @@ void Character::act(const unsigned int it) {
         _updateMovement(it);
     } else {
         if (moving_cooldown > 0) {
-            moving_cooldown = std::max(moving_cooldown - RATE, 0);
+            moving_cooldown = std::max((int)(moving_cooldown - it * RATE), 0);
         }
     }
 
     if (attack_cooldown > 0)
-        attack_cooldown = std::max(attack_cooldown - RATE, 0);
+        attack_cooldown = std::max((int)(attack_cooldown - it * RATE), 0);
 
     _updateTimeDependantAttributes(it);
 }
@@ -192,7 +192,7 @@ const bool Character::recoverHealth(unsigned int& points) {
 const bool Character::recoverMana(unsigned int& points) {
     if (!points || !health || this->mana == this->max_mana)
         return false;
-    
+
     if (mana + points > max_mana) {
         points = max_mana - mana;
         mana = max_mana;
