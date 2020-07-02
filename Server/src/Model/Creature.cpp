@@ -251,6 +251,7 @@ void Creature::fillBroadcastData(CreatureData& data) const {
     data.creature_id = this->id;
     data.health = this->health;
     data.max_health = this->health_max;
+    data.movement_speed = this->movement_speed;
 }
 
 const bool Creature::mustBeBroadcasted() const {
