@@ -3,6 +3,7 @@
 
 //-----------------------------------------------------------------------------
 #include <fstream>
+#include <list>
 #include <string>
 #include <unordered_map>
 //-----------------------------------------------------------------------------
@@ -60,7 +61,7 @@ class Config {
         return config.at(id);
     }
 
-    /* 
+    /*
      * Agrega al vector ids recibido todas las ids existentes
      * en la configuración.
      */

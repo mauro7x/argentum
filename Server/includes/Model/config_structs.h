@@ -1,11 +1,11 @@
 #ifndef __CONFIG_STRUCTS_H__
 #define __CONFIG_STRUCTS_H__
-
 //-----------------------------------------------------------------------------
 #include <cstdint>
+#include <list>
 #include <string>
 #include <vector>
-
+//-----------------------------------------------------------------------------
 #include "../../../Common/includes/Inventory.h"
 #include "../../../Common/includes/Orientation.h"
 #include "../../../Common/includes/defs.h"
@@ -112,7 +112,7 @@ struct RaceCfg {
     int strength;
     int agility;
 
-    //verificar si es shorter
+    // verificar si es shorter
     bool is_shorter;
 };
 
@@ -147,6 +147,7 @@ struct KindCfg {
 struct NPCCfg {
     Id id;
     std::string name;
+    std::list<Id> sellable_items;
 };
 
 //-----------------------------------------------------------------------------
@@ -191,7 +192,6 @@ struct CreatureCfg {
     unsigned int visible_range = 0;
     unsigned int movement_speed = 0;
 };
-
 
 //-----------------------------------------------------------------------------
 struct DroppingSlot {

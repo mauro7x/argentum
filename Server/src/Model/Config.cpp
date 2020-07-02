@@ -69,6 +69,7 @@ void Config<NPCCfg>::_parseFile() {
 
         npc.id = j[i]["id"];
         npc.name = j[i]["name"];
+        j[i]["sellable_items"].get_to(npc.sellable_items);
         config[npc.id] = npc;
     }
 }
