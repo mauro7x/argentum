@@ -18,6 +18,7 @@
 #include "../GameView/GameView.h"
 #include "Broadcasts/Broadcast.h"
 #include "Broadcasts/BroadcastFactory.h"
+#include "Event.h"
 #include "Messages/Message.h"
 #include "Messages/MessageFactory.h"
 //-----------------------------------------------------------------------------
@@ -29,6 +30,7 @@ class Receiver : public Thread {
     const SocketWrapper& socket;              /* SÓLO LECTURA (RECV) */
     NonBlockingQueue<Broadcast*>& broadcasts; /* Broadcasts a recibir */
     NonBlockingQueue<Message*>& messages;     /* Mensajes a recibir */
+    NonBlockingQueue<Event*>& events;         /* Eventos a recibir */
     GameView& game_view;
 
     //-----------------------------------------------------------------------------
@@ -40,13 +42,17 @@ class Receiver : public Thread {
     /* Recibe un broadcast y lo pushea en la cola */
     void _receiveBroadcast() const;
 
+    /* Recibe un evento y lo pushea en la cola */
+    void _receiveEvent() const;
+
     //-----------------------------------------------------------------------------
 
    public:
     /* Constructor */
     Receiver(const SocketWrapper& socket,
              NonBlockingQueue<Broadcast*>& broadcasts,
-             NonBlockingQueue<Message*>& messages, GameView& game_view);
+             NonBlockingQueue<Message*>& messages,
+             NonBlockingQueue<Event*>& events, GameView& game_view);
 
     /* Deshabilitamos el constructor por copia. */
     Receiver(const Receiver&) = delete;

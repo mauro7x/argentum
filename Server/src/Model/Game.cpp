@@ -255,7 +255,7 @@ void Game::newCreature(const CreatureCfg& init_data, const Id init_map) {
         std::forward_as_tuple(init_data, map_container, init_map,
                               spawning_x_coord, spawning_y_coord,
                               init_data.base_health, init_data.base_damage,
-                              items));
+                              items, characters));
 
     _pushCreatureDifferentialBroadcast(new_creature_id, NEW_BROADCAST);
 }
@@ -344,7 +344,11 @@ void Game::actCreatures(const int it) {
         this->creatures.begin();
 
     while (it_creatures != this->creatures.end()) {
-        it_creatures->second.act(it);
+        try {
+            it_creatures->second.act(it);
+        } catch (const CollisionWhileMovingException& e) {
+            it_creatures->second.stopMoving();
+        }
 
         if (it_creatures->second.mustBeBroadcasted()) {
             _pushCreatureDifferentialBroadcast(it_creatures->first,

@@ -107,14 +107,15 @@ void Client::_launchGameCtx() {
     BlockingQueue<Command*> commands;
     NonBlockingQueue<Broadcast*> broadcasts;
     NonBlockingQueue<Message*> messages;
+    NonBlockingQueue<Event*> events;
 
     // Recibimos el primer paquete
     _receiveFirstPackage(broadcasts);
 
     // Componentes del GameCtx
-    GameView game_view(commands, broadcasts, messages, renderer);
+    GameView game_view(commands, broadcasts, messages, events, renderer);
     CommandDispatcher command_dispatcher(socket, commands, game_view);
-    Receiver receiver(socket, broadcasts, messages, game_view);
+    Receiver receiver(socket, broadcasts, messages, events, game_view);
 
     // Lanzamos la ejecución
     command_dispatcher.start();

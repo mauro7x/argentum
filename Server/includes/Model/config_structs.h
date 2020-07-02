@@ -188,6 +188,8 @@ struct CreatureCfg {
     std::string name;
     unsigned int base_damage = 0;
     unsigned int base_health = 0;
+    unsigned int visible_range = 0;
+    unsigned int movement_speed = 0;
 };
 
 

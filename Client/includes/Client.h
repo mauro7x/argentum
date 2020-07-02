@@ -38,6 +38,7 @@
 #include "GameModel/Broadcasts/Broadcast.h"
 #include "GameModel/CommandDispatcher.h"
 #include "GameModel/Commands/Command.h"
+#include "GameModel/Event.h"
 #include "GameModel/Messages/Message.h"
 #include "GameModel/Receiver.h"
 #include "GameView/GameView.h"

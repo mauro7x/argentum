@@ -22,6 +22,7 @@
 //-----------------------------------------------------------------------------
 #include "../GameModel/Broadcasts/Broadcast.h"
 #include "../GameModel/Commands/Command.h"
+#include "../GameModel/Event.h"
 #include "../GameModel/Messages/Message.h"
 //-----------------------------------------------------------------------------
 
@@ -54,6 +55,7 @@ class GameView : public ConstantRateFunc {
     BlockingQueue<Command*>& commands;
     NonBlockingQueue<Broadcast*>& broadcasts;
     NonBlockingQueue<Message*>& messages;
+    NonBlockingQueue<Event*>& events;
 
     // Componentes principales
     const Renderer& renderer;
@@ -94,6 +96,9 @@ class GameView : public ConstantRateFunc {
     /* Vacía la cola de broadcasts del servidor */
     void _processBroadcasts();
 
+    /* Vacía la cola de eventos del servidor */
+    void _processEvents();
+
     /* Iteración del loop */
     void _func(const int it) override;
 
@@ -103,7 +108,8 @@ class GameView : public ConstantRateFunc {
     /* Constructor */
     GameView(BlockingQueue<Command*>& commands,
              NonBlockingQueue<Broadcast*>& broadcasts,
-             NonBlockingQueue<Message*>& messages, const Renderer& renderer);
+             NonBlockingQueue<Message*>& messages,
+             NonBlockingQueue<Event*>& events, const Renderer& renderer);
 
     /* Destructor */
     ~GameView();

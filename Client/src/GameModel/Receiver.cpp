@@ -33,6 +33,27 @@ void Receiver::_receiveBroadcast() const {
     broadcasts.push(new_broadcast);
 }
 
+void Receiver::_receiveEvent() const {
+    uint8_t event_type;
+    uint32_t x;
+    uint32_t y;
+
+    if (!(socket >> event_type)) {
+        throw Exception("Receiver::_receiveEvent: incomplete event received.");
+    }
+
+    if (!(socket >> x)) {
+        throw Exception("Receiver::_receiveEvent: incomplete event received.");
+    }
+
+    if (!(socket >> y)) {
+        throw Exception("Receiver::_receiveEvent: incomplete event received.");
+    }
+
+    Event* new_event = new Event(event_type, x, y);
+    events.push(new_event);
+}
+
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -40,10 +61,12 @@ void Receiver::_receiveBroadcast() const {
 
 Receiver::Receiver(const SocketWrapper& socket,
                    NonBlockingQueue<Broadcast*>& broadcasts,
-                   NonBlockingQueue<Message*>& messages, GameView& game_view)
+                   NonBlockingQueue<Message*>& messages,
+                   NonBlockingQueue<Event*>& events, GameView& game_view)
     : socket(socket),
       broadcasts(broadcasts),
       messages(messages),
+      events(events),
       game_view(game_view) {}
 
 void Receiver::run() {
@@ -58,6 +81,11 @@ void Receiver::run() {
 
                 case BROADCAST_OPCODE: {
                     _receiveBroadcast();
+                    break;
+                }
+
+                case EVENT_OPCODE: {
+                    _receiveEvent();
                     break;
                 }
 

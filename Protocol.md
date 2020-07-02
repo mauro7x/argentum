@@ -21,9 +21,49 @@ Identificas el mensaje con el primer byte recibido (opcode), y para cada caso se
 | 0 | Respuesta a conexión | S -> C | `TYPE (1)` |
 | 1 | Mensaje | S -> C | `TYPE (1) + ...` |
 | 2 | Broadcast | S -> C | `TYPE (1) + ...` |
+| 3 | Evento | S -> C | `TYPE (1) + POS` |
 | 128 | Comando | C -> S | `TYPE (1) + ...` |
 | 129 | Sign-in | C -> S | `USER_LENGTH (4) + USERNAME (USER_LENGTH) + PASS_LENGTH (4) + PASSWORD (PASS_LENGTH)` |
 | 130 | Sign-up | C -> S | `USER_LENGTH (4) + USERNAME (USER_LENGTH) + PASS_LENGTH (4) + PASSWORD (PASS_LENGTH) + RACE (4) + KIND (4) + HEAD_ID (4) + BODY_ID (4)` |
+
+
+### Eventos (OP = 3)
+| OPCODE | DESCRIPCION |
+|--------|-------------|
+| 0 | Movimiento |
+| 1 | Tirar |
+| 2 | Agarrar |
+| 3 | Empezar a meditar |
+| 4 | Level up |
+| 5 | Muerte |
+| 6 | Resurrección |
+| 7 | Daño sufrido |
+| 8 | Ataque a melee |
+| 9 | Ataque a distancia |
+| 10 | Hechizo de explosión |
+| 11 | Hechizo de curación |
+| 12 | Curación de sacerdote | 
+
+### Eventos
+
+- movimiento.
+- ataques.
+
+- curaciones.
+- drop.
+- tirar.
+- meditar al principio.
+- resucitar.
+- curar con sacerdote.
+- level up
+- muerte
+- daño sufrido
+- algun sonido de confirmación de compra.
+- ir viendo mas.
+
+-- sonidos en local
+- sonidos cuando selecciono cosas
+
 
 ---
 
@@ -46,7 +86,7 @@ Identificas el mensaje con el primer byte recibido (opcode), y para cada caso se
 | 0 | Mensaje de error del server | `MSG_LENGTH (4) + MSG (MSG_LENGTH)` |
 | 1 | Mensaje de información del server | `MSG_LENGTH (4) + MSG (MSG_LENGTH)` |
 | 2 | Mensaje de éxito del server | `MSG_LENGTH (4) + MSG (MSG_LENGTH)` |
-| 3 | Lista del server | `ver lista` |
+| 3 | Lista del server | `LENGTH (4) + STRUCT(MSG_PACK) (LENGTH)` |
 | 128 | Mensaje privado | `SENDER_LENGTH (4) + SENDER (SENDER_LENGTH) + MSG_LENGTH (4) + MSG (MSG_LENGTH)` |
 | 129 | Mensaje general | `SENDER_LENGTH (4) + SENDER (SENDER_LENGTH) + MSG_LENGTH (4) + MSG (MSG_LENGTH)` |
 
