@@ -24,6 +24,7 @@ Creature::Creature(const CreatureCfg& data, MapContainer& map_container,
       visible_range(data.visible_range),
       movement_speed(data.movement_speed),
       items(items),
+      map(map_container[init_map]),
       characters(characters),
       is_moving(false),
       moving_cooldown(0),
@@ -36,20 +37,28 @@ Creature::~Creature() {}
 InstanceId Creature::_getNearestCharacter() {
     InstanceId nearest_id = 0;
     unsigned int nearest_range = visible_range + 1;
-    std::unordered_map<InstanceId, Character>::iterator it_characters =
-        this->characters.begin();
-    while (it_characters != this->characters.end()) {
-        const unsigned int actual_range =
-            position.getRange(it_characters->second.getPosition());
-        const unsigned int health = it_characters->second.getHealth();
-        if (actual_range <= visible_range) {
-            if (actual_range < nearest_range && health > 0) {
-                nearest_id = it_characters->first;
-                nearest_range = actual_range;
+    const unsigned int x_tile = position.getX();
+    const unsigned int y_tile = position.getY();
+    for (int y = -int(visible_range); y <= int(visible_range); y++) {
+        int abs_y = std::abs(y);
+        for (int x = -int(visible_range) + abs_y;
+             x <= int(visible_range) - abs_y; x++) {
+            InstanceId id = 0;
+            try {
+                id = map.getTile(x_tile + x, y_tile + y).occupant_id;
+            } catch (Exception& e) {
+                continue;
+            }
+            if (characters.count(id) > 0) {
+                if (x + y < int(nearest_range) &&
+                    characters.at(id).getHealth() > 0) {
+                    nearest_range = x + y;
+                    nearest_id = id;
+                }
             }
         }
-        ++it_characters;
     }
+
     return nearest_id;
 }
 
@@ -228,7 +237,8 @@ void Creature::dropAllItems(std::vector<DroppingSlot>& dropped_items) {
         const std::vector<Id>& wands = this->items.getWandsId();
         size_t wand_idx = gen((int)0, (int)wands.size() - 1);
         dropped_items.emplace_back(wands[wand_idx], 1);
-        fprintf(stderr, "DEBUG: Creature::drop: WAND. Item id: %i\n", wands[wand_idx]);
+        fprintf(stderr, "DEBUG: Creature::drop: WAND. Item id: %i\n",
+                wands[wand_idx]);
         return;
     }
 

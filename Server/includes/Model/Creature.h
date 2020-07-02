@@ -33,6 +33,7 @@ class Creature : public Attackable {
     int movement_speed;
 
     ItemsContainer& items;
+    Map& map;
     std::unordered_map<InstanceId, Character>& characters;
 
     bool is_moving;
