@@ -42,6 +42,7 @@ Identificas el mensaje con el primer byte recibido (opcode), y para cada caso se
 | 9 | Ataque a distancia |
 | 10 | Hechizo de explosión |
 | 11 | Hechizo de curación |
+| 12 | Curación de sacerdote | 
 
 ### Eventos
 
