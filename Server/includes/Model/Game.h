@@ -63,10 +63,12 @@ class Game {
     // se obtienen a partir de las coordenadas
     // del tile que contiene el item droppeado.
     // e.g: (x = 1, y = 2)   ---> key = "1,2"
-    //     (x = 2, y = 1)   ---> key = "2,1"
-    //     (x = 39, y = 27) ---> key = "39,27"
+    //      (x = 2, y = 1)   ---> key = "2,1"
+    //      (x = 39, y = 27) ---> key = "39,27"
     std::unordered_map<Id, std::unordered_map<std::string, int>>
         dropped_items_lifetime_per_map;
+
+    int data_persistence_cooldown;
     //--------------------------------------------------------------------------
 
     //--------------------------------------------------------------------------
@@ -75,23 +77,25 @@ class Game {
     InstanceId next_instance_id;
     ActiveClients& active_clients;
     std::unordered_map<std::string, InstanceId> nickname_id_map;
+
+    Id banker;
+    Id priest;
+    std::vector<Id> merchants;
     //--------------------------------------------------------------------------
 
     //--------------------------------------------------------------------------
-    // Game entities
+    // Métodos auxiliares de creacion de entidades
     //--------------------------------------------------------------------------
-    int data_persist_cooldown;
-    //--------------------------------------------------------------------------
-    //--------------------------------------------------------------------------
-    // Métodos auxiliares de creacion de entidades;
-    //--------------------------------------------------------------------------
-    /* Llenar la cuenta del banco del game desde datos iniciales. */
+
+    /* Llena la cuenta del banco del jugador con los datos persistidos. */
     void _loadBankAccount(const CharacterCfg& init_data);
 
     //--------------------------------------------------------------------------
+
     //--------------------------------------------------------------------------
     // Métodos de broadcast
     //--------------------------------------------------------------------------
+
     /*
      * Construye el broadcast del character cuya id es recibida.
      *
@@ -176,7 +180,22 @@ class Game {
 
     const bool _validateBankerPosition(const InstanceId caller,
                                        const uint32_t x_coord,
-                                       const uint32_t y_coord);
+                                       const uint32_t y_coord,
+                                       const bool reply_if_invalid);
+
+    const bool _validatePriestPosition(const InstanceId caller,
+                                       const uint32_t x_coord,
+                                       const uint32_t y_coord,
+                                       const bool reply_if_invalid);
+
+    const bool _validateMerchantPosition(const InstanceId caller,
+                                         Id& merchant_id,
+                                         const uint32_t x_coord,
+                                         const uint32_t y_coord,
+                                         const bool reply_if_invalid);
+
+    void _listNPCSellableItems(const Id npc_id, std::string& init_msg,
+                               std::list<std::string>& item_list);
 
     const bool _dropItem(const InstanceId caller, const uint8_t n_slot,
                          uint32_t& amount, Item** dropped);
