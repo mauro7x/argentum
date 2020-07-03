@@ -266,11 +266,11 @@ const Id Creature::getMapId() const {
 
 void Creature::fillBroadcastData(CreatureData& data) const {
     this->position.fillBroadcastData(data.basic_data);
+    data.basic_data.movement_speed = this->movement_speed;
     data.name = this->name;
     data.creature_id = this->id;
     data.health = this->health;
     data.max_health = this->health_max;
-    data.movement_speed = this->movement_speed;
 }
 
 const bool Creature::mustBeBroadcasted() const {

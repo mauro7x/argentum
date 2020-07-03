@@ -10,6 +10,7 @@ void to_json(json& j, const PlayerData& data) {
              {"x_tile", data.basic_data.x_tile},
              {"y_tile", data.basic_data.y_tile},
              {"orientation", data.basic_data.orientation},
+             {"movement_speed", data.basic_data.movement_speed},
              {"nickname", data.nickname},
              {"head_id", data.head_id},
              {"body_id", data.body_id},
@@ -33,11 +34,11 @@ void to_json(json& j, const CreatureData& data) {
              {"x_tile", data.basic_data.x_tile},
              {"y_tile", data.basic_data.y_tile},
              {"orientation", data.basic_data.orientation},
+             {"movement_speed", data.basic_data.movement_speed},
              {"name", data.name},
              {"creature_id", data.creature_id},
              {"health", data.health},
-             {"max_health", data.max_health},
-             {"movement_speed", data.movement_speed}/*,
+             {"max_health", data.max_health}/*,
              {"level", data.level}*/};
 }
 
@@ -59,6 +60,7 @@ void from_json(const json& j, PlayerData& data) {
     j.at("x_tile").get_to(data.basic_data.x_tile);
     j.at("y_tile").get_to(data.basic_data.y_tile);
     j.at("orientation").get_to(data.basic_data.orientation);
+    j.at("movement_speed").get_to(data.basic_data.movement_speed);
     j.at("nickname").get_to(data.nickname);
     j.at("head_id").get_to(data.head_id);
     j.at("body_id").get_to(data.body_id);
@@ -82,11 +84,11 @@ void from_json(const json& j, CreatureData& data) {
     j.at("x_tile").get_to(data.basic_data.x_tile);
     j.at("y_tile").get_to(data.basic_data.y_tile);
     j.at("orientation").get_to(data.basic_data.orientation);
+    j.at("movement_speed").get_to(data.basic_data.movement_speed);
     j.at("name").get_to(data.name);
     j.at("creature_id").get_to(data.creature_id);
     j.at("health").get_to(data.health);
     j.at("max_health").get_to(data.max_health);
-    j.at("movement_speed").get_to(data.movement_speed);
     /*j.at("level").get_to(data.level);*/
 }
 

@@ -486,7 +486,7 @@ void Character::fillBroadcastData(PlayerData& data) const {
     // Llena map_id, x_tile, y_tile, orientation.
     this->position.fillBroadcastData(data.basic_data);
     this->state->fillBroadcastData(data);
-
+    data.basic_data.movement_speed = UNIT_MOVEMENT_SPEED;
     data.is_shorter = race.is_shorter;
     data.nickname = this->nickname;
     data.health = this->health;

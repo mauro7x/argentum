@@ -20,6 +20,7 @@ struct UnitData {
     Id map;
     int x_tile, y_tile;      /* coordenadas en tiles */
     Orientation orientation; /* orientación de la unidad */
+    int movement_speed;
 };
 
 //-----------------------------------------------------------------------------
@@ -49,7 +50,6 @@ struct CreatureData {
     std::string name;
     Id creature_id;
     uint32_t health, max_health /*, level*/;
-    uint32_t movement_speed;
 };
 
 struct ItemData {
