@@ -1385,6 +1385,68 @@ void Game::listConnectedPlayers(const InstanceId caller) {
     active_clients.notify(caller, list);
 }
 
+void Game::help(const InstanceId caller, const uint32_t x_coord,
+                const uint32_t y_coord) {
+    if (!this->characters.count(caller))
+        throw Exception("Game::helpNPC: unknown caller.");
+
+    std::string init_msg;
+    std::list<std::string> descriptions;
+
+    Id npc_id = 0;
+
+    if (_validatePriestPosition(caller, x_coord, y_coord, false)) {
+        init_msg = "Sacerdote";
+        descriptions.push_back("/resucitar: resucita a un jugador muerto");
+        descriptions.push_back(
+            "/curar: cura a un personaje tanto en maná como en vida.");
+        descriptions.push_back(
+            "/comprar <objeto> [<cantidad>]: para comprar los báculos, varas y "
+            "pociones en su lista.");
+        descriptions.push_back(
+            "/vender [<cantidad>]: para vender el item seleccionado del "
+            "inventario al precio de su lista.");
+        descriptions.push_back(
+            "/listar: para conocer los items que compra/vende.");
+    } else if (_validateBankerPosition(caller, x_coord, y_coord, false)) {
+        init_msg = "Banquero";
+        descriptions.push_back(
+            "/depositar [<cantidad>]: para guardar el item seleccionado del "
+            "inventario en la cuenta bancaria.");
+        descriptions.push_back(
+            "/depositaroro <cantidad>: para depositar el monto de oro "
+            "especificado en la cuenta bancaria.");
+        descriptions.push_back(
+            "/retirar <id> [<cantidad>]: para retirar el item especificado de "
+            "la cuenta bancaria.");
+        descriptions.push_back(
+            "/retiraroro <cantidad>: para retirar el monto especificado de oro "
+            "de la cuenta bancaria.");
+        descriptions.push_back(
+            "/listar: para listar el contenido de la cuenta bancaria.");
+    } else if (_validateMerchantPosition(caller, npc_id, x_coord, y_coord,
+                                         false)) {
+        init_msg = "Mercader";
+        descriptions.push_back(
+            "/comprar <objeto> [<cantidad>]: para comprar las armas y defensas "
+            "en su lista.");
+        descriptions.push_back(
+            "/vender [<cantidad>]: para vender el item seleccionado del "
+            "inventario al precio de su lista.");
+        descriptions.push_back(
+            "/listar: para conocer los items que compra/vende.");
+    } else {
+        // En la posición recibida no hay un npc.
+        std::string msg_reply = "Hay que seleccionar a un NPC para la ayuda.";
+        Notification* reply = new Reply(ERROR_MSG, msg_reply);
+        active_clients.notify(caller, reply);
+        return;
+    }
+
+    Notification* list = new List(init_msg, descriptions);
+    active_clients.notify(caller, list);
+}
+
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------

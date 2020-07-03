@@ -371,6 +371,8 @@ class Game {
 
     void sendGeneralMessage(const InstanceId caller, const std::string message);
 
+    void help(const InstanceId caller, const uint32_t x_coord, const uint32_t y_coord);
+
     //-------------------------------------------------------------------------
 
     const Id getMapId(const InstanceId caller);

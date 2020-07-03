@@ -11,6 +11,7 @@
 #include "../../../includes/Control/Commands/EquipCommand.h"
 #include "../../../includes/Control/Commands/GeneralMessageCommand.h"
 #include "../../../includes/Control/Commands/HealCommand.h"
+#include "../../../includes/Control/Commands/HelpNPCCommand.h"
 #include "../../../includes/Control/Commands/ListCommand.h"
 #include "../../../includes/Control/Commands/ListConnectedPlayersCommand.h"
 #include "../../../includes/Control/Commands/MeditateCommand.h"
@@ -196,6 +197,13 @@ Command* CommandFactory::newCommand(InstanceId caller, uint8_t opcode,
             socket >> x_coord;
             socket >> y_coord;
             return new HealCommand(caller, x_coord, y_coord);
+        }
+
+        case HELP_NPC_CMD: {
+            uint32_t x_coord, y_coord;
+            socket >> x_coord;
+            socket >> y_coord;
+            return new HelpNPCCommand(caller, x_coord, y_coord);
         }
 
         default: {
