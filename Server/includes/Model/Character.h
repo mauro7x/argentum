@@ -59,11 +59,14 @@ class Character : public Attackable {
     Equipment equipment;
     Position position;
 
-    bool meditating;
+    bool is_meditating;
 
     bool is_moving;
     int moving_cooldown;
     unsigned int attribute_update_time_elapsed;
+
+    bool is_resurrecting;
+    int resurrecting_cooldown;
 
     int attack_cooldown;
 
@@ -201,16 +204,32 @@ class Character : public Attackable {
      * Los movimientos se efectúan en act. Acá se controlan.
      */
 
-    /* Setea moving en true y la orientación en UP. */
+    /*
+     * Setea moving en true y la orientación en UP.
+     *
+     * Lanza StateCantMoveException si el jugador está resucitando.
+     */
     void startMovingUp();
 
-    /* Setea moving en true y la orientación en DOWN. */
+    /*
+     * Setea moving en true y la orientación en DOWN.
+     *
+     * Lanza StateCantMoveException si el jugador está resucitando.
+     */
     void startMovingDown();
 
-    /* Setea moving en true y la orientación en RIGHT. */
+    /*
+     * Setea moving en true y la orientación en RIGHT.
+     *
+     * Lanza StateCantMoveException si el jugador está resucitando.
+     */
     void startMovingRight();
 
-    /* Setea moving en true y la orientación en LEFT. */
+    /*
+     * Setea moving en true y la orientación en LEFT.
+     *
+     * Lanza StateCantMoveException si el jugador está resucitando.
+     */
     void startMovingLeft();
 
     /* Setea moving en false. */
@@ -258,6 +277,9 @@ class Character : public Attackable {
      *
      * Lanza FullInventoryException si el inventario esta lleno
      * y no pudo agregarse.
+     *
+     *       StateCantTakeItemException si el estado del jugador no permite
+     * tomar items.
      */
     void takeItem(Item* item, unsigned int amount = 1);
 
@@ -280,6 +302,9 @@ class Character : public Attackable {
      *
      * Lanza InsufficientGoldException si la cantidad de oro que tiene el
      * jugador en el inventario es menor a amount.
+     *
+     *       StateCantGatherGoldException si el jugador no puede usar su oro
+     * para comprar items porque su estado no lo permite.
      */
     void gatherGold(const unsigned int amount);
 
@@ -290,6 +315,8 @@ class Character : public Attackable {
      *
      * Lanza GoldMaximumCapacityReachedException si se alcanza el límite máximo
      * de oro que se puede almacenar.
+     *
+     *       StateCantTakeItemException si el estado no permite recoger oro.
      */
     void takeGold(unsigned int& amount);
 
@@ -311,7 +338,7 @@ class Character : public Attackable {
      * Efectua la acción curativa de las pociones de maná.
      * Aumenta los puntos de mana en los points especificados,
      * siempre y cuando el límite de mana no se supere.
-     * 
+     *
      * Setea points en los puntos reales recuperados.
      *
      * Retorna si aumentó el maná o no.
@@ -322,7 +349,7 @@ class Character : public Attackable {
      * Efectua la acción curativa de las pociones/hechizos de vida.
      * Aumenta los puntos de vida en los points especificados,
      * siempre y cuando el límite de health no se supere.
-     * 
+     *
      * Setea points en los puntos reales recuperados.
      *
      * Retorna si aumentó la vida o no.
@@ -337,11 +364,20 @@ class Character : public Attackable {
     void consumeMana(const unsigned int mana_points);
 
     /*
+     * Lleva la vida y el maná del character a sus máximos.
+     *
+     * Lanza StateCantBeCuratedException si el estado del character no permite
+     * la curación.
+     */
+    void curate();
+
+    /*
      * El character comienza a meditar, acelerando la recuperación de su maná.
      *
      * Ante cualquier acción que afecte su estado, dejará de meditar.
      *
      * Lanza KindCantMeditateException si su kind no puede meditar.
+     * Lanza StateCantMeditateException si su estado no puede meditar.
      */
     void meditate();
 
@@ -442,6 +478,17 @@ class Character : public Attackable {
      */
     void die();
 
+    /*
+     * Si el estado del jugador es Dead, cambia el estado a Resurrecting y setea
+     * un resurrecting_cooldown, tiempo en el que no podrá realizar ninguna
+     * acción y, transcurrido el mismo, volverá al estado Alive.
+     *
+     * Lanza StateCantResurrectException si el estado es Alive.
+     */
+    void resurrect(const unsigned int cooldown);
+
+    void _resurrect();
+
     //--------------------------------------------------------------------------
 
     //--------------------------------------------------------------------------
@@ -468,6 +515,9 @@ class Character : public Attackable {
 
     /* Retorna el nickname del character */
     const std::string& getNickname() const;
+
+    /* Retorna false */
+    const bool isCreature() const override;
 
     //--------------------------------------------------------------------------
 

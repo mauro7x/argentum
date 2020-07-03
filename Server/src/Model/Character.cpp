@@ -42,11 +42,15 @@ Character::Character(const CharacterCfg& init_data, const RaceCfg& race,
 
       position(init_map, init_x_coord, init_y_coord, map_container),
 
-      meditating(false),
+      is_meditating(false),
 
       is_moving(false),
       moving_cooldown(0),
       attribute_update_time_elapsed(0),
+
+      is_resurrecting(false),
+      resurrecting_cooldown(0),
+
       attack_cooldown(0),
       broadcast(false) {
     this->updateLevelDependantAttributes();  // Set max_health, max_mana,
@@ -74,6 +78,13 @@ void Character::act(const unsigned int it) {
 
     if (attack_cooldown > 0)
         attack_cooldown = std::max((int)(attack_cooldown - it * RATE), 0);
+
+    if (is_resurrecting) {
+        resurrecting_cooldown =
+            std::max((int)(resurrecting_cooldown - it * RATE), 0);
+        if (!resurrecting_cooldown)
+            _resurrect();
+    }
 
     _updateTimeDependantAttributes(it);
 }
@@ -104,7 +115,7 @@ void Character::_updateTimeDependantAttributes(const unsigned int it) {
             this->race.mana_recovery_factor,
             TIME_TO_UPDATE_ATTRIBUTES / 1000);  // en segundos
 
-        if (this->meditating)
+        if (this->is_meditating)
             mana_update += Formulas::calculateManaMeditationTimeRecovery(
                 this->kind.meditation_factor, this->intelligence,
                 TIME_TO_UPDATE_ATTRIBUTES / 1000);  // en segundos
@@ -141,25 +152,29 @@ std::string Character::getNickname() {
 //-----------------------------------------------------------------------------
 
 void Character::startMovingUp() {
-    this->meditating = false;
+    this->state->move();
+    this->is_meditating = false;
     this->position.changeOrientation(UP_ORIENTATION);
     this->is_moving = true;
 }
 
 void Character::startMovingDown() {
-    this->meditating = false;
+    this->state->move();
+    this->is_meditating = false;
     this->position.changeOrientation(DOWN_ORIENTATION);
     this->is_moving = true;
 }
 
 void Character::startMovingRight() {
-    this->meditating = false;
+    this->state->move();
+    this->is_meditating = false;
     this->position.changeOrientation(RIGHT_ORIENTATION);
     this->is_moving = true;
 }
 
 void Character::startMovingLeft() {
-    this->meditating = false;
+    this->state->move();
+    this->is_meditating = false;
     this->position.changeOrientation(LEFT_ORIENTATION);
     this->is_moving = true;
 }
@@ -204,6 +219,11 @@ const bool Character::recoverMana(unsigned int& points) {
     return true;
 }
 
+void Character::curate() {
+    this->health = max_health;
+    this->mana = max_mana;
+}
+
 void Character::consumeMana(const unsigned int points) {
     if (this->mana < points) {
         throw InsufficientManaException();
@@ -214,8 +234,9 @@ void Character::consumeMana(const unsigned int points) {
 }
 
 void Character::meditate() {
+    this->state->meditate();
     this->kind.meditate();
-    this->meditating = true;
+    this->is_meditating = true;
 }
 
 //-----------------------------------------------------------------------------
@@ -280,11 +301,13 @@ Item* Character::dropItem(const unsigned int n_slot, unsigned int& amount) {
 }
 
 void Character::gatherGold(const unsigned int amount) {
+    this->state->gatherGold();
     this->inventory.gatherGold(amount);
     this->broadcast = true;
 }
 
 void Character::takeGold(unsigned int& amount) {
+    this->state->takeItem();
     this->inventory.addGold(amount);
     this->broadcast = true;
 }
@@ -310,6 +333,7 @@ void Character::beAttacked() {
 }
 
 void Character::doMagic() {
+    // Delego en mi kind si puedo hacer magia.
     this->kind.doMagic();
 }
 
@@ -351,7 +375,7 @@ void Character::_checkPriorToUseAttackWeaponConditions(
     // Verificación de diferencia de niveles entre jugadores.
     const unsigned int target_level = target->getLevel();
 
-    if (target_level &&
+    if (!target->isCreature() &&
         !(Formulas::canAttackByLevel(this->level.getLevel(), target_level)))
         throw TooHighLevelDifferenceOnAttackException();
 }
@@ -396,7 +420,7 @@ const bool Character::_useAttackWeapon(Attackable* target, int& damage) {
 const bool Character::useWeapon(Attackable* target, int& damage) {
     _checkPriorToUseWeaponConditions(target);
 
-    this->meditating = false;
+    this->is_meditating = false;
 
     if (this->equipment.isWeaponHealing())
         return _useHealingWeapon(target, damage);
@@ -406,7 +430,7 @@ const bool Character::useWeapon(Attackable* target, int& damage) {
 }
 
 const bool Character::receiveAttack(int& damage, const bool eludible) {
-    this->meditating = false;
+    this->is_meditating = false;
 
     if (eludible && Formulas::isAttackEluded(this->agility)) {
         // El ataque es esquivado, no se recibe daño
@@ -430,8 +454,30 @@ const bool Character::receiveAttack(int& damage, const bool eludible) {
 
 void Character::die() {
     delete this->state;
-    this->state = new Dead(this->race);
+    this->state = new Dead(this->race.dead_head_id, this->race.dead_body_id);
+    this->mana = 0;
     this->broadcast = true;
+}
+
+void Character::_resurrect() {
+    fprintf(stderr, "RESUCITE!!!!!!!!!!1 \n");
+    is_resurrecting = false;
+    delete this->state;
+    this->state = new Alive(this->race.head_id, this->race.body_id);
+    fprintf(stderr, "Cree estado alive con: head_id=%i, body_id=%i \n",
+            this->race.head_id, this->race.body_id);
+    this->curate();
+    this->broadcast = true;
+}
+
+void Character::resurrect(const unsigned int cooldown) {
+    this->state->resurrect();
+    this->stopMoving();
+    delete this->state;
+    this->state =
+        new Resurrecting(this->race.dead_head_id, this->race.dead_body_id);
+    this->resurrecting_cooldown = cooldown;
+    this->is_resurrecting = true;
 }
 
 //-----------------------------------------------------------------------------
@@ -468,6 +514,10 @@ const std::string& Character::getNickname() const {
     return this->nickname;
 }
 
+const bool Character::isCreature() const {
+    return false;
+}
+
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -486,6 +536,7 @@ void Character::fillBroadcastData(PlayerData& data) const {
     // Llena map_id, x_tile, y_tile, orientation.
     this->position.fillBroadcastData(data.basic_data);
     this->state->fillBroadcastData(data);
+
     data.basic_data.movement_speed = UNIT_MOVEMENT_SPEED;
     data.is_shorter = race.is_shorter;
     data.nickname = this->nickname;

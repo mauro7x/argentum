@@ -81,11 +81,15 @@ class Game {
     Id banker;
     Id priest;
     std::vector<Id> merchants;
+
+    std::unordered_map<Id, std::vector<std::string>> priests_position;
     //--------------------------------------------------------------------------
 
     //--------------------------------------------------------------------------
     // Métodos auxiliares de creacion de entidades
     //--------------------------------------------------------------------------
+
+    void _establishPriestsPosition(std::vector<Id>& maps_id);
 
     /* Llena la cuenta del banco del jugador con los datos persistidos. */
     void _loadBankAccount(const CharacterCfg& init_data);
@@ -326,6 +330,9 @@ class Game {
     void meditate(const InstanceId caller);
 
     void resurrect(const InstanceId caller);
+
+    void resurrect(const InstanceId caller, const uint32_t x_coord,
+                   const uint32_t y_coord);
 
     void list(const InstanceId caller, const uint32_t x_coord,
               const uint32_t y_coord);

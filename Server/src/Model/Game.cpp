@@ -26,7 +26,8 @@ Game::Game(ActiveClients& active_clients)
       active_clients(active_clients) {
     map_container.loadMaps();
 
-    std::vector<Id> maps_id = std::move(this->map_container.getMapsId());
+    std::vector<Id> maps_id;
+    this->map_container.getMapsId(maps_id);
 
     for (unsigned int i = 0; i < maps_id.size(); ++i) {
         this->maps_creatures_info.emplace(
@@ -44,6 +45,8 @@ Game::Game(ActiveClients& active_clients)
         else
             merchants.push_back(npcs_id[i]);
     }
+
+    _establishPriestsPosition(maps_id);
 }
 
 Game::~Game() {
@@ -58,9 +61,27 @@ MapCreaturesInfo::MapCreaturesInfo(unsigned int amount_of_creatures,
       creature_spawning_cooldown(creature_spawning_cooldown) {}
 
 //-----------------------------------------------------------------------------
+
 //-----------------------------------------------------------------------------
 // Métodos auxiliares de creacion de entidades;
 //-----------------------------------------------------------------------------
+
+void Game::_establishPriestsPosition(std::vector<Id>& maps_id) {
+    std::vector<Id>::iterator it = maps_id.begin();
+
+    for (; it != maps_id.end(); ++it) {
+        Map& map = map_container[*it];
+        for (int x = 0; x < map.getWidthTiles(); ++x) {
+            for (int y = 0; y < map.getHeightTiles(); ++y) {
+                if (!(map.getTile(x, y).npc == priest))
+                    continue;
+                priests_position[*it].push_back(_coordinatesToMapKey(x, y));
+                fprintf(stderr, "Mapa %i: priest en x=%i, y=%i \n", *it, x, y);
+            }
+        }
+    }
+}
+
 void Game::_loadBankAccount(const CharacterCfg& init_data) {
     BankAccount& account = bank[init_data.nickname];
     account.depositGold(init_data.bank_gold);
@@ -365,11 +386,10 @@ void Game::actCreatures(const int it) {
                                                UPDATE_BROADCAST);
         }
         InstanceId receiver = it_creatures->second.getAttackingCharacterId();
-        if (receiver != 0 ) {
+        if (receiver != 0) {
             Notification* broadcast =
                 _buildPlayerBroadcast(receiver, UPDATE_BROADCAST);
             this->active_clients.notify(receiver, broadcast);
-            
         }
 
         // it_creatures->second.debug();
@@ -465,7 +485,13 @@ void Game::startMovingUp(const InstanceId caller) {
     }
 
     Character& character = this->characters.at(caller);
-    character.startMovingUp();
+
+    try {
+        character.startMovingUp();
+    } catch (const StateCantMoveException& e) {
+        Notification* reply = new Reply(ERROR_MSG, e.what());
+        active_clients.notify(caller, reply);
+    }
 }
 
 void Game::startMovingDown(const InstanceId caller) {
@@ -474,7 +500,13 @@ void Game::startMovingDown(const InstanceId caller) {
     }
 
     Character& character = this->characters.at(caller);
-    character.startMovingDown();
+
+    try {
+        character.startMovingDown();
+    } catch (const StateCantMoveException& e) {
+        Notification* reply = new Reply(ERROR_MSG, e.what());
+        active_clients.notify(caller, reply);
+    }
 }
 
 void Game::startMovingLeft(const InstanceId caller) {
@@ -483,7 +515,13 @@ void Game::startMovingLeft(const InstanceId caller) {
     }
 
     Character& character = this->characters.at(caller);
-    character.startMovingLeft();
+
+    try {
+        character.startMovingLeft();
+    } catch (const StateCantMoveException& e) {
+        Notification* reply = new Reply(ERROR_MSG, e.what());
+        active_clients.notify(caller, reply);
+    }
 }
 
 void Game::startMovingRight(const InstanceId caller) {
@@ -492,7 +530,13 @@ void Game::startMovingRight(const InstanceId caller) {
     }
 
     Character& character = this->characters.at(caller);
-    character.startMovingRight();
+
+    try {
+        character.startMovingRight();
+    } catch (const StateCantMoveException& e) {
+        Notification* reply = new Reply(ERROR_MSG, e.what());
+        active_clients.notify(caller, reply);
+    }
 }
 
 void Game::stopMoving(const InstanceId caller) {
@@ -788,7 +832,68 @@ void Game::drop(const InstanceId caller, const uint8_t n_slot,
 }
 
 void Game::resurrect(const InstanceId caller) {
-    fprintf(stderr, "Game::resurrect no implementado.\n");
+    if (!this->characters.count(caller))
+        throw Exception("Game::resurrect: unknown caller.");
+
+    Character& character = this->characters.at(caller);
+
+    // encontrar al sacerdote más cercano.
+    std::vector<std::string>& priests =
+        this->priests_position[character.getMapId()];
+
+    if (!priests.size())
+        throw Exception("No hay sacerdotes en el mapa.");
+
+    std::vector<std::string>::iterator it = priests.begin();
+    int respawn_x_coord, respawn_y_coord;
+    _mapKeyToCoordinates(*it, respawn_x_coord, respawn_y_coord);
+    unsigned int min_distance =
+        character.getPosition().getDistance(respawn_x_coord, respawn_y_coord);
+
+    for (++it; it != priests.end(); ++it) {
+        int _x, _y;
+        _mapKeyToCoordinates(*it, _x, _y);
+        unsigned int distance = character.getPosition().getDistance(_x, _y);
+        if (distance < min_distance) {
+            respawn_x_coord = _x;
+            respawn_y_coord = _y;
+            min_distance = distance;
+        }
+    }
+
+    // calcular cooldown.
+    unsigned int cooldown = min_distance * 1000;
+    fprintf(stderr,
+            "El sacerdote mas cercano esta en x=%i, y=%i, a distancia=%i => "
+            "cooldown=%i \n",
+            respawn_x_coord, respawn_y_coord, min_distance, cooldown);
+
+    try {
+        character.resurrect(cooldown);
+    } catch (const StateCantResurrectException& e) {
+        Notification* reply = new Reply(ERROR_MSG, e.what());
+        active_clients.notify(caller, reply);
+        return;
+    }
+}
+
+void Game::resurrect(const InstanceId caller, const uint32_t x_coord,
+                     const uint32_t y_coord) {
+    if (!this->characters.count(caller))
+        throw Exception("Game::resurrect: unknown caller.");
+
+    if (!_validatePriestPosition(caller, x_coord, y_coord, true))
+        return;
+
+    Character& character = this->characters.at(caller);
+
+    try {
+        character.resurrect(0);
+    } catch (const StateCantResurrectException& e) {
+        Notification* reply = new Reply(ERROR_MSG, e.what());
+        active_clients.notify(caller, reply);
+        return;
+    }
 }
 
 void Game::list(const InstanceId caller, const uint32_t x_coord,
@@ -964,7 +1069,8 @@ void Game::withdrawItemFromBank(const InstanceId caller, const uint32_t x_coord,
 
     try {
         character.takeItem(withdrew, amount);
-    } catch (const FullInventoryException& e) {
+    } catch (const std::exception& e) {
+        // StateCantTakeItemsException, FullInventoryException
         account.deposit(withdrew->getId(), amount);
         Notification* reply = new Reply(ERROR_MSG, e.what());
         active_clients.notify(caller, reply);
@@ -995,7 +1101,8 @@ void Game::depositGoldOnBank(const InstanceId caller, const uint32_t x_coord,
 
     try {
         character.gatherGold(amount);
-    } catch (const InsufficientGoldException& e) {
+    } catch (const std::exception& e) {
+        // InsufficientGoldException, StateCantGatherGoldException
         Notification* reply = new Reply(ERROR_MSG, e.what());
         active_clients.notify(caller, reply);
         return;
@@ -1043,6 +1150,11 @@ void Game::withdrawGoldFromBank(const InstanceId caller, const uint32_t x_coord,
         reply_msg +=
             "No pudiste extraer todo lo solicitado. No entra más oro en tu "
             "inventario.";
+    } catch (const StateCantTakeItemException& e) {
+        account.depositGold(asked_amount - amount);
+        Notification* reply = new Reply(ERROR_MSG, e.what());
+        active_clients.notify(caller, reply);
+        return;
     }
 
     // agregar mensaje si pide extraer mas de lo que tiene
@@ -1101,7 +1213,8 @@ void Game::buyItem(const InstanceId caller, const uint32_t x_coord,
 
     try {
         character.gatherGold(total_price);
-    } catch (const InsufficientGoldException& e) {
+    } catch (const std::exception& e) {
+        // InsufficientGoldException, StateCantGatherGoldException
         Notification* reply = new Reply(ERROR_MSG, e.what());
         active_clients.notify(caller, reply);
         return;
@@ -1109,8 +1222,8 @@ void Game::buyItem(const InstanceId caller, const uint32_t x_coord,
 
     try {
         character.takeItem(this->items[item_id], amount);
-    } catch (const std::exception& e) {
-        // FullInventoryException, StateCantTakeItemException
+    } catch (const FullInventoryException& e) {
+        // FullInventoryException
         character.takeGold(total_price);
         Notification* reply = new Reply(ERROR_MSG, e.what());
         active_clients.notify(caller, reply);
@@ -1161,6 +1274,7 @@ void Game::sellItem(const InstanceId caller, const uint32_t x_coord,
     try {
         character.takeGold(total_price);
     } catch (const GoldMaximumCapacityReachedException& e) {
+        // GoldMaximumCapacityReachedException
         unsigned int amount_to_replenish = amount + to_sell->getPrice();
         if (amount_to_replenish)
             character.takeItem(to_sell, amount_to_replenish);
