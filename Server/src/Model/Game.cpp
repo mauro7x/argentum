@@ -265,8 +265,7 @@ void Game::newCreature(const CreatureCfg& init_data, const Id init_map) {
         std::piecewise_construct, std::forward_as_tuple(new_creature_id),
         std::forward_as_tuple(init_data, map_container, init_map,
                               spawning_x_coord, spawning_y_coord,
-                              init_data.base_health, init_data.base_damage,
-                              items, characters));
+                              init_data.base_health, items, characters));
 
     _pushCreatureDifferentialBroadcast(new_creature_id, NEW_BROADCAST);
 }
@@ -364,6 +363,13 @@ void Game::actCreatures(const int it) {
         if (it_creatures->second.mustBeBroadcasted()) {
             _pushCreatureDifferentialBroadcast(it_creatures->first,
                                                UPDATE_BROADCAST);
+        }
+        InstanceId receiver = it_creatures->second.getAttackingCharacterId();
+        if (receiver != 0 ) {
+            Notification* broadcast =
+                _buildPlayerBroadcast(receiver, UPDATE_BROADCAST);
+            this->active_clients.notify(receiver, broadcast);
+            
         }
 
         // it_creatures->second.debug();
