@@ -20,7 +20,7 @@ struct UnitData {
     Id map;
     int x_tile, y_tile;      /* coordenadas en tiles */
     Orientation orientation; /* orientación de la unidad */
-    int movement_speed;
+    int movement_speed;      /* tiles/s */
 };
 
 //-----------------------------------------------------------------------------
