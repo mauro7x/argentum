@@ -76,7 +76,6 @@ void Game::_establishPriestsPosition(std::vector<Id>& maps_id) {
                 if (!(map.getTile(x, y).npc == priest))
                     continue;
                 priests_position[*it].push_back(_coordinatesToMapKey(x, y));
-                fprintf(stderr, "Mapa %i: priest en x=%i, y=%i \n", *it, x, y);
             }
         }
     }
@@ -385,7 +384,9 @@ void Game::actCreatures(const int it) {
             _pushCreatureDifferentialBroadcast(it_creatures->first,
                                                UPDATE_BROADCAST);
         }
+
         InstanceId receiver = it_creatures->second.getAttackingCharacterId();
+
         if (receiver != 0) {
             Notification* broadcast =
                 _buildPlayerBroadcast(receiver, UPDATE_BROADCAST);
@@ -875,6 +876,12 @@ void Game::resurrect(const InstanceId caller) {
         active_clients.notify(caller, reply);
         return;
     }
+
+    std::string reply_msg = "Resucitando. Debes esperar " +
+                            std::to_string(cooldown / 1000) +
+                            " segundos de cooldown.";
+    Notification* reply = new Reply(SUCCESS_MSG, reply_msg);
+    active_clients.notify(caller, reply);
 }
 
 void Game::resurrect(const InstanceId caller, const uint32_t x_coord,
@@ -894,6 +901,33 @@ void Game::resurrect(const InstanceId caller, const uint32_t x_coord,
         active_clients.notify(caller, reply);
         return;
     }
+
+    std::string reply_msg = "¡Has resucitado!";
+    Notification* reply = new Reply(SUCCESS_MSG, reply_msg);
+    active_clients.notify(caller, reply);
+}
+
+void Game::heal(const InstanceId caller, const uint32_t x_coord,
+                const uint32_t y_coord) {
+    if (!this->characters.count(caller))
+        throw Exception("Game::heal: unknown caller.");
+
+    if (!_validatePriestPosition(caller, x_coord, y_coord, true))
+        return;
+
+    Character& character = this->characters.at(caller);
+
+    try {
+        character.heal();
+    } catch (const StateCantBeHealedException& e) {
+        Notification* reply = new Reply(ERROR_MSG, e.what());
+        active_clients.notify(caller, reply);
+        return;
+    }
+
+    std::string reply_msg = "Has sido curado.";
+    Notification* reply = new Reply(SUCCESS_MSG, reply_msg);
+    active_clients.notify(caller, reply);
 }
 
 void Game::list(const InstanceId caller, const uint32_t x_coord,
@@ -1290,10 +1324,6 @@ void Game::sellItem(const InstanceId caller, const uint32_t x_coord,
     active_clients.notify(caller, reply);
 }
 
-void Game::listConnectedPlayers(const InstanceId caller) {
-    fprintf(stderr, "Comando list no implementado.\n");
-}
-
 void Game::sendPrivateMessage(const InstanceId caller,
                               const std::string to_nickname,
                               const std::string message) {
@@ -1335,6 +1365,24 @@ void Game::sendGeneralMessage(const InstanceId caller,
     Notification* notification =
         new Message(caller_nickname, message, GENERAL_MSG);
     this->active_clients.sendMessageToAll(notification, caller);
+}
+
+void Game::listConnectedPlayers(const InstanceId caller) {
+    if (!this->characters.count(caller))
+        throw Exception("Game::listConnectedPlayers: unknown caller.");
+
+    std::unordered_map<Id, Character>::const_iterator it =
+        this->characters.begin();
+
+    std::string init_msg = "Jugadores conectados";
+    std::list<std::string> player_list;
+
+    for (; it != this->characters.end(); ++it) {
+        player_list.push_back(it->second.getNickname());
+    }
+
+    Notification* list = new List(init_msg, player_list);
+    active_clients.notify(caller, list);
 }
 
 //-----------------------------------------------------------------------------

@@ -219,7 +219,8 @@ const bool Character::recoverMana(unsigned int& points) {
     return true;
 }
 
-void Character::curate() {
+void Character::heal() {
+    this->state->beHealed();
     this->health = max_health;
     this->mana = max_mana;
 }
@@ -466,7 +467,7 @@ void Character::_resurrect() {
     this->state = new Alive(this->race.head_id, this->race.body_id);
     fprintf(stderr, "Cree estado alive con: head_id=%i, body_id=%i \n",
             this->race.head_id, this->race.body_id);
-    this->curate();
+    this->heal();
     this->broadcast = true;
 }
 

@@ -334,6 +334,9 @@ class Game {
     void resurrect(const InstanceId caller, const uint32_t x_coord,
                    const uint32_t y_coord);
 
+    void heal(const InstanceId caller, const uint32_t x_coord,
+              const uint32_t y_coord);
+
     void list(const InstanceId caller, const uint32_t x_coord,
               const uint32_t y_coord);
 
