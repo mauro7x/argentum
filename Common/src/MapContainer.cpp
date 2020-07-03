@@ -47,16 +47,12 @@ const Map& MapContainer::operator[](const Id id) const {
     return content.at(id);
 }
 
-std::vector<Id> MapContainer::getMapsId() const {
-    std::vector<Id> maps_id;
-
+void MapContainer::getMapsId(std::vector<Id>& maps_id) const {
     std::unordered_map<Id, Map>::const_iterator it = this->content.begin();
     while (it != this->content.end()) {
         maps_id.push_back(it->first);
         ++it;
     }
-
-    return maps_id;
 }
 
 const Id MapContainer::getCharacterSpawningMap() const {

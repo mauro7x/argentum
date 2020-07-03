@@ -46,7 +46,7 @@ class MapContainer {
 
     /* PROVISORIO! */
     /* Para crear el mapa de conteo de criaturas por mapa */
-    std::vector<Id> getMapsId() const;
+    void getMapsId(std::vector<Id>& maps_id) const;
 
     /* Obtiene el mapa correspondiente modificable */
     Map& operator[](const Id id);
