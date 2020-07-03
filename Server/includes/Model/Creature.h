@@ -175,6 +175,9 @@ class Creature : public Attackable {
     /* Retorna la id del mapa en el que se encuentra la criatura */
     const Id getMapId() const;
 
+    /* Retorna true */
+    const bool isCreature() const override;
+
     /* Retorno la id del character que esta atacando*/
     const InstanceId getAttackingCharacterId() const;
 };

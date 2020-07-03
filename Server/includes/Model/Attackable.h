@@ -28,6 +28,8 @@ class Attackable {
     virtual void beAttacked() = 0;
 
     virtual const bool isNewbie() const = 0;
+
+    virtual const bool isCreature() const = 0;
 };
 
 //-----------------------------------------------------------------------------

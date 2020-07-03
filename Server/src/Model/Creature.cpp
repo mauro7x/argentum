@@ -33,7 +33,7 @@ Creature::Creature(const CreatureCfg& data, MapContainer& map_container,
       attack_cooldown(data.attack_cooldown),
       actual_attack_cooldown(0),
       attacking_id(0),
-      level(1),
+      level(15),
       broadcast(false) {}
 
 Creature::~Creature() {}
@@ -276,6 +276,10 @@ const Id Creature::getMapId() const {
 
 const InstanceId Creature::getAttackingCharacterId() const {
     return this->attacking_id;
+}
+
+const bool Creature::isCreature() const {
+    return true;
 }
 
 void Creature::fillBroadcastData(CreatureData& data) const {
