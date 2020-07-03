@@ -63,6 +63,11 @@ class Creature : public Attackable {
     void _determinateDirectionAndMove(const Position& position_character);
 
     /*
+     * Hacer el damage al character mas cerca si esta listo a pegar
+     */
+
+    void _updateDamage(const unsigned int it, const InstanceId id);
+    /*
      * Recibe el número de iteraciones que pasaron desde la última vez que
      * se llamó.
      *
