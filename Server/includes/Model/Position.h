@@ -32,12 +32,14 @@ class Position {
      */
     const unsigned int getDistance(const Position& other) const;
 
+    const unsigned int getDistance(const int other_x, const int other_y) const;
+
     /*
-     * Devuelve el maximo valor entre las coordenadas de this y 
+     * Devuelve el maximo valor entre las coordenadas de this y
      *las de other
      */
     const unsigned int getRange(const Position& other) const;
-    
+
     /* Devuelve la coordenada x de la posición del character */
     const int getX() const;
 

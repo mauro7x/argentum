@@ -35,10 +35,15 @@ const Id Position::getMapId() const {
 }
 
 const unsigned int Position::getDistance(const Position& other) const {
-    return abs(this->x - other.getX()) + abs(this->y - other.getY());
+    return getDistance(other.x, other.y);
 }
 
-const unsigned int Position::getRange(const Position& other) const{
+const unsigned int Position::getDistance(const int other_x,
+                                         const int other_y) const {
+    return abs(this->x - other_x) + abs(this->y - other_y);
+}
+
+const unsigned int Position::getRange(const Position& other) const {
     return std::max(abs(this->x - other.getX()), abs(this->y - other.getY()));
 }
 
@@ -89,7 +94,6 @@ void Position::fillPersistenceData(CharacterCfg& data) const {
     data.x_tile = this->x;
     data.y_tile = this->y;
 }
-
 
 const char* CollisionWhileMovingException::what() const noexcept {
     return "No puedes moverte en esa dirección.";
