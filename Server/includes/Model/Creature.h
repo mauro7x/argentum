@@ -27,7 +27,8 @@ class Creature : public Attackable {
     std::string name;
     uint32_t health_max;
     uint32_t health;
-    uint32_t damage;
+    uint32_t min_damage;
+    uint32_t max_damage;
     Position position;
     uint32_t visible_range;
     int movement_speed;
@@ -40,6 +41,9 @@ class Creature : public Attackable {
     int moving_cooldown;
     unsigned int attribute_update_time_elapsed;
     int attack_cooldown;
+    int actual_attack_cooldown;
+    InstanceId attacking_id;
+    uint32_t level;
     bool broadcast;
 
     /*
@@ -73,8 +77,7 @@ class Creature : public Attackable {
     /* Constructor */
     Creature(const CreatureCfg& data, MapContainer& map_container,
              const Id init_map, const int init_x_coord, const int init_y_coord,
-             const uint32_t health, const uint32_t damage,
-             ItemsContainer& items,
+             const uint32_t health, ItemsContainer& items,
              std::unordered_map<InstanceId, Character>& characters);
 
     /* Destructor */
@@ -166,6 +169,9 @@ class Creature : public Attackable {
 
     /* Retorna la id del mapa en el que se encuentra la criatura */
     const Id getMapId() const;
+
+    /* Retorno la id del character que esta atacando*/
+    const InstanceId getAttackingCharacterId() const;
 };
 
 class CantRecoverCreaturesHealthException : public std::exception {

@@ -13,13 +13,14 @@
 Creature::Creature(const CreatureCfg& data, MapContainer& map_container,
                    const Id init_map, const int init_x_coord,
                    const int init_y_coord, const uint32_t health,
-                   const uint32_t damage, ItemsContainer& items,
+                   ItemsContainer& items,
                    std::unordered_map<InstanceId, Character>& characters)
     : id(data.id),
       name(data.name),
       health_max(data.base_health),
       health(health),
-      damage(damage),
+      min_damage(data.min_damage),
+      max_damage(data.max_damage),
       position(init_map, init_x_coord, init_y_coord, map_container),
       visible_range(data.visible_range),
       movement_speed(data.movement_speed),
@@ -29,7 +30,10 @@ Creature::Creature(const CreatureCfg& data, MapContainer& map_container,
       is_moving(false),
       moving_cooldown(0),
       attribute_update_time_elapsed(0),
-      attack_cooldown(0),
+      attack_cooldown(data.attack_cooldown),
+      actual_attack_cooldown(0),
+      attacking_id(0),
+      level(1),
       broadcast(false) {}
 
 Creature::~Creature() {}
@@ -66,24 +70,20 @@ bool Creature::_attackNearstCharacter(const Position& position_character) {
     if (position.getX() == position_character.getX()) {
         if (position_character.getY() - position.getY() == 1) {
             this->position.changeOrientation(DOWN_ORIENTATION);
-            // atacar
             return true;
         }
         if (position.getY() - position_character.getY() == 1) {
             this->position.changeOrientation(UP_ORIENTATION);
-            // atacar
             return true;
         }
     }
     if (position.getY() == position_character.getY()) {
         if (position_character.getX() - position.getX() == 1) {
             this->position.changeOrientation(RIGHT_ORIENTATION);
-            // atacar
             return true;
         }
         if (position.getX() - position_character.getX() == 1) {
             this->position.changeOrientation(LEFT_ORIENTATION);
-            // atacar
             return true;
         }
     }
@@ -126,17 +126,27 @@ void Creature::act(const unsigned int it) {
         stopMoving();
     } else {
         if (_attackNearstCharacter(characters.at(id).getPosition())) {
+            actual_attack_cooldown -= it * RATE;
+            if (actual_attack_cooldown <= 0) {
+                RandomNumberGenerator random_number_generator;
+                int damage =
+                    level * (int)random_number_generator((int)this->min_damage,
+                                                         (int)this->max_damage);
+                characters.at(id).receiveAttack(damage, true);
+                actual_attack_cooldown += attack_cooldown;
+                attacking_id = id;
+            } else {
+                attacking_id = 0;
+            }
             stopMoving();
         } else {
             _determinateDirectionAndMove(characters.at(id).getPosition());
+            attacking_id = 0;
         }
     }
     if (is_moving) {
         _updateMovement(it);
     }
-
-    if (attack_cooldown > 0)
-        attack_cooldown = std::max(int(attack_cooldown - it*RATE), 0);
 }
 
 void Creature::startMovingUp() {
@@ -253,15 +263,15 @@ const unsigned int Creature::getHealth() const {
 }
 
 const unsigned int Creature::getLevel() const {
-    // IMPLEMENTAR NIVEL!!!!
-    // IMPLEMENTAR NIVEL!!!!
-    // IMPLEMENTAR NIVEL!!!!
-    // IMPLEMENTAR NIVEL!!!!
-    return 0;
+    return this->level;
 }
 
 const Id Creature::getMapId() const {
     return this->position.getMapId();
+}
+
+const InstanceId Creature::getAttackingCharacterId() const {
+    return this->attacking_id;
 }
 
 void Creature::fillBroadcastData(CreatureData& data) const {

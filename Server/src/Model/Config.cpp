@@ -204,10 +204,12 @@ void Config<CreatureCfg>::_parseFile() {
 
         creature.id = j[i]["id"];
         creature.name = j[i]["name"];
-        creature.base_damage = j[i]["base_damage"];
+        creature.min_damage = j[i]["min_damage"];
+        creature.max_damage = j[i]["max_damage"];
         creature.base_health = j[i]["base_health"];
         creature.visible_range = j[i]["visible_range"];
         creature.movement_speed = j[i]["movement_speed"];
+        creature.attack_cooldown = j[i]["attack_cooldown"];
 
         config[creature.id] = creature;
     }
