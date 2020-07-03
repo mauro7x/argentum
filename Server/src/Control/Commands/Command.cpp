@@ -13,6 +13,7 @@
 #include "../../../includes/Control/Commands/ListCommand.h"
 #include "../../../includes/Control/Commands/MeditateCommand.h"
 #include "../../../includes/Control/Commands/PrivateMessageCommand.h"
+#include "../../../includes/Control/Commands/ResurrectCommand.h"
 #include "../../../includes/Control/Commands/SelfResurrectCommand.h"
 #include "../../../includes/Control/Commands/SellItemCommand.h"
 #include "../../../includes/Control/Commands/StartMovingDownCommand.h"
@@ -175,6 +176,13 @@ Command* CommandFactory::newCommand(InstanceId caller, uint8_t opcode,
             std::string message;
             socket >> message;
             return new GeneralMessageCommand(caller, std::move(message));
+        }
+
+        case RESURRECT_CMD: {
+            uint32_t x_coord, y_coord;
+            socket >> x_coord;
+            socket >> y_coord;
+            return new ResurrectCommand(caller, x_coord, y_coord);
         }
 
         default: {
