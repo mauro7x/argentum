@@ -12,6 +12,7 @@
 #include "../../../includes/Control/Commands/GeneralMessageCommand.h"
 #include "../../../includes/Control/Commands/HealCommand.h"
 #include "../../../includes/Control/Commands/ListCommand.h"
+#include "../../../includes/Control/Commands/ListConnectedPlayersCommand.h"
 #include "../../../includes/Control/Commands/MeditateCommand.h"
 #include "../../../includes/Control/Commands/PrivateMessageCommand.h"
 #include "../../../includes/Control/Commands/ResurrectCommand.h"
@@ -67,6 +68,10 @@ Command* CommandFactory::newCommand(InstanceId caller, uint8_t opcode,
 
         case GRAB_OBJECT_CMD: {
             return new TakeCommand(caller);
+        }
+
+        case LIST_CONNECTED_PLAYERS_CMD: {
+            return new ListConnectedPlayersCommand(caller);
         }
 
         case USE_MAIN_WEAPON_CMD: {
