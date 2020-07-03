@@ -109,7 +109,9 @@ void Creature::_determinateDirectionAndMove(
 }
 void Creature::_updateDamage(const unsigned int it, const InstanceId id) {
     actual_attack_cooldown -= it * RATE;
-    if (actual_attack_cooldown <= 0) {
+    attacking_id = 0;
+
+    while (actual_attack_cooldown <= 0) {
         this->broadcast = true;
         RandomNumberGenerator random_number_generator;
         int damage = level * (int)random_number_generator(
@@ -117,8 +119,6 @@ void Creature::_updateDamage(const unsigned int it, const InstanceId id) {
         characters.at(id).receiveAttack(damage, true);
         actual_attack_cooldown += attack_cooldown;
         attacking_id = id;
-    } else {
-        attacking_id = 0;
     }
 }
 
@@ -147,6 +147,7 @@ void Creature::act(const unsigned int it) {
             attacking_id = 0;
         }
     }
+
     if (is_moving) {
         _updateMovement(it);
     }
