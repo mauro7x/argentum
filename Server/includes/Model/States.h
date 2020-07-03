@@ -7,8 +7,8 @@
 
 /*
  * Interfaz que representa al estado del personaje.
- * Implementan esta interfaz las clases Alive y Dead.
- * Delimita las acciones que se puede realizar en c/estado.
+ * Implementan esta interfaz las clases Alive, Dead y Resurrecting.
+ * Delimita las acciones que se pueden realizar (o no) en c/estado.
  */
 class State {
    protected:
@@ -27,6 +27,11 @@ class State {
     virtual void attack() const = 0;
     virtual void beAttacked() const = 0;
     virtual void takeItem() const = 0;
+    virtual void move() const = 0;
+    virtual void beHealed() const = 0;
+    virtual void resurrect() const = 0;
+    virtual void meditate() const = 0;
+    virtual void gatherGold() const = 0;
 
     void fillBroadcastData(PlayerData& data);
 
@@ -45,7 +50,7 @@ class StateFactory {
  */
 class Alive : public State {
    public:
-    Alive(const Race& race_data);
+    Alive(const Id head_id, const Id body_id);
     ~Alive();
 
     Alive(const Alive&) = delete;
@@ -56,6 +61,11 @@ class Alive : public State {
     virtual void attack() const override;
     virtual void beAttacked() const override;
     virtual void takeItem() const override;
+    virtual void move() const override;
+    virtual void beHealed() const override;
+    virtual void resurrect() const override;
+    virtual void meditate() const override;
+    virtual void gatherGold() const override;
 };
 
 /*
@@ -65,7 +75,7 @@ class Alive : public State {
  */
 class Dead : public State {
    public:
-    Dead(const Race& race_data);
+    Dead(const Id dead_head_id, const Id dead_body_id);
     ~Dead();
 
     Dead(const Dead&) = delete;
@@ -76,6 +86,31 @@ class Dead : public State {
     virtual void attack() const override;
     virtual void beAttacked() const override;
     virtual void takeItem() const override;
+    virtual void move() const override;
+    virtual void beHealed() const override;
+    virtual void resurrect() const override;
+    virtual void meditate() const override;
+    virtual void gatherGold() const override;
+};
+
+class Resurrecting : public State {
+   public:
+    Resurrecting(const Id dead_head_id, const Id dead_body_id);
+    ~Resurrecting();
+
+    Resurrecting(const Resurrecting&) = delete;
+    Resurrecting& operator=(const Resurrecting&) = delete;
+    Resurrecting(Resurrecting&&) = delete;
+    Resurrecting& operator=(Resurrecting&&) = delete;
+
+    virtual void attack() const override;
+    virtual void beAttacked() const override;
+    virtual void takeItem() const override;
+    virtual void move() const override;
+    virtual void beHealed() const override;
+    virtual void resurrect() const override;
+    virtual void meditate() const override;
+    virtual void gatherGold() const override;
 };
 
 class AttackedStateCantBeAttackedException : public std::exception {
@@ -89,6 +124,31 @@ class AttackerStateCantAttackException : public std::exception {
 };
 
 class StateCantTakeItemException : public std::exception {
+   public:
+    virtual const char* what() const noexcept;
+};
+
+class StateCantGatherGoldException : public std::exception {
+   public:
+    virtual const char* what() const noexcept;
+};
+
+class StateCantMoveException : public std::exception {
+   public:
+    virtual const char* what() const noexcept;
+};
+
+class StateCantBeHealedException : public std::exception {
+   public:
+    virtual const char* what() const noexcept;
+};
+
+class StateCantResurrectException : public std::exception {
+   public:
+    virtual const char* what() const noexcept;
+};
+
+class StateCantMeditateException : public std::exception {
    public:
     virtual const char* what() const noexcept;
 };
