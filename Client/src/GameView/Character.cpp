@@ -108,11 +108,15 @@ void Character::update(const CharacterData& updated_data) {
                                         "Nivel " + std::to_string(level));
     }
 
+    /* Si hay que iniciar un movimiento */
+    if ((data.x_tile != updated_data.basic_data.x_tile) ||
+        (data.y_tile != updated_data.basic_data.y_tile)) {
+        _setMovementSpeed(updated_data.basic_data.x_tile,
+                          updated_data.basic_data.y_tile);
+    }
+
     /* Actualizamos la data */
     _copyData(updated_data);
-
-    /* Iniciamos el movimiento si nuestra posición en pixeles no coincide*/
-    _setMovementSpeed();
 }
 
 void Character::render() const {

@@ -8,7 +8,7 @@
 //-----------------------------------------------------------------------------
 #include "../../../Common/includes/DataStructs.h"
 #include "../../../Common/includes/Exceptions/Exception.h"
-#include "../../../Common/includes/defs.h"
+// #include "../../../Common/includes/defs.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -53,8 +53,8 @@ class Unit {
     Uint32 last_moved = 0;           /* ultimo movimiento */
     int current_animation_frame = 0; /* frame actual a renderizar */
 
-    /* Settea la velocidad de movimiento en caso de ser necesario */
-    void _setMovementSpeed();
+    /* Settea la velocidad de movimiento */
+    void _setMovementSpeed(int next_x_tile, int next_y_tile);
 
     /* Verifica si el movimiento ya terminó (si nos pasamos) */
     void _movementFinished();

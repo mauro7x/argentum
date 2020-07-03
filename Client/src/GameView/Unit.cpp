@@ -3,31 +3,34 @@
 //-----------------------------------------------------------------------------
 // Métodos privados
 
-void Unit::_setMovementSpeed() {
-    int next_x = data.x_tile * TILE_WIDTH;
-    int next_y = data.y_tile * TILE_HEIGHT;
+void Unit::_setMovementSpeed(int next_x_tile, int next_y_tile) {
+    int old_x = data.x_tile * TILE_WIDTH;
+    int old_y = data.y_tile * TILE_HEIGHT;
+    int new_x = next_x_tile * TILE_WIDTH;
+    int new_y = next_y_tile * TILE_HEIGHT;
 
     /* Velocidad en X */
-    if (next_x > x) {
-        x_vel = ((float)(next_x - x) / UNIT_TIME_TO_MOVE);
-    } else if (next_x < x) {
-        x_vel = -((float)(x - next_x) / UNIT_TIME_TO_MOVE);
+    if (new_x != old_x) {
+        // Saco la corrección de velocidad ya que genera una animación más
+        // trabada, y la ganancia es muy poca.
+        // x_vel = ((float)(new_x - x) / (1000 / data.movement_speed));
+        x_vel = ((float)(new_x - old_x) / (1000 / data.movement_speed));
     } else {
         x_vel = 0;
     }
 
     /* Velocidad en Y */
-    if (next_y > y) {
-        y_vel = ((float)(next_y - y) / UNIT_TIME_TO_MOVE);
-    } else if (next_y < y) {
-        y_vel = -((float)(y - next_y) / UNIT_TIME_TO_MOVE);
+    if (new_y != old_y) {
+        // Saco la corrección de velocidad ya que genera una animación más
+        // trabada, y la ganancia es muy poca.
+        // y_vel = ((float)(new_y - y) / (1000 / data.movement_speed));
+        y_vel = ((float)(new_y - old_y) / (1000 / data.movement_speed));
     } else {
         y_vel = 0;
     }
 
     /* Si ya nos estabamos moviendo NO es necesario actualizar el last_moved */
     if ((state != MOVING) && ((x_vel != 0) || (y_vel != 0))) {
-        /* Seteamos el estado y el last_moved */
         state = MOVING;
         last_moved = SDL_GetTicks();
     }
@@ -47,7 +50,8 @@ void Unit::_movementFinished() {
         y_vel = 0;
     }
 
-    if ((x == next_x) && (y == next_y)) {
+    // Verificamos si terminó el movimiento
+    if ((x_vel == 0) && (y_vel == 0)) {
         state = READY;
         current_animation_frame = 0;
     }
