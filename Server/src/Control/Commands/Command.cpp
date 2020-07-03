@@ -10,6 +10,7 @@
 #include "../../../includes/Control/Commands/DropCommand.h"
 #include "../../../includes/Control/Commands/EquipCommand.h"
 #include "../../../includes/Control/Commands/GeneralMessageCommand.h"
+#include "../../../includes/Control/Commands/HealCommand.h"
 #include "../../../includes/Control/Commands/ListCommand.h"
 #include "../../../includes/Control/Commands/MeditateCommand.h"
 #include "../../../includes/Control/Commands/PrivateMessageCommand.h"
@@ -183,6 +184,13 @@ Command* CommandFactory::newCommand(InstanceId caller, uint8_t opcode,
             socket >> x_coord;
             socket >> y_coord;
             return new ResurrectCommand(caller, x_coord, y_coord);
+        }
+
+        case HEAL_CMD: {
+            uint32_t x_coord, y_coord;
+            socket >> x_coord;
+            socket >> y_coord;
+            return new HealCommand(caller, x_coord, y_coord);
         }
 
         default: {

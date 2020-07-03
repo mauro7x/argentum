@@ -385,7 +385,9 @@ void Game::actCreatures(const int it) {
             _pushCreatureDifferentialBroadcast(it_creatures->first,
                                                UPDATE_BROADCAST);
         }
+
         InstanceId receiver = it_creatures->second.getAttackingCharacterId();
+
         if (receiver != 0) {
             Notification* broadcast =
                 _buildPlayerBroadcast(receiver, UPDATE_BROADCAST);
@@ -875,6 +877,12 @@ void Game::resurrect(const InstanceId caller) {
         active_clients.notify(caller, reply);
         return;
     }
+
+    std::string reply_msg = "Resucitando. Debes esperar " +
+                            std::to_string(cooldown / 1000) +
+                            " segundos de cooldown.";
+    Notification* reply = new Reply(SUCCESS_MSG, reply_msg);
+    active_clients.notify(caller, reply);
 }
 
 void Game::resurrect(const InstanceId caller, const uint32_t x_coord,
@@ -894,6 +902,33 @@ void Game::resurrect(const InstanceId caller, const uint32_t x_coord,
         active_clients.notify(caller, reply);
         return;
     }
+
+    std::string reply_msg = "¡Has resucitado!";
+    Notification* reply = new Reply(SUCCESS_MSG, reply_msg);
+    active_clients.notify(caller, reply);
+}
+
+void Game::heal(const InstanceId caller, const uint32_t x_coord,
+                const uint32_t y_coord) {
+    if (!this->characters.count(caller))
+        throw Exception("Game::heal: unknown caller.");
+
+    if (!_validatePriestPosition(caller, x_coord, y_coord, true))
+        return;
+
+    Character& character = this->characters.at(caller);
+
+    try {
+        character.heal();
+    } catch (const StateCantBeHealedException& e) {
+        Notification* reply = new Reply(ERROR_MSG, e.what());
+        active_clients.notify(caller, reply);
+        return;
+    }
+
+    std::string reply_msg = "Has sido curado.";
+    Notification* reply = new Reply(SUCCESS_MSG, reply_msg);
+    active_clients.notify(caller, reply);
 }
 
 void Game::list(const InstanceId caller, const uint32_t x_coord,

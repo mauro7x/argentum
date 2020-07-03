@@ -366,10 +366,10 @@ class Character : public Attackable {
     /*
      * Lleva la vida y el maná del character a sus máximos.
      *
-     * Lanza StateCantBeCuratedException si el estado del character no permite
+     * Lanza StateCantBeHealedException si el estado del character no permite
      * la curación.
      */
-    void curate();
+    void heal();
 
     /*
      * El character comienza a meditar, acelerando la recuperación de su maná.
