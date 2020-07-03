@@ -4,7 +4,7 @@
         "name": "Goblin",
         "base_damage":10,
         "base_health":100,
-        "visible_range":2,
+        "visible_range":3,
         "movement_speed":10
     },
     {
@@ -12,7 +12,7 @@
         "name": "Esqueleto",
         "base_damage":10,
         "base_health":100,
-        "visible_range":1,
+        "visible_range":2,
         "movement_speed":4
     },
     {
@@ -20,8 +20,8 @@
         "name": "Zombie",
         "base_damage":10,
         "base_health":100,
-        "visible_range":1,
-        "movement_speed":2
+        "visible_range":3,
+        "movement_speed":4
     },
     {
         "id": 303,

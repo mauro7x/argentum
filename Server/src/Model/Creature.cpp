@@ -81,7 +81,7 @@ bool Creature::_attackNearstCharacter(const Position& position_character) {
             // atacar
             return true;
         }
-        if (position.getY() - position_character.getY() == 1) {
+        if (position.getX() - position_character.getX() == 1) {
             this->position.changeOrientation(LEFT_ORIENTATION);
             // atacar
             return true;
@@ -116,7 +116,7 @@ void Creature::_updateMovement(const unsigned int it) {
 
         this->position.move();
 
-        this->moving_cooldown += UNIT_TIME_TO_MOVE;
+        this->moving_cooldown += 1000 / movement_speed;
     }
 }
 
@@ -133,15 +133,10 @@ void Creature::act(const unsigned int it) {
     }
     if (is_moving) {
         _updateMovement(it);
-    } else {
-        if (moving_cooldown > 0) {
-            moving_cooldown =
-                std::max(moving_cooldown - 1000 / movement_speed, 0);
-        }
     }
 
     if (attack_cooldown > 0)
-        attack_cooldown = std::max(attack_cooldown - 1000 / movement_speed, 0);
+        attack_cooldown = std::max(int(attack_cooldown - it*RATE), 0);
 }
 
 void Creature::startMovingUp() {
@@ -166,7 +161,6 @@ void Creature::startMovingLeft() {
 
 void Creature::stopMoving() {
     this->is_moving = false;
-    this->moving_cooldown = 0;
 }
 
 const bool Creature::receiveAttack(int& damage, const bool eludible) {
