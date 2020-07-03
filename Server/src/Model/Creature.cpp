@@ -33,7 +33,7 @@ Creature::Creature(const CreatureCfg& data, MapContainer& map_container,
       attack_cooldown(data.attack_cooldown),
       actual_attack_cooldown(0),
       attacking_id(0),
-      level(15),
+      level(1),
       broadcast(false) {}
 
 Creature::~Creature() {}
@@ -137,6 +137,7 @@ void Creature::_updateMovement(const unsigned int it) {
 void Creature::act(const unsigned int it) {
     InstanceId id = _getNearestCharacter();
     if (!id) {
+        attacking_id = 0;
         stopMoving();
     } else {
         if (_attackNearstCharacter(characters.at(id).getPosition())) {
@@ -144,7 +145,6 @@ void Creature::act(const unsigned int it) {
             stopMoving();
         } else {
             _determinateDirectionAndMove(characters.at(id).getPosition());
-            attacking_id = 0;
         }
     }
 
