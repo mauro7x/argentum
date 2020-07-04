@@ -2,6 +2,8 @@
     {
         "id": 300,
         "name": "Goblin",
+        "min_level":1,
+        "max_level":10,
         "min_damage": 5,
         "max_damage": 10,
         "base_health": 100,
@@ -12,6 +14,8 @@
     {
         "id": 301,
         "name": "Esqueleto",
+        "min_level":1,
+        "max_level":10,
         "min_damage": 15,
         "max_damage": 25,
         "base_health": 100,
@@ -22,6 +26,8 @@
     {
         "id": 302,
         "name": "Zombie",
+        "min_level":1,
+        "max_level":10,
         "min_damage": 10,
         "max_damage": 15,
         "base_health": 100,
@@ -32,6 +38,8 @@
     {
         "id": 303,
         "name": "Araña",
+        "min_level":1,
+        "max_level":10,
         "min_damage": 8,
         "max_damage": 12,
         "base_health": 100,

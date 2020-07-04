@@ -33,8 +33,11 @@ Creature::Creature(const CreatureCfg& data, MapContainer& map_container,
       attack_cooldown(data.attack_cooldown),
       actual_attack_cooldown(0),
       attacking_id(0),
-      level(1),
-      broadcast(false) {}
+      broadcast(false) {
+          RandomNumberGenerator random_number_generator;
+          level = random_number_generator(
+                                 (int)data.min_level, (int)data.max_level);
+      }
 
 Creature::~Creature() {}
 
