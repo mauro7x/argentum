@@ -153,6 +153,13 @@ class Game {
                                         BroadcastType broadcast_type);
 
     /*
+     * Ante cualquier evento que desenvuelva acciones multimedia, se pushea el
+     * mismo y se los envía a los clientes.
+     */
+    void _pushCharacterEvent(InstanceId character_id, EventType type);
+    void _pushCreatureEvent(InstanceId creature_id, EventType type);
+
+    /*
      * Ante la conexión de un nuevo jugador o el cambio de mapa, se invoca
      * este método para enviarle a dicho jugador un full broadcast con
      * toda la información del juego.
@@ -371,7 +378,8 @@ class Game {
 
     void sendGeneralMessage(const InstanceId caller, const std::string message);
 
-    void help(const InstanceId caller, const uint32_t x_coord, const uint32_t y_coord);
+    void help(const InstanceId caller, const uint32_t x_coord,
+              const uint32_t y_coord);
 
     //-------------------------------------------------------------------------
 

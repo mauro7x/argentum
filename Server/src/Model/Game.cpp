@@ -9,6 +9,7 @@
 //-----------------------------------------------------------------------------
 #include "../../includes/Control/ActiveClients.h"
 #include "../../includes/Control/Notifications/EntityBroadcast.h"
+#include "../../includes/Control/Notifications/Event.h"
 #include "../../includes/Control/Notifications/ItemBroadcast.h"
 #include "../../includes/Control/Notifications/List.h"
 #include "../../includes/Control/Notifications/Message.h"
@@ -169,6 +170,24 @@ void Game::_pushItemDifferentialBroadcast(Id map_id, int x_coord, int y_coord,
         _buildItemBroadcast(map_id, x_coord, y_coord, broadcast_type);
 
     this->active_clients.sendDifferentialBroadcastToAll(broadcast, 0, false);
+}
+
+void Game::_pushCharacterEvent(InstanceId id, EventType type) {
+    const Position& position = this->characters.at(id).getPosition();
+    uint32_t x_coord = position.getX();
+    uint32_t y_coord = position.getY();
+
+    Notification* event = new Event(x_coord, y_coord, type);
+    active_clients.sendEventToAll(event);
+}
+
+void Game::_pushCreatureEvent(InstanceId id, EventType type) {
+    const Position& position = this->creatures.at(id).getPosition();
+    uint32_t x_coord = position.getX();
+    uint32_t y_coord = position.getY();
+
+    Notification* event = new Event(x_coord, y_coord, type);
+    active_clients.sendEventToAll(event);
 }
 
 void Game::_pushFullBroadcast(InstanceId receiver, bool is_new_connection) {
@@ -826,6 +845,7 @@ void Game::drop(const InstanceId caller, const uint8_t n_slot,
 
     // Broadcasteo new item
     _pushItemDifferentialBroadcast(map_id, x, y, NEW_BROADCAST);
+    _pushCharacterEvent(caller, THROW_EV_TYPE);
 }
 
 void Game::resurrect(const InstanceId caller) {
@@ -1356,7 +1376,7 @@ void Game::sendGeneralMessage(const InstanceId caller,
 
     Notification* notification =
         new Message(caller_nickname, message, GENERAL_MSG);
-    this->active_clients.sendMessageToAll(notification, caller);
+    this->active_clients.sendMessageToAll(notification);
 }
 
 void Game::listConnectedPlayers(const InstanceId caller) {

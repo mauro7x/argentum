@@ -1,6 +1,7 @@
 #include "../../includes/Control/ActiveClients.h"
 //-----------------------------------------------------------------------------
 #include "../../includes/Control/Notifications/EntityBroadcast.h"
+#include "../../includes/Control/Notifications/Event.h"
 #include "../../includes/Control/Notifications/ItemBroadcast.h"
 #include "../../includes/Control/Notifications/Message.h"
 //-----------------------------------------------------------------------------
@@ -65,19 +66,32 @@ void ActiveClients::sendDifferentialBroadcastToAll(
     delete broadcast;
 }
 
-void ActiveClients::sendMessageToAll(Notification* message,
-                                     const InstanceId sender) {
+void ActiveClients::sendMessageToAll(Notification* message) {
     auto it = content.begin();
 
     Notification* message_copy;
 
-     while (it != this->content.end()) {
+    while (it != this->content.end()) {
         message_copy = new Message(*((Message*)message));
         it->second.push(message_copy);
         ++it;
     }
 
     delete message;
+}
+
+void ActiveClients::sendEventToAll(Notification* event) {
+    auto it = content.begin();
+
+    Notification* event_copy;
+
+    while (it != this->content.end()) {
+        event_copy = new Event(*((Event*)event));
+        it->second.push(event_copy);
+        ++it;
+    }
+
+    delete event;
 }
 
 void ActiveClients::stop() {
