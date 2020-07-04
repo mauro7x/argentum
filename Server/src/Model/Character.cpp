@@ -456,18 +456,20 @@ const bool Character::receiveAttack(int& damage, const bool eludible) {
 void Character::die() {
     delete this->state;
     this->state = new Dead(this->race.dead_head_id, this->race.dead_body_id);
+
     this->mana = 0;
+    
     this->broadcast = true;
 }
 
 void Character::_resurrect() {
-    fprintf(stderr, "RESUCITE!!!!!!!!!!1 \n");
     is_resurrecting = false;
+
     delete this->state;
     this->state = new Alive(this->race.head_id, this->race.body_id);
-    fprintf(stderr, "Cree estado alive con: head_id=%i, body_id=%i \n",
-            this->race.head_id, this->race.body_id);
+
     this->heal();
+
     this->broadcast = true;
 }
 
@@ -576,7 +578,7 @@ void Character::fillPersistenceData(CharacterCfg& data) const {
     this->level.fillPersistenceData(data);
     this->equipment.fillPersistenceData(data);
     this->inventory.fillPersistenceData(data);
-    
+
     data.health = this->health;
     data.mana = this->mana;
     data.new_created = false;
