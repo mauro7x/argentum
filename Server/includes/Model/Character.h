@@ -67,6 +67,7 @@ class Character : public Attackable {
 
     bool is_resurrecting;
     int resurrecting_cooldown;
+    int respawning_x_coord, respawning_y_coord;
 
     int attack_cooldown;
 
@@ -485,7 +486,8 @@ class Character : public Attackable {
      *
      * Lanza StateCantResurrectException si el estado es Alive.
      */
-    void resurrect(const unsigned int cooldown);
+    void resurrect(const unsigned int cooldown, const int priest_x_coord,
+                   const int priest_y_coord);
 
     void _resurrect();
 

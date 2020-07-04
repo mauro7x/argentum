@@ -50,6 +50,8 @@ Character::Character(const CharacterCfg& init_data, const RaceCfg& race,
 
       is_resurrecting(false),
       resurrecting_cooldown(0),
+      respawning_x_coord(0),
+      respawning_y_coord(0),
 
       attack_cooldown(0),
       broadcast(false) {
@@ -458,7 +460,7 @@ void Character::die() {
     this->state = new Dead(this->race.dead_head_id, this->race.dead_body_id);
 
     this->mana = 0;
-    
+
     this->broadcast = true;
 }
 
@@ -470,16 +472,25 @@ void Character::_resurrect() {
 
     this->heal();
 
+    this->position.changePosition(respawning_x_coord, respawning_y_coord);
+
     this->broadcast = true;
 }
 
-void Character::resurrect(const unsigned int cooldown) {
+void Character::resurrect(const unsigned int cooldown, const int priest_x_coord,
+                          const int priest_y_coord) {
     this->state->resurrect();
+
     this->stopMoving();
+
     delete this->state;
     this->state =
         new Resurrecting(this->race.dead_head_id, this->race.dead_body_id);
+
     this->resurrecting_cooldown = cooldown;
+    this->respawning_x_coord = priest_x_coord;
+    this->respawning_y_coord = priest_y_coord;
+
     this->is_resurrecting = true;
 }
 

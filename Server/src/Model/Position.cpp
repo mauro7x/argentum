@@ -78,6 +78,18 @@ void Position::changeOrientation(Orientation orientation) {
     this->orientation = orientation;
 }
 
+void Position::changePosition(int x, int y) {
+    try {
+        this->map_container[this->map].getNearestFreeTile(x, y);
+    } catch (const CouldNotFindFreeTileException& e) {
+        // No cambio mi posición.
+        return;
+    }
+    
+    this->x = x;
+    this->y = y;
+}
+
 const bool Position::isInSafeZone() const {
     return map_container[map].isSafeZone(x, y);
 }
