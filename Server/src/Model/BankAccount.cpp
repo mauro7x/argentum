@@ -50,7 +50,7 @@ void BankAccount::withdrawGold(unsigned int& amount) {
 void BankAccount::list(std::string& init_msg,
                        std::list<std::string>& list_items) const {
     if (!saved_items.size() && !gold) {
-        init_msg = "No tienes ningún item guardado en el banco";
+        init_msg = "No tienes ni oro ni items guardados en el banco";
         return;
     }
 
