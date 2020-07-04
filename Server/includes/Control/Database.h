@@ -16,8 +16,13 @@
 //-----------------------------------------------------------------------------
 #include "../../../Common/includes/Exceptions/Exception.h"
 #include "../../../Common/includes/Exceptions/LoginException.h"
+#include "../../../Common/includes/JSON.h"
 #include "../../../Common/includes/Protocol.h"
 #include "../../../Common/includes/defs.h"
+#include "../../../Common/includes/json_conversion.h"
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
 #include "../Model/Config.h"
 #include "../Model/config_structs.h"
 #include "../paths.h"
@@ -45,15 +50,24 @@ class Database {
    private:
     Config<RaceCfg> races;
     Config<KindCfg> kinds;
-    bool initialized;
     size_t file_pointer;
     std::mutex m;
     std::unordered_map<std::string, DataIndex> data_index; /*user:data_index */
 
+    // Data con la que se crea un nuevo jugador
+    CharacterCfg new_player_data = {};
+
     //-------------------------------------------------------------------------
     // Métodos privados
+
+    /* Verifica que los archivos existan y sean validos, cc. los crea */
+    void _loadFiles();
+
     /* Llenar las infos de cada jugador al map */
     void _fillInfo();
+
+    /* Carga la data con la que los nuevos jugadores se crearan */
+    void _loadNewPlayerData();
 
     /* Obtener el dato del jugador */
     void _getPlayerData(const std::string& username,
@@ -72,6 +86,7 @@ class Database {
 
     /* chequear si body_id es valido */
     bool _checkBodyId(Id race, Id body_id);
+
     //-------------------------------------------------------------------------
 
    public:
@@ -93,9 +108,6 @@ class Database {
     //-------------------------------------------------------------------------
     // Al ser un recurso compartido, su API debe ser thread-safe (C-S)
 
-    /* Inicializa variables internas */
-    void init();
-
     /* Intenta loggear al cliente. Devuelve 0 en caso de éxito, en caso
      * contrario devuelve el CONNECTION_ACK_TYPE correspondiente. */
     ConnectionAckType signIn(const std::string& username,
@@ -108,6 +120,7 @@ class Database {
                              const std::string& password, Id race, Id kind,
                              Id head_id, Id body_id,
                              CharacterCfg& character_data);
+
     //-------------------------------------------------------------------------
 
     /* Guardar los datos del jugador al archivo. Si el flag disconnected aparte
