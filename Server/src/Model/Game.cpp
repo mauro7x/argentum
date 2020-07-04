@@ -174,19 +174,21 @@ void Game::_pushItemDifferentialBroadcast(Id map_id, int x_coord, int y_coord,
 
 void Game::_pushCharacterEvent(InstanceId id, EventType type) {
     const Position& position = this->characters.at(id).getPosition();
+    Id map_id = position.getMapId();
     uint32_t x_coord = position.getX();
     uint32_t y_coord = position.getY();
 
-    Notification* event = new Event(x_coord, y_coord, type);
+    Notification* event = new Event(map_id, x_coord, y_coord, type);
     active_clients.sendEventToAll(event);
 }
 
 void Game::_pushCreatureEvent(InstanceId id, EventType type) {
     const Position& position = this->creatures.at(id).getPosition();
+    Id map_id = position.getMapId();
     uint32_t x_coord = position.getX();
     uint32_t y_coord = position.getY();
 
-    Notification* event = new Event(x_coord, y_coord, type);
+    Notification* event = new Event(map_id, x_coord, y_coord, type);
     active_clients.sendEventToAll(event);
 }
 
@@ -785,6 +787,8 @@ void Game::take(const InstanceId caller) {
 
     this->map_container[map_id].clearTileItem(x_coord, y_coord);
     _pushItemDifferentialBroadcast(map_id, x_coord, y_coord, DELETE_BROADCAST);
+
+    _pushCharacterEvent(caller, GRAB_EV_TYPE);
 }
 
 const bool Game::_dropItem(const InstanceId caller, const uint8_t n_slot,
@@ -845,6 +849,7 @@ void Game::drop(const InstanceId caller, const uint8_t n_slot,
 
     // Broadcasteo new item
     _pushItemDifferentialBroadcast(map_id, x, y, NEW_BROADCAST);
+
     _pushCharacterEvent(caller, THROW_EV_TYPE);
 }
 

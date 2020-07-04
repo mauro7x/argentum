@@ -83,8 +83,8 @@ const Id EntityBroadcast::getMapId() const {
     return this->map;
 }
 
-const bool EntityBroadcast::isBroadcast() const {
-    return true;
+const bool EntityBroadcast::isForEveryMap() const {
+    return false;
 }
 
 const EntityType EntityBroadcast::getEntityType() const {

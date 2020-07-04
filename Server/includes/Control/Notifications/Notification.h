@@ -43,7 +43,7 @@ class Notification {
     /* Envío polimórfico de notificacion. Devuelve si se pudo enviar. */
     virtual bool send(const InstanceId sender, const SocketWrapper& peer) = 0;
 
-    virtual const bool isBroadcast() const;
+    virtual const bool isForEveryMap() const;
 
     virtual const EntityType getEntityType() const;
 

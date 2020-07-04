@@ -10,8 +10,8 @@ Notification::Notification() {}
 Notification::~Notification() {}
 //-----------------------------------------------------------------------------
 
-const bool Notification::isBroadcast() const {
-    return false;
+const bool Notification::isForEveryMap() const {
+    return true;
 }
 
 const EntityType Notification::getEntityType() const {

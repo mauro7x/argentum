@@ -43,7 +43,7 @@ class ItemBroadcast : public Notification {
 
     virtual const Id getMapId() const;
 
-    virtual const bool isBroadcast() const;
+    virtual const bool isForEveryMap() const;
 
     virtual const EntityType getEntityType() const;
 

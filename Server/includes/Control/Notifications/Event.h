@@ -13,13 +13,14 @@
  */
 class Event : public Notification {
    private:
+    Id map;
     uint32_t x_coord;
     uint32_t y_coord;
     EventType event_type;
 
    public:
     /* Constructor */
-    Event(const uint32_t x_coord, const uint32_t y_coord,
+    Event(const Id map, const uint32_t x_coord, const uint32_t y_coord,
           const EventType event_type);
 
     /* Habilitamos el constructor por copia. */
@@ -32,6 +33,10 @@ class Event : public Notification {
 
     /* Envío polimórfico de notificacion. Devuelve si se pudo enviar. */
     virtual bool send(const InstanceId sender, const SocketWrapper& peer);
+
+    virtual const Id getMapId() const;
+
+    virtual const bool isForEveryMap() const;
 
     //-----------------------------------------------------------------------------
 

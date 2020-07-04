@@ -30,7 +30,7 @@ void ClientConnection::_sender() {
         Notification* notification = nullptr;
         bool socket_valid = true;
         while ((notification = notifications.pop())) {
-            if (notification->isBroadcast()) {
+            if (!notification->isForEveryMap()) {
                 if (!(notification->getMapId() == this->map)) {
                     delete notification;
                     continue;
