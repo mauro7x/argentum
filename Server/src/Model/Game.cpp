@@ -377,9 +377,6 @@ void Game::actCreatures(const int it) {
         it_creatures->second.act(it);
 
         if (it_creatures->second.mustBeBroadcasted()) {
-            fprintf(stderr, "ID:%d in x: %d, y: %d \n", it_creatures->first,
-                    it_creatures->second.getPosition().getX(),
-                    it_creatures->second.getPosition().getY());
             _pushCreatureDifferentialBroadcast(it_creatures->first,
                                                UPDATE_BROADCAST);
         }

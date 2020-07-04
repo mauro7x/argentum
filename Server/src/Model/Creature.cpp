@@ -43,10 +43,10 @@ InstanceId Creature::_getNearestCharacter() {
     unsigned int nearest_range = visible_range + 1;
     const unsigned int x_tile = position.getX();
     const unsigned int y_tile = position.getY();
-    for (int y = -int(visible_range); y <= int(visible_range); y++) {
+    for (int y = -(int)visible_range; y <= (int)visible_range; y++) {
         int abs_y = std::abs(y);
-        for (int x = -int(visible_range) + abs_y;
-             x <= int(visible_range) - abs_y; x++) {
+        for (int x = -(int)visible_range + abs_y;
+             x <= (int)visible_range - abs_y; x++) {
             InstanceId id = 0;
             try {
                 id = map.getTile(x_tile + x, y_tile + y).occupant_id;
