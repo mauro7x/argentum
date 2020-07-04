@@ -14,7 +14,6 @@
 
 //-----------------------------------------------------------------------------
 #include "../../../Common/includes/JSON.h"
-#include "../../../Common/includes/paths.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -22,6 +21,7 @@
 #include "../SDL/Texture.h"
 #include "../colors.h"
 #include "../defs.h"
+#include "../paths.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -29,9 +29,9 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-#define CONSOLE_OUTPUT_FONT FONT_SANFORD_FP
-#define CONSOLE_INPUT_FONT FONT_SANFORD_FP
-#define CONSOLE_CURSOR_FONT FONT_SANFORD_FP
+#define CONSOLE_OUTPUT_FONT paths::asset(FONT_SANFORD_FP)
+#define CONSOLE_INPUT_FONT paths::asset(FONT_SANFORD_FP)
+#define CONSOLE_CURSOR_FONT paths::asset(FONT_SANFORD_FP)
 
 #define INPUT_MAX_SIZE 256
 #define CURSOR_TIME_ANIMATION 500

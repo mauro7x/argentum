@@ -121,7 +121,7 @@ void Console::loadMedia() {
     }
 
     // Cargar media
-    base.loadFromFile(g_renderer, HUD_CONSOLE_BASE_FP);
+    base.loadFromFile(g_renderer, paths::asset(HUD_CONSOLE_BASE_FP));
 
     // Cargamos la/s fuente/s a usar
     input_font = TTF_OpenFont(CONSOLE_INPUT_FONT, input_fontsize);

@@ -53,7 +53,7 @@ void HUD::loadMedia() {
     user_stats.loadMedia();
 
     // Cargamos la upper layer
-    upper_layer.loadFromFile(g_renderer, HUD_UPPER_LAYER_FP);
+    upper_layer.loadFromFile(g_renderer, paths::asset(HUD_UPPER_LAYER_FP));
 }
 
 void HUD::enableInput() {

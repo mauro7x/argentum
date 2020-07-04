@@ -4,7 +4,8 @@
 // Métodos privados
 
 void Database::_fillInfo() {
-    std::ifstream file_info(PLAYER_INFO_FILEPATH, std::fstream::binary);
+    std::ifstream file_info(paths::config(PLAYER_INFO_FILEPATH),
+                            std::fstream::binary);
     if (!file_info.is_open()) {
         throw Exception("Database::_fillInfo: error opening info file.");
     }
@@ -27,7 +28,7 @@ void Database::_fillInfo() {
 
         DataIndex& new_data_idx = data_index.at(player_info.username);
         std::memcpy(new_data_idx.password, player_info.password,
-                     sizeof(new_data_idx.password) - 1);
+                    sizeof(new_data_idx.password) - 1);
 
         size_actual += sizeof(player_info);
     }
@@ -41,11 +42,11 @@ void Database::_persistPlayerInfo(const std::string& username) {
     std::strncpy(player_info.username, username.c_str(),
                  sizeof(player_info.username) - 1);
     std::memcpy(player_info.password, data_index.at(username).password,
-                 sizeof(player_info.password) - 1);
+                sizeof(player_info.password) - 1);
     player_info.index = file_pointer;
 
     // Lo guardamos al final
-    std::ofstream file_info(PLAYER_INFO_FILEPATH,
+    std::ofstream file_info(paths::config(PLAYER_INFO_FILEPATH),
                             std::fstream::app | std::fstream::binary);
     file_info.write(reinterpret_cast<char*>(&player_info), sizeof(player_info));
     file_info.close();
@@ -66,12 +67,15 @@ void Database::_createInitialData(const std::string& username, Id race, Id kind,
     character_data.state = ALIVE;
     character_data.equipment = {0, 0, 0, 0};
     character_data.inventory = {
-        InventorySlot({1500, 2}), InventorySlot({1400, 2}), InventorySlot({1300, 2}),
-        InventorySlot({1100, 2}), InventorySlot({1000, 2}), InventorySlot({0, 0}),
-        InventorySlot({0, 0}), InventorySlot({0, 0}), InventorySlot({0, 0}),
-        InventorySlot({0, 0}), InventorySlot({0, 0}), InventorySlot({0, 0}),
-        InventorySlot({0, 0}), InventorySlot({0, 0}), InventorySlot({0, 0}),
-        InventorySlot({0, 0}), InventorySlot({0, 0}), InventorySlot({0, 0})};
+        InventorySlot({1500, 2}), InventorySlot({1400, 2}),
+        InventorySlot({1300, 2}), InventorySlot({1100, 2}),
+        InventorySlot({1000, 2}), InventorySlot({0, 0}),
+        InventorySlot({0, 0}),    InventorySlot({0, 0}),
+        InventorySlot({0, 0}),    InventorySlot({0, 0}),
+        InventorySlot({0, 0}),    InventorySlot({0, 0}),
+        InventorySlot({0, 0}),    InventorySlot({0, 0}),
+        InventorySlot({0, 0}),    InventorySlot({0, 0}),
+        InventorySlot({0, 0}),    InventorySlot({0, 0})};
     character_data.bank_gold = 0;
     character_data.bank_account = {
         InventorySlot({0, 0}), InventorySlot({0, 0}), InventorySlot({0, 0}),
@@ -101,7 +105,8 @@ void Database::_createInitialData(const std::string& username, Id race, Id kind,
 void Database::_getPlayerData(const std::string& username,
                               CharacterCfg& character_data) {
     std::streampos position = data_index.at(username).index;
-    std::ifstream file_data(PLAYER_DATA_FILEPATH, std::fstream::binary);
+    std::ifstream file_data(paths::config(PLAYER_DATA_FILEPATH),
+                            std::fstream::binary);
     file_data.seekg(position);
     file_data.read(reinterpret_cast<char*>(&character_data),
                    sizeof(character_data));
@@ -142,7 +147,7 @@ void Database::init() {
     // En caso de que los archivos no existan, los creamos
     {
         // Archivo de índices
-        std::fstream file_info(PLAYER_INFO_FILEPATH,
+        std::fstream file_info(paths::config(PLAYER_INFO_FILEPATH),
                                std::fstream::in | std::fstream::out |
                                    std::fstream::app | std::fstream::binary);
         file_info.seekg(0, std::fstream::end);
@@ -156,7 +161,7 @@ void Database::init() {
         file_info.close();
 
         // Archivo de data (actualizamos nuestro file pointer)
-        std::fstream file_data(PLAYER_DATA_FILEPATH,
+        std::fstream file_data(paths::config(PLAYER_DATA_FILEPATH),
                                std::fstream::in | std::fstream::out |
                                    std::fstream::app | std::fstream::binary);
         file_data.seekg(0, std::fstream::end);
@@ -244,9 +249,9 @@ ConnectionAckType Database::signUp(const std::string& username,
 }
 
 void Database::persistPlayerData(CharacterCfg& data, bool disconnect) {
-    std::fstream file_data(PLAYER_DATA_FILEPATH, std::fstream::in |
-                                                     std::fstream::out |
-                                                     std::fstream::binary);
+    std::fstream file_data(
+        paths::config(PLAYER_DATA_FILEPATH),
+        std::fstream::in | std::fstream::out | std::fstream::binary);
     std::streampos idx = data_index.at(data.nickname).index;
     file_data.seekp(idx, std::fstream::beg);
     file_data.write(reinterpret_cast<char*>(&data), sizeof(data));

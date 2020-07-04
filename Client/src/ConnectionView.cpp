@@ -52,28 +52,31 @@ void ConnectionView::_init() {
 
 void ConnectionView::_loadMedia() {
     // Cargamos el background
-    bg.loadFromFile(&renderer, CONNECTIONVIEW_BG_FP);
+    bg.loadFromFile(&renderer, paths::asset(CONNECTIONVIEW_BG_FP));
 
     // Cargamos las texturas de los text-boxes
     {
-        username_txtbx.base.loadFromFile(&renderer, CONNECTIONVIEW_TEXTBOX_FP);
-        password_txtbx.base.loadFromFile(&renderer, CONNECTIONVIEW_TEXTBOX_FP);
+        username_txtbx.base.loadFromFile(
+            &renderer, paths::asset(CONNECTIONVIEW_TEXTBOX_FP));
+        password_txtbx.base.loadFromFile(
+            &renderer, paths::asset(CONNECTIONVIEW_TEXTBOX_FP));
 
-        username_txtbx.active.loadFromFile(&renderer,
-                                           CONNECTIONVIEW_TEXTBOX_ACTIVE_FP);
-        password_txtbx.active.loadFromFile(&renderer,
-                                           CONNECTIONVIEW_TEXTBOX_ACTIVE_FP);
+        username_txtbx.active.loadFromFile(
+            &renderer, paths::asset(CONNECTIONVIEW_TEXTBOX_ACTIVE_FP));
+        password_txtbx.active.loadFromFile(
+            &renderer, paths::asset(CONNECTIONVIEW_TEXTBOX_ACTIVE_FP));
     }
 
     // Cargamos las texturas de los botones
     {
-        play_btn.base.loadFromFile(&renderer, CONNECTIONVIEW_PLAY_BUTTON_FP);
-        play_btn.pressed.loadFromFile(&renderer,
-                                      CONNECTIONVIEW_PLAY_BUTTON_PRESSED_FP);
-        signup_btn.base.loadFromFile(&renderer,
-                                     CONNECTIONVIEW_SIGNUP_BUTTON_FP);
+        play_btn.base.loadFromFile(&renderer,
+                                   paths::asset(CONNECTIONVIEW_PLAY_BUTTON_FP));
+        play_btn.pressed.loadFromFile(
+            &renderer, paths::asset(CONNECTIONVIEW_PLAY_BUTTON_PRESSED_FP));
+        signup_btn.base.loadFromFile(
+            &renderer, paths::asset(CONNECTIONVIEW_SIGNUP_BUTTON_FP));
         signup_btn.pressed.loadFromFile(
-            &renderer, CONNECTIONVIEW_SIGNUP_BUTTON_PRESSED_FP);
+            &renderer, paths::asset(CONNECTIONVIEW_SIGNUP_BUTTON_PRESSED_FP));
     }
 
     // Cargamos la/s fuente/s a usar

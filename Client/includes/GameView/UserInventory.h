@@ -14,7 +14,6 @@
 //-----------------------------------------------------------------------------
 #include "../../../Common/includes/Inventory.h"
 #include "../../../Common/includes/JSON.h"
-#include "../../../Common/includes/paths.h"
 #include "../../../Common/includes/types.h"
 //-----------------------------------------------------------------------------
 
@@ -24,6 +23,7 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+#include "../paths.h"
 #include "HUDComponent.h"
 #include "ItemSpriteContainer.h"
 #include "Player.h"

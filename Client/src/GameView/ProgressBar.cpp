@@ -50,16 +50,17 @@ void ProgressBar::loadMedia() {
 
     // Cargamos la fuente
     // font = TTF_OpenFont(FONT_ANCIENTMEDIUM_FP, PROGRESS_BAR_FONT_SIZE);
-    font = TTF_OpenFont(FONT_CINZELBOLD_FP, PROGRESS_BAR_FONT_SIZE);
+    font = TTF_OpenFont(paths::asset(FONT_CINZELBOLD_FP).c_str(),
+                        PROGRESS_BAR_FONT_SIZE);
 
     if (!font) {
         throw Exception("ProgressBar::loadMedia: Error opening TTF_Font/s.");
     }
 
     // Cargamos las texturas estáticas
-    base.loadFromFile(g_renderer, HUD_PROGRESSBAR_BASE_FP);
-    bisel.loadFromFile(g_renderer, HUD_PROGRESSBAR_BISEL_FP);
-    border.loadFromFile(g_renderer, HUD_PROGRESSBAR_BORDER_FP);
+    base.loadFromFile(g_renderer, paths::asset(HUD_PROGRESSBAR_BASE_FP));
+    bisel.loadFromFile(g_renderer, paths::asset(HUD_PROGRESSBAR_BISEL_FP));
+    border.loadFromFile(g_renderer, paths::asset(HUD_PROGRESSBAR_BORDER_FP));
 
     // Cargamos el texto
     if (text_type) {

@@ -161,7 +161,7 @@ void SignUpView::_init() {
 }
 
 void SignUpView::_loadPreviewData() {
-    json signup_data = JSON::loadJsonFile(SIGNUP_DATA_FILEPATH);
+    json signup_data = JSON::loadJsonFile(paths::config(SIGNUP_DATA_FILEPATH));
 
     // Razas
     {
@@ -241,7 +241,7 @@ void SignUpView::_loadPreviewData() {
 
 void SignUpView::_loadMedia() {
     // Cargamos el background
-    bg.loadFromFile(&renderer, SIGNUPVIEW_BG_FP);
+    bg.loadFromFile(&renderer, paths::asset(SIGNUPVIEW_BG_FP));
 
     // Cargamos la/s fuente/s a usar
     input_font = TTF_OpenFont(VIEWS_INPUT_FONT, input_fontsize);
@@ -263,61 +263,75 @@ void SignUpView::_loadMedia() {
 
     // TextBoxes
     {
-        username_txtbx.base.loadFromFile(&renderer, SIGNUPVIEW_TEXTBOX_FP);
-        password_txtbx.base.loadFromFile(&renderer, SIGNUPVIEW_TEXTBOX_FP);
+        username_txtbx.base.loadFromFile(&renderer,
+                                         paths::asset(SIGNUPVIEW_TEXTBOX_FP));
+        password_txtbx.base.loadFromFile(&renderer,
+                                         paths::asset(SIGNUPVIEW_TEXTBOX_FP));
 
-        username_txtbx.active.loadFromFile(&renderer,
-                                           SIGNUPVIEW_TEXTBOX_ACTIVE_FP);
-        password_txtbx.active.loadFromFile(&renderer,
-                                           SIGNUPVIEW_TEXTBOX_ACTIVE_FP);
+        username_txtbx.active.loadFromFile(
+            &renderer, paths::asset(SIGNUPVIEW_TEXTBOX_ACTIVE_FP));
+        password_txtbx.active.loadFromFile(
+            &renderer, paths::asset(SIGNUPVIEW_TEXTBOX_ACTIVE_FP));
     }
 
     // SelectionBoxes
     {
-        race_sibx.prev.loadFromFile(&renderer, SIGNUPVIEW_SELECTIONBOX_PREV_FP);
-        kind_sibx.prev.loadFromFile(&renderer, SIGNUPVIEW_SELECTIONBOX_PREV_FP);
-        head_sibx.prev.loadFromFile(&renderer, SIGNUPVIEW_SELECTIONBOX_PREV_FP);
-        body_sibx.prev.loadFromFile(&renderer, SIGNUPVIEW_SELECTIONBOX_PREV_FP);
+        race_sibx.prev.loadFromFile(
+            &renderer, paths::asset(SIGNUPVIEW_SELECTIONBOX_PREV_FP));
+        kind_sibx.prev.loadFromFile(
+            &renderer, paths::asset(SIGNUPVIEW_SELECTIONBOX_PREV_FP));
+        head_sibx.prev.loadFromFile(
+            &renderer, paths::asset(SIGNUPVIEW_SELECTIONBOX_PREV_FP));
+        body_sibx.prev.loadFromFile(
+            &renderer, paths::asset(SIGNUPVIEW_SELECTIONBOX_PREV_FP));
 
         race_sibx.prev_pressed.loadFromFile(
-            &renderer, SIGNUPVIEW_SELECTIONBOX_PREV_PRESSED_FP);
+            &renderer, paths::asset(SIGNUPVIEW_SELECTIONBOX_PREV_PRESSED_FP));
         kind_sibx.prev_pressed.loadFromFile(
-            &renderer, SIGNUPVIEW_SELECTIONBOX_PREV_PRESSED_FP);
+            &renderer, paths::asset(SIGNUPVIEW_SELECTIONBOX_PREV_PRESSED_FP));
         head_sibx.prev_pressed.loadFromFile(
-            &renderer, SIGNUPVIEW_SELECTIONBOX_PREV_PRESSED_FP);
+            &renderer, paths::asset(SIGNUPVIEW_SELECTIONBOX_PREV_PRESSED_FP));
         body_sibx.prev_pressed.loadFromFile(
-            &renderer, SIGNUPVIEW_SELECTIONBOX_PREV_PRESSED_FP);
+            &renderer, paths::asset(SIGNUPVIEW_SELECTIONBOX_PREV_PRESSED_FP));
 
-        race_sibx.next.loadFromFile(&renderer, SIGNUPVIEW_SELECTIONBOX_NEXT_FP);
-        kind_sibx.next.loadFromFile(&renderer, SIGNUPVIEW_SELECTIONBOX_NEXT_FP);
-        head_sibx.next.loadFromFile(&renderer, SIGNUPVIEW_SELECTIONBOX_NEXT_FP);
-        body_sibx.next.loadFromFile(&renderer, SIGNUPVIEW_SELECTIONBOX_NEXT_FP);
+        race_sibx.next.loadFromFile(
+            &renderer, paths::asset(SIGNUPVIEW_SELECTIONBOX_NEXT_FP));
+        kind_sibx.next.loadFromFile(
+            &renderer, paths::asset(SIGNUPVIEW_SELECTIONBOX_NEXT_FP));
+        head_sibx.next.loadFromFile(
+            &renderer, paths::asset(SIGNUPVIEW_SELECTIONBOX_NEXT_FP));
+        body_sibx.next.loadFromFile(
+            &renderer, paths::asset(SIGNUPVIEW_SELECTIONBOX_NEXT_FP));
 
         race_sibx.next_pressed.loadFromFile(
-            &renderer, SIGNUPVIEW_SELECTIONBOX_NEXT_PRESSED_FP);
+            &renderer, paths::asset(SIGNUPVIEW_SELECTIONBOX_NEXT_PRESSED_FP));
         kind_sibx.next_pressed.loadFromFile(
-            &renderer, SIGNUPVIEW_SELECTIONBOX_NEXT_PRESSED_FP);
+            &renderer, paths::asset(SIGNUPVIEW_SELECTIONBOX_NEXT_PRESSED_FP));
         head_sibx.next_pressed.loadFromFile(
-            &renderer, SIGNUPVIEW_SELECTIONBOX_NEXT_PRESSED_FP);
+            &renderer, paths::asset(SIGNUPVIEW_SELECTIONBOX_NEXT_PRESSED_FP));
         body_sibx.next_pressed.loadFromFile(
-            &renderer, SIGNUPVIEW_SELECTIONBOX_NEXT_PRESSED_FP);
+            &renderer, paths::asset(SIGNUPVIEW_SELECTIONBOX_NEXT_PRESSED_FP));
 
-        race_sibx.bar.loadFromFile(&renderer, SIGNUPVIEW_SELECTIONBOX_BAR_FP);
-        kind_sibx.bar.loadFromFile(&renderer, SIGNUPVIEW_SELECTIONBOX_BAR_FP);
-        head_sibx.bar.loadFromFile(&renderer,
-                                   SIGNUPVIEW_SELECTIONBOX_SMALL_BAR_FP);
-        body_sibx.bar.loadFromFile(&renderer,
-                                   SIGNUPVIEW_SELECTIONBOX_SMALL_BAR_FP);
+        race_sibx.bar.loadFromFile(
+            &renderer, paths::asset(SIGNUPVIEW_SELECTIONBOX_BAR_FP));
+        kind_sibx.bar.loadFromFile(
+            &renderer, paths::asset(SIGNUPVIEW_SELECTIONBOX_BAR_FP));
+        head_sibx.bar.loadFromFile(
+            &renderer, paths::asset(SIGNUPVIEW_SELECTIONBOX_SMALL_BAR_FP));
+        body_sibx.bar.loadFromFile(
+            &renderer, paths::asset(SIGNUPVIEW_SELECTIONBOX_SMALL_BAR_FP));
     }
 
     // Botones
     {
-        goback_btn.base.loadFromFile(&renderer, SIGNUPVIEW_GOBACK_BUTTON_FP);
-        goback_btn.pressed.loadFromFile(&renderer,
-                                        SIGNUPVIEW_GOBACK_BUTTON_PRESSED_FP);
-        create_btn.base.loadFromFile(&renderer, SIGNUPVIEW_CREATE_BUTTON_FP);
-        create_btn.pressed.loadFromFile(&renderer,
-                                        SIGNUPVIEW_CREATE_BUTTON_PRESSED_FP);
+        goback_btn.base.loadFromFile(&renderer,
+                                     paths::asset(SIGNUPVIEW_GOBACK_BUTTON_FP));
+        goback_btn.pressed.loadFromFile(
+            &renderer, paths::asset(SIGNUPVIEW_GOBACK_BUTTON_PRESSED_FP));
+        create_btn.base.loadFromFile(&renderer,
+                                     paths::asset(SIGNUPVIEW_CREATE_BUTTON_FP));
+        create_btn.pressed.loadFromFile(
+            &renderer, paths::asset(SIGNUPVIEW_CREATE_BUTTON_PRESSED_FP));
     }
 
     // Cargamos los input_text vacíos

@@ -2,9 +2,12 @@
 #define __SERVER_PATHS_H__
 
 //-----------------------------------------------------------------------------
+#include "../../Common/includes/paths.h"
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
 // Config paths
 
-#define CONFIG_PATH "server/config/Server/"
 #define RACES_CONFIG_FILEPATH "server/config/Server/races.json"
 #define KINDS_CONFIG_FILEPATH "server/config/Server/kinds.json"
 #define NPC_CONFIG_FILEPATH "server/config/Server/npcs.json"

@@ -39,7 +39,7 @@ ItemSpriteContainer::ItemSpriteContainer(const Renderer* renderer)
     : g_renderer(renderer) {}
 
 void ItemSpriteContainer::loadMedia() {
-    json sprites = JSON::loadJsonFile(ITEM_SPRITES_FILEPATH);
+    json sprites = JSON::loadJsonFile(paths::config(ITEM_SPRITES_FILEPATH));
 
     std::string dirpath = sprites["dirpath"];
     _loadSpritesFromJson(sprites["helmets"], dirpath);

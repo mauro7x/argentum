@@ -35,9 +35,9 @@ enum ExpectedArgs { NAME, EXPECTED_ARGC };
 // Configuración de las vistas
 
 // Fuentes
-#define VIEWS_INPUT_FONT FONT_SANFORD_FP
-#define VIEWS_CURSOR_FONT FONT_SANFORD_FP
-#define VIEWS_INFO_FONT FONT_FORCEDSQUARE_FP
+#define VIEWS_INPUT_FONT paths::asset(FONT_SANFORD_FP)
+#define VIEWS_CURSOR_FONT paths::asset(FONT_SANFORD_FP)
+#define VIEWS_INFO_FONT paths::asset(FONT_FORCEDSQUARE_FP)
 
 // Lógica
 #define VIEWS_MAX_INPUT_SIZE 20

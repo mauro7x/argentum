@@ -186,12 +186,15 @@ void UserInventory::loadMedia() {
     }
 
     // Cargar media
-    base.loadFromFile(g_renderer, HUD_USER_INVENTORY_BASE_FP);
-    selection.loadFromFile(g_renderer, HUD_USER_INVENTORY_SELECTED_FP);
+    base.loadFromFile(g_renderer, paths::asset(HUD_USER_INVENTORY_BASE_FP));
+    selection.loadFromFile(g_renderer,
+                           paths::asset(HUD_USER_INVENTORY_SELECTED_FP));
 
     // Fuentes a utilizar
-    quantities_font = TTF_OpenFont(FONT_CINZELBOLD_FP, quantities_fontsize);
-    gold_font = TTF_OpenFont(FONT_AUGUSTA_FP, gold_fontsize);
+    quantities_font = TTF_OpenFont(paths::asset(FONT_CINZELBOLD_FP).c_str(),
+                                   quantities_fontsize);
+    gold_font =
+        TTF_OpenFont(paths::asset(FONT_AUGUSTA_FP).c_str(), gold_fontsize);
 
     if (!quantities_font || !gold_font) {
         throw Exception("UserInventory::loadMedia: Error opening TTF_Font/s.");

@@ -73,7 +73,7 @@ void Mixer::finishedChunkCallback() {
 // Métodos
 
 void Mixer::_init() {
-    json audio_to_load = JSON::loadJsonFile(AUDIO_FILEPATH);
+    json audio_to_load = JSON::loadJsonFile(paths::config(AUDIO_FILEPATH));
 
     // Seteamos el volumen inicial de la música (a la mitad del máximo)
     music_volume = (MIX_MAX_VOLUME / 2);

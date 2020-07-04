@@ -15,13 +15,13 @@
 #include "../../../Common/includes/DataStructs.h"
 #include "../../../Common/includes/Exceptions/Exception.h"
 #include "../../../Common/includes/JSON.h"
-#include "../../../Common/includes/paths.h"
 #include "../../../Common/includes/types.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 #include "../SDL/Renderer.h"
 #include "../defs.h"
+#include "../paths.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -67,8 +67,10 @@ class UnitContainer {
     /* Carga la media necesaria */
     void loadMedia() {
         // Fuentes a utilizar
-        nickname_font = TTF_OpenFont(FONT_AUGUSTA_FP, INFO_NAME_FONTSIZE);
-        level_font = TTF_OpenFont(FONT_CINZELBOLD_FP, INFO_LVL_FONTSIZE);
+        nickname_font =
+            TTF_OpenFont(paths::asset(FONT_AUGUSTA_FP), INFO_NAME_FONTSIZE);
+        level_font =
+            TTF_OpenFont(paths::asset(FONT_CINZELBOLD_FP), INFO_LVL_FONTSIZE);
 
         if (!nickname_font || !level_font) {
             throw Exception(
