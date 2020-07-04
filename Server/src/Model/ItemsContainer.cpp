@@ -17,7 +17,7 @@ ItemsContainer::ItemsContainer() {
     Config<OtherItemsCfg> others;
 
     weapons.gatherIds(weapons_id);
-    size_t fist_idx;
+    size_t fist_idx = 0;
 
     for (unsigned int i = 0; i < weapons_id.size(); ++i) {
         Id id = weapons_id[i];
