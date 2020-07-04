@@ -71,5 +71,5 @@ install(DIRECTORY ${CMAKE_SOURCE_DIR}/Client/assets DESTINATION ${ASSETS_DIRPATH
 # Server
 install(TARGETS ao-server DESTINATION ${BINARIES_DIRPATH})
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/Server/config DESTINATION ${CONFIG_DIRPATH}/server)
-#install(DIRECTORY DESTINATION ${ASSETS_DIRPATH}/server/Database)
+install(DIRECTORY DESTINATION ${ASSETS_DIRPATH}/server/assets/Database)
 #------------------------------------------------------------------------------
