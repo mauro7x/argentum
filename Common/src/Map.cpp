@@ -216,15 +216,22 @@ void Map::setItem(const Id item_id, const uint32_t amount, const int x,
 // NO ES EL MEJOR ALGORITMO PERO FUNCIONA ;) -santi
 // (si alguno quiere cambiarlo es bienvenido)
 void Map::addItem(const Id item_id, const uint32_t amount, int& x, int& y) {
-    bool empty_tile_found = false;
+    this->getNearestFreeTile(x, y);
 
     Tile& tile = this->_getTile(x, y);
+    tile.item_id = item_id;
+    tile.item_amount = amount;
+}
 
-    if (!tile.item_id && !tile.collision && !tile.npc_id) {
-        tile.item_id = item_id;
-        tile.item_amount = amount;
-        empty_tile_found = true;
+void Map::getNearestFreeTile(int& x, int& y) {
+    // Primero nos fijamos si está libre el mismo tile en (x, y)
+    Tile& current_tile = this->_getTile(x, y);
+    if (!current_tile.item_id && !current_tile.collision &&
+        !current_tile.npc_id) {
+        return;
     }
+
+    bool empty_tile_found = false;
 
     int step = 1;
     int _x = 0;
@@ -243,8 +250,6 @@ void Map::addItem(const Id item_id, const uint32_t amount, int& x, int& y) {
                 Tile& tile = this->_getTile(_x, _y);
 
                 if (!tile.item_id && !tile.collision && !tile.npc_id) {
-                    tile.item_id = item_id;
-                    tile.item_amount = amount;
                     empty_tile_found = true;
                     x = _x;
                     y = _y;
@@ -254,7 +259,7 @@ void Map::addItem(const Id item_id, const uint32_t amount, int& x, int& y) {
         }
         ++step;
         if (step == MAX_FREE_ITEM_TILE_SEARCHING_STEP)
-            throw(ItemCouldNotBeAddedException());
+            throw(CouldNotFindFreeTileException());
     }
 }
 
@@ -275,7 +280,7 @@ void Map::clearTileItem(const int x, const int y) {
 
 Map::~Map() {}
 
-const char* ItemCouldNotBeAddedException::what() const noexcept {
+const char* CouldNotFindFreeTileException::what() const noexcept {
     return "No se pudieron dropear algunos items.";
 }
 

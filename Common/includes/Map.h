@@ -14,7 +14,7 @@
 #include "defs.h"
 #include "types.h"
 //-----------------------------------------------------------------------------
-#define DROPPING_RANGE 3
+#define FREE_TILE_LOOKUP_RANGE 3
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -112,13 +112,19 @@ class Map {
      * Agrega dicho item a ese tile libre buscado y cambia
      * los valores de x e y con las coordenadas del mismo.
      *
-     * Dicha búsqueda se realiza hasta DROPPING_RANGE tiles aldeaños,
+     * Dicha búsqueda se realiza hasta FREE_TILE_LOOKUP_RANGE tiles aldeaños,
      * en la línea de orientación recibida.
      *
-     * Lanza ItemCouldNotBeAddedException si no se encuentra tile
-     * libre para que el item lo ocupe dentro del rango DROPPING_RANGE.
+     * Lanza CouldNotFindFreeTileException si no se encuentra tile
+     * libre para que el item lo ocupe dentro del rango FREE_TILE_LOOKUP_RANGE.
      */
     void addItem(const Id item_id, const uint32_t amount, int& x, int& y);
+
+    /*
+     * Lanza CouldNotFindFreeTileException si no se encuentra tile libre alguno
+     * dentro del rango FREE_TILE_LOOKUP_RANGE.
+     */
+    void getNearestFreeTile(int& x, int& y);
 
     /* Devuelve si las coordenadas recibidas están dentro de una zona segura */
     const bool isSafeZone(const int x, const int y) const;
@@ -135,7 +141,7 @@ class Map {
     ~Map();
 };
 
-class ItemCouldNotBeAddedException : public std::exception {
+class CouldNotFindFreeTileException : public std::exception {
    public:
     virtual const char* what() const noexcept;
 };
