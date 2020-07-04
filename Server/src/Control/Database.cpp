@@ -150,6 +150,10 @@ void Database::init() {
         std::fstream file_info(paths::asset(PLAYER_INFO_FILEPATH),
                                std::fstream::in | std::fstream::out |
                                    std::fstream::app | std::fstream::binary);
+        if (!file_info.is_open()) {
+            throw Exception(
+                "Database::_fillInfo: error opening info database file.");
+        }
         file_info.seekg(0, std::fstream::end);
         size_t size = file_info.tellg();
         // Chequeamos que sea multiplo del size que necesitamos
@@ -164,6 +168,10 @@ void Database::init() {
         std::fstream file_data(paths::asset(PLAYER_DATA_FILEPATH),
                                std::fstream::in | std::fstream::out |
                                    std::fstream::app | std::fstream::binary);
+        if (!file_data.is_open()) {
+            throw Exception(
+                "Database::_fillInfo: error opening data database file.");
+        }
         file_data.seekg(0, std::fstream::end);
         file_pointer = file_data.tellg();
         // Chequeamos que sea multiplo del size que necesitamos
