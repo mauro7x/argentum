@@ -88,9 +88,13 @@ Tile& Map::_getTile(const int x, const int y) {
     return tiles.at(tile);
 }
 
-const bool Map::_moveOccupant(Tile& from_tile, Tile& to_tile) {
+const bool Map::_moveOccupant(Tile& from_tile, Tile& to_tile,
+                              bool is_creature) {
     if (to_tile.collision || to_tile.occupant_id || to_tile.npc_id) {
         // El tile está ocupado / hay colisión.
+        return false;
+    }
+    if (is_creature && to_tile.safe_zone) {
         return false;
     }
 
@@ -143,7 +147,7 @@ TileId& Map::getNPC(const int x, const int y) {
 }
 
 const bool Map::moveOccupant(const int x, const int y,
-                             const Orientation& orientation) {
+                             const Orientation& orientation, bool is_creature) {
     Tile& from_tile = _getTile(x, y);
 
     if (orientation == UP_ORIENTATION) {
@@ -152,7 +156,7 @@ const bool Map::moveOccupant(const int x, const int y,
             return false;
         }
         Tile& to_tile = _getTile(x, y - 1);
-        return _moveOccupant(from_tile, to_tile);
+        return _moveOccupant(from_tile, to_tile, is_creature);
     }
 
     if (orientation == DOWN_ORIENTATION) {
@@ -161,7 +165,7 @@ const bool Map::moveOccupant(const int x, const int y,
             return false;
         }
         Tile& to_tile = _getTile(x, y + 1);
-        return _moveOccupant(from_tile, to_tile);
+        return _moveOccupant(from_tile, to_tile, is_creature);
     }
 
     if (orientation == LEFT_ORIENTATION) {
@@ -170,7 +174,7 @@ const bool Map::moveOccupant(const int x, const int y,
             return false;
         }
         Tile& to_tile = _getTile(x - 1, y);
-        return _moveOccupant(from_tile, to_tile);
+        return _moveOccupant(from_tile, to_tile, is_creature);
     }
 
     if (x + 1 == this->w) {
@@ -178,7 +182,7 @@ const bool Map::moveOccupant(const int x, const int y,
         return false;
     }
     Tile& to_tile = _getTile(x + 1, y);
-    return _moveOccupant(from_tile, to_tile);
+    return _moveOccupant(from_tile, to_tile, is_creature);
 }
 
 void Map::establishEntitySpawningPosition(InstanceId id, int& x, int& y,

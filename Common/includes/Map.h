@@ -59,7 +59,7 @@ class Map {
     /* Devuelve si el tile es válido y es parte del mapa */
     bool _isValid(const int x, const int y) const;
 
-    const bool _moveOccupant(Tile& from_tile, Tile& to_tile);
+    const bool _moveOccupant(Tile& from_tile, Tile& to_tile, bool is_creature);
 
    public:
     /* Constructor */
@@ -96,7 +96,7 @@ class Map {
     TileId& getNPC(const int x, const int y);
 
     const bool moveOccupant(const int x, const int y,
-                            const Orientation& orientation);
+                            const Orientation& orientation, bool is_creature);
 
     /*iniciando una posicion para el character*/
     void establishEntitySpawningPosition(InstanceId id, int& x, int& y,

@@ -130,7 +130,7 @@ void Creature::_updateMovement(const unsigned int it) {
 
     while (this->moving_cooldown <= 0) {
         try {
-            this->position.move();
+            this->position.move(true);
         } catch (const CollisionWhileMovingException& e) {
             stopMoving();
             moving_cooldown = 0;

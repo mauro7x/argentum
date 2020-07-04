@@ -47,9 +47,9 @@ const unsigned int Position::getRange(const Position& other) const {
     return std::max(abs(this->x - other.getX()), abs(this->y - other.getY()));
 }
 
-void Position::move() {
-    if (!this->map_container[this->map].moveOccupant(this->x, this->y,
-                                                     this->orientation))
+void Position::move(bool is_creature) {
+    if (!this->map_container[this->map].moveOccupant(
+            this->x, this->y, this->orientation, is_creature))
         throw CollisionWhileMovingException();
 
     switch (this->orientation) {
@@ -85,7 +85,7 @@ void Position::changePosition(int x, int y) {
         // No cambio mi posición.
         return;
     }
-    
+
     this->x = x;
     this->y = y;
 }
