@@ -864,10 +864,6 @@ void Game::resurrect(const InstanceId caller) {
 
     // calcular cooldown.
     unsigned int cooldown = min_distance * 1000;
-    fprintf(stderr,
-            "El sacerdote mas cercano esta en x=%i, y=%i, a distancia=%i => "
-            "cooldown=%i \n",
-            respawn_x_coord, respawn_y_coord, min_distance, cooldown);
 
     try {
         character.resurrect(cooldown);
