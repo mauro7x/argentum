@@ -3,14 +3,14 @@
 # =============================================================================
 
 #------------------------------------------------------------------------------
-# CONFIGURACIÓN DEL PROYECTO
+# CONFIGURACION DEL PROYECTO
 
 cmake_minimum_required(VERSION 2.8.12)
-project(skeleton)
+project(argentum)
 #------------------------------------------------------------------------------
 
 #------------------------------------------------------------------------------
-# FLAGS DE COMPILACIÓN
+# FLAGS DE COMPILACION
 
 # Estándar a utilizar
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pthread")
@@ -35,23 +35,41 @@ FILE(GLOB_RECURSE server_src "Server/*.cpp")
 #------------------------------------------------------------------------------
 
 #------------------------------------------------------------------------------
-# LIBRERÍAS NECESARIAS
+# TARGETS
 
-add_library(common SHARED ${common_src})
+# Common
+add_library(ao-common SHARED ${common_src})
 
-# Threads
-# agregar
+# Client
+add_executable(ao-client ${client_src})
+target_link_libraries(ao-client ao-common SDL2 SDL2_image SDL2_ttf SDL2_mixer)
+
+# Server
+add_executable(ao-server ${server_src})
+target_link_libraries(ao-server ao-common)
 #------------------------------------------------------------------------------
 
 #------------------------------------------------------------------------------
-# CLIENTE
+# INSTALACION
 
-add_executable(client ${client_src})
-target_link_libraries(client common SDL2 SDL2_image SDL2_ttf SDL2_mixer)
-#------------------------------------------------------------------------------
+# Rutas
+set(BINARIES_DIRPATH "/usr/bin")
+set(SHAREDLIBS_DIRPATH "/usr/lib")
+set(CONFIG_DIRPATH "/etc/argentum")
+set(ASSETS_DIRPATH "/var/argentum")
 
-#------------------------------------------------------------------------------
-# SERVIDOR
-add_executable(server ${server_src})
-target_link_libraries(server common)
+# Common
+install(TARGETS ao-common DESTINATION ${SHAREDLIBS_DIRPATH})
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/Common/config DESTINATION ${CONFIG_DIRPATH}/common)
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/Common/assets DESTINATION ${ASSETS_DIRPATH}/common)
+
+# Cliente
+install(TARGETS ao-client DESTINATION ${BINARIES_DIRPATH})
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/Client/config DESTINATION ${CONFIG_DIRPATH}/client)
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/Client/assets DESTINATION ${ASSETS_DIRPATH}/client)
+
+# Server
+install(TARGETS ao-server DESTINATION ${BINARIES_DIRPATH})
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/Server/config DESTINATION ${CONFIG_DIRPATH}/server)
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/Server/assets DESTINATION ${ASSETS_DIRPATH}/server)
 #------------------------------------------------------------------------------

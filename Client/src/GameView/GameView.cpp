@@ -4,7 +4,7 @@
 // Métodos privados
 
 void GameView::_init() {
-    json config = JSON::loadJsonFile(CONFIG_FILEPATH);
+    json config = JSON::loadJsonFile(paths::config(CONFIG_FILEPATH));
 
     /* Iniciamos la cámara */
     camera.init(config["camera"]);

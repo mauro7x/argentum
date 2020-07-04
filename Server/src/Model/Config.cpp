@@ -6,7 +6,7 @@
 
 template <>
 void Config<RaceCfg>::_parseFile() {
-    json j = JSON::loadJsonFile(RACES_CONFIG_FILEPATH);
+    json j = JSON::loadJsonFile(paths::config(RACES_CONFIG_FILEPATH));
 
     int size = j.size();
     for (int i = 0; i < size; i++) {
@@ -37,7 +37,7 @@ void Config<RaceCfg>::_parseFile() {
 
 template <>
 void Config<KindCfg>::_parseFile() {
-    json j = JSON::loadJsonFile(KINDS_CONFIG_FILEPATH);
+    json j = JSON::loadJsonFile(paths::config(KINDS_CONFIG_FILEPATH));
 
     int size = j.size();
     for (int i = 0; i < size; i++) {
@@ -61,7 +61,7 @@ void Config<KindCfg>::_parseFile() {
 
 template <>
 void Config<NPCCfg>::_parseFile() {
-    json j = JSON::loadJsonFile(NPC_CONFIG_FILEPATH);
+    json j = JSON::loadJsonFile(paths::config(NPC_CONFIG_FILEPATH));
 
     int size = j.size();
     for (int i = 0; i < size; i++) {
@@ -76,7 +76,7 @@ void Config<NPCCfg>::_parseFile() {
 
 template <>
 void Config<WeaponCfg>::_parseFile() {
-    json j = JSON::loadJsonFile(ITEMS_CONFIG_FILEPATH);
+    json j = JSON::loadJsonFile(paths::config(ITEMS_CONFIG_FILEPATH));
 
     int size = j["weapons"].size();
     for (int i = 0; i < size; i++) {
@@ -96,7 +96,7 @@ void Config<WeaponCfg>::_parseFile() {
 
 template <>
 void Config<WandCfg>::_parseFile() {
-    json j = JSON::loadJsonFile(ITEMS_CONFIG_FILEPATH);
+    json j = JSON::loadJsonFile(paths::config(ITEMS_CONFIG_FILEPATH));
 
     int size = j["wands"].size();
     for (int i = 0; i < size; i++) {
@@ -113,7 +113,7 @@ void Config<WandCfg>::_parseFile() {
 
 template <>
 void Config<SpellCfg>::_parseFile() {
-    json j = JSON::loadJsonFile(ITEMS_CONFIG_FILEPATH);
+    json j = JSON::loadJsonFile(paths::config(ITEMS_CONFIG_FILEPATH));
 
     int size = j["spells"].size();
     for (int i = 0; i < size; i++) {
@@ -135,7 +135,7 @@ void Config<SpellCfg>::_parseFile() {
 
 template <>
 void Config<DefenceCfg>::_parseFile() {
-    json j = JSON::loadJsonFile(ITEMS_CONFIG_FILEPATH);
+    json j = JSON::loadJsonFile(paths::config(ITEMS_CONFIG_FILEPATH));
 
     std::array<std::string, AMOUNT_OF_DEFFENCE_TYPES> defences = {
         "helmets", "armours", "shields"};
@@ -163,7 +163,7 @@ void Config<DefenceCfg>::_parseFile() {
 
 template <>
 void Config<PotionCfg>::_parseFile() {
-    json j = JSON::loadJsonFile(ITEMS_CONFIG_FILEPATH);
+    json j = JSON::loadJsonFile(paths::config(ITEMS_CONFIG_FILEPATH));
 
     int size = j["potions"].size();
     for (int i = 0; i < size; i++) {
@@ -181,7 +181,7 @@ void Config<PotionCfg>::_parseFile() {
 
 template <>
 void Config<OtherItemsCfg>::_parseFile() {
-    json j = JSON::loadJsonFile(ITEMS_CONFIG_FILEPATH);
+    json j = JSON::loadJsonFile(paths::config(ITEMS_CONFIG_FILEPATH));
 
     int size = j["others"].size();
     for (int i = 0; i < size; i++) {
@@ -196,7 +196,7 @@ void Config<OtherItemsCfg>::_parseFile() {
 
 template <>
 void Config<CreatureCfg>::_parseFile() {
-    json j = JSON::loadJsonFile(CREATURES_CONFIG_FILEPATH);
+    json j = JSON::loadJsonFile(paths::config(CREATURES_CONFIG_FILEPATH));
 
     int size = j.size();
     for (int i = 0; i < size; i++) {

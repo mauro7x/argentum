@@ -59,7 +59,7 @@ void UserStats::loadMedia() {
     }
 
     // Cargar media
-    base.loadFromFile(g_renderer, HUD_USER_STATS_BASE_FP);
+    base.loadFromFile(g_renderer, paths::asset(HUD_USER_STATS_BASE_FP));
     health.loadMedia();
     mana.loadMedia();
 }

@@ -4,7 +4,7 @@
 // Métodos privados
 
 void HomeView::_init() {
-    json config = JSON::loadJsonFile(CONFIG_FILEPATH);
+    json config = JSON::loadJsonFile(paths::config(CONFIG_FILEPATH));
 
     // Fuente
     input_fontsize = config["homeview"]["fontsize"];
@@ -33,23 +33,27 @@ void HomeView::_init() {
 
 void HomeView::_loadMedia() {
     // Cargamos el background
-    bg.loadFromFile(&renderer, HOMEVIEW_BG_FP);
+    bg.loadFromFile(&renderer, paths::asset(HOMEVIEW_BG_FP));
 
     // Cargamos las imagenes estáticas
-    hostname_txtbx.base.loadFromFile(&renderer, HOMEVIEW_TEXTBOX_FP);
-    port_txtbx.base.loadFromFile(&renderer, HOMEVIEW_TEXTBOX_FP);
+    hostname_txtbx.base.loadFromFile(&renderer,
+                                     paths::asset(HOMEVIEW_TEXTBOX_FP));
+    port_txtbx.base.loadFromFile(&renderer, paths::asset(HOMEVIEW_TEXTBOX_FP));
 
-    hostname_txtbx.active.loadFromFile(&renderer, HOMEVIEW_TEXTBOX_ACTIVE_FP);
-    port_txtbx.active.loadFromFile(&renderer, HOMEVIEW_TEXTBOX_ACTIVE_FP);
+    hostname_txtbx.active.loadFromFile(
+        &renderer, paths::asset(HOMEVIEW_TEXTBOX_ACTIVE_FP));
+    port_txtbx.active.loadFromFile(&renderer,
+                                   paths::asset(HOMEVIEW_TEXTBOX_ACTIVE_FP));
 
-    connect_btn.base.loadFromFile(&renderer, HOMEVIEW_CONNECT_BUTTON_FP);
-    connect_btn.pressed.loadFromFile(&renderer,
-                                     HOMEVIEW_CONNECT_BUTTON_PRESSED_FP);
+    connect_btn.base.loadFromFile(&renderer,
+                                  paths::asset(HOMEVIEW_CONNECT_BUTTON_FP));
+    connect_btn.pressed.loadFromFile(
+        &renderer, paths::asset(HOMEVIEW_CONNECT_BUTTON_PRESSED_FP));
 
     // Cargamos la/s fuente/s a usar
-    input_font = TTF_OpenFont(VIEWS_INPUT_FONT, input_fontsize);
-    cursor_font = TTF_OpenFont(VIEWS_CURSOR_FONT, input_fontsize);
-    info_font = TTF_OpenFont(VIEWS_INFO_FONT, info_fontsize);
+    input_font = TTF_OpenFont(VIEWS_INPUT_FONT.c_str(), input_fontsize);
+    cursor_font = TTF_OpenFont(VIEWS_CURSOR_FONT.c_str(), input_fontsize);
+    info_font = TTF_OpenFont(VIEWS_INFO_FONT.c_str(), info_fontsize);
 
     if (!input_font || !cursor_font || !info_font) {
         throw Exception("HomeView::loadMedia: Error opening TTF_Font/s.");

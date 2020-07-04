@@ -4,7 +4,7 @@
 // Métodos privados
 
 void ConnectionView::_init() {
-    json config = JSON::loadJsonFile(CONFIG_FILEPATH);
+    json config = JSON::loadJsonFile(paths::config(CONFIG_FILEPATH));
 
     // Fuente
     input_fontsize = config["connectionview"]["fontsize"];
@@ -52,34 +52,37 @@ void ConnectionView::_init() {
 
 void ConnectionView::_loadMedia() {
     // Cargamos el background
-    bg.loadFromFile(&renderer, CONNECTIONVIEW_BG_FP);
+    bg.loadFromFile(&renderer, paths::asset(CONNECTIONVIEW_BG_FP));
 
     // Cargamos las texturas de los text-boxes
     {
-        username_txtbx.base.loadFromFile(&renderer, CONNECTIONVIEW_TEXTBOX_FP);
-        password_txtbx.base.loadFromFile(&renderer, CONNECTIONVIEW_TEXTBOX_FP);
+        username_txtbx.base.loadFromFile(
+            &renderer, paths::asset(CONNECTIONVIEW_TEXTBOX_FP));
+        password_txtbx.base.loadFromFile(
+            &renderer, paths::asset(CONNECTIONVIEW_TEXTBOX_FP));
 
-        username_txtbx.active.loadFromFile(&renderer,
-                                           CONNECTIONVIEW_TEXTBOX_ACTIVE_FP);
-        password_txtbx.active.loadFromFile(&renderer,
-                                           CONNECTIONVIEW_TEXTBOX_ACTIVE_FP);
+        username_txtbx.active.loadFromFile(
+            &renderer, paths::asset(CONNECTIONVIEW_TEXTBOX_ACTIVE_FP));
+        password_txtbx.active.loadFromFile(
+            &renderer, paths::asset(CONNECTIONVIEW_TEXTBOX_ACTIVE_FP));
     }
 
     // Cargamos las texturas de los botones
     {
-        play_btn.base.loadFromFile(&renderer, CONNECTIONVIEW_PLAY_BUTTON_FP);
-        play_btn.pressed.loadFromFile(&renderer,
-                                      CONNECTIONVIEW_PLAY_BUTTON_PRESSED_FP);
-        signup_btn.base.loadFromFile(&renderer,
-                                     CONNECTIONVIEW_SIGNUP_BUTTON_FP);
+        play_btn.base.loadFromFile(&renderer,
+                                   paths::asset(CONNECTIONVIEW_PLAY_BUTTON_FP));
+        play_btn.pressed.loadFromFile(
+            &renderer, paths::asset(CONNECTIONVIEW_PLAY_BUTTON_PRESSED_FP));
+        signup_btn.base.loadFromFile(
+            &renderer, paths::asset(CONNECTIONVIEW_SIGNUP_BUTTON_FP));
         signup_btn.pressed.loadFromFile(
-            &renderer, CONNECTIONVIEW_SIGNUP_BUTTON_PRESSED_FP);
+            &renderer, paths::asset(CONNECTIONVIEW_SIGNUP_BUTTON_PRESSED_FP));
     }
 
     // Cargamos la/s fuente/s a usar
-    input_font = TTF_OpenFont(VIEWS_INPUT_FONT, input_fontsize);
-    cursor_font = TTF_OpenFont(VIEWS_CURSOR_FONT, input_fontsize);
-    info_font = TTF_OpenFont(VIEWS_INFO_FONT, info_fontsize);
+    input_font = TTF_OpenFont(VIEWS_INPUT_FONT.c_str(), input_fontsize);
+    cursor_font = TTF_OpenFont(VIEWS_CURSOR_FONT.c_str(), input_fontsize);
+    info_font = TTF_OpenFont(VIEWS_INFO_FONT.c_str(), info_fontsize);
 
     if (!input_font || !cursor_font || !info_font) {
         throw Exception("ConnectionView::loadMedia: Error opening TTF_Font/s.");

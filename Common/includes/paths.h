@@ -1,14 +1,28 @@
-#ifndef __COMMON_PATHS_H__
-#define __COMMON_PATHS_H__
-//-----------------------------------------------------------------------------
-
-/* Se incluyen los paths desde la carpeta ~build/, siendo ~ la raíz del TP. */
+#ifndef __PATHS_H__
+#define __PATHS_H__
 
 //-----------------------------------------------------------------------------
-// Map paths
-
-#define MAPS_FILEPATH "../Config/Common/maps.json"
+#include <string>
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-#endif  // __COMMON_PATHS_H__
+// Common paths
+
+#define MAPS_FILEPATH "common/config/maps.json"
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+
+namespace paths {
+
+/* Traduce un path relativo de configuración a uno absoluto */
+std::string config(const char* relative_path);
+
+/* Traduce un path relativo de asset a uno absoluto */
+std::string asset(const char* relative_path);
+
+}  // namespace paths
+
+//-----------------------------------------------------------------------------
+
+#endif  // __PATHS_H__

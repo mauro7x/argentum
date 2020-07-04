@@ -77,8 +77,10 @@ Player::Player(const Renderer* renderer, const Camera& camera,
 
 void Player::loadMedia() {
     // Fuentes a utilizar
-    nickname_font = TTF_OpenFont(FONT_AUGUSTA_FP, INFO_NAME_FONTSIZE);
-    level_font = TTF_OpenFont(FONT_CINZELBOLD_FP, INFO_LVL_FONTSIZE);
+    nickname_font =
+        TTF_OpenFont(paths::asset(FONT_AUGUSTA_FP).c_str(), INFO_NAME_FONTSIZE);
+    level_font = TTF_OpenFont(paths::asset(FONT_CINZELBOLD_FP).c_str(),
+                              INFO_LVL_FONTSIZE);
 
     if (!nickname_font || !level_font) {
         throw Exception("Player::loadMedia: Error opening TTF_Font/s.");

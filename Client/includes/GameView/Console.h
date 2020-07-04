@@ -29,9 +29,9 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-#define CONSOLE_OUTPUT_FONT FONT_SANFORD_FP
-#define CONSOLE_INPUT_FONT FONT_SANFORD_FP
-#define CONSOLE_CURSOR_FONT FONT_SANFORD_FP
+#define CONSOLE_OUTPUT_FONT paths::asset(FONT_SANFORD_FP)
+#define CONSOLE_INPUT_FONT paths::asset(FONT_SANFORD_FP)
+#define CONSOLE_CURSOR_FONT paths::asset(FONT_SANFORD_FP)
 
 #define INPUT_MAX_SIZE 256
 #define CURSOR_TIME_ANIMATION 500

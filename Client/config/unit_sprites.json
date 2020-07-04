@@ -1,5 +1,5 @@
 {
-    "dirpath": "../Assets/Sprites/Units/",
+    "dirpath": "client/assets/Sprites/Units/",
     "shorter_characters_offset": 10000,
     "pj": {
         "head": [

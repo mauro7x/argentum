@@ -61,15 +61,17 @@ void UserInfo::loadMedia() {
     }
 
     // Cargamos las fuentes a usar
-    nickname_font = TTF_OpenFont(FONT_OLDLONDON_FP, nickname_fontsize);
-    lvl_font = TTF_OpenFont(FONT_AUGUSTA_FP, lvl_fontsize);
+    nickname_font = TTF_OpenFont(paths::asset(FONT_OLDLONDON_FP).c_str(),
+                                 nickname_fontsize);
+    lvl_font =
+        TTF_OpenFont(paths::asset(FONT_AUGUSTA_FP).c_str(), lvl_fontsize);
 
     if (!nickname_font || !lvl_font) {
         throw Exception("UserInfo::loadMedia: Error opening TTF_Font/s.");
     }
 
     // Cargar media
-    base.loadFromFile(g_renderer, HUD_USER_INFO_BASE_FP);
+    base.loadFromFile(g_renderer, paths::asset(HUD_USER_INFO_BASE_FP));
 
     // Nickname loading
     current_nickname = "loading";

@@ -1,11 +1,11 @@
 {
     "music": {
-        "dirpath": "../Assets/Audio/Music/",
+        "dirpath": "client/assets/Audio/Music/",
         "extension": ".mp3",
         "songs": 4
     },
     "chunks": {
-        "dirpath": "../Assets/Audio/Chunks/",
+        "dirpath": "client/assets/Audio/Chunks/",
         "extension": ".wav",
         "samples": 11,
         "listening_radio": 20

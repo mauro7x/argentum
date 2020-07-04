@@ -58,6 +58,7 @@ void Map::_fillTiles(const json& map, const json& tilesets) {
             int tileset_first_gid = tilesets["npcs"]["first_gid"];
             int npc_lid = npc_gid - tileset_first_gid;
             std::string tileset_filepath = tilesets["npcs"]["filepath"];
+            tileset_filepath = paths::asset(tileset_filepath.c_str());
             json tileset = JSON::loadJsonFile(tileset_filepath);
             tile.npc = tileset["tiles"][npc_lid]["properties"][0]["value"];
 

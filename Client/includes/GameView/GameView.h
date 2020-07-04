@@ -11,7 +11,6 @@
 #include "../../../Common/includes/Exceptions/Exception.h"
 #include "../../../Common/includes/JSON.h"
 #include "../../../Common/includes/NonBlockingQueue.h"
-#include "../../../Common/includes/paths.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
