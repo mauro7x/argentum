@@ -1,5 +1,5 @@
 {
-    "dirpath": "../Assets/Sprites/Items/",
+    "dirpath": "client/assets/Sprites/Items/",
     "helmets": [
         {
             "gid": 1300,

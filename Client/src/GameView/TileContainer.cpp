@@ -12,6 +12,7 @@ void TileContainer::_loadTextures(const json& tileset) {
     first_gid = tileset["first_gid"];
     next_first_gid = tileset["next_first_gid"];
     dirpath = tileset["src"]["dirpath"];
+    dirpath = paths::asset(dirpath.c_str());
     need_color_keying = tileset["src"]["color_key"]["is_needed"];
 
     if (need_color_keying) {
@@ -46,7 +47,7 @@ TileContainer::TileContainer(const Renderer* renderer) : g_renderer(renderer) {}
 
 void TileContainer::loadMedia() {
     json tiles;
-    tiles = JSON::loadJsonFile(MAPS_FILEPATH)["tilesets"];
+    tiles = JSON::loadJsonFile(paths::config(MAPS_FILEPATH))["tilesets"];
     _loadTextures(tiles["ground"]);
     _loadTextures(tiles["decoration"]);
     _loadTextures(tiles["npcs"]);

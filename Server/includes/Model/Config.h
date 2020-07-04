@@ -55,7 +55,7 @@ class Config {
     /* Operador para lectura de configuración */
     const T& operator[](const Id id) const {
         if (config.count(id) == 0) {
-            throw Exception("Config.cpp operator[]: Unknown id.");
+            throw Exception("Config.cpp operator[]: Unknown id: %i.", (int)id);
         }
 
         return config.at(id);

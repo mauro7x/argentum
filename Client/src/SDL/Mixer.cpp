@@ -88,6 +88,7 @@ void Mixer::_init() {
     {
         std::string dirpath, extension, filepath;
         dirpath = audio_to_load["music"]["dirpath"];
+        dirpath = paths::asset(dirpath.c_str());
         extension = audio_to_load["music"]["extension"];
         size_t songs = audio_to_load["music"]["songs"];
         Mix_Music* song;
@@ -112,6 +113,7 @@ void Mixer::_init() {
     {
         std::string dirpath, extension, filepath;
         dirpath = audio_to_load["chunks"]["dirpath"];
+        dirpath = paths::asset(dirpath.c_str());
         extension = audio_to_load["chunks"]["extension"];
         listening_radio = (size_t)audio_to_load["chunks"]["listening_radio"];
         size_t samples = audio_to_load["chunks"]["samples"];

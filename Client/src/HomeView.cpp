@@ -51,9 +51,9 @@ void HomeView::_loadMedia() {
         &renderer, paths::asset(HOMEVIEW_CONNECT_BUTTON_PRESSED_FP));
 
     // Cargamos la/s fuente/s a usar
-    input_font = TTF_OpenFont(VIEWS_INPUT_FONT, input_fontsize);
-    cursor_font = TTF_OpenFont(VIEWS_CURSOR_FONT, input_fontsize);
-    info_font = TTF_OpenFont(VIEWS_INFO_FONT, info_fontsize);
+    input_font = TTF_OpenFont(VIEWS_INPUT_FONT.c_str(), input_fontsize);
+    cursor_font = TTF_OpenFont(VIEWS_CURSOR_FONT.c_str(), input_fontsize);
+    info_font = TTF_OpenFont(VIEWS_INFO_FONT.c_str(), info_fontsize);
 
     if (!input_font || !cursor_font || !info_font) {
         throw Exception("HomeView::loadMedia: Error opening TTF_Font/s.");

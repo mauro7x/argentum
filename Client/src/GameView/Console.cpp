@@ -124,9 +124,9 @@ void Console::loadMedia() {
     base.loadFromFile(g_renderer, paths::asset(HUD_CONSOLE_BASE_FP));
 
     // Cargamos la/s fuente/s a usar
-    input_font = TTF_OpenFont(CONSOLE_INPUT_FONT, input_fontsize);
-    output_font = TTF_OpenFont(CONSOLE_OUTPUT_FONT, output_fontsize);
-    cursor_font = TTF_OpenFont(CONSOLE_CURSOR_FONT, input_fontsize);
+    input_font = TTF_OpenFont(CONSOLE_INPUT_FONT.c_str(), input_fontsize);
+    output_font = TTF_OpenFont(CONSOLE_OUTPUT_FONT.c_str(), output_fontsize);
+    cursor_font = TTF_OpenFont(CONSOLE_CURSOR_FONT.c_str(), input_fontsize);
 
     if (!input_font || !cursor_font || !output_font) {
         throw Exception("Console::loadMedia: Error opening TTF_Font/s.");

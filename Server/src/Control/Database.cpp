@@ -4,7 +4,7 @@
 // Métodos privados
 
 void Database::_fillInfo() {
-    std::ifstream file_info(paths::config(PLAYER_INFO_FILEPATH),
+    std::ifstream file_info(paths::asset(PLAYER_INFO_FILEPATH),
                             std::fstream::binary);
     if (!file_info.is_open()) {
         throw Exception("Database::_fillInfo: error opening info file.");
@@ -46,7 +46,7 @@ void Database::_persistPlayerInfo(const std::string& username) {
     player_info.index = file_pointer;
 
     // Lo guardamos al final
-    std::ofstream file_info(paths::config(PLAYER_INFO_FILEPATH),
+    std::ofstream file_info(paths::asset(PLAYER_INFO_FILEPATH),
                             std::fstream::app | std::fstream::binary);
     file_info.write(reinterpret_cast<char*>(&player_info), sizeof(player_info));
     file_info.close();
@@ -105,7 +105,7 @@ void Database::_createInitialData(const std::string& username, Id race, Id kind,
 void Database::_getPlayerData(const std::string& username,
                               CharacterCfg& character_data) {
     std::streampos position = data_index.at(username).index;
-    std::ifstream file_data(paths::config(PLAYER_DATA_FILEPATH),
+    std::ifstream file_data(paths::asset(PLAYER_DATA_FILEPATH),
                             std::fstream::binary);
     file_data.seekg(position);
     file_data.read(reinterpret_cast<char*>(&character_data),
@@ -147,7 +147,7 @@ void Database::init() {
     // En caso de que los archivos no existan, los creamos
     {
         // Archivo de índices
-        std::fstream file_info(paths::config(PLAYER_INFO_FILEPATH),
+        std::fstream file_info(paths::asset(PLAYER_INFO_FILEPATH),
                                std::fstream::in | std::fstream::out |
                                    std::fstream::app | std::fstream::binary);
         file_info.seekg(0, std::fstream::end);
@@ -161,7 +161,7 @@ void Database::init() {
         file_info.close();
 
         // Archivo de data (actualizamos nuestro file pointer)
-        std::fstream file_data(paths::config(PLAYER_DATA_FILEPATH),
+        std::fstream file_data(paths::asset(PLAYER_DATA_FILEPATH),
                                std::fstream::in | std::fstream::out |
                                    std::fstream::app | std::fstream::binary);
         file_data.seekg(0, std::fstream::end);
@@ -250,7 +250,7 @@ ConnectionAckType Database::signUp(const std::string& username,
 
 void Database::persistPlayerData(CharacterCfg& data, bool disconnect) {
     std::fstream file_data(
-        paths::config(PLAYER_DATA_FILEPATH),
+        paths::asset(PLAYER_DATA_FILEPATH),
         std::fstream::in | std::fstream::out | std::fstream::binary);
     std::streampos idx = data_index.at(data.nickname).index;
     file_data.seekp(idx, std::fstream::beg);

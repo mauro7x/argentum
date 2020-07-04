@@ -8,13 +8,18 @@
 //-----------------------------------------------------------------------------
 // Config paths
 
-#define RACES_CONFIG_FILEPATH "server/config/Server/races.json"
-#define KINDS_CONFIG_FILEPATH "server/config/Server/kinds.json"
-#define NPC_CONFIG_FILEPATH "server/config/Server/npcs.json"
-#define CREATURES_CONFIG_FILEPATH "server/config/Server/creatures.json"
-#define ITEMS_CONFIG_FILEPATH "server/config/Server/items.json"
-#define PLAYER_INFO_FILEPATH "server/config/Server/playerinfo.cfg"
-#define PLAYER_DATA_FILEPATH "server/config/Server/playerdata.cfg"
+#define RACES_CONFIG_FILEPATH "server/config/races.json"
+#define KINDS_CONFIG_FILEPATH "server/config/kinds.json"
+#define NPC_CONFIG_FILEPATH "server/config/npcs.json"
+#define CREATURES_CONFIG_FILEPATH "server/config/creatures.json"
+#define ITEMS_CONFIG_FILEPATH "server/config/items.json"
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+// Asset paths
+
+#define PLAYER_INFO_FILEPATH "server/assets/Database/playerinfo.cfg"
+#define PLAYER_DATA_FILEPATH "server/assets/Database/playerdata.cfg"
 //-----------------------------------------------------------------------------
 
 #endif  // __SERVER_PATHS_H__
