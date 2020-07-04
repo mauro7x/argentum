@@ -28,16 +28,21 @@ Creature::Creature(const CreatureCfg& data, MapContainer& map_container,
       map(map_container[init_map]),
       characters(characters),
       is_moving(false),
+      is_random_moving(false),
       moving_cooldown(0),
+      random_moving_cooldown(0),
       attribute_update_time_elapsed(0),
       attack_cooldown(data.attack_cooldown),
       actual_attack_cooldown(0),
       attacking_id(0),
       broadcast(false) {
-          RandomNumberGenerator random_number_generator;
-          level = random_number_generator(
-                                 (int)data.min_level, (int)data.max_level);
-      }
+    RandomNumberGenerator random_number_generator;
+    level = random_number_generator((int)data.min_level, (int)data.max_level);
+    posibles_orientations.push_back(UP_ORIENTATION);
+    posibles_orientations.push_back(DOWN_ORIENTATION);
+    posibles_orientations.push_back(LEFT_ORIENTATION);
+    posibles_orientations.push_back(RIGHT_ORIENTATION);
+}
 
 Creature::~Creature() {}
 
@@ -54,6 +59,9 @@ InstanceId Creature::_getNearestCharacter() {
             try {
                 id = map.getTile(x_tile + x, y_tile + y).occupant_id;
             } catch (Exception& e) {
+                continue;
+            }
+            if (map.getTile(x_tile + x, y_tile + y).safe_zone) {
                 continue;
             }
             if (characters.count(id) > 0) {
@@ -141,26 +149,54 @@ void Creature::_updateMovement(const unsigned int it) {
         this->moving_cooldown += 1000 / movement_speed;
     }
 }
+void Creature::_setRandomOrientation() {
+    RandomNumberGenerator gen;
+    Orientation orientation =
+        this->posibles_orientations[gen(0, posibles_orientations.size() - 1)];
+    this->position.changeOrientation(orientation);
+    this->is_random_moving = true;
+}
+void Creature::_randomMovement(const unsigned int it) {
+    this->random_moving_cooldown -= it * RATE;
+    _setRandomOrientation();
+
+    while (random_moving_cooldown <= 0) {
+        try {
+            this->position.move(true);
+        } catch (const CollisionWhileMovingException& e) {
+            stopMoving();
+            random_moving_cooldown = 0;
+            return;
+        }
+        this->broadcast = true;
+
+        this->random_moving_cooldown += RANDOM_MOVEMENT_FACTOR * 1000 / movement_speed;
+    }
+}
 
 void Creature::act(const unsigned int it) {
     InstanceId id = _getNearestCharacter();
     if (!id) {
         attacking_id = 0;
-        stopMoving();
+        _randomMovement(it);
     } else {
         if (_attackNearstCharacter(characters.at(id).getPosition())) {
             _updateDamage(it, id);
             stopMoving();
         } else {
             _determinateDirectionAndMove(characters.at(id).getPosition());
+            is_random_moving = false;
         }
     }
 
-    if (is_moving) {
+    if (is_moving && !is_random_moving) {
         _updateMovement(it);
     } else {
         this->moving_cooldown =
             std::max((int)(this->moving_cooldown - it * RATE), 0);
+
+        this->random_moving_cooldown =
+            std::max((int)(this->random_moving_cooldown - it * RATE), 0);
     }
 }
 

@@ -36,9 +36,12 @@ class Creature : public Attackable {
     ItemsContainer& items;
     Map& map;
     std::unordered_map<InstanceId, Character>& characters;
+    std::vector<Orientation> posibles_orientations;
 
     bool is_moving;
+    bool is_random_moving;
     int moving_cooldown;
+    int random_moving_cooldown;
     unsigned int attribute_update_time_elapsed;
     int attack_cooldown;
     int actual_attack_cooldown;
@@ -75,6 +78,20 @@ class Creature : public Attackable {
      * establecida.
      */
     void _updateMovement(const unsigned int it);
+
+    /*
+     * Setter una direccion aleatoria a mover cuando no hay jugador cercano;
+     */
+    void _setRandomOrientation();
+    /*
+     * Recibe el número de iteraciones que pasaron desde la última vez que
+     * se llamó.
+     *
+     *
+     * Genere una direccion valida random y actualiza la posición del character
+     * según la velocidad de movimiento establecida.
+     */
+    void _randomMovement(const unsigned int it);
 
    public:
     //-----------------------------------------------------------------------------
