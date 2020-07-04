@@ -374,13 +374,12 @@ void Game::actCreatures(const int it) {
         this->creatures.begin();
 
     while (it_creatures != this->creatures.end()) {
-        try {
-            it_creatures->second.act(it);
-        } catch (const CollisionWhileMovingException& e) {
-            it_creatures->second.stopMoving();
-        }
+        it_creatures->second.act(it);
 
         if (it_creatures->second.mustBeBroadcasted()) {
+            fprintf(stderr, "ID:%d in x: %d, y: %d \n", it_creatures->first,
+                    it_creatures->second.getPosition().getX(),
+                    it_creatures->second.getPosition().getY());
             _pushCreatureDifferentialBroadcast(it_creatures->first,
                                                UPDATE_BROADCAST);
         }

@@ -126,9 +126,14 @@ void Creature::_updateMovement(const unsigned int it) {
     this->moving_cooldown -= it * RATE;
 
     while (this->moving_cooldown <= 0) {
+        try {
+            this->position.move();
+        } catch (const CollisionWhileMovingException& e) {
+            stopMoving();
+            moving_cooldown = 0;
+            return;
+        }
         this->broadcast = true;
-
-        this->position.move();
 
         this->moving_cooldown += 1000 / movement_speed;
     }
@@ -150,6 +155,9 @@ void Creature::act(const unsigned int it) {
 
     if (is_moving) {
         _updateMovement(it);
+    } else {
+        this->moving_cooldown =
+            std::max((int)(this->moving_cooldown - it * RATE), 0);
     }
 }
 
