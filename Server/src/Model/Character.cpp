@@ -557,8 +557,12 @@ void Character::fillBroadcastData(PlayerData& data) const {
 void Character::fillPersistenceData(CharacterCfg& data) const {
     // llenar map x_tile, y_tile;
     this->position.fillPersistenceData(data);
-    this->state->fillPersistenceData(data);
+
+    data.head_id = this->race.head_id;
+    data.body_id = this->race.body_id;
+
     std::strncpy(data.nickname, nickname.c_str(), sizeof(data.nickname) - 1);
+
     data.race = this->race.id;
     data.kind = this->kind.id;
 
@@ -568,9 +572,11 @@ void Character::fillPersistenceData(CharacterCfg& data) const {
     } else {
         data.state = ALIVE;
     }
+
     this->level.fillPersistenceData(data);
     this->equipment.fillPersistenceData(data);
     this->inventory.fillPersistenceData(data);
+    
     data.health = this->health;
     data.mana = this->mana;
     data.new_created = false;
