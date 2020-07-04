@@ -49,8 +49,8 @@ void BankAccount::withdrawGold(unsigned int& amount) {
 
 void BankAccount::list(std::string& init_msg,
                        std::list<std::string>& list_items) const {
-    if (!saved_items.size()) {
-        init_msg = "No tienes ningún item guardado en el banco";
+    if (!saved_items.size() && !gold) {
+        init_msg = "No tienes ni oro ni items guardados en el banco";
         return;
     }
 
@@ -62,7 +62,7 @@ void BankAccount::list(std::string& init_msg,
         list_item = "Oro: " + std::to_string(gold);
         list_items.push_back(list_item);
     }
-    
+
     std::unordered_map<Id, unsigned int>::const_iterator it =
         saved_items.begin();
 

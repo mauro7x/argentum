@@ -225,6 +225,7 @@ void Character::heal() {
     this->state->beHealed();
     this->health = max_health;
     this->mana = max_mana;
+    this->broadcast = true;
 }
 
 void Character::consumeMana(const unsigned int points) {
