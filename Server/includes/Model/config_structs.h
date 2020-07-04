@@ -187,6 +187,8 @@ struct CharacterCfg {
 struct CreatureCfg {
     Id id = 0;
     std::string name;
+    unsigned int min_level = 0;
+    unsigned int max_level = 0;
     unsigned int min_damage = 0;
     unsigned int max_damage = 0;
     unsigned int base_health = 0;

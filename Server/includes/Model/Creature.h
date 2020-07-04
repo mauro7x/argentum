@@ -43,7 +43,7 @@ class Creature : public Attackable {
     int attack_cooldown;
     int actual_attack_cooldown;
     InstanceId attacking_id;
-    uint32_t level;
+    unsigned int level;
     bool broadcast;
 
     /*

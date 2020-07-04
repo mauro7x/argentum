@@ -204,6 +204,8 @@ void Config<CreatureCfg>::_parseFile() {
 
         creature.id = j[i]["id"];
         creature.name = j[i]["name"];
+        creature.min_level = j[i]["min_level"];
+        creature.max_level = j[i]["max_level"];
         creature.min_damage = j[i]["min_damage"];
         creature.max_damage = j[i]["max_damage"];
         creature.base_health = j[i]["base_health"];
