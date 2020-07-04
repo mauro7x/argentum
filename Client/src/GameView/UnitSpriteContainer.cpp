@@ -66,7 +66,7 @@ UnitSpriteContainer::UnitSpriteContainer(const Renderer* renderer)
     : g_renderer(renderer) {}
 
 void UnitSpriteContainer::loadMedia() {
-    json sprites = JSON::loadJsonFile(UNIT_SPRITES_FILEPATH);
+    json sprites = JSON::loadJsonFile(paths::config(UNIT_SPRITES_FILEPATH));
 
     shorter_characters_offset = sprites["shorter_characters_offset"];
     std::string dirpath = sprites["dirpath"];
@@ -80,14 +80,14 @@ void UnitSpriteContainer::loadMedia() {
 }
 
 void UnitSpriteContainer::loadHeadsMedia() {
-    json sprites = JSON::loadJsonFile(UNIT_SPRITES_FILEPATH);
+    json sprites = JSON::loadJsonFile(paths::config(UNIT_SPRITES_FILEPATH));
 
     std::string dirpath = sprites["dirpath"];
     _loadSpritesFromJson(sprites["pj"]["head"], dirpath);
 }
 
 void UnitSpriteContainer::loadBodiesMedia() {
-    json sprites = JSON::loadJsonFile(UNIT_SPRITES_FILEPATH);
+    json sprites = JSON::loadJsonFile(paths::config(UNIT_SPRITES_FILEPATH));
 
     std::string dirpath = sprites["dirpath"];
     _loadSpritesFromJson(sprites["pj"]["body"], dirpath);

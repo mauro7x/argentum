@@ -4,7 +4,7 @@
 // Métodos privados
 
 void SignUpView::_init() {
-    json config = JSON::loadJsonFile(CONFIG_FILEPATH);
+    json config = JSON::loadJsonFile(paths::config(CONFIG_FILEPATH));
 
     // Fuente
     input_fontsize = config["signupview"]["fontsize"];

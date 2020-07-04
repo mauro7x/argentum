@@ -18,6 +18,7 @@
 #include "../../Common/includes/Protocol.h"
 #include "../../Common/includes/Socket/SocketWrapper.h"
 #include "../../Common/includes/defs.h"
+#include "../../Common/includes/paths.h"
 #include "../../Common/includes/types.h"
 //-----------------------------------------------------------------------------
 
@@ -39,7 +40,6 @@
 #include "RoundRobinList.h"
 #include "contexts.h"
 #include "defs.h"
-#include "paths.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------

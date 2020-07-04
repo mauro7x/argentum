@@ -37,8 +37,9 @@ void Client::_initSDL() {
 
 void Client::_initComponents() {
     /* Cargamos los archivos de configuración */
-    json config = JSON::loadJsonFile(CONFIG_FILEPATH);
-    json user_config = JSON::loadJsonFile(USER_CONFIG_FILEPATH);
+    json config = JSON::loadJsonFile(paths::config(CONFIG_FILEPATH));
+    json user_config =
+        JSON::loadJsonFile(paths::config(USER_paths::config(CONFIG_FILEPATH)));
 
     /* Calculamos los factores de escala */
     float scale_factor_w, scale_factor_h;

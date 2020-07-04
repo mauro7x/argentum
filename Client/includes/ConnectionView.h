@@ -16,6 +16,7 @@
 #include "../../Common/includes/Protocol.h"
 #include "../../Common/includes/Socket/SocketWrapper.h"
 #include "../../Common/includes/defs.h"
+#include "../../Common/includes/paths.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -30,7 +31,6 @@
 #include "ConstantRateFunc.h"
 #include "contexts.h"
 #include "defs.h"
-#include "paths.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
