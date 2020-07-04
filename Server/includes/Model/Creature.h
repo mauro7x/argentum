@@ -36,7 +36,7 @@ class Creature : public Attackable {
     ItemsContainer& items;
     Map& map;
     std::unordered_map<InstanceId, Character>& characters;
-    std::vector<Orientation> posibles_orientations;
+    std::array<Orientation, 4> posibles_orientations;
 
     bool is_moving;
     bool is_random_moving;

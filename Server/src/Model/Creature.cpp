@@ -38,10 +38,8 @@ Creature::Creature(const CreatureCfg& data, MapContainer& map_container,
       broadcast(false) {
     RandomNumberGenerator random_number_generator;
     level = random_number_generator((int)data.min_level, (int)data.max_level);
-    posibles_orientations.push_back(UP_ORIENTATION);
-    posibles_orientations.push_back(DOWN_ORIENTATION);
-    posibles_orientations.push_back(LEFT_ORIENTATION);
-    posibles_orientations.push_back(RIGHT_ORIENTATION);
+    posibles_orientations = {UP_ORIENTATION, DOWN_ORIENTATION, LEFT_ORIENTATION,
+                             RIGHT_ORIENTATION};
 }
 
 Creature::~Creature() {}
@@ -170,7 +168,8 @@ void Creature::_randomMovement(const unsigned int it) {
         }
         this->broadcast = true;
 
-        this->random_moving_cooldown += RANDOM_MOVEMENT_FACTOR * 1000 / movement_speed;
+        this->random_moving_cooldown +=
+            RANDOM_MOVEMENT_FACTOR * 1000 / movement_speed;
     }
 }
 
