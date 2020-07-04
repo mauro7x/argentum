@@ -66,10 +66,12 @@ class Position {
     /*
      * Mueve un tile la posición en la dirección de la orientation.
      *
+     * Con parametro si es criatura para verificar.
      * Lanza CollisionWhileMovingException si no se puede mover
      * a causa de una colisión.
      */
-    void move();
+    void move(bool is_creature);
+
 
     const bool isInSafeZone() const;
 

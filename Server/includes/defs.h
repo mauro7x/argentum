@@ -33,6 +33,7 @@ enum ExpectedArgs { NAME, PORT, EXPECTED_ARGC };
 #define TIME_TO_SPAWN_CREATURE 3000           // en ms
 #define TIME_TO_DISSAPEAR_DROPPED_ITEM 25000  // en ms
 #define TIME_TO_PERSIST_DATA 60000   // en ms
+#define RANDOM_MOVEMENT_FACTOR 10 
 //-----------------------------------------------------------------------------
 
 #endif  // __SERVER_DEFS_H__
