@@ -34,8 +34,6 @@
 #define CONSOLE_CURSOR_FONT paths::asset(FONT_SANFORD_FP)
 
 #define INPUT_MAX_SIZE 256
-#define CURSOR_TIME_ANIMATION 500
-#define ITERATIONS_TO_SWITCH_CURSOR (CURSOR_TIME_ANIMATION / RATE)
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -46,7 +44,7 @@ class Console : public HUDComponent {
     bool input_enabled = false;
     bool input_changed = false;
     bool show_cursor = false;
-    int cursor_cooldown = ITERATIONS_TO_SWITCH_CURSOR;
+    int cursor_cooldown = VIEWS_ITERATIONS_TO_SWITCH_CURSOR;
 
     // Contenido
     std::string current_input;

@@ -4,7 +4,7 @@
 // Métodos privados
 
 void GameView::_init() {
-    json config = JSON::loadJsonFile(paths::config(CONFIG_FILEPATH));
+    json config = JSON::loadJsonFile(paths::config(VIEWS_CONFIG_FILEPATH));
 
     /* Iniciamos la cámara */
     camera.init(config["camera"]);
@@ -100,8 +100,7 @@ GameView::GameView(BlockingQueue<Command*>& commands,
                    NonBlockingQueue<Message*>& messages,
                    NonBlockingQueue<GameEvent*>& events,
                    const Renderer& renderer)
-    : ConstantRateFunc(RATE),
-      // Comunicación entre hilos
+    :  // Comunicación entre hilos
       commands(commands),
       broadcasts(broadcasts),
       messages(messages),

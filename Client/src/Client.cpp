@@ -38,17 +38,18 @@ void Client::_initSDL() {
 void Client::_initComponents() {
     /* Cargamos los archivos de configuración */
     json config = JSON::loadJsonFile(paths::config(CONFIG_FILEPATH));
-    json user_config = JSON::loadJsonFile(paths::config(USER_CONFIG_FILEPATH));
+    json views_config =
+        JSON::loadJsonFile(paths::config(VIEWS_CONFIG_FILEPATH));
 
     /* Calculamos los factores de escala */
     float scale_factor_w, scale_factor_h;
     int original_w, original_h, new_w, new_h;
-    original_w = config["window"]["w"];
-    original_h = config["window"]["h"];
-    new_w = user_config["window"]["w"];
-    new_h = user_config["window"]["h"];
+    original_w = views_config["window"]["w"];
+    original_h = views_config["window"]["h"];
+    new_w = config["window"]["w"];
+    new_h = config["window"]["h"];
 
-    bool fullscreen = user_config["window"]["fullscreen"];
+    bool fullscreen = config["window"]["fullscreen"];
     if (fullscreen) {
         SDL_DisplayMode dm;
         if (SDL_GetCurrentDisplayMode(0, &dm)) {
@@ -64,11 +65,11 @@ void Client::_initComponents() {
     scale_factor_h = (float)new_h / original_h;
 
     /* Iniciamos la ventana */
-    std::string title = config["window"]["title"];
+    std::string title = views_config["window"]["title"];
     window.init(fullscreen, new_w, new_h, title.c_str());
 
     /* Iniciamos el renderer */
-    bool vsync = config["renderer"]["vsync"];
+    bool vsync = views_config["renderer"]["vsync"];
     renderer.init(vsync, scale_factor_w, scale_factor_h);
 
     /* Inicializamos el mixer */

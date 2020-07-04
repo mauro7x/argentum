@@ -8,7 +8,10 @@
 //-----------------------------------------------------------------------------
 // API Pública
 
-ConstantRateFunc::ConstantRateFunc(int rate) : rate(rate), exit(false) {}
+ConstantRateFunc::ConstantRateFunc() : exit(false) {
+    json config = JSON::loadJsonFile(paths::config(CONFIG_FILEPATH));
+    this->rate = 1000 / (int)config["fps"];
+}
 
 void ConstantRateFunc::run() {
     // Variables para controlar el frame-rate

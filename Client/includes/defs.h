@@ -17,13 +17,6 @@ enum ExpectedArgs { NAME, EXPECTED_ARGC };
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-// Configuración del frame-rate
-
-#define FPS 60            /* frames/s */
-#define RATE (1000 / FPS) /* ms/frame */
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
 // Configuración de información de las unidades
 
 #define INFO_SPACE_FROM_HEAD 10 /* px */
@@ -42,8 +35,7 @@ enum ExpectedArgs { NAME, EXPECTED_ARGC };
 // Lógica
 #define VIEWS_MAX_INPUT_SIZE 20
 #define VIEWS_INPUT_TEXTBOX_X_OFFSET 5
-#define VIEWS_CURSOR_TIME_ANIMATION 500
-#define VIEWS_ITERATIONS_TO_SWITCH_CURSOR (VIEWS_CURSOR_TIME_ANIMATION / RATE)
+#define VIEWS_ITERATIONS_TO_SWITCH_CURSOR 35
 
 // Colores
 #define VIEWS_FONT_COLOR \
