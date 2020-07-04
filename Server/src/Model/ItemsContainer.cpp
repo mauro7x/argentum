@@ -17,13 +17,18 @@ ItemsContainer::ItemsContainer() {
     Config<OtherItemsCfg> others;
 
     weapons.gatherIds(weapons_id);
+    size_t fist_idx = 0;
 
     for (unsigned int i = 0; i < weapons_id.size(); ++i) {
         Id id = weapons_id[i];
         this->container.emplace(std::piecewise_construct,
                                 std::forward_as_tuple(id),
                                 std::forward_as_tuple(new Weapon(weapons[id])));
+        if (container[id]->what() == "Puño")
+            fist_idx = i;
     }
+
+    weapons_id.erase(weapons_id.begin() + fist_idx);
 
     wands.gatherIds(wands_id);
 

@@ -564,7 +564,7 @@ void Game::_dropAllItems(Attackable* dropper) {
         try {
             this->map_container[map_id].addItem(dropped_items[i].item,
                                                 dropped_items[i].amount, x, y);
-        } catch (const ItemCouldNotBeAddedException& e) {
+        } catch (const CouldNotFindFreeTileException& e) {
             // No se pudo efectuar el dropeo. Cancelo.
             return;
         }
@@ -815,7 +815,7 @@ void Game::drop(const InstanceId caller, const uint8_t n_slot,
 
     try {
         this->map_container[map_id].addItem(dropped_item_id, amount, x, y);
-    } catch (const ItemCouldNotBeAddedException& e) {
+    } catch (const CouldNotFindFreeTileException& e) {
         // No se pudo efectuar el dropeo. Le devuelvo el item al character.
         character.takeItem(dropped, amount);
         Notification* reply = new Reply(ERROR_MSG, e.what());
@@ -864,13 +864,9 @@ void Game::resurrect(const InstanceId caller) {
 
     // calcular cooldown.
     unsigned int cooldown = min_distance * 1000;
-    fprintf(stderr,
-            "El sacerdote mas cercano esta en x=%i, y=%i, a distancia=%i => "
-            "cooldown=%i \n",
-            respawn_x_coord, respawn_y_coord, min_distance, cooldown);
 
     try {
-        character.resurrect(cooldown);
+        character.resurrect(cooldown, respawn_x_coord, respawn_y_coord);
     } catch (const StateCantResurrectException& e) {
         Notification* reply = new Reply(ERROR_MSG, e.what());
         active_clients.notify(caller, reply);
@@ -895,7 +891,7 @@ void Game::resurrect(const InstanceId caller, const uint32_t x_coord,
     Character& character = this->characters.at(caller);
 
     try {
-        character.resurrect(0);
+        character.resurrect(0, x_coord, y_coord);
     } catch (const StateCantResurrectException& e) {
         Notification* reply = new Reply(ERROR_MSG, e.what());
         active_clients.notify(caller, reply);

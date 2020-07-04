@@ -50,6 +50,8 @@ Character::Character(const CharacterCfg& init_data, const RaceCfg& race,
 
       is_resurrecting(false),
       resurrecting_cooldown(0),
+      respawning_x_coord(0),
+      respawning_y_coord(0),
 
       attack_cooldown(0),
       broadcast(false) {
@@ -456,28 +458,39 @@ const bool Character::receiveAttack(int& damage, const bool eludible) {
 void Character::die() {
     delete this->state;
     this->state = new Dead(this->race.dead_head_id, this->race.dead_body_id);
+
     this->mana = 0;
+
     this->broadcast = true;
 }
 
 void Character::_resurrect() {
-    fprintf(stderr, "RESUCITE!!!!!!!!!!1 \n");
     is_resurrecting = false;
+
     delete this->state;
     this->state = new Alive(this->race.head_id, this->race.body_id);
-    fprintf(stderr, "Cree estado alive con: head_id=%i, body_id=%i \n",
-            this->race.head_id, this->race.body_id);
+
     this->heal();
+
+    this->position.changePosition(respawning_x_coord, respawning_y_coord);
+
     this->broadcast = true;
 }
 
-void Character::resurrect(const unsigned int cooldown) {
+void Character::resurrect(const unsigned int cooldown, const int priest_x_coord,
+                          const int priest_y_coord) {
     this->state->resurrect();
+
     this->stopMoving();
+
     delete this->state;
     this->state =
         new Resurrecting(this->race.dead_head_id, this->race.dead_body_id);
+
     this->resurrecting_cooldown = cooldown;
+    this->respawning_x_coord = priest_x_coord;
+    this->respawning_y_coord = priest_y_coord;
+
     this->is_resurrecting = true;
 }
 
@@ -557,8 +570,12 @@ void Character::fillBroadcastData(PlayerData& data) const {
 void Character::fillPersistenceData(CharacterCfg& data) const {
     // llenar map x_tile, y_tile;
     this->position.fillPersistenceData(data);
-    this->state->fillPersistenceData(data);
+
+    data.head_id = this->race.head_id;
+    data.body_id = this->race.body_id;
+
     std::strncpy(data.nickname, nickname.c_str(), sizeof(data.nickname) - 1);
+
     data.race = this->race.id;
     data.kind = this->kind.id;
 
@@ -568,9 +585,11 @@ void Character::fillPersistenceData(CharacterCfg& data) const {
     } else {
         data.state = ALIVE;
     }
+
     this->level.fillPersistenceData(data);
     this->equipment.fillPersistenceData(data);
     this->inventory.fillPersistenceData(data);
+
     data.health = this->health;
     data.mana = this->mana;
     data.new_created = false;

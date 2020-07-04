@@ -55,6 +55,14 @@ class Position {
     /* Cambia la orientacion por la especificada */
     void changeOrientation(Orientation orientation);
 
+    /* 
+     * Cambia el tile actual al tile libre más cercano a las coordenadas pasadas
+     * por parámetro. 
+     * 
+     * Si no se encuentra tile libre, no hace nada.
+     */
+    void changePosition(int x, int y);
+
     /*
      * Mueve un tile la posición en la dirección de la orientation.
      *
