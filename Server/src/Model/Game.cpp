@@ -296,7 +296,7 @@ const InstanceId Game::newCharacter(const CharacterCfg& init_data) {
     if (init_data.new_created) {
         spawning_map_id = this->map_container.getCharacterSpawningMap();
         this->map_container[spawning_map_id].establishEntitySpawningPosition(
-            new_character_id, spawning_x_coord, spawning_y_coord, false);
+            spawning_x_coord, spawning_y_coord, false);
     } else {
         spawning_map_id = init_data.map;
         spawning_x_coord = init_data.x_tile;
@@ -310,11 +310,13 @@ const InstanceId Game::newCharacter(const CharacterCfg& init_data) {
             // Si no puede spawnear en la posición persistida, asignamos
             // posición aleatoria.
             this->map_container[spawning_map_id]
-                .establishEntitySpawningPosition(new_character_id,
-                                                 spawning_x_coord,
+                .establishEntitySpawningPosition(spawning_x_coord,
                                                  spawning_y_coord, false);
         }
     }
+
+    this->map_container[spawning_map_id].occupyTile(
+        new_character_id, spawning_x_coord, spawning_y_coord);
 
     this->characters.emplace(
         std::piecewise_construct, std::forward_as_tuple(new_character_id),
@@ -335,16 +337,19 @@ const InstanceId Game::newCharacter(const CharacterCfg& init_data) {
 }
 
 void Game::newCreature(const CreatureCfg& init_data, const Id init_map) {
+    Id new_creature_id = this->next_instance_id;
+    ++this->next_instance_id;
+
     int spawning_x_coord;
     int spawning_y_coord;
     this->map_container[init_map].establishEntitySpawningPosition(
-        this->next_instance_id, spawning_x_coord, spawning_y_coord, true);
+        spawning_x_coord, spawning_y_coord, true);
+
+    this->map_container[init_map].occupyTile(new_creature_id, spawning_x_coord,
+                                             spawning_y_coord);
 
     // AGREGAR LOGICA DE INIT_HEALTH E INIT_DAMAGE EN BASE AL NIVEL DE LOS
     // JUGADORES EN EL MAPA.
-
-    Id new_creature_id = this->next_instance_id;
-    ++this->next_instance_id;
 
     this->creatures.emplace(
         std::piecewise_construct, std::forward_as_tuple(new_creature_id),
@@ -549,12 +554,8 @@ void Game::startMovingUp(const InstanceId caller) {
 
     Character& character = this->characters.at(caller);
 
-    try {
-        character.startMovingUp();
-    } catch (const StateCantMoveException& e) {
-        Notification* reply = new Reply(ERROR_MSG, e.what());
-        active_clients.notify(caller, reply);
-    }
+    // StateCantMoveException se propaga.
+    character.startMovingUp();
 }
 
 void Game::startMovingDown(const InstanceId caller) {
@@ -564,12 +565,8 @@ void Game::startMovingDown(const InstanceId caller) {
 
     Character& character = this->characters.at(caller);
 
-    try {
-        character.startMovingDown();
-    } catch (const StateCantMoveException& e) {
-        Notification* reply = new Reply(ERROR_MSG, e.what());
-        active_clients.notify(caller, reply);
-    }
+    // StateCantMoveException se propaga.
+    character.startMovingDown();
 }
 
 void Game::startMovingLeft(const InstanceId caller) {
@@ -579,12 +576,8 @@ void Game::startMovingLeft(const InstanceId caller) {
 
     Character& character = this->characters.at(caller);
 
-    try {
-        character.startMovingLeft();
-    } catch (const StateCantMoveException& e) {
-        Notification* reply = new Reply(ERROR_MSG, e.what());
-        active_clients.notify(caller, reply);
-    }
+    // StateCantMoveException se propaga.
+    character.startMovingLeft();
 }
 
 void Game::startMovingRight(const InstanceId caller) {
@@ -594,12 +587,8 @@ void Game::startMovingRight(const InstanceId caller) {
 
     Character& character = this->characters.at(caller);
 
-    try {
-        character.startMovingRight();
-    } catch (const StateCantMoveException& e) {
-        Notification* reply = new Reply(ERROR_MSG, e.what());
-        active_clients.notify(caller, reply);
-    }
+    // StateCantMoveException se propaga.
+    character.startMovingRight();
 }
 
 void Game::stopMoving(const InstanceId caller) {

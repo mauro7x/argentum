@@ -101,8 +101,7 @@ class Map {
                             const Orientation& orientation, bool is_creature);
 
     /*iniciando una posicion para el character*/
-    void establishEntitySpawningPosition(InstanceId id, int& x, int& y,
-                                         bool is_creature);
+    void establishEntitySpawningPosition(int& x, int& y, bool is_creature);
 
     /* Ocupa una celda con un ocupante */
     void occupyTile(InstanceId id, const int x, const int y);

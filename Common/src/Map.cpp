@@ -202,7 +202,7 @@ const bool Map::moveOccupant(const int x, const int y,
     return _moveOccupant(from_tile, to_tile, is_creature);
 }
 
-void Map::establishEntitySpawningPosition(InstanceId id, int& x, int& y,
+void Map::establishEntitySpawningPosition(int& x, int& y,
                                           bool is_creature) {
     bool valid_position = false;
     RandomNumberGenerator gen;
@@ -219,8 +219,6 @@ void Map::establishEntitySpawningPosition(InstanceId id, int& x, int& y,
             valid_position = true;
         }
     }
-    Tile& tile = this->_getTile(x, y);
-    tile.occupant_id = id;
 }
 
 void Map::occupyTile(InstanceId id, const int x, const int y) {
@@ -287,17 +285,18 @@ const bool Map::isSafeZone(const int x, const int y) const {
     return this->getTile(x, y).safe_zone;
 }
 
-void Map::clearTileOccupant(const int x, const int y) {
-    Tile& tile = this->_getTile(x, y);
-    tile.occupant_id = 0;
-}
-
 void Map::swapTileOcuppant(const int prev_x, const int prev_y, const int new_x,
                            const int new_y) {
     Tile& prev_tile = this->_getTile(prev_x, prev_y);
     Tile& new_tile = this->_getTile(new_x, new_y);
     new_tile.occupant_id = prev_tile.occupant_id;
     prev_tile.occupant_id = 0;
+}
+
+
+void Map::clearTileOccupant(const int x, const int y) {
+    Tile& tile = this->_getTile(x, y);
+    tile.occupant_id = 0;
 }
 
 void Map::clearTileItem(const int x, const int y) {
