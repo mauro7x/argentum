@@ -169,7 +169,7 @@ const char* StateCantMoveException::what() const noexcept {
 }
 
 const char* StateCantBeHealedException::what() const noexcept {
-    return "No puedes moverte. Estás resucitando.";
+    return "No puedes curarte. Estás muerto.";
 }
 
 const char* StateCantResurrectException::what() const noexcept {
