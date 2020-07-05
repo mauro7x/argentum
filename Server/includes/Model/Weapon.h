@@ -1,15 +1,16 @@
 #ifndef __WEAPON_H__
 #define __WEAPON_H__
-
+//-----------------------------------------------------------------------------
 #include "Wearable.h"
 #include "config_structs.h"
-
+//-----------------------------------------------------------------------------
 class Weapon: public Wearable {
     private:
         const unsigned int range;
         const unsigned int min_damage;
         const unsigned int max_damage;
         const unsigned int cooldown;
+        const WeaponType weapon_type;
 
     public:
         Weapon(const WeaponCfg& data);
@@ -30,7 +31,8 @@ class Weapon: public Wearable {
         const unsigned int getRange() const override;
 
         /* Devuelve si es curativa [always false] */
-        const bool isHealing() const override;
+        const WeaponType getWeaponType() const override;
 };
-
+//-----------------------------------------------------------------------------
 #endif
+//-----------------------------------------------------------------------------

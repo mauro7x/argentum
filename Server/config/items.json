@@ -7,7 +7,8 @@
             "range": 1,
             "min_damage": 20,
             "max_damage": 50,
-            "cooldown": 1000
+            "cooldown": 1000,
+            "weapon_type": 0
         },
         {
             "id": 1001,
@@ -16,7 +17,8 @@
             "range": 1,
             "min_damage": 40,
             "max_damage": 50,
-            "cooldown": 1000
+            "cooldown": 1000,
+            "weapon_type": 0
         },
         {
             "id": 1002,
@@ -25,7 +27,8 @@
             "range": 1,
             "min_damage": 10,
             "max_damage": 90,
-            "cooldown": 1000
+            "cooldown": 1000,
+            "weapon_type": 0
         },
         {
             "id": 1003,
@@ -34,7 +37,8 @@
             "range": 5,
             "min_damage": 10,
             "max_damage": 40,
-            "cooldown": 2000
+            "cooldown": 2000,
+            "weapon_type": 1
         },
         {
             "id": 1004,
@@ -43,7 +47,8 @@
             "range": 5,
             "min_damage": 40,
             "max_damage": 80,
-            "cooldown": 2000
+            "cooldown": 2000,
+            "weapon_type": 1
         },
         {
             "id": 1005,
@@ -52,7 +57,8 @@
             "range": 1,
             "min_damage": 10,
             "max_damage": 20,
-            "cooldown": 500
+            "cooldown": 500,
+            "weapon_type": 0
         }
     ],
     "wands": [
@@ -91,7 +97,8 @@
             "min_damage": 20,
             "max_damage": 60,
             "recovery_points": 0,
-            "cooldown": 3000
+            "cooldown": 3000,
+            "weapon_type": 1
         },
         {
             "id": 1201,
@@ -102,7 +109,8 @@
             "min_damage": 0,
             "max_damage": 0,
             "recovery_points": 100,
-            "cooldown": 3000
+            "cooldown": 3000,
+            "weapon_type": 3
         },
         {
             "id": 1202,
@@ -113,7 +121,8 @@
             "min_damage": 40,
             "max_damage": 80,
             "recovery_points": 0,
-            "cooldown": 3000
+            "cooldown": 3000,
+            "weapon_type": 1
         },
         {
             "id": 1203,
@@ -124,7 +133,8 @@
             "min_damage": 80,
             "max_damage": 200,
             "recovery_points": 0,
-            "cooldown": 3000
+            "cooldown": 3000,
+            "weapon_type": 2
         }
     ],
     "helmets": [

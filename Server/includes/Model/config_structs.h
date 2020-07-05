@@ -13,9 +13,9 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-#ifndef __SPELL_TYPE_H__
-#define __SPELL_TYPE_H__
-enum SpellType { ATTACKING, HEALING };
+#ifndef __WEAPON_TYPE_H__
+#define __WEAPON_TYPE_H__
+enum WeaponType { MELEE_ATTACK, DISTANT_ATTACK, EXPLOSIVE, HEALING };
 #endif
 //-----------------------------------------------------------------------------
 #ifndef __POTION_TYPE_H__
@@ -37,6 +37,7 @@ struct WeaponCfg {
     unsigned int min_damage;
     unsigned int max_damage;
     unsigned int cooldown;
+    WeaponType weapon_type;
 };
 
 struct WandCfg {
@@ -49,9 +50,9 @@ struct WandCfg {
 struct SpellCfg {
     Id id;
     std::string name;
-    SpellType type;
     unsigned int mana_usage_cost;
     unsigned int cooldown;
+    WeaponType weapon_type;
 
     // ATTACK SPELL ONLY
     unsigned int range;

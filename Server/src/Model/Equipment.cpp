@@ -1,19 +1,17 @@
 #include "../../includes/Model/Equipment.h"
-
-#include <iostream>  // Para testear
-
+//-----------------------------------------------------------------------------
 #include "../../includes/Model/Character.h"
+//-----------------------------------------------------------------------------
 
 Equipment::Equipment(const EquipmentData& init_data,
                      ItemsContainer& items_container)
     : fist((Wearable*)items_container[FIST_ID]) {
     // Inicializo array de wearables con los datos o nullptr.
     for (unsigned int i = 0; i < container.size(); ++i) {
-        if (!init_data[i]) {
+        if (!init_data[i])
             this->container[i] = nullptr;
-        } else {
+        else
             this->container[i] = (Wearable*)items_container[init_data[i]];
-        }
     }
 }
 
@@ -47,65 +45,65 @@ void Equipment::dropAll(std::vector<DroppingSlot>& dropped_items) {
 }
 
 const unsigned int Equipment::useAttackItem(Character& attacker) {
-    if (!this->container[WEAPON]) {
+    if (!this->container[WEAPON])
         return fist->use(attacker);
-    }
+
     return this->container[WEAPON]->use(attacker);
 }
 
 const unsigned int Equipment::getAttackRange() const {
-    if (!this->container[WEAPON]) {
+    if (!this->container[WEAPON])
         return fist->getRange();
-    }
+
     return this->container[WEAPON]->getRange();
 }
 
 const unsigned int Equipment::getDefensePoints(Character& defender) {
     unsigned int defense_points = 0;
+
     /* Sumo los puntos de defensa de cada wearables de defensa
     que lleva puesto,que resultan ser todos menos WEAPON.*/
     for (unsigned int type = 0; type < N_WEARABLE_ITEMS; ++type) {
-        if (type == WEAPON) {
+        if (type == WEAPON)
             continue;
-        }
-        if (this->container[type]) {
+
+        if (this->container[type])
             defense_points += this->container[type]->use(defender);
-        }
     }
     return defense_points;
 }
 
-const bool Equipment::hasAWeaponEquipped() const {
-    return (this->container[WEAPON] != nullptr);
-}
-
-const bool Equipment::isWeaponHealing() const {
+const WeaponType Equipment::getWeaponType() const {
     if (!this->container[WEAPON])
-        return false;
+        return fist->getWeaponType();
 
-    return this->container[WEAPON]->isHealing();
+    return this->container[WEAPON]->getWeaponType();
 }
 
 void Equipment::fillBroadcastData(PlayerData& data) const {
     for (int i = 0; i < N_WEARABLE_ITEMS; ++i) {
-        if (!this->container[i]) {
+        if (!this->container[i])
             data.equipment[i] = 0;
-        } else {
+        else
             data.equipment[i] = this->container[i]->getId();
-        }
     }
 }
 
 void Equipment::fillPersistenceData(CharacterCfg& data) const {
     for (int i = 0; i < N_WEARABLE_ITEMS; ++i) {
-        if (!this->container[i]) {
+        if (!this->container[i])
             data.equipment[i] = 0;
-        } else {
+        else
             data.equipment[i] = this->container[i]->getId();
-        }
     }
 }
+
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
 
 const char* InvalidEquipmentSlotNumberException::what() const noexcept {
     return "El numero de slot del equipamiento especificado es inválido.";
 }
+
+//-----------------------------------------------------------------------------

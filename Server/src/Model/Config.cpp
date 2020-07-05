@@ -89,6 +89,7 @@ void Config<WeaponCfg>::_parseFile() {
         weapon.min_damage = j["weapons"][i]["min_damage"];
         weapon.max_damage = j["weapons"][i]["max_damage"];
         weapon.cooldown = j["weapons"][i]["cooldown"];
+        weapon.weapon_type = j["weapons"][i]["weapon_type"];
 
         config[weapon.id] = weapon;
     }
@@ -121,13 +122,13 @@ void Config<SpellCfg>::_parseFile() {
 
         spell.id = j["spells"][i]["id"];
         spell.name = j["spells"][i]["name"];
-        spell.type = j["spells"][i]["spell_type"];
         spell.mana_usage_cost = j["spells"][i]["mana_usage_cost"];
         spell.range = j["spells"][i]["range"];
         spell.min_damage = j["spells"][i]["min_damage"];
         spell.max_damage = j["spells"][i]["max_damage"];
         spell.recovery_points = j["spells"][i]["recovery_points"];
         spell.cooldown = j["spells"][i]["cooldown"];
+        spell.weapon_type = j["spells"][i]["weapon_type"];
 
         config[spell.id] = spell;
     }

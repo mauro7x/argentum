@@ -10,6 +10,10 @@ Potion::Potion(const Id id, std::string name, const unsigned int price,
 
 Potion::~Potion() {}
 
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+
 Potion* PotionFactory::newPotion(const PotionCfg& data) {
     if (data.type == HEALTH) {
         return new HealthPotion(data);
@@ -19,6 +23,10 @@ Potion* PotionFactory::newPotion(const PotionCfg& data) {
         throw UnknownPotionTypeException();
     }
 }
+
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
 
 HealthPotion::HealthPotion(const PotionCfg& data)
     : Potion(data.id, data.name, data.price, data.recovery_points) {}
@@ -32,6 +40,10 @@ void HealthPotion::equip(Character& equipper) {
         throw HealthPotionHasNoPointsToRecoverException();
     };
 }
+
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
 
 ManaPotion::ManaPotion(const PotionCfg& data)
     : Potion(data.id, data.name, data.price, data.recovery_points) {}
@@ -53,6 +65,10 @@ void ManaPotion::equip(Character& equipper) {
     };
 }
 
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+
 const char* UnknownPotionTypeException::what() const noexcept {
     return "El tipo de poción especificado en PotionCfg es inválido.";
 }
@@ -65,3 +81,4 @@ const char* ManaPotionHasNoPointsToRecoverException::what() const noexcept {
     return "Ya tienes la barra de maná llena.";
 }
 
+//-----------------------------------------------------------------------------

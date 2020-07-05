@@ -393,7 +393,7 @@ const bool Character::_useHealingWeapon(Attackable* target, int& damage) {
     // Si el arma es curativa, obtengo sus puntos y curo.
     unsigned int healing_points = this->equipment.useAttackItem(*this);
     target->recoverHealth(healing_points);
-
+    
     // Establezco valor negativo de daño -> puntos curativos.
     damage = -healing_points;
     return false;
@@ -431,7 +431,7 @@ const bool Character::useWeapon(Attackable* target, int& damage) {
 
     this->is_meditating = false;
 
-    if (this->equipment.isWeaponHealing())
+    if (this->equipment.getWeaponType() == HEALING)
         return _useHealingWeapon(target, damage);
 
     // Es un arma de ataque.

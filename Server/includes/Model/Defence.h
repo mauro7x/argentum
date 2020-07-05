@@ -1,9 +1,17 @@
 #ifndef __DEFENCE_H__
 #define __DEFENCE_H__
-
+//-----------------------------------------------------------------------------
 #include "Wearable.h"
 #include "config_structs.h"
+//-----------------------------------------------------------------------------
 
+/*
+ * Representa las distintas defensas que un character puede portar.
+ * i.e: cascos, armaduras, y escudos.
+ *
+ * Cada cual tiene sus puntos de defensa, que restan puntos de daño ante un
+ * ataque externo.
+ */
 class Defence : public Wearable {
    private:
     unsigned int min_defence, max_defence;
@@ -23,11 +31,12 @@ class Defence : public Wearable {
     /* Lanza excepción. La defensa no tiene rango */
     const unsigned int getRange() const override;
 
-    /* 
-     * Lanza excepción. La defensa no es curativa. 
-     * (solo absorbe puntos de daño)
+    /*
+     * Lanza excepción. La no es un arma.
      */
-    const bool isHealing() const override;
+    const WeaponType getWeaponType() const override;
 };
 
+//-----------------------------------------------------------------------------
 #endif
+//-----------------------------------------------------------------------------

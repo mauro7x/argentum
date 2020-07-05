@@ -6,6 +6,7 @@
 //-----------------------------------------------------------------------------
 #include "../../../Common/includes/DataStructs.h"
 #include "../../../Common/includes/Inventory.h"
+//-----------------------------------------------------------------------------
 #include "ItemsContainer.h"
 #include "Wearable.h"
 #include "config_structs.h"
@@ -14,6 +15,7 @@
 //-----------------------------------------------------------------------------
 class Character;  // Forward declaration p/evitar circular dependences.
 //-----------------------------------------------------------------------------
+
 /*
  * Contiene los items con los que el jugador
  * esta equipado.
@@ -92,20 +94,25 @@ class Equipment {
      */
     const unsigned int getDefensePoints(Character& defender);
 
-    /* Devuelve si tiene un arma equipada o no */
-    const bool hasAWeaponEquipped() const;
-
     /* Devuelve si el arma equipada es curativa o no */
-    const bool isWeaponHealing() const;
+    const WeaponType getWeaponType() const;
 
+    /* Llena la estructura de broadcast. */
     void fillBroadcastData(PlayerData& data) const;
 
+    /* Llena la estructura de persistencia. */
     void fillPersistenceData(CharacterCfg& data) const;
 };
+
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
 
 class InvalidEquipmentSlotNumberException : public std::exception {
    public:
     virtual const char* what() const noexcept;
 };
 
+//-----------------------------------------------------------------------------
 #endif
+//-----------------------------------------------------------------------------

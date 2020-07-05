@@ -1,17 +1,12 @@
 #ifndef __SPELL_H__
 #define __SPELL_H__
-
-#include <exception>
+//-----------------------------------------------------------------------------
 #include <string>
-
+//-----------------------------------------------------------------------------
 #include "config_structs.h"
-
+//-----------------------------------------------------------------------------
 class Character;  // Forward declaration p/ evitar dependencias circulares.
-
-class UnknownSpellTypeException : public std::exception {
-   public:
-    virtual const char* what() const noexcept;
-};
+//-----------------------------------------------------------------------------
 
 /*
  * Representa a los hechizos que son lanzados por los Wand.
@@ -28,23 +23,27 @@ class Spell {
     const unsigned int mana_usage_cost;
     const unsigned int range;
     const unsigned int cooldown;
+    WeaponType weapon_type;
 
    public:
     Spell(const int id, const std::string name,
           const unsigned int mana_usage_cost, const unsigned int range,
-          const unsigned int cooldown);
+          const unsigned int cooldown, const WeaponType weapon_type);
     virtual ~Spell();
 
-    
     /* Lanzamiento del hechizo. Retorna los puntos de ataque que provoca. */
     virtual const unsigned int cast(Character& caster) = 0;
 
-    /* Devuelve si el hechizo es curativo o no */
-    virtual const bool isHealing() const = 0;
+    /* Devuelve el tipo de arma del hechizo. */
+    const WeaponType getWeaponType() const;
 
     /* Retorna el rango del hechizo. */
     const unsigned int getRange() const;
 };
+
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
 
 /*
  * Crea un hechizo segun el tipo especificado en
@@ -54,6 +53,10 @@ class SpellFactory {
    public:
     static Spell* newSpell(const SpellCfg& data);
 };
+
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
 
 class AttackingSpell : public Spell {
    private:
@@ -70,9 +73,11 @@ class AttackingSpell : public Spell {
      * Si no tiene suficiente mana, lanza InsufficientManaException.
      */
     const unsigned int cast(Character& caster) override;
-
-    const bool isHealing() const override;
 };
+
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
 
 class HealingSpell : public Spell {
    private:
@@ -89,8 +94,8 @@ class HealingSpell : public Spell {
      * Si no tiene suficiente mana, lanza InsufficientManaException.
      */
     const unsigned int cast(Character& caster) override;
-
-    const bool isHealing() const override;
 };
 
+//-----------------------------------------------------------------------------
 #endif
+//-----------------------------------------------------------------------------
