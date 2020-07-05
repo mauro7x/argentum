@@ -528,6 +528,9 @@ class Character : public Attackable {
     /* Retorna false */
     const bool isCreature() const override;
 
+    /* Retorna el tipo de arma que porta actualmente. */
+    const WeaponType getWeaponType() const;
+
     //--------------------------------------------------------------------------
 
     //--------------------------------------------------------------------------

@@ -638,16 +638,27 @@ void Game::_sendCharacterAttackNotifications(const int damage,
                                              const InstanceId target) {
     std::string msg_to_attacked, msg_to_attacker;
 
+    WeaponType weapon_type = this->characters.at(caller).getWeaponType();
+
     if (damage > 0) {
         msg_to_attacker =
             "Le has infligido " + std::to_string(damage) + " de daño.";
         msg_to_attacked =
             "Has recibido " + std::to_string(damage) + " de daño.";
-    } else if (damage < 0) {
+
+        if (weapon_type == EXPLOSIVE)
+            _pushCharacterEvent(caller, EXPLOSION_SPELL_EV_TYPE);
+        else
+            _pushCharacterEvent(caller, GRAL_ATTACK_EV_TYPE);
+
+    } else if (damage <= 0 && weapon_type == HEALING) {
         msg_to_attacker =
             "Le has curado " + std::to_string(-damage) + " puntos de vida.";
         msg_to_attacked =
             "Te han curado " + std::to_string(-damage) + " puntos de vida.";
+
+        _pushCharacterEvent(caller, HEALING_SPELL_EV_TYPE);
+        
     } else if (eluded) {
         msg_to_attacker = "Tu ataque fue eludido.";
         msg_to_attacked = "Has eludido un ataque.";
@@ -655,6 +666,12 @@ void Game::_sendCharacterAttackNotifications(const int damage,
         msg_to_attacker =
             "No le has causado daño, la defensa absorbió el ataque.";
         msg_to_attacked = "Tu defensa absorbió todo el daño del ataque.";
+
+        // Provisorio, conviene ponerlo en un evento aparte.
+        if (weapon_type == EXPLOSIVE)
+            _pushCharacterEvent(caller, EXPLOSION_SPELL_EV_TYPE);
+        else
+            _pushCharacterEvent(caller, GRAL_ATTACK_EV_TYPE);
     }
 
     Notification* reply = new Reply(INFO_MSG, msg_to_attacker.c_str());
@@ -671,6 +688,13 @@ void Game::_sendCreatureAttackNotifications(const int damage,
                                             const InstanceId caller) {
     std::string msg_to_attacker = "Has atacado a la criatura, provocando " +
                                   std::to_string(damage) + " de daño.";
+
+    WeaponType weapon_type = this->characters.at(caller).getWeaponType();
+
+    if (weapon_type == EXPLOSIVE)
+        _pushCharacterEvent(caller, EXPLOSION_SPELL_EV_TYPE);
+    else
+        _pushCharacterEvent(caller, GRAL_ATTACK_EV_TYPE);
 
     Notification* reply = new Reply(INFO_MSG, msg_to_attacker.c_str());
     active_clients.notify(caller, reply);

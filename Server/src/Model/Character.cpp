@@ -197,8 +197,10 @@ void Character::stopMoving() {
 //-----------------------------------------------------------------------------
 
 const bool Character::recoverHealth(unsigned int& points) {
-    if (!points || !health || this->health == this->max_health)
+    if (!points || !health || this->health == this->max_health) {
+        points = 0;
         return false;
+    }
 
     if (health + points > max_health) {
         points = max_health - health;
@@ -393,7 +395,7 @@ const bool Character::_useHealingWeapon(Attackable* target, int& damage) {
     // Si el arma es curativa, obtengo sus puntos y curo.
     unsigned int healing_points = this->equipment.useAttackItem(*this);
     target->recoverHealth(healing_points);
-    
+
     // Establezco valor negativo de daño -> puntos curativos.
     damage = -healing_points;
     return false;
@@ -536,6 +538,10 @@ const std::string& Character::getNickname() const {
 
 const bool Character::isCreature() const {
     return false;
+}
+
+const WeaponType Character::getWeaponType() const {
+    return this->equipment.getWeaponType();
 }
 
 //-----------------------------------------------------------------------------
