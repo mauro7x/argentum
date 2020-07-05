@@ -550,6 +550,7 @@ const bool Character::mustBeBroadcasted() const {
 
 void Character::beBroadcasted() {
     this->broadcast = false;
+    this->position.beBroadcasted();
 }
 
 void Character::fillBroadcastData(PlayerData& data) const {
