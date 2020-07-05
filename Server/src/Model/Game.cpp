@@ -20,8 +20,9 @@
 #define FIRST_INSTANCE_ID 1
 //-----------------------------------------------------------------------------
 
-Game::Game(ActiveClients& active_clients)
-    : bank(items),
+Game::Game(ActiveClients& active_clients, const int& rate)
+    : rate(rate),
+      bank(items),
       data_persistence_cooldown(TIME_TO_PERSIST_DATA),
       next_instance_id(FIRST_INSTANCE_ID),
       active_clients(active_clients) {
@@ -279,7 +280,7 @@ const InstanceId Game::newCharacter(const CharacterCfg& init_data) {
         std::forward_as_tuple(init_data, this->races[init_data.race],
                               this->kinds[init_data.kind], this->map_container,
                               spawning_map_id, spawning_x_coord,
-                              spawning_y_coord, this->items));
+                              spawning_y_coord, this->items, rate));
 
     this->nickname_id_map[init_data.nickname] = new_character_id;
 
@@ -306,7 +307,7 @@ void Game::newCreature(const CreatureCfg& init_data, const Id init_map) {
         std::piecewise_construct, std::forward_as_tuple(new_creature_id),
         std::forward_as_tuple(init_data, map_container, init_map,
                               spawning_x_coord, spawning_y_coord,
-                              init_data.base_health, items, characters));
+                              init_data.base_health, items, characters, rate));
 
     _pushCreatureDifferentialBroadcast(new_creature_id, NEW_BROADCAST);
 }
@@ -426,7 +427,7 @@ void Game::spawnNewCreatures(const int it) {
             continue;
         }
 
-        iterator->second.creature_spawning_cooldown -= it * RATE;
+        iterator->second.creature_spawning_cooldown -= it * rate;
         while (iterator->second.creature_spawning_cooldown <= 0) {
             _spawnNewCreature(iterator->first);
             ++iterator->second.amount_of_creatures;
@@ -441,7 +442,7 @@ void Game::spawnNewCreatures(const int it) {
 void Game::persistPeriodicData(Database& database, const int it) {
     std::unordered_map<InstanceId, Character>::iterator it_characters =
         this->characters.begin();
-    data_persistence_cooldown -= it * RATE;
+    data_persistence_cooldown -= it * rate;
     if (data_persistence_cooldown <= 0) {
         while (it_characters != this->characters.end()) {
             CharacterCfg character_data = {};
@@ -470,7 +471,7 @@ void Game::updateDroppedItemsLifetime(const int it) {
         while (dropped_items_iterator != map_iterator->second.end()) {
             int& lifetime = dropped_items_iterator->second;
 
-            lifetime -= it * RATE;
+            lifetime -= it * rate;
 
             if (lifetime <= 0) {
                 // Eliminamos el item del mapa.

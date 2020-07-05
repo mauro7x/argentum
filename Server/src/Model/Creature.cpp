@@ -14,7 +14,8 @@ Creature::Creature(const CreatureCfg& data, MapContainer& map_container,
                    const Id init_map, const int init_x_coord,
                    const int init_y_coord, const uint32_t health,
                    ItemsContainer& items,
-                   std::unordered_map<InstanceId, Character>& characters)
+                   std::unordered_map<InstanceId, Character>& characters,
+                   const int& rate)
     : id(data.id),
       name(data.name),
       health_max(data.base_health),
@@ -35,7 +36,8 @@ Creature::Creature(const CreatureCfg& data, MapContainer& map_container,
       attack_cooldown(data.attack_cooldown),
       actual_attack_cooldown(0),
       attacking_id(0),
-      broadcast(false) {
+      broadcast(false),
+      rate(rate) {
     RandomNumberGenerator random_number_generator;
     level = random_number_generator((int)data.min_level, (int)data.max_level);
     posibles_orientations.push_back(UP_ORIENTATION);
@@ -119,7 +121,7 @@ void Creature::_determinateDirectionAndMove(
     }
 }
 void Creature::_updateDamage(const unsigned int it, const InstanceId id) {
-    actual_attack_cooldown -= it * RATE;
+    actual_attack_cooldown -= it * rate;
     attacking_id = 0;
 
     while (actual_attack_cooldown <= 0) {
@@ -134,7 +136,7 @@ void Creature::_updateDamage(const unsigned int it, const InstanceId id) {
 }
 
 void Creature::_updateMovement(const unsigned int it) {
-    this->moving_cooldown -= it * RATE;
+    this->moving_cooldown -= it * rate;
 
     while (this->moving_cooldown <= 0) {
         try {
@@ -157,7 +159,7 @@ void Creature::_setRandomOrientation() {
     this->is_random_moving = true;
 }
 void Creature::_randomMovement(const unsigned int it) {
-    this->random_moving_cooldown -= it * RATE;
+    this->random_moving_cooldown -= it * rate;
     _setRandomOrientation();
 
     while (random_moving_cooldown <= 0) {
@@ -170,7 +172,8 @@ void Creature::_randomMovement(const unsigned int it) {
         }
         this->broadcast = true;
 
-        this->random_moving_cooldown += RANDOM_MOVEMENT_FACTOR * 1000 / movement_speed;
+        this->random_moving_cooldown +=
+            RANDOM_MOVEMENT_FACTOR * 1000 / movement_speed;
     }
 }
 
@@ -193,10 +196,10 @@ void Creature::act(const unsigned int it) {
         _updateMovement(it);
     } else {
         this->moving_cooldown =
-            std::max((int)(this->moving_cooldown - it * RATE), 0);
+            std::max((int)(this->moving_cooldown - it * rate), 0);
 
         this->random_moving_cooldown =
-            std::max((int)(this->random_moving_cooldown - it * RATE), 0);
+            std::max((int)(this->random_moving_cooldown - it * rate), 0);
     }
 }
 

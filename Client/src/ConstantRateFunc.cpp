@@ -10,6 +10,11 @@
 
 ConstantRateFunc::ConstantRateFunc() : exit(false) {
     json config = JSON::loadJsonFile(paths::config(CONFIG_FILEPATH));
+    if (!((int)config["fps"])) {
+        throw Exception(
+            "ConstantRateFunc::ConstantRateFunc: invalid fps in config file.");
+    }
+
     this->rate = 1000 / (int)config["fps"];
 }
 

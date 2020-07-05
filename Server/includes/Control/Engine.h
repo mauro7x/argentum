@@ -40,6 +40,9 @@ class Engine : public Thread {
     std::atomic_bool keep_executing;
     Database& database;
 
+    // Rate
+    int rate;
+
     // Colas a vaciar en cada iteración
     NonBlockingQueue<NewConnection*>& new_connections;
     NonBlockingQueue<InstanceId*> finished_connections;

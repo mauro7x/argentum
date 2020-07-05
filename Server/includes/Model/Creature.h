@@ -49,6 +49,9 @@ class Creature : public Attackable {
     unsigned int level;
     bool broadcast;
 
+    // Información del engine
+    const int& rate;
+
     /*
      * Recorrer todo el map de characteres, si encuentra characteres dentro del
      * rango visible, si no devuelve 0
@@ -100,7 +103,8 @@ class Creature : public Attackable {
     Creature(const CreatureCfg& data, MapContainer& map_container,
              const Id init_map, const int init_x_coord, const int init_y_coord,
              const uint32_t health, ItemsContainer& items,
-             std::unordered_map<InstanceId, Character>& characters);
+             std::unordered_map<InstanceId, Character>& characters,
+             const int& rate);
 
     /* Destructor */
     ~Creature();

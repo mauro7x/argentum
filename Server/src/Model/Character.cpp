@@ -16,10 +16,9 @@
 Character::Character(const CharacterCfg& init_data, const RaceCfg& race,
                      const KindCfg& kind, MapContainer& map_container,
                      const Id init_map, const int init_x_coord,
-                     const int init_y_coord, ItemsContainer& items_container)
-    :
-
-      health(init_data.health),
+                     const int init_y_coord, ItemsContainer& items_container,
+                     const int& rate)
+    : health(init_data.health),
       mana(init_data.mana),
 
       intelligence(kind.intelligence + race.intelligence),
@@ -54,7 +53,9 @@ Character::Character(const CharacterCfg& init_data, const RaceCfg& race,
       respawning_y_coord(0),
 
       attack_cooldown(0),
-      broadcast(false) {
+      broadcast(false),
+
+      rate(rate) {
     this->updateLevelDependantAttributes();  // Set max_health, max_mana,
                                              // max_inventory_gold.
 }
@@ -74,16 +75,16 @@ void Character::act(const unsigned int it) {
         _updateMovement(it);
     } else {
         if (moving_cooldown > 0) {
-            moving_cooldown = std::max((int)(moving_cooldown - it * RATE), 0);
+            moving_cooldown = std::max((int)(moving_cooldown - it * rate), 0);
         }
     }
 
     if (attack_cooldown > 0)
-        attack_cooldown = std::max((int)(attack_cooldown - it * RATE), 0);
+        attack_cooldown = std::max((int)(attack_cooldown - it * rate), 0);
 
     if (is_resurrecting) {
         resurrecting_cooldown =
-            std::max((int)(resurrecting_cooldown - it * RATE), 0);
+            std::max((int)(resurrecting_cooldown - it * rate), 0);
         if (!resurrecting_cooldown)
             _resurrect();
     }
@@ -106,7 +107,7 @@ void Character::updateLevelDependantAttributes() {
 }
 
 void Character::_updateTimeDependantAttributes(const unsigned int it) {
-    attribute_update_time_elapsed += it * RATE;
+    attribute_update_time_elapsed += it * rate;
 
     while (attribute_update_time_elapsed >= TIME_TO_UPDATE_ATTRIBUTES) {
         unsigned int health_update = Formulas::calculateHealthTimeRecovery(
@@ -132,7 +133,7 @@ void Character::_updateTimeDependantAttributes(const unsigned int it) {
 }
 
 void Character::_updateMovement(const unsigned int it) {
-    this->moving_cooldown -= it * RATE;
+    this->moving_cooldown -= it * rate;
 
     while (this->moving_cooldown <= 0) {
         this->broadcast = true;
