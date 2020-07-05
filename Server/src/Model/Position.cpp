@@ -85,7 +85,8 @@ void Position::changePosition(int x, int y) {
         // No cambio mi posición.
         return;
     }
-
+    
+    this->map_container[this->map].swapTileOcuppant(this->x, this->y, x, y);
     this->x = x;
     this->y = y;
 }

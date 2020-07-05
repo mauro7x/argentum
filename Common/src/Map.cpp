@@ -218,8 +218,6 @@ void Map::setItem(const Id item_id, const uint32_t amount, const int x,
     tile.item_amount = amount;
 }
 
-// NO ES EL MEJOR ALGORITMO PERO FUNCIONA ;) -santi
-// (si alguno quiere cambiarlo es bienvenido)
 void Map::addItem(const Id item_id, const uint32_t amount, int& x, int& y) {
     this->getNearestFreeTile(x, y);
 
@@ -275,6 +273,14 @@ const bool Map::isSafeZone(const int x, const int y) const {
 void Map::clearTileOccupant(const int x, const int y) {
     Tile& tile = this->_getTile(x, y);
     tile.occupant_id = 0;
+}
+
+void Map::swapTileOcuppant(const int prev_x, const int prev_y, const int new_x,
+                           const int new_y) {
+    Tile& prev_tile = this->_getTile(prev_x, prev_y);
+    Tile& new_tile = this->_getTile(new_x, new_y);
+    new_tile.occupant_id = prev_tile.occupant_id;
+    prev_tile.occupant_id = 0;
 }
 
 void Map::clearTileItem(const int x, const int y) {
