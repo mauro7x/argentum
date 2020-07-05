@@ -783,6 +783,8 @@ void Game::meditate(const InstanceId caller) {
         "Has comenzado a meditar. Ante cualquier acción dejarás de hacerlo.";
     Notification* reply = new Reply(SUCCESS_MSG, reply_msg);
     active_clients.notify(caller, reply);
+
+    _pushCharacterEvent(caller, MEDITATE_EV_TYPE);
 }
 
 void Game::take(const InstanceId caller) {
@@ -927,6 +929,8 @@ void Game::resurrect(const InstanceId caller) {
                             " segundos de cooldown.";
     Notification* reply = new Reply(SUCCESS_MSG, reply_msg);
     active_clients.notify(caller, reply);
+
+    _pushCharacterEvent(caller, RESURRECT_EV_TYPE);
 }
 
 void Game::resurrect(const InstanceId caller, const uint32_t x_coord,
@@ -950,6 +954,8 @@ void Game::resurrect(const InstanceId caller, const uint32_t x_coord,
     std::string reply_msg = "¡Has resucitado!";
     Notification* reply = new Reply(SUCCESS_MSG, reply_msg);
     active_clients.notify(caller, reply);
+
+    _pushCharacterEvent(caller, RESURRECT_EV_TYPE);
 }
 
 void Game::heal(const InstanceId caller, const uint32_t x_coord,
@@ -973,6 +979,8 @@ void Game::heal(const InstanceId caller, const uint32_t x_coord,
     std::string reply_msg = "Has sido curado.";
     Notification* reply = new Reply(SUCCESS_MSG, reply_msg);
     active_clients.notify(caller, reply);
+
+    _pushCharacterEvent(caller, HEALED_BY_PRIEST_EV_TYPE);
 }
 
 void Game::list(const InstanceId caller, const uint32_t x_coord,
