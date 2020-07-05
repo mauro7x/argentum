@@ -355,6 +355,7 @@ void EventHandler::handleEvent(const SDL_Event& e) {
         // Texto
         case START_INPUT_EV: {
             hud.enableInput();
+            Mixer::playLocalSound(CLICK_SOUND);
             break;
         }
 
@@ -370,11 +371,12 @@ void EventHandler::handleEvent(const SDL_Event& e) {
 
         case STOP_INPUT_EV: {
             hud.disableInput();
+            Mixer::playLocalSound(CLICK_SOUND);
+
             std::string input = hud.popText();
             std::string reply;
             Command* cmd = input_parser.parse(input, reply);
             if (cmd) {
-                // ver si esto queda o si lo volamos, quizas es medio pesado
                 hud.addMessage(">> " + input, USER_CMD_MSG_COLOR);
                 commands.push(cmd);
             } else if (!reply.empty()) {
@@ -400,6 +402,8 @@ void EventHandler::handleEvent(const SDL_Event& e) {
             // Si el tile tiene un NPC, lo seleccionamos para futuros comandos
             Id npc = map.getNPC(tile.x, tile.y);
             if (npc) {
+                Mixer::playLocalSound(SELECTION_SOUND);
+
                 if (current_selection.npc_selected) {
                     map.clearSelectedNPC(current_selection.npc_x_tile,
                                          current_selection.npc_y_tile);
@@ -422,6 +426,7 @@ void EventHandler::handleEvent(const SDL_Event& e) {
 
             int8_t inventory_slot = hud.getInventorySlotClicked(click_pos);
             if (inventory_slot >= 0) {
+                Mixer::playLocalSound(SELECTION_SOUND);
                 current_selection.inventory_slot_selected = inventory_slot;
                 hud.selectItem(inventory_slot);
             }
@@ -442,6 +447,7 @@ void EventHandler::handleEvent(const SDL_Event& e) {
 
             int8_t equipment_slot = hud.getEquipmentSlotClicked(click_pos);
             if (equipment_slot >= 0) {
+                Mixer::playLocalSound(SELECTION_SOUND);
                 commands.push(new UnequipObjectCommand(equipment_slot));
                 break;
             }

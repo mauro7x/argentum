@@ -9,5 +9,9 @@
         "extension": ".wav",
         "samples": 11,
         "listening_radio": 20
+    },
+    "local_sounds": {
+        "click": "client/assets/Audio/Local/click.wav",
+        "selection": "client/assets/Audio/Local/selection.wav"
     }
 }

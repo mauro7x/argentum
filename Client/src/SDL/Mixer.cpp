@@ -50,6 +50,10 @@ void Mixer::playEventSound(uint8_t sound_id, const SDL_Point& player_pos,
     Mixer::getInstance()._playChunk(sound_id, player_pos, sound_pos);
 }
 
+void Mixer::playLocalSound(LocalSound local_sound) {
+    Mixer::getInstance()._playLocalSound(local_sound);
+}
+
 void Mixer::finishedSongCallback() {
     Mixer& instance = Mixer::getInstance();
 
@@ -134,6 +138,24 @@ void Mixer::_init() {
 
         // Cargamos la función que lleva un conteo de chunks activos
         Mix_ChannelFinished(chunkCallback);
+    }
+
+    // Cargamos los sonidos locales
+    {
+        std::string filepath;
+        Mix_Chunk* new_sound = NULL;
+
+        // Click
+        filepath = audio_to_load["local_sounds"]["click"];
+        filepath = paths::asset(filepath.c_str());
+        new_sound = Mix_LoadWAV(filepath.c_str());
+        local_sounds[CLICK_SOUND] = new_sound;
+
+        // Selección
+        filepath = audio_to_load["local_sounds"]["selection"];
+        filepath = paths::asset(filepath.c_str());
+        new_sound = Mix_LoadWAV(filepath.c_str());
+        local_sounds[SELECTION_SOUND] = new_sound;
     }
 }
 
@@ -269,6 +291,24 @@ void Mixer::_playChunk(uint8_t sound_id, const SDL_Point& player_pos,
     Mix_SetPosition(channel, sdl_angle, sdl_distance);
 }
 
+void Mixer::_playLocalSound(LocalSound local_sound) {
+    if ((local_sound < 0) || (local_sound > N_LOCAL_SOUNDS)) {
+        throw Exception("Mixer::_playLocalSound: invalid local_sound (%u)",
+                        (unsigned int)local_sound);
+    }
+
+    int channel = Mix_PlayChannel(-1, local_sounds[local_sound], 0);
+    if (channel < 0) {
+        // No hay más canales disponibles
+        return;
+    }
+
+    active_chunks++;
+
+    // Limpiamos los efectos
+    Mix_SetPosition(channel, 0, 0);
+}
+
 Sint16 Mixer::_getAngle(const SDL_Point& origin, const SDL_Point& point) const {
     SDL_Point centered = {point.x - origin.x, point.y - origin.y};
 
@@ -312,6 +352,14 @@ Mixer::~Mixer() {
     // Liberamos chunks
     for (auto it = chunks.begin(); it != chunks.end(); it++) {
         Mix_FreeChunk(*it);
+    }
+
+    // Liberamos local sounds
+    for (int i = 0; i < N_LOCAL_SOUNDS; i++) {
+        if (local_sounds[i] != NULL) {
+            Mix_FreeChunk(local_sounds[i]);
+            local_sounds[i] = NULL;
+        }
     }
 }
 
