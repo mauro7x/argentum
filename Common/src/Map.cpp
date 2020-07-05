@@ -146,6 +146,23 @@ TileId& Map::getNPC(const int x, const int y) {
     return tile.npc_id;
 }
 
+TileId& Map::getPortal(int x, int y) {
+    // Hay que llegar a la celda inferior izquierda del portal
+    // Primero descendemos
+    while (_getTile(x, y).portal) {
+        y++;
+    }
+    y--;
+
+    // Ahora vamos a la izquierda
+    while (_getTile(x, y).portal) {
+        x--;
+    }
+    x++;
+
+    return _getTile(x, y).decoration_id;
+}
+
 const bool Map::moveOccupant(const int x, const int y,
                              const Orientation& orientation, bool is_creature) {
     Tile& from_tile = _getTile(x, y);

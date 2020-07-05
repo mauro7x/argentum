@@ -9,6 +9,7 @@ void InputParser::_fillCommands() {
     commands.emplace(THROW_EXPECTED_INPUT, THROW_INPUT_CMD);
     commands.emplace(MEDITATE_EXPECTED_INPUT, MEDITATE_INPUT_CMD);
     commands.emplace(RESURRECT_EXPECTED_INPUT, RESURRECT_INPUT_CMD);
+    commands.emplace(TRANSPORT_EXPECTED_INPUT, TRANSPORT_INPUT_CMD);
     commands.emplace(HEAL_EXPECTED_INPUT, HEAL_INPUT_CMD);
     commands.emplace(LIST_EXPECTED_INPUT, LIST_INPUT_CMD);
     commands.emplace(DEPOSIT_EXPECTED_INPUT, DEPOSIT_INPUT_CMD);
@@ -111,6 +112,23 @@ Command* InputParser::_parseCommand(const std::string& command_input,
             }
         }
 
+        case TRANSPORT_INPUT_CMD: {
+            if (!current_selection.portal_selected) {
+                (*g_reply) =
+                    "Debes seleccionar un portal primero (haciéndole click).";
+                return NULL;
+            }
+
+            body = _getCommandBody(command_input);
+            if (!body.empty()) {
+                (*g_reply) = "El comando '/transportar' no admite parámetros.";
+                return NULL;
+            }
+
+            return new TransportCommand(current_selection.portal_x_tile,
+                                        current_selection.portal_y_tile);
+        }
+
         case HEAL_INPUT_CMD: {
             if (!current_selection.npc_selected) {
                 (*g_reply) =
@@ -130,9 +148,11 @@ Command* InputParser::_parseCommand(const std::string& command_input,
         }
 
         case LIST_INPUT_CMD: {
-            if (!current_selection.npc_selected) {
+            if (!current_selection.npc_selected &&
+                !current_selection.portal_selected) {
                 (*g_reply) =
-                    "Debes seleccionar a un NPC primero (haciéndole click).";
+                    "Debes seleccionar a un NPC o a un portal primero "
+                    "(haciéndole click).";
                 return NULL;
             }
 
@@ -142,8 +162,13 @@ Command* InputParser::_parseCommand(const std::string& command_input,
                 return NULL;
             }
 
-            return new ListCommand(current_selection.npc_x_tile,
-                                   current_selection.npc_y_tile);
+            if (current_selection.npc_selected) {
+                return new ListCommand(current_selection.npc_x_tile,
+                                       current_selection.npc_y_tile);
+            } else {
+                return new ListCommand(current_selection.portal_x_tile,
+                                       current_selection.portal_y_tile);
+            }
         }
 
         case DEPOSIT_INPUT_CMD: {

@@ -26,43 +26,6 @@ Identificas el mensaje con el primer byte recibido (opcode), y para cada caso se
 | 129 | Sign-in | C -> S | `USER_LENGTH (4) + USERNAME (USER_LENGTH) + PASS_LENGTH (4) + PASSWORD (PASS_LENGTH)` |
 | 130 | Sign-up | C -> S | `USER_LENGTH (4) + USERNAME (USER_LENGTH) + PASS_LENGTH (4) + PASSWORD (PASS_LENGTH) + RACE (4) + KIND (4) + HEAD_ID (4) + BODY_ID (4)` |
 
-
-### Eventos (OP = 3)
-| OPCODE | DESCRIPCION |
-|--------|-------------|
-| 0 | Movimiento |
-| 1 | Tirar |
-| 2 | Agarrar |
-| 3 | Empezar a meditar |
-| 4 | Level up |
-| 5 | Muerte |
-| 6 | Resurrección |
-| 7 | Ataque general |
-| 8 | Hechizo de explosión |
-| 9 | Hechizo de curación |
-| 10 | Curación de sacerdote | 
-
-### Eventos
-
-- movimiento.
-- ataques.
-
-- curaciones.
-- drop.
-- tirar.
-- meditar al principio.
-- resucitar.
-- curar con sacerdote.
-- level up
-- muerte
-- daño sufrido
-- algun sonido de confirmación de compra.
-- ir viendo mas.
-
--- sonidos en local
-- sonidos cuando selecciono cosas
-
-
 ---
 
 ### Respuesta a conexión (OP = 0):
@@ -109,6 +72,29 @@ Identificas el mensaje con el primer byte recibido (opcode), y para cada caso se
 
 ---
 
+### Eventos (OP = 3)
+| OPCODE | DESCRIPCION |
+|--------|-------------|
+| 0 | Movimiento |
+| 1 | Tirar |
+| 2 | Agarrar |
+| 3 | Empezar a meditar |
+| 4 | Level up |
+| 5 | Muerte |
+| 6 | Resurrección |
+| 7 | Ataque general |
+| 8 | Hechizo de explosión |
+| 9 | Hechizo de curación |
+| 10 | Curación de sacerdote | 
+
+#### Otros para ir agregando
+
+- daño sufrido
+- algun sonido de confirmación de compra.
+- ir viendo mas.
+
+---
+
 ### Comandos (OP = 128)
 
 | OPCODE | TIPO | ESTRUCTURA (B) |
@@ -138,7 +124,7 @@ Identificas el mensaje con el primer byte recibido (opcode), y para cada caso se
 | 22 | Listar jugadores conectados | `` |
 | 23 | Mensaje general | `CONTENT_LENGTH (4) + CONTENT (LENGTH)` |
 | 24 | Mensaje privado | `NICK_LENGTH (4) + NICKNAME (NICK_LENGTH) + CONTENT_LENGTH (4) + CONTENT (LENGTH)` |
-
+| 25 | Transportar | `POS` |
 
 * `POS` = `X (4) + Y (4)`
 

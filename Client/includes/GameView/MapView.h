@@ -71,8 +71,14 @@ class MapView {
     /* Seleccionar un NPC en un tile */
     void selectNPC(const int x_tile, const int y_tile);
 
-    /* Desselecciona al NPC en un tile */
+    /* Des-selecciona al NPC en un tile */
     void clearSelectedNPC(const int x_tile, const int y_tile);
+
+    /* Seleccionar el PORTAL de un tile */
+    void selectPortal(const int x_tile, const int y_tile);
+
+    /* Des-selecciona el PORTAL de un tile */
+    void clearSelectedPortal(const int x_tile, const int y_tile);
 
     /* Settea el ocupante de una celda */
     void occupyTile(InstanceId id, const int x_tile, const int y_tile);
@@ -115,6 +121,9 @@ class MapView {
 
     /* Devuelve si la celda dada pertenece a un indoor */
     bool indoor(const int x, const int y) const;
+
+    /* Devuelve si en la celda dada hay un portal */
+    bool portal(const int x, const int y) const;
 
     /* Obtiene la anchura en tiles del mapa actual */
     int widthInTiles() const;
