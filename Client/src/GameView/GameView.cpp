@@ -68,6 +68,7 @@ void GameView::_func(const int it) {
     // auto t1 = std::chrono::steady_clock::now();
     _processMessages();
     _processBroadcasts();
+    _processEvents();
 
     /* Limpiamos la pantalla */
     renderer.clearScreen();
