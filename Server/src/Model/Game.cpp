@@ -421,20 +421,23 @@ void Game::actCharacters(const int it) {
         this->characters.begin();
 
     while (it_characters != this->characters.end()) {
+        InstanceId id = it_characters->first;
+        Character& character = it_characters->second;
         try {
-            it_characters->second.act(it);
+            character.act(it);
         } catch (const CollisionWhileMovingException& e) {
-            it_characters->second.stopMoving();
+            character.stopMoving();
             Notification* reply = new Reply(ERROR_MSG, e.what());
-            active_clients.notify(it_characters->first, reply);
+            active_clients.notify(id, reply);
         }
 
-        if (it_characters->second.mustBeBroadcasted()) {
+        if (character.mustBeBroadcasted()) {
+            if (character.getPosition().mustBeBroadcasted())
+                _pushCharacterEvent(id, MOVEMENT_EV_TYPE);
+
             _pushCharacterDifferentialBroadcast(it_characters->first,
                                                 UPDATE_BROADCAST, true);
         }
-
-        // it_characters->second.debug();
 
         ++it_characters;
     }
