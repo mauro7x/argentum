@@ -293,11 +293,33 @@ const InstanceId Game::newCharacter(const CharacterCfg& init_data) {
     fprintf(stderr, "deberia espawnear en map: %i, x: %i, y: %i\n",
             init_data.map, init_data.x_tile, init_data.y_tile);
 
-    const Id spawning_map_id = this->map_container.getCharacterSpawningMap();
-    int spawning_x_coord;
-    int spawning_y_coord;
-    this->map_container[spawning_map_id].establishEntitySpawningPosition(
-        new_character_id, spawning_x_coord, spawning_y_coord, false);
+    fprintf(stderr, "new_created = %i\n", init_data.new_created);
+
+    Id spawning_map_id;
+    int spawning_x_coord, spawning_y_coord;
+
+    if (init_data.new_created) {
+        spawning_map_id = this->map_container.getCharacterSpawningMap();
+        this->map_container[spawning_map_id].establishEntitySpawningPosition(
+            new_character_id, spawning_x_coord, spawning_y_coord, false);
+    } else {
+        spawning_map_id = init_data.map;
+        spawning_x_coord = init_data.x_tile;
+        spawning_y_coord = init_data.y_tile;
+        try {
+            // Obtengo free tile próximo a la última posición del jugador
+            // persistida.
+            this->map_container[spawning_map_id].getNearestFreeTile(
+                spawning_x_coord, spawning_y_coord);
+        } catch (const CouldNotFindFreeTileException& e) {
+            // Si no puede spawnear en la posición persistida, asignamos
+            // posición aleatoria.
+            this->map_container[spawning_map_id]
+                .establishEntitySpawningPosition(new_character_id,
+                                                 spawning_x_coord,
+                                                 spawning_y_coord, false);
+        }
+    }
 
     this->characters.emplace(
         std::piecewise_construct, std::forward_as_tuple(new_character_id),
