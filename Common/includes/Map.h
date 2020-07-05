@@ -140,6 +140,9 @@ class Map {
     /* Elimina el item de una celda */
     void clearTileItem(const int x, const int y);
 
+    /* Chequear si una posicion es valida para la criatura */
+    bool isPositionValidForCreature (const int x, const int y);
+
     //-------------------------------------------------------------------------
 
     /* Destructor */
