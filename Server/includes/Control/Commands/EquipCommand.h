@@ -3,15 +3,13 @@
 
 #include "Command.h"
 
-// comando para equipar los objetos del inventario
+// Equipa el objeto en el n_slot.
 class EquipCommand : public Command {
    private:
-    InstanceId caller;
-
     const uint8_t n_slot;
 
    public:
-    EquipCommand(InstanceId caller, const uint8_t n_slot);
+    EquipCommand(const InstanceId caller, const uint8_t n_slot);
     ~EquipCommand();
 
     void exec(Game& game) override;

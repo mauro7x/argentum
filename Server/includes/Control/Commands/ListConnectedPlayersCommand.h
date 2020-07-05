@@ -3,11 +3,8 @@
 
 #include "Command.h"
 
-// comando para equipar los objetos del inventario
+// Listar los jugadores conectados en el juego.
 class ListConnectedPlayersCommand : public Command {
-   private:
-    InstanceId caller;
-
    public:
     ListConnectedPlayersCommand(const InstanceId caller);
     ~ListConnectedPlayersCommand();

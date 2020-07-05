@@ -3,14 +3,15 @@
 
 #include "Command.h"
 
+// Resucita a un jugador muerto mediante el sacerdote en la posición (x_coord,
+// y_coord).
 class ResurrectCommand : public Command {
    private:
-    InstanceId caller;
-    uint32_t x_coord;
-    uint32_t y_coord;
+    const uint32_t x_coord;
+    const uint32_t y_coord;
 
    public:
-    ResurrectCommand(InstanceId caller, const uint32_t x_coord,
+    ResurrectCommand(const InstanceId caller, const uint32_t x_coord,
                      const uint32_t y_coord);
     ~ResurrectCommand();
 

@@ -1,7 +1,7 @@
 #include "../../../includes/Control/Commands/StartMovingRightCommand.h"
 
-StartMovingRightCommand::StartMovingRightCommand(InstanceId caller)
-    : caller(caller) {}
+StartMovingRightCommand::StartMovingRightCommand(const InstanceId caller)
+    : Command(caller) {}
 StartMovingRightCommand::~StartMovingRightCommand() {}
 
 void StartMovingRightCommand::exec(Game& game) {

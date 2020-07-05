@@ -1,7 +1,7 @@
 #include "../../../includes/Control/Commands/StartMovingDownCommand.h"
 
-StartMovingDownCommand::StartMovingDownCommand(InstanceId caller)
-    : caller(caller) {}
+StartMovingDownCommand::StartMovingDownCommand(const InstanceId caller)
+    : Command(caller) {}
 StartMovingDownCommand::~StartMovingDownCommand() {}
 
 void StartMovingDownCommand::exec(Game& game) {

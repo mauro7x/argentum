@@ -4,11 +4,8 @@
 #include "Command.h"
 
 class StopMovingCommand : public Command {
-   private:
-    InstanceId caller;
-
    public:
-    StopMovingCommand(InstanceId caller);
+    StopMovingCommand(const InstanceId caller);
     ~StopMovingCommand();
 
     void exec(Game& game) override;

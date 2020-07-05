@@ -1,7 +1,8 @@
 #include "../../../includes/Control/Commands/UseWeaponCommand.h"
 
-UseWeaponCommand::UseWeaponCommand(InstanceId caller, const InstanceId target)
-    : caller(caller), target(target) {}
+UseWeaponCommand::UseWeaponCommand(const InstanceId caller,
+                                   const InstanceId target)
+    : Command(caller), target(target) {}
 
 UseWeaponCommand::~UseWeaponCommand() {}
 

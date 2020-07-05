@@ -30,8 +30,12 @@
 #include "../../../includes/Control/Commands/WithdrawGoldFromBankCommand.h"
 #include "../../../includes/Control/Commands/WithdrawItemFromBankCommand.h"
 //-----------------------------------------------------------------------------
-Command::Command() {}
+Command::Command(const InstanceId caller) : caller(caller) {}
 Command::~Command() {}
+
+const InstanceId Command::getCaller() const {
+    return this->caller;
+}
 
 // VERIFICAR SI SOCKET RECIBE BIEN LAS COSAS!
 // VERIFICAR SI SOCKET RECIBE BIEN LAS COSAS!

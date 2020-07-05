@@ -23,11 +23,18 @@ void Engine::_processCommands() {
     Command* cmd = nullptr;
     while ((cmd = commands.pop())) {
         fprintf(stderr, "ENGINE: Ejecutando comando (1/2).\n");
-        cmd->exec(game);
+
+        try {
+            cmd->exec(game);
+        } catch(const std::exception& e) {
+            Notification* reply = new Reply(ERROR_MSG, e.what());
+            active_clients.notify(cmd->getCaller(), reply);
+        }
+
         delete cmd;
+
         fprintf(stderr, "ENGINE: Comando ejecutado (2/2).\n");
     }
-    // fprintf(stderr, "No hay mas comandos por ejecutar\n");
 }
 
 void Engine::_processFinishedConnections() {
@@ -38,7 +45,6 @@ void Engine::_processFinishedConnections() {
 
         game.deleteCharacter(*finished_connection, database);
         active_clients.remove(*finished_connection);
-        // acá habría que persistir al cliente que se desconecto
 
         delete finished_connection;
 
@@ -151,8 +157,6 @@ void Engine::run() {
 
     // Vaciamos las colas para no perder memoria:
     _freeQueues();
-
-    // Persistir
 
     fprintf(stderr, "DEBUG: Termina la ejecución del engine.\n");
 }

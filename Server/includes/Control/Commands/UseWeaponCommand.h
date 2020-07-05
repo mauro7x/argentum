@@ -3,14 +3,13 @@
 
 #include "Command.h"
 
+// Usar el arma sobre el target.
 class UseWeaponCommand : public Command {
    private:
-    InstanceId caller;
-
     const InstanceId target;
 
    public:
-    UseWeaponCommand(InstanceId caller, const InstanceId target);
+    UseWeaponCommand(const InstanceId caller, const InstanceId target);
     ~UseWeaponCommand();
 
     void exec(Game& game) override;

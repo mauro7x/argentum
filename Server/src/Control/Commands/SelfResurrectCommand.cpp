@@ -1,6 +1,7 @@
 #include "../../../includes/Control/Commands/SelfResurrectCommand.h"
 
-SelfResurrectCommand::SelfResurrectCommand(InstanceId caller) : caller(caller) {}
+SelfResurrectCommand::SelfResurrectCommand(const InstanceId caller)
+    : Command(caller) {}
 
 SelfResurrectCommand::~SelfResurrectCommand() {}
 

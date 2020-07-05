@@ -16,11 +16,13 @@
  * de ejecución según sea necesario. Tener en cuenta que los atributos
  * particulares que necesite cada comando deben ser agregados como atributos
  * específicos de las clases concretas que hereden de esta. */
-
 class Command {
+   protected:
+    const InstanceId caller;
+
    public:
     /* Constructor */
-    Command();
+    Command(const InstanceId caller);
 
     /* Deshabilitamos el constructor por copia. */
     Command(const Command&) = delete;
@@ -38,6 +40,9 @@ class Command {
 
     /* Ejecución polimórfica del comando */
     virtual void exec(Game& game) = 0;
+
+    /* Devuelve el InstanceId del caller. */
+    const InstanceId getCaller() const;
 
     //-------------------------------------------------------------------------
 

@@ -3,17 +3,17 @@
 
 #include "Command.h"
 
+// Deposita el objeto en el n_slot en el banquero en la posición (x_coord,
+// y_coord).
 class DepositItemOnBankCommand : public Command {
    private:
-    InstanceId caller;
-
     const uint32_t x_coord;
     const uint32_t y_coord;
     const uint8_t n_slot;
     const uint32_t amount;
 
    public:
-    DepositItemOnBankCommand(InstanceId caller, const uint32_t x_coord,
+    DepositItemOnBankCommand(const InstanceId caller, const uint32_t x_coord,
                              const uint32_t y_coord, const uint8_t n_slot,
                              const uint32_t amount);
     ~DepositItemOnBankCommand();

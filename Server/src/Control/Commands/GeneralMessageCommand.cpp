@@ -1,8 +1,8 @@
 #include "../../../includes/Control/Commands/GeneralMessageCommand.h"
 
-GeneralMessageCommand::GeneralMessageCommand(InstanceId caller,
+GeneralMessageCommand::GeneralMessageCommand(const InstanceId caller,
                                              const std::string message)
-    : caller(caller),
+    : Command(caller),
       message(std::move(message)) {}
 
 GeneralMessageCommand::~GeneralMessageCommand() {}

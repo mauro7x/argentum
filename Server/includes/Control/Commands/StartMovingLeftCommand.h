@@ -3,12 +3,10 @@
 
 #include "Command.h"
 
+// Empezar a moverse a la izquierda.
 class StartMovingLeftCommand : public Command {
-   private:
-    InstanceId caller;
-
    public:
-    StartMovingLeftCommand(InstanceId caller);
+    StartMovingLeftCommand(const InstanceId caller);
     ~StartMovingLeftCommand();
 
     void exec(Game& game) override;
