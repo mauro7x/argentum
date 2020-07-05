@@ -681,24 +681,18 @@ void Game::_useWeapon(const InstanceId caller, const InstanceId target,
     int damage = 0;
     bool eluded = false;
 
-    try {
-        eluded = attacker.useWeapon(attacked, damage);
-    } catch (const std::exception& e) {
-        /*
-         * Atrapo excepciones:
-         * OutOfRangeAttackException,
-         * CantAttackWithoutWeaponException,
-         * KindCantDoMagicException,
-         * TooHighLevelDifferenceOnAttackException,
-         * NewbiesCantBeAttackedException, InsufficientManaException,
-         * AttackedActualStateCantBeAttackedException,
-         * AttackCooldownTimeNotElapsedException,
-         * CantAttackItselfException
-         */
-        Notification* reply = new Reply(ERROR_MSG, e.what());
-        active_clients.notify(caller, reply);
-        return;
-    }
+    /*
+     * Se propagan excepciones:
+     *  OutOfRangeAttackException,
+     *  CantAttackWithoutWeaponException,
+     *  KindCantDoMagicException,
+     *  TooHighLevelDifferenceOnAttackException,
+     *  NewbiesCantBeAttackedException, InsufficientManaException,
+     *  AttackedActualStateCantBeAttackedException,
+     *  AttackCooldownTimeNotElapsedException,
+     *  CantAttackItselfException
+     */
+    eluded = attacker.useWeapon(attacked, damage);
 
     // Verificamos si murió, en cuyo caso dropea todo.
     if (damage > 0 && !attacked->getHealth()) {
@@ -722,16 +716,13 @@ void Game::useWeapon(const InstanceId caller, const InstanceId target) {
     if (this->characters.count(target)) {
         Character& attacked = this->characters.at(target);
         _useWeapon(caller, target, &attacked, false);
-        return;
-    }
-
-    if (this->creatures.count(target)) {
+    } else if (this->creatures.count(target)) {
         Creature& attacked = this->creatures.at(target);
         _useWeapon(caller, target, &attacked, true);
-        return;
+    } else {
+        // Excepcion. target invalido.
+        throw Exception("El target recibido no es válido.");
     }
-
-    // Excepcion. target invalido.
 }
 
 void Game::equip(const InstanceId caller, const uint8_t n_slot) {
@@ -741,16 +732,12 @@ void Game::equip(const InstanceId caller, const uint8_t n_slot) {
 
     Character& character = this->characters.at(caller);
 
-    try {
-        character.equip(n_slot);
-    } catch (const std::exception& e) {
-        // InvalidInventorySlotNumberException,
-        // KindCantDoMagicException,
-        // PotionHasNoPointsToRecoverException
-        Notification* reply = new Reply(ERROR_MSG, e.what());
-        active_clients.notify(caller, reply);
-        return;
-    }
+    /* Se propagan excepciones:
+     *   InvalidInventorySlotNumberException,
+     *   KindCantDoMagicException,
+     *   PotionHasNoPointsToRecoverException
+     */
+    character.equip(n_slot);
 }
 
 void Game::unequip(const InstanceId caller, const uint8_t n_slot) {
@@ -760,14 +747,11 @@ void Game::unequip(const InstanceId caller, const uint8_t n_slot) {
 
     Character& character = this->characters.at(caller);
 
-    try {
-        character.unequip(n_slot);
-    } catch (const std::exception& e) {
-        // FullInventoryException e InvalidEquipmentSlotNumberException
-        Notification* reply = new Reply(ERROR_MSG, e.what());
-        active_clients.notify(caller, reply);
-        return;
-    }
+    /* Se propagan excepciones:
+     *   FullInventoryException e
+     *   InvalidEquipmentSlotNumberException
+     */
+    character.unequip(n_slot);
 }
 
 void Game::meditate(const InstanceId caller) {
@@ -777,16 +761,12 @@ void Game::meditate(const InstanceId caller) {
 
     Character& character = this->characters.at(caller);
 
-    try {
-        character.meditate();
-    } catch (const KindCantMeditateException& e) {
-        Notification* reply = new Reply(ERROR_MSG, e.what());
-        active_clients.notify(caller, reply);
-        return;
-    }
+    // Se propaga KindCantMeditateException
+    character.meditate();
 
     std::string reply_msg =
         "Has comenzado a meditar. Ante cualquier acción dejarás de hacerlo.";
+
     Notification* reply = new Reply(SUCCESS_MSG, reply_msg);
     active_clients.notify(caller, reply);
 
@@ -811,17 +791,16 @@ void Game::take(const InstanceId caller) {
     if (!item_id)
         return;  // envio notifiacion?
 
-    try {
-        character.takeItem(this->items[item_id], amount);
-    } catch (const std::exception& e) {
-        // FullInventoryException, StateCantTakeItemException,
-        // GoldMaximumCapacityReached.
-        Notification* reply = new Reply(ERROR_MSG, e.what());
-        active_clients.notify(caller, reply);
-        return;
-    }
+    /*
+     * Se propagan excepciones:
+     *   FullInventoryException
+     *   StateCantTakeItemException
+     *   GoldMaximumCapacityReached
+     */
+    character.takeItem(this->items[item_id], amount);
 
     this->map_container[map_id].clearTileItem(x_coord, y_coord);
+
     _pushItemDifferentialBroadcast(map_id, x_coord, y_coord, DELETE_BROADCAST);
 
     _pushCharacterEvent(caller, GRAB_EV_TYPE);
@@ -831,13 +810,8 @@ const bool Game::_dropItem(const InstanceId caller, const uint8_t n_slot,
                            uint32_t& amount, Item** dropped) {
     Character& character = this->characters.at(caller);
 
-    try {
-        *dropped = character.dropItem(n_slot, amount);
-    } catch (const InvalidInventorySlotNumberException& e) {
-        Notification* reply = new Reply(ERROR_MSG, e.what());
-        active_clients.notify(caller, reply);
-        return false;
-    }
+    // Se propaga excepción InvalidInventorySlotNumberException
+    *dropped = character.dropItem(n_slot, amount);
 
     return (*dropped != nullptr);
 }
@@ -851,6 +825,7 @@ void Game::drop(const InstanceId caller, const uint8_t n_slot,
     uint32_t asked_amount = amount;
     Item* dropped = nullptr;
 
+    // Se propaga excepción InvalidInventorySlotNumberException
     if (!_dropItem(caller, n_slot, amount, &dropped))
         return;
 
@@ -873,9 +848,9 @@ void Game::drop(const InstanceId caller, const uint8_t n_slot,
     } catch (const CouldNotFindFreeTileException& e) {
         // No se pudo efectuar el dropeo. Le devuelvo el item al character.
         character.takeItem(dropped, amount);
-        Notification* reply = new Reply(ERROR_MSG, e.what());
-        active_clients.notify(caller, reply);
-        return;
+
+        // Propago la excepción.
+        throw e;
     }
 
     // Agrego elemento al mapa de dropped items cooldown
@@ -922,13 +897,8 @@ void Game::resurrect(const InstanceId caller) {
     // calcular cooldown.
     unsigned int cooldown = min_distance * 1000;
 
-    try {
-        character.resurrect(cooldown, respawn_x_coord, respawn_y_coord);
-    } catch (const StateCantResurrectException& e) {
-        Notification* reply = new Reply(ERROR_MSG, e.what());
-        active_clients.notify(caller, reply);
-        return;
-    }
+    // Propago excepción StateCantResurrectException
+    character.resurrect(cooldown, respawn_x_coord, respawn_y_coord);
 
     std::string reply_msg = "Resucitando. Debes esperar " +
                             std::to_string(cooldown / 1000) +
@@ -944,18 +914,16 @@ void Game::resurrect(const InstanceId caller, const uint32_t x_coord,
     if (!this->characters.count(caller))
         throw Exception("Game::resurrect: unknown caller.");
 
-    if (!_validatePriestPosition(caller, x_coord, y_coord, true))
-        return;
+    Id priest_id;
+
+    // Propaga Exception si la posición especificada no corresponde a la de un
+    // sacerdote
+    _validatePriestPosition(caller, priest_id, x_coord, y_coord, true);
 
     Character& character = this->characters.at(caller);
 
-    try {
-        character.resurrect(0, x_coord, y_coord);
-    } catch (const StateCantResurrectException& e) {
-        Notification* reply = new Reply(ERROR_MSG, e.what());
-        active_clients.notify(caller, reply);
-        return;
-    }
+    // Propaga StateCantResurrectException
+    character.resurrect(0, x_coord, y_coord);
 
     std::string reply_msg = "¡Has resucitado!";
     Notification* reply = new Reply(SUCCESS_MSG, reply_msg);
@@ -969,18 +937,16 @@ void Game::heal(const InstanceId caller, const uint32_t x_coord,
     if (!this->characters.count(caller))
         throw Exception("Game::heal: unknown caller.");
 
-    if (!_validatePriestPosition(caller, x_coord, y_coord, true))
-        return;
+    Id priest_id;
+
+    // Propaga Exception si la posición especificada no corresponde a la de un
+    // sacerdote
+    _validatePriestPosition(caller, priest_id, x_coord, y_coord, true);
 
     Character& character = this->characters.at(caller);
 
-    try {
-        character.heal();
-    } catch (const StateCantBeHealedException& e) {
-        Notification* reply = new Reply(ERROR_MSG, e.what());
-        active_clients.notify(caller, reply);
-        return;
-    }
+    // Propaga StateCantBeHealedException.
+    character.heal();
 
     std::string reply_msg = "Has sido curado.";
     Notification* reply = new Reply(SUCCESS_MSG, reply_msg);
@@ -996,22 +962,22 @@ void Game::list(const InstanceId caller, const uint32_t x_coord,
 
     Character& character = this->characters.at(caller);
 
+    Id npc_id;
+
     std::string init_msg;
     std::list<std::string> list_items;
 
-    if (_validateBankerPosition(caller, x_coord, y_coord, false)) {
+    if (_validateBankerPosition(caller, npc_id, x_coord, y_coord, false)) {
         BankAccount& account = bank[character.getNickname()];
         account.list(init_msg, list_items);
-    } else if (_validatePriestPosition(caller, x_coord, y_coord, false)) {
-        _listNPCSellableItems(priest, init_msg, list_items);
+    } else if (_validatePriestPosition(caller, npc_id, x_coord, y_coord,
+                                       false) ||
+               _validateMerchantPosition(caller, npc_id, x_coord, y_coord,
+                                         false)) {
+        _listNPCSellableItems(npc_id, init_msg, list_items);
     } else {
-        Id merchant_id = 0;
-        if (!_validateMerchantPosition(caller, merchant_id, x_coord, y_coord,
-                                       false)) {
-            // devolver mensaje de no hay npc que tenga cosas para listar.
-            return;
-        }
-        _listNPCSellableItems(merchant_id, init_msg, list_items);
+        throw Exception(
+            "La posición indicada no corresponde a la de un NPC listable.");
     }
 
     Notification* list = new List(init_msg, list_items);
@@ -1034,63 +1000,57 @@ void Game::_listNPCSellableItems(const Id npc_id, std::string& init_msg,
     }
 }
 
-const bool Game::_validateBankerPosition(const InstanceId caller,
+const bool Game::_validateBankerPosition(const InstanceId caller, Id& npc_id,
                                          const uint32_t x_coord,
                                          const uint32_t y_coord,
-                                         const bool reply_if_invalid) {
+                                         const bool exception_if_invalid) {
     Id map_id = this->characters.at(caller).getMapId();
 
-    if (this->map_container[map_id].getTile(x_coord, y_coord).npc == banker)
+    if (this->map_container[map_id].getTile(x_coord, y_coord).npc == banker) {
+        npc_id = banker;
         return true;
-
-    if (reply_if_invalid) {
-        std::string reply_msg = "El NPC seleccionado no es un banquero.";
-        Notification* reply = new Reply(ERROR_MSG, reply_msg.c_str());
-        active_clients.notify(caller, reply);
     }
+
+    if (exception_if_invalid)
+        throw Exception("El NPC seleccionado no es un banquero.");
 
     return false;
 }
 
-const bool Game::_validatePriestPosition(const InstanceId caller,
+const bool Game::_validatePriestPosition(const InstanceId caller, Id& npc_id,
                                          const uint32_t x_coord,
                                          const uint32_t y_coord,
-                                         const bool reply_if_invalid) {
+                                         const bool exception_if_invalid) {
     Id map_id = this->characters.at(caller).getMapId();
 
-    if (this->map_container[map_id].getTile(x_coord, y_coord).npc == priest)
+    if (this->map_container[map_id].getTile(x_coord, y_coord).npc == priest) {
+        npc_id = priest;
         return true;
-
-    if (reply_if_invalid) {
-        std::string reply_msg = "El NPC seleccionado no es un sacerdote.";
-        Notification* reply = new Reply(ERROR_MSG, reply_msg.c_str());
-        active_clients.notify(caller, reply);
     }
+
+    if (exception_if_invalid)
+        throw Exception("El NPC seleccionado no es un sacerdote.");
 
     return false;
 }
 
-const bool Game::_validateMerchantPosition(const InstanceId caller,
-                                           Id& merchant_id,
+const bool Game::_validateMerchantPosition(const InstanceId caller, Id& npc_id,
                                            const uint32_t x_coord,
                                            const uint32_t y_coord,
-                                           const bool reply_if_invalid) {
+                                           const bool exception_if_invalid) {
     Id map_id = this->characters.at(caller).getMapId();
-    Id npc_id = this->map_container[map_id].getTile(x_coord, y_coord).npc;
+    Id npc_tile_id = this->map_container[map_id].getTile(x_coord, y_coord).npc;
 
     for (size_t i = 0; i < merchants.size(); ++i) {
-        if (merchants[i] != npc_id)
+        if (merchants[i] != npc_tile_id)
             continue;
 
-        merchant_id = npc_id;
+        npc_id = npc_tile_id;
         return true;
     }
 
-    if (reply_if_invalid) {
-        std::string reply_msg = "El NPC seleccionado no es un mercader.";
-        Notification* reply = new Reply(ERROR_MSG, reply_msg.c_str());
-        active_clients.notify(caller, reply);
-    }
+    if (exception_if_invalid)
+        throw Exception("El NPC seleccionado no es un mercader.");
 
     return false;
 }
@@ -1101,12 +1061,16 @@ void Game::depositItemOnBank(const InstanceId caller, const uint32_t x_coord,
     if (!this->characters.count(caller))
         throw Exception("Game::depositItemOnBank: unknown caller.");
 
-    if (!_validateBankerPosition(caller, x_coord, y_coord, true))
-        return;
+    Id banker_id;
+
+    // Propaga Exception si la posición especificada no corresponde a la de un
+    // banquero
+    _validateBankerPosition(caller, banker_id, x_coord, y_coord, true);
 
     uint32_t asked_amount = amount;
     Item* to_deposit = nullptr;
 
+    // Se propaga excepción InvalidInventorySlotNumberException
     if (!_dropItem(caller, n_slot, amount, &to_deposit))
         return;
 
@@ -1114,13 +1078,8 @@ void Game::depositItemOnBank(const InstanceId caller, const uint32_t x_coord,
 
     BankAccount& account = this->bank[character.getNickname()];
 
-    try {
-        account.deposit(to_deposit->getId(), amount);
-    } catch (const FullBankAccountException& e) {
-        Notification* reply = new Reply(ERROR_MSG, e.what());
-        active_clients.notify(caller, reply);
-        return;
-    }
+    // Propaga FullBankAccountException.
+    account.deposit(to_deposit->getId(), amount);
 
     std::string reply_msg = "";
 
@@ -1132,8 +1091,6 @@ void Game::depositItemOnBank(const InstanceId caller, const uint32_t x_coord,
 
     Notification* reply = new Reply(INFO_MSG, reply_msg.c_str());
     active_clients.notify(caller, reply);
-
-    // this->account.debug();
 }
 
 void Game::withdrawItemFromBank(const InstanceId caller, const uint32_t x_coord,
@@ -1142,8 +1099,11 @@ void Game::withdrawItemFromBank(const InstanceId caller, const uint32_t x_coord,
     if (!this->characters.count(caller))
         throw Exception("Game::withdrawItemFromBank: unknown caller.");
 
-    if (!_validateBankerPosition(caller, x_coord, y_coord, true))
-        return;
+    Id banker_id;
+
+    // Propaga Exception si la posición especificada no corresponde a la de un
+    // banquero
+    _validateBankerPosition(caller, banker_id, x_coord, y_coord, true);
 
     uint32_t asked_amount = amount;
     Item* withdrew = nullptr;
@@ -1152,22 +1112,15 @@ void Game::withdrawItemFromBank(const InstanceId caller, const uint32_t x_coord,
 
     BankAccount& account = this->bank[character.getNickname()];
 
-    try {
-        withdrew = account.withdraw(item_id, amount);
-    } catch (const InvalidItemIdException& e) {
-        Notification* reply = new Reply(ERROR_MSG, e.what());
-        active_clients.notify(caller, reply);
-        return;
-    }
+    // Propaga InvalidItemIdException.
+    withdrew = account.withdraw(item_id, amount);
 
     try {
         character.takeItem(withdrew, amount);
     } catch (const std::exception& e) {
         // StateCantTakeItemsException, FullInventoryException
         account.deposit(withdrew->getId(), amount);
-        Notification* reply = new Reply(ERROR_MSG, e.what());
-        active_clients.notify(caller, reply);
-        return;
+        throw e;  // Se propaga.
     }
 
     std::string reply_msg = "";
@@ -1187,19 +1140,16 @@ void Game::depositGoldOnBank(const InstanceId caller, const uint32_t x_coord,
     if (!this->characters.count(caller))
         throw Exception("Game::depositGoldOnBank: unknown caller.");
 
-    if (!_validateBankerPosition(caller, x_coord, y_coord, true))
-        return;
+    Id banker_id;
+
+    // Propaga Exception si la posición especificada no corresponde a la de un
+    // banquero
+    _validateBankerPosition(caller, banker_id, x_coord, y_coord, true);
 
     Character& character = this->characters.at(caller);
 
-    try {
-        character.gatherGold(amount);
-    } catch (const std::exception& e) {
-        // InsufficientGoldException, StateCantGatherGoldException
-        Notification* reply = new Reply(ERROR_MSG, e.what());
-        active_clients.notify(caller, reply);
-        return;
-    }
+    // Propaga InsufficientGoldException, StateCantGatherGoldException.
+    character.gatherGold(amount);
 
     BankAccount& account = this->bank[character.getNickname()];
 
@@ -1217,8 +1167,11 @@ void Game::withdrawGoldFromBank(const InstanceId caller, const uint32_t x_coord,
     if (!this->characters.count(caller))
         throw Exception("Game::withdrawGoldFromBank: unknown caller.");
 
-    if (!_validateBankerPosition(caller, x_coord, y_coord, true))
-        return;
+    Id banker_id;
+
+    // Propaga Exception si la posición especificada no corresponde a la de un
+    // banquero
+    _validateBankerPosition(caller, banker_id, x_coord, y_coord, true);
 
     uint32_t asked_amount = amount;
 
@@ -1226,13 +1179,8 @@ void Game::withdrawGoldFromBank(const InstanceId caller, const uint32_t x_coord,
 
     BankAccount& account = this->bank[character.getNickname()];
 
-    try {
-        account.withdrawGold(amount);
-    } catch (const NoMoneyAvailableException& e) {
-        Notification* reply = new Reply(ERROR_MSG, e.what());
-        active_clients.notify(caller, reply);
-        return;
-    }
+    // Propaga NoMoneyAvailableException
+    account.withdrawGold(amount);
 
     std::string reply_msg = "";
 
@@ -1245,9 +1193,7 @@ void Game::withdrawGoldFromBank(const InstanceId caller, const uint32_t x_coord,
             "inventario.";
     } catch (const StateCantTakeItemException& e) {
         account.depositGold(amount);
-        Notification* reply = new Reply(ERROR_MSG, e.what());
-        active_clients.notify(caller, reply);
-        return;
+        throw e;
     }
 
     // agregar mensaje si pide extraer mas de lo que tiene
@@ -1258,21 +1204,18 @@ void Game::withdrawGoldFromBank(const InstanceId caller, const uint32_t x_coord,
     active_clients.notify(caller, reply);
 }
 
-const bool Game::_validateIfNPCSellsItem(const InstanceId caller,
-                                         const Id npc_id, const Id item_id) {
+void Game::_validateIfNPCSellsItem(const InstanceId caller, const Id npc_id,
+                                   const Id item_id) {
     const std::list<Id>& sellable_items = npcs[npc_id].sellable_items;
     std::list<Id>::const_iterator it =
         std::find(sellable_items.begin(), sellable_items.end(), item_id);
 
     if (it != sellable_items.end())
-        return true;
+        return;
 
-    std::string msg_reply =
+    throw Exception(
         "El item especificado no es válido. [Escriba /listar para ver los "
-        "items válidos].";
-    Notification* reply = new Reply(ERROR_MSG, msg_reply);
-    active_clients.notify(caller, reply);
-    return false;
+        "items válidos].");
 }
 
 void Game::buyItem(const InstanceId caller, const uint32_t x_coord,
@@ -1288,39 +1231,24 @@ void Game::buyItem(const InstanceId caller, const uint32_t x_coord,
     // Verifico x e y correspondan a la posición de un comerciante o sacerdote.
     Id npc_id = 0;
 
-    if (_validatePriestPosition(caller, x_coord, y_coord, false))
-        npc_id = priest;
-    else if (!_validateMerchantPosition(caller, npc_id, x_coord, y_coord,
-                                        false)) {
-        // En la posición recibida no hay un npc que venda items.
-        std::string msg_reply = "No seleccionaste a un NPC que venda items.";
-        Notification* reply = new Reply(ERROR_MSG, msg_reply);
-        active_clients.notify(caller, reply);
-        return;
-    }
+    if (!_validatePriestPosition(caller, npc_id, x_coord, y_coord, false) &&
+        !_validateMerchantPosition(caller, npc_id, x_coord, y_coord, false))
+        throw Exception("No seleccionaste a un NPC que venda items.");
 
-    if (!_validateIfNPCSellsItem(caller, npc_id, item_id))
-        return;
+    // Propaga Exception si no vende el item especificado.
+    _validateIfNPCSellsItem(caller, npc_id, item_id);
 
     unsigned int total_price = items[item_id]->getPrice() * amount;
 
-    try {
-        character.gatherGold(total_price);
-    } catch (const std::exception& e) {
-        // InsufficientGoldException, StateCantGatherGoldException
-        Notification* reply = new Reply(ERROR_MSG, e.what());
-        active_clients.notify(caller, reply);
-        return;
-    }
+    // Propaga InsufficientGoldException, StateCantGatherGoldException
+    character.gatherGold(total_price);
 
     try {
         character.takeItem(this->items[item_id], amount);
     } catch (const FullInventoryException& e) {
-        // FullInventoryException
+        // Le devuelvo el oro.
         character.takeGold(total_price);
-        Notification* reply = new Reply(ERROR_MSG, e.what());
-        active_clients.notify(caller, reply);
-        return;
+        throw e;
     }
 
     std::string reply_msg =
@@ -1340,39 +1268,37 @@ void Game::sellItem(const InstanceId caller, const uint32_t x_coord,
     // Verifico x e y correspondan a la posición de un comerciante o sacerdote.
     Id npc_id = 0;
 
-    if (_validatePriestPosition(caller, x_coord, y_coord, false))
-        npc_id = priest;
-    else if (!_validateMerchantPosition(caller, npc_id, x_coord, y_coord,
-                                        false)) {
-        // En la posición recibida no hay un npc que venda items.
-        std::string msg_reply = "No seleccionaste a un NPC que compre items.";
-        Notification* reply = new Reply(ERROR_MSG, msg_reply);
-        active_clients.notify(caller, reply);
-        return;
-    }
+    if (!_validatePriestPosition(caller, npc_id, x_coord, y_coord, false) &&
+        !_validateMerchantPosition(caller, npc_id, x_coord, y_coord, false))
+        throw Exception("No seleccionaste a un NPC que compre items.");
 
     // uint32_t asked_amount = amount;
     Item* to_sell = nullptr;
 
+    // Propago InvalidInventorySlotNumberException
     if (!_dropItem(caller, n_slot, amount, &to_sell))
         return;
 
-    if (!_validateIfNPCSellsItem(caller, npc_id, to_sell->getId())) {
+    try {
+        _validateIfNPCSellsItem(caller, npc_id, to_sell->getId());
+    } catch (const Exception& e) {
         character.takeItem(to_sell, amount);
-        return;
+        throw e;
     }
 
     unsigned int total_price = to_sell->getPrice() * amount;
+    unsigned int taken_amount = total_price;
 
     try {
-        character.takeGold(total_price);
+        character.takeGold(taken_amount);
     } catch (const GoldMaximumCapacityReachedException& e) {
         // GoldMaximumCapacityReachedException
-        unsigned int amount_to_replenish = amount + to_sell->getPrice();
+        unsigned int amount_to_replenish =
+            (total_price - taken_amount) / to_sell->getPrice();
+        fprintf(stderr, "Amount to replenish: %i\n", amount_to_replenish);
         if (amount_to_replenish)
             character.takeItem(to_sell, amount_to_replenish);
-        Notification* reply = new Reply(ERROR_MSG, e.what());
-        active_clients.notify(caller, reply);
+        throw e;
     }
 
     // si amount < asked_amount avisar.
@@ -1389,13 +1315,8 @@ void Game::sendPrivateMessage(const InstanceId caller,
     if (!this->characters.count(caller))
         throw Exception("Game::sendPrivateMessage: unknown caller.");
 
-    if (!this->nickname_id_map.count(to_nickname)) {
-        std::string reply_msg =
-            "No existe jugador con el nickname especificado.";
-        Notification* reply = new Reply(ERROR_MSG, reply_msg.c_str());
-        active_clients.notify(caller, reply);
-        return;
-    }
+    if (!this->nickname_id_map.count(to_nickname))
+        throw Exception("No existe jugador con el nickname especificado.");
 
     InstanceId destinatary_id = this->nickname_id_map.at(to_nickname);
 
@@ -1454,7 +1375,7 @@ void Game::help(const InstanceId caller, const uint32_t x_coord,
 
     Id npc_id = 0;
 
-    if (_validatePriestPosition(caller, x_coord, y_coord, false)) {
+    if (_validatePriestPosition(caller, npc_id, x_coord, y_coord, false)) {
         init_msg = "Sacerdote";
         descriptions.push_back("/resucitar: resucita a un jugador muerto");
         descriptions.push_back(
@@ -1467,7 +1388,8 @@ void Game::help(const InstanceId caller, const uint32_t x_coord,
             "inventario al precio de su lista.");
         descriptions.push_back(
             "/listar: para conocer los items que compra/vende.");
-    } else if (_validateBankerPosition(caller, x_coord, y_coord, false)) {
+    } else if (_validateBankerPosition(caller, npc_id, x_coord, y_coord,
+                                       false)) {
         init_msg = "Banquero";
         descriptions.push_back(
             "/depositar [<cantidad>]: para guardar el item seleccionado del "
@@ -1496,10 +1418,7 @@ void Game::help(const InstanceId caller, const uint32_t x_coord,
             "/listar: para conocer los items que compra/vende.");
     } else {
         // En la posición recibida no hay un npc.
-        std::string msg_reply = "Hay que seleccionar a un NPC para la ayuda.";
-        Notification* reply = new Reply(ERROR_MSG, msg_reply);
-        active_clients.notify(caller, reply);
-        return;
+        throw Exception("Hay que seleccionar a un NPC para la ayuda.");
     }
 
     Notification* list = new List(init_msg, descriptions);

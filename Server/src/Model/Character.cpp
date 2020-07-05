@@ -296,8 +296,8 @@ void Character::unequip(unsigned int n_slot) {
 
 void Character::takeItem(Item* item, unsigned int amount) {
     this->state->takeItem();
-    this->inventory.addItem(item, amount);
     this->broadcast = true;
+    this->inventory.addItem(item, amount);
 }
 
 Item* Character::dropItem(const unsigned int n_slot, unsigned int& amount) {
@@ -311,14 +311,14 @@ Item* Character::dropItem(const unsigned int n_slot, unsigned int& amount) {
 
 void Character::gatherGold(const unsigned int amount) {
     this->state->gatherGold();
-    this->inventory.gatherGold(amount);
     this->broadcast = true;
+    this->inventory.gatherGold(amount);
 }
 
 void Character::takeGold(unsigned int& amount) {
     this->state->takeItem();
-    this->inventory.addGold(amount);
     this->broadcast = true;
+    this->inventory.addGold(amount);
 }
 
 void Character::dropAllItems(std::vector<DroppingSlot>& dropped_items) {
