@@ -30,7 +30,7 @@ void Console::_discardOldMessages() {
 
 void Console::_resetCursorCooldown() {
     show_cursor = true;
-    cursor_cooldown = ITERATIONS_TO_SWITCH_CURSOR;
+    cursor_cooldown = VIEWS_ITERATIONS_TO_SWITCH_CURSOR;
 }
 
 void Console::_switchCursorVisibility() {
@@ -235,7 +235,7 @@ void Console::update(const int it) {
             cursor_cooldown -= it;
             while (cursor_cooldown <= 0) {
                 _switchCursorVisibility();
-                cursor_cooldown += ITERATIONS_TO_SWITCH_CURSOR;
+                cursor_cooldown += VIEWS_ITERATIONS_TO_SWITCH_CURSOR;
             }
         }
     }

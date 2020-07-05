@@ -1,16 +1,24 @@
 #ifndef __GAME_H__
 #define __GAME_H__
+
 //-----------------------------------------------------------------------------
 #include <cstdint>
 #include <string>
 #include <unordered_map>
 //-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+#include "../../../Common/includes/JSON.h"
 #include "../../../Common/includes/MapContainer.h"
 #include "../../../Common/includes/types.h"
+//-----------------------------------------------------------------------------
+
 //-----------------------------------------------------------------------------
 #include "../../includes/Control/Database.h"
 #include "../../includes/Control/Notifications/Notification.h"
 #include "../defs.h"
+//-----------------------------------------------------------------------------
+
 //-----------------------------------------------------------------------------
 #include "Bank.h"
 #include "BankAccount.h"
@@ -19,6 +27,20 @@
 #include "Creature.h"
 #include "ItemsContainer.h"
 #include "config_structs.h"
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+
+struct GameCfg {
+    unsigned int critical_attack_dmg_modifier;
+    unsigned int random_movement_factor;
+    unsigned int max_creatures_per_map;
+    unsigned int ms_to_update_character_attributes;
+    unsigned int ms_to_spawn_creature;
+    unsigned int ms_to_disappear_dropped_item;
+    unsigned int ms_to_persist_data;
+};
+
 //-----------------------------------------------------------------------------
 
 // Forward declaration
@@ -33,6 +55,13 @@ struct MapCreaturesInfo {
 
 class Game {
    private:
+    //--------------------------------------------------------------------------
+    // Config
+    //--------------------------------------------------------------------------
+    const int& rate;
+    GameCfg cfg = {};
+    //--------------------------------------------------------------------------
+
     //--------------------------------------------------------------------------
     // Game components configuration files:
     //--------------------------------------------------------------------------
@@ -83,6 +112,15 @@ class Game {
     std::vector<Id> merchants;
 
     std::unordered_map<Id, std::vector<std::string>> priests_position;
+    //--------------------------------------------------------------------------
+
+    //--------------------------------------------------------------------------
+    // Métodos de carga de configuración
+    //--------------------------------------------------------------------------
+
+    /* Carga la configuración del json correspondiente */
+    void _loadCfg();
+
     //--------------------------------------------------------------------------
 
     //--------------------------------------------------------------------------
@@ -229,7 +267,7 @@ class Game {
    public:
     //--------------------------------------------------------------------------
 
-    Game(ActiveClients& active_clients);
+    Game(ActiveClients& active_clients, const int& rate);
     ~Game();
 
     Game(const Game&) = delete;
@@ -302,8 +340,8 @@ class Game {
     void actCreatures(const int it);
 
     /*
-     * Spawnea criaturas en cada mapa según TIME_TO_SPAWN_CREATURE, hasta
-     * alcanzar el número máximo MAX_CREATURES_PER_MAP.
+     * Spawnea criaturas en cada mapa según el tiempo de spawneo, hasta
+     * alcanzar el número máximo.
      */
     void spawnNewCreatures(const int it);
 

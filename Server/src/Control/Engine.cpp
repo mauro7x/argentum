@@ -89,11 +89,21 @@ Engine::Engine(Database& database,
                NonBlockingQueue<NewConnection*>& new_connections)
     : keep_executing(true),
       database(database),
+      rate(30),  // default value
       new_connections(new_connections),
       finished_connections(),
       commands(),
       active_clients(commands, finished_connections),
-      game(active_clients) {}
+      game(active_clients, rate) {
+    // Cargamos el rate
+    json config = JSON::loadJsonFile(paths::config(CONFIG_FILEPATH));
+    if (!((int)config["ticks_per_sec"])) {
+        throw Exception(
+            "Engine::Engine: invalid ticks_per_sec in config file.");
+    }
+
+    this->rate = 1000 / (int)config["ticks_per_sec"];
+}
 
 void Engine::run() {
     fprintf(stderr, "DEBUG: Comienza la ejecución del engine.\n");
@@ -115,21 +125,21 @@ void Engine::run() {
         it = 0;
         t2 = std::chrono::steady_clock::now();
         diff = t2 - t1;
-        rest = RATE - std::ceil(diff.count());
+        rest = rate - std::ceil(diff.count());
 
         if (rest < 0) {
             fprintf(stderr, "\n\n=== PÉRDIDA DE FRAME/S ===\n\n\n");
             behind = -rest;
-            lost = RATE + (behind - behind % RATE);
-            rest = RATE - behind % RATE;
+            lost = rate + (behind - behind % rate);
+            rest = rate - behind % rate;
             t1 += std::chrono::milliseconds(lost);
-            it += std::floor(lost / RATE);
+            it += std::floor(lost / rate);
         }
 
         // fprintf(stderr, "ENGINE: Sleeping for %i ms.\n", rest);
 
         std::this_thread::sleep_for(std::chrono::milliseconds(rest));
-        t1 += std::chrono::milliseconds(RATE);
+        t1 += std::chrono::milliseconds(rate);
         it += 1;
     }
 

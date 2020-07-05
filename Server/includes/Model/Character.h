@@ -73,6 +73,11 @@ class Character : public Attackable {
 
     bool broadcast;
 
+    // Configuración
+    const int& rate;
+    const unsigned int critical_attack_dmg_modifier;
+    const unsigned int ms_to_update_attributes;
+
     //--------------------------------------------------------------------------
     // Métodos auxiliares para las actualizaciones dependientes del tiempo.
     //--------------------------------------------------------------------------
@@ -160,7 +165,9 @@ class Character : public Attackable {
     Character(const CharacterCfg& init_data, const RaceCfg& race,
               const KindCfg& kind, MapContainer& map_container,
               const Id init_map, const int init_x_coord, const int init_y_coord,
-              ItemsContainer& items_container);
+              ItemsContainer& items_container, const int& rate,
+              const unsigned int critical_attack_dmg_modifier,
+              const unsigned int ms_to_update_attributes);
     ~Character();
 
     Character(const Character&) = delete;

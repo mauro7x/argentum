@@ -4,7 +4,7 @@
 // Métodos privados
 
 void HomeView::_init() {
-    json config = JSON::loadJsonFile(paths::config(CONFIG_FILEPATH));
+    json config = JSON::loadJsonFile(paths::config(VIEWS_CONFIG_FILEPATH));
 
     // Fuente
     input_fontsize = config["homeview"]["fontsize"];
@@ -459,10 +459,7 @@ void HomeView::_switchCursorVisibility() {
 
 HomeView::HomeView(Context& current_context, const Renderer& renderer,
                    SocketWrapper& socket)
-    : ConstantRateFunc(RATE),
-      current_context(current_context),
-      renderer(renderer),
-      socket(socket) {
+    : current_context(current_context), renderer(renderer), socket(socket) {
     _init();
     _loadMedia();
     SDL_StartTextInput();

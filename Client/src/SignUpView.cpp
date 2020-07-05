@@ -4,7 +4,7 @@
 // Métodos privados
 
 void SignUpView::_init() {
-    json config = JSON::loadJsonFile(paths::config(CONFIG_FILEPATH));
+    json config = JSON::loadJsonFile(paths::config(VIEWS_CONFIG_FILEPATH));
 
     // Fuente
     input_fontsize = config["signupview"]["fontsize"];
@@ -1070,8 +1070,7 @@ void SignUpView::_switchCursorVisibility() {
 
 SignUpView::SignUpView(Context& current_context, const Renderer& renderer,
                        const SocketWrapper& socket)
-    : ConstantRateFunc(RATE),
-      current_context(current_context),
+    : current_context(current_context),
       renderer(renderer),
 
       socket(socket),

@@ -8,11 +8,13 @@
 //-----------------------------------------------------------------------------
 // Config paths
 
+#define CONFIG_FILEPATH "server/config/config.json"
 #define RACES_CONFIG_FILEPATH "server/config/races.json"
 #define KINDS_CONFIG_FILEPATH "server/config/kinds.json"
 #define NPC_CONFIG_FILEPATH "server/config/npcs.json"
 #define CREATURES_CONFIG_FILEPATH "server/config/creatures.json"
 #define ITEMS_CONFIG_FILEPATH "server/config/items.json"
+#define NEW_PLAYER_DATA_FILEPATH "server/config/new_player_data.json"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------

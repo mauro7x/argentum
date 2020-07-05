@@ -17,16 +17,16 @@ Server::Server(const std::string& port, const int max_clients_queued)
 void Server::run() {
     fprintf(stderr, "DEBUG: Comienza la ejecución del servidor.\n");
 
-    // Iniciamos la base de datos
-    database.init();
-
-    // Iniciamos el motor
+    // Iniciamos la ejecución del motor
     engine.start();
 
-    // Iniciamos el accepter
+    // Iniciamos la ejecución del accepter
     accepter.start();
 
-    /* Loop de comandos */
+    /** LOOP DE COMANDOS
+     *
+     * 'q' = cierra el servidor.
+     */
     std::string input;
     do {
         std::getline(std::cin, input);

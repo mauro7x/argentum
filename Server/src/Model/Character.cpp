@@ -16,10 +16,11 @@
 Character::Character(const CharacterCfg& init_data, const RaceCfg& race,
                      const KindCfg& kind, MapContainer& map_container,
                      const Id init_map, const int init_x_coord,
-                     const int init_y_coord, ItemsContainer& items_container)
-    :
-
-      health(init_data.health),
+                     const int init_y_coord, ItemsContainer& items_container,
+                     const int& rate,
+                     const unsigned int critical_attack_dmg_modifier,
+                     const unsigned int ms_to_update_attributes)
+    : health(init_data.health),
       mana(init_data.mana),
 
       intelligence(kind.intelligence + race.intelligence),
@@ -54,7 +55,11 @@ Character::Character(const CharacterCfg& init_data, const RaceCfg& race,
       respawning_y_coord(0),
 
       attack_cooldown(0),
-      broadcast(false) {
+      broadcast(false),
+
+      rate(rate),
+      critical_attack_dmg_modifier(critical_attack_dmg_modifier),
+      ms_to_update_attributes(ms_to_update_attributes) {
     this->updateLevelDependantAttributes();  // Set max_health, max_mana,
                                              // max_inventory_gold.
 }
@@ -74,16 +79,16 @@ void Character::act(const unsigned int it) {
         _updateMovement(it);
     } else {
         if (moving_cooldown > 0) {
-            moving_cooldown = std::max((int)(moving_cooldown - it * RATE), 0);
+            moving_cooldown = std::max((int)(moving_cooldown - it * rate), 0);
         }
     }
 
     if (attack_cooldown > 0)
-        attack_cooldown = std::max((int)(attack_cooldown - it * RATE), 0);
+        attack_cooldown = std::max((int)(attack_cooldown - it * rate), 0);
 
     if (is_resurrecting) {
         resurrecting_cooldown =
-            std::max((int)(resurrecting_cooldown - it * RATE), 0);
+            std::max((int)(resurrecting_cooldown - it * rate), 0);
         if (!resurrecting_cooldown)
             _resurrect();
     }
@@ -106,33 +111,33 @@ void Character::updateLevelDependantAttributes() {
 }
 
 void Character::_updateTimeDependantAttributes(const unsigned int it) {
-    attribute_update_time_elapsed += it * RATE;
+    attribute_update_time_elapsed += it * rate;
 
-    while (attribute_update_time_elapsed >= TIME_TO_UPDATE_ATTRIBUTES) {
+    while (attribute_update_time_elapsed >= ms_to_update_attributes) {
         unsigned int health_update = Formulas::calculateHealthTimeRecovery(
             this->race.health_recovery_factor,
-            TIME_TO_UPDATE_ATTRIBUTES / 1000);  // en segundos
+            ms_to_update_attributes / 1000);  // en segundos
 
         unsigned int mana_update = Formulas::calculateManaTimeRecovery(
             this->race.mana_recovery_factor,
-            TIME_TO_UPDATE_ATTRIBUTES / 1000);  // en segundos
+            ms_to_update_attributes / 1000);  // en segundos
 
         if (this->is_meditating)
             mana_update += Formulas::calculateManaMeditationTimeRecovery(
                 this->kind.meditation_factor, this->intelligence,
-                TIME_TO_UPDATE_ATTRIBUTES / 1000);  // en segundos
+                ms_to_update_attributes / 1000);  // en segundos
 
         if ((this->health < this->max_health))
             this->recoverHealth(health_update);
         if ((this->mana < this->max_mana))
             this->recoverMana(mana_update);
 
-        attribute_update_time_elapsed -= TIME_TO_UPDATE_ATTRIBUTES;
+        attribute_update_time_elapsed -= ms_to_update_attributes;
     }
 }
 
 void Character::_updateMovement(const unsigned int it) {
-    this->moving_cooldown -= it * RATE;
+    this->moving_cooldown -= it * rate;
 
     while (this->moving_cooldown <= 0) {
         this->broadcast = true;
@@ -403,7 +408,7 @@ const bool Character::_useAttackWeapon(Attackable* target, int& damage) {
     // Se define si el ataque es critico
     bool critical_attack = Formulas::isCriticalAttack();
     if (critical_attack)
-        damage = damage * CRITICAL_ATTACK_DAMAGE_MODIFIER;
+        damage = damage * critical_attack_dmg_modifier;
 
     // El atacado recibe el daño del ataque.
     const bool eluded = !target->receiveAttack(damage, critical_attack);

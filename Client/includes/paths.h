@@ -9,11 +9,11 @@
 // Config files
 
 #define CONFIG_FILEPATH "client/config/config.json"
-#define USER_CONFIG_FILEPATH "client/config/user_config.json"
+#define VIEWS_CONFIG_FILEPATH "client/config/views_config.json"
 #define UNIT_SPRITES_FILEPATH "client/config/unit_sprites.json"
-#define SIGNUP_DATA_FILEPATH "client/config/signup_data.json"
 #define ITEM_SPRITES_FILEPATH "client/config/item_sprites.json"
 #define AUDIO_FILEPATH "client/config/audio.json"
+#define SIGNUP_DATA_FILEPATH "client/config/signup_data.json"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------

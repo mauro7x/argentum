@@ -20,11 +20,16 @@
 #define FIRST_INSTANCE_ID 1
 //-----------------------------------------------------------------------------
 
-Game::Game(ActiveClients& active_clients)
-    : bank(items),
-      data_persistence_cooldown(TIME_TO_PERSIST_DATA),
+Game::Game(ActiveClients& active_clients, const int& rate)
+    : rate(rate),
+      bank(items),
       next_instance_id(FIRST_INSTANCE_ID),
       active_clients(active_clients) {
+    // Cargamos la configuración
+    _loadCfg();
+    data_persistence_cooldown = cfg.ms_to_persist_data;
+
+    // Cargamos los mapas
     map_container.loadMaps();
 
     std::vector<Id> maps_id;
@@ -33,7 +38,7 @@ Game::Game(ActiveClients& active_clients)
     for (unsigned int i = 0; i < maps_id.size(); ++i) {
         this->maps_creatures_info.emplace(
             std::piecewise_construct, std::forward_as_tuple(maps_id[i]),
-            std::forward_as_tuple(0, TIME_TO_SPAWN_CREATURE));
+            std::forward_as_tuple(0, cfg.ms_to_spawn_creature));
     }
 
     std::vector<Id> npcs_id;
@@ -62,6 +67,26 @@ MapCreaturesInfo::MapCreaturesInfo(unsigned int amount_of_creatures,
       creature_spawning_cooldown(creature_spawning_cooldown) {}
 
 //-----------------------------------------------------------------------------
+
+//--------------------------------------------------------------------------
+// Métodos de carga de configuración
+//--------------------------------------------------------------------------
+
+void Game::_loadCfg() {
+    json config = JSON::loadJsonFile(paths::config(CONFIG_FILEPATH));
+    cfg.critical_attack_dmg_modifier =
+        config["game"]["critical_attack_dmg_modifier"];
+    cfg.random_movement_factor = config["game"]["random_movement_factor"];
+    cfg.max_creatures_per_map = config["game"]["max_creatures_per_map"];
+    cfg.ms_to_update_character_attributes =
+        config["game"]["ms_to_update_character_attributes"];
+    cfg.ms_to_spawn_creature = config["game"]["ms_to_spawn_creature"];
+    cfg.ms_to_disappear_dropped_item =
+        config["game"]["ms_to_disappear_dropped_item"];
+    cfg.ms_to_persist_data = config["game"]["ms_to_persist_data"];
+}
+
+//--------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 // Métodos auxiliares de creacion de entidades;
@@ -279,7 +304,9 @@ const InstanceId Game::newCharacter(const CharacterCfg& init_data) {
         std::forward_as_tuple(init_data, this->races[init_data.race],
                               this->kinds[init_data.kind], this->map_container,
                               spawning_map_id, spawning_x_coord,
-                              spawning_y_coord, this->items));
+                              spawning_y_coord, this->items, rate,
+                              cfg.critical_attack_dmg_modifier,
+                              cfg.ms_to_update_character_attributes));
 
     this->nickname_id_map[init_data.nickname] = new_character_id;
 
@@ -306,7 +333,8 @@ void Game::newCreature(const CreatureCfg& init_data, const Id init_map) {
         std::piecewise_construct, std::forward_as_tuple(new_creature_id),
         std::forward_as_tuple(init_data, map_container, init_map,
                               spawning_x_coord, spawning_y_coord,
-                              init_data.base_health, items, characters));
+                              init_data.base_health, items, characters, rate,
+                              cfg.random_movement_factor));
 
     _pushCreatureDifferentialBroadcast(new_creature_id, NEW_BROADCAST);
 }
@@ -421,17 +449,17 @@ void Game::spawnNewCreatures(const int it) {
         this->maps_creatures_info.begin();
 
     while (iterator != this->maps_creatures_info.end()) {
-        if (iterator->second.amount_of_creatures == MAX_CREATURES_PER_MAP) {
+        if (iterator->second.amount_of_creatures == cfg.max_creatures_per_map) {
             ++iterator;
             continue;
         }
 
-        iterator->second.creature_spawning_cooldown -= it * RATE;
+        iterator->second.creature_spawning_cooldown -= it * rate;
         while (iterator->second.creature_spawning_cooldown <= 0) {
             _spawnNewCreature(iterator->first);
             ++iterator->second.amount_of_creatures;
             iterator->second.creature_spawning_cooldown +=
-                TIME_TO_SPAWN_CREATURE;
+                cfg.ms_to_spawn_creature;
         }
 
         ++iterator;
@@ -441,7 +469,7 @@ void Game::spawnNewCreatures(const int it) {
 void Game::persistPeriodicData(Database& database, const int it) {
     std::unordered_map<InstanceId, Character>::iterator it_characters =
         this->characters.begin();
-    data_persistence_cooldown -= it * RATE;
+    data_persistence_cooldown -= it * rate;
     if (data_persistence_cooldown <= 0) {
         while (it_characters != this->characters.end()) {
             CharacterCfg character_data = {};
@@ -451,7 +479,7 @@ void Game::persistPeriodicData(Database& database, const int it) {
             database.persistPlayerData(character_data, false);
             ++it_characters;
         }
-        data_persistence_cooldown = TIME_TO_PERSIST_DATA;
+        data_persistence_cooldown = cfg.ms_to_persist_data;
     }
 }
 
@@ -470,7 +498,7 @@ void Game::updateDroppedItemsLifetime(const int it) {
         while (dropped_items_iterator != map_iterator->second.end()) {
             int& lifetime = dropped_items_iterator->second;
 
-            lifetime -= it * RATE;
+            lifetime -= it * rate;
 
             if (lifetime <= 0) {
                 // Eliminamos el item del mapa.
@@ -589,7 +617,7 @@ void Game::_dropAllItems(Attackable* dropper) {
         // Agrego elemento al mapa de dropped items cooldown
         const std::string key = std::move(_coordinatesToMapKey(x, y));
         this->dropped_items_lifetime_per_map[map_id].emplace(
-            key, TIME_TO_DISSAPEAR_DROPPED_ITEM);
+            key, cfg.ms_to_disappear_dropped_item);
 
         // Broadcasteo new item
         _pushItemDifferentialBroadcast(map_id, x, y, NEW_BROADCAST);
@@ -845,7 +873,7 @@ void Game::drop(const InstanceId caller, const uint8_t n_slot,
     // Agrego elemento al mapa de dropped items cooldown
     const std::string key = std::move(_coordinatesToMapKey(x, y));
     this->dropped_items_lifetime_per_map[map_id].emplace(
-        key, TIME_TO_DISSAPEAR_DROPPED_ITEM);
+        key, cfg.ms_to_disappear_dropped_item);
 
     // Broadcasteo new item
     _pushItemDifferentialBroadcast(map_id, x, y, NEW_BROADCAST);
