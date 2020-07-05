@@ -15,7 +15,7 @@ Creature::Creature(const CreatureCfg& data, MapContainer& map_container,
                    const int init_y_coord, const uint32_t health,
                    ItemsContainer& items,
                    std::unordered_map<InstanceId, Character>& characters,
-                   const int& rate)
+                   const int& rate, const unsigned int random_movement_factor)
     : id(data.id),
       name(data.name),
       health_max(data.base_health),
@@ -37,7 +37,8 @@ Creature::Creature(const CreatureCfg& data, MapContainer& map_container,
       actual_attack_cooldown(0),
       attacking_id(0),
       broadcast(false),
-      rate(rate) {
+      rate(rate),
+      random_movement_factor(random_movement_factor) {
     RandomNumberGenerator random_number_generator;
     level = random_number_generator((int)data.min_level, (int)data.max_level);
     posibles_orientations.push_back(UP_ORIENTATION);
@@ -173,7 +174,7 @@ void Creature::_randomMovement(const unsigned int it) {
         this->broadcast = true;
 
         this->random_moving_cooldown +=
-            RANDOM_MOVEMENT_FACTOR * 1000 / movement_speed;
+            random_movement_factor * 1000 / movement_speed;
     }
 }
 

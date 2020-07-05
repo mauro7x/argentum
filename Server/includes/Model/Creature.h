@@ -49,8 +49,9 @@ class Creature : public Attackable {
     unsigned int level;
     bool broadcast;
 
-    // Información del engine
+    // Configuración
     const int& rate;
+    const unsigned int random_movement_factor;
 
     /*
      * Recorrer todo el map de characteres, si encuentra characteres dentro del
@@ -104,7 +105,7 @@ class Creature : public Attackable {
              const Id init_map, const int init_x_coord, const int init_y_coord,
              const uint32_t health, ItemsContainer& items,
              std::unordered_map<InstanceId, Character>& characters,
-             const int& rate);
+             const int& rate, const unsigned int random_movement_factor);
 
     /* Destructor */
     ~Creature();
