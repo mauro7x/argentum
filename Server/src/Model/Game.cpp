@@ -448,22 +448,21 @@ void Game::actCreatures(const int it) {
         this->creatures.begin();
 
     while (it_creatures != this->creatures.end()) {
-        it_creatures->second.act(it);
+        InstanceId id = it_creatures->first;
+        Creature& creature = it_creatures->second;
+        creature.act(it);
 
-        if (it_creatures->second.mustBeBroadcasted()) {
-            _pushCreatureDifferentialBroadcast(it_creatures->first,
-                                               UPDATE_BROADCAST);
+        if (creature.mustBeBroadcasted()) {
+            _pushCreatureDifferentialBroadcast(id, UPDATE_BROADCAST);
         }
 
-        InstanceId receiver = it_creatures->second.getAttackingCharacterId();
+        InstanceId receiver = creature.getAttackingCharacterId();
 
         if (receiver != 0) {
             Notification* broadcast =
                 _buildPlayerBroadcast(receiver, UPDATE_BROADCAST);
             this->active_clients.notify(receiver, broadcast);
         }
-
-        // it_creatures->second.debug();
 
         ++it_creatures;
     }
