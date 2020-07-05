@@ -1255,7 +1255,7 @@ void Game::withdrawGoldFromBank(const InstanceId caller, const uint32_t x_coord,
             "No pudiste extraer todo lo solicitado. No entra más oro en tu "
             "inventario.";
     } catch (const StateCantTakeItemException& e) {
-        account.depositGold(asked_amount - amount);
+        account.depositGold(amount);
         Notification* reply = new Reply(ERROR_MSG, e.what());
         active_clients.notify(caller, reply);
         return;
