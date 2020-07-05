@@ -657,6 +657,7 @@ void SignUpView::_handleEvent(const SDL_Event& e) {
 
             if (e.key.keysym.sym == SDLK_RETURN) {
                 _handleCreateButtonPressed();
+                Mixer::playLocalSound(CLICK_SOUND);
                 break;
             }
 
@@ -674,11 +675,13 @@ void SignUpView::_handleEvent(const SDL_Event& e) {
                     username_txtbx.is_active = false;
                     password_txtbx.is_active = true;
                     _resetCursorCooldown();
+                    Mixer::playLocalSound(SELECTION_SOUND);
                 } else if (password_txtbx.is_active) {
                     password_txtbx.is_active = false;
                 } else {
                     username_txtbx.is_active = true;
                     _resetCursorCooldown();
+                    Mixer::playLocalSound(SELECTION_SOUND);
                 }
             }
 

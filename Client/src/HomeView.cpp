@@ -236,6 +236,7 @@ void HomeView::_handleEvent(const SDL_Event& e) {
 
             if (e.key.keysym.sym == SDLK_RETURN) {
                 _handleConnectButtonPressed();
+                Mixer::playLocalSound(CLICK_SOUND);
                 break;
             }
 
@@ -253,11 +254,13 @@ void HomeView::_handleEvent(const SDL_Event& e) {
                     hostname_txtbx.is_active = false;
                     port_txtbx.is_active = true;
                     _resetCursorCooldown();
+                    Mixer::playLocalSound(SELECTION_SOUND);
                 } else if (port_txtbx.is_active) {
                     port_txtbx.is_active = false;
                 } else {
                     hostname_txtbx.is_active = true;
                     _resetCursorCooldown();
+                    Mixer::playLocalSound(SELECTION_SOUND);
                 }
             }
 
