@@ -290,11 +290,6 @@ const InstanceId Game::newCharacter(const CharacterCfg& init_data) {
     Id new_character_id = this->next_instance_id;
     ++this->next_instance_id;
 
-    fprintf(stderr, "deberia espawnear en map: %i, x: %i, y: %i\n",
-            init_data.map, init_data.x_tile, init_data.y_tile);
-
-    fprintf(stderr, "new_created = %i\n", init_data.new_created);
-
     Id spawning_map_id;
     int spawning_x_coord, spawning_y_coord;
 
