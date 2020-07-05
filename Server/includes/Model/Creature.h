@@ -38,8 +38,6 @@ class Creature : public Attackable {
     std::unordered_map<InstanceId, Character>& characters;
     std::array<Orientation, 4> posibles_orientations;
 
-    bool is_moving;
-    bool is_random_moving;
     int moving_cooldown;
     int random_moving_cooldown;
     unsigned int attribute_update_time_elapsed;
@@ -132,17 +130,6 @@ class Creature : public Attackable {
      * - posición [si la criatura está en movimiento]
      */
     void act(const unsigned int it);
-
-    //-----------------------------------------------------------------------------
-    //  Movimiento
-    //-----------------------------------------------------------------------------
-
-    void startMovingUp();
-    void startMovingDown();
-    void startMovingRight();
-    void startMovingLeft();
-
-    void stopMoving();
 
     /*
      * Efectúa la recepción del ataque de un character.
