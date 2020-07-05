@@ -818,6 +818,7 @@ void SignUpView::_handleEvent(const SDL_Event& e) {
             if (_inside(mouse_pos, username_txtbx.render_box)) {
                 username_txtbx.is_active = true;
                 _resetCursorCooldown();
+                Mixer::playLocalSound(SELECTION_SOUND);
             } else {
                 username_txtbx.is_active = false;
             }
@@ -826,6 +827,7 @@ void SignUpView::_handleEvent(const SDL_Event& e) {
             if (_inside(mouse_pos, password_txtbx.render_box)) {
                 password_txtbx.is_active = true;
                 _resetCursorCooldown();
+                Mixer::playLocalSound(SELECTION_SOUND);
             } else {
                 password_txtbx.is_active = false;
             }
@@ -833,53 +835,63 @@ void SignUpView::_handleEvent(const SDL_Event& e) {
             // Click en los botones de SelectionBox
             if (_inside(mouse_pos, race_sibx.next_box)) {
                 races_data.next();
+                Mixer::playLocalSound(CLICK_SOUND);
                 break;
             }
 
             if (_inside(mouse_pos, race_sibx.prev_box)) {
                 races_data.prev();
+                Mixer::playLocalSound(CLICK_SOUND);
                 break;
             }
 
             if (_inside(mouse_pos, kind_sibx.next_box)) {
                 kinds_data.next();
+                Mixer::playLocalSound(CLICK_SOUND);
                 break;
             }
 
             if (_inside(mouse_pos, kind_sibx.prev_box)) {
                 kinds_data.prev();
+                Mixer::playLocalSound(CLICK_SOUND);
                 break;
             }
 
             if (_inside(mouse_pos, head_sibx.next_box)) {
                 races_data.getCurrentValue().head_ids.next();
+                Mixer::playLocalSound(CLICK_SOUND);
                 break;
             }
 
             if (_inside(mouse_pos, head_sibx.prev_box)) {
                 races_data.getCurrentValue().head_ids.prev();
+                Mixer::playLocalSound(CLICK_SOUND);
                 break;
             }
 
             if (_inside(mouse_pos, body_sibx.next_box)) {
                 races_data.getCurrentValue().body_ids.next();
+                Mixer::playLocalSound(CLICK_SOUND);
                 break;
             }
 
             if (_inside(mouse_pos, body_sibx.prev_box)) {
                 races_data.getCurrentValue().body_ids.prev();
+                Mixer::playLocalSound(CLICK_SOUND);
                 break;
             }
 
             // Click en el botón de volver
             if (_inside(mouse_pos, goback_btn.render_box)) {
                 _handleGoBackButtonPressed();
+                Mixer::playLocalSound(CLICK_SOUND);
                 break;
             }
 
             // Click en el botón de crear cuenta
             if (_inside(mouse_pos, create_btn.render_box)) {
                 _handleCreateButtonPressed();
+                Mixer::playLocalSound(CLICK_SOUND);
                 break;
             }
 

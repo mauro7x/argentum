@@ -7,6 +7,7 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+#include <array>
 #include <cmath>
 #include <cstdlib>
 #include <string>
@@ -35,6 +36,9 @@
 
 // Chunks
 #define MAX_CHUNKS_SIMULTANEOUSLY 3 /* límite para sonidos EXTERNOS */
+
+// Local sounds
+enum LocalSound { CLICK_SOUND, SELECTION_SOUND, N_LOCAL_SOUNDS };
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -70,6 +74,9 @@ class Mixer {
     static void playEventSound(uint8_t sound_id, const SDL_Point& player_pos,
                                const SDL_Point& sound_pos);
 
+    /* Método para hacer sonar un sonido local */
+    static void playLocalSound(LocalSound local_sound);
+
     /* Callback que se llama cuando termina una canción */
     static void finishedSongCallback();
 
@@ -90,6 +97,9 @@ class Mixer {
     size_t listening_radio = 0;
     int active_chunks = 0;
     std::vector<Mix_Chunk*> chunks;
+
+    // Local sounds
+    std::array<Mix_Chunk*, N_LOCAL_SOUNDS> local_sounds = {};
 
     //-------------------------------------------------------------------------
 
@@ -140,6 +150,9 @@ class Mixer {
     /* Reproduce un chunk si está dentro del listening_radio */
     void _playChunk(uint8_t sound_id, const SDL_Point& player_pos,
                     const SDL_Point& sound_pos);
+
+    /* Reproduce un sonido local */
+    void _playLocalSound(LocalSound local_sound);
 
     /* Obtiene el angulo entre dos posiciones según la convención de
      * SDL_SetPosition */

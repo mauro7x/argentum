@@ -383,6 +383,7 @@ void ConnectionView::_handleEvent(const SDL_Event& e) {
             if (_inside(mouse_pos, username_txtbx.render_box)) {
                 username_txtbx.is_active = true;
                 _resetCursorCooldown();
+                Mixer::playLocalSound(SELECTION_SOUND);
             } else {
                 username_txtbx.is_active = false;
             }
@@ -391,6 +392,7 @@ void ConnectionView::_handleEvent(const SDL_Event& e) {
             if (_inside(mouse_pos, password_txtbx.render_box)) {
                 password_txtbx.is_active = true;
                 _resetCursorCooldown();
+                Mixer::playLocalSound(SELECTION_SOUND);
             } else {
                 password_txtbx.is_active = false;
             }
@@ -398,12 +400,14 @@ void ConnectionView::_handleEvent(const SDL_Event& e) {
             // Click en el botón de jugar
             if (_inside(mouse_pos, play_btn.render_box)) {
                 _handlePlayButtonPressed();
+                Mixer::playLocalSound(CLICK_SOUND);
                 break;
             }
 
             // Click en el botón de crear cuenta
             if (_inside(mouse_pos, signup_btn.render_box)) {
                 _handleSignUpButtonPressed();
+                Mixer::playLocalSound(CLICK_SOUND);
                 break;
             }
 
