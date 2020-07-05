@@ -15,6 +15,7 @@ class Position {
     int x, y;
     Orientation orientation;
     MapContainer& map_container;
+    bool broadcast;
 
    public:
     Position(const Id map, const int init_x_coord, const int init_y_coord,
@@ -74,6 +75,10 @@ class Position {
 
 
     const bool isInSafeZone() const;
+
+    const bool mustBeBroadcasted() const;
+
+    void beBroadcasted();
 
     /*
      * Llena los campos x_tile, y_tile y orientation del

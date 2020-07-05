@@ -12,7 +12,8 @@ Position::Position(const Id map, const int init_x_coord, const int init_y_coord,
       x(init_x_coord),
       y(init_y_coord),
       orientation(DEFAULT_ORIENTATION),
-      map_container(map_container) {}
+      map_container(map_container),
+      broadcast(false) {}
 
 Position::~Position() {
     map_container[map].clearTileOccupant(x, y);
@@ -72,6 +73,8 @@ void Position::move(bool is_creature) {
         default:
             throw Exception("Position::move: unknown orientation.");
     }
+
+    this->broadcast = true;
 }
 
 void Position::changeOrientation(Orientation orientation) {
@@ -93,6 +96,14 @@ void Position::changePosition(int x, int y) {
 
 const bool Position::isInSafeZone() const {
     return map_container[map].isSafeZone(x, y);
+}
+
+const bool Position::mustBeBroadcasted() const {
+    return this->broadcast;
+}
+
+void Position::beBroadcasted() {
+    this->broadcast = false;
 }
 
 void Position::fillBroadcastData(UnitData& data) const {
