@@ -236,6 +236,7 @@ void HomeView::_handleEvent(const SDL_Event& e) {
 
             if (e.key.keysym.sym == SDLK_RETURN) {
                 _handleConnectButtonPressed();
+                Mixer::playLocalSound(CLICK_SOUND);
                 break;
             }
 
@@ -253,11 +254,13 @@ void HomeView::_handleEvent(const SDL_Event& e) {
                     hostname_txtbx.is_active = false;
                     port_txtbx.is_active = true;
                     _resetCursorCooldown();
+                    Mixer::playLocalSound(SELECTION_SOUND);
                 } else if (port_txtbx.is_active) {
                     port_txtbx.is_active = false;
                 } else {
                     hostname_txtbx.is_active = true;
                     _resetCursorCooldown();
+                    Mixer::playLocalSound(SELECTION_SOUND);
                 }
             }
 
@@ -338,6 +341,7 @@ void HomeView::_handleEvent(const SDL_Event& e) {
             if (_inside(mouse_pos, hostname_txtbx.render_box)) {
                 hostname_txtbx.is_active = true;
                 _resetCursorCooldown();
+                Mixer::playLocalSound(SELECTION_SOUND);
             } else {
                 hostname_txtbx.is_active = false;
             }
@@ -346,6 +350,7 @@ void HomeView::_handleEvent(const SDL_Event& e) {
             if (_inside(mouse_pos, port_txtbx.render_box)) {
                 port_txtbx.is_active = true;
                 _resetCursorCooldown();
+                Mixer::playLocalSound(SELECTION_SOUND);
             } else {
                 port_txtbx.is_active = false;
             }
@@ -353,6 +358,7 @@ void HomeView::_handleEvent(const SDL_Event& e) {
             // Click en el botón de conectar
             if (_inside(mouse_pos, connect_btn.render_box)) {
                 _handleConnectButtonPressed();
+                Mixer::playLocalSound(CLICK_SOUND);
                 break;
             }
 

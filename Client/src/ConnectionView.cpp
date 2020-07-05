@@ -275,6 +275,7 @@ void ConnectionView::_handleEvent(const SDL_Event& e) {
 
             if (e.key.keysym.sym == SDLK_RETURN) {
                 _handlePlayButtonPressed();
+                Mixer::playLocalSound(CLICK_SOUND);
                 break;
             }
 
@@ -292,11 +293,13 @@ void ConnectionView::_handleEvent(const SDL_Event& e) {
                     username_txtbx.is_active = false;
                     password_txtbx.is_active = true;
                     _resetCursorCooldown();
+                    Mixer::playLocalSound(SELECTION_SOUND);
                 } else if (password_txtbx.is_active) {
                     password_txtbx.is_active = false;
                 } else {
                     username_txtbx.is_active = true;
                     _resetCursorCooldown();
+                    Mixer::playLocalSound(SELECTION_SOUND);
                 }
             }
 
@@ -383,6 +386,7 @@ void ConnectionView::_handleEvent(const SDL_Event& e) {
             if (_inside(mouse_pos, username_txtbx.render_box)) {
                 username_txtbx.is_active = true;
                 _resetCursorCooldown();
+                Mixer::playLocalSound(SELECTION_SOUND);
             } else {
                 username_txtbx.is_active = false;
             }
@@ -391,6 +395,7 @@ void ConnectionView::_handleEvent(const SDL_Event& e) {
             if (_inside(mouse_pos, password_txtbx.render_box)) {
                 password_txtbx.is_active = true;
                 _resetCursorCooldown();
+                Mixer::playLocalSound(SELECTION_SOUND);
             } else {
                 password_txtbx.is_active = false;
             }
@@ -398,12 +403,14 @@ void ConnectionView::_handleEvent(const SDL_Event& e) {
             // Click en el botón de jugar
             if (_inside(mouse_pos, play_btn.render_box)) {
                 _handlePlayButtonPressed();
+                Mixer::playLocalSound(CLICK_SOUND);
                 break;
             }
 
             // Click en el botón de crear cuenta
             if (_inside(mouse_pos, signup_btn.render_box)) {
                 _handleSignUpButtonPressed();
+                Mixer::playLocalSound(CLICK_SOUND);
                 break;
             }
 

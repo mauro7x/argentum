@@ -85,14 +85,17 @@
     * npc-comerciante: sistema compra-venta (high).
         * distintos comerciantes: low.
 
-* Data inicial configurable en un json (high).
+* ~~Data inicial configurable en un json (high)~~.
+    * **UPDATE:** done. -Mau, 04/07.
 
-* Frame-rate del cliente (medium), tick-rate del servidor (medium) en jsons.
+* ~~Frame-rate del cliente (medium), tick-rate del servidor (medium) en jsons~~.
+    * **UPDATE:** done. -Mau, 04/07.
 
 * ~~Sonidos de eventos (medium).~~
     * **UPDATE:** done. -Mau, 02/07.
 
-* Instalador.
+* ~~Instalador.~~
+    * **UPDATE:** done. -Mau, 04/07.
 
 
 
