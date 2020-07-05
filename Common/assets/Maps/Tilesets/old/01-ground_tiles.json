@@ -1,12 +1,4 @@
 { "columns":0,
- "editorsettings":
-    {
-     "export":
-        {
-         "format":"",
-         "target":"."
-        }
-    },
  "grid":
     {
      "height":1,
@@ -14,9 +6,9 @@
      "width":1
     },
  "margin":0,
- "name":"pisos",
+ "name":"ground_tiles",
  "spacing":0,
- "tilecount":8,
+ "tilecount":16,
  "tiledversion":"2020.05.29",
  "tileheight":128,
  "tiles":[
@@ -65,6 +57,54 @@
         {
          "id":7,
          "image":"..\/..\/Tiles\/Ground\/7.png",
+         "imageheight":64,
+         "imagewidth":64
+        }, 
+        {
+         "id":8,
+         "image":"..\/..\/Tiles\/Ground\/8.png",
+         "imageheight":128,
+         "imagewidth":128
+        }, 
+        {
+         "id":9,
+         "image":"..\/..\/Tiles\/Ground\/9.png",
+         "imageheight":128,
+         "imagewidth":128
+        }, 
+        {
+         "id":10,
+         "image":"..\/..\/Tiles\/Ground\/10.png",
+         "imageheight":128,
+         "imagewidth":128
+        }, 
+        {
+         "id":11,
+         "image":"..\/..\/Tiles\/Ground\/11.png",
+         "imageheight":128,
+         "imagewidth":128
+        }, 
+        {
+         "id":12,
+         "image":"..\/..\/Tiles\/Ground\/12.png",
+         "imageheight":128,
+         "imagewidth":128
+        }, 
+        {
+         "id":13,
+         "image":"..\/..\/Tiles\/Ground\/13.png",
+         "imageheight":128,
+         "imagewidth":128
+        }, 
+        {
+         "id":14,
+         "image":"..\/..\/Tiles\/Ground\/14.png",
+         "imageheight":64,
+         "imagewidth":64
+        }, 
+        {
+         "id":15,
+         "image":"..\/..\/Tiles\/Ground\/15.png",
          "imageheight":64,
          "imagewidth":64
         }],

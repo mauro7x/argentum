@@ -66,6 +66,24 @@ void MapView::clearSelectedNPC(const int x_tile, const int y_tile) {
     npc_id--;
 }
 
+void MapView::selectPortal(const int x_tile, const int y_tile) {
+    if (!current_map) {
+        throw Exception("MapView:: current_map is NULL!");
+    }
+
+    TileId& portal = current_map->getPortal(x_tile, y_tile);
+    portal++;
+}
+
+void MapView::clearSelectedPortal(const int x_tile, const int y_tile) {
+    if (!current_map) {
+        throw Exception("MapView:: current_map is NULL!");
+    }
+
+    TileId& portal = current_map->getPortal(x_tile, y_tile);
+    portal--;
+}
+
 void MapView::occupyTile(InstanceId id, const int x_tile, const int y_tile) {
     if (!current_map) {
         throw Exception("MapView:: current_map is NULL!");
@@ -250,6 +268,15 @@ bool MapView::indoor(const int x, const int y) const {
 
     const Tile& current_tile = current_map->getTile(x, y);
     return current_tile.indoor;
+}
+
+bool MapView::portal(const int x, const int y) const {
+    if (!current_map) {
+        throw Exception("MapView:: current_map is NULL!");
+    }
+
+    const Tile& current_tile = current_map->getTile(x, y);
+    return current_tile.portal;
 }
 
 int MapView::widthInTiles() const {

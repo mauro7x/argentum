@@ -18,6 +18,12 @@ void EventHandler::_bindKeycodes() {
 }
 
 void EventHandler::_clearSelection() {
+    _clearNPCSelection();
+    _clearPortalSelection();
+    _clearItemSelection();
+}
+
+void EventHandler::_clearNPCSelection() {
     if (current_selection.npc_selected) {
         map.clearSelectedNPC(current_selection.npc_x_tile,
                              current_selection.npc_y_tile);
@@ -26,6 +32,20 @@ void EventHandler::_clearSelection() {
     current_selection.npc_selected = false;
     current_selection.npc_x_tile = 0;
     current_selection.npc_y_tile = 0;
+}
+
+void EventHandler::_clearPortalSelection() {
+    if (current_selection.portal_selected) {
+        map.clearSelectedPortal(current_selection.portal_x_tile,
+                                current_selection.portal_y_tile);
+    }
+
+    current_selection.portal_selected = false;
+    current_selection.portal_x_tile = 0;
+    current_selection.portal_y_tile = 0;
+}
+
+void EventHandler::_clearItemSelection() {
     current_selection.inventory_slot_selected = -1;
     hud.clearSelection();
 }
@@ -403,11 +423,8 @@ void EventHandler::handleEvent(const SDL_Event& e) {
             Id npc = map.getNPC(tile.x, tile.y);
             if (npc) {
                 Mixer::playLocalSound(SELECTION_SOUND);
-
-                if (current_selection.npc_selected) {
-                    map.clearSelectedNPC(current_selection.npc_x_tile,
-                                         current_selection.npc_y_tile);
-                }
+                _clearPortalSelection();
+                _clearNPCSelection();
 
                 current_selection.npc_selected = true;
                 current_selection.npc_x_tile = tile.x;
@@ -416,6 +433,20 @@ void EventHandler::handleEvent(const SDL_Event& e) {
                 map.selectNPC(current_selection.npc_x_tile,
                               current_selection.npc_y_tile);
                 break;
+            }
+
+            // Si el tile es un portal, lo seleccionamos
+            if (map.portal(tile.x, tile.y)) {
+                Mixer::playLocalSound(SELECTION_SOUND);
+                _clearSelection();
+
+                // Seleccionar portal
+                current_selection.portal_selected = true;
+                current_selection.portal_x_tile = tile.x;
+                current_selection.portal_y_tile = tile.y;
+
+                map.selectPortal(current_selection.portal_x_tile,
+                                 current_selection.portal_y_tile);
             }
 
             break;
@@ -427,6 +458,8 @@ void EventHandler::handleEvent(const SDL_Event& e) {
             int8_t inventory_slot = hud.getInventorySlotClicked(click_pos);
             if (inventory_slot >= 0) {
                 Mixer::playLocalSound(SELECTION_SOUND);
+                _clearPortalSelection();
+
                 current_selection.inventory_slot_selected = inventory_slot;
                 hud.selectItem(inventory_slot);
             }

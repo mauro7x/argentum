@@ -103,7 +103,7 @@ class EventHandler {
     // Flags internos
     Key key_pressed = UNMAPPED_KEY;
     bool text_input_enabled = false;
-    Selection current_selection = {false, 0, 0, -1};
+    Selection current_selection;
 
     // Componentes internos
     std::unordered_map<SDL_Keycode, Key> keys;
@@ -117,6 +117,15 @@ class EventHandler {
 
     /* Resetea la selección a invalida */
     void _clearSelection();
+
+    /* Resetea la selección de NPCs */
+    void _clearNPCSelection();
+
+    /* Resetea la selección de portales */
+    void _clearPortalSelection();
+
+    /* Resetea la selección de objetos del inventario */
+    void _clearItemSelection();
 
     /* Traduce el Keycode de SDL a una key esperada */
     Key _getKey(const SDL_Keycode& key);

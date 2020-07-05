@@ -6,33 +6,27 @@
      "width":1
     },
  "margin":0,
- "name":"Metadata",
+ "name":"metadata",
  "spacing":0,
- "tilecount":4,
+ "tilecount":3,
  "tiledversion":"2020.05.29",
  "tileheight":32,
  "tiles":[
         {
          "id":0,
-         "image":"..\/..\/..\/..\/Client\/assets\/Tiles\/Metadata\/collision.png",
+         "image":"..\/..\/Tiles\/Metadata\/collision.png",
          "imageheight":32,
          "imagewidth":32
         }, 
         {
          "id":1,
-         "image":"..\/..\/..\/..\/Client\/assets\/Tiles\/Metadata\/indoor.png",
+         "image":"..\/..\/Tiles\/Metadata\/indoor.png",
          "imageheight":32,
          "imagewidth":32
         }, 
         {
          "id":2,
-         "image":"..\/..\/..\/..\/Client\/assets\/Tiles\/Metadata\/safezone.png",
-         "imageheight":32,
-         "imagewidth":32
-        }, 
-        {
-         "id":3,
-         "image":"..\/..\/..\/..\/Client\/assets\/Tiles\/Metadata\/portal.png",
+         "image":"..\/..\/Tiles\/Metadata\/safezone.png",
          "imageheight":32,
          "imagewidth":32
         }],

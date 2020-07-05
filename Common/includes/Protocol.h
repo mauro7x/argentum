@@ -58,7 +58,10 @@ enum CommandOpcode {
     // Comunicación con otros jugadores
     LIST_CONNECTED_PLAYERS_CMD,
     SEND_GENERAL_MESSAGE_CMD,
-    SEND_PRIVATE_MESSAGE_CMD
+    SEND_PRIVATE_MESSAGE_CMD,
+
+    // Portal
+    TRANSPORT_CMD
 
 };
 

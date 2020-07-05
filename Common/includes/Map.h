@@ -94,6 +94,9 @@ class Map {
     /* Devuelve una referencia al NPC_ID (gráfico) para escritura */
     TileId& getNPC(const int x, const int y);
 
+    /* Devuelve una referencia al PORTAL (gráfico) para escritura */
+    TileId& getPortal(int x, int y);
+
     const bool moveOccupant(const int x, const int y,
                             const Orientation& orientation, bool is_creature);
 
