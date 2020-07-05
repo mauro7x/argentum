@@ -3,15 +3,14 @@
 
 #include "Command.h"
 
+// Listar los elementos que ofrece/contiene un NPC.
 class ListCommand : public Command {
    private:
-    InstanceId caller;
-
     const uint32_t x_coord;
     const uint32_t y_coord;
 
    public:
-    ListCommand(InstanceId caller, const uint32_t x_coord,
+    ListCommand(const InstanceId caller, const uint32_t x_coord,
                 const uint32_t y_coord);
     ~ListCommand();
 

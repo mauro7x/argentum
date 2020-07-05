@@ -3,16 +3,13 @@
 
 #include "Command.h"
 
+// Resucita a un jugador muerto.
 class SelfResurrectCommand : public Command {
-   private:
-    InstanceId caller;
-
    public:
-    SelfResurrectCommand(InstanceId caller);
+    SelfResurrectCommand(const InstanceId caller);
     ~SelfResurrectCommand();
 
     void exec(Game& game) override;
 };
 
-#endif // __RESURRECT_COMMAND_H__
-
+#endif  // __RESURRECT_COMMAND_H__

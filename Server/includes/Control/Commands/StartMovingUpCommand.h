@@ -3,12 +3,10 @@
 
 #include "Command.h"
 
+// Empezar a moverse abajo.
 class StartMovingUpCommand : public Command {
-   private:
-    InstanceId caller;
-
    public:
-    StartMovingUpCommand(InstanceId caller);
+    StartMovingUpCommand(const InstanceId caller);
     ~StartMovingUpCommand();
 
     void exec(Game& game) override;

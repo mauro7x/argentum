@@ -3,16 +3,16 @@
 
 #include "Command.h"
 
+// Deposita la cantidad de oro especificada en el banquero en la posición
+// (x_coord, y_coord).
 class DepositGoldOnBankCommand : public Command {
    private:
-    InstanceId caller;
-
     const uint32_t x_coord;
     const uint32_t y_coord;
     const uint32_t amount;
 
    public:
-    DepositGoldOnBankCommand(InstanceId caller, const uint32_t x_coord,
+    DepositGoldOnBankCommand(const InstanceId caller, const uint32_t x_coord,
                              const uint32_t y_coord, const uint32_t amount);
     ~DepositGoldOnBankCommand();
 

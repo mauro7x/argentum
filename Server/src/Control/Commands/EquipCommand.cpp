@@ -1,7 +1,7 @@
 #include "../../../includes/Control/Commands/EquipCommand.h"
 
-EquipCommand::EquipCommand(InstanceId caller, const uint8_t n_slot)
-    : caller(caller), n_slot(n_slot) {}
+EquipCommand::EquipCommand(const InstanceId caller, const uint8_t n_slot)
+    : Command(caller), n_slot(n_slot) {}
 
 EquipCommand::~EquipCommand() {}
 

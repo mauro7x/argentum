@@ -3,15 +3,12 @@
 
 #include "Command.h"
 
-// comando para desequipar los objetos del equipamiento
+// Desequipar el objeto en el n_slot especificado.
 class UnequipCommand : public Command {
-   private:
-    InstanceId caller;
-
     const uint8_t n_slot;
 
    public:
-    UnequipCommand(InstanceId caller, const uint8_t n_slot);
+    UnequipCommand(const InstanceId caller, const uint8_t n_slot);
     ~UnequipCommand();
 
     void exec(Game& game) override;

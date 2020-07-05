@@ -3,16 +3,13 @@
 
 #include "Command.h"
 
+// /tomar. Toma el objeto en su tile.
 class TakeCommand : public Command {
-   private:
-    InstanceId caller;
-
    public:
-    TakeCommand(InstanceId caller);
+    TakeCommand(const InstanceId caller);
     ~TakeCommand();
 
     void exec(Game& game) override;
 };
 
-#endif // __TAKE_COMMAND_H__
-
+#endif  // __TAKE_COMMAND_H__

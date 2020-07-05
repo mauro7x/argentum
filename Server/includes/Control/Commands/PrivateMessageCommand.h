@@ -3,16 +3,16 @@
 
 #include "Command.h"
 
+// Envía un mensaje al jugador con el nickname especificado. Chat privado.
 class PrivateMessageCommand : public Command {
    private:
-    InstanceId caller;
-
-    std::string to_nickname;
-    std::string message;
+    const std::string to_nickname;
+    const std::string message;
 
    public:
-    PrivateMessageCommand(InstanceId caller, std::string to_nickname,
-                          std::string message);
+    PrivateMessageCommand(const InstanceId caller,
+                          const std::string to_nickname,
+                          const std::string message);
     ~PrivateMessageCommand();
 
     void exec(Game& game) override;

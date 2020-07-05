@@ -3,15 +3,16 @@
 
 #include "Command.h"
 
+// Muestra un mensaje de ayuda con los comandos del NPC en la posición (x_coord,
+// y_coord).
 class HelpNPCCommand : public Command {
    private:
-    InstanceId caller;
-    uint32_t x_coord;
-    uint32_t y_coord;
+    const uint32_t x_coord;
+    const uint32_t y_coord;
 
    public:
-    HelpNPCCommand(InstanceId caller, const uint32_t x_coord,
-                const uint32_t y_coord);
+    HelpNPCCommand(const InstanceId caller, const uint32_t x_coord,
+                   const uint32_t y_coord);
     ~HelpNPCCommand();
 
     void exec(Game& game) override;

@@ -3,15 +3,13 @@
 
 #include "Command.h"
 
+// /meditar. El jugador recupera su maná velozmente.
 class MeditateCommand : public Command {
-   private:
-    InstanceId caller;
-
    public:
-    MeditateCommand(InstanceId caller);
+    MeditateCommand(const InstanceId caller);
     ~MeditateCommand();
 
     void exec(Game& game) override;
 };
 
-#endif // __MEDITATE_COMMAND_H__
+#endif  // __MEDITATE_COMMAND_H__

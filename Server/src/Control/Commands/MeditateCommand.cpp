@@ -1,6 +1,6 @@
 #include "../../../includes/Control/Commands/MeditateCommand.h"
 
-MeditateCommand::MeditateCommand(InstanceId caller) : caller(caller) {}
+MeditateCommand::MeditateCommand(const InstanceId caller) : Command(caller) {}
 
 MeditateCommand::~MeditateCommand() {}
 

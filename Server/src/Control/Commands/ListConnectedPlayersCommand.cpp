@@ -1,7 +1,8 @@
 #include "../../../includes/Control/Commands/ListConnectedPlayersCommand.h"
 
-ListConnectedPlayersCommand::ListConnectedPlayersCommand(InstanceId caller)
-    : caller(caller) {}
+ListConnectedPlayersCommand::ListConnectedPlayersCommand(
+    const InstanceId caller)
+    : Command(caller) {}
 
 ListConnectedPlayersCommand::~ListConnectedPlayersCommand() {}
 

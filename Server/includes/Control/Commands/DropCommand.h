@@ -3,15 +3,15 @@
 
 #include "Command.h"
 
+// Dropea el objeto en el n_slot.
 class DropCommand : public Command {
    private:
-    InstanceId caller;
-
     const uint8_t n_slot;
     const uint32_t amount;
 
    public:
-    DropCommand(InstanceId caller, const uint8_t n_slot, const uint32_t amount);
+    DropCommand(const InstanceId caller, const uint8_t n_slot,
+                const uint32_t amount);
     ~DropCommand();
 
     void exec(Game& game) override;

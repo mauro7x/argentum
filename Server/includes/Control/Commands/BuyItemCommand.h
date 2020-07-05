@@ -3,19 +3,19 @@
 
 #include "Command.h"
 
+// Compra el objeto que corresponde al id especificado, al vendedor en la
+// posición (x_coord, y_coord).
 class BuyItemCommand : public Command {
    private:
-    InstanceId caller;
-
     const uint32_t x_coord;
     const uint32_t y_coord;
     const uint32_t item_id;
     const uint32_t amount;
 
    public:
-    BuyItemCommand(InstanceId caller, const uint32_t x_coord,
-               const uint32_t y_coord, const uint32_t item_id,
-               const uint32_t amount);
+    BuyItemCommand(const InstanceId caller, const uint32_t x_coord,
+                   const uint32_t y_coord, const uint32_t item_id,
+                   const uint32_t amount);
     ~BuyItemCommand();
 
     void exec(Game& game) override;

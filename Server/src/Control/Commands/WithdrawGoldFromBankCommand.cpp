@@ -1,10 +1,10 @@
 #include "../../../includes/Control/Commands/WithdrawGoldFromBankCommand.h"
 
-WithdrawGoldFromBankCommand::WithdrawGoldFromBankCommand(InstanceId caller,
+WithdrawGoldFromBankCommand::WithdrawGoldFromBankCommand(const InstanceId caller,
                                                          const uint32_t x_coord,
                                                          const uint32_t y_coord,
                                                          const uint32_t amount)
-    : caller(caller), x_coord(x_coord), y_coord(y_coord), amount(amount) {}
+    : Command(caller), x_coord(x_coord), y_coord(y_coord), amount(amount) {}
 
 WithdrawGoldFromBankCommand::~WithdrawGoldFromBankCommand() {}
 

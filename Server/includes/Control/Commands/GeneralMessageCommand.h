@@ -3,14 +3,13 @@
 
 #include "Command.h"
 
+// Envía un mensaje a todos los jugadores. Chat general.
 class GeneralMessageCommand : public Command {
    private:
-    InstanceId caller;
-
-    std::string message;
+    const std::string message;
 
    public:
-    GeneralMessageCommand(InstanceId caller, std::string message);
+    GeneralMessageCommand(const InstanceId caller, const std::string message);
     ~GeneralMessageCommand();
 
     void exec(Game& game) override;

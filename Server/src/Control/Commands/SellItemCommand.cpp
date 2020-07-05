@@ -1,9 +1,9 @@
 #include "../../../includes/Control/Commands/SellItemCommand.h"
 
-SellItemCommand::SellItemCommand(InstanceId caller, const uint32_t x_coord,
-                                 const uint32_t y_coord, const uint8_t n_slot,
-                                 const uint32_t amount)
-    : caller(caller),
+SellItemCommand::SellItemCommand(const InstanceId caller,
+                                 const uint32_t x_coord, const uint32_t y_coord,
+                                 const uint8_t n_slot, const uint32_t amount)
+    : Command(caller),
       x_coord(x_coord),
       y_coord(y_coord),
       n_slot(n_slot),

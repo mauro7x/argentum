@@ -3,17 +3,16 @@
 
 #include "Command.h"
 
+// Retirar item del banco.
 class WithdrawItemFromBankCommand : public Command {
    private:
-    InstanceId caller;
-
     const uint32_t x_coord;
     const uint32_t y_coord;
     const uint32_t item_id;
     const uint32_t amount;
 
    public:
-    WithdrawItemFromBankCommand(InstanceId caller, const uint32_t x_coord,
+    WithdrawItemFromBankCommand(const InstanceId caller, const uint32_t x_coord,
                                 const uint32_t y_coord, const uint32_t item_id,
                                 const uint32_t amount);
     ~WithdrawItemFromBankCommand();

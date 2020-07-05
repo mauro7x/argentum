@@ -1,9 +1,9 @@
 #include "../../../includes/Control/Commands/PrivateMessageCommand.h"
 
-PrivateMessageCommand::PrivateMessageCommand(InstanceId caller,
+PrivateMessageCommand::PrivateMessageCommand(const InstanceId caller,
                                              const std::string to_nickname,
                                              const std::string message)
-    : caller(caller),
+    : Command(caller),
       to_nickname(std::move(to_nickname)),
       message(std::move(message)) {}
 
