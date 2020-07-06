@@ -562,7 +562,7 @@ void Game::updateResurrectingPlayersCooldown(const int it) {
     while (iterator != resurrecting_players_cooldown.end()) {
         Id player = iterator->first;
 
-        if (this->characters.count(player)) {
+        if (!this->characters.count(player)) {
             iterator = resurrecting_players_cooldown.erase(iterator);
             continue;
         }
@@ -573,7 +573,6 @@ void Game::updateResurrectingPlayersCooldown(const int it) {
         info.time_since_last_message += it * rate;
 
         if (info.cooldown <= 0) {
-            // MANEJAR CASO EN EL QUE SE DESCONECTA RESUCITANDO...!
             // Resucitar.
             _cooldownResurrect(player);
             iterator = resurrecting_players_cooldown.erase(iterator);
