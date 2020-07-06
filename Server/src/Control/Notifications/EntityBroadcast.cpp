@@ -83,6 +83,14 @@ const Id EntityBroadcast::getMapId() const {
     return this->map;
 }
 
+const InstanceId EntityBroadcast::getSourceInstanceId() const {
+    return this->id;
+}
+
+const bool EntityBroadcast::isEntityBroadcast() const {
+    return true;
+}
+
 const bool EntityBroadcast::isForEveryMap() const {
     return false;
 }

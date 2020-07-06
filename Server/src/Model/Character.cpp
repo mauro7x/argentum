@@ -190,6 +190,12 @@ void Character::stopMoving() {
     this->is_moving = false;
 }
 
+void Character::teleport(const Id map_id, const uint32_t x_coord,
+                  const uint32_t y_coord) {
+    this->position.teleport(map_id, x_coord, y_coord);
+    this->broadcast = true;
+}
+
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------

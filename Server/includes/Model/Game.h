@@ -247,8 +247,13 @@ class Game {
                                        const uint32_t y_coord,
                                        const bool exception_if_invalid);
 
+    void _validatePortalMapId(const InstanceId caller, Id map_id);
+
     void _validateIfNPCSellsItem(const InstanceId caller, const Id npc_id,
                                  const Id item_id);
+
+    void _listPortalMaps(std::string& init_msg,
+                         std::list<std::string>& item_list);
 
     void _listNPCSellableItems(const Id npc_id, std::string& init_msg,
                                std::list<std::string>& item_list);
@@ -427,8 +432,8 @@ class Game {
     void help(const InstanceId caller, const uint32_t x_coord,
               const uint32_t y_coord);
 
-    void teleport(const InstanceId caller, const uint32_t x_coord,
-                  const uint32_t y_coord, const uint32_t map_id);
+    void teleport(const InstanceId caller, const uint32_t portal_x_coord,
+                  const uint32_t portal_y_coord, const Id map_id);
 
     //-------------------------------------------------------------------------
 

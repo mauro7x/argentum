@@ -56,7 +56,10 @@ class ActiveClients {
     void remove(const InstanceId id);
 
     /* Notifica a un cliente en particular */
-    void notify(const InstanceId& id, Notification* notification);
+    void notify(const InstanceId id, Notification* notification);
+
+    /* Cambia el mapa de un cliente */
+    void changeMap(const InstanceId id, const Id new_map);
 
     /*
      * Envía un broadcast de actualización de updated_client a todos los

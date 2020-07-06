@@ -44,8 +44,7 @@ class MapContainer {
     /* Carga los mapas parseando los json correspondiente */
     void loadMaps();
 
-    /* PROVISORIO! */
-    /* Para crear el mapa de conteo de criaturas por mapa */
+    /* Agrega a maps_id los ids de los mapas existentes. */
     void getMapsId(std::vector<Id>& maps_id) const;
 
     /* Obtiene el mapa correspondiente modificable */

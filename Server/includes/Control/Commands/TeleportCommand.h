@@ -12,7 +12,7 @@ class TeleportCommand : public Command {
 
    public:
     TeleportCommand(const InstanceId caller, const uint32_t x_coord,
-                    const uint32_t y_coord, const uint32_t map_id);
+                    const uint32_t y_coord, const Id map_id);
     ~TeleportCommand();
 
     void exec(Game& game) override;

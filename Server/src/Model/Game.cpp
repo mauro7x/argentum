@@ -1030,6 +1030,8 @@ void Game::list(const InstanceId caller, const uint32_t x_coord,
                _validateMerchantPosition(caller, npc_id, x_coord, y_coord,
                                          false)) {
         _listNPCSellableItems(npc_id, init_msg, list_items);
+    } else if (_validatePortalPosition(caller, x_coord, y_coord, false)) {
+        _listPortalMaps(init_msg, list_items);
     } else {
         throw Exception(
             "La posición indicada no corresponde a la de un NPC listable.");
@@ -1038,6 +1040,19 @@ void Game::list(const InstanceId caller, const uint32_t x_coord,
     Notification* list = new List(init_msg, list_items);
     this->active_clients.notify(caller, list);
     return;
+}
+
+void Game::_listPortalMaps(std::string& init_msg,
+                           std::list<std::string>& item_list) {
+    init_msg = "Posibles mapas para viajar";
+
+    std::vector<Id> maps_id;
+    this->map_container.getMapsId(maps_id);
+
+    std::vector<Id>::iterator it = maps_id.begin();
+    for (; it != maps_id.end(); ++it) {
+        item_list.push_back(std::to_string(*it));
+    }
 }
 
 void Game::_listNPCSellableItems(const Id npc_id, std::string& init_msg,
@@ -1495,13 +1510,50 @@ const bool Game::_validatePortalPosition(const InstanceId caller,
     return false;
 }
 
-void Game::teleport(const InstanceId caller, const uint32_t x_coord,
-                    const uint32_t y_coord, const uint32_t map_id) {
+void Game::_validatePortalMapId(const InstanceId caller, Id map_id) {
+    std::vector<Id> maps_id;
+    this->map_container.getMapsId(maps_id);
+
+    std::vector<Id>::iterator it =
+        std::find(maps_id.begin(), maps_id.end(), map_id);
+
+    if (it == maps_id.end())
+        throw Exception("El Id del mapa es inválido.");
+}
+
+void Game::teleport(const InstanceId caller, const uint32_t portal_x_coord,
+                    const uint32_t portal_y_coord, const Id map_id) {
     if (!this->characters.count(caller))
         throw Exception("Game::teleport: unknown caller.");
 
+    Character& character = this->characters.at(caller);
+
     // Propaga Exception si no hay un portal en la posición especificada.
-    _validatePortalPosition(caller, x_coord, y_coord, true);
+    _validatePortalPosition(caller, portal_x_coord, portal_y_coord, true);
+
+    if (map_id == character.getMapId())
+        throw Exception(
+            "No puedes viajar al mismo mapa en el que te encuentras.");
+
+    _validatePortalMapId(caller, map_id);
+
+    _pushCharacterDifferentialBroadcast(caller, DELETE_BROADCAST, false);
+
+    int spawning_x_coord, spawning_y_coord;
+    this->map_container[map_id].establishEntitySpawningPosition(
+        spawning_x_coord, spawning_y_coord, false);
+    this->map_container[map_id].occupyTile(caller, spawning_x_coord,
+                                           spawning_y_coord);
+
+    character.teleport(map_id, spawning_x_coord, spawning_y_coord);
+    active_clients.changeMap(caller, map_id);
+
+    _pushCharacterDifferentialBroadcast(caller, NEW_BROADCAST, false);
+
+    // este podria ser reemplazado por uno solo hacia el caller
+    _pushCharacterDifferentialBroadcast(caller, UPDATE_BROADCAST, true);
+
+    _pushFullBroadcast(caller, false);
 }
 
 //-----------------------------------------------------------------------------

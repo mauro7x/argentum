@@ -32,8 +32,15 @@ void ClientConnection::_sender() {
         while ((notification = notifications.pop())) {
             if (!notification->isForEveryMap()) {
                 if (!(notification->getMapId() == this->map)) {
-                    delete notification;
-                    continue;
+                    if (notification->isEntityBroadcast()) {
+                        if (notification->getSourceInstanceId() != this->id) {
+                            delete notification;
+                            continue;
+                        }
+                    } else {
+                        delete notification;
+                        continue;
+                    }
                 }
             }
             socket_valid = notification->send(this->id, peer);
