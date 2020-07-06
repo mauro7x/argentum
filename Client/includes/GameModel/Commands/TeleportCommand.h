@@ -1,5 +1,5 @@
-#ifndef __TRANSPORT_COMMAND_H__
-#define __TRANSPORT_COMMAND_H__
+#ifndef __TELEPORT_COMMAND_H__
+#define __TELEPORT_COMMAND_H__
 
 //-----------------------------------------------------------------------------
 #include "../../../../Common/includes/Protocol.h"
@@ -9,14 +9,14 @@
 
 //-----------------------------------------------------------------------------
 
-class TransportCommand : public Command {
+class TeleportCommand : public Command {
    private:
     uint32_t x;
     uint32_t y;
 
    public:
     /* Constructor */
-    TransportCommand(uint32_t x, uint32_t y);
+    TeleportCommand(uint32_t x, uint32_t y);
 
     //-------------------------------------------------------------------------
 
@@ -26,9 +26,9 @@ class TransportCommand : public Command {
     //-------------------------------------------------------------------------
 
     /* Destructor */
-    ~TransportCommand();
+    ~TeleportCommand();
 };
 
 //-----------------------------------------------------------------------------
 
-#endif  // __TRANSPORT_COMMAND_H__
+#endif  // __TELEPORT_COMMAND_H__

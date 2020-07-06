@@ -61,7 +61,7 @@ enum CommandOpcode {
     SEND_PRIVATE_MESSAGE_CMD,
 
     // Portal
-    TRANSPORT_CMD
+    TELEPORT_CMD
 
 };
 

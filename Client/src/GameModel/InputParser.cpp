@@ -9,7 +9,7 @@ void InputParser::_fillCommands() {
     commands.emplace(THROW_EXPECTED_INPUT, THROW_INPUT_CMD);
     commands.emplace(MEDITATE_EXPECTED_INPUT, MEDITATE_INPUT_CMD);
     commands.emplace(RESURRECT_EXPECTED_INPUT, RESURRECT_INPUT_CMD);
-    commands.emplace(TRANSPORT_EXPECTED_INPUT, TRANSPORT_INPUT_CMD);
+    commands.emplace(TELEPORT_EXPECTED_INPUT, TELEPORT_INPUT_CMD);
     commands.emplace(HEAL_EXPECTED_INPUT, HEAL_INPUT_CMD);
     commands.emplace(LIST_EXPECTED_INPUT, LIST_INPUT_CMD);
     commands.emplace(DEPOSIT_EXPECTED_INPUT, DEPOSIT_INPUT_CMD);
@@ -112,7 +112,7 @@ Command* InputParser::_parseCommand(const std::string& command_input,
             }
         }
 
-        case TRANSPORT_INPUT_CMD: {
+        case TELEPORT_INPUT_CMD: {
             if (!current_selection.portal_selected) {
                 (*g_reply) =
                     "Debes seleccionar un portal primero (haciéndole click).";
@@ -125,7 +125,7 @@ Command* InputParser::_parseCommand(const std::string& command_input,
                 return NULL;
             }
 
-            return new TransportCommand(current_selection.portal_x_tile,
+            return new TeleportCommand(current_selection.portal_x_tile,
                                         current_selection.portal_y_tile);
         }
 

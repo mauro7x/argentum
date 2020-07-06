@@ -658,7 +658,7 @@ void Game::_sendCharacterAttackNotifications(const int damage,
             "Te han curado " + std::to_string(-damage) + " puntos de vida.";
 
         _pushCharacterEvent(caller, HEALING_SPELL_EV_TYPE);
-        
+
     } else if (eluded) {
         msg_to_attacker = "Tu ataque fue eludido.";
         msg_to_attacked = "Has eludido un ataque.";
@@ -1449,6 +1449,31 @@ void Game::help(const InstanceId caller, const uint32_t x_coord,
 
     Notification* list = new List(init_msg, descriptions);
     active_clients.notify(caller, list);
+}
+
+const bool Game::_validatePortalPosition(const InstanceId caller,
+                                         const uint32_t x_coord,
+                                         const uint32_t y_coord,
+                                         const bool exception_if_invalid) {
+    Id map_id = this->characters.at(caller).getMapId();
+
+    if (this->map_container[map_id].getTile(x_coord, y_coord).portal)
+        return true;
+
+    if (exception_if_invalid)
+        throw Exception("No hay un portal en la posición especificada.");
+
+    return false;
+}
+
+void Game::teleport(const InstanceId caller, const uint32_t x_coord,
+                    const uint32_t y_coord, const uint32_t map_id) {
+    if (!this->characters.count(caller))
+        throw Exception("Game::teleport: unknown caller.");
+
+    // Propaga Exception si no hay un portal en la posición especificada.
+    _validatePortalPosition(caller, x_coord, y_coord, true);
+
 }
 
 //-----------------------------------------------------------------------------

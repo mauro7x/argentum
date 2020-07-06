@@ -20,7 +20,7 @@
 #include "StartMovingCommand.h"
 #include "StopMovingCommand.h"
 #include "ThrowNObjectsCommand.h"
-#include "TransportCommand.h"
+#include "TeleportCommand.h"
 #include "UnequipObjectCommand.h"
 #include "UseMainWeaponCommand.h"
 #include "WithdrawGoldCommand.h"
