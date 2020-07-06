@@ -313,7 +313,7 @@ const InstanceId Game::newCharacter(const CharacterCfg& init_data) {
             // Obtengo free tile próximo a la última posición del jugador
             // persistida.
             this->map_container[spawning_map_id].getNearestFreeTile(
-                spawning_x_coord, spawning_y_coord);
+                spawning_x_coord, spawning_y_coord, false);
         } catch (const CouldNotFindFreeTileException& e) {
             // Si no puede spawnear en la posición persistida, asignamos
             // posición aleatoria.
@@ -965,7 +965,8 @@ void Game::_cooldownResurrect(const InstanceId caller) {
     int respawn_y = info.priest_y_coord;
 
     try {
-        this->map_container[map_id].getNearestFreeTile(respawn_x, respawn_y);
+        this->map_container[map_id].getNearestFreeTile(respawn_x, respawn_y,
+                                                       false);
     } catch (const CouldNotFindFreeTileException& e) {
         // Que hago aca? je.
         return;
@@ -1593,6 +1594,8 @@ void Game::teleport(const InstanceId caller, const uint32_t portal_x_coord,
         throw Exception("Game::teleport: unknown caller.");
 
     Character& character = this->characters.at(caller);
+
+    // VALIDAR TELEPORT SI SE ESTA RESUCITANDO...
 
     // Propaga Exception si no hay un portal en la posición especificada.
     _validatePortalPosition(caller, portal_x_coord, portal_y_coord, true);

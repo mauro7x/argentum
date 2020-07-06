@@ -233,18 +233,18 @@ void Map::setItem(const Id item_id, const uint32_t amount, const int x,
 }
 
 void Map::addItem(const Id item_id, const uint32_t amount, int& x, int& y) {
-    this->getNearestFreeTile(x, y);
+    this->getNearestFreeTile(x, y, true);
 
     Tile& tile = this->_getTile(x, y);
     tile.item_id = item_id;
     tile.item_amount = amount;
 }
 
-void Map::getNearestFreeTile(int& x, int& y) {
+void Map::getNearestFreeTile(int& x, int& y, const bool is_for_item) {
     // Primero nos fijamos si está libre el mismo tile en (x, y)
     Tile& current_tile = this->_getTile(x, y);
     if (!current_tile.item_id && !current_tile.collision &&
-        !current_tile.npc_id && !current_tile.occupant_id) {
+        !current_tile.npc_id && (is_for_item || !current_tile.occupant_id)) {
         return;
     }
 
@@ -267,7 +267,7 @@ void Map::getNearestFreeTile(int& x, int& y) {
                 Tile& tile = this->_getTile(_x, _y);
 
                 if (!tile.item_id && !tile.collision && !tile.npc_id &&
-                    !tile.occupant_id) {
+                    (is_for_item || !current_tile.occupant_id)) {
                     empty_tile_found = true;
                     x = _x;
                     y = _y;

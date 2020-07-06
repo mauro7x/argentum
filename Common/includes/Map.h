@@ -130,7 +130,7 @@ class Map {
      * Lanza CouldNotFindFreeTileException si no se encuentra tile libre alguno
      * dentro del rango FREE_TILE_LOOKUP_RANGE.
      */
-    void getNearestFreeTile(int& x, int& y);
+    void getNearestFreeTile(int& x, int& y, const bool is_for_item);
 
     /* Devuelve si las coordenadas recibidas están dentro de una zona segura */
     const bool isSafeZone(const int x, const int y) const;
