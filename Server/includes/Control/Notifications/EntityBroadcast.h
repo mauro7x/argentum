@@ -52,6 +52,10 @@ class EntityBroadcast : public Notification {
 
     virtual const EntityType getEntityType() const;
 
+    const InstanceId getSourceInstanceId() const override;
+
+    const bool isEntityBroadcast() const override;
+
     //-----------------------------------------------------------------------------
 
     /* Destructor */

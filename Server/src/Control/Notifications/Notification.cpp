@@ -23,3 +23,11 @@ const EntityType Notification::getEntityType() const {
 const Id Notification::getMapId() const {
     return 0;
 }
+
+const InstanceId Notification::getSourceInstanceId() const {
+    throw Exception("No source instance id for this notification.");
+}
+
+const bool Notification::isEntityBroadcast() const {
+    return false;
+}

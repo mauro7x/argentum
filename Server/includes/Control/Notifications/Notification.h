@@ -49,6 +49,10 @@ class Notification {
 
     virtual const Id getMapId() const;
 
+    virtual const InstanceId getSourceInstanceId() const;
+
+    virtual const bool isEntityBroadcast() const;
+
     //-----------------------------------------------------------------------------
 
     /* Destructor */
