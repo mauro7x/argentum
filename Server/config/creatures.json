@@ -32,7 +32,7 @@
         "max_damage": 15,
         "base_health": 100,
         "visible_range": 5,
-        "movement_speed": 2,
+        "movement_speed": 3,
         "attack_cooldown": 2000
     },
     {

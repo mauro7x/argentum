@@ -15,8 +15,9 @@ Creature::Creature(const CreatureCfg& data, MapContainer& map_container,
                    const Id init_map, const int init_x_coord,
                    const int init_y_coord, const uint32_t health,
                    ItemsContainer& items,
-                   std::unordered_map<InstanceId, Character>& characters, Game& game,
-                   const int& rate, const unsigned int random_movement_factor)
+                   std::unordered_map<InstanceId, Character>& characters,
+                   Game& game, const int& rate,
+                   const unsigned int random_movement_factor)
     : id(data.id),
       name(data.name),
       health_max(data.base_health),
@@ -120,12 +121,25 @@ void Creature::_determinateDirectionAndMove(
             }
         }
     }
-    if (position_character.getY() > position.getY()) {
-        position.changeOrientation(DOWN_ORIENTATION);
+    if (position_character.getY() > y) {
+        if (map.isPositionValidForCreature(x, y + 1)) {
+            position.changeOrientation(DOWN_ORIENTATION);
+            return;
+        }
+
     } else {
-        position.changeOrientation(UP_ORIENTATION);
+        if (map.isPositionValidForCreature(x, y - 1)) {
+            position.changeOrientation(UP_ORIENTATION);
+            return;
+        }
+    }
+    if (position_character.getX() > x) {
+        position.changeOrientation(RIGHT_ORIENTATION);
+    } else {
+        position.changeOrientation(LEFT_ORIENTATION);
     }
 }
+
 void Creature::_updateDamage(const unsigned int it, const InstanceId id) {
     actual_attack_cooldown -= it * rate;
     attacking_id = 0;
