@@ -128,9 +128,9 @@ void Character::_updateMovement(const unsigned int it) {
     while (this->moving_cooldown <= 0) {
         this->broadcast = true;
 
-        this->position.move(false);
-
         this->moving_cooldown += UNIT_TIME_TO_MOVE;
+
+        this->position.move(false);
     }
 }
 
