@@ -41,8 +41,8 @@ FILE(GLOB_RECURSE server_src "Server/*.cpp")
 add_library(ao-common SHARED ${common_src})
 
 # Client
-add_executable(ao-client ${client_src})
-target_link_libraries(ao-client ao-common SDL2 SDL2_image SDL2_ttf SDL2_mixer)
+add_executable(argentum ${client_src})
+target_link_libraries(argentum ao-common SDL2 SDL2_image SDL2_ttf SDL2_mixer)
 
 # Server
 add_executable(ao-server ${server_src})
@@ -64,7 +64,7 @@ install(DIRECTORY ${CMAKE_SOURCE_DIR}/Common/config DESTINATION ${CONFIG_DIRPATH
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/Common/assets DESTINATION ${ASSETS_DIRPATH}/common)
 
 # Cliente
-install(TARGETS ao-client DESTINATION ${BINARIES_DIRPATH})
+install(TARGETS argentum DESTINATION ${BINARIES_DIRPATH})
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/Client/config DESTINATION ${CONFIG_DIRPATH}/client)
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/Client/assets DESTINATION ${ASSETS_DIRPATH}/client)
 
