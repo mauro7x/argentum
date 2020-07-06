@@ -248,10 +248,6 @@ void Mixer::_stopMusic(bool fade_out) const {
     }
 }
 
-void Mixer::_musicFinishedCallback() {
-    fprintf(stderr, "proxy: la canción terminó.\n");
-}
-
 void Mixer::_setMusicVolume(int volume) {
     if (volume > 0 && volume <= MIX_MAX_VOLUME) {
         music_volume = volume;
@@ -317,6 +313,10 @@ void Mixer::_playLocalSound(LocalSound local_sound) {
     if ((local_sound < 0) || (local_sound > N_LOCAL_SOUNDS)) {
         throw Exception("Mixer::_playLocalSound: invalid local_sound (%u)",
                         (unsigned int)local_sound);
+    }
+
+    if (muted) {
+        return;
     }
 
     int channel = Mix_PlayChannel(-1, local_sounds[local_sound], 0);

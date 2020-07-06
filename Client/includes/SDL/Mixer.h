@@ -142,9 +142,6 @@ class Mixer {
     /* Detiene cualquier música que esté sonando. El flag permite fade-out */
     void _stopMusic(bool fade_out = false) const;
 
-    /* Callback para cuando una canción termina */
-    void _musicFinishedCallback();
-
     /* Settea el volumen de la música */
     void _setMusicVolume(int volume);
 
