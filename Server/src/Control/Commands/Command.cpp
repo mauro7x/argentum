@@ -212,7 +212,8 @@ Command* CommandFactory::newCommand(InstanceId caller, uint8_t opcode,
         }
 
         case TELEPORT_CMD: {
-            uint32_t x_coord, y_coord, map_id;
+            uint32_t x_coord, y_coord;
+            Id map_id;
             socket >> x_coord;
             socket >> y_coord;
             socket >> map_id;
