@@ -19,11 +19,9 @@ void UpdatePlayerBroadcast::exec(
     map.clearTileOccupant(old_pos.x, old_pos.y);
     player.update(data);
 
-    fprintf(stderr, "MAP ID: %u\n", data.basic_data.map);
     if (map.selectMap(data.basic_data.map)) {
         // El mapa cambió
-        fprintf(stderr, "el mapa cambio. hacemos clears. map_id=[%u]\n",
-                data.basic_data.map);
+
         characters.clear();
         creatures.clear();
         map.clear();
