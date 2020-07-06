@@ -9,7 +9,7 @@ void InputParser::_fillCommands() {
     commands.emplace(THROW_EXPECTED_INPUT, THROW_INPUT_CMD);
     commands.emplace(MEDITATE_EXPECTED_INPUT, MEDITATE_INPUT_CMD);
     commands.emplace(RESURRECT_EXPECTED_INPUT, RESURRECT_INPUT_CMD);
-    commands.emplace(TRANSPORT_EXPECTED_INPUT, TRANSPORT_INPUT_CMD);
+    commands.emplace(TELEPORT_EXPECTED_INPUT, TELEPORT_INPUT_CMD);
     commands.emplace(HEAL_EXPECTED_INPUT, HEAL_INPUT_CMD);
     commands.emplace(LIST_EXPECTED_INPUT, LIST_INPUT_CMD);
     commands.emplace(DEPOSIT_EXPECTED_INPUT, DEPOSIT_INPUT_CMD);
@@ -112,7 +112,7 @@ Command* InputParser::_parseCommand(const std::string& command_input,
             }
         }
 
-        case TRANSPORT_INPUT_CMD: {
+        case TELEPORT_INPUT_CMD: {
             if (!current_selection.portal_selected) {
                 (*g_reply) =
                     "Debes seleccionar un portal primero (haciéndole click).";
@@ -120,13 +120,18 @@ Command* InputParser::_parseCommand(const std::string& command_input,
             }
 
             body = _getCommandBody(command_input);
-            if (!body.empty()) {
-                (*g_reply) = "El comando '/transportar' no admite parámetros.";
+            std::string s_map_id, excess;
+            _splitBy(' ', body, s_map_id, excess);
+            uint32_t map_id;
+
+            if (s_map_id.empty() || !excess.empty() ||
+                !_castToUint32(s_map_id, map_id)) {
+                (*g_reply) = "Uso esperado del comando: /viajar <map_id>";
                 return NULL;
             }
 
-            return new TransportCommand(current_selection.portal_x_tile,
-                                        current_selection.portal_y_tile);
+            return new TeleportCommand(current_selection.portal_x_tile,
+                                       current_selection.portal_y_tile, map_id);
         }
 
         case HEAL_INPUT_CMD: {

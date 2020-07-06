@@ -124,7 +124,7 @@ Identificas el mensaje con el primer byte recibido (opcode), y para cada caso se
 | 22 | Listar jugadores conectados | `` |
 | 23 | Mensaje general | `CONTENT_LENGTH (4) + CONTENT (LENGTH)` |
 | 24 | Mensaje privado | `NICK_LENGTH (4) + NICKNAME (NICK_LENGTH) + CONTENT_LENGTH (4) + CONTENT (LENGTH)` |
-| 25 | Transportar | `POS` |
+| 25 | Teletransportar | `POS` + MAP_ID(4) |
 
 * `POS` = `X (4) + Y (4)`
 

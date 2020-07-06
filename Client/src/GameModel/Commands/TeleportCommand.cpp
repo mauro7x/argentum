@@ -1,4 +1,4 @@
-#include "../../../includes/GameModel/Commands/TransportCommand.h"
+#include "../../../includes/GameModel/Commands/TeleportCommand.h"
 
 //-----------------------------------------------------------------------------
 // Métodos privados
@@ -8,16 +8,16 @@
 //-----------------------------------------------------------------------------
 // API Pública
 
-TransportCommand::TransportCommand(uint32_t x, uint32_t y)
-    : Command(), x(x), y(y) {}
+TeleportCommand::TeleportCommand(uint32_t x, uint32_t y, uint32_t map_id)
+    : Command(), x(x), y(y), map_id(map_id) {}
 
-bool TransportCommand::send(const SocketWrapper& socket) {
+bool TeleportCommand::send(const SocketWrapper& socket) {
     // Enviamos el comando según el protocolo
     if (!(socket << (uint8_t)COMMAND_OPCODE)) {
         return false;
     }
 
-    if (!(socket << (uint8_t)TRANSPORT_CMD)) {
+    if (!(socket << (uint8_t)TELEPORT_CMD)) {
         return false;
     }
 
@@ -29,9 +29,13 @@ bool TransportCommand::send(const SocketWrapper& socket) {
         return false;
     }
 
+    if (!(socket << (uint32_t)map_id)) {
+        return false;
+    }
+
     return true;
 }
 
-TransportCommand::~TransportCommand() {}
+TeleportCommand::~TeleportCommand() {}
 
 //-----------------------------------------------------------------------------

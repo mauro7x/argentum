@@ -1476,6 +1476,31 @@ void Game::help(const InstanceId caller, const uint32_t x_coord,
     active_clients.notify(caller, list);
 }
 
+const bool Game::_validatePortalPosition(const InstanceId caller,
+                                         const uint32_t x_coord,
+                                         const uint32_t y_coord,
+                                         const bool exception_if_invalid) {
+    Id map_id = this->characters.at(caller).getMapId();
+
+    if (this->map_container[map_id].getTile(x_coord, y_coord).portal)
+        return true;
+
+    if (exception_if_invalid)
+        throw Exception("No hay un portal en la posición especificada.");
+
+    return false;
+}
+
+void Game::teleport(const InstanceId caller, const uint32_t x_coord,
+                    const uint32_t y_coord, const uint32_t map_id) {
+    if (!this->characters.count(caller))
+        throw Exception("Game::teleport: unknown caller.");
+
+    // Propaga Exception si no hay un portal en la posición especificada.
+    _validatePortalPosition(caller, x_coord, y_coord, true);
+
+}
+
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------

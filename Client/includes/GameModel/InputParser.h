@@ -29,7 +29,7 @@
 #define THROW_EXPECTED_INPUT "/tirar"
 #define MEDITATE_EXPECTED_INPUT "/meditar"
 #define RESURRECT_EXPECTED_INPUT "/resucitar"
-#define TRANSPORT_EXPECTED_INPUT "/transportar"
+#define TELEPORT_EXPECTED_INPUT "/viajar"
 #define HEAL_EXPECTED_INPUT "/curar"
 #define LIST_EXPECTED_INPUT "/listar"
 #define DEPOSIT_EXPECTED_INPUT "/depositar"
@@ -50,7 +50,7 @@ enum InputCommand {
     THROW_INPUT_CMD,
     MEDITATE_INPUT_CMD,
     RESURRECT_INPUT_CMD,
-    TRANSPORT_INPUT_CMD,
+    TELEPORT_INPUT_CMD,
     HEAL_INPUT_CMD,
     LIST_INPUT_CMD,
     DEPOSIT_INPUT_CMD,
