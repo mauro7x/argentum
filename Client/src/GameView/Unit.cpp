@@ -4,27 +4,27 @@
 // Métodos privados
 
 void Unit::_setMovementSpeed(int next_x_tile, int next_y_tile) {
-    int old_x = data.x_tile * TILE_WIDTH;
-    int old_y = data.y_tile * TILE_HEIGHT;
+    // int old_x = data.x_tile * TILE_WIDTH;
+    // int old_y = data.y_tile * TILE_HEIGHT;
     int new_x = next_x_tile * TILE_WIDTH;
     int new_y = next_y_tile * TILE_HEIGHT;
 
     /* Velocidad en X */
-    if (new_x != old_x) {
+    if (new_x != x) {
         // Saco la corrección de velocidad ya que genera una animación más
         // trabada, y la ganancia es muy poca.
-        // x_vel = ((float)(new_x - x) / (1000 / data.movement_speed));
-        x_vel = ((float)(new_x - old_x) / (1000 / data.movement_speed));
+        x_vel = ((float)(new_x - x) / (1000 / data.movement_speed));
+        // x_vel = ((float)(new_x - old_x) / (1000 / data.movement_speed));
     } else {
         x_vel = 0;
     }
 
     /* Velocidad en Y */
-    if (new_y != old_y) {
+    if (new_y != y) {
         // Saco la corrección de velocidad ya que genera una animación más
         // trabada, y la ganancia es muy poca.
-        // y_vel = ((float)(new_y - y) / (1000 / data.movement_speed));
-        y_vel = ((float)(new_y - old_y) / (1000 / data.movement_speed));
+        y_vel = ((float)(new_y - y) / (1000 / data.movement_speed));
+        // y_vel = ((float)(new_y - old_y) / (1000 / data.movement_speed));
     } else {
         y_vel = 0;
     }

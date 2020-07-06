@@ -45,6 +45,10 @@ void Mixer::playMusic(bool fade_in) {
     Mixer::getInstance()._playMusic(fade_in);
 }
 
+void Mixer::setGameMusicVolume() {
+    Mixer::getInstance()._setMusicVolume(GAME_MUSIC_VOLUME);
+}
+
 void Mixer::playEventSound(uint8_t sound_id, const SDL_Point& player_pos,
                            const SDL_Point& sound_pos) {
     Mixer::getInstance()._playChunk(sound_id, player_pos, sound_pos);
@@ -236,6 +240,13 @@ void Mixer::_stopMusic(bool fade_out) const {
 
 void Mixer::_musicFinishedCallback() {
     fprintf(stderr, "proxy: la canción terminó.\n");
+}
+
+void Mixer::_setMusicVolume(int volume) {
+    if (volume > 0 && volume <= MIX_MAX_VOLUME) {
+        music_volume = volume;
+        Mix_VolumeMusic(music_volume);
+    }
 }
 
 void Mixer::_increaseMusicVolume() {

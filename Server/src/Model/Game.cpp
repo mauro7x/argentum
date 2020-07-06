@@ -740,8 +740,11 @@ void Game::_useWeapon(const InstanceId caller, const InstanceId target,
     if (damage > 0 && !attacked->getHealth()) {
         _dropAllItems(attacked);
 
-        if (target_is_creature)
+        if (target_is_creature) {
             deleteCreature(target);
+        } else {
+            _pushCharacterEvent(target, DEATH_EV_TYPE);
+        }
     }
 
     if (target_is_creature)
@@ -754,6 +757,7 @@ void Game::attackedByCreature(const InstanceId caller, int& damage,
                               bool eluded) {
     Character& attacked = this->characters.at(caller);
     if (damage > 0 && !attacked.getHealth()) {
+        _pushCharacterEvent(caller, DEATH_EV_TYPE);
         _dropAllItems(&attacked);
     }
     _sendAttackedByCreatureNotifications(damage, eluded, caller);
@@ -1498,7 +1502,6 @@ void Game::teleport(const InstanceId caller, const uint32_t x_coord,
 
     // Propaga Exception si no hay un portal en la posición especificada.
     _validatePortalPosition(caller, x_coord, y_coord, true);
-
 }
 
 //-----------------------------------------------------------------------------

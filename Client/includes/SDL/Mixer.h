@@ -33,6 +33,7 @@
 
 // Volumen (el máximo volumen es 128)
 #define MUSIC_VOLUME_LEVEL 4
+#define GAME_MUSIC_VOLUME 32
 
 // Chunks
 #define MAX_CHUNKS_SIMULTANEOUSLY 3 /* límite para sonidos EXTERNOS */
@@ -69,6 +70,9 @@ class Mixer {
 
     /* Método para que empiece a sonar la lista de canciones */
     static void playMusic(bool fade_in);
+
+    /* Settea el volumen de la música para el juego */
+    static void setGameMusicVolume();
 
     /* Método para hacer sonar un chunk */
     static void playEventSound(uint8_t sound_id, const SDL_Point& player_pos,
@@ -137,6 +141,9 @@ class Mixer {
 
     /* Callback para cuando una canción termina */
     void _musicFinishedCallback();
+
+    /* Settea el volumen de la música */
+    void _setMusicVolume(int volume);
 
     /* Sube el volumen actual de la música */
     void _increaseMusicVolume();
