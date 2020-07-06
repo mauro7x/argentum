@@ -120,13 +120,18 @@ Command* InputParser::_parseCommand(const std::string& command_input,
             }
 
             body = _getCommandBody(command_input);
-            if (!body.empty()) {
-                (*g_reply) = "El comando '/transportar' no admite parámetros.";
+            std::string s_map_id, excess;
+            _splitBy(' ', body, s_map_id, excess);
+            uint32_t map_id;
+
+            if (s_map_id.empty() || !excess.empty() ||
+                !_castToUint32(s_map_id, map_id)) {
+                (*g_reply) = "Uso esperado del comando: /viajar <map_id>";
                 return NULL;
             }
 
             return new TeleportCommand(current_selection.portal_x_tile,
-                                        current_selection.portal_y_tile);
+                                       current_selection.portal_y_tile, map_id);
         }
 
         case HEAL_INPUT_CMD: {

@@ -64,8 +64,6 @@ void GameView::_processEvents() {
 void GameView::_func(const int it) {
     /* Vaciamos las colas a procesar*/
     _processSDLEvents();
-
-    // auto t1 = std::chrono::steady_clock::now();
     _processMessages();
     _processBroadcasts();
     _processEvents();
@@ -83,12 +81,8 @@ void GameView::_func(const int it) {
     /* Renderizamos y presentamos la pantalla */
     stage.render();
     hud.render();
-    // auto t2 = std::chrono::steady_clock::now();
 
     renderer.presentScreen();
-
-    // std::chrono::duration<float, std::milli> diff = t2 - t1;
-    // fprintf(stderr, "Iteration time: %i ms.\n", (int)diff.count());
 }
 
 //-----------------------------------------------------------------------------

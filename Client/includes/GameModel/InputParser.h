@@ -29,7 +29,7 @@
 #define THROW_EXPECTED_INPUT "/tirar"
 #define MEDITATE_EXPECTED_INPUT "/meditar"
 #define RESURRECT_EXPECTED_INPUT "/resucitar"
-#define TELEPORT_EXPECTED_INPUT "/transportar"
+#define TELEPORT_EXPECTED_INPUT "/viajar"
 #define HEAL_EXPECTED_INPUT "/curar"
 #define LIST_EXPECTED_INPUT "/listar"
 #define DEPOSIT_EXPECTED_INPUT "/depositar"

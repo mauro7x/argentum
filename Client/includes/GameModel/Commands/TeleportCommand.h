@@ -13,10 +13,11 @@ class TeleportCommand : public Command {
    private:
     uint32_t x;
     uint32_t y;
+    uint32_t map_id;
 
    public:
     /* Constructor */
-    TeleportCommand(uint32_t x, uint32_t y);
+    TeleportCommand(uint32_t x, uint32_t y, uint32_t map_id);
 
     //-------------------------------------------------------------------------
 

@@ -8,8 +8,8 @@
 //-----------------------------------------------------------------------------
 // API Pública
 
-TeleportCommand::TeleportCommand(uint32_t x, uint32_t y)
-    : Command(), x(x), y(y) {}
+TeleportCommand::TeleportCommand(uint32_t x, uint32_t y, uint32_t map_id)
+    : Command(), x(x), y(y), map_id(map_id) {}
 
 bool TeleportCommand::send(const SocketWrapper& socket) {
     // Enviamos el comando según el protocolo
@@ -26,6 +26,10 @@ bool TeleportCommand::send(const SocketWrapper& socket) {
     }
 
     if (!(socket << (uint32_t)y)) {
+        return false;
+    }
+
+    if (!(socket << (uint32_t)map_id)) {
         return false;
     }
 
