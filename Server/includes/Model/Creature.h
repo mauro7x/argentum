@@ -21,6 +21,8 @@
 #define DROP_ITEM_PROB 0.10
 //-----------------------------------------------------------------------------
 
+class Game;
+
 class Creature : public Attackable {
    private:
     Id id;
@@ -37,6 +39,7 @@ class Creature : public Attackable {
     Map& map;
     std::unordered_map<InstanceId, Character>& characters;
     std::array<Orientation, 4> posibles_orientations;
+    Game& game;
 
     int moving_cooldown;
     int random_moving_cooldown;
@@ -102,7 +105,7 @@ class Creature : public Attackable {
     Creature(const CreatureCfg& data, MapContainer& map_container,
              const Id init_map, const int init_x_coord, const int init_y_coord,
              const uint32_t health, ItemsContainer& items,
-             std::unordered_map<InstanceId, Character>& characters,
+             std::unordered_map<InstanceId, Character>& characters, Game& game,
              const int& rate, const unsigned int random_movement_factor);
 
     /* Destructor */

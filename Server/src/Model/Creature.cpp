@@ -5,6 +5,7 @@
 //-----------------------------------------------------------------------------
 #include "../../includes/Model/Creature.h"
 #include "../../includes/Model/Formulas.h"
+#include "../../includes/Model/Game.h"
 //-----------------------------------------------------------------------------
 #include "../../../Common/includes/RandomNumberGenerator.h"
 //-----------------------------------------------------------------------------
@@ -14,7 +15,7 @@ Creature::Creature(const CreatureCfg& data, MapContainer& map_container,
                    const Id init_map, const int init_x_coord,
                    const int init_y_coord, const uint32_t health,
                    ItemsContainer& items,
-                   std::unordered_map<InstanceId, Character>& characters,
+                   std::unordered_map<InstanceId, Character>& characters, Game& game,
                    const int& rate, const unsigned int random_movement_factor)
     : id(data.id),
       name(data.name),
@@ -28,6 +29,7 @@ Creature::Creature(const CreatureCfg& data, MapContainer& map_container,
       items(items),
       map(map_container[init_map]),
       characters(characters),
+      game(game),
       moving_cooldown(0),
       random_moving_cooldown(0),
       attribute_update_time_elapsed(0),
@@ -127,13 +129,14 @@ void Creature::_determinateDirectionAndMove(
 void Creature::_updateDamage(const unsigned int it, const InstanceId id) {
     actual_attack_cooldown -= it * rate;
     attacking_id = 0;
-
+    bool eluded;
     while (actual_attack_cooldown <= 0) {
         this->broadcast = true;
         RandomNumberGenerator random_number_generator;
         int damage = level * (int)random_number_generator(
                                  (int)this->min_damage, (int)this->max_damage);
-        characters.at(id).receiveAttack(damage, true);
+        eluded = !characters.at(id).receiveAttack(damage, true);
+        game.attackedByCreature(id, damage, eluded);
         actual_attack_cooldown += attack_cooldown;
         attacking_id = id;
     }

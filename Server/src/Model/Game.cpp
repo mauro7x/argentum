@@ -355,8 +355,8 @@ void Game::newCreature(const CreatureCfg& init_data, const Id init_map) {
         std::piecewise_construct, std::forward_as_tuple(new_creature_id),
         std::forward_as_tuple(init_data, map_container, init_map,
                               spawning_x_coord, spawning_y_coord,
-                              init_data.base_health, items, characters, rate,
-                              cfg.random_movement_factor));
+                              init_data.base_health, items, characters, *this,
+                              rate, cfg.random_movement_factor));
 
     _pushCreatureDifferentialBroadcast(new_creature_id, NEW_BROADCAST);
 }
@@ -658,7 +658,7 @@ void Game::_sendCharacterAttackNotifications(const int damage,
             "Te han curado " + std::to_string(-damage) + " puntos de vida.";
 
         _pushCharacterEvent(caller, HEALING_SPELL_EV_TYPE);
-        
+
     } else if (eluded) {
         msg_to_attacker = "Tu ataque fue eludido.";
         msg_to_attacked = "Has eludido un ataque.";
@@ -700,6 +700,22 @@ void Game::_sendCreatureAttackNotifications(const int damage,
     active_clients.notify(caller, reply);
 }
 
+void Game::_sendAttackedByCreatureNotifications(const int damage,
+                                                const bool eluded,
+                                                const InstanceId caller) {
+    std::string msg_to_attacked;
+    if (damage > 0) {
+        msg_to_attacked =
+            "Has recibido " + std::to_string(damage) + " de daño.";
+    } else if (eluded) {
+        msg_to_attacked = "Has eludido un ataque.";
+    } else {
+        msg_to_attacked = "Tu defensa absorbió todo el daño del ataque.";
+    }
+    Notification* reply = new Reply(INFO_MSG, msg_to_attacked.c_str());
+    active_clients.notify(caller, reply);
+}
+
 void Game::_useWeapon(const InstanceId caller, const InstanceId target,
                       Attackable* attacked, const bool target_is_creature) {
     Character& attacker = this->characters.at(caller);
@@ -732,6 +748,15 @@ void Game::_useWeapon(const InstanceId caller, const InstanceId target,
         _sendCreatureAttackNotifications(damage, caller);
     else
         _sendCharacterAttackNotifications(damage, eluded, caller, target);
+}
+
+void Game::attackedByCreature(const InstanceId caller, int& damage,
+                              bool eluded) {
+    Character& attacked = this->characters.at(caller);
+    if (damage > 0 && !attacked.getHealth()) {
+        _dropAllItems(&attacked);
+    }
+    _sendAttackedByCreatureNotifications(damage, eluded, caller);
 }
 
 void Game::useWeapon(const InstanceId caller, const InstanceId target) {

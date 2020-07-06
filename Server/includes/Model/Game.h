@@ -227,26 +227,23 @@ class Game {
     // Métodos auxiliares para los comandos.
     //--------------------------------------------------------------------------
 
-    const bool _validateBankerPosition(const InstanceId caller,
-                                       Id& npc_id,
+    const bool _validateBankerPosition(const InstanceId caller, Id& npc_id,
                                        const uint32_t x_coord,
                                        const uint32_t y_coord,
                                        const bool exception_if_invalid);
 
-    const bool _validatePriestPosition(const InstanceId caller,
-                                       Id& npc_id,
+    const bool _validatePriestPosition(const InstanceId caller, Id& npc_id,
                                        const uint32_t x_coord,
                                        const uint32_t y_coord,
                                        const bool exception_if_invalid);
 
-    const bool _validateMerchantPosition(const InstanceId caller,
-                                         Id& npc_id,
+    const bool _validateMerchantPosition(const InstanceId caller, Id& npc_id,
                                          const uint32_t x_coord,
                                          const uint32_t y_coord,
                                          const bool exception_if_invalid);
 
     void _validateIfNPCSellsItem(const InstanceId caller, const Id npc_id,
-                                       const Id item_id);
+                                 const Id item_id);
 
     void _listNPCSellableItems(const Id npc_id, std::string& init_msg,
                                std::list<std::string>& item_list);
@@ -265,6 +262,10 @@ class Game {
 
     void _sendCreatureAttackNotifications(const int damage,
                                           const InstanceId caller);
+
+    void _sendAttackedByCreatureNotifications(const int damage,
+                                              const bool eluded,
+                                              const InstanceId caller);
 
    public:
     //--------------------------------------------------------------------------
@@ -424,6 +425,10 @@ class Game {
     //-------------------------------------------------------------------------
 
     const Id getMapId(const InstanceId caller);
+
+    //-------------------------------------------------------------------------
+
+    void attackedByCreature(const InstanceId caller, int& damage, bool eluded);
 };
 
 //-----------------------------------------------------------------------------
