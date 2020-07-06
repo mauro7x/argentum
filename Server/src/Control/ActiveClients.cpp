@@ -32,12 +32,16 @@ void ActiveClients::remove(const InstanceId id) {
     content.erase(id);
 }
 
-void ActiveClients::notify(const InstanceId& id, Notification* notification) {
+void ActiveClients::notify(const InstanceId id, Notification* notification) {
     if (content.count(id) == 0) {
         throw Exception("ActiveClients::notify: invalid client id.");
     }
 
     content.at(id).push(notification);
+}
+
+void ActiveClients::changeMap(const InstanceId id, const Id new_map) {
+    this->content.at(id).changeMap(new_map);
 }
 
 void ActiveClients::sendDifferentialBroadcastToAll(

@@ -1531,9 +1531,11 @@ void Game::teleport(const InstanceId caller, const uint32_t portal_x_coord,
     // Propaga Exception si no hay un portal en la posición especificada.
     _validatePortalPosition(caller, portal_x_coord, portal_y_coord, true);
 
-    _validatePortalMapId(caller, map_id);
+    if (map_id == character.getMapId())
+        throw Exception(
+            "No puedes viajar al mismo mapa en el que te encuentras.");
 
-    fprintf(stderr, "Se recibio teleport al mapa=%i \n", map_id);
+    _validatePortalMapId(caller, map_id);
 
     _pushCharacterDifferentialBroadcast(caller, DELETE_BROADCAST, false);
 
@@ -1544,6 +1546,7 @@ void Game::teleport(const InstanceId caller, const uint32_t portal_x_coord,
                                            spawning_y_coord);
 
     character.teleport(map_id, spawning_x_coord, spawning_y_coord);
+    active_clients.changeMap(caller, map_id);
 
     _pushCharacterDifferentialBroadcast(caller, NEW_BROADCAST, false);
 
