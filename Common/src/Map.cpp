@@ -305,6 +305,13 @@ void Map::clearTileItem(const int x, const int y) {
     tile.item_amount = 0;
 }
 
+bool Map::isPositionValidForCreature (const int x, const int y){
+    Tile& tile = _getTile(x, y);
+    if (tile.collision || tile.occupant_id || tile.npc_id || tile.safe_zone){
+        return false;
+    }
+    return true;
+}
 Map::~Map() {}
 
 const char* CouldNotFindFreeTileException::what() const noexcept {

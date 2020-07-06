@@ -28,8 +28,6 @@ Creature::Creature(const CreatureCfg& data, MapContainer& map_container,
       items(items),
       map(map_container[init_map]),
       characters(characters),
-      is_moving(false),
-      is_random_moving(false),
       moving_cooldown(0),
       random_moving_cooldown(0),
       attribute_update_time_elapsed(0),
@@ -104,19 +102,26 @@ bool Creature::_attackNearstCharacter(const Position& position_character) {
 
 void Creature::_determinateDirectionAndMove(
     const Position& position_character) {
-    if (abs(position_character.getX() - position.getX()) >
-        abs(position_character.getY() - position.getY())) {
-        if (position_character.getX() > position.getX()) {
-            startMovingRight();
+    const int x = position.getX();
+    const int y = position.getY();
+    if (abs(position_character.getX() - x) >=
+        abs(position_character.getY() - y)) {
+        if (position_character.getX() > x) {
+            if (map.isPositionValidForCreature(x + 1, y)) {
+                position.changeOrientation(RIGHT_ORIENTATION);
+                return;
+            }
         } else {
-            startMovingLeft();
+            if (map.isPositionValidForCreature(x - 1, y)) {
+                position.changeOrientation(LEFT_ORIENTATION);
+                return;
+            }
         }
+    }
+    if (position_character.getY() > position.getY()) {
+        position.changeOrientation(DOWN_ORIENTATION);
     } else {
-        if (position_character.getY() > position.getY()) {
-            startMovingDown();
-        } else {
-            startMovingUp();
-        }
+        position.changeOrientation(UP_ORIENTATION);
     }
 }
 void Creature::_updateDamage(const unsigned int it, const InstanceId id) {
@@ -141,7 +146,6 @@ void Creature::_updateMovement(const unsigned int it) {
         try {
             this->position.move(true);
         } catch (const CollisionWhileMovingException& e) {
-            stopMoving();
             moving_cooldown = 0;
             return;
         }
@@ -155,24 +159,23 @@ void Creature::_setRandomOrientation() {
     Orientation orientation =
         this->posibles_orientations[gen(0, posibles_orientations.size() - 1)];
     this->position.changeOrientation(orientation);
-    this->is_random_moving = true;
 }
+
 void Creature::_randomMovement(const unsigned int it) {
     this->random_moving_cooldown -= it * rate;
-    _setRandomOrientation();
 
     while (random_moving_cooldown <= 0) {
+        _setRandomOrientation();
         try {
             this->position.move(true);
         } catch (const CollisionWhileMovingException& e) {
-            stopMoving();
             random_moving_cooldown = 0;
             return;
         }
         this->broadcast = true;
 
-        this->random_moving_cooldown += 
-          random_movement_factor * 1000 / movement_speed;
+        this->random_moving_cooldown +=
+            random_movement_factor * 1000 / movement_speed;
     }
 }
 
@@ -184,46 +187,11 @@ void Creature::act(const unsigned int it) {
     } else {
         if (_attackNearstCharacter(characters.at(id).getPosition())) {
             _updateDamage(it, id);
-            stopMoving();
         } else {
             _determinateDirectionAndMove(characters.at(id).getPosition());
-            is_random_moving = false;
+            _updateMovement(it);
         }
     }
-
-    if (is_moving && !is_random_moving) {
-        _updateMovement(it);
-    } else {
-        this->moving_cooldown =
-            std::max((int)(this->moving_cooldown - it * rate), 0);
-
-        this->random_moving_cooldown =
-            std::max((int)(this->random_moving_cooldown - it * rate), 0);
-    }
-}
-
-void Creature::startMovingUp() {
-    this->position.changeOrientation(UP_ORIENTATION);
-    this->is_moving = true;
-}
-
-void Creature::startMovingDown() {
-    this->position.changeOrientation(DOWN_ORIENTATION);
-    this->is_moving = true;
-}
-
-void Creature::startMovingRight() {
-    this->position.changeOrientation(RIGHT_ORIENTATION);
-    this->is_moving = true;
-}
-
-void Creature::startMovingLeft() {
-    this->position.changeOrientation(LEFT_ORIENTATION);
-    this->is_moving = true;
-}
-
-void Creature::stopMoving() {
-    this->is_moving = false;
 }
 
 const bool Creature::receiveAttack(int& damage, const bool eludible) {
