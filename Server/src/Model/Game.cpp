@@ -1257,7 +1257,7 @@ void Game::withdrawItemFromBank(const InstanceId caller, const uint32_t x_coord,
     } catch (const std::exception& e) {
         // StateCantTakeItemsException, FullInventoryException
         account.deposit(withdrew->getId(), amount);
-        throw e;  // Se propaga.
+        throw Exception("%s", e.what());  // Se propaga.
     }
 
     std::string reply_msg = "";
