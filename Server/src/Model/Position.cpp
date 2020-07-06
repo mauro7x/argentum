@@ -81,19 +81,6 @@ void Position::changeOrientation(Orientation orientation) {
     this->orientation = orientation;
 }
 
-void Position::changePosition(int x, int y) {
-    try {
-        this->map_container[this->map].getNearestFreeTile(x, y);
-    } catch (const CouldNotFindFreeTileException& e) {
-        // No cambio mi posición.
-        return;
-    }
-    
-    this->map_container[this->map].swapTileOcuppant(this->x, this->y, x, y);
-    this->x = x;
-    this->y = y;
-}
-
 void Position::teleport(const Id map_id, const uint32_t x_coord,
                   const uint32_t y_coord) {
     this->map = map_id;

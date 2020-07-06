@@ -26,7 +26,7 @@ void Engine::_processCommands() {
 
         try {
             cmd->exec(game);
-        } catch(const std::exception& e) {
+        } catch (const std::exception& e) {
             Notification* reply = new Reply(ERROR_MSG, e.what());
             active_clients.notify(cmd->getCaller(), reply);
         }
@@ -83,6 +83,7 @@ void Engine::_loopIteration(int it) {
     game.spawnNewCreatures(it);
     game.persistPeriodicData(database, it);
     game.updateDroppedItemsLifetime(it);
+    game.updateResurrectingPlayersCooldown(it);
     _processFinishedConnections();
 }
 

@@ -29,6 +29,11 @@
 #include "config_structs.h"
 //-----------------------------------------------------------------------------
 
+// Forward declaration
+class ActiveClients;
+
+//-----------------------------------------------------------------------------
+// Estructuras auxiliares
 //-----------------------------------------------------------------------------
 
 struct GameCfg {
@@ -43,15 +48,25 @@ struct GameCfg {
 
 //-----------------------------------------------------------------------------
 
-// Forward declaration
-class ActiveClients;
-
 struct MapCreaturesInfo {
     MapCreaturesInfo(unsigned int amount_of_creatures,
                      int creature_spawning_cooldown);
     unsigned int amount_of_creatures;
     int creature_spawning_cooldown;
 };
+
+//-----------------------------------------------------------------------------
+
+struct ResurrectionInfo {
+    ResurrectionInfo(int cooldown, int priest_x_coord, int priest_y_coord);
+    int cooldown;
+    int priest_x_coord;
+    int priest_y_coord;
+};
+
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
 
 class Game {
    private:
@@ -96,6 +111,8 @@ class Game {
     //      (x = 39, y = 27) ---> key = "39,27"
     std::unordered_map<Id, std::unordered_map<std::string, int>>
         dropped_items_lifetime_per_map;
+
+    std::unordered_map<Id, ResurrectionInfo> resurrecting_players_cooldown;
 
     int data_persistence_cooldown;
     //--------------------------------------------------------------------------
@@ -277,6 +294,10 @@ class Game {
                                               const bool eluded,
                                               const InstanceId caller);
 
+    void _cooldownResurrect(const InstanceId player);
+
+    void _notifyResurrection(const InstanceId caller);
+
    public:
     //--------------------------------------------------------------------------
 
@@ -362,11 +383,19 @@ class Game {
      * Guardar los datos del jugador periodicamente segun TIME_TO_SAVE_DATA.
      */
     void persistPeriodicData(Database& database, const int it);
+
     /*
      * Actualiza el tiempo de vida de los items droppeados en el mapa,
      * y si alguno de ellos llega a cero los elimina del mapa.
      */
     void updateDroppedItemsLifetime(const int it);
+
+    /*
+     * Actualiza el cooldown de los jugadores que están resucitando, y si alguno
+     * de ellos llega a cero los resucita, se transporta hacia el sacerdote
+     * resurrector y es notificado.
+     */
+    void updateResurrectingPlayersCooldown(const int it);
 
     //--------------------------------------------------------------------------
 
@@ -445,6 +474,8 @@ class Game {
 };
 
 //-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
 // Funciones auxiliares
 //-----------------------------------------------------------------------------
 
@@ -453,3 +484,4 @@ void _mapKeyToCoordinates(const std::string& key, int& x, int& y);
 
 //-----------------------------------------------------------------------------
 #endif  // __GAME_H__
+//-----------------------------------------------------------------------------

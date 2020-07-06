@@ -49,11 +49,6 @@ Character::Character(const CharacterCfg& init_data, const RaceCfg& race,
       moving_cooldown(0),
       attribute_update_time_elapsed(0),
 
-      is_resurrecting(false),
-      resurrecting_cooldown(0),
-      respawning_x_coord(0),
-      respawning_y_coord(0),
-
       attack_cooldown(0),
       broadcast(false),
 
@@ -85,13 +80,6 @@ void Character::act(const unsigned int it) {
 
     if (attack_cooldown > 0)
         attack_cooldown = std::max((int)(attack_cooldown - it * rate), 0);
-
-    if (is_resurrecting) {
-        resurrecting_cooldown =
-            std::max((int)(resurrecting_cooldown - it * rate), 0);
-        if (!resurrecting_cooldown)
-            _resurrect();
-    }
 
     _updateTimeDependantAttributes(it);
 }
@@ -140,9 +128,9 @@ void Character::_updateMovement(const unsigned int it) {
     while (this->moving_cooldown <= 0) {
         this->broadcast = true;
 
-        this->position.move(false);
-
         this->moving_cooldown += UNIT_TIME_TO_MOVE;
+
+        this->position.move(false);
     }
 }
 
@@ -476,21 +464,18 @@ void Character::die() {
     this->broadcast = true;
 }
 
-void Character::_resurrect() {
-    is_resurrecting = false;
+void Character::resurrect() {
+    this->state->resurrect();
 
     delete this->state;
     this->state = new Alive(this->race.head_id, this->race.body_id);
 
     this->heal();
-
-    this->position.changePosition(respawning_x_coord, respawning_y_coord);
-
+    
     this->broadcast = true;
 }
 
-void Character::resurrect(const unsigned int cooldown, const int priest_x_coord,
-                          const int priest_y_coord) {
+void Character::startResurrecting() {
     this->state->resurrect();
 
     this->stopMoving();
@@ -498,12 +483,6 @@ void Character::resurrect(const unsigned int cooldown, const int priest_x_coord,
     delete this->state;
     this->state =
         new Resurrecting(this->race.dead_head_id, this->race.dead_body_id);
-
-    this->resurrecting_cooldown = cooldown;
-    this->respawning_x_coord = priest_x_coord;
-    this->respawning_y_coord = priest_y_coord;
-
-    this->is_resurrecting = true;
 }
 
 //-----------------------------------------------------------------------------

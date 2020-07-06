@@ -56,25 +56,18 @@ class Position {
     /* Cambia la orientacion por la especificada */
     void changeOrientation(Orientation orientation);
 
-    /*
-     * Cambia el tile actual al tile libre más cercano a las coordenadas pasadas
-     * por parámetro.
-     *
-     * Si no se encuentra tile libre, no hace nada.
-     */
-    void changePosition(int x, int y);
-
+    /* */
     void teleport(const Id map_id, const uint32_t x_coord,
                   const uint32_t y_coord);
 
-        /*
-         * Mueve un tile la posición en la dirección de la orientation.
-         *
-         * Con parametro si es criatura para verificar.
-         * Lanza CollisionWhileMovingException si no se puede mover
-         * a causa de una colisión.
-         */
-        void move(bool is_creature);
+    /*
+     * Mueve un tile la posición en la dirección de la orientation.
+     *
+     * Con parametro si es criatura para verificar.
+     * Lanza CollisionWhileMovingException si no se puede mover
+     * a causa de una colisión.
+     */
+    void move(bool is_creature);
 
     const bool isInSafeZone() const;
 

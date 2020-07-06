@@ -130,16 +130,13 @@ class Map {
      * Lanza CouldNotFindFreeTileException si no se encuentra tile libre alguno
      * dentro del rango FREE_TILE_LOOKUP_RANGE.
      */
-    void getNearestFreeTile(int& x, int& y);
+    void getNearestFreeTile(int& x, int& y, const bool is_for_item);
 
     /* Devuelve si las coordenadas recibidas están dentro de una zona segura */
     const bool isSafeZone(const int x, const int y) const;
 
     /* Elimina al ocupante de una celda */
     void clearTileOccupant(const int x, const int y);
-
-    void swapTileOcuppant(const int prev_x, const int prev_y, const int new_x,
-                          const int new_y);
 
     /* Elimina el item de una celda */
     void clearTileItem(const int x, const int y);

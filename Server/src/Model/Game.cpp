@@ -60,6 +60,8 @@ Game::~Game() {
 }
 
 //-----------------------------------------------------------------------------
+// Estructuras auxiliares
+//-----------------------------------------------------------------------------
 
 MapCreaturesInfo::MapCreaturesInfo(unsigned int amount_of_creatures,
                                    int creature_spawning_cooldown)
@@ -68,9 +70,15 @@ MapCreaturesInfo::MapCreaturesInfo(unsigned int amount_of_creatures,
 
 //-----------------------------------------------------------------------------
 
-//--------------------------------------------------------------------------
+ResurrectionInfo::ResurrectionInfo(int cooldown, int priest_x_coord,
+                                   int priest_y_coord)
+    : cooldown(cooldown),
+      priest_x_coord(priest_x_coord),
+      priest_y_coord(priest_y_coord) {}
+
+//-----------------------------------------------------------------------------
 // Métodos de carga de configuración
-//--------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 
 void Game::_loadCfg() {
     json config = JSON::loadJsonFile(paths::config(CONFIG_FILEPATH));
@@ -305,7 +313,7 @@ const InstanceId Game::newCharacter(const CharacterCfg& init_data) {
             // Obtengo free tile próximo a la última posición del jugador
             // persistida.
             this->map_container[spawning_map_id].getNearestFreeTile(
-                spawning_x_coord, spawning_y_coord);
+                spawning_x_coord, spawning_y_coord, false);
         } catch (const CouldNotFindFreeTileException& e) {
             // Si no puede spawnear en la posición persistida, asignamos
             // posición aleatoria.
@@ -542,6 +550,28 @@ void Game::updateDroppedItemsLifetime(const int it) {
         }
 
         ++map_iterator;
+    }
+}
+
+void Game::updateResurrectingPlayersCooldown(const int it) {
+    std::unordered_map<Id, ResurrectionInfo>::iterator iterator =
+        resurrecting_players_cooldown.begin();
+
+    while (iterator != resurrecting_players_cooldown.end()) {
+        Id player = iterator->first;
+        ResurrectionInfo& info = iterator->second;
+
+        info.cooldown -= it * rate;
+
+        if (info.cooldown <= 0) {
+            // MANEJAR CASO EN EL QUE SE DESCONECTA RESUCITANDO...!
+            // Resucitar.
+            _cooldownResurrect(player);
+            iterator = resurrecting_players_cooldown.erase(iterator);
+            continue;
+        }
+
+        ++iterator;
     }
 }
 
@@ -921,11 +951,43 @@ void Game::drop(const InstanceId caller, const uint8_t n_slot,
     _pushCharacterEvent(caller, THROW_EV_TYPE);
 }
 
+void Game::_cooldownResurrect(const InstanceId caller) {
+    if (!this->characters.count(caller))
+        return;  // El jugador se desconectó. Seguirá muerto.
+
+    Character& character = this->characters.at(caller);
+    Id map_id = character.getMapId();
+    ResurrectionInfo& info = resurrecting_players_cooldown.at(caller);
+
+    character.resurrect();
+
+    int respawn_x = info.priest_x_coord;
+    int respawn_y = info.priest_y_coord;
+
+    try {
+        this->map_container[map_id].getNearestFreeTile(respawn_x, respawn_y,
+                                                       false);
+    } catch (const CouldNotFindFreeTileException& e) {
+        // Que hago aca? je.
+        return;
+    }
+
+    this->map_container[map_id].clearTileOccupant(
+        character.getPosition().getX(), character.getPosition().getY());
+    this->map_container[map_id].occupyTile(caller, respawn_x, respawn_y);
+    character.teleport(map_id, respawn_x, respawn_y);
+
+    _notifyResurrection(caller);
+}
+
 void Game::resurrect(const InstanceId caller) {
     if (!this->characters.count(caller))
         throw Exception("Game::resurrect: unknown caller.");
 
     Character& character = this->characters.at(caller);
+
+    // Propago excepción StateCantResurrectException
+    character.startResurrecting();
 
     // encontrar al sacerdote más cercano.
     std::vector<std::string>& priests =
@@ -954,12 +1016,19 @@ void Game::resurrect(const InstanceId caller) {
     // calcular cooldown.
     unsigned int cooldown = min_distance * 1000;
 
-    // Propago excepción StateCantResurrectException
-    character.resurrect(cooldown, respawn_x_coord, respawn_y_coord);
+    this->resurrecting_players_cooldown.emplace(
+        std::piecewise_construct, std::forward_as_tuple(caller),
+        std::forward_as_tuple(cooldown, respawn_x_coord, respawn_y_coord));
 
     std::string reply_msg = "Resucitando. Debes esperar " +
                             std::to_string(cooldown / 1000) +
                             " segundos de cooldown.";
+    Notification* reply = new Reply(SUCCESS_MSG, reply_msg);
+    active_clients.notify(caller, reply);
+}
+
+void Game::_notifyResurrection(const InstanceId caller) {
+    std::string reply_msg = "¡Has resucitado!";
     Notification* reply = new Reply(SUCCESS_MSG, reply_msg);
     active_clients.notify(caller, reply);
 
@@ -980,13 +1049,9 @@ void Game::resurrect(const InstanceId caller, const uint32_t x_coord,
     Character& character = this->characters.at(caller);
 
     // Propaga StateCantResurrectException
-    character.resurrect(0, x_coord, y_coord);
+    character.resurrect();
 
-    std::string reply_msg = "¡Has resucitado!";
-    Notification* reply = new Reply(SUCCESS_MSG, reply_msg);
-    active_clients.notify(caller, reply);
-
-    _pushCharacterEvent(caller, RESURRECT_EV_TYPE);
+    _notifyResurrection(caller);
 }
 
 void Game::heal(const InstanceId caller, const uint32_t x_coord,
@@ -1529,6 +1594,8 @@ void Game::teleport(const InstanceId caller, const uint32_t portal_x_coord,
         throw Exception("Game::teleport: unknown caller.");
 
     Character& character = this->characters.at(caller);
+
+    // VALIDAR TELEPORT SI SE ESTA RESUCITANDO...
 
     // Propaga Exception si no hay un portal en la posición especificada.
     _validatePortalPosition(caller, portal_x_coord, portal_y_coord, true);
