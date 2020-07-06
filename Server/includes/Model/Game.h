@@ -424,7 +424,7 @@ class Game {
               const uint32_t y_coord);
 
     void teleport(const InstanceId caller, const uint32_t x_coord,
-                  const uint32_t y_coord);
+                  const uint32_t y_coord, const uint32_t map_id);
 
     //-------------------------------------------------------------------------
 
