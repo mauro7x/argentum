@@ -243,6 +243,9 @@ class Character : public Attackable {
     /* Setea moving en false. */
     void stopMoving();
 
+    void teleport(const Id map_id, const uint32_t x_coord,
+                  const uint32_t y_coord);
+
     //--------------------------------------------------------------------------
 
     //--------------------------------------------------------------------------

@@ -94,6 +94,13 @@ void Position::changePosition(int x, int y) {
     this->y = y;
 }
 
+void Position::teleport(const Id map_id, const uint32_t x_coord,
+                  const uint32_t y_coord) {
+    this->map = map_id;
+    this->x = x_coord;
+    this->y = y_coord;
+}
+
 const bool Position::isInSafeZone() const {
     return map_container[map].isSafeZone(x, y);
 }
