@@ -65,10 +65,6 @@ class Character : public Attackable {
     int moving_cooldown;
     unsigned int attribute_update_time_elapsed;
 
-    bool is_resurrecting;
-    int resurrecting_cooldown;
-    int respawning_x_coord, respawning_y_coord;
-
     int attack_cooldown;
 
     bool broadcast;
@@ -489,17 +485,16 @@ class Character : public Attackable {
      */
     void die();
 
+    void resurrect();
+
     /*
-     * Si el estado del jugador es Dead, cambia el estado a Resurrecting y setea
-     * un resurrecting_cooldown, tiempo en el que no podrá realizar ninguna
-     * acción y, transcurrido el mismo, volverá al estado Alive.
+     * Si el estado del jugador es Dead, cambia el estado a Resurrecting, en el
+     * que no podrá realizar ninguna acción, para luego volver a Alive una vez
+     * se llame a resurrect().
      *
      * Lanza StateCantResurrectException si el estado es Alive.
      */
-    void resurrect(const unsigned int cooldown, const int priest_x_coord,
-                   const int priest_y_coord);
-
-    void _resurrect();
+    void startResurrecting();
 
     //--------------------------------------------------------------------------
 

@@ -202,8 +202,7 @@ const bool Map::moveOccupant(const int x, const int y,
     return _moveOccupant(from_tile, to_tile, is_creature);
 }
 
-void Map::establishEntitySpawningPosition(int& x, int& y,
-                                          bool is_creature) {
+void Map::establishEntitySpawningPosition(int& x, int& y, bool is_creature) {
     bool valid_position = false;
     RandomNumberGenerator gen;
     while (!valid_position) {
@@ -245,7 +244,7 @@ void Map::getNearestFreeTile(int& x, int& y) {
     // Primero nos fijamos si está libre el mismo tile en (x, y)
     Tile& current_tile = this->_getTile(x, y);
     if (!current_tile.item_id && !current_tile.collision &&
-        !current_tile.npc_id) {
+        !current_tile.npc_id && !current_tile.occupant_id) {
         return;
     }
 
@@ -267,7 +266,8 @@ void Map::getNearestFreeTile(int& x, int& y) {
 
                 Tile& tile = this->_getTile(_x, _y);
 
-                if (!tile.item_id && !tile.collision && !tile.npc_id) {
+                if (!tile.item_id && !tile.collision && !tile.npc_id &&
+                    !tile.occupant_id) {
                     empty_tile_found = true;
                     x = _x;
                     y = _y;
@@ -285,15 +285,6 @@ const bool Map::isSafeZone(const int x, const int y) const {
     return this->getTile(x, y).safe_zone;
 }
 
-void Map::swapTileOcuppant(const int prev_x, const int prev_y, const int new_x,
-                           const int new_y) {
-    Tile& prev_tile = this->_getTile(prev_x, prev_y);
-    Tile& new_tile = this->_getTile(new_x, new_y);
-    new_tile.occupant_id = prev_tile.occupant_id;
-    prev_tile.occupant_id = 0;
-}
-
-
 void Map::clearTileOccupant(const int x, const int y) {
     Tile& tile = this->_getTile(x, y);
     tile.occupant_id = 0;
@@ -305,9 +296,9 @@ void Map::clearTileItem(const int x, const int y) {
     tile.item_amount = 0;
 }
 
-bool Map::isPositionValidForCreature (const int x, const int y){
+bool Map::isPositionValidForCreature(const int x, const int y) {
     Tile& tile = _getTile(x, y);
-    if (tile.collision || tile.occupant_id || tile.npc_id || tile.safe_zone){
+    if (tile.collision || tile.occupant_id || tile.npc_id || tile.safe_zone) {
         return false;
     }
     return true;

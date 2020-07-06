@@ -138,9 +138,6 @@ class Map {
     /* Elimina al ocupante de una celda */
     void clearTileOccupant(const int x, const int y);
 
-    void swapTileOcuppant(const int prev_x, const int prev_y, const int new_x,
-                          const int new_y);
-
     /* Elimina el item de una celda */
     void clearTileItem(const int x, const int y);
 
