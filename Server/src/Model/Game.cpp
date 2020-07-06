@@ -57,7 +57,7 @@ Game::Game(ActiveClients& active_clients, const int& rate)
 }
 
 Game::~Game() {
-    // PERSISTIR TODO ANTES QUE SE DESTRUYA
+    // _persistAllData()
 }
 
 //-----------------------------------------------------------------------------
@@ -502,19 +502,25 @@ void Game::spawnNewCreatures(const int it) {
     }
 }
 
-void Game::persistPeriodicData(Database& database, const int it) {
+void Game::_persistAllData(Database& database) {
     std::unordered_map<InstanceId, Character>::iterator it_characters =
         this->characters.begin();
+
+    while (it_characters != this->characters.end()) {
+        CharacterCfg character_data = {};
+        bank[it_characters->second.getNickname()].fillPersistenceData(
+            character_data);
+        it_characters->second.fillPersistenceData(character_data);
+        database.persistPlayerData(character_data, false);
+        ++it_characters;
+    }
+}
+
+void Game::persistPeriodicData(Database& database, const int it) {
     data_persistence_cooldown -= it * rate;
+
     if (data_persistence_cooldown <= 0) {
-        while (it_characters != this->characters.end()) {
-            CharacterCfg character_data = {};
-            bank[it_characters->second.getNickname()].fillPersistenceData(
-                character_data);
-            it_characters->second.fillPersistenceData(character_data);
-            database.persistPlayerData(character_data, false);
-            ++it_characters;
-        }
+        _persistAllData(database);
         data_persistence_cooldown = cfg.ms_to_persist_data;
     }
 }

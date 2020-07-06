@@ -299,6 +299,8 @@ class Game {
 
     void _notifyResurrection(const InstanceId caller);
 
+    void _persistAllData(Database& database);
+
    public:
     //--------------------------------------------------------------------------
 
