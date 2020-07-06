@@ -123,6 +123,7 @@ void Client::_launchGameCtx() {
     receiver.start();
 
     try {
+        Mixer::setGameMusicVolume();
         game_view.run();
     } catch (const Exception& e) {
         _finishGameCtx(commands, command_dispatcher, receiver);
