@@ -375,6 +375,8 @@ void Game::deleteCharacter(const InstanceId id, Database& database) {
 
     this->nickname_id_map.erase(character.getNickname());
 
+    this->bank.removeAccount(character.getNickname());
+
     this->characters.erase(id);
 }
 

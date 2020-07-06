@@ -14,4 +14,8 @@ BankAccount& Bank::operator[](const std::string nickname) {
     return this->accounts.at(nickname);
 }
 
+void Bank::removeAccount(const std::string& nickname) {
+    this->accounts.erase(nickname);
+}
+
 //-----------------------------------------------------------------------------
