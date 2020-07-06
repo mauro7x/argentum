@@ -46,19 +46,19 @@ const unsigned int Formulas::calculateMaxMana(const unsigned int intelligence,
 }
 
 const unsigned int Formulas::calculateHealthTimeRecovery(
-    const unsigned int race_factor, const unsigned int seconds_elapsed) {
-    return race_factor * seconds_elapsed;
+    const unsigned int race_factor, const unsigned int ms_elapsed) {
+    return (race_factor * ms_elapsed) / 1000;
 }
 
 const unsigned int Formulas::calculateManaTimeRecovery(
-    const unsigned int race_factor, const unsigned int seconds_elapsed) {
-    return race_factor * seconds_elapsed;
+    const unsigned int race_factor, const unsigned int ms_elapsed) {
+    return (race_factor * ms_elapsed) / 1000;
 }
 
 const unsigned int Formulas::calculateManaMeditationTimeRecovery(
     const unsigned int kind_meditation_factor, const unsigned int intelligence,
-    const unsigned int seconds_elapsed) {
-    return kind_meditation_factor * intelligence * seconds_elapsed;
+    const unsigned int ms_elapsed) {
+    return (kind_meditation_factor * intelligence * ms_elapsed) / 1000;
 }
 
 const bool Formulas::isAttackEluded(const unsigned int agility) {

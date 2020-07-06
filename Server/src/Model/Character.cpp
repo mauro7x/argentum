@@ -115,17 +115,15 @@ void Character::_updateTimeDependantAttributes(const unsigned int it) {
 
     while (attribute_update_time_elapsed >= ms_to_update_attributes) {
         unsigned int health_update = Formulas::calculateHealthTimeRecovery(
-            this->race.health_recovery_factor,
-            ms_to_update_attributes / 1000);  // en segundos
+            this->race.health_recovery_factor, ms_to_update_attributes);
 
         unsigned int mana_update = Formulas::calculateManaTimeRecovery(
-            this->race.mana_recovery_factor,
-            ms_to_update_attributes / 1000);  // en segundos
+            this->race.mana_recovery_factor, ms_to_update_attributes);
 
         if (this->is_meditating)
             mana_update += Formulas::calculateManaMeditationTimeRecovery(
                 this->kind.meditation_factor, this->intelligence,
-                ms_to_update_attributes / 1000);  // en segundos
+                ms_to_update_attributes);
 
         if ((this->health < this->max_health))
             this->recoverHealth(health_update);
@@ -191,7 +189,7 @@ void Character::stopMoving() {
 }
 
 void Character::teleport(const Id map_id, const uint32_t x_coord,
-                  const uint32_t y_coord) {
+                         const uint32_t y_coord) {
     this->position.teleport(map_id, x_coord, y_coord);
     this->broadcast = true;
 }
