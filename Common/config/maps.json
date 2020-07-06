@@ -12,7 +12,7 @@
     "tilesets": {
         "ground": {
             "first_gid": 1,
-            "next_first_gid": 17,
+            "next_first_gid": 79,
             "filepath": "common/assets/Maps/Tilesets/01-ground_tiles.json",
             "src": {
                 "dirpath": "client/assets/Tiles/Ground/",
@@ -27,8 +27,8 @@
             }
         },
         "decoration": {
-            "first_gid": 17,
-            "next_first_gid": 46,
+            "first_gid": 79,
+            "next_first_gid": 243,
             "filepath": "common/assets/Maps/Tilesets/02-decoration.json",
             "src": {
                 "dirpath": "client/assets/Tiles/Decoration/",
@@ -42,12 +42,12 @@
                 }
             }
         },
-        "metadata": {
-            "first_gid": 46,
-            "next_first_gid": 50,
-            "filepath": "common/assets/Maps/Tilesets/04-metadata.json",
+        "npcs": {
+            "first_gid": 243,
+            "next_first_gid": 249,
+            "filepath": "common/assets/Maps/Tilesets/03-npcs.json",
             "src": {
-                "dirpath": "client/assets/Tiles/Metadata/",
+                "dirpath": "client/assets/Tiles/NPCs/",
                 "color_key": {
                     "is_needed": false,
                     "color": {
@@ -58,12 +58,12 @@
                 }
             }
         },
-        "npcs": {
-            "first_gid": 50,
-            "next_first_gid": 56,
-            "filepath": "common/assets/Maps/Tilesets/03-npcs.json",
+        "metadata": {
+            "first_gid": 249,
+            "next_first_gid": 253,
+            "filepath": "common/assets/Maps/Tilesets/04-metadata.json",
             "src": {
-                "dirpath": "client/assets/Tiles/NPCs/",
+                "dirpath": "client/assets/Tiles/Metadata/",
                 "color_key": {
                     "is_needed": false,
                     "color": {
