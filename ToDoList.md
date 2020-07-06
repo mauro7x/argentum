@@ -78,11 +78,15 @@
 
 * Movimiento inteligente de monstruos y ataque.
     * high.
+    * **UPDATE:** done.
 
 * Soporte para la interacción con:
-    * npc-banco: sistema bancario (high).
+    * npc-banco: sistema bancario (high).  
+       * **UPDATE:** done.
     * npc-sacerdote: curar, resucitar (high). resucitar desde lejos (medium).
+       * **UPDATE:** done.
     * npc-comerciante: sistema compra-venta (high).
+       * **UPDATE:** done.
         * distintos comerciantes: low.
 
 * ~~Data inicial configurable en un json (high)~~.
