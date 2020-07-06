@@ -743,7 +743,7 @@ void Game::_useWeapon(const InstanceId caller, const InstanceId target,
         if (target_is_creature) {
             deleteCreature(target);
         } else {
-            _pushCharacterEvent(caller, DEATH_EV_TYPE);
+            _pushCharacterEvent(target, DEATH_EV_TYPE);
         }
     }
 
