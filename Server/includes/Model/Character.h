@@ -591,6 +591,11 @@ class NewbiesCantBeAttackedException : public std::exception {
     virtual const char* what() const noexcept;
 };
 
+class NewbiesCantAttackCharactersException : public std::exception {
+   public:
+    virtual const char* what() const noexcept;
+};
+
 class AttackCooldownTimeNotElapsedException : public std::exception {
    public:
     virtual const char* what() const noexcept;
