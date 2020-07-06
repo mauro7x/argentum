@@ -93,6 +93,9 @@ class Mixer {
     //-------------------------------------------------------------------------
     // Atributos
 
+    // Generales
+    bool muted = false;
+
     // Música
     int music_volume = 0;
     RoundRobinList<Mix_Music*> music;

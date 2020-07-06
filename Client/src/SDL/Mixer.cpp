@@ -196,6 +196,16 @@ void Mixer::_handleEvent(const SDL_Event& e) {
                 break;
             }
 
+            case SDLK_F1: {
+                if (muted) {
+                    muted = false;
+                    Mix_ResumeMusic();
+                } else {
+                    muted = true;
+                    Mix_PauseMusic();
+                }
+            }
+
             default: {
                 break;
             }
@@ -265,8 +275,9 @@ void Mixer::_decreaseMusicVolume() {
 
 void Mixer::_playChunk(uint8_t sound_id, const SDL_Point& player_pos,
                        const SDL_Point& sound_pos) {
-    if (((sound_pos.x != player_pos.x) || (sound_pos.y != player_pos.y)) &&
-        (active_chunks >= MAX_CHUNKS_SIMULTANEOUSLY)) {
+    if ((((sound_pos.x != player_pos.x) || (sound_pos.y != player_pos.y)) &&
+         (active_chunks >= MAX_CHUNKS_SIMULTANEOUSLY)) ||
+        muted) {
         // no reproducimos el sonido pues no es prioritario
         return;
     }
