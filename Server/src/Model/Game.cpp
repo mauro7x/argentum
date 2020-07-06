@@ -738,11 +738,13 @@ void Game::_useWeapon(const InstanceId caller, const InstanceId target,
 
     // Verificamos si murió, en cuyo caso dropea todo.
     if (damage > 0 && !attacked->getHealth()) {
-        _pushCharacterEvent(caller, DEATH_EV_TYPE);
         _dropAllItems(attacked);
 
-        if (target_is_creature)
+        if (target_is_creature) {
             deleteCreature(target);
+        } else {
+            _pushCharacterEvent(caller, DEATH_EV_TYPE);
+        }
     }
 
     if (target_is_creature)
@@ -1500,7 +1502,6 @@ void Game::teleport(const InstanceId caller, const uint32_t x_coord,
 
     // Propaga Exception si no hay un portal en la posición especificada.
     _validatePortalPosition(caller, x_coord, y_coord, true);
-
 }
 
 //-----------------------------------------------------------------------------
