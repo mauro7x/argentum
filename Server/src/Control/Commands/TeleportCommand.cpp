@@ -2,7 +2,7 @@
 
 TeleportCommand::TeleportCommand(const InstanceId caller,
                                  const uint32_t x_coord, const uint32_t y_coord,
-                                 const uint32_t map_id)
+                                 const Id map_id)
     : Command(caller), x_coord(x_coord), y_coord(y_coord), map_id(map_id) {}
 
 TeleportCommand::~TeleportCommand() {}
