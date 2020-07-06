@@ -375,6 +375,9 @@ void Character::_checkPriorToUseAttackWeaponConditions(
     if (target->isNewbie())
         throw NewbiesCantBeAttackedException();
 
+    if (this->isNewbie() && !target->isCreature())
+        throw NewbiesCantAttackCharactersException();
+
     // Verificación de diferencia de niveles entre jugadores.
     const unsigned int target_level = target->getLevel();
 
@@ -471,7 +474,7 @@ void Character::resurrect() {
     this->state = new Alive(this->race.head_id, this->race.body_id);
 
     this->heal();
-    
+
     this->broadcast = true;
 }
 
@@ -612,6 +615,10 @@ const char* OutOfRangeAttackException::what() const noexcept {
 
 const char* NewbiesCantBeAttackedException::what() const noexcept {
     return "No puedes atacar a jugador newbie.";
+}
+
+const char* NewbiesCantAttackCharactersException::what() const noexcept {
+    return "No puedes atacar a otro jugador. Eres newbie.";
 }
 
 const char* AttackCooldownTimeNotElapsedException::what() const noexcept {

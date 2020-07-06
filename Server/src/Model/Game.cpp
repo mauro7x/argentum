@@ -18,6 +18,7 @@
 #include "../../includes/Model/Game.h"
 //-----------------------------------------------------------------------------
 #define FIRST_INSTANCE_ID 1
+#define TIME_TO_NOTIFY_RESURRECT_COOLDOWN_INFO 5000
 //-----------------------------------------------------------------------------
 
 Game::Game(ActiveClients& active_clients, const int& rate)
@@ -73,6 +74,7 @@ MapCreaturesInfo::MapCreaturesInfo(unsigned int amount_of_creatures,
 ResurrectionInfo::ResurrectionInfo(int cooldown, int priest_x_coord,
                                    int priest_y_coord)
     : cooldown(cooldown),
+      time_since_last_message(0),
       priest_x_coord(priest_x_coord),
       priest_y_coord(priest_y_coord) {}
 
@@ -559,9 +561,16 @@ void Game::updateResurrectingPlayersCooldown(const int it) {
 
     while (iterator != resurrecting_players_cooldown.end()) {
         Id player = iterator->first;
+
+        if (this->characters.count(player)) {
+            iterator = resurrecting_players_cooldown.erase(iterator);
+            continue;
+        }
+
         ResurrectionInfo& info = iterator->second;
 
         info.cooldown -= it * rate;
+        info.time_since_last_message += it * rate;
 
         if (info.cooldown <= 0) {
             // MANEJAR CASO EN EL QUE SE DESCONECTA RESUCITANDO...!
@@ -569,6 +578,16 @@ void Game::updateResurrectingPlayersCooldown(const int it) {
             _cooldownResurrect(player);
             iterator = resurrecting_players_cooldown.erase(iterator);
             continue;
+        }
+
+        if (info.time_since_last_message >
+                TIME_TO_NOTIFY_RESURRECT_COOLDOWN_INFO &&
+            info.cooldown > 1000) {
+            info.time_since_last_message = 0;
+            std::string msg = "Te faltan " +
+                              std::to_string(info.cooldown / 1000) +
+                              " segundos para respawnear.";
+            active_clients.notify(player, new Reply(INFO_MSG, msg));
         }
 
         ++iterator;
@@ -986,6 +1005,12 @@ void Game::resurrect(const InstanceId caller) {
 
     Character& character = this->characters.at(caller);
 
+    if (this->resurrecting_players_cooldown.count(caller))
+        throw Exception(
+            "Ya estás resucitando. Sé paciente. Todavía debes esperar %i "
+            "segundos.",
+            this->resurrecting_players_cooldown.at(caller).cooldown / 1000);
+
     // Propago excepción StateCantResurrectException
     character.startResurrecting();
 
@@ -1039,6 +1064,11 @@ void Game::resurrect(const InstanceId caller, const uint32_t x_coord,
                      const uint32_t y_coord) {
     if (!this->characters.count(caller))
         throw Exception("Game::resurrect: unknown caller.");
+
+    if (this->resurrecting_players_cooldown.count(caller))
+        throw Exception(
+            "Ya estás resucitando. Sé paciente. Todavía debes esperar %i.",
+            this->resurrecting_players_cooldown.at(caller).cooldown);
 
     Id priest_id;
 
@@ -1595,7 +1625,10 @@ void Game::teleport(const InstanceId caller, const uint32_t portal_x_coord,
 
     Character& character = this->characters.at(caller);
 
-    // VALIDAR TELEPORT SI SE ESTA RESUCITANDO...
+    // Si está resucitando, no se puede teletransportar.
+    if (this->resurrecting_players_cooldown.count(caller))
+        throw Exception(
+            "No puedes teletransportarte mientras estás resucitando.");
 
     // Propaga Exception si no hay un portal en la posición especificada.
     _validatePortalPosition(caller, portal_x_coord, portal_y_coord, true);

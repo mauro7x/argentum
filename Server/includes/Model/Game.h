@@ -60,6 +60,7 @@ struct MapCreaturesInfo {
 struct ResurrectionInfo {
     ResurrectionInfo(int cooldown, int priest_x_coord, int priest_y_coord);
     int cooldown;
+    int time_since_last_message;
     int priest_x_coord;
     int priest_y_coord;
 };
