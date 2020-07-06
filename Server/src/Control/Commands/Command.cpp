@@ -25,6 +25,7 @@
 #include "../../../includes/Control/Commands/StartMovingUpCommand.h"
 #include "../../../includes/Control/Commands/StopMovingCommand.h"
 #include "../../../includes/Control/Commands/TakeCommand.h"
+#include "../../../includes/Control/Commands/TeleportCommand.h"
 #include "../../../includes/Control/Commands/UnequipCommand.h"
 #include "../../../includes/Control/Commands/UseWeaponCommand.h"
 #include "../../../includes/Control/Commands/WithdrawGoldFromBankCommand.h"
@@ -208,6 +209,14 @@ Command* CommandFactory::newCommand(InstanceId caller, uint8_t opcode,
             socket >> x_coord;
             socket >> y_coord;
             return new HelpNPCCommand(caller, x_coord, y_coord);
+        }
+
+        case TELEPORT_CMD: {
+            uint32_t x_coord, y_coord, map_id;
+            socket >> x_coord;
+            socket >> y_coord;
+            socket >> map_id;
+            return new TeleportCommand(caller, x_coord, y_coord, map_id);
         }
 
         default: {
