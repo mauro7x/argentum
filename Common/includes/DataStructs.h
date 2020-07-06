@@ -40,7 +40,7 @@ struct PlayerData : public CharacterData {
     uint32_t health, max_health;
     uint32_t mana, max_mana;
     uint32_t safe_gold, excess_gold;
-    uint32_t exp, levelup_exp;
+    uint32_t exp, levelup_exp, prev_levelup_exp;
 
     InventoryData inventory;
 };
