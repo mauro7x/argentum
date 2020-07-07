@@ -7,7 +7,7 @@
     "chunks": {
         "dirpath": "client/assets/Audio/Chunks/",
         "extension": ".wav",
-        "samples": 11,
+        "samples": 13,
         "listening_radio": 20
     },
     "local_sounds": {
