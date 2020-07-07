@@ -208,6 +208,7 @@ void Client::_finishGameCtx(BlockingQueue<Command*>& commands,
     // Terminamos la ejecución
     commands.close();
     socket.shutdown();
+    socket.close();
     command_dispatcher.join();
     receiver.join();
 }
@@ -264,7 +265,11 @@ void Client::launch() {
     }
 
     // Salir ordenadamente
-    socket.shutdown();
+    try {
+        socket.shutdown();
+    } catch (const Exception& e) {
+        fprintf(stderr, "Warning: error while shutting-down socket.");
+    }
 }
 
 Client::~Client() {
