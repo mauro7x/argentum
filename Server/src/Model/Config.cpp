@@ -23,8 +23,6 @@ void Config<RaceCfg>::_parseFile() {
         race.max_mana_factor = j[i]["max_mana_factor"];
         race.health_recovery_factor = j[i]["health_recovery_factor"];
         race.mana_recovery_factor = j[i]["mana_recovery_factor"];
-        race.initial_mana = j[i]["initial_mana"];
-        race.initial_health = j[i]["initial_health"];
         race.intelligence = j[i]["intelligence"];
         race.constitution = j[i]["constitution"];
         race.strength = j[i]["strength"];
@@ -48,8 +46,6 @@ void Config<KindCfg>::_parseFile() {
         kind.max_health_factor = j[i]["max_health_factor"];
         kind.max_mana_factor = j[i]["max_mana_factor"];
         kind.meditation_factor = j[i]["meditation_factor"];
-        kind.initial_mana = j[i]["initial_mana"];
-        kind.initial_health = j[i]["initial_health"];
         kind.intelligence = j[i]["intelligence"];
         kind.constitution = j[i]["constitution"];
         kind.strength = j[i]["strength"];

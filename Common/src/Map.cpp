@@ -212,9 +212,11 @@ void Map::establishEntitySpawningPosition(int& x, int& y, bool is_creature) {
         const Tile& tile = this->getTile(x, y);
 
         if (!tile.collision && !tile.npc_id) {
-            if (is_creature && tile.safe_zone) {
+            if (is_creature && tile.safe_zone)
                 continue;
-            }
+            if (!is_creature && !tile.safe_zone)
+                continue;
+                
             valid_position = true;
         }
     }

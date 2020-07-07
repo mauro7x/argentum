@@ -103,17 +103,13 @@ struct RaceCfg {
     uint8_t health_recovery_factor;
     uint8_t mana_recovery_factor;
 
-    // Atributos iniciales
-    uint8_t initial_mana;
-    uint8_t initial_health;
-
     // Modificadores
     int intelligence;
     int constitution;
     int strength;
     int agility;
 
-    // verificar si es shorter
+    // Verificar si es enano para el renderizado
     bool is_shorter;
 };
 
@@ -128,10 +124,6 @@ struct KindCfg {
     uint8_t max_health_factor;
     uint8_t max_mana_factor;
     uint8_t meditation_factor;
-
-    // Atributos iniciales
-    uint8_t initial_mana;
-    uint8_t initial_health;
 
     // Modificadores
     int intelligence;

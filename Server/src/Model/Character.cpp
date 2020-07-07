@@ -20,10 +20,7 @@ Character::Character(const CharacterCfg& init_data, const RaceCfg& race,
                      const int& rate,
                      const unsigned int critical_attack_dmg_modifier,
                      const unsigned int ms_to_update_attributes)
-    : health(init_data.health),
-      mana(init_data.mana),
-
-      intelligence(kind.intelligence + race.intelligence),
+    : intelligence(kind.intelligence + race.intelligence),
       constitution(kind.constitution + race.constitution),
       strength(kind.strength + race.strength),
       agility(kind.agility + race.agility),
@@ -57,6 +54,13 @@ Character::Character(const CharacterCfg& init_data, const RaceCfg& race,
       ms_to_update_attributes(ms_to_update_attributes) {
     this->updateLevelDependantAttributes();  // Set max_health, max_mana,
                                              // max_inventory_gold.
+    if (init_data.new_created) {
+        health = max_health;
+        mana = max_mana;
+    } else {
+        health = init_data.health;
+        mana = init_data.mana;
+    }
 }
 
 Character::~Character() {

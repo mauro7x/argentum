@@ -141,12 +141,8 @@ void Database::_createInitialData(const std::string& username, Id race, Id kind,
     character_data.kind = kind;
     character_data.head_id = head_id;
     character_data.body_id = body_id;
-    character_data.health =
-        races[race].initial_health + kinds[kind].initial_health;
-    character_data.mana =
-        (kinds[kind].initial_mana)
-            ? races[race].initial_mana + kinds[kind].initial_mana
-            : 0;
+    character_data.health = 0;
+    character_data.mana = 0;
 }
 
 void Database::_getPlayerData(const std::string& username,
