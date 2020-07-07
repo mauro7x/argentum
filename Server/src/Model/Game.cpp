@@ -1007,6 +1007,7 @@ void Game::_cooldownResurrect(const InstanceId caller) {
     this->map_container[map_id].occupyTile(caller, respawn_x, respawn_y);
     character.teleport(map_id, respawn_x, respawn_y);
 
+    _pushCharacterDifferentialBroadcast(caller, UPDATE_BROADCAST, true);
     _notifyResurrection(caller);
 }
 
