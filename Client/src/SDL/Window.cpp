@@ -25,6 +25,15 @@ void Window::init(bool fullscreen, int w, int h, const char* title) {
                         SDL_GetError());
     }
 
+    // Cargamos el icono de la ventana
+    window_icon = IMG_Load(paths::asset(WINDOW_ICON_FILEPATH).c_str());
+    if (!window_icon) {
+        throw Exception("Error loading window icon surface.\nSDL_Error: %s",
+                        SDL_GetError());
+    }
+
+    SDL_SetWindowIcon(window, window_icon);
+
     if (fullscreen) {
         SDL_SetWindowFullscreen(window, SDL_TRUE);
     }
@@ -44,6 +53,11 @@ Window::~Window() {
     if (window) {
         SDL_DestroyWindow(window);
         window = NULL;
+    }
+
+    if (window_icon) {
+        SDL_FreeSurface(window_icon);
+        window_icon = NULL;
     }
 }
 
