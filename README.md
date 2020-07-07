@@ -6,8 +6,6 @@
 * **Año y cuatrimestre:** 1°C 2020
 * **Tutor:** Martín Di Paola
 
----
-
 ## Integrantes
 
 | Nombre y apellido | Padrón | Mail | GitHub |
@@ -18,8 +16,7 @@
 
 ## Enlaces de interés
 * [**Repositorio en GitHub**](https://github.com/mauro7x/taller_final)
-
----
+* [**Manual de usuario**](https://es.overleaf.com/project/5f03991f67f43b00016cbe50)
 
 ## Instalación
 
@@ -34,5 +31,3 @@ chmod +x ./installer.sh
 ```
 
 El script ofrece un menú con múltiples opciones. Para instalar todo, simplemente elegir la opción `a`.
-
----
