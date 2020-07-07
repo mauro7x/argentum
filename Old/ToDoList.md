@@ -53,10 +53,6 @@
 * ~~Chat general. Cuando un jugador escribe algo, se debe broadcastear a todos como una notification reply que va en el chat gral. -Mau, 23/06.~~
     * **UPDATE:** ez pz. 
 
-* Endianness en el socket. -Santi, 25/06.
-    * high.
-
-
 
 ## Cosas que faltan (meeting 30/06).
 
