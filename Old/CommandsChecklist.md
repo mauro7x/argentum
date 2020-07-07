@@ -15,17 +15,17 @@ Marcarlos cuando estén implementados y funcionando!
 | 8 | Tomar | X | X | X |
 | 9 | Tirar | X | X | X |
 | 10 | Meditar | X | X | X |
-| 11 | Resucitar (solo) | X | | |
-| 12 | Listar comandos disponibles del NPC (/help) | X | | |
-| 13 | Resucitar (con sacerdote) | X | | |
-| 14 | Curar | X | | |
-| 15 | Listar | X | | |
-| 16 | Depositar | X | | |
-| 17 | Depositar oro | X | | |
-| 18 | Retirar | X | | |
-| 19 | Retirar oro | X | | | 
-| 20 | Comprar | X | | |
-| 21 | Vender | X | | |
-| 22 | Listar jugadores conectados | X | | |
+| 11 | Resucitar (solo) | X | X | X |
+| 12 | Listar comandos disponibles del NPC (/help) | X | X | X |
+| 13 | Resucitar (con sacerdote) | X | X | X |
+| 14 | Curar | X | X | X |
+| 15 | Listar | X | X | X |
+| 16 | Depositar | X | X | X |
+| 17 | Depositar oro | X | X | X |
+| 18 | Retirar | X | X | X |
+| 19 | Retirar oro | X | X | X | 
+| 20 | Comprar | X | X | X |
+| 21 | Vender | X | X | X |
+| 22 | Listar jugadores conectados | X | X | X |
 | 23 | Mensaje general | X | X | X |
 | 24 | Mensaje privado | X | X | X |
