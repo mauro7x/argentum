@@ -4,7 +4,7 @@
             "id": 0,
             "name": "Ciudad",
             "filepath": "common/assets/Maps/0.json",
-            "monsters": [
+            "creatures": [
                 300,
                 303
             ]
@@ -13,7 +13,7 @@
             "id": 1,
             "name": "Cementerio",
             "filepath": "common/assets/Maps/1.json",
-            "monsters": [
+            "creatures": [
                 301,
                 302
             ]
