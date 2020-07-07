@@ -96,6 +96,7 @@ class Game {
     std::unordered_map<InstanceId, Character> characters;
     std::unordered_map<InstanceId, Creature> creatures;
 
+
     Bank bank;
     //--------------------------------------------------------------------------
 
@@ -130,6 +131,8 @@ class Game {
     std::vector<Id> merchants;
 
     std::unordered_map<Id, std::vector<std::string>> priests_position;
+
+    Database& database;
     //--------------------------------------------------------------------------
 
     //--------------------------------------------------------------------------
@@ -304,7 +307,7 @@ class Game {
    public:
     //--------------------------------------------------------------------------
 
-    Game(ActiveClients& active_clients, const int& rate);
+    Game(ActiveClients& active_clients, const int& rate, Database& Database);
     ~Game();
 
     Game(const Game&) = delete;

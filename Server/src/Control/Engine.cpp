@@ -101,7 +101,7 @@ Engine::Engine(Database& database,
       finished_connections(),
       commands(),
       active_clients(commands, finished_connections),
-      game(active_clients, rate) {
+      game(active_clients, rate, database) {
     // Cargamos el rate
     json config = JSON::loadJsonFile(paths::config(CONFIG_FILEPATH));
     if (!((int)config["ticks_per_sec"])) {

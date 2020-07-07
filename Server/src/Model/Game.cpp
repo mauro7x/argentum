@@ -21,11 +21,12 @@
 #define TIME_TO_NOTIFY_RESURRECT_COOLDOWN_INFO 5000
 //-----------------------------------------------------------------------------
 
-Game::Game(ActiveClients& active_clients, const int& rate)
+Game::Game(ActiveClients& active_clients, const int& rate, Database& database)
     : rate(rate),
       bank(items),
       next_instance_id(FIRST_INSTANCE_ID),
-      active_clients(active_clients) {
+      active_clients(active_clients),
+      database(database) {
     // Cargamos la configuración
     _loadCfg();
     data_persistence_cooldown = cfg.ms_to_persist_data;
@@ -57,7 +58,7 @@ Game::Game(ActiveClients& active_clients, const int& rate)
 }
 
 Game::~Game() {
-    // _persistAllData()
+    _persistAllData(this->database);
 }
 
 //-----------------------------------------------------------------------------
