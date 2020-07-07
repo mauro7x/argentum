@@ -301,15 +301,13 @@ const InstanceId Game::newCharacter(const CharacterCfg& init_data) {
     Id new_character_id = this->next_instance_id;
     ++this->next_instance_id;
 
-    Id spawning_map_id;
+    Id spawning_map_id = init_data.map;
     int spawning_x_coord, spawning_y_coord;
 
     if (init_data.new_created) {
-        spawning_map_id = this->map_container.getCharacterSpawningMap();
         this->map_container[spawning_map_id].establishEntitySpawningPosition(
             spawning_x_coord, spawning_y_coord, false);
     } else {
-        spawning_map_id = init_data.map;
         spawning_x_coord = init_data.x_tile;
         spawning_y_coord = init_data.y_tile;
         try {
