@@ -1159,7 +1159,8 @@ void Game::_listPortalMaps(std::string& init_msg,
 
     std::vector<Id>::iterator it = maps_id.begin();
     for (; it != maps_id.end(); ++it) {
-        item_list.push_back(std::to_string(*it));
+        item_list.push_back(std::to_string(*it) + ": " +
+                            this->map_container[*it].getMapName());
     }
 }
 
