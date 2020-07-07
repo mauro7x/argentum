@@ -17,6 +17,7 @@ void MapContainer::loadMaps() {
     json maps, map;
     std::string filepath;
     std::vector<Id> creatures;
+    std::string name;
     maps = JSON::loadJsonFile(paths::config(MAPS_FILEPATH));
 
     int size = maps["data"].size();
@@ -27,9 +28,10 @@ void MapContainer::loadMaps() {
         map = JSON::loadJsonFile(filepath);
         map_id = (Id)maps["data"][i]["id"];
         maps["data"][i]["creatures"].get_to(creatures);
+        name = maps["data"][i]["name"];
         content.emplace(std::piecewise_construct, std::forward_as_tuple(map_id),
                         std::forward_as_tuple());
-        content.at(map_id).init(map, maps["tilesets"], creatures);
+        content.at(map_id).init(map, maps["tilesets"], creatures, name);
     }
 }
 

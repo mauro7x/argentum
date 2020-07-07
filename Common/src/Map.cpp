@@ -113,10 +113,12 @@ const bool Map::_moveOccupant(Tile& from_tile, Tile& to_tile,
 
 Map::Map() {}
 
-void Map::init(const json& map, const json& tilesets, std::vector<Id>& creatures) {
+void Map::init(const json& map, const json& tilesets,
+               std::vector<Id>& creatures, std::string& name) {
     w = map["width"];
     h = map["height"];
     this->creatures = creatures;
+    this->name = name;
 
     _checkIfValid(map);
     _fillTiles(map, tilesets);
@@ -333,10 +335,12 @@ bool Map::isPositionValidForCreature(const int x, const int y) {
     return true;
 }
 
-std::vector<Id> Map::getCreatures() const{
+std::vector<Id> Map::getCreatures() const {
     return creatures;
 }
-
+std::string Map::getMapName() const {
+    return name;
+}
 Map::~Map() {}
 
 const char* CouldNotFindFreeTileException::what() const noexcept {

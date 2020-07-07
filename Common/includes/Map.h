@@ -43,6 +43,7 @@ class Map {
     int w = 0, h = 0;
     std::vector<Tile> tiles;
     std::vector<Id> creatures;
+    std::string name;
 
     /* Chequea si el mapa es válido. Lanza exepción si no. */
     void _checkIfValid(const json& map) const;
@@ -81,7 +82,7 @@ class Map {
 
     /* Inicializa sus datos leyendo el json de la dirección recibida, recibiendo
      * las medidas que se esperan de cada tile */
-    void init(const json& map, const json& tilesets, std::vector<Id>& creatures);
+    void init(const json& map, const json& tilesets, std::vector<Id>& creatures, std::string& name);
 
     /* Devuelve la anchura en tiles */
     int getWidthTiles() const;
@@ -147,6 +148,9 @@ class Map {
 
     /* Obtener el vector de ids de criaturas*/
     std::vector<Id> getCreatures() const;
+
+    /* Obtener el nombre del map */
+    std::string getMapName() const;
 
     //-------------------------------------------------------------------------
 
