@@ -1,19 +1,22 @@
 #ifndef __INVENTORY_H__
 #define __INVENTORY_H__
-
+//-----------------------------------------------------------------------------
 #include <array>
 #include <cstdio>
 #include <exception>
 #include <map>
 #include <vector>
-
+//-----------------------------------------------------------------------------
 #include "../../../Common/includes/DataStructs.h"
 #include "../../../Common/includes/Inventory.h"
+//-----------------------------------------------------------------------------
+#include "Formulas.h"
 #include "Item.h"
 #include "ItemsContainer.h"
 #include "Level.h"
 #include "Slot.h"
 #include "config_structs.h"
+//-----------------------------------------------------------------------------
 
 /*
  * El Inventario es un contenedor que guarda Items,
@@ -30,6 +33,8 @@ class Inventory {
     unsigned int safe_gold, excess_gold;
     unsigned int max_safe_gold, max_excess_gold;
     Level& character_level;
+
+    Formulas& formulas;
 
     /*
      * Devuelve la el indice del menor slot libre del
@@ -60,7 +65,7 @@ class Inventory {
    public:
     Inventory(const InventoryData& init_data, uint32_t init_safe_gold,
               uint32_t init_excess_gold, Level& level,
-              ItemsContainer& items_container);
+              ItemsContainer& items_container, Formulas& formulas);
     ~Inventory();
 
     Inventory(const Inventory&) = delete;
@@ -104,7 +109,7 @@ class Inventory {
      * Agrega amount de gold al inventario, llenando primero
      * el oro seguro y luego el oro en exceso, hasta llegar
      * a sus respectivos limites.
-     * 
+     *
      * Setea en amount el oro efectivamente agregado.
      *
      * Lanza GoldMaximumCapacityReachedException si no se pudo

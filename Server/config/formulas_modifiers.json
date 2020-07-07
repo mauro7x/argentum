@@ -1,0 +1,27 @@
+{
+    "level_up_modifier": 1000,
+    "level_up_exponent": 1.8,
+
+    "attack_xp_gain_level_difference": 10,
+    "kill_xp_gain_min_rand_modifier": 0,
+    "kill_xp_gain_max_rand_modifier": 0.1,
+
+    "newbies_max_level": 12,
+
+    "elude_attack_min_rand_base": 0,
+    "elude_attack_max_rand_base": 1,
+    "elude_attack_threshold": 0.001,
+
+    "critical_attack_min_rand": 0,
+    "critical_attack_max_rand": 1,
+    "critical_attack_threshold": 0.1,
+
+    "max_attacking_level_difference": 10,
+
+    "max_safe_gold_modifier": 100,
+    "max_safe_gold_exponent": 1.1,
+    "max_excess_gold_proportion": 0.5,
+
+    "creature_gold_drop_min_rand_modifier": 0.01,
+    "creature_gold_drop_max_rand_modifier": 0.2
+}

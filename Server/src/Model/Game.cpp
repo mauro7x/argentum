@@ -335,7 +335,7 @@ const InstanceId Game::newCharacter(const CharacterCfg& init_data) {
         std::forward_as_tuple(init_data, this->races[init_data.race],
                               this->kinds[init_data.kind], this->map_container,
                               spawning_map_id, spawning_x_coord,
-                              spawning_y_coord, this->items, rate,
+                              spawning_y_coord, this->items, formulas, rate,
                               cfg.critical_attack_dmg_modifier,
                               cfg.ms_to_update_character_attributes));
 
@@ -368,7 +368,7 @@ void Game::newCreature(const CreatureCfg& init_data, const Id init_map) {
         std::forward_as_tuple(init_data, map_container, init_map,
                               spawning_x_coord, spawning_y_coord,
                               init_data.base_health, items, characters, *this,
-                              rate, cfg.random_movement_factor));
+                              formulas, rate, cfg.random_movement_factor));
 
     _pushCreatureDifferentialBroadcast(new_creature_id, NEW_BROADCAST);
 }

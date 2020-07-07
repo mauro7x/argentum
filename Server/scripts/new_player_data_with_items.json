@@ -7,7 +7,7 @@
     "level": 1,
     "exp": 0,
     "safe_gold": 0,
-    "excess_gold": 0,
+    "excess_gold": 15,
     "equipment": [
         0,
         0,
@@ -16,24 +16,24 @@
     ],
     "inventory": [
         {
-            "item": 0,
-            "amount": 0
+            "item": 1500,
+            "amount": 2
         },
         {
-            "item": 0,
-            "amount": 0
+            "item": 1400,
+            "amount": 2
         },
         {
-            "item": 0,
-            "amount": 0
+            "item": 1300,
+            "amount": 2
         },
         {
-            "item": 0,
-            "amount": 0
+            "item": 1100,
+            "amount": 2
         },
         {
-            "item": 0,
-            "amount": 0
+            "item": 1000,
+            "amount": 2
         },
         {
             "item": 0,

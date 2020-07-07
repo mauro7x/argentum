@@ -25,6 +25,7 @@
 #include "Character.h"
 #include "Config.h"
 #include "Creature.h"
+#include "Formulas.h"
 #include "ItemsContainer.h"
 #include "config_structs.h"
 //-----------------------------------------------------------------------------
@@ -96,7 +97,6 @@ class Game {
     std::unordered_map<InstanceId, Character> characters;
     std::unordered_map<InstanceId, Creature> creatures;
 
-
     Bank bank;
     //--------------------------------------------------------------------------
 
@@ -133,6 +133,7 @@ class Game {
     std::unordered_map<Id, std::vector<std::string>> priests_position;
 
     Database& database;
+    Formulas formulas;
     //--------------------------------------------------------------------------
 
     //--------------------------------------------------------------------------
