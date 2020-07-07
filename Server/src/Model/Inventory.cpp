@@ -6,11 +6,12 @@
 
 Inventory::Inventory(const InventoryData& init_data, uint32_t init_safe_gold,
                      uint32_t init_excess_gold, Level& character_level,
-                     ItemsContainer& items_container)
+                     ItemsContainer& items_container, Formulas& formulas)
     : occupied_slots(0),
       safe_gold(init_safe_gold),
       excess_gold(init_excess_gold),
-      character_level(character_level) {
+      character_level(character_level),
+      formulas(formulas) {
     for (unsigned int i = 0; i < slots.size(); ++i) {
         if (!init_data[i].item || !init_data[i].amount) {
             continue;
@@ -33,9 +34,9 @@ Inventory::~Inventory() {}
 
 void Inventory::updateMaxAmountsOfGold() {
     this->max_safe_gold =
-        Formulas::calculateMaxSafeGold(this->character_level.getLevel());
+        formulas.calculateMaxSafeGold(this->character_level.getLevel());
     this->max_excess_gold =
-        Formulas::calculateMaxExcessGold(this->max_safe_gold);
+        formulas.calculateMaxExcessGold(this->max_safe_gold);
 
     if (excess_gold && safe_gold < max_safe_gold) {
         if (safe_gold + excess_gold > max_safe_gold) {

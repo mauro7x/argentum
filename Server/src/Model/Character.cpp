@@ -17,7 +17,7 @@ Character::Character(const CharacterCfg& init_data, const RaceCfg& race,
                      const KindCfg& kind, MapContainer& map_container,
                      const Id init_map, const int init_x_coord,
                      const int init_y_coord, ItemsContainer& items_container,
-                     const int& rate,
+                     Formulas& formulas, const int& rate,
                      const unsigned int critical_attack_dmg_modifier,
                      const unsigned int ms_to_update_attributes)
     : intelligence(kind.intelligence + race.intelligence),
@@ -32,10 +32,10 @@ Character::Character(const CharacterCfg& init_data, const RaceCfg& race,
 
       state(StateFactory::newState(init_data.state, this->race)),
 
-      level(init_data.level, init_data.exp),
+      level(init_data.level, init_data.exp, formulas),
 
       inventory(init_data.inventory, init_data.safe_gold, init_data.excess_gold,
-                this->level, items_container),
+                this->level, items_container, formulas),
       equipment(init_data.equipment, items_container),
 
       position(init_map, init_x_coord, init_y_coord, map_container),
@@ -48,6 +48,8 @@ Character::Character(const CharacterCfg& init_data, const RaceCfg& race,
 
       attack_cooldown(0),
       broadcast(false),
+
+      formulas(formulas),
 
       rate(rate),
       critical_attack_dmg_modifier(critical_attack_dmg_modifier),
@@ -89,11 +91,11 @@ void Character::act(const unsigned int it) {
 }
 
 void Character::updateLevelDependantAttributes() {
-    this->max_health = Formulas::calculateMaxHealth(
+    this->max_health = formulas.calculateMaxHealth(
         this->constitution, this->kind.max_health_factor,
         this->race.max_health_factor, this->level.getLevel());
 
-    this->max_mana = Formulas::calculateMaxMana(
+    this->max_mana = formulas.calculateMaxMana(
         this->intelligence, this->kind.max_mana_factor,
         this->race.max_mana_factor, this->level.getLevel());
 
@@ -106,14 +108,14 @@ void Character::_updateTimeDependantAttributes(const unsigned int it) {
     attribute_update_time_elapsed += it * rate;
 
     while (attribute_update_time_elapsed >= ms_to_update_attributes) {
-        unsigned int health_update = Formulas::calculateHealthTimeRecovery(
+        unsigned int health_update = formulas.calculateHealthTimeRecovery(
             this->race.health_recovery_factor, ms_to_update_attributes);
 
-        unsigned int mana_update = Formulas::calculateManaTimeRecovery(
+        unsigned int mana_update = formulas.calculateManaTimeRecovery(
             this->race.mana_recovery_factor, ms_to_update_attributes);
 
         if (this->is_meditating)
-            mana_update += Formulas::calculateManaMeditationTimeRecovery(
+            mana_update += formulas.calculateManaMeditationTimeRecovery(
                 this->kind.meditation_factor, this->intelligence,
                 ms_to_update_attributes);
 
@@ -386,7 +388,7 @@ void Character::_checkPriorToUseAttackWeaponConditions(
     const unsigned int target_level = target->getLevel();
 
     if (!target->isCreature() &&
-        !(Formulas::canAttackByLevel(this->level.getLevel(), target_level)))
+        !(formulas.canAttackByLevel(this->level.getLevel(), target_level)))
         throw TooHighLevelDifferenceOnAttackException();
 }
 
@@ -407,7 +409,7 @@ const bool Character::_useAttackWeapon(Attackable* target, int& damage) {
     damage = this->equipment.useAttackItem(*this);
 
     // Se define si el ataque es critico
-    bool critical_attack = Formulas::isCriticalAttack();
+    bool critical_attack = formulas.isCriticalAttack();
     if (critical_attack)
         damage = damage * critical_attack_dmg_modifier;
 
@@ -442,7 +444,7 @@ const bool Character::useWeapon(Attackable* target, int& damage) {
 const bool Character::receiveAttack(int& damage, const bool eludible) {
     this->is_meditating = false;
 
-    if (eludible && Formulas::isAttackEluded(this->agility)) {
+    if (eludible && formulas.isAttackEluded(this->agility)) {
         // El ataque es esquivado, no se recibe daño
         damage = 0;
         return false;
