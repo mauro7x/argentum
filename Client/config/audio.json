@@ -2,7 +2,7 @@
     "music": {
         "dirpath": "client/assets/Audio/Music/",
         "extension": ".mp3",
-        "songs": 10
+        "songs": 19
     },
     "chunks": {
         "dirpath": "client/assets/Audio/Chunks/",
