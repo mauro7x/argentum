@@ -19,8 +19,8 @@ void Database::_loadFiles() {
 
         // Chequeamos que sea multiplo del size que necesitamos
         if ((size % sizeof(PlayerInfo))) {
-            fprintf(stderr, "Debug (info_data) | size: %lu, sizeof: %lu\n",
-                    size, sizeof(PlayerInfo));
+            fprintf(stderr, "Debug (info_data) | size: %u, sizeof: %u\n", size,
+                    sizeof(PlayerInfo));
             throw Exception("Database::_fillInfo: invalid index file size.");
         }
 
@@ -42,7 +42,7 @@ void Database::_loadFiles() {
 
         // Chequeamos que sea multiplo del size que necesitamos
         if ((file_pointer % sizeof(CharacterCfg))) {
-            fprintf(stderr, "Debug (info_data) | fp: %lu, sizeof: %lu\n",
+            fprintf(stderr, "Debug (info_data) | fp: %u, sizeof: %u\n",
                     file_pointer, sizeof(CharacterCfg));
             throw Exception("Database::_fillInfo: invalid data file size.");
         }
