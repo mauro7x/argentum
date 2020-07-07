@@ -25,6 +25,11 @@ function helpMessage() {
     echo "Opciones de desinstalación:"
     echo "  u: desinstala el juego."
     echo ""
+    echo "Opciones post-instalación:"
+    echo "  reset_database: resetea las bases de datos del servidor."
+    echo "  script_items: carga un script para que los personajes creados inicien con objetos."
+    echo "  script_empty: anula el efecto de los scripts de creación de personajes."
+    echo ""
     echo "Otras opciones:"
     echo "  h: muestra este mensaje."
     echo "  m: manual de usuario."
@@ -115,6 +120,36 @@ function uninstall() {
 #------------------------------------------------------------------------------
 
 #------------------------------------------------------------------------------
+# Scripts post-instalacion
+
+function scriptResetDatabase() {
+    echo "=== SCRIPT ==="
+    echo "> Se reseteara la base de datos."
+    sudo rm -rf /var/argentum/server/assets/Database/playerdata.cfg
+    sudo rm -rf /var/argentum/server/assets/Database/playerinfo.cfg
+    echo "Se ha cargado el script correctamente."
+    echo ""
+}
+
+function scriptItems() {
+    echo "=== SCRIPT ==="
+    echo "> Todos los personajes creados iniciarán con varios items y algo de oro."
+    sudo cp -f /etc/argentum/server/config/scripts/new_player_data_with_items.json /etc/argentum/server/config/new_player_data.json
+    echo "Se ha cargado el script correctamente."
+    echo ""
+}
+
+function scriptEmpty() {
+    echo "=== SCRIPT ==="
+    echo "> Todos los personajes creados iniciarán sin items ni oro."
+    sudo cp -f /etc/argentum/server/config/scripts/new_player_data.json /etc/argentum/server/config/new_player_data.json
+    echo "Se ha cargado el script correctamente."
+    echo ""
+}
+
+#------------------------------------------------------------------------------
+
+#------------------------------------------------------------------------------
 # Loop ppal
 
 # exit when any command fails
@@ -147,6 +182,21 @@ do
         u)
             echo ""
             uninstall
+            waitingInputMessage
+        ;;
+        reset_database)
+            echo ""
+            scriptResetDatabase
+            waitingInputMessage
+        ;;
+        script_items)
+            echo ""
+            scriptItems
+            waitingInputMessage
+        ;;
+        script_empty)
+            echo ""
+            scriptEmpty
             waitingInputMessage
         ;;
         h)  

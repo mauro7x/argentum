@@ -1,0 +1,216 @@
+{
+    "map": 0,
+    "pos": {
+        "x": 0,
+        "y": 0
+    },
+    "level": 1,
+    "exp": 0,
+    "safe_gold": 0,
+    "excess_gold": 0,
+    "equipment": [
+        0,
+        0,
+        0,
+        0
+    ],
+    "inventory": [
+        {
+            "item": 0,
+            "amount": 0
+        },
+        {
+            "item": 0,
+            "amount": 0
+        },
+        {
+            "item": 0,
+            "amount": 0
+        },
+        {
+            "item": 0,
+            "amount": 0
+        },
+        {
+            "item": 0,
+            "amount": 0
+        },
+        {
+            "item": 0,
+            "amount": 0
+        },
+        {
+            "item": 0,
+            "amount": 0
+        },
+        {
+            "item": 0,
+            "amount": 0
+        },
+        {
+            "item": 0,
+            "amount": 0
+        },
+        {
+            "item": 0,
+            "amount": 0
+        },
+        {
+            "item": 0,
+            "amount": 0
+        },
+        {
+            "item": 0,
+            "amount": 0
+        },
+        {
+            "item": 0,
+            "amount": 0
+        },
+        {
+            "item": 0,
+            "amount": 0
+        },
+        {
+            "item": 0,
+            "amount": 0
+        },
+        {
+            "item": 0,
+            "amount": 0
+        },
+        {
+            "item": 0,
+            "amount": 0
+        },
+        {
+            "item": 0,
+            "amount": 0
+        }
+    ],
+    "bank_account": {
+        "gold": 0,
+        "items": [
+            {
+                "item": 0,
+                "amount": 0
+            },
+            {
+                "item": 0,
+                "amount": 0
+            },
+            {
+                "item": 0,
+                "amount": 0
+            },
+            {
+                "item": 0,
+                "amount": 0
+            },
+            {
+                "item": 0,
+                "amount": 0
+            },
+            {
+                "item": 0,
+                "amount": 0
+            },
+            {
+                "item": 0,
+                "amount": 0
+            },
+            {
+                "item": 0,
+                "amount": 0
+            },
+            {
+                "item": 0,
+                "amount": 0
+            },
+            {
+                "item": 0,
+                "amount": 0
+            },
+            {
+                "item": 0,
+                "amount": 0
+            },
+            {
+                "item": 0,
+                "amount": 0
+            },
+            {
+                "item": 0,
+                "amount": 0
+            },
+            {
+                "item": 0,
+                "amount": 0
+            },
+            {
+                "item": 0,
+                "amount": 0
+            },
+            {
+                "item": 0,
+                "amount": 0
+            },
+            {
+                "item": 0,
+                "amount": 0
+            },
+            {
+                "item": 0,
+                "amount": 0
+            },
+            {
+                "item": 0,
+                "amount": 0
+            },
+            {
+                "item": 0,
+                "amount": 0
+            },
+            {
+                "item": 0,
+                "amount": 0
+            },
+            {
+                "item": 0,
+                "amount": 0
+            },
+            {
+                "item": 0,
+                "amount": 0
+            },
+            {
+                "item": 0,
+                "amount": 0
+            },
+            {
+                "item": 0,
+                "amount": 0
+            },
+            {
+                "item": 0,
+                "amount": 0
+            },
+            {
+                "item": 0,
+                "amount": 0
+            },
+            {
+                "item": 0,
+                "amount": 0
+            },
+            {
+                "item": 0,
+                "amount": 0
+            },
+            {
+                "item": 0,
+                "amount": 0
+            }
+        ]
+    }
+}
