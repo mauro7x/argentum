@@ -773,6 +773,7 @@ void Game::_sendAttackedByCreatureNotifications(const int damage,
 void Game::_useWeapon(const InstanceId caller, const InstanceId target,
                       Attackable* attacked, const bool target_is_creature) {
     Character& attacker = this->characters.at(caller);
+    const unsigned int prev_level = attacker.getLevel();
 
     int damage = 0;
     bool eluded = false;
@@ -805,6 +806,9 @@ void Game::_useWeapon(const InstanceId caller, const InstanceId target,
         _sendCreatureAttackNotifications(damage, caller);
     else
         _sendCharacterAttackNotifications(damage, eluded, caller, target);
+
+    if (prev_level < attacker.getLevel())
+        _pushCharacterEvent(caller, LEVEL_UP_EV_TYPE);
 }
 
 void Game::attackedByCreature(const InstanceId caller, int& damage,
