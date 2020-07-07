@@ -72,7 +72,12 @@ void Accepter::run() {
 
 void Accepter::stop() {
     keep_accepting = false;
-    socket.shutdown();
+    try {
+        socket.shutdown();
+    } catch (const Exception& e) {
+        fprintf(stderr,
+                "Warning: error while shutting-down accepter. Aborting.\n");
+    }
     socket.close();
 }
 

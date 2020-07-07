@@ -109,8 +109,7 @@ void ClientConnection::_receiveCommand() {
         commands.push(cmd);
     } catch (const UnknownCommandException& e) {
         // Comando desconocido. Envio error.
-        Reply* reply_error =
-            new Reply(ERROR_MSG, e.what());
+        Reply* reply_error = new Reply(ERROR_MSG, e.what());
         this->notifications.push(reply_error);
     }
 }
@@ -172,7 +171,6 @@ void ClientConnection::stop() {
         fprintf(stderr, "CLIENTE %i: error in socket::shutdown. Aborting.\n",
                 id);
     }
-    peer.close();
 }
 
 ClientConnection::~ClientConnection() {

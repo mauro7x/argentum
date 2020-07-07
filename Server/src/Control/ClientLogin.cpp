@@ -137,12 +137,20 @@ void ClientLogin::run() {
         fprintf(stderr, "Finaliza la ejecución del clientlogin.\n");
     } catch (const std::exception& e) {
         // Error grave
-        peer.shutdown();
+        try {
+            peer.shutdown();
+        } catch (const Exception& e) {
+            fprintf(stderr, "Warning: error while shutting-down client_login.");
+        }
         peer.close();
         fprintf(stderr, "%s\n", e.what());
     } catch (...) {
         // Error desconocido
-        peer.shutdown();
+        try {
+            peer.shutdown();
+        } catch (const Exception& e) {
+            fprintf(stderr, "Warning: error while shutting-down client_login.");
+        }
         peer.close();
         fprintf(stderr, "Unknown error.\n");
     }
@@ -161,7 +169,11 @@ void ClientLogin::stop() {
         // instante en que un cliente abandone la instancia de login. En este
         // caso, no habrá problema ya que el socket está preparado para hacer el
         // shutdown/close sólo si es necesario. -Mau.
-        peer.shutdown();
+        try {
+            peer.shutdown();
+        } catch (const Exception& e) {
+            fprintf(stderr, "Warning: error while shutting-down client_login.");
+        }
         peer.close();
     }
 }
