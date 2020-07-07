@@ -3,6 +3,7 @@
 #include "../includes/RandomNumberGenerator.h"
 
 #define MAX_FREE_ITEM_TILE_SEARCHING_STEP 30
+#define SAFE_ZONE_MAX_SEARCHING_STEP 100
 //-----------------------------------------------------------------------------
 // Métodos privados
 
@@ -205,6 +206,7 @@ const bool Map::moveOccupant(const int x, const int y,
 void Map::establishEntitySpawningPosition(int& x, int& y, bool is_creature) {
     bool valid_position = false;
     RandomNumberGenerator gen;
+    int step = 0;
     while (!valid_position) {
         x = gen(0, this->w - 1);
         y = gen(0, this->h - 1);
@@ -212,13 +214,21 @@ void Map::establishEntitySpawningPosition(int& x, int& y, bool is_creature) {
         const Tile& tile = this->getTile(x, y);
 
         if (!tile.collision && !tile.npc_id) {
-            if (is_creature && tile.safe_zone)
+            if (is_creature && tile.safe_zone &&
+                step < SAFE_ZONE_MAX_SEARCHING_STEP) {
+                ++step;
                 continue;
-            if (!is_creature && !tile.safe_zone)
+            }
+            if (!is_creature && !tile.safe_zone &&
+                step < SAFE_ZONE_MAX_SEARCHING_STEP) {
+                ++step;
                 continue;
-                
+            }
+
             valid_position = true;
         }
+
+        ++step;
     }
 }
 
@@ -248,13 +258,13 @@ void Map::getNearestFreeTile(int& x, int& y, const bool is_for_item) {
     if (is_for_item) {
         if (!current_tile.item_id && !current_tile.collision &&
             !current_tile.npc_id) {
-                return;
-            }
+            return;
+        }
     } else {
         if (!current_tile.item_id && !current_tile.collision &&
             !current_tile.npc_id && !current_tile.occupant_id) {
-                return;
-            }
+            return;
+        }
     }
 
     bool empty_tile_found = false;
@@ -275,23 +285,22 @@ void Map::getNearestFreeTile(int& x, int& y, const bool is_for_item) {
 
                 Tile& tile = this->_getTile(_x, _y);
 
-                    if (is_for_item) {
-                        if (!tile.item_id && !tile.collision &&
-                            !tile.npc_id) {
-                            empty_tile_found = true;
-                            x = _x;
-                            y = _y;
-                            return;
-                        }
-                    } else {
-                        if (!tile.item_id && !tile.collision &&
-                            !tile.npc_id && !tile.occupant_id) {
-                            empty_tile_found = true;
-                            x = _x;
-                            y = _y;
-                            return;
-                        }
+                if (is_for_item) {
+                    if (!tile.item_id && !tile.collision && !tile.npc_id) {
+                        empty_tile_found = true;
+                        x = _x;
+                        y = _y;
+                        return;
                     }
+                } else {
+                    if (!tile.item_id && !tile.collision && !tile.npc_id &&
+                        !tile.occupant_id) {
+                        empty_tile_found = true;
+                        x = _x;
+                        y = _y;
+                        return;
+                    }
+                }
             }
         }
         ++step;
