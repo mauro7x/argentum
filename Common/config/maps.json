@@ -3,6 +3,10 @@
         {
             "id": 0,
             "filepath": "common/assets/Maps/0.json"
+        },
+        {
+            "id": 1,
+            "filepath": "common/assets/Maps/1.json"
         }
     ],
     "tilesets": {
