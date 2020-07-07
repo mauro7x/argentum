@@ -2,11 +2,21 @@
     "data": [
         {
             "id": 0,
-            "filepath": "common/assets/Maps/0.json"
+            "name": "Ciudad",
+            "filepath": "common/assets/Maps/0.json",
+            "monsters": [
+                300,
+                303
+            ]
         },
         {
             "id": 1,
-            "filepath": "common/assets/Maps/1.json"
+            "name": "Cementerio",
+            "filepath": "common/assets/Maps/1.json",
+            "monsters": [
+                301,
+                302
+            ]
         }
     ],
     "tilesets": {
