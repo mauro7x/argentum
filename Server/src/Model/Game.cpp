@@ -407,17 +407,17 @@ void Game::deleteCreature(const InstanceId id) {
     this->creatures.erase(id);
 }
 
-const Id Game::_randomSelectCreature() const {
+const Id Game::_randomSelectCreature(const Id spawning_map) const {
     std::vector<Id> possible_creatures;
 
-    this->creatures_data.gatherIds(possible_creatures);
+    possible_creatures = map_container[spawning_map].getCreatures();
 
     RandomNumberGenerator gen;
     return possible_creatures[gen(0, possible_creatures.size() - 1)];
 }
 
 void Game::_spawnNewCreature(const Id spawning_map) {
-    const Id creature_id = _randomSelectCreature();
+    const Id creature_id = _randomSelectCreature(spawning_map);
 
     const CreatureCfg& data = creatures_data[creature_id];
 

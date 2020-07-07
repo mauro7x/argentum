@@ -235,7 +235,7 @@ class Game {
      * Escoge aleatoriamente una criatura entre las disponibles en la config,
      * y deuvelve su Id.
      */
-    const Id _randomSelectCreature() const;
+    const Id _randomSelectCreature(const Id spawning_map) const;
 
     /*
      * Recibe un mapa en el cual spawnea una criatura aleatoria.
