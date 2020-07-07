@@ -6,6 +6,8 @@
 * **Año y cuatrimestre:** 1°C 2020
 * **Tutor:** Martín Di Paola
 
+---
+
 ## Integrantes
 
 | Nombre y apellido | Padrón | Mail | GitHub |
@@ -17,32 +19,20 @@
 ## Enlaces de interés
 * [**Repositorio en GitHub**](https://github.com/mauro7x/taller_final)
 
-<!-- ###################################################################### -->
+---
 
-# Compilar con CMake
+## Instalación
 
-Para compilar, se deben ejecutar desde la raíz del repositorio las siguientes líneas:
-
-```
-mkdir build && cd build
-cmake ..
+Para instalar el juego se provee de un script `installer.sh` que corre en bash. Se debe ejecutar:
+```bash
+./installer.sh
 ```
 
-Una vez hecho esto y si no hubieron errores, obtendremos el `Makefile` generado por **CMake**. Ahora podemos:
+Si fallan los permisos, se le deberán conceder los mismos ejecutando:
+```bash
+chmod +x ./installer.sh
+```
 
-* Para compilar el **servidor**:
-    ```
-    make server
-    ```
-* Para compilar el **cliente**:
-    ```
-    make client
-    ```
-* Para compilar todo:
-    ```
-    make
-    ```
-
-<!-- ###################################################################### -->
+El script ofrece un menú con múltiples opciones. Para instalar todo, simplemente elegir la opción `a`.
 
 ---
