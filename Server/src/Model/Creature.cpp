@@ -1,7 +1,5 @@
 #include <math.h>
-
 #include <algorithm>
-
 //-----------------------------------------------------------------------------
 #include "../../includes/Model/Creature.h"
 #include "../../includes/Model/Formulas.h"
@@ -237,63 +235,58 @@ const Position& Creature::getPosition() const {
 
 void Creature::dropAllItems(std::vector<DroppingSlot>& dropped_items) {
     RandomNumberGenerator gen;
-    float prob = gen((float)0, (float)1);
 
-    float acum = DROP_NOTHING_PROB;
+    switch (formulas.calculateDroppingItem()) {
+        case DROP_NOTHING: {
+            // fprintf(stderr, "DEBUG: Creature::drop: NOTHING\n");
+            // break;
+        }
 
-    if (prob < acum) {
-        fprintf(stderr, "DEBUG: Creature::drop: NOTHING\n");
-        return;
+        case DROP_GOLD: {
+            dropped_items.emplace_back(
+                GOLD_BAG_ID,
+                formulas.calculateGoldDroppingAmount(this->health_max));
+            // fprintf(stderr, "DEBUG: Creature::drop: ORO. Item id: %i\n",
+            //         GOLD_BAG_ID);
+            break;
+        }
+
+        case DROP_POTION: {
+            const std::vector<Id>& potions = this->items.getPotionsId();
+            size_t potion_idx = gen((int)0, (int)potions.size() - 1);
+            dropped_items.emplace_back(potions[potion_idx], 1);
+            // fprintf(stderr, "DEBUG: Creature::drop: POTION. Item id: %i\n",
+            //         potions[potion_idx]);
+            break;
+        }
+
+        case DROP_WEAPON: {
+            const std::vector<Id>& weapons = this->items.getWeaponsId();
+            size_t weapon_idx = gen((int)0, (int)weapons.size() - 1);
+            dropped_items.emplace_back(weapons[weapon_idx], 1);
+            // fprintf(stderr, "DEBUG: Creature::drop: WEAPON. Item id: %i\n",
+            //         weapons[weapon_idx]);
+            break;
+        }
+
+        case DROP_WAND: {
+            const std::vector<Id>& wands = this->items.getWandsId();
+            size_t wand_idx = gen((int)0, (int)wands.size() - 1);
+            dropped_items.emplace_back(wands[wand_idx], 1);
+            // fprintf(stderr, "DEBUG: Creature::drop: WAND. Item id: %i\n",
+            //         wands[wand_idx]);
+            break;
+        }
+
+        case DROP_DEFENCE: {
+            const std::vector<Id>& defences = this->items.getDefencesId();
+            size_t defence_idx = gen((int)0, (int)defences.size() - 1);
+            dropped_items.emplace_back(defences[defence_idx], 1);
+            // fprintf(stderr, "DEBUG: Creature::drop: DEFENCE. Item id: %i\n",
+            //         defences[defence_idx]);
+            break;
+        }
     }
-
-    acum += DROP_GOLD_PROB;
-
-    if (prob < acum) {
-        dropped_items.emplace_back(
-            GOLD_BAG_ID,
-            formulas.calculateGoldDroppingAmount(this->health_max));
-        fprintf(stderr, "DEBUG: Creature::drop: ORO. Item id: %i\n",
-                GOLD_BAG_ID);
-        return;
-    }
-
-    acum += DROP_POTION_PROB;
-
-    if (prob < acum) {
-        const std::vector<Id>& potions = this->items.getPotionsId();
-        size_t potion_idx = gen((int)0, (int)potions.size() - 1);
-        dropped_items.emplace_back(potions[potion_idx], 1);
-        fprintf(stderr, "DEBUG: Creature::drop: POTION. Item id: %i\n",
-                potions[potion_idx]);
-        return;
-    }
-
-    int choice = gen((int)0, (int)2);
-
-    if (choice < 1) {
-        const std::vector<Id>& weapons = this->items.getWeaponsId();
-        size_t weapon_idx = gen((int)0, (int)weapons.size() - 1);
-        dropped_items.emplace_back(weapons[weapon_idx], 1);
-        fprintf(stderr, "DEBUG: Creature::drop: WEAPON. Item id: %i\n",
-                weapons[weapon_idx]);
-        return;
-    }
-
-    if (choice < 2) {
-        const std::vector<Id>& wands = this->items.getWandsId();
-        size_t wand_idx = gen((int)0, (int)wands.size() - 1);
-        dropped_items.emplace_back(wands[wand_idx], 1);
-        fprintf(stderr, "DEBUG: Creature::drop: WAND. Item id: %i\n",
-                wands[wand_idx]);
-        return;
-    }
-
-    const std::vector<Id>& defences = this->items.getDefencesId();
-    size_t defence_idx = gen((int)0, (int)defences.size() - 1);
-    dropped_items.emplace_back(defences[defence_idx], 1);
-    fprintf(stderr, "DEBUG: Creature::drop: DEFENCE. Item id: %i\n",
-            defences[defence_idx]);
-    return;
 }
 
 const unsigned int Creature::getMaxHealth() const {

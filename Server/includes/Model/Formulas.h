@@ -29,6 +29,23 @@ struct FormulasCfg {
     float max_excess_gold_proportion;
     float creature_gold_drop_min_rand_modifier;
     float creature_gold_drop_max_rand_modifier;
+    float creature_drop_nothing_prob;
+    float creature_drop_gold_prob;
+    float creature_drop_potion_prob;
+    float creature_drop_weapon_prob;
+    float creature_drop_wand_prob;
+    float creature_drop_defence_prob;
+};
+
+//-----------------------------------------------------------------------------
+
+enum Drop {
+    DROP_NOTHING,
+    DROP_GOLD,
+    DROP_POTION,
+    DROP_WEAPON,
+    DROP_WAND,
+    DROP_DEFENCE
 };
 
 //-----------------------------------------------------------------------------
@@ -89,6 +106,8 @@ class Formulas {
     // Creature
     const unsigned int calculateGoldDroppingAmount(
         const unsigned int max_health);
+
+    const Drop calculateDroppingItem() const;
 };
 
 //-----------------------------------------------------------------------------
