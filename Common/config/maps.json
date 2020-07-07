@@ -3,10 +3,6 @@
         {
             "id": 0,
             "filepath": "common/assets/Maps/0.json"
-        },
-        {
-            "id": 1,
-            "filepath": "common/assets/Maps/1.json"
         }
     ],
     "tilesets": {
@@ -44,7 +40,7 @@
         },
         "npcs": {
             "first_gid": 243,
-            "next_first_gid": 249,
+            "next_first_gid": 251,
             "filepath": "common/assets/Maps/Tilesets/03-npcs.json",
             "src": {
                 "dirpath": "client/assets/Tiles/NPCs/",
@@ -59,8 +55,8 @@
             }
         },
         "metadata": {
-            "first_gid": 249,
-            "next_first_gid": 253,
+            "first_gid": 251,
+            "next_first_gid": 255,
             "filepath": "common/assets/Maps/Tilesets/04-metadata.json",
             "src": {
                 "dirpath": "client/assets/Tiles/Metadata/",
