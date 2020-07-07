@@ -271,6 +271,8 @@ void Mixer::_decreaseMusicVolume() {
 
 void Mixer::_playChunk(uint8_t sound_id, const SDL_Point& player_pos,
                        const SDL_Point& sound_pos) {
+    fprintf(stderr, "\nPlayer pos: (%i, %i) - Sound pos: (%i, %i)\n",
+            player_pos.x, player_pos.y, sound_pos.x, sound_pos.y);
     if ((((sound_pos.x != player_pos.x) || (sound_pos.y != player_pos.y)) &&
          (active_chunks >= MAX_CHUNKS_SIMULTANEOUSLY)) ||
         muted) {
@@ -305,7 +307,7 @@ void Mixer::_playChunk(uint8_t sound_id, const SDL_Point& player_pos,
     // Agregamos efectos
     Sint16 sdl_angle = _getAngle(player_pos, sound_pos);
     Uint8 sdl_distance = (distance * MAX_DISTANCE_EFFECT) / listening_radio;
-
+    fprintf(stderr, "angulo: %i, dist: %u\n", sdl_angle, sdl_distance);
     Mix_SetPosition(channel, sdl_angle, sdl_distance);
 }
 
