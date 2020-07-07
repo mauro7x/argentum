@@ -33,7 +33,7 @@
 
 // Volumen (el máximo volumen es 128)
 #define MUSIC_VOLUME_LEVEL 4
-#define GAME_MUSIC_VOLUME 32
+#define GAME_MUSIC_VOLUME 16
 
 // Chunks
 #define MAX_CHUNKS_SIMULTANEOUSLY 3 /* límite para sonidos EXTERNOS */
