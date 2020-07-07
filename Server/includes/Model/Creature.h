@@ -15,13 +15,8 @@
 #include "Position.h"
 #include "config_structs.h"
 //-----------------------------------------------------------------------------
-#define DROP_NOTHING_PROB 0.70
-#define DROP_GOLD_PROB 0.10
-#define DROP_POTION_PROB 0.10
-#define DROP_ITEM_PROB 0.10
-//-----------------------------------------------------------------------------
-
 class Game;
+//-----------------------------------------------------------------------------
 
 class Creature : public Attackable {
    private:

@@ -1,6 +1,7 @@
 #include "../../includes/Model/Formulas.h"
 //-----------------------------------------------------------------------------
 #include <math.h>
+
 #include <algorithm>
 #include <cstdlib>
 //-----------------------------------------------------------------------------
@@ -42,6 +43,12 @@ void Formulas::_loadCfg() {
         config["creature_gold_drop_min_rand_modifier"];
     cfg.creature_gold_drop_max_rand_modifier =
         config["creature_gold_drop_max_rand_modifier"];
+    cfg.creature_drop_nothing_prob = config["creature_drop_nothing_prob"];
+    cfg.creature_drop_gold_prob = config["creature_drop_gold_prob"];
+    cfg.creature_drop_potion_prob = config["creature_drop_potion_prob"];
+    cfg.creature_drop_weapon_prob = config["creature_drop_weapon_prob"];
+    cfg.creature_drop_wand_prob = config["creature_drop_wand_prob"];
+    cfg.creature_drop_defence_prob = config["creature_drop_defence_prob"];
 }
 
 //-----------------------------------------------------------------------------
@@ -161,6 +168,38 @@ const unsigned int Formulas::calculateGoldDroppingAmount(
     return (float)gen(cfg.creature_gold_drop_min_rand_modifier,
                       cfg.creature_gold_drop_max_rand_modifier) *
            max_health;
+}
+
+const Drop Formulas::calculateDroppingItem() const {
+    RandomNumberGenerator gen;
+    float prob = gen((float)0, (float)1);
+
+    float acum = cfg.creature_drop_nothing_prob;
+
+    if (prob < acum)
+        return DROP_NOTHING;
+
+    acum += cfg.creature_drop_gold_prob;
+
+    if (prob < acum)
+        return DROP_GOLD;
+
+    acum += cfg.creature_drop_potion_prob;
+    
+    if (prob < acum)
+        return DROP_POTION;
+
+    acum += cfg.creature_drop_weapon_prob;
+    
+    if (prob < acum)
+        return DROP_WEAPON;
+
+    acum += cfg.creature_drop_wand_prob;
+    
+    if (prob < acum)
+        return DROP_WAND;
+
+    return DROP_DEFENCE;
 }
 
 //-----------------------------------------------------------------------------
