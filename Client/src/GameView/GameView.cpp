@@ -27,6 +27,10 @@ void GameView::_loadMedia() {
     map.loadMedia();
 }
 
+void GameView::_welcomeMessage() {
+    hud.addMessage("¡Bienvenido a Argentum Online!", PRIVATE_MSG_COLOR);
+}
+
 void GameView::_processSDLEvents() {
     SDL_Event e;
     while (SDL_PollEvent(&e) != 0) {
@@ -122,6 +126,7 @@ GameView::GameView(BlockingQueue<Command*>& commands,
       event_handler(exit, commands, hud, map, camera) {
     _init();
     _loadMedia();
+    _welcomeMessage();
 }
 
 GameView::~GameView() {}

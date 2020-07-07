@@ -86,6 +86,9 @@ class GameView : public ConstantRateFunc {
     /* Carga la media necesaria */
     void _loadMedia();
 
+    /* Carga el mensaje de bienvenida */
+    void _welcomeMessage();
+
     /* Vacía la cola de eventos de SDL */
     void _processSDLEvents();
 
