@@ -1,5 +1,6 @@
 #include "../../includes/Socket/SocketWrapper.h"
-
+//-----------------------------------------------------------------------------
+#include <endian.h>
 //-----------------------------------------------------------------------------
 // Métodos privados
 
@@ -64,14 +65,15 @@ size_t SocketWrapper::operator>>(uint8_t& n) const {
 }
 
 size_t SocketWrapper::operator<<(const uint32_t& n) const {
-    return send((char*)&n, sizeof(n));
+    uint32_t _n = htole32(n);
+    return send((char*)&_n, sizeof(_n));
 }
 
 size_t SocketWrapper::operator>>(uint32_t& n) const {
-    uint32_t received;
+    uint32_t _received;
     size_t n_received;
-    n_received = recv((char*)&received, sizeof(received));
-    n = received;
+    n_received = recv((char*)&_received, sizeof(_received));
+    n = le32toh(_received);
     return n_received;
 }
 
