@@ -45,7 +45,7 @@ class Player : public Unit {
     uint32_t health = 0, max_health = 0;
     uint32_t mana = 0, max_mana = 0;
     uint32_t safe_gold = 0, excess_gold = 0;
-    uint32_t level = 0, exp = 0, levelup_exp = 0;
+    uint32_t level = 0, exp = 0, levelup_exp = 0, prev_levelup_exp = 0;
 
     // Texturas para el nickname
     TTF_Font* nickname_font = NULL;
@@ -124,6 +124,7 @@ class Player : public Unit {
     const uint32_t& getLevel() const;
     const uint32_t& getExp() const;
     const uint32_t& getLvlUpExp() const;
+    const uint32_t& getPrevLvlUpExp() const;
 
     //-------------------------------------------------------------------------
 

@@ -107,7 +107,8 @@ void UserInfo::update(const int it) {
     }
 
     // Update de la experiencia
-    xp.update(player.getExp(), player.getLvlUpExp());
+    xp.update(player.getExp() - player.getPrevLvlUpExp(),
+              player.getLvlUpExp() - player.getPrevLvlUpExp());
 }
 
 void UserInfo::render() const {

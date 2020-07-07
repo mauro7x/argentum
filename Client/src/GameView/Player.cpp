@@ -24,6 +24,7 @@ void Player::_copyData(const PlayerData& data) {
     this->level = data.level;
     this->exp = data.exp;
     this->levelup_exp = data.levelup_exp;
+    this->prev_levelup_exp = data.prev_levelup_exp;
 
     // Si es enano/gnomo
     this->is_shorter = data.is_shorter;
@@ -241,6 +242,10 @@ const uint32_t& Player::getExp() const {
 
 const uint32_t& Player::getLvlUpExp() const {
     return levelup_exp;
+}
+
+const uint32_t& Player::getPrevLvlUpExp() const {
+    return prev_levelup_exp;
 }
 
 //-------------------------------------------------------------------------
