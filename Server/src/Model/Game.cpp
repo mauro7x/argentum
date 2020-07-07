@@ -187,6 +187,9 @@ void Game::_pushCharacterDifferentialBroadcast(InstanceId caller,
     this->active_clients.sendDifferentialBroadcastToAll(broadcast, caller,
                                                         send_to_caller);
 
+    if (this->characters.at(caller).getPosition().mustBeBroadcasted())
+        _pushCharacterEvent(caller, MOVEMENT_EV_TYPE);
+
     this->characters.at(caller).beBroadcasted();
 }
 
@@ -442,13 +445,9 @@ void Game::actCharacters(const int it) {
             active_clients.notify(id, reply);
         }
 
-        if (character.mustBeBroadcasted()) {
-            if (character.getPosition().mustBeBroadcasted())
-                _pushCharacterEvent(id, MOVEMENT_EV_TYPE);
-
+        if (character.mustBeBroadcasted())
             _pushCharacterDifferentialBroadcast(it_characters->first,
                                                 UPDATE_BROADCAST, true);
-        }
 
         ++it_characters;
     }
