@@ -1,19 +1,29 @@
 #ifndef __LEVEL_H__
 #define __LEVEL_H__
+//-----------------------------------------------------------------------------
 
+//-----------------------------------------------------------------------------
 #include "../../../Common/includes/DataStructs.h"
-#include "config_structs.h"
+//-----------------------------------------------------------------------------
 
+//-----------------------------------------------------------------------------
+#include "Formulas.h"
+#include "config_structs.h"
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
 class Character;  // Forward declaration para evitar circular dependences.
+//-----------------------------------------------------------------------------
 
 class Level {
    private:
     uint32_t level;
     uint32_t xp;
+    Formulas& formulas;
     uint32_t level_up_xp;
 
    public:
-    Level(uint32_t init_level, uint32_t init_xp);
+    Level(uint32_t init_level, uint32_t init_xp, Formulas& formulas);
     ~Level();
 
     Level(const Level&) = delete;
@@ -37,4 +47,6 @@ class Level {
     void fillPersistenceData(CharacterCfg& data) const;
 };
 
+//-----------------------------------------------------------------------------
 #endif
+//-----------------------------------------------------------------------------

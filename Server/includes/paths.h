@@ -15,6 +15,7 @@
 #define CREATURES_CONFIG_FILEPATH "server/config/creatures.json"
 #define ITEMS_CONFIG_FILEPATH "server/config/items.json"
 #define NEW_PLAYER_DATA_FILEPATH "server/config/new_player_data.json"
+#define FORMULAS_MODIFIERS_FILEPATH "server/config/formulas_modifiers.json"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------

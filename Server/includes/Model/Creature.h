@@ -38,7 +38,7 @@ class Creature : public Attackable {
     ItemsContainer& items;
     Map& map;
     std::unordered_map<InstanceId, Character>& characters;
-    std::array<Orientation, 4> posibles_orientations;
+    std::array<Orientation, N_ORIENTATIONS> posibles_orientations;
     Game& game;
 
     int moving_cooldown;
@@ -49,6 +49,8 @@ class Creature : public Attackable {
     InstanceId attacking_id;
     unsigned int level;
     bool broadcast;
+
+    Formulas& formulas;
 
     // Configuración
     const int& rate;
@@ -106,7 +108,8 @@ class Creature : public Attackable {
              const Id init_map, const int init_x_coord, const int init_y_coord,
              const uint32_t health, ItemsContainer& items,
              std::unordered_map<InstanceId, Character>& characters, Game& game,
-             const int& rate, const unsigned int random_movement_factor);
+             Formulas& formulas, const int& rate,
+             const unsigned int random_movement_factor);
 
     /* Destructor */
     ~Creature();

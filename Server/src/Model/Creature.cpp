@@ -16,7 +16,7 @@ Creature::Creature(const CreatureCfg& data, MapContainer& map_container,
                    const int init_y_coord, const uint32_t health,
                    ItemsContainer& items,
                    std::unordered_map<InstanceId, Character>& characters,
-                   Game& game, const int& rate,
+                   Game& game, Formulas& formulas, const int& rate,
                    const unsigned int random_movement_factor)
     : id(data.id),
       name(data.name),
@@ -38,6 +38,7 @@ Creature::Creature(const CreatureCfg& data, MapContainer& map_container,
       actual_attack_cooldown(0),
       attacking_id(0),
       broadcast(false),
+      formulas(formulas),
       rate(rate),
       random_movement_factor(random_movement_factor) {
     RandomNumberGenerator random_number_generator;
@@ -250,7 +251,7 @@ void Creature::dropAllItems(std::vector<DroppingSlot>& dropped_items) {
     if (prob < acum) {
         dropped_items.emplace_back(
             GOLD_BAG_ID,
-            Formulas::calculateGoldDroppingAmount(this->health_max));
+            formulas.calculateGoldDroppingAmount(this->health_max));
         fprintf(stderr, "DEBUG: Creature::drop: ORO. Item id: %i\n",
                 GOLD_BAG_ID);
         return;
