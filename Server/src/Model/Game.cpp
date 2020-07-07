@@ -699,11 +699,12 @@ void Game::_sendCharacterAttackNotifications(const int damage,
             "Le has infligido " + std::to_string(damage) + " de daño.";
         msg_to_attacked =
             "Has recibido " + std::to_string(damage) + " de daño.";
-
         if (weapon_type == EXPLOSIVE)
             _pushCharacterEvent(caller, EXPLOSION_SPELL_EV_TYPE);
         else
             _pushCharacterEvent(caller, GRAL_ATTACK_EV_TYPE);
+
+        _pushCharacterEvent(target, BEATTACKED_EV_TYPE);
 
     } else if (damage <= 0 && weapon_type == HEALING) {
         msg_to_attacker =
@@ -716,6 +717,7 @@ void Game::_sendCharacterAttackNotifications(const int damage,
     } else if (eluded) {
         msg_to_attacker = "Tu ataque fue eludido.";
         msg_to_attacked = "Has eludido un ataque.";
+        _pushCharacterEvent(target, EVASION_EV_TYPE);
     } else {
         msg_to_attacker =
             "No le has causado daño, la defensa absorbió el ataque.";
@@ -761,8 +763,10 @@ void Game::_sendAttackedByCreatureNotifications(const int damage,
     if (damage > 0) {
         msg_to_attacked =
             "Has recibido " + std::to_string(damage) + " de daño.";
+        _pushCharacterEvent(caller, BEATTACKED_EV_TYPE);
     } else if (eluded) {
         msg_to_attacked = "Has eludido un ataque.";
+        _pushCharacterEvent(caller, EVASION_EV_TYPE);
     } else {
         msg_to_attacked = "Tu defensa absorbió todo el daño del ataque.";
     }
