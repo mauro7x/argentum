@@ -31,3 +31,17 @@ chmod +x ./installer.sh
 ```
 
 El script ofrece un menú con múltiples opciones. Para instalar todo, simplemente elegir la opción `a`.
+
+## Configuración
+
+Se provee de un script de configuración, que permite modificar distintos valores numéricos del juego. Para esto, se debe ejecutar:
+```bash
+./config.sh
+```
+
+Al igual que con el script del instalador, si fallan los permisos, se le deberán conceder los mismos ejecutando:
+```bash
+chmod +x ./config.sh
+```
+
+Al abrirlo, podremos seleccionar el archivo que queremos editar, y el mismo se abrirá para su edición utilizando `Vim`.
