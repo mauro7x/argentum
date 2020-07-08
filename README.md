@@ -6,7 +6,7 @@
 * **Año y cuatrimestre:** 1°C 2020
 * **Tutor:** Martín Di Paola
 
-## Integrantes
+## Equipo de desarrollo
 
 | Nombre y apellido | Padrón | Mail | GitHub |
 |-------------------|--------|------|--------|
