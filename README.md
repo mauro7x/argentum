@@ -16,7 +16,7 @@
 
 ## Enlaces de interés
 * [**Repositorio en GitHub**](https://github.com/mauro7x/taller_final)
-* [**Manual de usuario**](Documents/Manual\de\Usuario.pdf)
+* [**Manual de usuario**](Documents/Manual_de_Usuario.pdf)
 
 ## Instalación
 
