@@ -15,12 +15,12 @@ Remake del juego [**Argentum Online**](https://github.com/ao-libre) diseñado pa
 
 ## Enlaces de interés
 * [**Repositorio en GitHub**](https://github.com/mauro7x/taller_final)
-* [**Manual de usuario**](Documents/Manual_de_Usuario.pdf) - Manual para ambos aplicativos, incluyendo requerimientos de hardware, software, instalación, configuración y uso.
+* [**Manual de usuario**](Documents/Manual_de_Usuario.pdf) - *Manual para ambos aplicativos, incluyendo requerimientos de hardware, software, instalación, configuración y uso.*
 
 ### Documentación en construcción
 Los siguientes documentos se encuentran en elaboración y se adjunta el link para edición a los mismos en Overleaf:
-* [**Manual de Proyecto**](https://es.overleaf.com/8387857119mbhmdtbrpvnh) - Organización, cronogramas, división de tareas, y evolución del proyecto.
-* [**Documentación Técnica**](https://es.overleaf.com/2395968991ysqtxgxxsncs) - Detalles de implementación y de diseño, estructuras utilizadas, herramientas integradas.
+* [**Manual de Proyecto**](https://es.overleaf.com/8387857119mbhmdtbrpvnh) - *Organización, cronogramas, división de tareas, y evolución del proyecto.*
+* [**Documentación Técnica**](https://es.overleaf.com/2395968991ysqtxgxxsncs) - *Detalles de implementación y de diseño, estructuras utilizadas, herramientas integradas.*
 
 ## Instalación
 *(Esta sección se encuentra detallada en el [Manual de Usuario](Documents/Manual_de_Usuario.pdf), por lo que se recomienda su lectura.)*
