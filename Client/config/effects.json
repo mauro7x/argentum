@@ -3,7 +3,7 @@
         "death": {
             "dirpath": "client/assets/Effects/Death/",
             "clips": 11,
-            "change_every_n_frames": 5,
+            "change_every_n_frames": 7,
             "offset": {
                 "x": 0,
                 "y": -30
@@ -70,8 +70,12 @@
     "special_effects": {
         "be_attacked": {
             "dirpath": "client/assets/Effects/BeAttacked/",
-            "clips": 23,
-            "change_every_n_frames": 2
+            "clips": 28,
+            "change_every_n_frames": 1
+        },
+        "be_healed": {
+            "dirpath": "client/assets/Effects/BeHealed/",
+            "clips": 8
         }
     }
 }

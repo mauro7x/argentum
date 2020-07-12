@@ -40,33 +40,36 @@ void BeAttacked::loadMedia(const json& config) {
 }
 
 void BeAttacked::add() {
-    if (!is_active) {
-        current_frame = 0;
-        is_active = true;
-        is_new = true;
-    }
+    active_effects.emplace_back();
 }
 
 void BeAttacked::act(const int it) {
-    if (is_active) {
-        if (!is_new) {
-            current_frame += it;
+    for (auto i = active_effects.begin(); i != active_effects.end();) {
+        // Avanzamos el clip si no fue creado en la misma iteración
+        if (!(i->is_new)) {
+            i->current_clip += it;
         } else {
-            is_new = false;
+            i->is_new = false;
         }
 
-        if (current_frame >= total_clips) {
-            is_active = false;
-            current_frame = 0;
+        fprintf(stderr, "efecto en su iteración %i\n", (int)i->current_clip);
+
+        // Si la animación terminó, la eliminamos
+        if (i->current_clip < total_clips) {
+            i++;
+        } else {
+            fprintf(stderr, "efecto siendo eliminado\n");
+            i = active_effects.erase(i);
         }
     }
 }
 
 void BeAttacked::render() const {
-    if (is_active) {
-        SDL_Rect render_quad = this->render_box;
+    SDL_Rect render_quad;
+    for (auto it = active_effects.begin(); it != active_effects.end(); it++) {
+        render_quad = this->render_box;
         g_renderer->render(
-            clips.at(current_frame / change_every_n_frames).getTexture(),
+            clips.at(it->current_clip / change_every_n_frames).getTexture(),
             &render_quad);
     }
 }

@@ -6,6 +6,7 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+#include <list>
 #include <string>
 #include <unordered_map>
 //-----------------------------------------------------------------------------
@@ -22,6 +23,17 @@
 
 //-----------------------------------------------------------------------------
 
+struct ActiveBeAttacked {
+    bool is_new;
+    size_t current_clip;
+
+    ActiveBeAttacked() : is_new(true), current_clip(0) {}
+};
+
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+
 class BeAttacked {
    private:
     const Renderer* g_renderer;
@@ -30,10 +42,8 @@ class BeAttacked {
     std::unordered_map<size_t, Texture> clips;
     int change_every_n_frames = 1;
 
-    // Current effect
-    bool is_new = false;
-    bool is_active = false;
-    size_t current_frame = 0;
+    // Efectos en reproducción actualmente
+    std::list<ActiveBeAttacked> active_effects;
 
     //-----------------------------------------------------------------------------
     // Métodos privados
@@ -62,13 +72,13 @@ class BeAttacked {
     /* Carga la media desde un archivo de configuración */
     void loadMedia(const json& config);
 
-    /* Activa la reproducción del efecto */
+    /* Agrega una ejecución del efecto */
     void add();
 
-    /* Avanza it iteraciones el efecto actual (si existe) */
+    /* Avanza it iteraciones los efectos */
     void act(const int it);
 
-    /* Renderiza el efecto actual (si existe)  */
+    /* Renderiza los efectos visibles por la cámara */
     void render() const;
 
     //-----------------------------------------------------------------------------
