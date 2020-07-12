@@ -83,13 +83,10 @@ void Effect::act(const int it) {
             i->is_new = false;
         }
 
-        fprintf(stderr, "efecto en su iteración %i\n", (int)i->current_clip);
-
         // Si la animación terminó, la eliminamos
         if (i->current_clip < total_clips) {
             i++;
         } else {
-            fprintf(stderr, "efecto siendo eliminado\n");
             i = active_effects.erase(i);
         }
     }
@@ -110,22 +107,6 @@ void Effect::render() const {
         }
 
         _setRenderQuad(render_quad, it->effect_pos.x, it->effect_pos.y);
-
-        if (clip) {
-            fprintf(stderr,
-                    "RENDERIZANDO EFECTO. Posición recibida: (%i, %i). Render "
-                    "quad: (%i, %i, %i, %i). Clip: (%i, %i, %i, %i)\n",
-                    it->effect_pos.x, it->effect_pos.y, render_quad.x,
-                    render_quad.y, render_quad.w, render_quad.h, clip->x,
-                    clip->y, clip->w, clip->h);
-        } else {
-            fprintf(stderr,
-                    "RENDERIZANDO EFECTO. Posición recibida: (%i, %i). Render "
-                    "quad: (%i, %i, %i, %i). Clip: no hay.\n",
-                    it->effect_pos.x, it->effect_pos.y, render_quad.x,
-                    render_quad.y, render_quad.w, render_quad.h);
-        }
-
         camera.renderIfVisible(g_renderer, texture.getTexture(), render_quad,
                                clip);
     }

@@ -52,13 +52,10 @@ void BeAttacked::act(const int it) {
             i->is_new = false;
         }
 
-        fprintf(stderr, "efecto en su iteración %i\n", (int)i->current_clip);
-
         // Si la animación terminó, la eliminamos
         if (i->current_clip < total_clips) {
             i++;
         } else {
-            fprintf(stderr, "efecto siendo eliminado\n");
             i = active_effects.erase(i);
         }
     }
