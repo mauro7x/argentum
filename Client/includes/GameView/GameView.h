@@ -36,6 +36,7 @@
 #include "Camera.h"
 #include "Character.h"
 #include "Creature.h"
+#include "Effects/EffectPlayer.h"
 #include "EventHandler.h"
 #include "HUD.h"
 #include "ItemSpriteContainer.h"
@@ -74,6 +75,7 @@ class GameView : public ConstantRateFunc {
     MapView map;
 
     // Otros
+    EffectPlayer effects;
     Stage stage;
     EventHandler event_handler;
 
