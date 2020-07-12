@@ -712,7 +712,7 @@ void Game::_sendCharacterAttackNotifications(const int damage,
         msg_to_attacked =
             "Te han curado " + std::to_string(-damage) + " puntos de vida.";
 
-        _pushCharacterEvent(caller, HEALING_SPELL_EV_TYPE);
+        _pushCharacterEvent(target, HEALING_SPELL_EV_TYPE);
 
     } else if (eluded) {
         msg_to_attacker = "Tu ataque fue eludido.";
@@ -749,7 +749,7 @@ void Game::_sendCreatureAttackNotifications(const int damage,
     WeaponType weapon_type = this->characters.at(caller).getWeaponType();
 
     if (weapon_type == EXPLOSIVE)
-        _pushCharacterEvent(target, EXPLOSION_SPELL_EV_TYPE);
+        _pushCreatureEvent(target, EXPLOSION_SPELL_EV_TYPE);
     else
         _pushCharacterEvent(caller, GRAL_ATTACK_EV_TYPE);
 
@@ -979,7 +979,8 @@ void Game::drop(const InstanceId caller, const uint8_t n_slot,
     // Broadcasteo new item
     _pushItemDifferentialBroadcast(map_id, x, y, NEW_BROADCAST);
 
-    _pushCharacterEvent(caller, THROW_EV_TYPE);
+    Notification* event = new Event(map_id, x, y, THROW_EV_TYPE);
+    active_clients.sendEventToAll(event);
 }
 
 void Game::_cooldownResurrect(const InstanceId caller) {
