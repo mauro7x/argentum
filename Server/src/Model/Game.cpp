@@ -705,6 +705,7 @@ void Game::_sendCharacterAttackNotifications(const int damage,
             _pushCharacterEvent(caller, GRAL_ATTACK_EV_TYPE);
 
         _pushCharacterEvent(target, BEATTACKED_EV_TYPE);
+        _pushCharacterEvent(target, DMG_EV_TYPE);
 
     } else if (damage <= 0 && weapon_type == HEALING) {
         msg_to_attacker =
@@ -753,26 +754,28 @@ void Game::_sendCreatureAttackNotifications(const int damage,
     else
         _pushCharacterEvent(caller, GRAL_ATTACK_EV_TYPE);
 
+    _pushCreatureEvent(target, DMG_EV_TYPE);
     Notification* reply = new Reply(INFO_MSG, msg_to_attacker.c_str());
     active_clients.notify(caller, reply);
 }
 
 void Game::_sendAttackedByCreatureNotifications(const int damage,
                                                 const bool eluded,
-                                                const InstanceId caller) {
+                                                const InstanceId target) {
     std::string msg_to_attacked;
     if (damage > 0) {
         msg_to_attacked =
             "Has recibido " + std::to_string(damage) + " de daño.";
-        _pushCharacterEvent(caller, BEATTACKED_EV_TYPE);
+        _pushCharacterEvent(target, BEATTACKED_EV_TYPE);
+        _pushCharacterEvent(target, DMG_EV_TYPE);
     } else if (eluded) {
         msg_to_attacked = "Has eludido un ataque.";
-        _pushCharacterEvent(caller, EVASION_EV_TYPE);
+        _pushCharacterEvent(target, EVASION_EV_TYPE);
     } else {
         msg_to_attacked = "Tu defensa absorbió todo el daño del ataque.";
     }
     Notification* reply = new Reply(INFO_MSG, msg_to_attacked.c_str());
-    active_clients.notify(caller, reply);
+    active_clients.notify(target, reply);
 }
 
 void Game::_useWeapon(const InstanceId caller, const InstanceId target,
