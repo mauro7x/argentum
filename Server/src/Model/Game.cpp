@@ -712,7 +712,7 @@ void Game::_sendCharacterAttackNotifications(const int damage,
         msg_to_attacked =
             "Te han curado " + std::to_string(-damage) + " puntos de vida.";
 
-        _pushCharacterEvent(caller, HEALING_SPELL_EV_TYPE);
+        _pushCharacterEvent(target, HEALING_SPELL_EV_TYPE);
 
     } else if (eluded) {
         msg_to_attacker = "Tu ataque fue eludido.";
