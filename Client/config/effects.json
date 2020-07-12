@@ -67,8 +67,8 @@
             }
         }
     },
-    "dmg_received": {
-        "dirpath": "client/assets/Effects/DmgReceived/",
+    "be_attacked": {
+        "dirpath": "client/assets/Effects/BeAttacked/",
         "clips": 23,
         "change_every_n_frames": 1,
         "offset": {
