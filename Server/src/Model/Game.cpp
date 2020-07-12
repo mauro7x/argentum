@@ -797,6 +797,10 @@ void Game::_useWeapon(const InstanceId caller, const InstanceId target,
     eluded = attacker.useWeapon(attacked, damage);
 
     // Verificamos si murió, en cuyo caso dropea todo.
+    if (target_is_creature)
+        _sendCreatureAttackNotifications(damage, caller, target);
+    else
+        _sendCharacterAttackNotifications(damage, eluded, caller, target);
     if (damage > 0 && !attacked->getHealth()) {
         _dropAllItems(attacked);
 
@@ -806,11 +810,6 @@ void Game::_useWeapon(const InstanceId caller, const InstanceId target,
             _pushCharacterEvent(target, DEATH_EV_TYPE);
         }
     }
-
-    if (target_is_creature)
-        _sendCreatureAttackNotifications(damage, caller, target);
-    else
-        _sendCharacterAttackNotifications(damage, eluded, caller, target);
 
     if (prev_level < attacker.getLevel())
         _pushCharacterEvent(caller, LEVEL_UP_EV_TYPE);
