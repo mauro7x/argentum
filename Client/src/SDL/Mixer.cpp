@@ -296,7 +296,6 @@ void Mixer::_playChunk(uint8_t sound_id, const SDL_Point& player_pos,
     }
 
     // Reproducimos el sonido
-
     Mix_Chunk* sound = NULL;
     try {
         sound = chunks.at(sound_id);
