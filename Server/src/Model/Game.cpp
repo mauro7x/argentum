@@ -700,7 +700,7 @@ void Game::_sendCharacterAttackNotifications(const int damage,
         msg_to_attacked =
             "Has recibido " + std::to_string(damage) + " de daño.";
         if (weapon_type == EXPLOSIVE)
-            _pushCharacterEvent(caller, EXPLOSION_SPELL_EV_TYPE);
+            _pushCharacterEvent(target, EXPLOSION_SPELL_EV_TYPE);
         else
             _pushCharacterEvent(caller, GRAL_ATTACK_EV_TYPE);
 
@@ -725,7 +725,7 @@ void Game::_sendCharacterAttackNotifications(const int damage,
 
         // Provisorio, conviene ponerlo en un evento aparte.
         if (weapon_type == EXPLOSIVE)
-            _pushCharacterEvent(caller, EXPLOSION_SPELL_EV_TYPE);
+            _pushCharacterEvent(target, EXPLOSION_SPELL_EV_TYPE);
         else
             _pushCharacterEvent(caller, GRAL_ATTACK_EV_TYPE);
     }
@@ -741,14 +741,15 @@ void Game::_sendCharacterAttackNotifications(const int damage,
 }
 
 void Game::_sendCreatureAttackNotifications(const int damage,
-                                            const InstanceId caller) {
+                                            const InstanceId caller,
+                                            const InstanceId target) {
     std::string msg_to_attacker = "Has atacado a la criatura, provocando " +
                                   std::to_string(damage) + " de daño.";
 
     WeaponType weapon_type = this->characters.at(caller).getWeaponType();
 
     if (weapon_type == EXPLOSIVE)
-        _pushCharacterEvent(caller, EXPLOSION_SPELL_EV_TYPE);
+        _pushCharacterEvent(target, EXPLOSION_SPELL_EV_TYPE);
     else
         _pushCharacterEvent(caller, GRAL_ATTACK_EV_TYPE);
 
@@ -807,7 +808,7 @@ void Game::_useWeapon(const InstanceId caller, const InstanceId target,
     }
 
     if (target_is_creature)
-        _sendCreatureAttackNotifications(damage, caller);
+        _sendCreatureAttackNotifications(damage, caller, target);
     else
         _sendCharacterAttackNotifications(damage, eluded, caller, target);
 

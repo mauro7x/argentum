@@ -293,7 +293,8 @@ class Game {
                                            const InstanceId target);
 
     void _sendCreatureAttackNotifications(const int damage,
-                                          const InstanceId caller);
+                                          const InstanceId caller,
+                                          const InstanceId target);
 
     void _sendAttackedByCreatureNotifications(const int damage,
                                               const bool eluded,
