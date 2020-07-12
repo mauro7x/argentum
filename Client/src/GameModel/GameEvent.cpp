@@ -18,8 +18,6 @@ void GameEvent::act(const SDL_Point& player_pos,
 
     // Reproducimos el efecto gráfico
     effect_player.add(event_type, event_pos);
-    fprintf(stderr, "EVENTO: Playerpos = (%i, %i), eventpos = (%i, %i)\n",
-            player_pos.x, player_pos.y, event_pos.x, event_pos.y);
 }
 
 GameEvent::~GameEvent() {}

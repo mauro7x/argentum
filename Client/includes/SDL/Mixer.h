@@ -11,7 +11,7 @@
 #include <cmath>
 #include <cstdlib>
 #include <string>
-#include <vector>
+#include <unordered_map>
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -103,7 +103,7 @@ class Mixer {
     // Chunks
     size_t listening_radio = 0;
     int active_chunks = 0;
-    std::vector<Mix_Chunk*> chunks;
+    std::unordered_map<int, Mix_Chunk*> chunks;
 
     // Local sounds
     std::array<Mix_Chunk*, N_LOCAL_SOUNDS> local_sounds = {};

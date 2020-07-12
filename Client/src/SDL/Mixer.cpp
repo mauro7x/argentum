@@ -124,11 +124,15 @@ void Mixer::_init() {
         dirpath = paths::asset(dirpath.c_str());
         extension = audio_to_load["chunks"]["extension"];
         listening_radio = (size_t)audio_to_load["chunks"]["listening_radio"];
-        size_t samples = audio_to_load["chunks"]["samples"];
-        chunks.reserve(samples);
+
+        json& samples = audio_to_load["chunks"]["samples"];
+        size_t n_samples = samples.size();
+        chunks.reserve(n_samples);
+
         Mix_Chunk* chunk;
-        for (size_t chunk_idx = 0; chunk_idx < samples; chunk_idx++) {
-            filepath = dirpath + std::to_string(chunk_idx) + extension;
+        for (size_t chunk_idx = 0; chunk_idx < n_samples; chunk_idx++) {
+            filepath =
+                dirpath + std::to_string((int)samples[chunk_idx]) + extension;
             chunk = Mix_LoadWAV(filepath.c_str());
             if (!chunk) {
                 throw Exception(
@@ -136,9 +140,10 @@ void Mixer::_init() {
                     "%s.",
                     filepath.c_str(), Mix_GetError());
             }
-            chunks.push_back(chunk);
+            chunks.emplace(std::piecewise_construct,
+                           std::forward_as_tuple(samples[chunk_idx]),
+                           std::forward_as_tuple(chunk));
         }
-        chunks.shrink_to_fit();
 
         // Cargamos la función que lleva un conteo de chunks activos
         Mix_ChannelFinished(chunkCallback);
@@ -271,6 +276,11 @@ void Mixer::_decreaseMusicVolume() {
 
 void Mixer::_playChunk(uint8_t sound_id, const SDL_Point& player_pos,
                        const SDL_Point& sound_pos) {
+    if (chunks.count(sound_id) == 0) {
+        // sonido sin efecto
+        return;
+    }
+
     if ((((sound_pos.x != player_pos.x) || (sound_pos.y != player_pos.y)) &&
          (active_chunks >= MAX_CHUNKS_SIMULTANEOUSLY)) ||
         muted) {
@@ -373,7 +383,7 @@ Mixer::~Mixer() {
 
     // Liberamos chunks
     for (auto it = chunks.begin(); it != chunks.end(); it++) {
-        Mix_FreeChunk(*it);
+        Mix_FreeChunk(it->second);
     }
 
     // Liberamos local sounds

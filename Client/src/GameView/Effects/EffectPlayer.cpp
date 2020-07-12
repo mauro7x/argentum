@@ -12,19 +12,19 @@ EffectPlayer::EffectPlayer(const Renderer* g_renderer, const Camera& camera)
     : media_loaded(false), g_renderer(g_renderer) {
     // Creamos los efectos
 
-    // Be Attacked
+    // Death
     effects.emplace(std::piecewise_construct,
                     std::forward_as_tuple(DEATH_EV_TYPE),
+                    std::forward_as_tuple(g_renderer, camera));
+
+    // Damage
+    effects.emplace(std::piecewise_construct,
+                    std::forward_as_tuple(DMG_EV_TYPE),
                     std::forward_as_tuple(g_renderer, camera));
 
     // Explosion
     effects.emplace(std::piecewise_construct,
                     std::forward_as_tuple(EXPLOSION_SPELL_EV_TYPE),
-                    std::forward_as_tuple(g_renderer, camera));
-
-    // Be Attacked
-    effects.emplace(std::piecewise_construct,
-                    std::forward_as_tuple(BEATTACKED_EV_TYPE),
                     std::forward_as_tuple(g_renderer, camera));
 }
 
@@ -33,11 +33,18 @@ void EffectPlayer::loadMedia() {
         throw Exception("EffectPlayer::loadMedia: media already loaded.");
     }
 
-    // Cargamos los efectos
     json effects_config = JSON::loadJsonFile(paths::config(EFFECTS_FILEPATH));
-    effects.at(DEATH_EV_TYPE).loadMedia(effects_config["death"]);
-    effects.at(EXPLOSION_SPELL_EV_TYPE).loadMedia(effects_config["explosion"]);
-    effects.at(BEATTACKED_EV_TYPE).loadMedia(effects_config["dmg_received"]);
+
+    // Cargamos los efectos del juego
+    {
+        json& game_effects = effects_config["game_effects"];
+        effects.at(DEATH_EV_TYPE).loadMedia(game_effects["death"]);
+        effects.at(DMG_EV_TYPE).loadMedia(game_effects["dmg"]);
+        effects.at(EXPLOSION_SPELL_EV_TYPE)
+            .loadMedia(game_effects["explosion"]);
+    }
+
+    // Cargamos los demás efectos
 
     media_loaded = true;
 }
