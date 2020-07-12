@@ -11,7 +11,8 @@
 EffectPlayer::EffectPlayer(const Renderer* g_renderer, const Camera& camera)
     : media_loaded(false),
       g_renderer(g_renderer),
-      be_attacked_effect(g_renderer) {
+      be_attacked_effect(g_renderer),
+      be_healed_effect(g_renderer) {
     // Creamos los efectos
 
     // Death
@@ -50,6 +51,7 @@ void EffectPlayer::loadMedia() {
     {
         json& special_effects = effects_config["special_effects"];
         be_attacked_effect.loadMedia(special_effects["be_attacked"]);
+        be_healed_effect.loadMedia(special_effects["be_healed"]);
     }
 
     media_loaded = true;
@@ -62,18 +64,25 @@ void EffectPlayer::add(int event_id, const SDL_Point& pos) {
 
     fprintf(stderr, "Llega evento %i al effectplayer...\n", event_id);
 
-    // Efectos del juego
-    if (effects.count(event_id) > 0) {
-        // No nos quejamos si no existe, para no hacer distinción en el evento
-        // que dispare la reproducción.
+    switch (event_id) {
+        case BEATTACKED_EV_TYPE: {
+            be_attacked_effect.add();
+            break;
+        }
 
-        fprintf(stderr, "Lo agregamos a los efectos a renderizar!\n");
-        effects.at(event_id).add(pos);
-    }
+        case BEHEALED_EV_TYPE: {
+            be_healed_effect.add();
+            break;
+        }
 
-    // Efectos especiales
-    if (event_id == BEATTACKED_EV_TYPE) {
-        be_attacked_effect.add();
+        default: {
+            if (effects.count(event_id) > 0) {
+                // No nos quejamos si no existe, para no hacer distinción en el
+                // evento que dispare la reproducción.
+                effects.at(event_id).add(pos);
+            }
+            break;
+        }
     }
 }
 
@@ -87,6 +96,7 @@ void EffectPlayer::act(const int it) {
     }
 
     be_attacked_effect.act(it);
+    be_healed_effect.act(it);
 }
 
 void EffectPlayer::render() const {
@@ -99,6 +109,7 @@ void EffectPlayer::render() const {
     }
 
     be_attacked_effect.render();
+    be_healed_effect.render();
 }
 
 EffectPlayer::~EffectPlayer() {}

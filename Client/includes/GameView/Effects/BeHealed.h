@@ -1,18 +1,18 @@
-#ifndef __BE_ATTACKED_H__
-#define __BE_ATTACKED_H__
+#ifndef __BE_HEALED_H__
+#define __BE_HEALED_H__
 
 //-----------------------------------------------------------------------------
 #include <SDL2/SDL.h>
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-#include <list>
 #include <string>
 #include <unordered_map>
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 #include "../../../../Common/includes/JSON.h"
+#include "../../../../Common/includes/RandomNumberGenerator.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -23,43 +23,38 @@
 
 //-----------------------------------------------------------------------------
 
-struct ActiveBeAttacked {
-    bool is_new;
-    size_t current_clip;
-
-    ActiveBeAttacked() : is_new(true), current_clip(0) {}
-};
-
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
-
-class BeAttacked {
+class BeHealed {
    private:
     const Renderer* g_renderer;
     SDL_Rect render_box = {0};
     size_t total_clips = 0;
     std::unordered_map<size_t, Texture> clips;
-    int change_every_n_frames = 1;
+    size_t frames = 0;
+    size_t clips_per_frame = 0;
 
-    // Efectos en reproducción actualmente
-    std::list<ActiveBeAttacked> active_effects;
+    // Efecto actual
+    bool is_active = false;
+    bool is_new = false;
+    size_t current_frame = 0;
+
+    // Generador de números random
+    RandomNumberGenerator random;
 
    public:
     /* Constructor */
-    BeAttacked(const Renderer* g_renderer);
+    BeHealed(const Renderer* g_renderer);
 
     /* Deshabilitamos el constructor por copia. */
-    BeAttacked(const BeAttacked&) = delete;
+    BeHealed(const BeHealed&) = delete;
 
     /* Deshabilitamos el operador= para copia.*/
-    BeAttacked& operator=(const BeAttacked&) = delete;
+    BeHealed& operator=(const BeHealed&) = delete;
 
     /* Deshabilitamos el constructor por movimiento. */
-    BeAttacked(BeAttacked&& other) = delete;
+    BeHealed(BeHealed&& other) = delete;
 
     /* Deshabilitamos el operador= para movimiento. */
-    BeAttacked& operator=(BeAttacked&& other) = delete;
+    BeHealed& operator=(BeHealed&& other) = delete;
 
     //-----------------------------------------------------------------------------
     // Métodos de la API pública
@@ -79,9 +74,9 @@ class BeAttacked {
     //-----------------------------------------------------------------------------
 
     /* Destructor */
-    ~BeAttacked();
+    ~BeHealed();
 };
 
 //-----------------------------------------------------------------------------
 
-#endif  // __BE_ATTACKED_H__
+#endif  // __BE_HEALED_H__

@@ -75,7 +75,9 @@
         },
         "be_healed": {
             "dirpath": "client/assets/Effects/BeHealed/",
-            "clips": 8
+            "clips": 8,
+            "clips_per_frame": 12,
+            "frames": 50
         }
     }
 }
