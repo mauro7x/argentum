@@ -12,8 +12,9 @@
 #define VIEWS_CONFIG_FILEPATH "client/config/views_config.json"
 #define UNIT_SPRITES_FILEPATH "client/config/unit_sprites.json"
 #define ITEM_SPRITES_FILEPATH "client/config/item_sprites.json"
-#define AUDIO_FILEPATH "client/config/audio.json"
 #define SIGNUP_DATA_FILEPATH "client/config/signup_data.json"
+#define AUDIO_FILEPATH "client/config/audio.json"
+#define EFFECTS_FILEPATH "client/config/effects.json"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------

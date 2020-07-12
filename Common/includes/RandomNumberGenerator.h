@@ -6,8 +6,8 @@ class RandomNumberGenerator {
     RandomNumberGenerator();
     ~RandomNumberGenerator();
 
-    float operator()(float min, float max);
-    int operator()(int min, int max);
+    float operator()(float min, float max) const;
+    int operator()(int min, int max) const;
 };
 
 #endif
