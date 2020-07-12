@@ -218,7 +218,12 @@ class Game {
      */
     void _pushCharacterEvent(InstanceId character_id, EventType type);
     void _pushCreatureEvent(InstanceId creature_id, EventType type);
+    
 
+    /*
+     * Los eventos beattacked y behealed solo se pushea el mismo;
+     */
+    void _pushCharacterMainEvent(InstanceId character_id, EventType type);
     /*
      * Ante la conexión de un nuevo jugador o el cambio de mapa, se invoca
      * este método para enviarle a dicho jugador un full broadcast con

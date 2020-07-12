@@ -221,6 +221,16 @@ void Game::_pushCharacterEvent(InstanceId id, EventType type) {
     active_clients.sendEventToAll(event);
 }
 
+void Game::_pushCharacterMainEvent(InstanceId id, EventType type) {
+    const Position& position = this->characters.at(id).getPosition();
+    Id map_id = position.getMapId();
+    uint32_t x_coord = position.getX();
+    uint32_t y_coord = position.getY();
+
+    Notification* event = new Event(map_id, x_coord, y_coord, type);
+    active_clients.notify(id, event);
+}
+
 void Game::_pushCreatureEvent(InstanceId id, EventType type) {
     const Position& position = this->creatures.at(id).getPosition();
     Id map_id = position.getMapId();
@@ -704,7 +714,7 @@ void Game::_sendCharacterAttackNotifications(const int damage,
         else
             _pushCharacterEvent(caller, GRAL_ATTACK_EV_TYPE);
 
-        _pushCharacterEvent(target, BEATTACKED_EV_TYPE);
+        _pushCharacterMainEvent(target, BEATTACKED_EV_TYPE);
         _pushCharacterEvent(target, DMG_EV_TYPE);
 
     } else if (damage <= 0 && weapon_type == HEALING) {
@@ -766,7 +776,7 @@ void Game::_sendAttackedByCreatureNotifications(const int damage,
     if (damage > 0) {
         msg_to_attacked =
             "Has recibido " + std::to_string(damage) + " de daño.";
-        _pushCharacterEvent(target, BEATTACKED_EV_TYPE);
+        _pushCharacterMainEvent(target, BEATTACKED_EV_TYPE);
         _pushCharacterEvent(target, DMG_EV_TYPE);
     } else if (eluded) {
         msg_to_attacked = "Has eludido un ataque.";
