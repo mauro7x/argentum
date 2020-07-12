@@ -85,7 +85,9 @@ Identificas el mensaje con el primer byte recibido (opcode), y para cada caso se
 | 7 | Ataque general |
 | 8 | Hechizo de explosión |
 | 9 | Hechizo de curación |
-| 10 | Curación de sacerdote | 
+| 10 | Curación de sacerdote |
+| 11 | Recibir daño | 
+| 12 | Evadir ataque |
 
 #### Otros para ir agregando
 

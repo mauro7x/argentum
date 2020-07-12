@@ -25,6 +25,7 @@ void GameView::_loadMedia() {
     creatures.loadMedia();
     hud.loadMedia();
     map.loadMedia();
+    effects.loadMedia();
 }
 
 void GameView::_welcomeMessage() {
@@ -60,7 +61,7 @@ void GameView::_processBroadcasts() {
 void GameView::_processEvents() {
     GameEvent* event = NULL;
     while ((event = events.pop())) {
-        event->act(player.getPos());
+        event->act(player.getPos(), effects);
         delete event;
     }
 }
@@ -79,11 +80,13 @@ void GameView::_func(const int it) {
     player.act(it);
     characters.act(it);
     creatures.act(it);
+    effects.act(it);
     camera.center(player.getBox(), map.widthInPx(), map.heightInPx());
     hud.update(it);
 
     /* Renderizamos y presentamos la pantalla */
     stage.render();
+    effects.render();
     hud.render();
 
     renderer.presentScreen();
@@ -122,6 +125,7 @@ GameView::GameView(BlockingQueue<Command*>& commands,
       map(&renderer, camera, item_sprites),
 
       // Otros
+      effects(&renderer, camera),
       stage(map, player, characters, creatures),
       event_handler(exit, commands, hud, map, camera) {
     _init();

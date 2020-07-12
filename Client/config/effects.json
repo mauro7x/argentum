@@ -1,0 +1,90 @@
+{
+    "death": {
+        "dirpath": "client/assets/Effects/Death/",
+        "clips": 11,
+        "change_every_n_frames": 1,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "clip": {
+            "is_needed": false,
+            "w": 0,
+            "h": 0
+        },
+        "color_key": {
+            "is_needed": true,
+            "color": {
+                "r": 0,
+                "g": 0,
+                "b": 0
+            }
+        }
+    },
+    "dmg": {
+        "dirpath": "client/assets/Effects/Dmg/",
+        "clips": 5,
+        "change_every_n_frames": 1,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "clip": {
+            "is_needed": false,
+            "w": 0,
+            "h": 0
+        },
+        "color_key": {
+            "is_needed": true,
+            "color": {
+                "r": 0,
+                "g": 0,
+                "b": 0
+            }
+        }
+    },
+    "explosion": {
+        "dirpath": "client/assets/Effects/Explosion/",
+        "clips": 21,
+        "change_every_n_frames": 3,
+        "offset": {
+            "x": 0,
+            "y": -50
+        },
+        "clip": {
+            "is_needed": true,
+            "w": 145,
+            "h": 145
+        },
+        "color_key": {
+            "is_needed": true,
+            "color": {
+                "r": 0,
+                "g": 0,
+                "b": 0
+            }
+        }
+    },
+    "dmg_received": {
+        "dirpath": "client/assets/Effects/DmgReceived/",
+        "clips": 23,
+        "change_every_n_frames": 1,
+        "offset": {
+            "x": 0,
+            "y": 0
+        },
+        "clip": {
+            "is_needed": false,
+            "w": 0,
+            "h": 0
+        },
+        "color_key": {
+            "is_needed": false,
+            "color": {
+                "r": 0,
+                "g": 0,
+                "b": 0
+            }
+        }
+    }
+}
