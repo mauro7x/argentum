@@ -22,6 +22,7 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+#include "BeAttacked.h"
 #include "Effect.h"
 //-----------------------------------------------------------------------------
 
@@ -31,7 +32,12 @@ class EffectPlayer {
    private:
     bool media_loaded;
     const Renderer* g_renderer;
+
+    // Efectos del juego
     std::unordered_map<int, Effect> effects;
+
+    // Efectos adicionales
+    BeAttacked be_attacked_effect;
 
     //-----------------------------------------------------------------------------
     // Métodos privados

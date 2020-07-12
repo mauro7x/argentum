@@ -1,89 +1,59 @@
-#ifndef __EFFECT_H__
-#define __EFFECT_H__
+#ifndef __BE_ATTACKED_H__
+#define __BE_ATTACKED_H__
 
 //-----------------------------------------------------------------------------
 #include <SDL2/SDL.h>
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-#include <list>
 #include <string>
 #include <unordered_map>
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 #include "../../../../Common/includes/JSON.h"
-#include "../../../../Common/includes/defs.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 #include "../../SDL/Renderer.h"
 #include "../../SDL/Texture.h"
 #include "../../paths.h"
-#include "../Camera.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 
-struct ActiveEffect {
-    bool is_new;
-    size_t current_clip;
-    SDL_Point effect_pos;
-
-    ActiveEffect(const SDL_Point& effect_pos)
-        : is_new(true), current_clip(0), effect_pos(effect_pos) {}
-};
-
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
-
-class Effect {
+class BeAttacked {
    private:
     const Renderer* g_renderer;
-    const Camera& camera;
+    SDL_Rect render_box = {0};
     size_t total_clips = 0;
     std::unordered_map<size_t, Texture> clips;
-
-    // Change every n frames
     int change_every_n_frames = 1;
 
-    // Offset
-    int x_offset = 0;
-    int y_offset = 0;
-
-    // Clip
-    bool clip_needed = false;
-    SDL_Rect clip_rect = {0};
-    SDL_Rect* clip = NULL;
-
-    // Efectos en reproducción actualmente
-    std::list<ActiveEffect> active_effects;
+    // Current effect
+    bool is_active = false;
+    size_t current_frame = 0;
 
     //-----------------------------------------------------------------------------
     // Métodos privados
-
-    /* Calcula la posición de renderizado de un efecto */
-    void _setRenderQuad(SDL_Rect& render_quad, const int x_tile,
-                        const int y_tile) const;
 
     //-----------------------------------------------------------------------------
 
    public:
     /* Constructor */
-    Effect(const Renderer* g_renderer, const Camera& camera);
+    BeAttacked(const Renderer* g_renderer);
 
     /* Deshabilitamos el constructor por copia. */
-    Effect(const Effect&) = delete;
+    BeAttacked(const BeAttacked&) = delete;
 
     /* Deshabilitamos el operador= para copia.*/
-    Effect& operator=(const Effect&) = delete;
+    BeAttacked& operator=(const BeAttacked&) = delete;
 
     /* Deshabilitamos el constructor por movimiento. */
-    Effect(Effect&& other) = delete;
+    BeAttacked(BeAttacked&& other) = delete;
 
     /* Deshabilitamos el operador= para movimiento. */
-    Effect& operator=(Effect&& other) = delete;
+    BeAttacked& operator=(BeAttacked&& other) = delete;
 
     //-----------------------------------------------------------------------------
     // Métodos de la API pública
@@ -91,21 +61,21 @@ class Effect {
     /* Carga la media desde un archivo de configuración */
     void loadMedia(const json& config);
 
-    /* Agrega una ejecución del efecto */
-    void add(const SDL_Point& pos);
+    /* Activa la reproducción del efecto */
+    void add();
 
-    /* Avanza it iteraciones los efectos */
+    /* Avanza it iteraciones el efecto actual (si existe) */
     void act(const int it);
 
-    /* Renderiza los efectos visibles por la cámara */
+    /* Renderiza el efecto actual (si existe)  */
     void render() const;
 
     //-----------------------------------------------------------------------------
 
     /* Destructor */
-    ~Effect();
+    ~BeAttacked();
 };
 
 //-----------------------------------------------------------------------------
 
-#endif  // __EFFECT_H__
+#endif  // __BE_ATTACKED_H__

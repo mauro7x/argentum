@@ -76,8 +76,16 @@ void Effect::add(const SDL_Point& pos) {
 
 void Effect::act(const int it) {
     for (auto i = active_effects.begin(); i != active_effects.end();) {
-        i->current_clip += it;
+        // Avanzamos el clip si no fue creado en la misma iteración
+        if (!(i->is_new)) {
+            i->current_clip += it;
+        } else {
+            i->is_new = false;
+        }
+
         fprintf(stderr, "efecto en su iteración %i\n", (int)i->current_clip);
+
+        // Si la animación terminó, la eliminamos
         if (i->current_clip < total_clips) {
             i++;
         } else {

@@ -28,7 +28,7 @@
             "change_every_n_frames": 3,
             "offset": {
                 "x": 0,
-                "y": 0
+                "y": -10
             },
             "clip": {
                 "is_needed": false,
@@ -67,26 +67,11 @@
             }
         }
     },
-    "be_attacked": {
-        "dirpath": "client/assets/Effects/BeAttacked/",
-        "clips": 23,
-        "change_every_n_frames": 1,
-        "offset": {
-            "x": 0,
-            "y": 0
-        },
-        "clip": {
-            "is_needed": false,
-            "w": 0,
-            "h": 0
-        },
-        "color_key": {
-            "is_needed": false,
-            "color": {
-                "r": 0,
-                "g": 0,
-                "b": 0
-            }
+    "special_effects": {
+        "be_attacked": {
+            "dirpath": "client/assets/Effects/BeAttacked/",
+            "clips": 23,
+            "change_every_n_frames": 2
         }
     }
 }

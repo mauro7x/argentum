@@ -9,7 +9,9 @@
 // API Pública
 
 EffectPlayer::EffectPlayer(const Renderer* g_renderer, const Camera& camera)
-    : media_loaded(false), g_renderer(g_renderer) {
+    : media_loaded(false),
+      g_renderer(g_renderer),
+      be_attacked_effect(g_renderer) {
     // Creamos los efectos
 
     // Death
@@ -45,6 +47,10 @@ void EffectPlayer::loadMedia() {
     }
 
     // Cargamos los demás efectos
+    {
+        json& special_effects = effects_config["special_effects"];
+        be_attacked_effect.loadMedia(special_effects["be_attacked"]);
+    }
 
     media_loaded = true;
 }
@@ -56,12 +62,18 @@ void EffectPlayer::add(int event_id, const SDL_Point& pos) {
 
     fprintf(stderr, "Llega evento %i al effectplayer...\n", event_id);
 
+    // Efectos del juego
     if (effects.count(event_id) > 0) {
         // No nos quejamos si no existe, para no hacer distinción en el evento
         // que dispare la reproducción.
 
         fprintf(stderr, "Lo agregamos a los efectos a renderizar!\n");
         effects.at(event_id).add(pos);
+    }
+
+    // Efectos especiales
+    if (event_id == BEATTACKED_EV_TYPE) {
+        be_attacked_effect.add();
     }
 }
 
@@ -73,6 +85,8 @@ void EffectPlayer::act(const int it) {
     for (auto i = effects.begin(); i != effects.end(); i++) {
         i->second.act(it);
     }
+
+    be_attacked_effect.act(it);
 }
 
 void EffectPlayer::render() const {
@@ -83,6 +97,8 @@ void EffectPlayer::render() const {
     for (auto it = effects.begin(); it != effects.end(); it++) {
         it->second.render();
     }
+
+    be_attacked_effect.render();
 }
 
 EffectPlayer::~EffectPlayer() {}
