@@ -73,6 +73,7 @@ class Client {
     // Contextos
 
     void _launchHomeCtx();
+    void _launchTutorialCtx();
     void _launchConnectionCtx();
     void _launchSignUpCtx();
     void _launchGameCtx();

@@ -21,6 +21,11 @@ void HomeView::_init() {
     port_txtbx.render_box.w = config["homeview"]["port"]["w"];
     port_txtbx.render_box.h = config["homeview"]["port"]["h"];
 
+    tutorial_btn.render_box.x = config["homeview"]["tutorial"]["offset"]["x"];
+    tutorial_btn.render_box.y = config["homeview"]["tutorial"]["offset"]["y"];
+    tutorial_btn.render_box.w = config["homeview"]["tutorial"]["w"];
+    tutorial_btn.render_box.h = config["homeview"]["tutorial"]["h"];
+
     connect_btn.render_box.x = config["homeview"]["connect"]["offset"]["x"];
     connect_btn.render_box.y = config["homeview"]["connect"]["offset"]["y"];
     connect_btn.render_box.w = config["homeview"]["connect"]["w"];
@@ -44,6 +49,11 @@ void HomeView::_loadMedia() {
         &renderer, paths::asset(HOMEVIEW_TEXTBOX_ACTIVE_FP));
     port_txtbx.active.loadFromFile(&renderer,
                                    paths::asset(HOMEVIEW_TEXTBOX_ACTIVE_FP));
+
+    tutorial_btn.base.loadFromFile(&renderer,
+                                   paths::asset(HOMEVIEW_TUTORIAL_BUTTON_FP));
+    tutorial_btn.pressed.loadFromFile(
+        &renderer, paths::asset(HOMEVIEW_TUTORIAL_BUTTON_PRESSED_FP));
 
     connect_btn.base.loadFromFile(&renderer,
                                   paths::asset(HOMEVIEW_CONNECT_BUTTON_FP));
@@ -115,6 +125,14 @@ void HomeView::_render() const {
                    port_txtbx.content.getWidth(),
                    port_txtbx.content.getHeight()};
     renderer.render(port_txtbx.content.getTexture(), &render_quad);
+
+    // Renderizamos el boton de tutorial
+    render_quad = tutorial_btn.render_box;
+    if (tutorial_btn.mouse_over) {
+        renderer.render(tutorial_btn.pressed.getTexture(), &render_quad);
+    } else {
+        renderer.render(tutorial_btn.base.getTexture(), &render_quad);
+    }
 
     // Renderizamos el boton de conectar
     render_quad = connect_btn.render_box;
@@ -323,6 +341,12 @@ void HomeView::_handleEvent(const SDL_Event& e) {
                 connect_btn.mouse_over = false;
             }
 
+            if (_inside(mouse_pos, tutorial_btn.render_box)) {
+                tutorial_btn.mouse_over = true;
+            } else {
+                tutorial_btn.mouse_over = false;
+            }
+
             break;
         }
 
@@ -355,6 +379,13 @@ void HomeView::_handleEvent(const SDL_Event& e) {
                 port_txtbx.is_active = false;
             }
 
+            // Click en el botón de tutorial
+            if (_inside(mouse_pos, tutorial_btn.render_box)) {
+                _handleTutorialButtonPressed();
+                Mixer::playLocalSound(CLICK_SOUND);
+                break;
+            }
+
             // Click en el botón de conectar
             if (_inside(mouse_pos, connect_btn.render_box)) {
                 _handleConnectButtonPressed();
@@ -369,6 +400,11 @@ void HomeView::_handleEvent(const SDL_Event& e) {
             break;
         }
     }
+}
+
+void HomeView::_handleTutorialButtonPressed() {
+    current_context = TUTORIAL_CTX;
+    quit();
 }
 
 void HomeView::_handleConnectButtonPressed() {

@@ -30,6 +30,10 @@
 #define HOMEVIEW_TEXTBOX_FP "client/assets/Views/HomeView/BarraNoClickeada.png"
 #define HOMEVIEW_TEXTBOX_ACTIVE_FP \
     "client/assets/Views/HomeView/BarraClickeada.png"
+#define HOMEVIEW_TUTORIAL_BUTTON_FP \
+    "client/assets/Views/HomeView/BotonTutorial.png"
+#define HOMEVIEW_TUTORIAL_BUTTON_PRESSED_FP \
+    "client/assets/Views/HomeView/BotonTutorialPresionado.png"
 #define HOMEVIEW_CONNECT_BUTTON_FP \
     "client/assets/Views/HomeView/BotonConectar.png"
 #define HOMEVIEW_CONNECT_BUTTON_PRESSED_FP \

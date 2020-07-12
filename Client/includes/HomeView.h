@@ -56,7 +56,7 @@ class HomeView : public ConstantRateFunc {
     int cursor_cooldown = VIEWS_ITERATIONS_TO_SWITCH_CURSOR;
 
     // Widgets
-    Button connect_btn;
+    Button tutorial_btn, connect_btn;
     TextBox hostname_txtbx, port_txtbx;
 
     // Offsets de renderizado
@@ -100,6 +100,9 @@ class HomeView : public ConstantRateFunc {
 
     /* Handler de eventos de SDL */
     void _handleEvent(const SDL_Event& e);
+
+    /* Handler de solicitud de tutorial */
+    void _handleTutorialButtonPressed();
 
     /* Handler de solicitud de conexión */
     void _handleConnectButtonPressed();
