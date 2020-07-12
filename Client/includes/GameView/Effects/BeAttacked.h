@@ -31,6 +31,7 @@ class BeAttacked {
     int change_every_n_frames = 1;
 
     // Current effect
+    bool is_new = false;
     bool is_active = false;
     size_t current_frame = 0;
 

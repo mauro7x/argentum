@@ -43,12 +43,18 @@ void BeAttacked::add() {
     if (!is_active) {
         current_frame = 0;
         is_active = true;
+        is_new = true;
     }
 }
 
 void BeAttacked::act(const int it) {
     if (is_active) {
-        current_frame += it;
+        if (!is_new) {
+            current_frame += it;
+        } else {
+            is_new = false;
+        }
+
         if (current_frame >= total_clips) {
             is_active = false;
             current_frame = 0;
