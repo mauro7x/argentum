@@ -33,6 +33,16 @@ Se listan a continuación los ids utilizados en los archivos de configuración a
 | 301 | Esqueleto |
 | 302 | Zombie |
 | 303 | Araña |
+| 304 | Serpiente Orange |
+| 305 | Yeti |
+| 306 | Yeti Albino |
+| 307 | La Parca |
+| 308 | Serpiente |
+| 309 | Esqueleto Armado |
+| 310 | Lobo |
+| 311 | Lobo Albino |
+| 312 | Conejo Maldito |
+
 
 ### NPCs
 | ID | DESCRIPCION |

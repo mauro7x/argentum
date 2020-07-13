@@ -6,7 +6,6 @@
             "filepath": "common/assets/Maps/0.json",
             "creatures": [
                 300,
-                303,
                 308,
                 310,
                 312
@@ -18,7 +17,10 @@
             "filepath": "common/assets/Maps/1.json",
             "creatures": [
                 301,
-                302
+                302,
+                303,
+                307,
+                309
             ]
         }
     ],
