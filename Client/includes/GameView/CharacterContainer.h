@@ -42,6 +42,7 @@ class CharacterContainer {
     // Fuentes
     TTF_Font* nickname_font = NULL;
     TTF_Font* level_font = NULL;
+    TTF_Font* msg_font = NULL;
 
    public:
     /* Constructor */

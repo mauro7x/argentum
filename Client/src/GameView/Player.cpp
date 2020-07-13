@@ -31,41 +31,6 @@ void Player::_copyData(const PlayerData& data) {
 }
 
 void Player::_renderInfo() const {
-    /*
-    // Primero el nickname
-    SDL_Rect nick_quad = {0, 0, info_nickname.getWidth(),
-                          info_nickname.getHeight()};
-
-    // Centramos las coordenadas
-    nick_quad.x = (TILE_WIDTH - nick_quad.w) / 2;
-    nick_quad.y = TILE_HEIGHT;
-
-    // Le agregamos offsets de la unidad
-    nick_quad.x += (int)this->x;
-    nick_quad.y += (int)this->y;
-
-    // Lo copiamos para el nivel
-    SDL_Rect level_quad = nick_quad;
-
-    // Somrba
-    SDL_Rect nick_quad_bg = nick_quad;
-    nick_quad_bg.y++;
-
-    g_camera.renderIfVisible(g_renderer, info_nickname_shadow.getTexture(),
-                             nick_quad_bg);
-    g_camera.renderIfVisible(g_renderer, info_nickname.getTexture(), nick_quad);
-
-    // Ahora el nivel
-    level_quad.w = info_level.getWidth();
-    level_quad.h = info_level.getHeight();
-    level_quad.x = (TILE_WIDTH - level_quad.w) / 2;
-    level_quad.x += (int)this->x;
-    level_quad.y += nick_quad.h;
-
-    g_camera.renderIfVisible(g_renderer, info_level.getTexture(), level_quad);
-    */
-
-    /*
     // Primero el nivel
     SDL_Rect level_quad = {0, 0, info_level.getWidth(), info_level.getHeight()};
 
@@ -95,14 +60,33 @@ void Player::_renderInfo() const {
     nick_quad.x += (int)this->x;
     nick_quad.y -= nick_quad.h;
 
-    // Sombra
+    // Sombra del nickname
     SDL_Rect nick_quad_bg = nick_quad;
     nick_quad_bg.y++;
+
+    // Mensaje flotante
+    SDL_Rect msg_quad = nick_quad;
 
     g_camera.renderIfVisible(g_renderer, info_nickname_shadow.getTexture(),
                              nick_quad_bg);
     g_camera.renderIfVisible(g_renderer, info_nickname.getTexture(), nick_quad);
-    */
+
+    // Ahora el mensaje flotante (si existe)
+    if (msg_active) {
+        msg_quad.w = msg.getWidth();
+        msg_quad.h = msg.getHeight();
+        msg_quad.x = (TILE_WIDTH - msg_quad.w) / 2;
+        msg_quad.x += (int)this->x;
+        msg_quad.y -= (msg_quad.h + MSG_SPACE_FROM_NICK);
+
+        // Sombra del msg
+        SDL_Rect msg_quad_bg = msg_quad;
+        msg_quad_bg.y++;
+
+        g_camera.renderIfVisible(g_renderer, msg_shadow.getTexture(),
+                                 msg_quad_bg);
+        g_camera.renderIfVisible(g_renderer, msg.getTexture(), msg_quad);
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -118,8 +102,9 @@ void Player::loadMedia() {
         TTF_OpenFont(paths::asset(FONT_AUGUSTA_FP).c_str(), INFO_NAME_FONTSIZE);
     level_font = TTF_OpenFont(paths::asset(FONT_CINZELBOLD_FP).c_str(),
                               INFO_LVL_FONTSIZE);
+    msg_font = TTF_OpenFont(MSG_FONT.c_str(), MSG_FONTSIZE);
 
-    if (!nickname_font || !level_font) {
+    if (!nickname_font || !level_font || !msg_font) {
         throw Exception("Player::loadMedia: Error opening TTF_Font/s.");
     }
 }
@@ -183,6 +168,27 @@ void Player::addMessage(InstanceId sender_id, const std::string& msg) {
 
     // actualizar el mensaje
     fprintf(stderr, "llego mensaje del player.\n");
+
+    msg_active = true;
+    msg_its = MSG_ITERATIONS;
+    this->msg.loadFromRenderedWrappedText(g_renderer, msg_font, msg,
+                                          MSG_MAX_WIDTH);
+    this->msg_shadow.loadFromRenderedWrappedText(
+        g_renderer, msg_font, msg, MSG_MAX_WIDTH, SDL_Color({0, 0, 0, 255}));
+}
+
+void Player::act(const int it) {
+    Unit::act(it);
+
+    if (msg_active) {
+        fprintf(stderr, "le sacamos cd al mensaje\n");
+        msg_its -= it;
+        if (msg_its <= 0) {
+            msg_its = 0;
+            msg_active = false;
+            msg.free();
+        }
+    }
 }
 
 void Player::render() const {
@@ -305,6 +311,11 @@ Player::~Player() {
     if (level_font) {
         TTF_CloseFont(level_font);
         level_font = NULL;
+    }
+
+    if (msg_font) {
+        TTF_CloseFont(msg_font);
+        msg_font = NULL;
     }
 }
 

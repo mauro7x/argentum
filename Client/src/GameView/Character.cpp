@@ -47,13 +47,33 @@ void Character::_renderInfo() const {
     nick_quad.x += (int)this->x;
     nick_quad.y -= nick_quad.h;
 
-    // Sombra
+    // Sombra del nickname
     SDL_Rect nick_quad_bg = nick_quad;
     nick_quad_bg.y++;
+
+    // Mensaje flotante
+    SDL_Rect msg_quad = nick_quad;
 
     g_camera.renderIfVisible(g_renderer, info_nickname_shadow.getTexture(),
                              nick_quad_bg);
     g_camera.renderIfVisible(g_renderer, info_nickname.getTexture(), nick_quad);
+
+    // Ahora el mensaje flotante (si existe)
+    if (msg_active) {
+        msg_quad.w = msg.getWidth();
+        msg_quad.h = msg.getHeight();
+        msg_quad.x = (TILE_WIDTH - msg_quad.w) / 2;
+        msg_quad.x += (int)this->x;
+        msg_quad.y -= (msg_quad.h + MSG_SPACE_FROM_NICK);
+
+        // Sombra del msg
+        SDL_Rect msg_quad_bg = msg_quad;
+        msg_quad_bg.y++;
+
+        g_camera.renderIfVisible(g_renderer, msg_shadow.getTexture(),
+                                 msg_quad_bg);
+        g_camera.renderIfVisible(g_renderer, msg.getTexture(), msg_quad);
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -63,10 +83,11 @@ void Character::_renderInfo() const {
 
 Character::Character(const Renderer* renderer, const Camera& camera,
                      UnitSpriteContainer* sprites, TTF_Font* g_nickname_font,
-                     TTF_Font* g_level_font)
+                     TTF_Font* g_level_font, TTF_Font* g_msg_font)
     : Unit(renderer, camera, sprites),
       g_nickname_font(g_nickname_font),
-      g_level_font(g_level_font) {}
+      g_level_font(g_level_font),
+      g_msg_font(g_msg_font) {}
 
 void Character::init(const CharacterData& init_data) {
     if (state) {
@@ -118,6 +139,29 @@ void Character::update(const CharacterData& updated_data) {
 
     /* Actualizamos la data */
     _copyData(updated_data);
+}
+
+void Character::addMessage(const std::string& msg) {
+    msg_active = true;
+    msg_its = MSG_ITERATIONS;
+    this->msg.loadFromRenderedWrappedText(g_renderer, g_msg_font, msg,
+                                          MSG_MAX_WIDTH);
+    this->msg_shadow.loadFromRenderedWrappedText(
+        g_renderer, g_msg_font, msg, MSG_MAX_WIDTH, SDL_Color({0, 0, 0, 255}));
+}
+
+void Character::act(const int it) {
+    Unit::act(it);
+
+    if (msg_active) {
+        fprintf(stderr, "le sacamos cd al mensaje\n");
+        msg_its -= it;
+        if (msg_its <= 0) {
+            msg_its = 0;
+            msg_active = false;
+            msg.free();
+        }
+    }
 }
 
 void Character::render() const {

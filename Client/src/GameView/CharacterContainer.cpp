@@ -19,8 +19,9 @@ void CharacterContainer::loadMedia() {
         TTF_OpenFont(paths::asset(FONT_AUGUSTA_FP).c_str(), INFO_NAME_FONTSIZE);
     level_font = TTF_OpenFont(paths::asset(FONT_CINZELBOLD_FP).c_str(),
                               INFO_LVL_FONTSIZE);
+    msg_font = TTF_OpenFont(MSG_FONT.c_str(), MSG_FONTSIZE);
 
-    if (!nickname_font || !level_font) {
+    if (!nickname_font || !level_font || !msg_font) {
         throw Exception(
             "CharacterContainer::loadMedia: error opening TTF_Font/s.");
     }
@@ -36,7 +37,7 @@ void CharacterContainer::add(const InstanceId id,
 
     content.emplace(std::piecewise_construct, std::forward_as_tuple(id),
                     std::forward_as_tuple(g_renderer, g_camera, g_sprites,
-                                          nickname_font, level_font));
+                                          nickname_font, level_font, msg_font));
     content.at(id).init(init_data);
 }
 
@@ -70,7 +71,7 @@ void CharacterContainer::act(const int it) {
 void CharacterContainer::addMessage(InstanceId sender_id,
                                     const std::string& msg) {
     if (content.count(sender_id) > 0) {
-        fprintf(stderr, "agregando character msg\n");
+        content.at(sender_id).addMessage(msg);
     }
 }
 
@@ -103,6 +104,11 @@ CharacterContainer::~CharacterContainer() {
     if (level_font) {
         TTF_CloseFont(level_font);
         level_font = NULL;
+    }
+
+    if (msg_font) {
+        TTF_CloseFont(msg_font);
+        msg_font = NULL;
     }
 }
 
