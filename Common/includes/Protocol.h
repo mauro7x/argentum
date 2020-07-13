@@ -104,6 +104,8 @@ enum EventType {
     HEALED_BY_PRIEST_EV_TYPE,
     EVASION_EV_TYPE,
     DMG_EV_TYPE,
+    FIRE_SPELL_EV_TYPE,
+    LIGHTNING_SPELL_EV_TYPE,
 
     // Eventos sólo del personaje
     BEATTACKED_EV_TYPE = 128,

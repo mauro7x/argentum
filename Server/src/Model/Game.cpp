@@ -706,10 +706,28 @@ void Game::_sendCharacterAttackNotifications(const int damage,
             "Le has infligido " + std::to_string(damage) + " de daño.";
         msg_to_attacked =
             "Has recibido " + std::to_string(damage) + " de daño.";
-        if (weapon_type == EXPLOSIVE)
-            _pushCharacterEvent(target, EXPLOSION_SPELL_EV_TYPE);
-        else
-            _pushCharacterEvent(caller, GRAL_ATTACK_EV_TYPE);
+
+        switch (weapon_type) {
+            case EXPLOSIVE: {
+                _pushCharacterEvent(target, EXPLOSION_SPELL_EV_TYPE);
+                break;
+            }
+
+            case FIRE: {
+                _pushCharacterEvent(target, FIRE_SPELL_EV_TYPE);
+                break;
+            }
+
+            case LIGHTNING: {
+                _pushCharacterEvent(target, LIGHTNING_SPELL_EV_TYPE);
+                break;
+            }
+
+            default: {
+                _pushCharacterEvent(caller, GRAL_ATTACK_EV_TYPE);
+                break;
+            }
+        }
 
         _pushCharacterMainEvent(target, BEATTACKED_EV_TYPE);
         _pushCharacterEvent(target, DMG_EV_TYPE);
@@ -733,10 +751,27 @@ void Game::_sendCharacterAttackNotifications(const int damage,
         msg_to_attacked = "Tu defensa absorbió todo el daño del ataque.";
 
         // Provisorio, conviene ponerlo en un evento aparte.
-        if (weapon_type == EXPLOSIVE)
-            _pushCharacterEvent(target, EXPLOSION_SPELL_EV_TYPE);
-        else
-            _pushCharacterEvent(caller, GRAL_ATTACK_EV_TYPE);
+        switch (weapon_type) {
+            case EXPLOSIVE: {
+                _pushCharacterEvent(target, EXPLOSION_SPELL_EV_TYPE);
+                break;
+            }
+
+            case FIRE: {
+                _pushCharacterEvent(target, FIRE_SPELL_EV_TYPE);
+                break;
+            }
+
+            case LIGHTNING: {
+                _pushCharacterEvent(target, LIGHTNING_SPELL_EV_TYPE);
+                break;
+            }
+
+            default: {
+                _pushCharacterEvent(caller, GRAL_ATTACK_EV_TYPE);
+                break;
+            }
+        }
     }
 
     Notification* reply = new Reply(INFO_MSG, msg_to_attacker.c_str());
@@ -757,10 +792,27 @@ void Game::_sendCreatureAttackNotifications(const int damage,
 
     WeaponType weapon_type = this->characters.at(caller).getWeaponType();
 
-    if (weapon_type == EXPLOSIVE)
-        _pushCreatureEvent(target, EXPLOSION_SPELL_EV_TYPE);
-    else
-        _pushCharacterEvent(caller, GRAL_ATTACK_EV_TYPE);
+    switch (weapon_type) {
+        case EXPLOSIVE: {
+            _pushCreatureEvent(target, EXPLOSION_SPELL_EV_TYPE);
+            break;
+        }
+
+        case FIRE: {
+            _pushCreatureEvent(target, FIRE_SPELL_EV_TYPE);
+            break;
+        }
+
+        case LIGHTNING: {
+            _pushCreatureEvent(target, LIGHTNING_SPELL_EV_TYPE);
+            break;
+        }
+
+        default: {
+            _pushCreatureEvent(caller, GRAL_ATTACK_EV_TYPE);
+            break;
+        }
+    }
 
     _pushCreatureEvent(target, DMG_EV_TYPE);
     Notification* reply = new Reply(INFO_MSG, msg_to_attacker.c_str());

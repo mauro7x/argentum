@@ -29,6 +29,16 @@ EffectPlayer::EffectPlayer(const Renderer* g_renderer, const Camera& camera)
     effects.emplace(std::piecewise_construct,
                     std::forward_as_tuple(EXPLOSION_SPELL_EV_TYPE),
                     std::forward_as_tuple(g_renderer, camera));
+
+    // Fire
+    effects.emplace(std::piecewise_construct,
+                    std::forward_as_tuple(FIRE_SPELL_EV_TYPE),
+                    std::forward_as_tuple(g_renderer, camera));
+
+    // Lightning
+    effects.emplace(std::piecewise_construct,
+                    std::forward_as_tuple(LIGHTNING_SPELL_EV_TYPE),
+                    std::forward_as_tuple(g_renderer, camera));
 }
 
 void EffectPlayer::loadMedia() {
@@ -45,6 +55,9 @@ void EffectPlayer::loadMedia() {
         effects.at(DMG_EV_TYPE).loadMedia(game_effects["dmg"]);
         effects.at(EXPLOSION_SPELL_EV_TYPE)
             .loadMedia(game_effects["explosion"]);
+        effects.at(FIRE_SPELL_EV_TYPE).loadMedia(game_effects["fire"]);
+        effects.at(LIGHTNING_SPELL_EV_TYPE)
+            .loadMedia(game_effects["lightning"]);
     }
 
     // Cargamos los efectos de borde

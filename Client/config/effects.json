@@ -65,6 +65,50 @@
                     "b": 0
                 }
             }
+        },
+        "lightning": {
+            "dirpath": "client/assets/Effects/Lightning/",
+            "clips": 15,
+            "change_every_n_frames": 3,
+            "offset": {
+                "x": 0,
+                "y": -50
+            },
+            "clip": {
+                "is_needed": false,
+                "w": 0,
+                "h": 0
+            },
+            "color_key": {
+                "is_needed": true,
+                "color": {
+                    "r": 0,
+                    "g": 0,
+                    "b": 0
+                }
+            }
+        },
+        "fire": {
+            "dirpath": "client/assets/Effects/Fire/",
+            "clips": 15,
+            "change_every_n_frames": 3,
+            "offset": {
+                "x": 0,
+                "y": 0
+            },
+            "clip": {
+                "is_needed": false,
+                "w": 0,
+                "h": 0
+            },
+            "color_key": {
+                "is_needed": true,
+                "color": {
+                    "r": 0,
+                    "g": 0,
+                    "b": 0
+                }
+            }
         }
     },
     "border_effects": {
