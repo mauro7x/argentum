@@ -79,6 +79,9 @@ class CharacterContainer {
     /* Les da un turno de acción a las unidades */
     void act(const int it);
 
+    /* Agrega mensaje si corresponde */
+    void addMessage(InstanceId sender_id, const std::string& msg);
+
     /* Renderiza la unidad si el id es válido */
     void render(const InstanceId id) const;
 

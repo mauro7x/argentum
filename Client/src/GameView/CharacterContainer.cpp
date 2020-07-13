@@ -67,6 +67,13 @@ void CharacterContainer::act(const int it) {
     }
 }
 
+void CharacterContainer::addMessage(InstanceId sender_id,
+                                    const std::string& msg) {
+    if (content.count(sender_id) > 0) {
+        fprintf(stderr, "agregando character msg\n");
+    }
+}
+
 void CharacterContainer::render(const InstanceId id) const {
     if (content.count(id) > 0) {
         content.at(id).render();

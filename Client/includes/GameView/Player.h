@@ -96,6 +96,9 @@ class Player : public Unit {
     /* Actualizar información según lo que diga el servidor */
     void update(const PlayerData& updated_data);
 
+    /* Agrega mensaje si corresponde */
+    void addMessage(InstanceId sender_id, const std::string& msg);
+
     /* Renderizarse si se encuentra dentro de la cámara */
     void render() const override;
 

@@ -22,8 +22,8 @@ void SignedMessage::update(HUD& hud, Player& player,
     switch (type) {
         case GENERAL_SIGNED_MSG: {
             hud.addMessage("(Chat general) " + sender + ": " + content, color);
-            fprintf(stderr, "se recibio el mensaje gral con el senderid = %u\n",
-                    sender_id);
+            player.addMessage(sender_id, content);
+            characters.addMessage(sender_id, content);
             break;
         }
 

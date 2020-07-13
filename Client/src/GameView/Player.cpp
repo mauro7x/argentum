@@ -31,6 +31,41 @@ void Player::_copyData(const PlayerData& data) {
 }
 
 void Player::_renderInfo() const {
+    /*
+    // Primero el nickname
+    SDL_Rect nick_quad = {0, 0, info_nickname.getWidth(),
+                          info_nickname.getHeight()};
+
+    // Centramos las coordenadas
+    nick_quad.x = (TILE_WIDTH - nick_quad.w) / 2;
+    nick_quad.y = TILE_HEIGHT;
+
+    // Le agregamos offsets de la unidad
+    nick_quad.x += (int)this->x;
+    nick_quad.y += (int)this->y;
+
+    // Lo copiamos para el nivel
+    SDL_Rect level_quad = nick_quad;
+
+    // Somrba
+    SDL_Rect nick_quad_bg = nick_quad;
+    nick_quad_bg.y++;
+
+    g_camera.renderIfVisible(g_renderer, info_nickname_shadow.getTexture(),
+                             nick_quad_bg);
+    g_camera.renderIfVisible(g_renderer, info_nickname.getTexture(), nick_quad);
+
+    // Ahora el nivel
+    level_quad.w = info_level.getWidth();
+    level_quad.h = info_level.getHeight();
+    level_quad.x = (TILE_WIDTH - level_quad.w) / 2;
+    level_quad.x += (int)this->x;
+    level_quad.y += nick_quad.h;
+
+    g_camera.renderIfVisible(g_renderer, info_level.getTexture(), level_quad);
+    */
+
+    /*
     // Primero el nivel
     SDL_Rect level_quad = {0, 0, info_level.getWidth(), info_level.getHeight()};
 
@@ -67,6 +102,7 @@ void Player::_renderInfo() const {
     g_camera.renderIfVisible(g_renderer, info_nickname_shadow.getTexture(),
                              nick_quad_bg);
     g_camera.renderIfVisible(g_renderer, info_nickname.getTexture(), nick_quad);
+    */
 }
 
 //-----------------------------------------------------------------------------
@@ -137,6 +173,16 @@ void Player::update(const PlayerData& updated_data) {
 
     /* Actualizamos la data */
     _copyData(updated_data);
+}
+
+void Player::addMessage(InstanceId sender_id, const std::string& msg) {
+    if (sender_id != data.gid) {
+        // el mensaje no es nuestro
+        return;
+    }
+
+    // actualizar el mensaje
+    fprintf(stderr, "llego mensaje del player.\n");
 }
 
 void Player::render() const {
