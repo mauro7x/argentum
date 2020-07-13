@@ -216,7 +216,7 @@ void Map::establishEntitySpawningPosition(int& x, int& y, bool is_creature) {
 
         const Tile& tile = this->getTile(x, y);
 
-        if (!tile.collision && !tile.npc_id) {
+        if (!tile.collision && !tile.npc_id && !tile.occupant_id) {
             if (is_creature && tile.safe_zone &&
                 step < SAFE_ZONE_MAX_SEARCHING_STEP) {
                 ++step;
