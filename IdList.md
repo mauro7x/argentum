@@ -110,9 +110,9 @@ Se listan a continuación los ids utilizados en los archivos de configuración a
 ## Hechizos
 | ID | DESCRIPCION |
 |----|-------------|
-| 1200 | Flecha Mágica |
+| 1200 | Flecha de Fuego |
 | 1201 | Curar |
-| 1202 | Misil |
+| 1202 | Rayo |
 | 1203 | Explosión |
 
 ---
