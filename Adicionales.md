@@ -14,13 +14,11 @@ En este archivo se listan ideas que se fueron teniendo a lo largo del desarrollo
 
 * Realizar el movimiento de las unidades utilizando los ticks de la iteración de acten vez del tiempo interno que haya pasado. -Mau, 21/06.
 
-* Optimizar el renderizado del mapa usando vectores de listas para los objetos estáticos (recomendación de Martín). -Mau, 23/06.
+* Optimizar el renderizado del mapa usando vectores de listas para los objetos estáticos. -Mau, 23/06.
 
 * Indicador que diga la posición actual en una esquina. -Mau, 23/06.
 
 * Separar config.json en varios. (homeview_config.json, etc...). -Mau, 28/06.
-
-* Agregar el mensaje del chat general en la cabeza del character por un periodo breve de tiempo. -Mau, 30/06.
 
 ---
 
