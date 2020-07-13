@@ -20,6 +20,8 @@ function helpMessage() {
     echo "Scripts sobre creación de personaje:"
     echo "  0: Deshabilitar todos los scripts de creación de personaje."
     echo "  1: Crear personajes nuevos con items."
+    echo "  2: Crear personajes nuevos con nivel 20 (no newbies)."
+    echo "  3: Crear personajes nuevos con nivel 20 (no newbies) y con items."
     echo ""
     echo "Otras opciones:"
     echo "  h: muestra este mensaje."
@@ -49,6 +51,20 @@ function scriptItems1() {
     echo ""
 }
 
+function scriptItems2() {
+    echo "Ejecutando script..."
+    sudo cp -f /etc/argentum/server/config/scripts/new_player_data_with_level.json /etc/argentum/server/config/new_player_data.json
+    echo "Se ha ejecutado el script correctamente."
+    echo ""
+}
+
+function scriptItems3() {
+    echo "Ejecutando script..."
+    sudo cp -f /etc/argentum/server/config/scripts/new_player_data_with_items_and_level.json /etc/argentum/server/config/new_player_data.json
+    echo "Se ha ejecutado el script correctamente."
+    echo ""
+}
+
 #------------------------------------------------------------------------------
 
 #------------------------------------------------------------------------------
@@ -73,6 +89,16 @@ do
         1)
             echo ""
             scriptItems1
+            waitingInputMessage
+        ;;
+        2)
+            echo ""
+            scriptItems2
+            waitingInputMessage
+        ;;
+        3)
+            echo ""
+            scriptItems3
             waitingInputMessage
         ;;
         h)  
