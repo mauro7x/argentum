@@ -370,9 +370,6 @@ void Game::newCreature(const CreatureCfg& init_data, const Id init_map) {
     this->map_container[init_map].occupyTile(new_creature_id, spawning_x_coord,
                                              spawning_y_coord);
 
-    // AGREGAR LOGICA DE INIT_HEALTH E INIT_DAMAGE EN BASE AL NIVEL DE LOS
-    // JUGADORES EN EL MAPA.
-
     this->creatures.emplace(
         std::piecewise_construct, std::forward_as_tuple(new_creature_id),
         std::forward_as_tuple(init_data, map_container, init_map,
