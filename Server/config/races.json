@@ -41,7 +41,7 @@
                 "mana_recovery_factor": 10,
                 "intelligence": 2,
                 "constitution": 1,
-                "strength": 1,
+                "strength": -1,
                 "agility": 3,
                 "is_shorter": false
         },
@@ -62,7 +62,7 @@
                 "max_mana_factor": 10,
                 "health_recovery_factor": 10,
                 "mana_recovery_factor": 10,
-                "intelligence": 1,
+                "intelligence": -2,
                 "constitution": 3,
                 "strength": 3,
                 "agility": 0,
@@ -85,9 +85,33 @@
                 "health_recovery_factor": 10,
                 "mana_recovery_factor": 10,
                 "intelligence": 4,
-                "constitution": 1,
-                "strength": 1,
+                "constitution": 0,
+                "strength": -2,
                 "agility": 3,
                 "is_shorter": true
+        },
+        {
+                "id": 104,
+                "name": "Elfo Oscuro",
+                "head_ids": [
+                        2080,
+                        2081,
+                        2082,
+                        2083
+                ],
+                "body_ids": [
+                        2104
+                ],
+                "dead_head_id": 0,
+                "dead_body_id": 2200,
+                "max_health_factor": 10,
+                "max_mana_factor": 10,
+                "health_recovery_factor": 10,
+                "mana_recovery_factor": 10,
+                "intelligence": 2,
+                "constitution": 0,
+                "strength": 2,
+                "agility": 3,
+                "is_shorter": false
         }
 ]
