@@ -95,7 +95,7 @@ void Database::_loadNewPlayerData() {
 
     // Nivel y experiencia
     new_player_data.level = data["level"];
-    new_player_data.exp = data["exp"];
+    new_player_data.exp = 0;
 
     // Posesiones
     new_player_data.safe_gold = data["safe_gold"];

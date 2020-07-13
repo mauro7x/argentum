@@ -1,6 +1,7 @@
 #include "../../includes/Model/Level.h"
 //-----------------------------------------------------------------------------
 #include <math.h>
+
 #include <algorithm>
 //-----------------------------------------------------------------------------
 #include "../../includes/Model/Character.h"
@@ -11,7 +12,10 @@ Level::Level(uint32_t init_level, uint32_t init_xp, Formulas& formulas)
     : level(init_level),
       xp(init_xp),
       formulas(formulas),
-      level_up_xp(formulas.calculateLevelUpXP(this->level)) {}
+      level_up_xp(formulas.calculateLevelUpXP(this->level)) {
+    if (!init_xp && init_level > 1)
+        this->xp = formulas.calculateLevelUpXP(init_level - 1);
+}
 
 Level::~Level() {}
 
