@@ -81,16 +81,12 @@ void Client::_initComponents() {
 
 void Client::_launchHomeCtx() {
     HomeView home_view(current_context, renderer, socket);
-    Mixer::playMusic(true);
     home_view.run();
 }
 
 void Client::_launchTutorialCtx() {
-    // tutorial context...
-
-    // proxy
-    fprintf(stderr, "cambiando a tutorial.\n");
-    current_context = HOME_CTX;
+    TutorialView tutorial_view(current_context, renderer);
+    tutorial_view.run();
 }
 
 void Client::_launchConnectionCtx() {
@@ -233,6 +229,7 @@ Client::Client() : renderer(window), current_context(HOME_CTX) {
 
 void Client::launch() {
     // Iniciamos la ejecución launcheando HOME_CTX
+    Mixer::playMusic(true);
     _launchHomeCtx();
 
     while (current_context != EXIT_CTX) {

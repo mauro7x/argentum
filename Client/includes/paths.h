@@ -41,6 +41,24 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+// TutorialView assets
+
+#define TUTORIALVIEW_BG_FP "client/assets/Views/TutorialView/TutorialView.png"
+#define TUTORIALVIEW_GOBACK_BUTTON_FP \
+    "client/assets/Views/TutorialView/BotonVolver.png"
+#define TUTORIALVIEW_GOBACK_BUTTON_PRESSED_FP \
+    "client/assets/Views/TutorialView/BotonVolverPresionado.png"
+#define TUTORIALVIEW_PREV_BUTTON_FP \
+    "client/assets/Views/TutorialView/BotonPrev.png"
+#define TUTORIALVIEW_PREV_BUTTON_PRESSED_FP \
+    "client/assets/Views/TutorialView/BotonPrevPresionado.png"
+#define TUTORIALVIEW_NEXT_BUTTON_FP \
+    "client/assets/Views/TutorialView/BotonNext.png"
+#define TUTORIALVIEW_NEXT_BUTTON_PRESSED_FP \
+    "client/assets/Views/TutorialView/BotonNextPresionado.png"
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
 // ConnectionView assets
 
 #define CONNECTIONVIEW_BG_FP \
