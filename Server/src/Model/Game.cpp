@@ -1540,7 +1540,7 @@ void Game::sendGeneralMessage(const InstanceId caller,
         this->characters.at(caller).getNickname();
 
     Notification* notification =
-        new Message(caller_nickname, message, GENERAL_MSG);
+        new Message(caller_nickname, message, GENERAL_MSG, caller);
     this->active_clients.sendMessageToAll(notification);
 }
 

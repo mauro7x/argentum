@@ -61,6 +61,12 @@ Message* MessageFactory::newMessage(uint8_t message_type,
         }
 
         case GENERAL_MSG: {
+            InstanceId sender_id;
+            if (!(socket >> sender_id)) {
+                throw Exception(
+                    "MessageFactory::newMessage: incomplete message received.");
+            }
+
             std::string sender;
             if (!(socket >> sender)) {
                 throw Exception(
@@ -74,7 +80,7 @@ Message* MessageFactory::newMessage(uint8_t message_type,
             }
 
             return new SignedMessage(sender, content, GENERAL_SIGNED_MSG,
-                                     GENERAL_MSG_COLOR);
+                                     GENERAL_MSG_COLOR, sender_id);
         }
 
         case PRIVATE_MSG: {

@@ -17,11 +17,13 @@ class SignedMessage : public Message {
     std::string content;
     SignedMessageType type;
     Color color;
+    InstanceId sender_id;
 
    public:
     /* Constructor */
     SignedMessage(const std::string& sender, const std::string& content,
-                  SignedMessageType type, const Color& color);
+                  SignedMessageType type, const Color& color,
+                  InstanceId sender_id = 0);
 
     //-------------------------------------------------------------------------
 
