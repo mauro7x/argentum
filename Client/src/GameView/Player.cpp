@@ -181,7 +181,6 @@ void Player::act(const int it) {
     Unit::act(it);
 
     if (msg_active) {
-        fprintf(stderr, "le sacamos cd al mensaje\n");
         msg_its -= it;
         if (msg_its <= 0) {
             msg_its = 0;

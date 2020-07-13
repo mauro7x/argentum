@@ -62,8 +62,6 @@ void EffectPlayer::add(int event_id, const SDL_Point& pos) {
         throw Exception("EffectPlayer::add: media not loaded.");
     }
 
-    fprintf(stderr, "Llega evento %i al effectplayer...\n", event_id);
-
     switch (event_id) {
         case BEATTACKED_EV_TYPE: {
             be_attacked_effect.add();
