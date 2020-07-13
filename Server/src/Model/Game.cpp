@@ -724,6 +724,7 @@ void Game::_sendCharacterAttackNotifications(const int damage,
             "Te han curado " + std::to_string(-damage) + " puntos de vida.";
 
         _pushCharacterEvent(target, HEALING_SPELL_EV_TYPE);
+        _pushCharacterMainEvent(target, BEHEALED_EV_TYPE);
 
     } else if (eluded) {
         msg_to_attacker = "Tu ataque fue eludido.";
@@ -1084,6 +1085,7 @@ void Game::_notifyResurrection(const InstanceId caller) {
     active_clients.notify(caller, reply);
 
     _pushCharacterEvent(caller, RESURRECT_EV_TYPE);
+    _pushCharacterMainEvent(caller, BEHEALED_EV_TYPE);
 }
 
 void Game::resurrect(const InstanceId caller, const uint32_t x_coord,
@@ -1131,6 +1133,7 @@ void Game::heal(const InstanceId caller, const uint32_t x_coord,
     active_clients.notify(caller, reply);
 
     _pushCharacterEvent(caller, HEALED_BY_PRIEST_EV_TYPE);
+    _pushCharacterMainEvent(caller, BEHEALED_EV_TYPE);
 }
 
 void Game::list(const InstanceId caller, const uint32_t x_coord,
