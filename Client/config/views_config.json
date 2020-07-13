@@ -25,11 +25,19 @@
                 "y": 300
             }
         },
-        "connect": {
-            "w": 120,
+        "tutorial": {
+            "w": 110,
             "h": 40,
             "offset": {
-                "x": 90,
+                "x": 30,
+                "y": 350
+            }
+        },
+        "connect": {
+            "w": 110,
+            "h": 40,
+            "offset": {
+                "x": 160,
                 "y": 350
             }
         },
@@ -40,6 +48,44 @@
                 "x": 30,
                 "y": 410
             }
+        }
+    },
+    "tutorialview": {
+        "img_box": {
+            "w": 860,
+            "h": 400,
+            "offset": {
+                "x": 50,
+                "y": 70
+            }
+        },
+        "goback": {
+            "w": 120,
+            "h": 40,
+            "offset": {
+                "x": 50,
+                "y": 485
+            }
+        },
+        "prev": {
+            "w": 40,
+            "h": 40,
+            "offset": {
+                "x": 828,
+                "y": 485
+            }
+        },
+        "next": {
+            "w": 40,
+            "h": 40,
+            "offset": {
+                "x": 870,
+                "y": 485
+            }
+        },
+        "imgs": {
+            "dirpath": "client/assets/Views/TutorialView/imgs/",
+            "size": 14
         }
     },
     "connectionview": {

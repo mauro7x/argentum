@@ -1,18 +1,18 @@
-#ifndef __HOME_VIEW_H__
-#define __HOME_VIEW_H__
+#ifndef __TUTORIAL_VIEW_H__
+#define __TUTORIAL_VIEW_H__
 
 //-----------------------------------------------------------------------------
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+#include <iterator>
+#include <list>
 #include <string>
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 #include "../../Common/includes/JSON.h"
-#include "../../Common/includes/Socket/SocketWrapper.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -20,7 +20,6 @@
 #include "SDL/Renderer.h"
 #include "SDL/Texture.h"
 #include "SDL/Widgets/Button.h"
-#include "SDL/Widgets/TextBox.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -31,16 +30,8 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-// Mensajes
-#define HOMEVIEW_INVALID_INPUT_MSG "DEBES COMPLETAR AMBOS CAMPOS"
-#define HOMEVIEW_CONNECTING_MSG "INTENTANDO ESTABLECER CONEXION..."
-#define HOMEVIEW_ERROR_CONNECTING_MSG "NO SE PUDO ESTABLECER CONEXION"
-#define HOMEVIEW_MAX_INPUT_MSG "SE ALCANZO EL LIMITE DE CARACTERES"
-//-----------------------------------------------------------------------------
 
-//-----------------------------------------------------------------------------
-
-class HomeView : public ConstantRateFunc {
+class TutorialView : public ConstantRateFunc {
    private:
     // Contexto global actual
     Context& current_context;
@@ -48,34 +39,18 @@ class HomeView : public ConstantRateFunc {
     // Componentes globales
     const Renderer& renderer;
 
-    // Conexión
-    SocketWrapper& socket;
-
-    // Flags internos
-    bool show_cursor = false;
-    int cursor_cooldown = VIEWS_ITERATIONS_TO_SWITCH_CURSOR;
-
     // Widgets
-    Button tutorial_btn, connect_btn;
-    TextBox hostname_txtbx, port_txtbx;
+    Button goback_btn, prev_btn, next_btn;
 
     // Offsets de renderizado
-    SDL_Rect info_box = {0};
-    SDL_Point info_pos = {0};
-
-    // Fuentes a utilizar
-    int input_fontsize = 0;
-    int info_fontsize = 0;
-    TTF_Font* input_font = NULL;
-    TTF_Font* cursor_font = NULL;
-    TTF_Font* info_font = NULL;
+    SDL_Rect img_box = {0};
 
     // Texturas a renderizar
     Texture bg;
-    Texture cursor;
 
-    // Texturas dinámicas
-    Texture info_msg;
+    // Lista de imagenes del tutorial
+    std::list<Texture> imgs;
+    std::list<Texture>::iterator it;
 
     //-----------------------------------------------------------------------------
     // Métodos privados
@@ -101,17 +76,8 @@ class HomeView : public ConstantRateFunc {
     /* Handler de eventos de SDL */
     void _handleEvent(const SDL_Event& e);
 
-    /* Handler de solicitud de tutorial */
-    void _handleTutorialButtonPressed();
-
-    /* Handler de solicitud de conexión */
-    void _handleConnectButtonPressed();
-
-    /* Settea la posición de renderizado de los input_texts */
-    void _setInputPos();
-
-    /* Settea la posición de renderizado del mensaje de información */
-    void _setInfoPos();
+    /* Handler de solicitud de volver */
+    void _handleGoBackButtonPressed();
 
     /* Obtiene la posición del mouse */
     SDL_Point _getMousePos(const SDL_Event& e) const;
@@ -119,26 +85,16 @@ class HomeView : public ConstantRateFunc {
     /* Verifica si una posicion está dentro de un rectangulo */
     bool _inside(const SDL_Point& pos, const SDL_Rect& box) const;
 
-    /* Actualiza el cooldown del cursor */
-    void _updateCursorAnimation(const int it);
-
-    /* Resetea el cooldown del cursor switch */
-    void _resetCursorCooldown();
-
-    /* Switchea el estado actual del cursor */
-    void _switchCursorVisibility();
-
     //-----------------------------------------------------------------------------
 
    public:
     /* Constructor */
-    HomeView(Context& current_context, const Renderer& renderer,
-             SocketWrapper& socket);
+    TutorialView(Context& current_context, const Renderer& renderer);
 
     /* Destructor */
-    ~HomeView();
+    ~TutorialView();
 };
 
 //-----------------------------------------------------------------------------
 
-#endif  // __HOME_VIEW_H__
+#endif  // __TUTORIAL_VIEW_H__

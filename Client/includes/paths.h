@@ -30,10 +30,32 @@
 #define HOMEVIEW_TEXTBOX_FP "client/assets/Views/HomeView/BarraNoClickeada.png"
 #define HOMEVIEW_TEXTBOX_ACTIVE_FP \
     "client/assets/Views/HomeView/BarraClickeada.png"
+#define HOMEVIEW_TUTORIAL_BUTTON_FP \
+    "client/assets/Views/HomeView/BotonTutorial.png"
+#define HOMEVIEW_TUTORIAL_BUTTON_PRESSED_FP \
+    "client/assets/Views/HomeView/BotonTutorialPresionado.png"
 #define HOMEVIEW_CONNECT_BUTTON_FP \
     "client/assets/Views/HomeView/BotonConectar.png"
 #define HOMEVIEW_CONNECT_BUTTON_PRESSED_FP \
     "client/assets/Views/HomeView/BotonConectarPresionado.png"
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+// TutorialView assets
+
+#define TUTORIALVIEW_BG_FP "client/assets/Views/TutorialView/TutorialView.png"
+#define TUTORIALVIEW_GOBACK_BUTTON_FP \
+    "client/assets/Views/TutorialView/BotonVolver.png"
+#define TUTORIALVIEW_GOBACK_BUTTON_PRESSED_FP \
+    "client/assets/Views/TutorialView/BotonVolverPresionado.png"
+#define TUTORIALVIEW_PREV_BUTTON_FP \
+    "client/assets/Views/TutorialView/BotonPrev.png"
+#define TUTORIALVIEW_PREV_BUTTON_PRESSED_FP \
+    "client/assets/Views/TutorialView/BotonPrevPresionado.png"
+#define TUTORIALVIEW_NEXT_BUTTON_FP \
+    "client/assets/Views/TutorialView/BotonNext.png"
+#define TUTORIALVIEW_NEXT_BUTTON_PRESSED_FP \
+    "client/assets/Views/TutorialView/BotonNextPresionado.png"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------

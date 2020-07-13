@@ -80,30 +80,26 @@ void Client::_initComponents() {
 // Contextos
 
 void Client::_launchHomeCtx() {
-    // fprintf(stderr, "Inicia HOME.\n");
     HomeView home_view(current_context, renderer, socket);
-    Mixer::playMusic(true);
     home_view.run();
-    // fprintf(stderr, "Finaliza HOME.\n");
+}
+
+void Client::_launchTutorialCtx() {
+    TutorialView tutorial_view(current_context, renderer);
+    tutorial_view.run();
 }
 
 void Client::_launchConnectionCtx() {
-    // fprintf(stderr, "Inicia CONNECTION.\n");
     ConnectionView connection_view(current_context, renderer, socket);
     connection_view.run();
-    // fprintf(stderr, "Finaliza CONNECTION.\n");
 }
 
 void Client::_launchSignUpCtx() {
-    // fprintf(stderr, "Inicia SIGNUP.\n");
     SignUpView signup_view(current_context, renderer, socket);
     signup_view.run();
-    // fprintf(stderr, "Finaliza SIGNUP.\n");
 }
 
 void Client::_launchGameCtx() {
-    // fprintf(stderr, "Inicia GAME.\n");
-
     // Colas (thread-safe) de comunicación entre hilos
     BlockingQueue<Command*> commands;
     NonBlockingQueue<Broadcast*> broadcasts;
@@ -141,7 +137,6 @@ void Client::_launchGameCtx() {
 
     // Luego de que el game termina, salimos
     current_context = EXIT_CTX;
-    // fprintf(stderr, "Finaliza GAME.\n");
 }
 
 //-----------------------------------------------------------------------------
@@ -234,12 +229,18 @@ Client::Client() : renderer(window), current_context(HOME_CTX) {
 
 void Client::launch() {
     // Iniciamos la ejecución launcheando HOME_CTX
+    Mixer::playMusic(true);
     _launchHomeCtx();
 
     while (current_context != EXIT_CTX) {
         switch (current_context) {
             case HOME_CTX: {
                 _launchHomeCtx();
+                break;
+            }
+
+            case TUTORIAL_CTX: {
+                _launchTutorialCtx();
                 break;
             }
 

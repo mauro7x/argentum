@@ -44,6 +44,7 @@
 #include "GameView/GameView.h"
 #include "HomeView.h"
 #include "SignUpView.h"
+#include "TutorialView.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -73,6 +74,7 @@ class Client {
     // Contextos
 
     void _launchHomeCtx();
+    void _launchTutorialCtx();
     void _launchConnectionCtx();
     void _launchSignUpCtx();
     void _launchGameCtx();
