@@ -88,6 +88,8 @@ Identificas el mensaje con el primer byte recibido (opcode), y para cada caso se
 | 10 | Curación de sacerdote |
 | 11 | Evadir ataque |
 | 12 | Daño |
+| 13 | Hechizo de fuego |
+| 14 | Hechizo de rayo laser |
 | 128 | Recibir daño |
 | 129 | Recibir curación |
 
