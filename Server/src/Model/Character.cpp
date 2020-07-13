@@ -608,7 +608,7 @@ const char* InsufficientManaException::what() const noexcept {
 }
 
 const char* CantAttackInSafeZoneException::what() const noexcept {
-    return "No se puede atacar en una zona segura.";
+    return "No se puede atacar o lanzar hechizos en una zona segura.";
 }
 
 const char* CantAttackItselfException::what() const noexcept {
@@ -616,7 +616,7 @@ const char* CantAttackItselfException::what() const noexcept {
 }
 
 const char* OutOfRangeAttackException::what() const noexcept {
-    return "El jugador al que quieres atacar está fuera del rango de tu arma.";
+    return "El objetivo al que quieres atacar está fuera del rango de tu arma.";
 }
 
 const char* NewbiesCantBeAttackedException::what() const noexcept {
@@ -628,11 +628,11 @@ const char* NewbiesCantAttackCharactersException::what() const noexcept {
 }
 
 const char* AttackCooldownTimeNotElapsedException::what() const noexcept {
-    return "No puedes usar el arma todavía. Cooldown.";
+    return "No puedes usar el arma tan rápido, la misma está en enfriamiento.";
 }
 
 const char* TooHighLevelDifferenceOnAttackException::what() const noexcept {
-    return "No puedes atacar. La diferencia de niveles es mayor a 12.";
+    return "La diferencia de niveles es mayor a 12.";
 }
 
 //-----------------------------------------------------------------------------
