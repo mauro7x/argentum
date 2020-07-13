@@ -28,7 +28,9 @@ function helpMessage() {
     echo "  8: [SERVIDOR] Configuración de items."
     echo "  9: [SERVIDOR] Configuración de data inicial."
     echo "  10: [SERVIDOR] Configuración de NPCs."
-
+    echo ""
+    echo "Base de datos:"
+    echo "  11: [SERVIDOR] Vaciar la base de datos."
     echo ""
     echo "Otras opciones:"
     echo "  r: resetea la configuración a la default."
@@ -55,6 +57,13 @@ function openWithVi() {
 
 #------------------------------------------------------------------------------
 # Scripts
+
+function resetDatabase() {
+    sudo rm -rf /var/argentum/server/assets/Database/playerdata.cfg
+    sudo rm -rf /var/argentum/server/assets/Database/playerinfo.cfg
+    echo "Se ha vaciado la base de datos correctamente."
+    echo ""
+}
 
 function resetDefault() {
     # config del server
@@ -137,6 +146,11 @@ do
         10)
             echo ""
             openWithVi "/etc/argentum/server/config/npcs.json"
+            waitingInputMessage
+        ;;
+        11)
+            echo ""
+            resetDatabase
             waitingInputMessage
         ;;
         r)
