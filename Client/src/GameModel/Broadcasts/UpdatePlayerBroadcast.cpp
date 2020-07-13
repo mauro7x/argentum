@@ -11,10 +11,9 @@
 UpdatePlayerBroadcast::UpdatePlayerBroadcast(const PlayerData& data)
     : Broadcast(), data(data) {}
 
-void UpdatePlayerBroadcast::exec(
-    MapView& map, Player& player,
-    UnitContainer<Character, CharacterData>& characters,
-    UnitContainer<Creature, CreatureData>& creatures) {
+void UpdatePlayerBroadcast::exec(MapView& map, Player& player,
+                                 CharacterContainer& characters,
+                                 CreatureContainer& creatures) {
     SDL_Point old_pos = player.getPos();
     map.clearTileOccupant(old_pos.x, old_pos.y);
     player.update(data);

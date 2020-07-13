@@ -9,8 +9,8 @@
 // API Pública
 
 Stage::Stage(const MapView& map, const Player& player,
-             const UnitContainer<Character, CharacterData>& characters,
-             const UnitContainer<Creature, CreatureData>& creatures)
+             const CharacterContainer& characters,
+             const CreatureContainer& creatures)
     : g_map(map),
       g_player(player),
       g_characters(characters),

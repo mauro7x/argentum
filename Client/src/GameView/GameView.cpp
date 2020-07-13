@@ -45,7 +45,7 @@ void GameView::_processSDLEvents() {
 void GameView::_processMessages() {
     Message* message = NULL;
     while ((message = messages.pop())) {
-        message->update(hud);
+        message->update(hud, player, characters);
         delete message;
     }
 }

@@ -7,7 +7,6 @@
 
 //-----------------------------------------------------------------------------
 #include "../../../Common/includes/BlockingQueue.h"
-#include "../../../Common/includes/DataStructs.h"
 #include "../../../Common/includes/Exceptions/Exception.h"
 #include "../../../Common/includes/JSON.h"
 #include "../../../Common/includes/NonBlockingQueue.h"
@@ -35,7 +34,9 @@
 //-----------------------------------------------------------------------------
 #include "Camera.h"
 #include "Character.h"
+#include "CharacterContainer.h"
 #include "Creature.h"
+#include "CreatureContainer.h"
 #include "Effects/EffectPlayer.h"
 #include "EventHandler.h"
 #include "HUD.h"
@@ -43,7 +44,6 @@
 #include "MapView.h"
 #include "Player.h"
 #include "Stage.h"
-#include "UnitContainer.h"
 #include "UnitSpriteContainer.h"
 //-----------------------------------------------------------------------------
 
@@ -67,8 +67,8 @@ class GameView : public ConstantRateFunc {
 
     // Unidades
     Player player;
-    UnitContainer<Character, CharacterData> characters;
-    UnitContainer<Creature, CreatureData> creatures;
+    CharacterContainer characters;
+    CreatureContainer creatures;
 
     // Componentes de la vista
     HUD hud;
