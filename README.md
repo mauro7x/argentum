@@ -51,3 +51,16 @@ chmod +x ./config.sh
 ```
 
 Al abrirlo, podremos seleccionar el archivo que queremos editar, y el mismo se abrirá para su edición utilizando `Vim`.
+
+
+### Scripts para alterar la experiencia de juego
+
+También se provee de un script de *cheats* que permite cargar configuraciones determinadas de manera rápida, como por ejemplo que los jugadores empiecen con objetos, o demás. Para probar los distintos *cheats* disponibles, se debe ejecutar:
+```bash
+./scripts.sh
+```
+
+Nuevamente, si fallan los permisos, se le deberán conceder los mismos ejecutando:
+```bash
+chmod +x ./scripts.sh
+```
