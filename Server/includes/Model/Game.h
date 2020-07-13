@@ -146,13 +146,42 @@ class Game {
     //--------------------------------------------------------------------------
 
     //--------------------------------------------------------------------------
-    // Métodos auxiliares de creacion de entidades
+    // Métodos auxiliares de creación del game
     //--------------------------------------------------------------------------
 
+    /*
+     * Carga en el mapa priests_position las posiciones de los sacerdotes en
+     * los distintos mapas.
+     */
     void _establishPriestsPosition(std::vector<Id>& maps_id);
 
-    /* Llena la cuenta del banco del jugador con los datos persistidos. */
-    void _loadBankAccount(const CharacterCfg& init_data);
+    //--------------------------------------------------------------------------
+
+    //--------------------------------------------------------------------------
+    // Métodos auxiliares de creación de characters
+    //--------------------------------------------------------------------------  
+
+    /*
+     * Llena la cuenta del banco del jugador con los datos persistidos.
+     */
+    void _loadBankAccount(const CharacterCfg& init_data); 
+
+    //--------------------------------------------------------------------------
+
+    //--------------------------------------------------------------------------
+    // Métodos auxiliares para creación de creatures
+    //--------------------------------------------------------------------------
+
+    /*
+     * Escoge aleatoriamente una criatura entre las disponibles en la config,
+     * y deuvelve su Id.
+     */
+    const Id _randomSelectCreature(const Id spawning_map) const;
+
+    /*
+     * Recibe un mapa en el cual spawnea una criatura aleatoria.
+     */
+    void _spawnNewCreature(const Id spawning_map);
 
     //--------------------------------------------------------------------------
 
@@ -191,7 +220,7 @@ class Game {
      * actualización, pusheándola a los clientes activos.
      *
      * El atributo send_to_caller indica si dicho broadcast debe ser
-     * enviado al jugador que se actualizo o no.
+     * enviado al jugador que se actualizó o no.
      */
     void _pushCharacterDifferentialBroadcast(InstanceId id, BroadcastType type,
                                              bool send_to_caller);
@@ -213,40 +242,27 @@ class Game {
                                         BroadcastType broadcast_type);
 
     /*
-     * Ante cualquier evento que desenvuelva acciones multimedia, se pushea el
-     * mismo y se los envía a los clientes.
+     * Envían un evento que desenvuelve efectos multimedia que afectan a todos
+     * los jugadores.
      */
     void _pushCharacterEvent(InstanceId character_id, EventType type);
     void _pushCreatureEvent(InstanceId creature_id, EventType type);
-    
 
     /*
-     * Los eventos beattacked y behealed solo se pushea el mismo;
+     * Envía un evento que desenvuelve efectos multimedia que afecta sólo al
+     * jugador.
      */
     void _pushCharacterMainEvent(InstanceId character_id, EventType type);
+
     /*
      * Ante la conexión de un nuevo jugador o el cambio de mapa, se invoca
      * este método para enviarle a dicho jugador un full broadcast con
      * toda la información del juego.
+     *
+     * Dicho full broadcast contiene toda la información de los characters,
+     * creatures e items en el juego.
      */
     void _pushFullBroadcast(InstanceId receiver, bool is_new_connection);
-
-    //--------------------------------------------------------------------------
-
-    //--------------------------------------------------------------------------
-    // Métodos auxiliares para creación de criaturas.
-    //--------------------------------------------------------------------------
-
-    /*
-     * Escoge aleatoriamente una criatura entre las disponibles en la config,
-     * y deuvelve su Id.
-     */
-    const Id _randomSelectCreature(const Id spawning_map) const;
-
-    /*
-     * Recibe un mapa en el cual spawnea una criatura aleatoria.
-     */
-    void _spawnNewCreature(const Id spawning_map);
 
     //--------------------------------------------------------------------------
 
@@ -328,7 +344,6 @@ class Game {
     // Creación y eliminación de entidades
     //--------------------------------------------------------------------------
 
-    // DEFINIR COMO VIENE EL PLAYERDATA SI ES NUEVO!.
     /*
      * Recibe un struct CharacterCfg con toda la información persistida
      * del character, o bien la información necesaria para crear un nuevo

@@ -62,6 +62,8 @@ Game::~Game() {
 }
 
 //-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
 // Estructuras auxiliares
 //-----------------------------------------------------------------------------
 
@@ -78,6 +80,8 @@ ResurrectionInfo::ResurrectionInfo(int cooldown, int priest_x_coord,
       time_since_last_message(0),
       priest_x_coord(priest_x_coord),
       priest_y_coord(priest_y_coord) {}
+
+//-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 // Métodos de carga de configuración
@@ -97,10 +101,10 @@ void Game::_loadCfg() {
     cfg.ms_to_persist_data = config["game"]["ms_to_persist_data"];
 }
 
-//--------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-// Métodos auxiliares de creacion de entidades;
+// Métodos auxiliares de creacion de game
 //-----------------------------------------------------------------------------
 
 void Game::_establishPriestsPosition(std::vector<Id>& maps_id) {
@@ -118,6 +122,12 @@ void Game::_establishPriestsPosition(std::vector<Id>& maps_id) {
     }
 }
 
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+// Métodos auxiliares de creacion de characters
+//-----------------------------------------------------------------------------
+
 void Game::_loadBankAccount(const CharacterCfg& init_data) {
     BankAccount& account = bank[init_data.nickname];
     account.depositGold(init_data.bank_gold);
@@ -129,6 +139,29 @@ void Game::_loadBankAccount(const CharacterCfg& init_data) {
         }
         account.deposit(item, amount);
     }
+}
+
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+// Métodos auxiliares de creacion de creatures
+//-----------------------------------------------------------------------------
+
+const Id Game::_randomSelectCreature(const Id spawning_map) const {
+    std::vector<Id> possible_creatures;
+
+    possible_creatures = map_container[spawning_map].getCreatures();
+
+    RandomNumberGenerator gen;
+    return possible_creatures[gen(0, possible_creatures.size() - 1)];
+}
+
+void Game::_spawnNewCreature(const Id spawning_map) {
+    const Id creature_id = _randomSelectCreature(spawning_map);
+
+    const CreatureCfg& data = creatures_data[creature_id];
+
+    this->newCreature(data, spawning_map);
 }
 
 //-----------------------------------------------------------------------------
@@ -412,23 +445,6 @@ void Game::deleteCreature(const InstanceId id) {
     --this->maps_creatures_info.at(creature.getMapId()).amount_of_creatures;
 
     this->creatures.erase(id);
-}
-
-const Id Game::_randomSelectCreature(const Id spawning_map) const {
-    std::vector<Id> possible_creatures;
-
-    possible_creatures = map_container[spawning_map].getCreatures();
-
-    RandomNumberGenerator gen;
-    return possible_creatures[gen(0, possible_creatures.size() - 1)];
-}
-
-void Game::_spawnNewCreature(const Id spawning_map) {
-    const Id creature_id = _randomSelectCreature(spawning_map);
-
-    const CreatureCfg& data = creatures_data[creature_id];
-
-    this->newCreature(data, spawning_map);
 }
 
 //-----------------------------------------------------------------------------
