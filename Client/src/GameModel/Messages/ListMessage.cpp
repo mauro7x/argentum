@@ -13,7 +13,8 @@ ListMessage::ListMessage(const std::string& initial_msg,
                          const Color& color)
     : initial_msg(initial_msg), list_items(list_items), color(color) {}
 
-void ListMessage::update(HUD& hud) const {
+void ListMessage::update(HUD& hud, Player& player,
+                         CharacterContainer& characters) const {
     std::string msg_to_add;
     msg_to_add += initial_msg + ": ";
 

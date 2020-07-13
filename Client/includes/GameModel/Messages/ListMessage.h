@@ -24,7 +24,8 @@ class ListMessage : public Message {
 
     //-------------------------------------------------------------------------
 
-    void update(HUD& hud) const override;
+    void update(HUD& hud, Player& player,
+                CharacterContainer& characters) const override;
 
     //-------------------------------------------------------------------------
 

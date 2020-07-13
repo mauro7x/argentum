@@ -6,17 +6,17 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-#include "../../../Common/includes/DataStructs.h"
 #include "../../../Common/includes/types.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 #include "Character.h"
+#include "CharacterContainer.h"
 #include "Creature.h"
+#include "CreatureContainer.h"
 #include "HUD.h"
 #include "MapView.h"
 #include "Player.h"
-#include "UnitContainer.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -32,14 +32,14 @@ class Stage {
 
     /* Unidades a renderizar */
     const Player& g_player;
-    const UnitContainer<Character, CharacterData>& g_characters;
-    const UnitContainer<Creature, CreatureData>& g_creatures;
+    const CharacterContainer& g_characters;
+    const CreatureContainer& g_creatures;
 
    public:
     /* Constructor */
     Stage(const MapView& map, const Player& player,
-          const UnitContainer<Character, CharacterData>& characters,
-          const UnitContainer<Creature, CreatureData>& creatures);
+          const CharacterContainer& characters,
+          const CreatureContainer& creatures);
 
     /* Deshabilitamos el constructor por copia. */
     Stage(const Stage&) = delete;

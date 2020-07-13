@@ -11,10 +11,9 @@
 NewPlayerBroadcast::NewPlayerBroadcast(const PlayerData& data)
     : Broadcast(), data(data) {}
 
-void NewPlayerBroadcast::exec(
-    MapView& map, Player& player,
-    UnitContainer<Character, CharacterData>& characters,
-    UnitContainer<Creature, CreatureData>& creatures) {
+void NewPlayerBroadcast::exec(MapView& map, Player& player,
+                              CharacterContainer& characters,
+                              CreatureContainer& creatures) {
     map.selectMap(data.basic_data.map);
     player.init(data);
     map.occupyTile(data.basic_data.gid, data.basic_data.x_tile,

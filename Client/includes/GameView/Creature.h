@@ -47,8 +47,7 @@ class Creature : public Unit {
    public:
     /* Constructor */
     Creature(const Renderer* renderer, const Camera& camera,
-             UnitSpriteContainer* sprites, TTF_Font* g_nickname_font,
-             TTF_Font* g_level_font);
+             UnitSpriteContainer* sprites, TTF_Font* g_nickname_font);
 
     //-------------------------------------------------------------------------
 

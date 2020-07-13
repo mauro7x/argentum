@@ -49,7 +49,7 @@ Identificas el mensaje con el primer byte recibido (opcode), y para cada caso se
 | 2 | Mensaje de éxito del server | `MSG_LENGTH (4) + MSG (MSG_LENGTH)` |
 | 3 | Lista del server | `LENGTH (4) + STRUCT(MSG_PACK) (LENGTH)` |
 | 128 | Mensaje privado | `SENDER_LENGTH (4) + SENDER (SENDER_LENGTH) + MSG_LENGTH (4) + MSG (MSG_LENGTH)` |
-| 129 | Mensaje general | `SENDER_LENGTH (4) + SENDER (SENDER_LENGTH) + MSG_LENGTH (4) + MSG (MSG_LENGTH)` |
+| 129 | Mensaje general | `SENDER_ID (4) + SENDER_LENGTH (4) + SENDER (SENDER_LENGTH) + MSG_LENGTH (4) + MSG (MSG_LENGTH)` |
 
 ---
 

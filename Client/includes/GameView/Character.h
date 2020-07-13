@@ -31,12 +31,19 @@ class Character : public Unit {
     EquipmentData equipment = {0};
     uint32_t level = 0;
 
-    // Texturas para el nickname
+    // Texturas y fuentes para la info
     TTF_Font* g_nickname_font; /* no se debe cerrar */
     TTF_Font* g_level_font;    /* no se debe cerrar */
     Texture info_nickname;
     Texture info_nickname_shadow;
     Texture info_level;
+
+    // Mensaje flotante
+    TTF_Font* g_msg_font; /* no se debe cerrar */
+    Texture msg;
+    Texture msg_shadow;
+    bool msg_active = false;
+    int msg_its = 0;
 
     // Si es enano/gnomo usamos sus sprites
     bool is_shorter = false;
@@ -56,7 +63,7 @@ class Character : public Unit {
     /* Constructor */
     Character(const Renderer* renderer, const Camera& camera,
               UnitSpriteContainer* sprites, TTF_Font* g_nickname_font,
-              TTF_Font* g_level_font);
+              TTF_Font* g_level_font, TTF_Font* g_msg_font);
 
     //-------------------------------------------------------------------------
 
@@ -65,6 +72,12 @@ class Character : public Unit {
 
     /* Actualizar información según lo que diga el servidor */
     void update(const CharacterData& updated_data);
+
+    /* Agrega mensaje flotante */
+    void addMessage(const std::string& msg);
+
+    /* Override del método de Unit para el mensaje flotante */
+    void act(const int it) override;
 
     /* Renderizarse si se encuentra dentro de la cámara */
     void render() const override;

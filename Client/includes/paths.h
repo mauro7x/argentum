@@ -128,7 +128,8 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-// Fonts
+// Fonts (se dejan comentadas las fuentes viejas por si queremos volver a
+// utilizarlas en un futuro)
 
 #define FONT_OLDLONDON_FP "client/assets/Fonts/OldLondon.ttf"
 #define FONT_AUGUSTA_FP "client/assets/Fonts/Augusta.ttf"
@@ -139,6 +140,7 @@
 #define FONT_SANFORD_FP "client/assets/Fonts/Sanford.ttf"
 // #define FONT_ANCIENTMEDIUM_FP "client/assets/Fonts/AncientMedium.ttf"
 #define FONT_FORCEDSQUARE_FP "client/assets/Fonts/ForcedSquare.ttf"
+#define FONT_TIMELESS_FP "client/assets/Fonts/Timeless.ttf"
 //-----------------------------------------------------------------------------
 
 #endif  // __CLIENT_PATHS_H__

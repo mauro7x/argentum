@@ -11,10 +11,9 @@
 DeleteCreatureBroadcast::DeleteCreatureBroadcast(const InstanceId& id)
     : Broadcast(), id(id) {}
 
-void DeleteCreatureBroadcast::exec(
-    MapView& map, Player& player,
-    UnitContainer<Character, CharacterData>& characters,
-    UnitContainer<Creature, CreatureData>& creatures) {
+void DeleteCreatureBroadcast::exec(MapView& map, Player& player,
+                                   CharacterContainer& characters,
+                                   CreatureContainer& creatures) {
     SDL_Point old_pos = creatures.getPos(id);
     creatures.remove(id);
 

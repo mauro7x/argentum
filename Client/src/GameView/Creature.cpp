@@ -64,8 +64,7 @@ void Creature::_renderInfo() const {
 // API Pública
 
 Creature::Creature(const Renderer* renderer, const Camera& camera,
-                   UnitSpriteContainer* sprites, TTF_Font* g_nickname_font,
-                   TTF_Font* g_level_font)
+                   UnitSpriteContainer* sprites, TTF_Font* g_nickname_font)
     : Unit(renderer, camera, sprites), g_nickname_font(g_nickname_font) {}
 
 void Creature::init(const CreatureData& init_data) {

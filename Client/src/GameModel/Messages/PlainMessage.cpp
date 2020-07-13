@@ -11,7 +11,8 @@
 PlainMessage::PlainMessage(const std::string& content, const Color& color)
     : content(content), color(color) {}
 
-void PlainMessage::update(HUD& hud) const {
+void PlainMessage::update(HUD& hud, Player& player,
+                          CharacterContainer& characters) const {
     hud.addMessage(content, color);
 }
 

@@ -7,6 +7,7 @@
 
 //-----------------------------------------------------------------------------
 #include "../../../../Common/includes/Exceptions/Exception.h"
+#include "../../../../Common/includes/types.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -14,7 +15,10 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+#include "../../GameView/Character.h"
+#include "../../GameView/CharacterContainer.h"
 #include "../../GameView/HUD.h"
+#include "../../GameView/Player.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -38,8 +42,10 @@ class Message {
 
     //-------------------------------------------------------------------------
 
-    /* Agrega el mensaje a la consola de manera polimórfica */
-    virtual void update(HUD& hud) const = 0;
+    /* Agrega el mensaje a la consola de manera polimórfica. En caso de ser un
+     * mensaje general, lo agrega a la cabeza de los personajes */
+    virtual void update(HUD& hud, Player& player,
+                        CharacterContainer& characters) const = 0;
 
     //-------------------------------------------------------------------------
 

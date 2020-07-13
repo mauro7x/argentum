@@ -22,6 +22,11 @@ enum ExpectedArgs { NAME, EXPECTED_ARGC };
 #define INFO_SPACE_FROM_HEAD 10 /* px */
 #define INFO_NAME_FONTSIZE 16   /* fontsize del nickname + lvl de c/ unidad */
 #define INFO_LVL_FONTSIZE 10    /* fontsize del nickname + lvl de c/ unidad */
+#define MSG_ITERATIONS 150      /* its before disappear */
+#define MSG_SPACE_FROM_NICK 10  /* px */
+#define MSG_MAX_WIDTH 120       /* px */
+#define MSG_FONTSIZE 12         /* px */
+#define MSG_FONT paths::asset(FONT_TIMELESS_FP)
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------

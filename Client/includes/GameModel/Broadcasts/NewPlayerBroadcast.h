@@ -18,9 +18,8 @@ class NewPlayerBroadcast : public Broadcast {
     //-------------------------------------------------------------------------
 
     /* Ejecución polimórfica del broadcast */
-    void exec(MapView& map, Player& player,
-              UnitContainer<Character, CharacterData>& characters,
-              UnitContainer<Creature, CreatureData>& creatures);
+    void exec(MapView& map, Player& player, CharacterContainer& characters,
+              CreatureContainer& creatures);
 
     //-------------------------------------------------------------------------
 
