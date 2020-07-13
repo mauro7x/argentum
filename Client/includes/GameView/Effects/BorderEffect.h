@@ -1,5 +1,5 @@
-#ifndef __BE_ATTACKED_H__
-#define __BE_ATTACKED_H__
+#ifndef __BORDER_EFFECT_H__
+#define __BORDER_EFFECT_H__
 
 //-----------------------------------------------------------------------------
 #include <SDL2/SDL.h>
@@ -23,18 +23,18 @@
 
 //-----------------------------------------------------------------------------
 
-struct ActiveBeAttacked {
+struct ActiveBorderEffect {
     bool is_new;
     size_t current_clip;
 
-    ActiveBeAttacked() : is_new(true), current_clip(0) {}
+    ActiveBorderEffect() : is_new(true), current_clip(0) {}
 };
 
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 
-class BeAttacked {
+class BorderEffect {
    private:
     const Renderer* g_renderer;
     SDL_Rect render_box = {0};
@@ -43,23 +43,23 @@ class BeAttacked {
     int change_every_n_frames = 1;
 
     // Efectos en reproducción actualmente
-    std::list<ActiveBeAttacked> active_effects;
+    std::list<ActiveBorderEffect> active_effects;
 
    public:
     /* Constructor */
-    BeAttacked(const Renderer* g_renderer);
+    BorderEffect(const Renderer* g_renderer);
 
     /* Deshabilitamos el constructor por copia. */
-    BeAttacked(const BeAttacked&) = delete;
+    BorderEffect(const BorderEffect&) = delete;
 
     /* Deshabilitamos el operador= para copia.*/
-    BeAttacked& operator=(const BeAttacked&) = delete;
+    BorderEffect& operator=(const BorderEffect&) = delete;
 
     /* Deshabilitamos el constructor por movimiento. */
-    BeAttacked(BeAttacked&& other) = delete;
+    BorderEffect(BorderEffect&& other) = delete;
 
     /* Deshabilitamos el operador= para movimiento. */
-    BeAttacked& operator=(BeAttacked&& other) = delete;
+    BorderEffect& operator=(BorderEffect&& other) = delete;
 
     //-----------------------------------------------------------------------------
     // Métodos de la API pública
@@ -79,9 +79,9 @@ class BeAttacked {
     //-----------------------------------------------------------------------------
 
     /* Destructor */
-    ~BeAttacked();
+    ~BorderEffect();
 };
 
 //-----------------------------------------------------------------------------
 
-#endif  // __BE_ATTACKED_H__
+#endif  // __BORDER_EFFECT_H__

@@ -67,7 +67,7 @@
             }
         }
     },
-    "special_effects": {
+    "border_effects": {
         "be_attacked": {
             "dirpath": "client/assets/Effects/BeAttacked/",
             "clips": 28,
@@ -75,9 +75,8 @@
         },
         "be_healed": {
             "dirpath": "client/assets/Effects/BeHealed/",
-            "clips": 8,
-            "clips_per_frame": 12,
-            "frames": 50
+            "clips": 19,
+            "change_every_n_frames": 2
         }
     }
 }

@@ -47,11 +47,11 @@ void EffectPlayer::loadMedia() {
             .loadMedia(game_effects["explosion"]);
     }
 
-    // Cargamos los demás efectos
+    // Cargamos los efectos de borde
     {
-        json& special_effects = effects_config["special_effects"];
-        be_attacked_effect.loadMedia(special_effects["be_attacked"]);
-        be_healed_effect.loadMedia(special_effects["be_healed"]);
+        json& border_effects = effects_config["border_effects"];
+        be_attacked_effect.loadMedia(border_effects["be_attacked"]);
+        be_healed_effect.loadMedia(border_effects["be_healed"]);
     }
 
     media_loaded = true;

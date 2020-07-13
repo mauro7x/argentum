@@ -22,8 +22,7 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-#include "BeAttacked.h"
-#include "BeHealed.h"
+#include "BorderEffect.h"
 #include "Effect.h"
 //-----------------------------------------------------------------------------
 
@@ -37,9 +36,8 @@ class EffectPlayer {
     // Efectos del juego
     std::unordered_map<int, Effect> effects;
 
-    // Efectos adicionales
-    BeAttacked be_attacked_effect;
-    BeHealed be_healed_effect;
+    // Efectos de borde
+    BorderEffect be_attacked_effect, be_healed_effect;
 
    public:
     /* Constructor */

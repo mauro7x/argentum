@@ -1,4 +1,4 @@
-#include "../../../includes/GameView/Effects/BeAttacked.h"
+#include "../../../includes/GameView/Effects/BorderEffect.h"
 
 //-----------------------------------------------------------------------------
 // Métodos privados
@@ -8,9 +8,10 @@
 //-----------------------------------------------------------------------------
 // API Pública
 
-BeAttacked::BeAttacked(const Renderer* g_renderer) : g_renderer(g_renderer) {}
+BorderEffect::BorderEffect(const Renderer* g_renderer)
+    : g_renderer(g_renderer) {}
 
-void BeAttacked::loadMedia(const json& config) {
+void BorderEffect::loadMedia(const json& config) {
     json camera_config =
         JSON::loadJsonFile(paths::config(VIEWS_CONFIG_FILEPATH));
 
@@ -39,11 +40,11 @@ void BeAttacked::loadMedia(const json& config) {
     total_clips *= change_every_n_frames;
 }
 
-void BeAttacked::add() {
+void BorderEffect::add() {
     active_effects.emplace_back();
 }
 
-void BeAttacked::act(const int it) {
+void BorderEffect::act(const int it) {
     for (auto i = active_effects.begin(); i != active_effects.end();) {
         // Avanzamos el clip si no fue creado en la misma iteración
         if (!(i->is_new)) {
@@ -61,7 +62,7 @@ void BeAttacked::act(const int it) {
     }
 }
 
-void BeAttacked::render() const {
+void BorderEffect::render() const {
     SDL_Rect render_quad;
     for (auto it = active_effects.begin(); it != active_effects.end(); it++) {
         render_quad = this->render_box;
@@ -71,6 +72,6 @@ void BeAttacked::render() const {
     }
 }
 
-BeAttacked::~BeAttacked() {}
+BorderEffect::~BorderEffect() {}
 
 //-----------------------------------------------------------------------------
