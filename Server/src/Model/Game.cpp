@@ -752,7 +752,7 @@ void Game::_sendCreatureAttackNotifications(const int damage,
         }
 
         default: {
-            _pushCreatureEvent(caller, GRAL_ATTACK_EV_TYPE);
+            _pushCharacterEvent(caller, GRAL_ATTACK_EV_TYPE);
             break;
         }
     }

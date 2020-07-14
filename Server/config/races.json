@@ -41,8 +41,8 @@
                 "mana_recovery_factor": 10,
                 "intelligence": 2,
                 "constitution": 1,
-                "strength": -1,
-                "agility": 3,
+                "strength": 0,
+                "agility": 2,
                 "is_shorter": false
         },
         {
@@ -62,9 +62,9 @@
                 "max_mana_factor": 10,
                 "health_recovery_factor": 10,
                 "mana_recovery_factor": 10,
-                "intelligence": -2,
-                "constitution": 3,
-                "strength": 3,
+                "intelligence": 0,
+                "constitution": 2,
+                "strength": 2,
                 "agility": 0,
                 "is_shorter": true
         },
@@ -84,10 +84,10 @@
                 "max_mana_factor": 10,
                 "health_recovery_factor": 10,
                 "mana_recovery_factor": 10,
-                "intelligence": 4,
+                "intelligence": 3,
                 "constitution": 0,
-                "strength": -2,
-                "agility": 3,
+                "strength": 0,
+                "agility": 2,
                 "is_shorter": true
         },
         {
@@ -108,10 +108,10 @@
                 "max_mana_factor": 10,
                 "health_recovery_factor": 10,
                 "mana_recovery_factor": 10,
-                "intelligence": 2,
+                "intelligence": 1,
                 "constitution": 0,
                 "strength": 2,
-                "agility": 3,
+                "agility": 2,
                 "is_shorter": false
         }
 ]

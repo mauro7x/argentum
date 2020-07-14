@@ -2,6 +2,7 @@
 #define __CREATURE_H__
 
 //-----------------------------------------------------------------------------
+#include "../../../Common/includes/DataStructs.h"
 #include "../../../Common/includes/Exceptions/Exception.h"
 #include "../../../Common/includes/defs.h"
 #include "../../../Common/includes/types.h"
@@ -26,7 +27,7 @@ class Creature : public Unit {
     // Datos del monstruo
     std::string name;
     Id creature_id = 0;
-    uint32_t health = 0, max_health = 0 /*, level = 0*/;
+    uint32_t health = 0, max_health = 0, level = 0;
 
     // Texturas para el nickname
     TTF_Font* g_nickname_font; /* no se debe cerrar */
