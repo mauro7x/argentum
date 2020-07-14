@@ -12,6 +12,7 @@ void Creature::_copyData(const CreatureData& data) {
     this->creature_id = data.creature_id;
     this->health = data.health;
     this->max_health = data.max_health;
+    this->level = data.level;
 }
 
 void Creature::_renderInfo() const {
@@ -80,10 +81,14 @@ void Creature::init(const CreatureData& init_data) {
         throw Exception("Player::init: Fonts not initialized.");
     }
 
-    info_nickname.loadFromRenderedText(g_renderer, g_nickname_font, name,
-                                       CREATURE_NICKNAME_COLOR);
-    info_nickname_shadow.loadFromRenderedText(g_renderer, g_nickname_font, name,
-                                              SDL_Color({0, 0, 0, 255}));
+    info_nickname.loadFromRenderedText(
+        g_renderer, g_nickname_font,
+        name + " (lvl. " + std::to_string(level) + ")",
+        CREATURE_NICKNAME_COLOR);
+    info_nickname_shadow.loadFromRenderedText(
+        g_renderer, g_nickname_font,
+        name + " (lvl. " + std::to_string(level) + ")",
+        SDL_Color({0, 0, 0, 255}));
 
     /* Seteamos nuestra posición en pixeles para el renderizado */
     x = TILE_WIDTH * data.x_tile;

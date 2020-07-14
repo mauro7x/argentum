@@ -49,7 +49,7 @@ struct CreatureData {
     UnitData basic_data;
     std::string name;
     Id creature_id;
-    uint32_t health, max_health /*, level*/;
+    uint32_t health, max_health, level;
 };
 
 struct ItemData {
