@@ -99,13 +99,6 @@ const bool Map::_moveOccupant(Tile& from_tile, Tile& to_tile,
         return false;
     }
 
-    // Heisenbug estás allí?
-    if (from_tile.occupant_id == 0)
-        fprintf(
-            stderr,
-            " \n\n\n¡¡¡¡¡WARNING!!!!!: Map::_moveOcuppant: FROM_TILE OCCUPANT "
-            "ID IS ZERO\n\n\n");
-
     // Se puede mover.
     to_tile.occupant_id = from_tile.occupant_id;
     from_tile.occupant_id = 0;
