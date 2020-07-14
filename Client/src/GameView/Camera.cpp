@@ -25,35 +25,8 @@ void Camera::init(const json& config) {
 }
 
 bool Camera::isVisible(const SDL_Rect* object) const {
-    if (!initialized) {
-        throw Exception("Camera not initialized.");
-    }
-
-    // Calculamos los lados del objeto
-    int leftA = object->x;
-    int rightA = object->x + object->w;
-    int topA = object->y;
-    int bottomA = object->y + object->h;
-
-    // Calculamos los lados de la cámara
-    int leftB = pos.x;
-    int rightB = pos.x + box.w;
-    int topB = pos.y;
-    int bottomB = pos.y + box.h;
-
-    if (bottomA <= topB) {
-        return false;
-    }
-
-    if (topA >= bottomB) {
-        return false;
-    }
-
-    if (rightA <= leftB) {
-        return false;
-    }
-
-    if (leftA >= rightB) {
+    if ((object->y + object->h) <= pos.y || object->y >= (pos.y + box.h) ||
+        (object->x + object->w) <= pos.x || object->x >= (pos.x + box.w)) {
         return false;
     }
 
@@ -82,27 +55,15 @@ void Camera::fillQuadIfVisible(const Renderer* renderer, SDL_Rect& render_quad,
 }
 
 int Camera::xOffset() const {
-    if (!initialized) {
-        throw Exception("Camera not initialized.");
-    }
-
     return box.x - pos.x;
 }
 
 int Camera::yOffset() const {
-    if (!initialized) {
-        throw Exception("Camera not initialized.");
-    }
-
     return box.y - pos.y;
 }
 
 void Camera::center(const SDL_Rect object, const int map_width,
                     const int map_height) {
-    if (!initialized) {
-        throw Exception("Camera not initialized.");
-    }
-
     pos.x = (object.x + TILE_WIDTH / 2) - (box.w / 2);
     pos.y = (object.y + TILE_HEIGHT / 2) - (box.h / 2);
 
