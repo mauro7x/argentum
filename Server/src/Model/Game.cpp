@@ -1046,8 +1046,15 @@ void Game::updateResurrectingPlayersCooldown(const int it) {
 
 //-----------------------------------------------------------------------------
 
+/******************************************************************************
+ *                                COMANDOS                                    *
+ *****************************************************************************/
+
+/*****************************************************************************/
+/*****************************************************************************/
+
 //-----------------------------------------------------------------------------
-// Comandos
+// Movimiento
 //-----------------------------------------------------------------------------
 
 void Game::startMovingUp(const InstanceId caller) {
@@ -1103,32 +1110,51 @@ void Game::stopMoving(const InstanceId caller) {
     character.stopMoving();
 }
 
-void Game::attackedByCreature(const InstanceId caller, int& damage,
-                              bool eluded) {
-    Character& attacked = this->characters.at(caller);
-    if (damage > 0 && !attacked.getHealth()) {
-        _pushCharacterEvent(caller, DEATH_EV_TYPE);
-        _dropAllItems(&attacked);
-    }
-    _sendAttackedByCreatureNotifications(damage, eluded, caller);
+void Game::teleport(const InstanceId caller, const uint32_t portal_x_coord,
+                    const uint32_t portal_y_coord, const Id map_id) {
+    if (!this->characters.count(caller))
+        throw Exception("Game::teleport: unknown caller.");
+
+    Character& character = this->characters.at(caller);
+
+    // Si está resucitando, no se puede teletransportar.
+    if (this->resurrecting_players_cooldown.count(caller))
+        throw Exception(
+            "No puedes teletransportarte mientras estás resucitando.");
+
+    // Propaga Exception si no hay un portal en la posición especificada.
+    _validatePortalPosition(caller, portal_x_coord, portal_y_coord, true);
+
+    if (map_id == character.getMapId())
+        throw Exception(
+            "No puedes viajar al mismo mapa en el que te encuentras.");
+
+    _validatePortalMapId(caller, map_id);
+
+    _pushCharacterDifferentialBroadcast(caller, DELETE_BROADCAST, false);
+
+    int spawning_x_coord, spawning_y_coord;
+    this->map_container[map_id].establishEntitySpawningPosition(
+        spawning_x_coord, spawning_y_coord, false);
+    this->map_container[map_id].occupyTile(caller, spawning_x_coord,
+                                           spawning_y_coord);
+
+    character.teleport(map_id, spawning_x_coord, spawning_y_coord);
+    active_clients.changeMap(caller, map_id);
+
+    _pushCharacterDifferentialBroadcast(caller, NEW_BROADCAST, false);
+
+    // este podria ser reemplazado por uno solo hacia el caller
+    _pushCharacterDifferentialBroadcast(caller, UPDATE_BROADCAST, true);
+
+    _pushFullBroadcast(caller, false);
 }
 
-void Game::useWeapon(const InstanceId caller, const InstanceId target) {
-    if (!this->characters.count(caller)) {
-        throw Exception("Game::useWeapon: unknown caller.");
-    }
+//-----------------------------------------------------------------------------
 
-    if (this->characters.count(target)) {
-        Character& attacked = this->characters.at(target);
-        _useWeapon(caller, target, &attacked, false);
-    } else if (this->creatures.count(target)) {
-        Creature& attacked = this->creatures.at(target);
-        _useWeapon(caller, target, &attacked, true);
-    } else {
-        // Excepcion. target invalido.
-        throw Exception("El target recibido no es válido.");
-    }
-}
+//-----------------------------------------------------------------------------
+// Manipulación de items
+//-----------------------------------------------------------------------------
 
 void Game::equip(const InstanceId caller, const uint8_t n_slot) {
     if (!this->characters.count(caller)) {
@@ -1157,25 +1183,6 @@ void Game::unequip(const InstanceId caller, const uint8_t n_slot) {
      *   InvalidEquipmentSlotNumberException
      */
     character.unequip(n_slot);
-}
-
-void Game::meditate(const InstanceId caller) {
-    if (!this->characters.count(caller)) {
-        throw Exception("Game::unequip: unknown caller.");
-    }
-
-    Character& character = this->characters.at(caller);
-
-    // Se propaga KindCantMeditateException
-    character.meditate();
-
-    std::string reply_msg =
-        "Has comenzado a meditar. Ante cualquier acción dejarás de hacerlo.";
-
-    Notification* reply = new Reply(SUCCESS_MSG, reply_msg);
-    active_clients.notify(caller, reply);
-
-    _pushCharacterEvent(caller, MEDITATE_EV_TYPE);
 }
 
 void Game::take(const InstanceId caller) {
@@ -1260,6 +1267,55 @@ void Game::drop(const InstanceId caller, const uint8_t n_slot,
     active_clients.sendEventToAll(event);
 }
 
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+// Recuperación de vida/maná
+//-----------------------------------------------------------------------------
+
+void Game::heal(const InstanceId caller, const uint32_t x_coord,
+                const uint32_t y_coord) {
+    if (!this->characters.count(caller))
+        throw Exception("Game::heal: unknown caller.");
+
+    Id priest_id;
+
+    // Propaga Exception si la posición especificada no corresponde a la de un
+    // sacerdote
+    _validatePriestPosition(caller, priest_id, x_coord, y_coord, true);
+
+    Character& character = this->characters.at(caller);
+
+    // Propaga StateCantBeHealedException.
+    character.heal();
+
+    std::string reply_msg = "Has sido curado.";
+    Notification* reply = new Reply(SUCCESS_MSG, reply_msg);
+    active_clients.notify(caller, reply);
+
+    _pushCharacterEvent(caller, HEALED_BY_PRIEST_EV_TYPE);
+    _pushCharacterMainEvent(caller, BEHEALED_EV_TYPE);
+}
+
+void Game::meditate(const InstanceId caller) {
+    if (!this->characters.count(caller)) {
+        throw Exception("Game::unequip: unknown caller.");
+    }
+
+    Character& character = this->characters.at(caller);
+
+    // Se propaga KindCantMeditateException
+    character.meditate();
+
+    std::string reply_msg =
+        "Has comenzado a meditar. Ante cualquier acción dejarás de hacerlo.";
+
+    Notification* reply = new Reply(SUCCESS_MSG, reply_msg);
+    active_clients.notify(caller, reply);
+
+    _pushCharacterEvent(caller, MEDITATE_EV_TYPE);
+}
+
 void Game::resurrect(const InstanceId caller) {
     if (!this->characters.count(caller))
         throw Exception("Game::resurrect: unknown caller.");
@@ -1337,61 +1393,34 @@ void Game::resurrect(const InstanceId caller, const uint32_t x_coord,
     _notifyResurrection(caller);
 }
 
-void Game::heal(const InstanceId caller, const uint32_t x_coord,
-                const uint32_t y_coord) {
-    if (!this->characters.count(caller))
-        throw Exception("Game::heal: unknown caller.");
+//-----------------------------------------------------------------------------
 
-    Id priest_id;
+//-----------------------------------------------------------------------------
+// Interacciones entre jugadores
+//-----------------------------------------------------------------------------
 
-    // Propaga Exception si la posición especificada no corresponde a la de un
-    // sacerdote
-    _validatePriestPosition(caller, priest_id, x_coord, y_coord, true);
-
-    Character& character = this->characters.at(caller);
-
-    // Propaga StateCantBeHealedException.
-    character.heal();
-
-    std::string reply_msg = "Has sido curado.";
-    Notification* reply = new Reply(SUCCESS_MSG, reply_msg);
-    active_clients.notify(caller, reply);
-
-    _pushCharacterEvent(caller, HEALED_BY_PRIEST_EV_TYPE);
-    _pushCharacterMainEvent(caller, BEHEALED_EV_TYPE);
-}
-
-void Game::list(const InstanceId caller, const uint32_t x_coord,
-                const uint32_t y_coord) {
-    if (!this->characters.count(caller))
-        throw Exception("Game::list: unknown caller.");
-
-    Character& character = this->characters.at(caller);
-
-    Id npc_id;
-
-    std::string init_msg;
-    std::list<std::string> list_items;
-
-    if (_validateBankerPosition(caller, npc_id, x_coord, y_coord, false)) {
-        BankAccount& account = bank[character.getNickname()];
-        account.list(init_msg, list_items);
-    } else if (_validatePriestPosition(caller, npc_id, x_coord, y_coord,
-                                       false) ||
-               _validateMerchantPosition(caller, npc_id, x_coord, y_coord,
-                                         false)) {
-        _listNPCSellableItems(npc_id, init_msg, list_items);
-    } else if (_validatePortalPosition(caller, x_coord, y_coord, false)) {
-        _listPortalMaps(init_msg, list_items);
-    } else {
-        throw Exception(
-            "La posición indicada no corresponde a la de un NPC listable.");
+void Game::useWeapon(const InstanceId caller, const InstanceId target) {
+    if (!this->characters.count(caller)) {
+        throw Exception("Game::useWeapon: unknown caller.");
     }
 
-    Notification* list = new List(init_msg, list_items);
-    this->active_clients.notify(caller, list);
-    return;
+    if (this->characters.count(target)) {
+        Character& attacked = this->characters.at(target);
+        _useWeapon(caller, target, &attacked, false);
+    } else if (this->creatures.count(target)) {
+        Creature& attacked = this->creatures.at(target);
+        _useWeapon(caller, target, &attacked, true);
+    } else {
+        // Excepcion. target invalido.
+        throw Exception("El target recibido no es válido.");
+    }
 }
+
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+// Interacción con el banco
+//-----------------------------------------------------------------------------
 
 void Game::depositItemOnBank(const InstanceId caller, const uint32_t x_coord,
                              const uint32_t y_coord, const uint8_t n_slot,
@@ -1542,13 +1571,17 @@ void Game::withdrawGoldFromBank(const InstanceId caller, const uint32_t x_coord,
     active_clients.notify(caller, reply);
 }
 
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+// Interacción con compradores/vendedores (comerciantes y banqueros)
+//-----------------------------------------------------------------------------
+
 void Game::buyItem(const InstanceId caller, const uint32_t x_coord,
                    const uint32_t y_coord, const uint32_t item_id,
                    const uint32_t amount) {
     if (!this->characters.count(caller))
         throw Exception("Game::buyItem: unknown caller.");
-
-    fprintf(stderr, "buyItem: item_id: %i, amount: %i \n", item_id, amount);
 
     Character& character = this->characters.at(caller);
 
@@ -1633,6 +1666,12 @@ void Game::sellItem(const InstanceId caller, const uint32_t x_coord,
     active_clients.notify(caller, reply);
 }
 
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+// Servicio de mensajería
+//-----------------------------------------------------------------------------
+
 void Game::sendPrivateMessage(const InstanceId caller,
                               const std::string to_nickname,
                               const std::string message) {
@@ -1671,22 +1710,42 @@ void Game::sendGeneralMessage(const InstanceId caller,
     this->active_clients.sendMessageToAll(notification);
 }
 
-void Game::listConnectedPlayers(const InstanceId caller) {
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+// Comandos informativos
+//-----------------------------------------------------------------------------
+
+void Game::list(const InstanceId caller, const uint32_t x_coord,
+                const uint32_t y_coord) {
     if (!this->characters.count(caller))
-        throw Exception("Game::listConnectedPlayers: unknown caller.");
+        throw Exception("Game::list: unknown caller.");
 
-    std::unordered_map<Id, Character>::const_iterator it =
-        this->characters.begin();
+    Character& character = this->characters.at(caller);
 
-    std::string init_msg = "Jugadores conectados";
-    std::list<std::string> player_list;
+    Id npc_id;
 
-    for (; it != this->characters.end(); ++it) {
-        player_list.push_back(it->second.getNickname());
+    std::string init_msg;
+    std::list<std::string> list_items;
+
+    if (_validateBankerPosition(caller, npc_id, x_coord, y_coord, false)) {
+        BankAccount& account = bank[character.getNickname()];
+        account.list(init_msg, list_items);
+    } else if (_validatePriestPosition(caller, npc_id, x_coord, y_coord,
+                                       false) ||
+               _validateMerchantPosition(caller, npc_id, x_coord, y_coord,
+                                         false)) {
+        _listNPCSellableItems(npc_id, init_msg, list_items);
+    } else if (_validatePortalPosition(caller, x_coord, y_coord, false)) {
+        _listPortalMaps(init_msg, list_items);
+    } else {
+        throw Exception(
+            "La posición indicada no corresponde a la de un NPC listable.");
     }
 
-    Notification* list = new List(init_msg, player_list);
-    active_clients.notify(caller, list);
+    Notification* list = new List(init_msg, list_items);
+    this->active_clients.notify(caller, list);
+    return;
 }
 
 void Game::help(const InstanceId caller, const uint32_t x_coord,
@@ -1749,50 +1808,49 @@ void Game::help(const InstanceId caller, const uint32_t x_coord,
     active_clients.notify(caller, list);
 }
 
-void Game::teleport(const InstanceId caller, const uint32_t portal_x_coord,
-                    const uint32_t portal_y_coord, const Id map_id) {
+void Game::listConnectedPlayers(const InstanceId caller) {
     if (!this->characters.count(caller))
-        throw Exception("Game::teleport: unknown caller.");
+        throw Exception("Game::listConnectedPlayers: unknown caller.");
 
-    Character& character = this->characters.at(caller);
+    std::unordered_map<Id, Character>::const_iterator it =
+        this->characters.begin();
 
-    // Si está resucitando, no se puede teletransportar.
-    if (this->resurrecting_players_cooldown.count(caller))
-        throw Exception(
-            "No puedes teletransportarte mientras estás resucitando.");
+    std::string init_msg = "Jugadores conectados";
+    std::list<std::string> player_list;
 
-    // Propaga Exception si no hay un portal en la posición especificada.
-    _validatePortalPosition(caller, portal_x_coord, portal_y_coord, true);
+    for (; it != this->characters.end(); ++it) {
+        player_list.push_back(it->second.getNickname());
+    }
 
-    if (map_id == character.getMapId())
-        throw Exception(
-            "No puedes viajar al mismo mapa en el que te encuentras.");
+    Notification* list = new List(init_msg, player_list);
+    active_clients.notify(caller, list);
+}
 
-    _validatePortalMapId(caller, map_id);
+//-----------------------------------------------------------------------------
 
-    _pushCharacterDifferentialBroadcast(caller, DELETE_BROADCAST, false);
+/*****************************************************************************/
+/*****************************************************************************/
 
-    int spawning_x_coord, spawning_y_coord;
-    this->map_container[map_id].establishEntitySpawningPosition(
-        spawning_x_coord, spawning_y_coord, false);
-    this->map_container[map_id].occupyTile(caller, spawning_x_coord,
-                                           spawning_y_coord);
+//-----------------------------------------------------------------------------
+// Interacción con criaturas
+//-----------------------------------------------------------------------------
 
-    character.teleport(map_id, spawning_x_coord, spawning_y_coord);
-    active_clients.changeMap(caller, map_id);
+void Game::beAttackedByCreature(const InstanceId caller, int& damage,
+                              bool eluded) {
+    Character& attacked = this->characters.at(caller);
 
-    _pushCharacterDifferentialBroadcast(caller, NEW_BROADCAST, false);
+    if (damage > 0 && !attacked.getHealth()) {
+        _pushCharacterEvent(caller, DEATH_EV_TYPE);
+        _dropAllItems(&attacked);
+    }
 
-    // este podria ser reemplazado por uno solo hacia el caller
-    _pushCharacterDifferentialBroadcast(caller, UPDATE_BROADCAST, true);
-
-    _pushFullBroadcast(caller, false);
+    _sendAttackedByCreatureNotifications(damage, eluded, caller);
 }
 
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-// Getters de atributos
+// Obtención de atributos
 //-----------------------------------------------------------------------------
 
 const Id Game::getMapId(const InstanceId caller) {
