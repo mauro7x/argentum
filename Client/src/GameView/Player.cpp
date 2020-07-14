@@ -138,10 +138,6 @@ void Player::init(const PlayerData& init_data) {
 }
 
 void Player::update(const PlayerData& updated_data) {
-    if (!state) {
-        throw Exception("Player has not been initialized (update requested).");
-    }
-
     /* Verificamos si hay que modificar la info */
     if (level != updated_data.level) {
         info_level.loadFromRenderedText(
@@ -188,11 +184,13 @@ void Player::act(const int it) {
     }
 }
 
-void Player::render() const {
-    if (!state) {
-        throw Exception("Player has not been initialized (render requested).");
+void Player::render(InstanceId id) const {
+    if (data.gid == id) {
+        render();
     }
+}
 
+void Player::render() const {
     // Armadura / cuerpo (si no tiene armadura)
     if (equipment[ARMOUR]) {
         _render(g_sprites->get(equipment[ARMOUR], is_shorter));
@@ -225,10 +223,6 @@ void Player::render() const {
 }
 
 SDL_Rect Player::getBox() const {
-    if (!state) {
-        throw Exception("Player has not been initialized (box requested).");
-    }
-
     int body_w = g_sprites->get(body_id).clip_w;
     int head_h;
 

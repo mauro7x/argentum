@@ -109,6 +109,9 @@ class Player : public Unit {
     /* Override del método de Unit para el mensaje flotante */
     void act(const int it) override;
 
+    /* Renderizarse si su id es el indicado */
+    void render(InstanceId id) const;
+
     /* Renderizarse si se encuentra dentro de la cámara */
     void render() const override;
 
