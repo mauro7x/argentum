@@ -17,6 +17,10 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+#define TILENUMBER(x, y) ((y * w) + x)
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
 #define DROPPING_RANGE 3
 #define FREE_TILE_LOOKUP_RANGE 3
 //-----------------------------------------------------------------------------
@@ -45,22 +49,27 @@ class Map {
     std::vector<Id> creatures;
     std::string name;
 
+    //-------------------------------------------------------------------------
+    // Métodos privados
+
     /* Chequea si el mapa es válido. Lanza exepción si no. */
     void _checkIfValid(const json& map) const;
 
     /* Llena los tiles desde el json del mapa y desde los tilesets */
     void _fillTiles(const json& map, const json& tilesets);
 
-    /* Pasa de una posición dada por (x,y) a el número de tile en 1D */
-    int _tileNumber(const int x, const int y) const;
-
     /* Obtiene un tile modificable */
     Tile& _getTile(const int x, const int y);
+
+    /* Obtiene un tile modificable sin chequear */
+    Tile& _getTileWithoutChecks(const int x, const int y);
 
     /* Devuelve si el tile es válido y es parte del mapa */
     bool _isValid(const int x, const int y) const;
 
     const bool _moveOccupant(Tile& from_tile, Tile& to_tile, bool is_creature);
+
+    //-------------------------------------------------------------------------
 
    public:
     /* Constructor */
@@ -78,20 +87,13 @@ class Map {
     /* Deshabilitamos el operador= para movimiento. */
     Map& operator=(Map&& other) = delete;
 
-    //-------------------------------------------------------------------------
-
     /* Inicializa sus datos leyendo el json de la dirección recibida, recibiendo
      * las medidas que se esperan de cada tile */
-    void init(const json& map, const json& tilesets, std::vector<Id>& creatures, std::string& name);
+    void init(const json& map, const json& tilesets, std::vector<Id>& creatures,
+              std::string& name);
 
-    /* Devuelve la anchura en tiles */
-    int getWidthTiles() const;
-
-    /* Devuelve la altura en tiles */
-    int getHeightTiles() const;
-
-    /* Obtiene un Tile de solo lectura */
-    const Tile& getTile(const int x, const int y) const;
+    //-------------------------------------------------------------------------
+    // Escritura
 
     /* Devuelve una referencia al NPC_ID (gráfico) para escritura */
     TileId& getNPC(const int x, const int y);
@@ -102,7 +104,7 @@ class Map {
     const bool moveOccupant(const int x, const int y,
                             const Orientation& orientation, bool is_creature);
 
-    /*iniciando una posicion para el character*/
+    /* Iniciando una posicion para el character*/
     void establishEntitySpawningPosition(int& x, int& y, bool is_creature);
 
     /* Ocupa una celda con un ocupante */
@@ -128,12 +130,6 @@ class Map {
      */
     void addItem(const Id item_id, const uint32_t amount, int& x, int& y);
 
-    /*
-     * Lanza CouldNotFindFreeTileException si no se encuentra tile libre alguno
-     * dentro del rango FREE_TILE_LOOKUP_RANGE.
-     */
-    void getNearestFreeTile(int& x, int& y, const bool is_for_item);
-
     /* Devuelve si las coordenadas recibidas están dentro de una zona segura */
     const bool isSafeZone(const int x, const int y) const;
 
@@ -143,14 +139,38 @@ class Map {
     /* Elimina el item de una celda */
     void clearTileItem(const int x, const int y);
 
-    /* Chequear si una posicion es valida para la criatura */
-    bool isPositionValidForCreature (const int x, const int y);
+    /* Vacía el mapa de items y ocupantes */
+    void clear();
 
-    /* Obtener el vector de ids de criaturas*/
-    std::vector<Id> getCreatures() const;
+    //-------------------------------------------------------------------------
+    // Lectura
+
+    /* Devuelve la anchura en tiles */
+    int getWidthTiles() const;
+
+    /* Devuelve la altura en tiles */
+    int getHeightTiles() const;
+
+    /* Obtiene un Tile de solo lectura realizando el chequeo de los bounds */
+    const Tile& getTile(const int x, const int y) const;
+
+    /* Obtiene un Tile de solo lectura SIN REALIZAR EL CHEQUEO */
+    const Tile& getTileWithoutChecks(const int x, const int y) const;
+
+    /* Chequear si una posicion es valida para la criatura */
+    bool isPositionValidForCreature(const int x, const int y) const;
+
+    /*
+     * Lanza CouldNotFindFreeTileException si no se encuentra tile libre alguno
+     * dentro del rango FREE_TILE_LOOKUP_RANGE.
+     */
+    void getNearestFreeTile(int& x, int& y, const bool is_for_item) const;
+
+    /* Obtener el vector de ids de criaturas */
+    const std::vector<Id>& getCreatures() const;
 
     /* Obtener el nombre del map */
-    std::string getMapName() const;
+    const std::string& getMapName() const;
 
     //-------------------------------------------------------------------------
 

@@ -77,16 +77,16 @@ void Map::_fillTiles(const json& map, const json& tilesets) {
     }
 }
 
-int Map::_tileNumber(const int x, const int y) const {
+Tile& Map::_getTile(const int x, const int y) {
     if (!_isValid(x, y)) {
         throw Exception("Invalid map coordinates. x = %i, y = %i\n", x, y);
     }
-    return (y * w + x);
+
+    return tiles[TILENUMBER(x, y)];
 }
 
-Tile& Map::_getTile(const int x, const int y) {
-    int tile = _tileNumber(x, y);
-    return tiles.at(tile);
+Tile& Map::_getTileWithoutChecks(const int x, const int y) {
+    return tiles[TILENUMBER(x, y)];
 }
 
 const bool Map::_moveOccupant(Tile& from_tile, Tile& to_tile,
@@ -101,7 +101,9 @@ const bool Map::_moveOccupant(Tile& from_tile, Tile& to_tile,
 
     // Heisenbug estás allí?
     if (from_tile.occupant_id == 0)
-        fprintf(stderr," \n\n\n¡¡¡¡¡WARNING!!!!!: Map::_moveOcuppant: FROM_TILE OCCUPANT "
+        fprintf(
+            stderr,
+            " \n\n\n¡¡¡¡¡WARNING!!!!!: Map::_moveOcuppant: FROM_TILE OCCUPANT "
             "ID IS ZERO\n\n\n");
 
     // Se puede mover.
@@ -129,26 +131,8 @@ void Map::init(const json& map, const json& tilesets,
     _fillTiles(map, tilesets);
 }
 
-int Map::getWidthTiles() const {
-    return w;
-}
-
-int Map::getHeightTiles() const {
-    return h;
-}
-
-bool Map::_isValid(const int x, const int y) const {
-    if ((x >= w) || (x < 0) || (y >= h) || (y < 0)) {
-        return false;
-    } else {
-        return true;
-    }
-}
-
-const Tile& Map::getTile(const int x, const int y) const {
-    int tile = _tileNumber(x, y);
-    return tiles.at(tile);
-}
+//-----------------------------------------------------------------------------
+// Escritura
 
 TileId& Map::getNPC(const int x, const int y) {
     Tile& tile = _getTile(x, y);
@@ -260,9 +244,74 @@ void Map::addItem(const Id item_id, const uint32_t amount, int& x, int& y) {
     tile.item_amount = amount;
 }
 
-void Map::getNearestFreeTile(int& x, int& y, const bool is_for_item) {
+const bool Map::isSafeZone(const int x, const int y) const {
+    return this->getTile(x, y).safe_zone;
+}
+
+void Map::clearTileOccupant(const int x, const int y) {
+    Tile& tile = this->_getTile(x, y);
+    tile.occupant_id = 0;
+}
+
+void Map::clearTileItem(const int x, const int y) {
+    Tile& tile = this->_getTile(x, y);
+    tile.item_id = 0;
+    tile.item_amount = 0;
+}
+
+void Map::clear() {
+    for (size_t row = 0; row < h; row++) {
+        for (size_t col = 0; col < w; col++) {
+            Tile& tile = _getTileWithoutChecks(col, row);
+            tile.item_amount = 0;
+            tile.item_id = 0;
+            tile.occupant_id = 0;
+        }
+    }
+}
+
+//-----------------------------------------------------------------------------
+// Lectura
+
+int Map::getWidthTiles() const {
+    return w;
+}
+
+int Map::getHeightTiles() const {
+    return h;
+}
+
+bool Map::_isValid(const int x, const int y) const {
+    if ((x >= w) || (x < 0) || (y >= h) || (y < 0)) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+const Tile& Map::getTile(const int x, const int y) const {
+    if (!_isValid(x, y)) {
+        throw Exception("Invalid map coordinates. x = %i, y = %i\n", x, y);
+    }
+
+    return tiles[TILENUMBER(x, y)];
+}
+
+const Tile& Map::getTileWithoutChecks(const int x, const int y) const {
+    return tiles[TILENUMBER(x, y)];
+}
+
+bool Map::isPositionValidForCreature(const int x, const int y) const {
+    const Tile& tile = getTile(x, y);
+    if (tile.collision || tile.occupant_id || tile.npc_id || tile.safe_zone) {
+        return false;
+    }
+    return true;
+}
+
+void Map::getNearestFreeTile(int& x, int& y, const bool is_for_item) const {
     // Primero nos fijamos si está libre el mismo tile en (x, y)
-    Tile& current_tile = this->_getTile(x, y);
+    const Tile& current_tile = this->getTile(x, y);
     if (is_for_item) {
         if (!current_tile.item_id && !current_tile.collision &&
             !current_tile.npc_id) {
@@ -291,7 +340,7 @@ void Map::getNearestFreeTile(int& x, int& y, const bool is_for_item) {
                 if (_x < 0 || _y < 0 || _x > this->w - 1 || _y > this->h - 1)
                     continue;
 
-                Tile& tile = this->_getTile(_x, _y);
+                const Tile& tile = this->getTile(_x, _y);
 
                 if (is_for_item) {
                     if (!tile.item_id && !tile.collision && !tile.npc_id) {
@@ -317,35 +366,16 @@ void Map::getNearestFreeTile(int& x, int& y, const bool is_for_item) {
     }
 }
 
-const bool Map::isSafeZone(const int x, const int y) const {
-    return this->getTile(x, y).safe_zone;
-}
-
-void Map::clearTileOccupant(const int x, const int y) {
-    Tile& tile = this->_getTile(x, y);
-    tile.occupant_id = 0;
-}
-
-void Map::clearTileItem(const int x, const int y) {
-    Tile& tile = this->_getTile(x, y);
-    tile.item_id = 0;
-    tile.item_amount = 0;
-}
-
-bool Map::isPositionValidForCreature(const int x, const int y) {
-    Tile& tile = _getTile(x, y);
-    if (tile.collision || tile.occupant_id || tile.npc_id || tile.safe_zone) {
-        return false;
-    }
-    return true;
-}
-
-std::vector<Id> Map::getCreatures() const {
+const std::vector<Id>& Map::getCreatures() const {
     return creatures;
 }
-std::string Map::getMapName() const {
+
+const std::string& Map::getMapName() const {
     return name;
 }
+
+//-----------------------------------------------------------------------------
+
 Map::~Map() {}
 
 const char* CouldNotFindFreeTileException::what() const noexcept {
