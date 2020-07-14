@@ -167,8 +167,6 @@ void Player::addMessage(InstanceId sender_id, const std::string& msg) {
     }
 
     // actualizar el mensaje
-    fprintf(stderr, "llego mensaje del player.\n");
-
     msg_active = true;
     msg_its = MSG_ITERATIONS;
     this->msg.loadFromRenderedWrappedText(g_renderer, msg_font, msg,
