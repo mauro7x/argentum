@@ -118,15 +118,7 @@ void MapView::clearTileItem(const int x_tile, const int y_tile) {
 }
 
 void MapView::clear() {
-    int w_tiles = current_map->getWidthTiles();
-    int h_tiles = current_map->getHeightTiles();
-
-    for (int y = 0; y < h_tiles; y++) {
-        for (int x = 0; x < w_tiles; x++) {
-            current_map->clearTileItem(x, y);
-            current_map->clearTileOccupant(x, y);
-        }
-    }
+    current_map->clear();
 }
 
 void MapView::renderGround() const {
