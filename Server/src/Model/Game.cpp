@@ -175,9 +175,8 @@ void Game::_loadBankAccount(const CharacterCfg& init_data) {
 //-----------------------------------------------------------------------------
 
 const Id Game::_randomSelectCreature(const Id spawning_map) const {
-    std::vector<Id> possible_creatures;
-
-    possible_creatures = map_container[spawning_map].getCreatures();
+    const std::vector<Id>& possible_creatures =
+        map_container[spawning_map].getCreatures();
 
     RandomNumberGenerator gen;
     return possible_creatures[gen(0, possible_creatures.size() - 1)];
@@ -1836,7 +1835,7 @@ void Game::listConnectedPlayers(const InstanceId caller) {
 //-----------------------------------------------------------------------------
 
 void Game::beAttackedByCreature(const InstanceId caller, int& damage,
-                              bool eluded) {
+                                bool eluded) {
     Character& attacked = this->characters.at(caller);
 
     if (damage > 0 && !attacked.getHealth()) {
