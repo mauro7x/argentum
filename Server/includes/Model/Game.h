@@ -159,12 +159,28 @@ class Game {
 
     //--------------------------------------------------------------------------
     // Métodos auxiliares de creación de characters
-    //--------------------------------------------------------------------------  
+    //--------------------------------------------------------------------------
+
+    /*
+     * Establece la posición de spawneo del character.
+     *
+     * Si el character fue recién creado, (new_created = true), se asigna una
+     * posición aleatoria en una zona segura del mapa inicial dictaminado por la
+     * configuración recibida.
+     *
+     * Si el character ya estaba creado, se spawnea en la posición persistida o
+     * algún tile adyacente a ella (si está ocupada). Si no se puede encontrar
+     * posición libre a su alrededor, se spawneará como si fuera recién creada.
+     */
+    void _establishCharacterSpawningPosition(const CharacterCfg& init_data,
+                                             const Id& spawning_map_id,
+                                             int& spawning_x_coord,
+                                             int& spawning_y_coord);
 
     /*
      * Llena la cuenta del banco del jugador con los datos persistidos.
      */
-    void _loadBankAccount(const CharacterCfg& init_data); 
+    void _loadBankAccount(const CharacterCfg& init_data);
 
     //--------------------------------------------------------------------------
 
@@ -267,65 +283,179 @@ class Game {
     //--------------------------------------------------------------------------
 
     //--------------------------------------------------------------------------
-    // Métodos auxiliares para los comandos.
+    // Métodos auxiliares de persistencia
     //--------------------------------------------------------------------------
 
+    /*
+     * Persiste la información de todos los jugadores conectados.
+     */
+    void _persistAllData(Database& database);
+
+    //--------------------------------------------------------------------------
+
+    //--------------------------------------------------------------------------
+    // Validación de presencia de entes según la posición
+    //--------------------------------------------------------------------------
+
+    /*
+     * Retorna true si en la posición que corresponde a las coordenadas
+     * recibidas se encuentra un banquero, false en caso contrario.
+     *
+     * Si exception_if_invalid es true, se lanza una Exception con un mensaje
+     * indicando la incongruencia.
+     */
     const bool _validateBankerPosition(const InstanceId caller, Id& npc_id,
                                        const uint32_t x_coord,
                                        const uint32_t y_coord,
                                        const bool exception_if_invalid);
-
+    /*
+     * Retorna true si en la posición que corresponde a las coordenadas
+     * recibidas se encuentra un sacerdote, false en caso contrario.
+     *
+     * Si exception_if_invalid es true, se lanza una Exception con un mensaje
+     * indicando la incongruencia.
+     */
     const bool _validatePriestPosition(const InstanceId caller, Id& npc_id,
                                        const uint32_t x_coord,
                                        const uint32_t y_coord,
                                        const bool exception_if_invalid);
-
+    /*
+     * Retorna true si en la posición que corresponde a las coordenadas
+     * recibidas se encuentra un mercader, false en caso contrario.
+     *
+     * Si exception_if_invalid es true, se lanza una Exception con un mensaje
+     * indicando la incongruencia.
+     */
     const bool _validateMerchantPosition(const InstanceId caller, Id& npc_id,
                                          const uint32_t x_coord,
                                          const uint32_t y_coord,
                                          const bool exception_if_invalid);
-
+    /*
+     * Retorna true si en la posición que corresponde a las coordenadas
+     * recibidas se encuentra un portal, false en caso contrario.
+     *
+     * Si exception_if_invalid es true, se lanza una Exception con un mensaje
+     * indicando la incongruencia.
+     */
     const bool _validatePortalPosition(const InstanceId caller,
                                        const uint32_t x_coord,
                                        const uint32_t y_coord,
                                        const bool exception_if_invalid);
 
+    //--------------------------------------------------------------------------
+
+    //--------------------------------------------------------------------------
+    // Métodos auxiliares para la ejecución de los comandos
+    //--------------------------------------------------------------------------
+
+    /*
+     * Valida si el map_id especificado corresponde a un mapa al cual un
+     * portal puede teletransportar.
+     *
+     * Lanza Exception si no.
+     */
     void _validatePortalMapId(const InstanceId caller, Id map_id);
 
-    void _validateIfNPCSellsItem(const InstanceId caller, const Id npc_id,
-                                 const Id item_id);
+    /*
+     * Valida si el item_id especificado corresponde a un item que el NPC puede
+     * comercializar.
+     *
+     * Lanza Exception si no.
+     */
+    void _validateIfNPCMarketsItem(const InstanceId caller, const Id npc_id,
+                                   const Id item_id);
 
+    /*
+     * Lista los mapas posibles a los cuales un portal puede teletransportar.
+     * Además, establece un mensaje inicial descriptivo en init_msg.
+     */
     void _listPortalMaps(std::string& init_msg,
                          std::list<std::string>& item_list);
 
+    /*
+     * Lista los items que el NPC puede comercializar, con su descripción.
+     * Además, establece un mensaje inicial descriptivo en init_msg.
+     */
     void _listNPCSellableItems(const Id npc_id, std::string& init_msg,
                                std::list<std::string>& item_list);
 
+    /*
+     * Efectúa el dropeo del item en el n_slot especificado.
+     *
+     * Devuelve si se dropeó algún item (true) o no (false).
+     *
+     * Propaga InvalidInventorySlotNumberException.
+     */
     const bool _dropItem(const InstanceId caller, const uint8_t n_slot,
                          uint32_t& amount, Item** dropped);
 
+    /*
+     * Este método se llama ante la muerte de un character.
+     *
+     * Efectúa el dropeo de todos los items presentes en el inventario y
+     * equipamiento de un character, y los dispone todos los que pueda en el
+     * mapa. Si por alguna razón no se pueden disponer todos los items en el
+     * mapa, simplemente termina su ejecución.
+     */
     void _dropAllItems(Attackable* dropper);
 
+    /*
+     * Efectúa el uso de un arma por parte de un character, y envía las
+     * notificaciones pertinentes según el resultado de dicho uso.
+     *
+     * Propaga las siguientes excepciones:
+     *  OutOfRangeAttackException,
+     *  CantAttackWithoutWeaponException,
+     *  KindCantDoMagicException,
+     *  TooHighLevelDifferenceOnAttackException,
+     *  NewbiesCantBeAttackedException, InsufficientManaException,
+     *  AttackedActualStateCantBeAttackedException,
+     *  AttackCooldownTimeNotElapsedException,
+     *  CantAttackItselfException
+     */
     void _useWeapon(const InstanceId caller, const InstanceId target,
                     Attackable* attacked, const bool target_is_creature);
 
+    /*
+     * Este método es llamado una vez termina el cooldown de resurrección de un
+     * character.
+     *
+     * Efectúa la resurrección a distancia de un jugador. Esto implica
+     * teletransportar al jugador hacia el sacerdote más cercano (si se puede),
+     * resucitarlo, y hacer las notificaciones pertinentes.
+     */
+    void _cooldownResurrect(const InstanceId player);
+
+    /*
+     * Envía los mensajes y eventos pertinentes según el resultado del ataque
+     * por parte de un character.
+     */
     void _sendCharacterAttackNotifications(const int damage, const bool eluded,
                                            const InstanceId caller,
                                            const InstanceId target);
 
+    /*
+     * Envía los mensajes y eventos pertinentes según el resultado del ataque
+     * por parte de una creature.
+     */
     void _sendCreatureAttackNotifications(const int damage,
                                           const InstanceId caller,
                                           const InstanceId target);
 
+    /*
+     * Envía los mensajes y eventos pertinentes según el resultado de que un
+     * character sea atacado por una creature.
+     */
     void _sendAttackedByCreatureNotifications(const int damage,
                                               const bool eluded,
                                               const InstanceId caller);
 
-    void _cooldownResurrect(const InstanceId player);
-
+    /*
+     * Envía los mensajes y eventos pertinentes tras una resurrección.
+     */
     void _notifyResurrection(const InstanceId caller);
 
-    void _persistAllData(Database& database);
+    //--------------------------------------------------------------------------
 
    public:
     //--------------------------------------------------------------------------
@@ -408,7 +538,7 @@ class Game {
     void spawnNewCreatures(const int it);
 
     /*
-     * Guardar los datos del jugador periodicamente segun TIME_TO_SAVE_DATA.
+     * Guarda periódicamente los datos del jugador según TIME_TO_SAVE_DATA.
      */
     void persistPeriodicData(Database& database, const int it);
 
