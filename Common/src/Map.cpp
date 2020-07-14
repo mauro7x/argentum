@@ -253,8 +253,8 @@ void Map::clearTileItem(const int x, const int y) {
 }
 
 void Map::clear() {
-    for (size_t row = 0; row < h; row++) {
-        for (size_t col = 0; col < w; col++) {
+    for (size_t row = 0; row < (size_t)h; row++) {
+        for (size_t col = 0; col < (size_t)w; col++) {
             Tile& tile = _getTileWithoutChecks(col, row);
             tile.item_amount = 0;
             tile.item_id = 0;
