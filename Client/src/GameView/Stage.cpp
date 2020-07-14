@@ -39,12 +39,7 @@ void Stage::render() const {
         }
     }
 
-    /* Renderizamos los techos/sombras si es necesario */
-    if (g_map.indoor(player_pos.x, player_pos.y)) {
-        g_map.renderShadowOutdoor(); /* estamos adentro de una construcción */
-    } else {
-        g_map.renderRoofs(); /* estamos afuera de las construcciones */
-    }
+    g_map.renderTop(g_map.indoor(player_pos.x, player_pos.y));
 }
 
 Stage::~Stage() {}

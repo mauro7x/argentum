@@ -128,10 +128,6 @@ Unit::Unit(const Renderer* renderer, const Camera& camera,
     : g_renderer(renderer), g_camera(camera), g_sprites(sprites) {}
 
 void Unit::act(const int it) {
-    if (!state) {
-        throw Exception("Unit has not been initialized (act requested).");
-    }
-
     if (state == MOVING) {
         Uint32 time, time_step;
         time = SDL_GetTicks();
@@ -149,10 +145,6 @@ void Unit::act(const int it) {
 }
 
 SDL_Point Unit::getPos() const {
-    if (!state) {
-        throw Exception("Unit has not been initialized (pos requested).");
-    }
-
     return SDL_Point({data.x_tile, data.y_tile});
 }
 

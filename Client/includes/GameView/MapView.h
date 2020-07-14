@@ -2,6 +2,10 @@
 #define __MAP_VIEW_H__
 
 //-----------------------------------------------------------------------------
+#include <list>
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
 #include "../../../Common/includes/MapContainer.h"
 #include "../../../Common/includes/defs.h"
 #include "../../../Common/includes/types.h"
@@ -102,13 +106,11 @@ class MapView {
     void renderGround() const;
 
     /* Renderiza la decoración, los npcs, y los items */
-    void renderRow(const int row) const;
+    void renderRow(const int row, std::list<InstanceId>& units_to_render) const;
 
-    /* Renderiza los techos completos */
-    void renderRoofs() const;
-
-    /* Oscurece el mapa fuera de las construcciones */
-    void renderShadowOutdoor() const;
+    /* Renderiza el techo en caso de que no estemos dentro de una construcción,
+     * o sombra fuera si está dentro de una */
+    void renderTop(bool indoor) const;
 
     //-------------------------------------------------------------------------
     // Métodos de lectura
