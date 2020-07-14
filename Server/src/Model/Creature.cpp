@@ -153,7 +153,7 @@ void Creature::_updateDamage(const unsigned int it, const InstanceId id) {
         int damage = level * (int)random_number_generator(
                                  (int)this->min_damage, (int)this->max_damage);
         eluded = !characters.at(id).receiveAttack(damage, true);
-        game.attackedByCreature(id, damage, eluded);
+        game.beAttackedByCreature(id, damage, eluded);
         actual_attack_cooldown += attack_cooldown;
         attacking_id = id;
     }
@@ -174,6 +174,7 @@ void Creature::_updateMovement(const unsigned int it) {
         this->moving_cooldown += 1000 / movement_speed;
     }
 }
+
 void Creature::_setRandomOrientation() {
     RandomNumberGenerator gen;
     Orientation orientation =
