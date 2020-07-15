@@ -15,6 +15,7 @@ void EventHandler::_bindKeycodes() {
     keys.emplace(SDLK_SPACE, GRAB_THROW_KEY);
     keys.emplace(SDLK_BACKSPACE, DELETE_KEY);
     keys.emplace(SDLK_ESCAPE, ESC_KEY);
+    keys.emplace(SDLK_SLASH, COMMAND_KEY);
 }
 
 void EventHandler::_clearSelection() {
@@ -54,6 +55,8 @@ Key EventHandler::_getKey(const SDL_Keycode& key) {
     if (keys.count(key)) {
         return keys.at(key);
     }
+
+    // Tratamiento especial para la @?
 
     return UNMAPPED_KEY;
 }
@@ -161,6 +164,18 @@ Event EventHandler::_getKeyDownEv(const SDL_Event& e) {
 
             case ENTER_KEY: {
                 text_input_enabled = true;
+                return START_INPUT_EV;
+            }
+
+            case COMMAND_KEY: {
+                text_input_enabled = true;
+                hud.newInputText("/");
+                return START_INPUT_EV;
+            }
+
+            case PM_KEY: {
+                text_input_enabled = true;
+                hud.newInputText("@");
                 return START_INPUT_EV;
             }
 

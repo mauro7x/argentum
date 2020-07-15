@@ -78,7 +78,9 @@ enum Key {
     ENTER_KEY,
     GRAB_THROW_KEY,
     DELETE_KEY,
-    ESC_KEY
+    ESC_KEY,
+    COMMAND_KEY,
+    PM_KEY
 };
 
 //-----------------------------------------------------------------------------
