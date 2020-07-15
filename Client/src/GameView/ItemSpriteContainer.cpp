@@ -53,11 +53,23 @@ void ItemSpriteContainer::loadMedia() {
 }
 
 const ItemSprite& ItemSpriteContainer::get(const Id id) const {
-    return content.at(id);
+    try {
+        return content.at(id);
+    } catch (...) {
+        throw Exception(
+            "ItemSpriteContainer::operator[]: unknown item sprite id (%u)\n",
+            id);
+    }
 }
 
 const ItemSprite& ItemSpriteContainer::operator[](const Id id) const {
-    return content.at(id);
+    try {
+        return content.at(id);
+    } catch (...) {
+        throw Exception(
+            "ItemSpriteContainer::operator[]: unknown item sprite id (%u)\n",
+            id);
+    }
 }
 
 ItemSpriteContainer::~ItemSpriteContainer() {}

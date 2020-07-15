@@ -54,7 +54,12 @@ void TileContainer::loadMedia() {
 }
 
 const Texture& TileContainer::operator[](const TileId id) const {
-    return content.at(id);
+    try {
+        return content.at(id);
+    } catch (...) {
+        throw Exception("TileContainer::operator[]: unknown tile id (%u)\n",
+                        id);
+    }
 }
 
 TileContainer::~TileContainer() {}

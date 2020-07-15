@@ -98,7 +98,12 @@ const UnitSprite& UnitSpriteContainer::get(Id id, bool is_shorter) const {
         id += shorter_characters_offset;
     }
 
-    return content.at(id);
+    try {
+        return content.at(id);
+    } catch (...) {
+        throw Exception("UnitSpriteContainer::get: unknown sprite id (%u)\n",
+                        id);
+    }
 }
 
 const UnitSprite& UnitSpriteContainer::operator[](const Id id) const {
