@@ -401,8 +401,6 @@ void EventHandler::handleEvent(const SDL_Event& e) {
                 commands.push(cmd);
             } else if (!reply.empty()) {
                 hud.addMessage(reply, WARNING_MSG_COLOR);
-            } else {
-                _clearSelection();
             }
 
             break;
