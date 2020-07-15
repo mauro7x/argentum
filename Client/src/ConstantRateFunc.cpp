@@ -3,19 +3,28 @@
 //-----------------------------------------------------------------------------
 // Métodos privados
 
+void ConstantRateFunc::_updateIt(int& it) {
+    uint32_t ms = (it * rate) + delta_ms;
+    it = ms / original_rate;
+    delta_ms = ms % original_rate;
+}
+
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 // API Pública
 
-ConstantRateFunc::ConstantRateFunc() : exit(false) {
+ConstantRateFunc::ConstantRateFunc()
+    : original_rate(ORIGINAL_RATE), delta_ms(0), exit(false) {
     json config = JSON::loadJsonFile(paths::config(CONFIG_FILEPATH));
-    if (!((int)config["fps"])) {
+    int fps = config["fps"];
+
+    if (fps <= 0 || fps > MAX_FPS_ALLOWED) {
         throw Exception(
             "ConstantRateFunc::ConstantRateFunc: invalid fps in config file.");
     }
 
-    this->rate = 1000 / (int)config["fps"];
+    rate = 1000 / (int)config["fps"];
 }
 
 void ConstantRateFunc::run() {
@@ -28,6 +37,7 @@ void ConstantRateFunc::run() {
 
     // Loop principal
     while (!exit) {
+        _updateIt(it);
         _func(it);
 
         // Controlamos el rate y verificamos pérdida de frames.
@@ -39,7 +49,7 @@ void ConstantRateFunc::run() {
         rest = rate - std::ceil(diff.count());
 
         if (rest < 0) {
-            fprintf(stderr, ">> ConstantRateFunc: pérdida de frames.\n");
+            fprintf(stderr, ">> Ciclo principal: pérdida de frame/s.\n");
             behind = -rest;
             lost = rate + (behind - behind % rate);
             rest = rate - behind % rate;
@@ -47,7 +57,6 @@ void ConstantRateFunc::run() {
             it += std::floor(lost / rate);
         }
 
-        // fprintf(stderr, "MAIN-LOOP: Sleeping for %i ms.\n", rest);
         std::this_thread::sleep_for(std::chrono::milliseconds(rest));
         t1 += std::chrono::milliseconds(rate);
         it += 1;

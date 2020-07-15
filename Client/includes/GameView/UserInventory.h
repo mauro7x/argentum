@@ -72,7 +72,7 @@ class UserInventory : public HUDComponent {
     SDL_Point item_selected_pos = {0};
 
     // Animación de dobleclick para el equipamiento
-    uint8_t current_animate_slot = 0;
+    int16_t current_animate_slot = 0;
     SDL_Point animate_slot_pos = {0};
 
     /* Centra una textura en un rectangulo */
