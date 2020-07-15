@@ -1,6 +1,6 @@
 #include "../includes/Client.h"
 
-#include <valgrind/callgrind.h>
+// #include <valgrind/callgrind.h>
 
 //-----------------------------------------------------------------------------
 // Métodos privados
@@ -123,13 +123,13 @@ void Client::_launchGameCtx() {
     try {
         Mixer::setGameMusicVolume();
 
-        CALLGRIND_START_INSTRUMENTATION;
-        CALLGRIND_TOGGLE_COLLECT;
+        // CALLGRIND_START_INSTRUMENTATION;
+        // CALLGRIND_TOGGLE_COLLECT;
 
         game_view.run();
 
-        CALLGRIND_TOGGLE_COLLECT;
-        CALLGRIND_STOP_INSTRUMENTATION;
+        // CALLGRIND_TOGGLE_COLLECT;
+        // CALLGRIND_STOP_INSTRUMENTATION;
 
     } catch (const Exception& e) {
         _finishGameCtx(commands, command_dispatcher, receiver);
