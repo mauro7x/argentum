@@ -22,6 +22,11 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+static const int rendering_x_tiles_padding = 5;
+static const int rendering_y_tiles_padding = 5;
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
 
 class MapView {
    private:
@@ -31,10 +36,16 @@ class MapView {
     MapContainer maps;
     const ItemSpriteContainer& item_sprites;
 
-    /* Current map info */
+    // Area visible a renderizar
+    int x_min = 0, x_max = 0, y_min = 0, y_max = 0;
+
+    // Mapa actual
     Map* current_map = NULL;
     Id current_map_id = 0;
     int w_tiles = 0, h_tiles = 0;
+
+    //-------------------------------------------------------------------------
+    // Métodos privados
 
     /* Calcula el rectangulo sobre el que se debe graficar la textura. Esta
      * función es necesaria ya que el sistema de coordenadas en Tiled (el editor
@@ -42,6 +53,8 @@ class MapView {
      * función arregla esto. */
     SDL_Rect _getRenderQuad(const Texture& texture, const int x_tile,
                             const int y_tile) const;
+
+    //-------------------------------------------------------------------------
 
    public:
     /* Constructor */
@@ -68,6 +81,9 @@ class MapView {
 
     //-------------------------------------------------------------------------
     // Métodos de escritura
+
+    /* Settea la región de renderizado en base a la cámara */
+    void setRenderArea();
 
     /* Selecciona el mapa indicado por el id. Si cambia, devuelve true. */
     bool selectMap(const Id id);
@@ -127,11 +143,8 @@ class MapView {
     /* Devuelve si en la celda dada hay un portal */
     bool portal(const int x, const int y) const;
 
-    /* Obtiene la anchura en tiles del mapa actual */
-    int widthInTiles() const;
-
-    /* Obtiene la altura en tiles del mapa actual */
-    int heightInTiles() const;
+    /* Obtiene la fila minima y la máxima */
+    void getRowRange(int& row_min, int& row_max) const;
 
     /* Obtiene la anchura en pixeles del mapa actual */
     int widthInPx() const;

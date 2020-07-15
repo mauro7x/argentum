@@ -36,6 +36,28 @@ void MapView::loadMedia() {
     maps.loadMaps();
 }
 
+void MapView::setRenderArea() {
+    // Límites de renderizado
+
+    g_camera.getVisibleRect(x_min, x_max, y_min, y_max);
+    x_min = (x_min / TILE_WIDTH) - rendering_x_tiles_padding;
+    x_max = (x_max / TILE_WIDTH) + rendering_x_tiles_padding;
+    y_min = (y_min / TILE_HEIGHT) - rendering_y_tiles_padding;
+    y_max = (y_max / TILE_HEIGHT) + rendering_y_tiles_padding;
+
+    if (x_min < 0)
+        x_min = 0;
+
+    if (x_max >= w_tiles)
+        x_max = w_tiles;
+
+    if (y_min < 0)
+        y_min = 0;
+
+    if (y_max >= h_tiles)
+        y_max = h_tiles;
+}
+
 bool MapView::selectMap(const Id id) {
     if ((current_map_id == id) && (current_map != NULL)) {
         return false;
@@ -129,29 +151,29 @@ void MapView::renderGround() const {
     SDL_Rect render_quad = {0};
 
     /* Primera capa */
-    for (int y = 0; y < h_tiles; y++) {
-        for (int x = 0; x < w_tiles; x++) {
-            const Tile& current_tile = current_map->getTile(x, y);
+    for (int y = y_min; y < y_max; y++) {
+        for (int x = x_min; x < x_max; x++) {
+            const Tile& current_tile = current_map->getTileWithoutChecks(x, y);
 
             if (current_tile.ground_1_id) {
                 const Texture& texture = tiles[current_tile.ground_1_id];
                 render_quad = _getRenderQuad(texture, x, y);
-                g_camera.renderIfVisible(g_renderer, texture.getTexture(),
-                                         render_quad);
+                g_camera.renderAddingOffset(g_renderer, texture.getTexture(),
+                                            render_quad);
             }
         }
     }
 
     /* Segunda capa */
-    for (int y = 0; y < h_tiles; y++) {
-        for (int x = 0; x < w_tiles; x++) {
-            const Tile& current_tile = current_map->getTile(x, y);
+    for (int y = y_min; y < y_max; y++) {
+        for (int x = x_min; x < x_max; x++) {
+            const Tile& current_tile = current_map->getTileWithoutChecks(x, y);
 
             if (current_tile.ground_2_id) {
                 const Texture& texture = tiles[current_tile.ground_2_id];
                 render_quad = _getRenderQuad(texture, x, y);
-                g_camera.renderIfVisible(g_renderer, texture.getTexture(),
-                                         render_quad);
+                g_camera.renderAddingOffset(g_renderer, texture.getTexture(),
+                                            render_quad);
             }
         }
     }
@@ -161,31 +183,31 @@ void MapView::renderRow(const int row,
                         std::list<InstanceId>& units_to_render) const {
     SDL_Rect render_quad = {0};
 
-    for (int x = 0; x < w_tiles; x++) {
+    for (int x = x_min; x < x_max; x++) {
         const Tile& current_tile = current_map->getTileWithoutChecks(x, row);
 
         // Decoración
         if (current_tile.decoration_id) {
             const Texture& texture = tiles[current_tile.decoration_id];
             render_quad = _getRenderQuad(texture, x, row);
-            g_camera.renderIfVisible(g_renderer, texture.getTexture(),
-                                     render_quad);
+            g_camera.renderAddingOffset(g_renderer, texture.getTexture(),
+                                        render_quad);
         }
 
         // NPCs
         if (current_tile.npc_id) {
             const Texture& texture = tiles[current_tile.npc_id];
             render_quad = _getRenderQuad(texture, x, row);
-            g_camera.renderIfVisible(g_renderer, texture.getTexture(),
-                                     render_quad);
+            g_camera.renderAddingOffset(g_renderer, texture.getTexture(),
+                                        render_quad);
         }
 
         // Items
         if (current_tile.item_id) {
             const Texture& texture = item_sprites[current_tile.item_id].texture;
             render_quad = _getRenderQuad(texture, x, row);
-            g_camera.renderIfVisible(g_renderer, texture.getTexture(),
-                                     render_quad);
+            g_camera.renderAddingOffset(g_renderer, texture.getTexture(),
+                                        render_quad);
         }
 
         // Ocupantes
@@ -199,28 +221,30 @@ void MapView::renderTop(bool indoor) const {
     SDL_Rect render_quad = {0};
 
     if (!indoor) {
-        for (int y = 0; y < h_tiles; y++) {
-            for (int x = 0; x < w_tiles; x++) {
-                const Tile& current_tile = current_map->getTile(x, y);
+        for (int y = y_min; y < y_max; y++) {
+            for (int x = x_min; x < x_max; x++) {
+                const Tile& current_tile =
+                    current_map->getTileWithoutChecks(x, y);
 
                 if (current_tile.roof_id) {
                     const Texture& texture = tiles[current_tile.roof_id];
                     render_quad = _getRenderQuad(texture, x, y);
-                    g_camera.renderIfVisible(g_renderer, texture.getTexture(),
-                                             render_quad);
+                    g_camera.renderAddingOffset(
+                        g_renderer, texture.getTexture(), render_quad);
                 }
             }
         }
     } else {
-        for (int y = 0; y < h_tiles; y++) {
-            for (int x = 0; x < w_tiles; x++) {
-                const Tile& current_tile = current_map->getTile(x, y);
+        for (int y = y_min; y < y_max; y++) {
+            for (int x = x_min; x < x_max; x++) {
+                const Tile& current_tile =
+                    current_map->getTileWithoutChecks(x, y);
 
                 if (!(current_tile.indoor)) {
                     /* Renderizar una textura negra */
                     render_quad = {(x * TILE_WIDTH), (y * TILE_HEIGHT),
                                    TILE_WIDTH, TILE_HEIGHT};
-                    g_camera.fillQuadIfVisible(g_renderer, render_quad);
+                    g_camera.fillQuadAddingOffset(g_renderer, render_quad);
                 }
             }
         }
@@ -243,12 +267,9 @@ bool MapView::portal(const int x, const int y) const {
     return current_map->getTileWithoutChecks(x, y).portal;
 }
 
-int MapView::widthInTiles() const {
-    return w_tiles;
-}
-
-int MapView::heightInTiles() const {
-    return h_tiles;
+void MapView::getRowRange(int& row_min, int& row_max) const {
+    row_min = y_min;
+    row_max = y_max;
 }
 
 int MapView::widthInPx() const {
