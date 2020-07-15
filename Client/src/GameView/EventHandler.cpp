@@ -16,6 +16,7 @@ void EventHandler::_bindKeycodes() {
     keys.emplace(SDLK_BACKSPACE, DELETE_KEY);
     keys.emplace(SDLK_ESCAPE, ESC_KEY);
     keys.emplace(SDLK_SLASH, COMMAND_KEY);
+    keys.emplace(SDLK_m, PM_KEY);
 }
 
 void EventHandler::_clearSelection() {
@@ -55,8 +56,6 @@ Key EventHandler::_getKey(const SDL_Keycode& key) {
     if (keys.count(key)) {
         return keys.at(key);
     }
-
-    // Tratamiento especial para la @?
 
     return UNMAPPED_KEY;
 }
