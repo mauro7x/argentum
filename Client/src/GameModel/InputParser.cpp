@@ -451,8 +451,6 @@ Command* InputParser::_parseCommand(const std::string& command_input,
                 return NULL;
             }
 
-            fprintf(stderr, "Envío comando npchelp con x=%u, y=%u\n",
-                    current_selection.npc_x_tile, current_selection.npc_y_tile);
             return new HelpNpcCommand(current_selection.npc_x_tile,
                                       current_selection.npc_y_tile);
         }
