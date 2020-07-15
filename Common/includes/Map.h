@@ -49,25 +49,15 @@ class Map {
     int w = 0, h = 0;        /* dimensiones */
     std::vector<Tile> tiles; /* tiles lógicos */
 
-    // Capas gráficas estáticas del mapa
-    std::vector<std::list<GraphicTile>> decoration_ly;
-    std::vector<std::list<GraphicTile>> roof_ly;
-    std::vector<std::list<GraphicTile>> npc_ly;
-
     // Metadata
     std::vector<Id> creatures;
     std::string name;
-
-    // Vectores de objetos renderizables estáticos
 
     //-------------------------------------------------------------------------
     // Métodos privados
 
     /* Chequea si el mapa es válido. Lanza exepción si no. */
     void _checkIfValid(const json& map) const;
-
-    /* Inicializa las capas gráficas del mapa */
-    void _initLayers();
 
     /* Llena los tiles desde el json del mapa y desde los tilesets */
     void _fillTiles(const json& map, const json& tilesets);

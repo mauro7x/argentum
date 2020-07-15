@@ -30,23 +30,6 @@ void Map::_checkIfValid(const json& map) const {
     }
 }
 
-void Map::_initLayers() {
-    // Reservamos espacio para la grilla de tiles lógicos
-    tiles.reserve(w * h);
-
-    // Reservamos el espacio para nuestros objetos estáticos
-    decoration_ly.reserve(h);
-    roof_ly.reserve(h);
-    npc_ly.reserve(h);
-
-    // Iniciamos cada capa
-    for (int i = 0; i < h; i++) {
-        decoration_ly.emplace_back();
-        roof_ly.emplace_back();
-        npc_ly.emplace_back();
-    }
-}
-
 void Map::_fillTiles(const json& map, const json& tilesets) {
     Tile tile;
     size_t i = 0;
@@ -58,21 +41,9 @@ void Map::_fillTiles(const json& map, const json& tilesets) {
             // Ids gráficos (tiles gráficos)
             tile.ground_1_id = map["layers"][GROUND1_LAYER]["data"][i];
             tile.ground_2_id = map["layers"][GROUND2_LAYER]["data"][i];
-
             tile.decoration_id = map["layers"][DECORATION_LAYER]["data"][i];
-            if (tile.decoration_id) {
-                decoration_ly[row].emplace_back(col, tile.decoration_id);
-            }
-
             tile.roof_id = map["layers"][ROOF_LAYER]["data"][i];
-            if (tile.roof_id) {
-                roof_ly[row].emplace_back(col, tile.roof_id);
-            }
-
             tile.npc_id = map["layers"][NPC_LAYER]["data"][i];
-            if (tile.npc_id) {
-                npc_ly[row].emplace_back(col, tile.npc_id);
-            }
 
             // Metadata (tiles lógicos)
             int safe_zone = map["layers"][SAFEZONE_LAYER]["data"][i];
