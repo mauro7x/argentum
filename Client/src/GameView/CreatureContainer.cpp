@@ -40,22 +40,10 @@ void CreatureContainer::add(const InstanceId id,
 
 void CreatureContainer::update(const InstanceId id,
                                const CreatureData& updated_data) {
-    if (content.count(id) == 0) {
-        throw Exception(
-            "CreatureContainer::update: attempt to update unknown creature (id "
-            "is invalid).");
-    }
-
     content.at(id).update(updated_data);
 }
 
 SDL_Point CreatureContainer::getPos(const InstanceId id) const {
-    if (content.count(id) == 0) {
-        throw Exception(
-            "CreatureContainer::getPos: attempt to get pos of unknown creature "
-            "(id is invalid).");
-    }
-
     return content.at(id).getPos();
 }
 
@@ -72,12 +60,6 @@ void CreatureContainer::render(const InstanceId id) const {
 }
 
 void CreatureContainer::remove(const InstanceId id) {
-    if (content.count(id) == 0) {
-        throw Exception(
-            "CreatureContainer::remove: attempt to remove unknown creature (id "
-            "is invalid).");
-    }
-
     content.erase(id);
 }
 
