@@ -26,7 +26,7 @@ Command* InputParser::_parseCommandInput(
     const std::string& command_input) const {
     std::string identifier = _getCommandIdentifier(command_input);
     if (commands.count(identifier) == 0) {
-        (*g_reply) = "Comando inexistente.";
+        g_reply->msg = "Comando inexistente.";
         return NULL;
     }
 
@@ -39,7 +39,7 @@ Command* InputParser::_parseCommand(const std::string& command_input,
 
     switch (cmd_id) {
         case EQUIP_INPUT_CMD: {
-            (*g_reply) = "Este comando aun no está implementado.";
+            g_reply->msg = "Este comando aun no está implementado.";
             return NULL;
         }
 
@@ -49,13 +49,13 @@ Command* InputParser::_parseCommand(const std::string& command_input,
                 return new GrabItemCommand;
             }
 
-            (*g_reply) = "El comando '/tomar' no admite parámetros.";
+            g_reply->msg = "El comando '/tomar' no admite parámetros.";
             return NULL;
         }
 
         case THROW_INPUT_CMD: {
             if (current_selection.inventory_slot_selected < 0) {
-                (*g_reply) =
+                g_reply->msg =
                     "Debes seleccionar el item que quieres tirar (haciéndole "
                     "click).";
                 return NULL;
@@ -71,14 +71,14 @@ Command* InputParser::_parseCommand(const std::string& command_input,
             _splitBy(' ', body, n, excess);
 
             if (!excess.empty()) {
-                (*g_reply) =
+                g_reply->msg =
                     "Uso esperado del comando: /tirar [<cantidad> = 1]";
                 return NULL;
             }
 
             uint32_t amount;
             if (!_castToUint32(n, amount)) {
-                (*g_reply) =
+                g_reply->msg =
                     "Uso esperado del comando: /tirar [<cantidad> = 1]";
                 return NULL;
             }
@@ -93,14 +93,14 @@ Command* InputParser::_parseCommand(const std::string& command_input,
                 return new MeditateCommand;
             }
 
-            (*g_reply) = "El comando '/meditar' no admite parámetros.";
+            g_reply->msg = "El comando '/meditar' no admite parámetros.";
             return NULL;
         }
 
         case RESURRECT_INPUT_CMD: {
             body = _getCommandBody(command_input);
             if (!body.empty()) {
-                (*g_reply) = "El comando '/resucitar' no admite parámetros.";
+                g_reply->msg = "El comando '/resucitar' no admite parámetros.";
                 return NULL;
             }
 
@@ -114,7 +114,7 @@ Command* InputParser::_parseCommand(const std::string& command_input,
 
         case TELEPORT_INPUT_CMD: {
             if (!current_selection.portal_selected) {
-                (*g_reply) =
+                g_reply->msg =
                     "Debes seleccionar un portal primero (haciéndole click).";
                 return NULL;
             }
@@ -126,17 +126,18 @@ Command* InputParser::_parseCommand(const std::string& command_input,
 
             if (s_map_id.empty() || !excess.empty() ||
                 !_castToUint32(s_map_id, map_id)) {
-                (*g_reply) = "Uso esperado del comando: /viajar <map_id>";
+                g_reply->msg = "Uso esperado del comando: /viajar <map_id>";
                 return NULL;
             }
 
+            g_reply->clear_selection = true;
             return new TeleportCommand(current_selection.portal_x_tile,
                                        current_selection.portal_y_tile, map_id);
         }
 
         case HEAL_INPUT_CMD: {
             if (!current_selection.npc_selected) {
-                (*g_reply) =
+                g_reply->msg =
                     "Debes seleccionar a un sacerdote primero (haciéndole "
                     "click).";
                 return NULL;
@@ -144,7 +145,7 @@ Command* InputParser::_parseCommand(const std::string& command_input,
 
             body = _getCommandBody(command_input);
             if (!body.empty()) {
-                (*g_reply) = "El comando '/curar' no admite parámetros.";
+                g_reply->msg = "El comando '/curar' no admite parámetros.";
                 return NULL;
             }
 
@@ -155,7 +156,7 @@ Command* InputParser::_parseCommand(const std::string& command_input,
         case LIST_INPUT_CMD: {
             if (!current_selection.npc_selected &&
                 !current_selection.portal_selected) {
-                (*g_reply) =
+                g_reply->msg =
                     "Debes seleccionar a un NPC o a un portal primero "
                     "(haciéndole click).";
                 return NULL;
@@ -163,7 +164,7 @@ Command* InputParser::_parseCommand(const std::string& command_input,
 
             body = _getCommandBody(command_input);
             if (!body.empty()) {
-                (*g_reply) = "El comando '/listar' no admite parámetros.";
+                g_reply->msg = "El comando '/listar' no admite parámetros.";
                 return NULL;
             }
 
@@ -178,14 +179,14 @@ Command* InputParser::_parseCommand(const std::string& command_input,
 
         case DEPOSIT_INPUT_CMD: {
             if (!current_selection.npc_selected) {
-                (*g_reply) =
+                g_reply->msg =
                     "Debes seleccionar a un banquero primero (haciéndole "
                     "click).";
                 return NULL;
             }
 
             if (current_selection.inventory_slot_selected < 0) {
-                (*g_reply) =
+                g_reply->msg =
                     "Debes seleccionar el item que quieres depositar "
                     "(haciéndole click).";
                 return NULL;
@@ -202,14 +203,14 @@ Command* InputParser::_parseCommand(const std::string& command_input,
             _splitBy(' ', body, n, excess);
 
             if (!excess.empty()) {
-                (*g_reply) =
+                g_reply->msg =
                     "Uso esperado del comando: /depositar [<cantidad> = 1]";
                 return NULL;
             }
 
             uint32_t amount;
             if (!_castToUint32(n, amount)) {
-                (*g_reply) =
+                g_reply->msg =
                     "Uso esperado del comando: /depositar [<cantidad> = 1]";
                 return NULL;
             }
@@ -221,7 +222,7 @@ Command* InputParser::_parseCommand(const std::string& command_input,
 
         case DEPOSIT_GOLD_INPUT_CMD: {
             if (!current_selection.npc_selected) {
-                (*g_reply) =
+                g_reply->msg =
                     "Debes seleccionar a un banquero primero (haciéndole "
                     "click).";
                 return NULL;
@@ -229,7 +230,7 @@ Command* InputParser::_parseCommand(const std::string& command_input,
 
             body = _getCommandBody(command_input);
             if (body.empty()) {
-                (*g_reply) =
+                g_reply->msg =
                     "Uso esperado del comando: /depositaroro <cantidad>";
                 return NULL;
             }
@@ -238,14 +239,14 @@ Command* InputParser::_parseCommand(const std::string& command_input,
             _splitBy(' ', body, n, excess);
 
             if (!excess.empty()) {
-                (*g_reply) =
+                g_reply->msg =
                     "Uso esperado del comando: /depositaroro <cantidad>";
                 return NULL;
             }
 
             uint32_t amount;
             if (!_castToUint32(n, amount)) {
-                (*g_reply) =
+                g_reply->msg =
                     "Uso esperado del comando: /depositaroro <cantidad>";
                 return NULL;
             }
@@ -256,7 +257,7 @@ Command* InputParser::_parseCommand(const std::string& command_input,
 
         case WITHDRAW_INPUT_CMD: {
             if (!current_selection.npc_selected) {
-                (*g_reply) =
+                g_reply->msg =
                     "Debes seleccionar a un banquero primero (haciéndole "
                     "click).";
                 return NULL;
@@ -264,7 +265,7 @@ Command* InputParser::_parseCommand(const std::string& command_input,
 
             body = _getCommandBody(command_input);
             if (body.empty()) {
-                (*g_reply) =
+                g_reply->msg =
                     "Uso esperado del comando: /retirar <item_id> [<cantidad> "
                     "= 1]";
                 return NULL;
@@ -276,7 +277,7 @@ Command* InputParser::_parseCommand(const std::string& command_input,
             _splitBy(' ', excess, s_amount, excess);
 
             if (s_id.empty() || !excess.empty() || !_castToUint32(s_id, id)) {
-                (*g_reply) =
+                g_reply->msg =
                     "ASD Uso esperado del comando: /retirar <item_id> "
                     "[<cantidad> "
                     "= 1]";
@@ -290,7 +291,7 @@ Command* InputParser::_parseCommand(const std::string& command_input,
             }
 
             if (!_castToUint32(s_amount, amount)) {
-                (*g_reply) =
+                g_reply->msg =
                     "JKL Uso esperado del comando: /retirar <item_id> "
                     "[<cantidad> "
                     "= 1]";
@@ -304,7 +305,7 @@ Command* InputParser::_parseCommand(const std::string& command_input,
 
         case WITHDRAW_GOLD_INPUT_CMD: {
             if (!current_selection.npc_selected) {
-                (*g_reply) =
+                g_reply->msg =
                     "Debes seleccionar a un banquero primero (haciéndole "
                     "click).";
                 return NULL;
@@ -312,7 +313,8 @@ Command* InputParser::_parseCommand(const std::string& command_input,
 
             body = _getCommandBody(command_input);
             if (body.empty()) {
-                (*g_reply) = "Uso esperado del comando: /retiraroro <cantidad>";
+                g_reply->msg =
+                    "Uso esperado del comando: /retiraroro <cantidad>";
                 return NULL;
             }
 
@@ -320,13 +322,15 @@ Command* InputParser::_parseCommand(const std::string& command_input,
             _splitBy(' ', body, n, excess);
 
             if (!excess.empty()) {
-                (*g_reply) = "Uso esperado del comando: /retiraroro <cantidad>";
+                g_reply->msg =
+                    "Uso esperado del comando: /retiraroro <cantidad>";
                 return NULL;
             }
 
             uint32_t amount;
             if (!_castToUint32(n, amount)) {
-                (*g_reply) = "Uso esperado del comando: /retiraroro <cantidad>";
+                g_reply->msg =
+                    "Uso esperado del comando: /retiraroro <cantidad>";
                 return NULL;
             }
 
@@ -337,7 +341,7 @@ Command* InputParser::_parseCommand(const std::string& command_input,
 
         case BUY_INPUT_CMD: {
             if (!current_selection.npc_selected) {
-                (*g_reply) =
+                g_reply->msg =
                     "Debes seleccionar a un comerciante primero (haciéndole "
                     "click).";
                 return NULL;
@@ -345,7 +349,7 @@ Command* InputParser::_parseCommand(const std::string& command_input,
 
             body = _getCommandBody(command_input);
             if (body.empty()) {
-                (*g_reply) =
+                g_reply->msg =
                     "Uso esperado del comando: /comprar <item_id> [<cantidad> "
                     "= 1]";
                 return NULL;
@@ -357,7 +361,7 @@ Command* InputParser::_parseCommand(const std::string& command_input,
 
             uint32_t id;
             if (s_id.empty() || !excess.empty() || !_castToUint32(s_id, id)) {
-                (*g_reply) =
+                g_reply->msg =
                     "Uso esperado del comando: /comprar <item_id> [<cantidad> "
                     "= 1]";
                 return NULL;
@@ -371,7 +375,7 @@ Command* InputParser::_parseCommand(const std::string& command_input,
 
             uint32_t amount;
             if (!_castToUint32(s_amount, amount)) {
-                (*g_reply) =
+                g_reply->msg =
                     "Uso esperado del comando: /comprar <item_id> [<cantidad> "
                     "= 1]";
                 return NULL;
@@ -384,14 +388,14 @@ Command* InputParser::_parseCommand(const std::string& command_input,
 
         case SELL_INPUT_CMD: {
             if (!current_selection.npc_selected) {
-                (*g_reply) =
+                g_reply->msg =
                     "Debes seleccionar a un comerciante primero (haciéndole "
                     "click).";
                 return NULL;
             }
 
             if (current_selection.inventory_slot_selected < 0) {
-                (*g_reply) =
+                g_reply->msg =
                     "Debes seleccionar el item que quieres vender "
                     "(haciéndole click).";
                 return NULL;
@@ -408,14 +412,14 @@ Command* InputParser::_parseCommand(const std::string& command_input,
             _splitBy(' ', body, n, excess);
 
             if (!excess.empty()) {
-                (*g_reply) =
+                g_reply->msg =
                     "Uso esperado del comando: /vender [<cantidad> = 1]";
                 return NULL;
             }
 
             uint32_t amount;
             if (!_castToUint32(n, amount)) {
-                (*g_reply) =
+                g_reply->msg =
                     "Uso esperado del comando: /vender [<cantidad> = 1]";
                 return NULL;
             }
@@ -428,7 +432,7 @@ Command* InputParser::_parseCommand(const std::string& command_input,
         case LIST_PLAYERS_INPUT_CMD: {
             body = _getCommandBody(command_input);
             if (!body.empty()) {
-                (*g_reply) =
+                g_reply->msg =
                     "El comando '/listarjugadores' no admite parámetros.";
                 return NULL;
             }
@@ -438,7 +442,7 @@ Command* InputParser::_parseCommand(const std::string& command_input,
 
         case HELP_NPC_INPUT_CMD: {
             if (!current_selection.npc_selected) {
-                (*g_reply) =
+                g_reply->msg =
                     "Debes seleccionar al NPC al que le quieras pedir ayuda "
                     "(haciéndole "
                     "click).";
@@ -447,7 +451,7 @@ Command* InputParser::_parseCommand(const std::string& command_input,
 
             body = _getCommandBody(command_input);
             if (!body.empty()) {
-                (*g_reply) = "El comando '/help' no admite parámetros.";
+                g_reply->msg = "El comando '/help' no admite parámetros.";
                 return NULL;
             }
 
@@ -509,7 +513,7 @@ Command* InputParser::_parsePMInput(const std::string& message_input) const {
     _splitBy(": ", message_input.substr(1), receiver, content);
 
     if (receiver.empty() || content.empty()) {
-        (*g_reply) =
+        g_reply->msg =
             "Formato esperado para los mensajes privados: @destinatario: "
             "<mensaje>";
         return NULL;
@@ -554,7 +558,7 @@ InputParser::InputParser(Selection& current_selection)
     _fillCommands();
 }
 
-Command* InputParser::parse(const std::string& input, std::string& reply) {
+Command* InputParser::parse(const std::string& input, ParserReply& reply) {
     // Setteamos el puntero a la respuesta
     g_reply = &reply;
 
@@ -569,10 +573,12 @@ Command* InputParser::parse(const std::string& input, std::string& reply) {
         }
 
         case '@': {
+            g_reply->log_input = false;
             return _parsePMInput(input);
         }
 
         default: {
+            g_reply->log_input = false;
             return new SendGeneralMessageCommand(input);
         }
     }

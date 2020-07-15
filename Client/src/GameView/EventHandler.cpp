@@ -408,19 +408,21 @@ void EventHandler::handleEvent(const SDL_Event& e) {
             Mixer::playLocalSound(CLICK_SOUND);
 
             std::string input = hud.popText();
-            std::string reply;
+            // std::string reply;
+            ParserReply reply;
             Command* cmd = input_parser.parse(input, reply);
             if (cmd) {
-                hud.addMessage(">> " + input, USER_CMD_MSG_COLOR);
                 commands.push(cmd);
-            } else if (!reply.empty()) {
-                hud.addMessage(reply, WARNING_MSG_COLOR);
+                if (reply.log_input) {
+                    hud.addMessage(">> " + input, USER_CMD_MSG_COLOR);
+                }
+            } else if (!reply.msg.empty()) {
+                hud.addMessage(reply.msg, WARNING_MSG_COLOR);
             }
 
-            // Es necesario sacar la seleccion porque sino cuando se viaja y el
-            // mapa cambia, se quiere sacar la seleccion y la misma ya no es
-            // valida. Resolver de otra forma. Por ahora, para evitar el bug:
-            _clearSelection();
+            if (reply.clear_selection) {
+                _clearSelection();
+            }
 
             break;
         }

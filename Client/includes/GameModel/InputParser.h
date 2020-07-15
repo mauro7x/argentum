@@ -15,6 +15,7 @@
 //-----------------------------------------------------------------------------
 #include "Commands/Command.h"
 #include "Commands/Commands.h"
+#include "ParserReply.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -71,7 +72,7 @@ class InputParser {
    private:
     Selection& current_selection;
     std::unordered_map<std::string, InputCommand> commands;
-    std::string* g_reply;
+    ParserReply* g_reply;
 
     //-----------------------------------------------------------------------------
     // Métodos privados
@@ -133,7 +134,7 @@ class InputParser {
 
     /* Parsea un input y obtiene un comando. Si el input es inválido,
      * retorna NULL. */
-    Command* parse(const std::string& input, std::string& reply);
+    Command* parse(const std::string& input, ParserReply& reply);
 
     //-----------------------------------------------------------------------------
 
