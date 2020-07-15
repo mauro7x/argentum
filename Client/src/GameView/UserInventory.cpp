@@ -289,7 +289,10 @@ void UserInventory::update(const int it) {
 
     // Cooldown de las animaciones
     if (current_animate_slot) {
-        current_animate_slot--;
+        current_animate_slot -= it;
+        if (current_animate_slot < 0) {
+            current_animate_slot = 0;
+        }
     }
 }
 
