@@ -417,6 +417,11 @@ void EventHandler::handleEvent(const SDL_Event& e) {
                 hud.addMessage(reply, WARNING_MSG_COLOR);
             }
 
+            // Es necesario sacar la seleccion porque sino cuando se viaja y el
+            // mapa cambia, se quiere sacar la seleccion y la misma ya no es
+            // valida. Resolver de otra forma. Por ahora, para evitar el bug:
+            _clearSelection();
+
             break;
         }
 
