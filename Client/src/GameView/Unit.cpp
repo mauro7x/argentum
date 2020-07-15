@@ -115,9 +115,9 @@ void Unit::_render(const UnitSprite& sprite) const {
     render_clip.x = _calculateSpriteX(sprite);
     render_clip.y = _calculateSpriteY(sprite);
 
-    // Paso 4: renderizamos si somos visibles por la camara
-    g_camera.renderIfVisible(g_renderer, sprite.texture.getTexture(),
-                             render_quad, &render_clip);
+    // Paso 4: renderizamos
+    g_camera.renderAddingOffset(g_renderer, sprite.texture.getTexture(),
+                                render_quad, &render_clip);
 }
 
 //-----------------------------------------------------------------------------

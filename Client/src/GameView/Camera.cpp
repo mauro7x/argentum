@@ -41,17 +41,6 @@ bool Camera::isVisible(const SDL_Rect* object) const {
     return true;
 }
 
-void Camera::renderIfVisible(const Renderer* renderer, SDL_Texture* texture,
-                             SDL_Rect& render_quad,
-                             const SDL_Rect* clip) const {
-    if (isVisible(&render_quad)) {
-        render_quad.x += (box.x - pos.x);
-        render_quad.y += (box.y - pos.y);
-
-        renderer->render(texture, &render_quad, clip);
-    }
-}
-
 void Camera::renderAddingOffset(const Renderer* renderer, SDL_Texture* texture,
                                 SDL_Rect& render_quad,
                                 const SDL_Rect* clip) const {
@@ -59,16 +48,6 @@ void Camera::renderAddingOffset(const Renderer* renderer, SDL_Texture* texture,
     render_quad.y += (box.y - pos.y);
 
     renderer->render(texture, &render_quad, clip);
-}
-
-void Camera::fillQuadIfVisible(const Renderer* renderer, SDL_Rect& render_quad,
-                               const SDL_Color& color) const {
-    if (isVisible(&render_quad)) {
-        render_quad.x += (box.x - pos.x);
-        render_quad.y += (box.y - pos.y);
-
-        renderer->fillQuad(&render_quad, color);
-    }
 }
 
 void Camera::fillQuadAddingOffset(const Renderer* renderer,

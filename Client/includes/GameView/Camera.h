@@ -54,18 +54,9 @@ class Camera {
                             SDL_Rect& render_quad,
                             const SDL_Rect* clip = NULL) const;
 
-    /* Renderiza una textura con el renderer si es visible por la camara */
-    void renderIfVisible(const Renderer* renderer, SDL_Texture* texture,
-                         SDL_Rect& render_quad,
-                         const SDL_Rect* clip = NULL) const;
-
     /* Dibuja un rectangulo agregandole un offset, SEA O NO VISIBLE */
     void fillQuadAddingOffset(const Renderer* renderer, SDL_Rect& render_quad,
                               const SDL_Color& color = {0, 0, 0, 255}) const;
-
-    /* Dibuja un rectangulo con el renderer si es visible por la camara */
-    void fillQuadIfVisible(const Renderer* renderer, SDL_Rect& render_quad,
-                           const SDL_Color& color = {0, 0, 0, 255}) const;
 
     /* Offset de la camara en X */
     int xOffset() const;

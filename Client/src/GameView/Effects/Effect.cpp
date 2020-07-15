@@ -107,8 +107,10 @@ void Effect::render() const {
         }
 
         _setRenderQuad(render_quad, it->effect_pos.x, it->effect_pos.y);
-        camera.renderIfVisible(g_renderer, texture.getTexture(), render_quad,
-                               clip);
+        if (camera.isVisible(&render_quad)) {
+            camera.renderAddingOffset(g_renderer, texture.getTexture(),
+                                      render_quad, clip);
+        }
     }
 }
 
