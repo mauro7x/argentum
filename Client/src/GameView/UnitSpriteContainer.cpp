@@ -17,32 +17,29 @@ void UnitSpriteContainer::_loadSpritesFromJson(const json& sprites,
 
         content.emplace(std::piecewise_construct, std::forward_as_tuple(id),
                         std::forward_as_tuple(id));
-        content.at(id).id = id;
-        content.at(id).clip_w = (uint16_t)sprites[i]["clip_w"];
-        content.at(id).clip_h = (uint16_t)sprites[i]["clip_h"];
+        UnitSprite& new_sprite = content.at(id);
 
-        content.at(id).up_row = (uint8_t)sprites[i]["up_row_col_clips"][0];
-        content.at(id).up_col = (uint8_t)sprites[i]["up_row_col_clips"][1];
-        content.at(id).up_clips = (uint8_t)sprites[i]["up_row_col_clips"][2];
+        new_sprite.id = id;
+        new_sprite.clip_w = (uint16_t)sprites[i]["clip_w"];
+        new_sprite.clip_h = (uint16_t)sprites[i]["clip_h"];
 
-        content.at(id).down_row = (uint8_t)sprites[i]["down_row_col_clips"][0];
-        content.at(id).down_col = (uint8_t)sprites[i]["down_row_col_clips"][1];
-        content.at(id).down_clips =
-            (uint8_t)sprites[i]["down_row_col_clips"][2];
+        new_sprite.up_row = (uint8_t)sprites[i]["up_row_col_clips"][0];
+        new_sprite.up_col = (uint8_t)sprites[i]["up_row_col_clips"][1];
+        new_sprite.up_clips = (uint8_t)sprites[i]["up_row_col_clips"][2];
 
-        content.at(id).left_row = (uint8_t)sprites[i]["left_row_col_clips"][0];
-        content.at(id).left_col = (uint8_t)sprites[i]["left_row_col_clips"][1];
-        content.at(id).left_clips =
-            (uint8_t)sprites[i]["left_row_col_clips"][2];
+        new_sprite.down_row = (uint8_t)sprites[i]["down_row_col_clips"][0];
+        new_sprite.down_col = (uint8_t)sprites[i]["down_row_col_clips"][1];
+        new_sprite.down_clips = (uint8_t)sprites[i]["down_row_col_clips"][2];
 
-        content.at(id).right_row =
-            (uint8_t)sprites[i]["right_row_col_clips"][0];
-        content.at(id).right_col =
-            (uint8_t)sprites[i]["right_row_col_clips"][1];
-        content.at(id).right_clips =
-            (uint8_t)sprites[i]["right_row_col_clips"][2];
+        new_sprite.left_row = (uint8_t)sprites[i]["left_row_col_clips"][0];
+        new_sprite.left_col = (uint8_t)sprites[i]["left_row_col_clips"][1];
+        new_sprite.left_clips = (uint8_t)sprites[i]["left_row_col_clips"][2];
 
-        content.at(id).change_every_n_frames =
+        new_sprite.right_row = (uint8_t)sprites[i]["right_row_col_clips"][0];
+        new_sprite.right_col = (uint8_t)sprites[i]["right_row_col_clips"][1];
+        new_sprite.right_clips = (uint8_t)sprites[i]["right_row_col_clips"][2];
+
+        new_sprite.change_every_n_frames =
             (uint8_t)sprites[i]["change_every_n_frames"];
 
         need_color_keying = sprites[i]["color_key"]["is_needed"];
@@ -50,9 +47,9 @@ void UnitSpriteContainer::_loadSpritesFromJson(const json& sprites,
             r = sprites[i]["color_key"]["color"]["r"];
             g = sprites[i]["color_key"]["color"]["g"];
             b = sprites[i]["color_key"]["color"]["b"];
-            content.at(id).texture.loadFromFile(g_renderer, filepath, r, g, b);
+            new_sprite.texture.loadFromFile(g_renderer, filepath, r, g, b);
         } else {
-            content.at(id).texture.loadFromFile(g_renderer, filepath);
+            new_sprite.texture.loadFromFile(g_renderer, filepath);
         }
     }
 }
