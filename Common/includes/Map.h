@@ -3,6 +3,7 @@
 
 //-----------------------------------------------------------------------------
 #include <exception>
+#include <list>
 #include <vector>
 //-----------------------------------------------------------------------------
 
@@ -48,6 +49,8 @@ class Map {
     std::vector<Tile> tiles;
     std::vector<Id> creatures;
     std::string name;
+
+    // Vectores de objetos renderizables estáticos
 
     //-------------------------------------------------------------------------
     // Métodos privados
