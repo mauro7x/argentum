@@ -85,7 +85,7 @@
         },
         "imgs": {
             "dirpath": "client/assets/Views/TutorialView/imgs/",
-            "size": 14
+            "size": 15
         }
     },
     "connectionview": {
