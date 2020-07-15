@@ -69,10 +69,9 @@ class Socket {
      *
      * Retorno: -
      *
-     * En caso de error libera la memoria de all_addresses.
      * >THROW EXPLICITO DE EXCEPTION.
      */
-    void _setFd(addrinfo* address, addrinfo* all_addresses);
+    void _setFd(addrinfo* address);
 
     /** (SERVER-SIDE)
      * Descripción: arregla el problema de TIMEWAIT de existir.
@@ -81,7 +80,6 @@ class Socket {
      *
      * Retorno: -
      *
-     * En caso de error libera la memoria de address.
      * >THROW EXPLICITO DE EXCEPTION.
      */
     void _fixTimeWait(addrinfo* address) const;
@@ -93,7 +91,6 @@ class Socket {
      *
      * Retorno: -
      *
-     * Libera la memoria de address.
      * >THROW EXPLICITO DE EXCEPTION.
      */
     void _bind(addrinfo* address) const;
@@ -119,7 +116,6 @@ class Socket {
      *
      * Retorno: -
      *
-     * Libera la memoria de addresses.
      * >THROW EXPLICITO DE EXCEPTION.
      */
     void _tryToConnectTo(addrinfo* addresses);

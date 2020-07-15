@@ -43,12 +43,11 @@ void Socket::_setClientAddresses(const std::string& hostname,
     }
 }
 
-void Socket::_setFd(addrinfo* address, addrinfo* all_addresses) {
+void Socket::_setFd(addrinfo* address) {
     fd = ::socket(address->ai_family, address->ai_socktype,
                   address->ai_protocol);
 
     if (fd == -1) {
-        ::freeaddrinfo(all_addresses);
         throw Exception("Error in function: Socket::_setFd()");
     } else {
         fd_valid = true;
@@ -58,7 +57,6 @@ void Socket::_setFd(addrinfo* address, addrinfo* all_addresses) {
 void Socket::_fixTimeWait(addrinfo* address) const {
     int val = 1;
     if (::setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &val, sizeof(val))) {
-        ::freeaddrinfo(address);
         throw Exception("Error in function: Socket::_fixTimeWait()");
     }
 }
@@ -66,7 +64,6 @@ void Socket::_fixTimeWait(addrinfo* address) const {
 void Socket::_bind(addrinfo* address) const {
     int s;
     s = bind(fd, address->ai_addr, address->ai_addrlen);
-    ::freeaddrinfo(address);
 
     if (s == -1) {
         throw Exception("Error in function: Socket::_bind()");
@@ -85,7 +82,7 @@ void Socket::_tryToConnectTo(addrinfo* addresses) {
     try {
         for (ptr = addresses; ((ptr != NULL) && (connected == false));
              ptr = ptr->ai_next) {
-            _setFd(ptr, addresses);
+            _setFd(ptr);
             if (::connect(fd, ptr->ai_addr, ptr->ai_addrlen)) {
                 _closeFdIfValid();
             } else {
@@ -93,7 +90,6 @@ void Socket::_tryToConnectTo(addrinfo* addresses) {
             }
         }
 
-        ::freeaddrinfo(addresses);
         if (!connected) {
             throw Exception(
                 "Error in function: Socket::_tryToConnectTo(). "
@@ -124,7 +120,9 @@ Socket::Socket(const std::string& hostname, const std::string& port) {
     try {
         _setClientAddresses(hostname, port, &addresses);
         _tryToConnectTo(addresses);
+        ::freeaddrinfo(addresses);
     } catch (const Exception& e) {
+        ::freeaddrinfo(addresses);
         throw e;
     }
 }
@@ -135,13 +133,16 @@ Socket::Socket(const std::string& port, const int max_queued_clients) {
     addrinfo* address;
     try {
         _setServerAddress(port, &address);
-        _setFd(address, address);
+        _setFd(address);
         _fixTimeWait(address);
         _bind(address);
         _listen(max_queued_clients);
     } catch (const Exception& e) {
+        ::freeaddrinfo(address);
         throw e;
     }
+
+    ::freeaddrinfo(address);
 }
 
 Socket::Socket(Socket&& other) {
