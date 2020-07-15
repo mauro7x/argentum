@@ -49,7 +49,7 @@ function unknownInput() {
 
 function openWithVi() {
     echo "> Modificando archivo de configuración..."
-    sudo vi $1
+    vi $1
     echo ""
 }
 
@@ -59,8 +59,8 @@ function openWithVi() {
 # Scripts
 
 function resetDatabase() {
-    sudo rm -rf /var/argentum/server/assets/Database/playerdata.cfg
-    sudo rm -rf /var/argentum/server/assets/Database/playerinfo.cfg
+    rm -rf /var/argentum/server/assets/Database/playerdata.cfg
+    rm -rf /var/argentum/server/assets/Database/playerinfo.cfg
     echo "Se ha vaciado la base de datos correctamente."
     echo ""
 }
@@ -69,14 +69,17 @@ function resetDefault() {
     # config del server
     sudo rm -rf /etc/argentum/server/config
     sudo cp -rf Server/config /etc/argentum/server
+    sudo chmod -R a+rw /etc/argentum/server
     
     # config común
     sudo rm -rf /etc/argentum/common/config
     sudo cp -rf Common/config /etc/argentum/common
+    sudo chmod -R a+rw /etc/argentum/common
 
     #config del cliente
     sudo rm -rf /etc/argentum/client/config
-    sudo cp -rf Client/config /etc/argentum/client    
+    sudo cp -rf Client/config /etc/argentum/client
+    sudo chmod -R a+rw /etc/argentum/client
 
     echo "Se reseteo la configuración por defecto."
     echo ""
