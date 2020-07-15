@@ -39,9 +39,9 @@ void Creature::_renderInfo() const {
 
     SDL_Rect nick_quad = health_bar_bg;
 
-    g_camera.fillQuadIfVisible(g_renderer, health_bar_bg);
-    g_camera.fillQuadIfVisible(g_renderer, health_bar,
-                               CREATURE_HEALTH_BAR_COLOR);
+    g_camera.fillQuadAddingOffset(g_renderer, health_bar_bg);
+    g_camera.fillQuadAddingOffset(g_renderer, health_bar,
+                                  CREATURE_HEALTH_BAR_COLOR);
 
     // Ahora el nickname
     nick_quad.w = info_nickname.getWidth();
@@ -54,9 +54,10 @@ void Creature::_renderInfo() const {
     SDL_Rect nick_quad_bg = nick_quad;
     nick_quad_bg.y++;
 
-    g_camera.renderIfVisible(g_renderer, info_nickname_shadow.getTexture(),
-                             nick_quad_bg);
-    g_camera.renderIfVisible(g_renderer, info_nickname.getTexture(), nick_quad);
+    g_camera.renderAddingOffset(g_renderer, info_nickname_shadow.getTexture(),
+                                nick_quad_bg);
+    g_camera.renderAddingOffset(g_renderer, info_nickname.getTexture(),
+                                nick_quad);
 }
 
 //-----------------------------------------------------------------------------

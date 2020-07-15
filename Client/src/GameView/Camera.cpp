@@ -24,85 +24,51 @@ void Camera::init(const json& config) {
     initialized = true;
 }
 
+void Camera::getVisibleRect(int& x_min, int& x_max, int& y_min,
+                            int& y_max) const {
+    x_min = pos.x;
+    x_max = pos.x + box.w;
+    y_min = pos.y;
+    y_max = pos.y + box.h;
+}
+
 bool Camera::isVisible(const SDL_Rect* object) const {
-    if (!initialized) {
-        throw Exception("Camera not initialized.");
-    }
-
-    // Calculamos los lados del objeto
-    int leftA = object->x;
-    int rightA = object->x + object->w;
-    int topA = object->y;
-    int bottomA = object->y + object->h;
-
-    // Calculamos los lados de la cámara
-    int leftB = pos.x;
-    int rightB = pos.x + box.w;
-    int topB = pos.y;
-    int bottomB = pos.y + box.h;
-
-    if (bottomA <= topB) {
-        return false;
-    }
-
-    if (topA >= bottomB) {
-        return false;
-    }
-
-    if (rightA <= leftB) {
-        return false;
-    }
-
-    if (leftA >= rightB) {
+    if ((object->y + object->h) <= pos.y || object->y >= (pos.y + box.h) ||
+        (object->x + object->w) <= pos.x || object->x >= (pos.x + box.w)) {
         return false;
     }
 
     return true;
 }
 
-void Camera::renderIfVisible(const Renderer* renderer, SDL_Texture* texture,
-                             SDL_Rect& render_quad,
-                             const SDL_Rect* clip) const {
-    if (isVisible(&render_quad)) {
-        render_quad.x += (box.x - pos.x);
-        render_quad.y += (box.y - pos.y);
+void Camera::renderAddingOffset(const Renderer* renderer, SDL_Texture* texture,
+                                SDL_Rect& render_quad,
+                                const SDL_Rect* clip) const {
+    render_quad.x += (box.x - pos.x);
+    render_quad.y += (box.y - pos.y);
 
-        renderer->render(texture, &render_quad, clip);
-    }
+    renderer->render(texture, &render_quad, clip);
 }
 
-void Camera::fillQuadIfVisible(const Renderer* renderer, SDL_Rect& render_quad,
-                               const SDL_Color& color) const {
-    if (isVisible(&render_quad)) {
-        render_quad.x += (box.x - pos.x);
-        render_quad.y += (box.y - pos.y);
+void Camera::fillQuadAddingOffset(const Renderer* renderer,
+                                  SDL_Rect& render_quad,
+                                  const SDL_Color& color) const {
+    render_quad.x += (box.x - pos.x);
+    render_quad.y += (box.y - pos.y);
 
-        renderer->fillQuad(&render_quad, color);
-    }
+    renderer->fillQuad(&render_quad, color);
 }
 
 int Camera::xOffset() const {
-    if (!initialized) {
-        throw Exception("Camera not initialized.");
-    }
-
     return box.x - pos.x;
 }
 
 int Camera::yOffset() const {
-    if (!initialized) {
-        throw Exception("Camera not initialized.");
-    }
-
     return box.y - pos.y;
 }
 
 void Camera::center(const SDL_Rect object, const int map_width,
                     const int map_height) {
-    if (!initialized) {
-        throw Exception("Camera not initialized.");
-    }
-
     pos.x = (object.x + TILE_WIDTH / 2) - (box.w / 2);
     pos.y = (object.y + TILE_HEIGHT / 2) - (box.h / 2);
 

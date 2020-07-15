@@ -43,17 +43,20 @@ class Camera {
     /* Inicializa recursos */
     void init(const json& config);
 
+    /* Obtiene los extremos visibles */
+    void getVisibleRect(int& x_min, int& x_max, int& y_min, int& y_max) const;
+
     /* Devuelve si el objeto es visible por la camara o no */
     bool isVisible(const SDL_Rect* object) const;
 
-    /* Renderiza una textura con el renderer si es visible por la camara */
-    void renderIfVisible(const Renderer* renderer, SDL_Texture* texture,
-                         SDL_Rect& render_quad,
-                         const SDL_Rect* clip = NULL) const;
+    /* Renderiza una textura agregandole un offset, SEA O NO VISIBLE */
+    void renderAddingOffset(const Renderer* renderer, SDL_Texture* texture,
+                            SDL_Rect& render_quad,
+                            const SDL_Rect* clip = NULL) const;
 
-    /* Dibuja un rectangulo con el renderer si es visible por la camara */
-    void fillQuadIfVisible(const Renderer* renderer, SDL_Rect& render_quad,
-                           const SDL_Color& color = {0, 0, 0, 255}) const;
+    /* Dibuja un rectangulo agregandole un offset, SEA O NO VISIBLE */
+    void fillQuadAddingOffset(const Renderer* renderer, SDL_Rect& render_quad,
+                              const SDL_Color& color = {0, 0, 0, 255}) const;
 
     /* Offset de la camara en X */
     int xOffset() const;

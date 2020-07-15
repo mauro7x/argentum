@@ -2,6 +2,10 @@
 #define __MAP_VIEW_H__
 
 //-----------------------------------------------------------------------------
+#include <list>
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
 #include "../../../Common/includes/MapContainer.h"
 #include "../../../Common/includes/defs.h"
 #include "../../../Common/includes/types.h"
@@ -18,6 +22,11 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+static const int rendering_x_tiles_padding = 15;
+static const int rendering_y_tiles_padding = 15;
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
 
 class MapView {
    private:
@@ -27,10 +36,16 @@ class MapView {
     MapContainer maps;
     const ItemSpriteContainer& item_sprites;
 
-    /* Current map info */
+    // Area a renderizar
+    int x_min = 0, x_max = 0, y_min = 0, y_max = 0;
+
+    // Mapa actual
     Map* current_map = NULL;
     Id current_map_id = 0;
     int w_tiles = 0, h_tiles = 0;
+
+    //-------------------------------------------------------------------------
+    // Métodos privados
 
     /* Calcula el rectangulo sobre el que se debe graficar la textura. Esta
      * función es necesaria ya que el sistema de coordenadas en Tiled (el editor
@@ -38,6 +53,8 @@ class MapView {
      * función arregla esto. */
     SDL_Rect _getRenderQuad(const Texture& texture, const int x_tile,
                             const int y_tile) const;
+
+    //-------------------------------------------------------------------------
 
    public:
     /* Constructor */
@@ -64,6 +81,9 @@ class MapView {
 
     //-------------------------------------------------------------------------
     // Métodos de escritura
+
+    /* Settea la región de renderizado en base a la cámara */
+    void setRenderArea();
 
     /* Selecciona el mapa indicado por el id. Si cambia, devuelve true. */
     bool selectMap(const Id id);
@@ -102,12 +122,12 @@ class MapView {
     void renderGround() const;
 
     /* Renderiza la decoración, los npcs, y los items */
-    void renderRow(const int row) const;
+    void renderRow(const int row, std::list<InstanceId>& units_to_render) const;
 
-    /* Renderiza los techos completos */
+    /* Renderiza los techos */
     void renderRoofs() const;
 
-    /* Oscurece el mapa fuera de las construcciones */
+    /* Renderiza sombra en outdoor */
     void renderShadowOutdoor() const;
 
     //-------------------------------------------------------------------------
@@ -125,11 +145,8 @@ class MapView {
     /* Devuelve si en la celda dada hay un portal */
     bool portal(const int x, const int y) const;
 
-    /* Obtiene la anchura en tiles del mapa actual */
-    int widthInTiles() const;
-
-    /* Obtiene la altura en tiles del mapa actual */
-    int heightInTiles() const;
+    /* Obtiene la fila minima y la máxima */
+    void getRowRange(int& row_min, int& row_max) const;
 
     /* Obtiene la anchura en pixeles del mapa actual */
     int widthInPx() const;

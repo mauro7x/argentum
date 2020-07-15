@@ -54,10 +54,6 @@ void TileContainer::loadMedia() {
 }
 
 const Texture& TileContainer::operator[](const TileId id) const {
-    if (content.count(id) == 0) {
-        throw Exception("Unknown tile id: %u", id);
-    }
-
     return content.at(id);
 }
 

@@ -53,15 +53,11 @@ void ItemSpriteContainer::loadMedia() {
 }
 
 const ItemSprite& ItemSpriteContainer::get(const Id id) const {
-    if (content.count(id) == 0) {
-        throw Exception("Unknown sprite id.");
-    }
-
     return content.at(id);
 }
 
 const ItemSprite& ItemSpriteContainer::operator[](const Id id) const {
-    return this->get(id);
+    return content.at(id);
 }
 
 ItemSpriteContainer::~ItemSpriteContainer() {}

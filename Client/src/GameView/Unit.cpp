@@ -115,9 +115,9 @@ void Unit::_render(const UnitSprite& sprite) const {
     render_clip.x = _calculateSpriteX(sprite);
     render_clip.y = _calculateSpriteY(sprite);
 
-    // Paso 4: renderizamos si somos visibles por la camara
-    g_camera.renderIfVisible(g_renderer, sprite.texture.getTexture(),
-                             render_quad, &render_clip);
+    // Paso 4: renderizamos
+    g_camera.renderAddingOffset(g_renderer, sprite.texture.getTexture(),
+                                render_quad, &render_clip);
 }
 
 //-----------------------------------------------------------------------------
@@ -128,10 +128,6 @@ Unit::Unit(const Renderer* renderer, const Camera& camera,
     : g_renderer(renderer), g_camera(camera), g_sprites(sprites) {}
 
 void Unit::act(const int it) {
-    if (!state) {
-        throw Exception("Unit has not been initialized (act requested).");
-    }
-
     if (state == MOVING) {
         Uint32 time, time_step;
         time = SDL_GetTicks();
@@ -149,10 +145,6 @@ void Unit::act(const int it) {
 }
 
 SDL_Point Unit::getPos() const {
-    if (!state) {
-        throw Exception("Unit has not been initialized (pos requested).");
-    }
-
     return SDL_Point({data.x_tile, data.y_tile});
 }
 

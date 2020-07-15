@@ -82,6 +82,7 @@ void GameView::_func(const int it) {
     creatures.act(it);
     effects.act(it);
     camera.center(player.getBox(), map.widthInPx(), map.heightInPx());
+    map.setRenderArea();
     hud.update(it);
 
     /* Renderizamos y presentamos la pantalla */

@@ -56,10 +56,6 @@ void Renderer::init(bool vsync, float scale_factor_w, float scale_factor_h) {
 }
 
 void Renderer::clearScreen() const {
-    if (!initialized) {
-        throw Exception("Renderer not initialized.");
-    }
-
     if (SDL_RenderClear(renderer)) {
         throw Exception("Error in function SDL_RenderClear()\nSDL_Error: %s",
                         SDL_GetError());
@@ -67,18 +63,10 @@ void Renderer::clearScreen() const {
 }
 
 void Renderer::presentScreen() const {
-    if (!initialized) {
-        throw Exception("Renderer not initialized.");
-    }
-
     SDL_RenderPresent(renderer);
 }
 
 SDL_Texture* Renderer::createTextureFromSurface(SDL_Surface* surface) const {
-    if (!initialized) {
-        throw Exception("Renderer not initialized.");
-    }
-
     SDL_Texture* new_texture = SDL_CreateTextureFromSurface(renderer, surface);
     if (new_texture == NULL) {
         throw Exception(
@@ -90,10 +78,6 @@ SDL_Texture* Renderer::createTextureFromSurface(SDL_Surface* surface) const {
 
 void Renderer::render(SDL_Texture* texture, SDL_Rect* render_quad,
                       const SDL_Rect* clip) const {
-    if (!initialized) {
-        throw Exception("Renderer not initialized.");
-    }
-
     /* Escalamos a las dimensiones en las que estamos renderizando */
     _resize(render_quad);
 
@@ -105,10 +89,6 @@ void Renderer::render(SDL_Texture* texture, SDL_Rect* render_quad,
 
 /* Rellena el rectangulo */
 void Renderer::fillQuad(SDL_Rect* quad, SDL_Color color) const {
-    if (!initialized) {
-        throw Exception("Renderer not initialized.");
-    }
-
     if (SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a)) {
         throw Exception(
             "Error in function SDL_SetRenderDrawColor() while filling "

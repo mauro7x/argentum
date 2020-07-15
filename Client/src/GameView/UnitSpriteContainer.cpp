@@ -97,10 +97,6 @@ void UnitSpriteContainer::loadBodiesMedia() {
 }
 
 const UnitSprite& UnitSpriteContainer::get(Id id, bool is_shorter) const {
-    if (content.count(id) == 0) {
-        throw Exception("Unknown sprite id: %u", id);
-    }
-
     if (is_shorter) {
         id += shorter_characters_offset;
     }

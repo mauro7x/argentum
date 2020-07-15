@@ -38,7 +38,8 @@ void Character::_renderInfo() const {
     level_quad.y += (int)this->y;
 
     SDL_Rect nick_quad = level_quad;
-    g_camera.renderIfVisible(g_renderer, info_level.getTexture(), level_quad);
+    g_camera.renderAddingOffset(g_renderer, info_level.getTexture(),
+                                level_quad);
 
     // Ahora el nickname
     nick_quad.w = info_nickname.getWidth();
@@ -54,9 +55,10 @@ void Character::_renderInfo() const {
     // Mensaje flotante
     SDL_Rect msg_quad = nick_quad;
 
-    g_camera.renderIfVisible(g_renderer, info_nickname_shadow.getTexture(),
-                             nick_quad_bg);
-    g_camera.renderIfVisible(g_renderer, info_nickname.getTexture(), nick_quad);
+    g_camera.renderAddingOffset(g_renderer, info_nickname_shadow.getTexture(),
+                                nick_quad_bg);
+    g_camera.renderAddingOffset(g_renderer, info_nickname.getTexture(),
+                                nick_quad);
 
     // Ahora el mensaje flotante (si existe)
     if (msg_active) {
@@ -70,9 +72,9 @@ void Character::_renderInfo() const {
         SDL_Rect msg_quad_bg = msg_quad;
         msg_quad_bg.y++;
 
-        g_camera.renderIfVisible(g_renderer, msg_shadow.getTexture(),
-                                 msg_quad_bg);
-        g_camera.renderIfVisible(g_renderer, msg.getTexture(), msg_quad);
+        g_camera.renderAddingOffset(g_renderer, msg_shadow.getTexture(),
+                                    msg_quad_bg);
+        g_camera.renderAddingOffset(g_renderer, msg.getTexture(), msg_quad);
     }
 }
 

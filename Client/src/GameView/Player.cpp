@@ -51,7 +51,8 @@ void Player::_renderInfo() const {
     level_quad.y += (int)this->y;
 
     SDL_Rect nick_quad = level_quad;
-    g_camera.renderIfVisible(g_renderer, info_level.getTexture(), level_quad);
+    g_camera.renderAddingOffset(g_renderer, info_level.getTexture(),
+                                level_quad);
 
     // Ahora el nickname
     nick_quad.w = info_nickname.getWidth();
@@ -67,9 +68,10 @@ void Player::_renderInfo() const {
     // Mensaje flotante
     SDL_Rect msg_quad = nick_quad;
 
-    g_camera.renderIfVisible(g_renderer, info_nickname_shadow.getTexture(),
-                             nick_quad_bg);
-    g_camera.renderIfVisible(g_renderer, info_nickname.getTexture(), nick_quad);
+    g_camera.renderAddingOffset(g_renderer, info_nickname_shadow.getTexture(),
+                                nick_quad_bg);
+    g_camera.renderAddingOffset(g_renderer, info_nickname.getTexture(),
+                                nick_quad);
 
     // Ahora el mensaje flotante (si existe)
     if (msg_active) {
@@ -83,9 +85,9 @@ void Player::_renderInfo() const {
         SDL_Rect msg_quad_bg = msg_quad;
         msg_quad_bg.y++;
 
-        g_camera.renderIfVisible(g_renderer, msg_shadow.getTexture(),
-                                 msg_quad_bg);
-        g_camera.renderIfVisible(g_renderer, msg.getTexture(), msg_quad);
+        g_camera.renderAddingOffset(g_renderer, msg_shadow.getTexture(),
+                                    msg_quad_bg);
+        g_camera.renderAddingOffset(g_renderer, msg.getTexture(), msg_quad);
     }
 }
 
@@ -138,10 +140,6 @@ void Player::init(const PlayerData& init_data) {
 }
 
 void Player::update(const PlayerData& updated_data) {
-    if (!state) {
-        throw Exception("Player has not been initialized (update requested).");
-    }
-
     /* Verificamos si hay que modificar la info */
     if (level != updated_data.level) {
         info_level.loadFromRenderedText(
@@ -167,8 +165,6 @@ void Player::addMessage(InstanceId sender_id, const std::string& msg) {
     }
 
     // actualizar el mensaje
-    fprintf(stderr, "llego mensaje del player.\n");
-
     msg_active = true;
     msg_its = MSG_ITERATIONS;
     this->msg.loadFromRenderedWrappedText(g_renderer, msg_font, msg,
@@ -190,11 +186,13 @@ void Player::act(const int it) {
     }
 }
 
-void Player::render() const {
-    if (!state) {
-        throw Exception("Player has not been initialized (render requested).");
+void Player::render(InstanceId id) const {
+    if (data.gid == id) {
+        render();
     }
+}
 
+void Player::render() const {
     // Armadura / cuerpo (si no tiene armadura)
     if (equipment[ARMOUR]) {
         _render(g_sprites->get(equipment[ARMOUR], is_shorter));
@@ -227,10 +225,6 @@ void Player::render() const {
 }
 
 SDL_Rect Player::getBox() const {
-    if (!state) {
-        throw Exception("Player has not been initialized (box requested).");
-    }
-
     int body_w = g_sprites->get(body_id).clip_w;
     int head_h;
 

@@ -43,22 +43,10 @@ void CharacterContainer::add(const InstanceId id,
 
 void CharacterContainer::update(const InstanceId id,
                                 const CharacterData& updated_data) {
-    if (content.count(id) == 0) {
-        throw Exception(
-            "CharacterContainer::update: attempt to update unknown character "
-            "(id is invalid).");
-    }
-
     content.at(id).update(updated_data);
 }
 
 SDL_Point CharacterContainer::getPos(const InstanceId id) const {
-    if (content.count(id) == 0) {
-        throw Exception(
-            "CharacterContainer::getPos: attempt to get pos of unknown "
-            "character (id is invalid).");
-    }
-
     return content.at(id).getPos();
 }
 
@@ -82,12 +70,6 @@ void CharacterContainer::render(const InstanceId id) const {
 }
 
 void CharacterContainer::remove(const InstanceId id) {
-    if (content.count(id) == 0) {
-        throw Exception(
-            "CharacterContainer::remove: attempt to remove unknown character "
-            "(id is invalid).");
-    }
-
     content.erase(id);
 }
 

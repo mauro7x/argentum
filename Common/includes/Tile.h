@@ -7,6 +7,13 @@
 
 //-----------------------------------------------------------------------------
 
+struct GraphicTile {
+    int x;
+    const TileId& id;
+
+    GraphicTile(int x, const TileId& id) : x(x), id(id) {}
+};
+
 struct Tile {
     /* Graficos */
     TileId ground_1_id;
