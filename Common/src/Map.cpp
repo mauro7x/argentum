@@ -33,8 +33,8 @@ void Map::_checkIfValid(const json& map) const {
 void Map::_fillTiles(const json& map, const json& tilesets) {
     Tile tile;
     size_t i = 0;
-    for (size_t row = 0; row < h; row++) {
-        for (size_t col = 0; col < w; col++) {
+    for (size_t row = 0; row < (size_t)h; row++) {
+        for (size_t col = 0; col < (size_t)w; col++) {
             // Calculamos el índice actual
             i = (row * w) + col;
 
@@ -122,7 +122,6 @@ void Map::init(const json& map, const json& tilesets,
     this->name = name;
 
     _checkIfValid(map);
-    _initLayers();
     _fillTiles(map, tilesets);
 }
 
