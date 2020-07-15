@@ -30,50 +30,80 @@ void Map::_checkIfValid(const json& map) const {
     }
 }
 
+void Map::_initLayers() {
+    // Reservamos espacio para la grilla de tiles lógicos
+    tiles.reserve(w * h);
+
+    // Reservamos el espacio para nuestros objetos estáticos
+    decoration_ly.reserve(h);
+    roof_ly.reserve(h);
+    npc_ly.reserve(h);
+
+    // Iniciamos cada capa
+    for (int i = 0; i < h; i++) {
+        decoration_ly.emplace_back();
+        roof_ly.emplace_back();
+        npc_ly.emplace_back();
+    }
+}
+
 void Map::_fillTiles(const json& map, const json& tilesets) {
-    int total_tiles = w * h;
-    tiles.reserve(total_tiles);
     Tile tile;
-    for (int i = 0; i < total_tiles; i++) {
-        /* Ids gráficos */
-        tile.ground_1_id = map["layers"][GROUND1_LAYER]["data"][i];
-        tile.ground_2_id = map["layers"][GROUND2_LAYER]["data"][i];
-        tile.decoration_id = map["layers"][DECORATION_LAYER]["data"][i];
-        tile.roof_id = map["layers"][ROOF_LAYER]["data"][i];
-        tile.npc_id = map["layers"][NPC_LAYER]["data"][i];
+    size_t i = 0;
+    for (size_t row = 0; row < h; row++) {
+        for (size_t col = 0; col < w; col++) {
+            // Calculamos el índice actual
+            i = (row * w) + col;
 
-        /* Metadata */
-        int safe_zone = map["layers"][SAFEZONE_LAYER]["data"][i];
-        tile.safe_zone = (bool)safe_zone;
-        int collision = map["layers"][COLLISION_LAYER]["data"][i];
-        tile.collision = (bool)collision;
-        int indoor = map["layers"][INDOOR_LAYER]["data"][i];
-        tile.indoor = (bool)indoor;
-        int portal = map["layers"][PORTAL_LAYER]["data"][i];
-        tile.portal = (bool)portal;
+            // Ids gráficos (tiles gráficos)
+            tile.ground_1_id = map["layers"][GROUND1_LAYER]["data"][i];
+            tile.ground_2_id = map["layers"][GROUND2_LAYER]["data"][i];
 
-        /* NPC */
-        if (tile.npc_id > 0) {
-            /* Debemos calcular el id global del npc */
-            int npc_gid = tile.npc_id;
-            int tileset_first_gid = tilesets["npcs"]["first_gid"];
-            int npc_lid = npc_gid - tileset_first_gid;
-            std::string tileset_filepath = tilesets["npcs"]["filepath"];
-            tileset_filepath = paths::asset(tileset_filepath.c_str());
-            json tileset = JSON::loadJsonFile(tileset_filepath);
-            tile.npc = tileset["tiles"][npc_lid]["properties"][0]["value"];
+            tile.decoration_id = map["layers"][DECORATION_LAYER]["data"][i];
+            if (tile.decoration_id) {
+                decoration_ly[row].emplace_back(col, tile.decoration_id);
+            }
 
-        } else {
-            tile.npc = 0;
+            tile.roof_id = map["layers"][ROOF_LAYER]["data"][i];
+            if (tile.roof_id) {
+                roof_ly[row].emplace_back(col, tile.roof_id);
+            }
+
+            tile.npc_id = map["layers"][NPC_LAYER]["data"][i];
+            if (tile.npc_id) {
+                npc_ly[row].emplace_back(col, tile.npc_id);
+            }
+
+            // Metadata (tiles lógicos)
+            int safe_zone = map["layers"][SAFEZONE_LAYER]["data"][i];
+            tile.safe_zone = (bool)safe_zone;
+            int collision = map["layers"][COLLISION_LAYER]["data"][i];
+            tile.collision = (bool)collision;
+            int indoor = map["layers"][INDOOR_LAYER]["data"][i];
+            tile.indoor = (bool)indoor;
+            int portal = map["layers"][PORTAL_LAYER]["data"][i];
+            tile.portal = (bool)portal;
+
+            if (tile.npc_id > 0) {
+                /* Debemos calcular el id global del npc */
+                size_t npc_gid = tile.npc_id;
+                size_t tileset_first_gid = tilesets["npcs"]["first_gid"];
+                size_t npc_lid = npc_gid - tileset_first_gid;
+                std::string tileset_filepath = tilesets["npcs"]["filepath"];
+                tileset_filepath = paths::asset(tileset_filepath.c_str());
+                json tileset = JSON::loadJsonFile(tileset_filepath);
+                tile.npc = tileset["tiles"][npc_lid]["properties"][0]["value"];
+            } else {
+                tile.npc = 0;
+            }
+
+            // Ocupantes del tile
+            tile.occupant_id = 0;
+            tile.item_id = 0;
+            tile.item_amount = 0;
+
+            tiles.push_back(tile);
         }
-
-        /* Ocupantes */
-        tile.occupant_id = 0;
-
-        tile.item_id = 0;
-        tile.item_amount = 0;
-
-        tiles.push_back(tile);
     }
 }
 
@@ -121,6 +151,7 @@ void Map::init(const json& map, const json& tilesets,
     this->name = name;
 
     _checkIfValid(map);
+    _initLayers();
     _fillTiles(map, tilesets);
 }
 

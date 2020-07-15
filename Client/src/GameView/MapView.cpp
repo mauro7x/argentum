@@ -38,7 +38,6 @@ void MapView::loadMedia() {
 
 void MapView::setRenderArea() {
     // Límites de renderizado
-
     g_camera.getVisibleRect(x_min, x_max, y_min, y_max);
     x_min = (x_min / TILE_WIDTH) - rendering_x_tiles_padding;
     x_max = (x_max / TILE_WIDTH) + rendering_x_tiles_padding;
@@ -223,6 +222,7 @@ void MapView::renderRow(const int row,
             units_to_render.emplace_back(current_tile.occupant_id);
         }
     }
+
 }
 
 void MapView::renderRoofs() const {
