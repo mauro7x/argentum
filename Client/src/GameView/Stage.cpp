@@ -38,7 +38,11 @@ void Stage::render() const {
         }
     }
 
-    g_map.renderTop(g_map.indoor(player_pos.x, player_pos.y));
+    if (!g_map.indoor(player_pos.x, player_pos.y)) {
+        g_map.renderRoofs();
+    } else {
+        g_map.renderShadowOutdoor();
+    }
 }
 
 Stage::~Stage() {}

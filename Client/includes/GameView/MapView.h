@@ -36,7 +36,7 @@ class MapView {
     MapContainer maps;
     const ItemSpriteContainer& item_sprites;
 
-    // Area visible a renderizar
+    // Area a renderizar
     int x_min = 0, x_max = 0, y_min = 0, y_max = 0;
 
     // Mapa actual
@@ -124,9 +124,11 @@ class MapView {
     /* Renderiza la decoración, los npcs, y los items */
     void renderRow(const int row, std::list<InstanceId>& units_to_render) const;
 
-    /* Renderiza el techo en caso de que no estemos dentro de una construcción,
-     * o sombra fuera si está dentro de una */
-    void renderTop(bool indoor) const;
+    /* Renderiza los techos */
+    void renderRoofs() const;
+
+    /* Renderiza sombra en outdoor */
+    void renderShadowOutdoor() const;
 
     //-------------------------------------------------------------------------
     // Métodos de lectura
