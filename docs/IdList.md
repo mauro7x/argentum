@@ -1,8 +1,3 @@
----
-title: IDs
-description: Lista de IDs globales utilizados en el proyecto
----
-
 # IDs Globales
 
 Se listan a continuación los ids utilizados en los archivos de configuración a fin de facilitar su modificación.
