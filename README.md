@@ -24,7 +24,7 @@ Próximamente el video estará aquí...
 ### Documentación en construcción
 Los siguientes documentos se encuentran en elaboración y se adjunta el link para edición a los mismos en Overleaf:
 * [**Manual de Proyecto**](https://es.overleaf.com/8387857119mbhmdtbrpvnh) - *Organización, cronogramas, división de tareas, y evolución del proyecto.*
-* [**Documentación Técnica**](https://es.overleaf.com/2395968991ysqtxgxxsncs) - *Detalles de implementación y de diseño, estructuras utilizadas, herramientas integradas.*
+* [**Manual de Referencia**](https://es.overleaf.com/2395968991ysqtxgxxsncs) - *Detalles de implementación y de diseño, estructuras utilizadas, herramientas integradas.*
 
 ## Instalación
 *(Esta sección se encuentra detallada en el [Manual de Usuario](Documents/Manual_de_Usuario.pdf), por lo que se recomienda su lectura.)*
