@@ -1,6 +1,10 @@
 # Argentum
 Remake del juego [**Argentum Online**](https://github.com/ao-libre) para sistemas operativos basados en Debian, utilizando programación concurrente orientada a objetos y sockets TCP/IPv4 bloqueantes. Trabajo final de la materia **Taller de Programación I** para la carrera Ingeniería Informática de la Universidad de Buenos Aires.
 
+## Trailer
+
+Próximamente el video estará aquí...
+
 ## Detalles administrativos
 * **Materia:** Taller de Programación I
 * **Año y cuatrimestre:** 1°C 2020
