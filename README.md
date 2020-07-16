@@ -18,7 +18,6 @@ Próximamente el video estará aquí...
 | Yuhong Huang | 102146 | yhuang@fi.uba.ar | [tonyhuang07](https://github.com/tonyhuang07) |
 
 ## Enlaces de interés
-* [**Repositorio en GitHub**](https://github.com/mauro7x/taller_final)
 * [**Manual de usuario**](Documents/Manual_de_Usuario.pdf) - *Manual para ambos aplicativos, incluyendo requerimientos de hardware, software, instalación, configuración y uso.*
 
 ### Documentación en construcción
