@@ -21,7 +21,7 @@ Remake del juego [**Argentum Online**](https://github.com/ao-libre) para sistema
 | Yuhong Huang | 102146 | yhuang@fi.uba.ar | [tonyhuang07](https://github.com/tonyhuang07) |
 
 ## Manuales
-* [**Manual de usuario**](Documents/Manual_de_Usuario.pdf) - *Manual para ambos aplicativos (cliente y servidor), incluyendo requerimientos de hardware, software, instalación, configuración y uso.*
+* [**Manual de usuario**](../Documents/Manual_de_Usuario.pdf) - *Manual para ambos aplicativos (cliente y servidor), incluyendo requerimientos de hardware, software, instalación, configuración y uso.*
 
 ### Documentación en construcción
 Los siguientes documentos se encuentran en elaboración y se adjunta el link para edición a los mismos en Overleaf:
@@ -29,7 +29,7 @@ Los siguientes documentos se encuentran en elaboración y se adjunta el link par
 * [**Manual de Referencia**](https://es.overleaf.com/2395968991ysqtxgxxsncs) - *Detalles de implementación y de diseño, estructuras utilizadas, herramientas integradas.*
 
 # Instalación
-*(Esta sección se encuentra detallada en el [Manual de Usuario](Documents/Manual_de_Usuario.pdf), por lo que se recomienda su lectura.)*
+*(Esta sección se encuentra detallada en el [Manual de Usuario](../Documents/Manual_de_Usuario.pdf), por lo que se recomienda su lectura.)*
 
 Para instalar el juego se provee de un script `installer.sh` que corre en bash. Se debe ejecutar:
 ```bash
@@ -57,7 +57,7 @@ chmod +x ./config.sh
 Al abrirlo, podremos seleccionar el archivo que queremos editar, y el mismo se abrirá para su edición utilizando `Vim`.
 
 
-### Scripts para alterar la experiencia de juego
+## Scripts
 También se provee de un script de *cheats* que permite cargar configuraciones determinadas de manera rápida, como por ejemplo que los jugadores empiecen con objetos, o demás. Para probar los distintos *cheats* disponibles, se debe ejecutar:
 ```bash
 ./scripts.sh
