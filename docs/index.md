@@ -45,6 +45,8 @@ Los siguientes documentos se encuentran en elaboración y se adjunta el link par
 * [**Manual de Proyecto**](https://es.overleaf.com/8387857119mbhmdtbrpvnh) - *Organización, cronogramas, división de tareas, y evolución del proyecto.*
 * [**Manual de Referencia**](https://es.overleaf.com/2395968991ysqtxgxxsncs) - *Detalles de implementación y de diseño, estructuras utilizadas, herramientas integradas.*
 
+<hr>
+
 <!-- ##################################################################### -->
 
 # Juego <a name="juego"></a>
