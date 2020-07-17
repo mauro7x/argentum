@@ -1178,7 +1178,11 @@ void Game::take(const InstanceId caller) {
     if (!item_id)
         return;  // No hay item droppeado en su posición.
 
-    _notifyResponse(caller, character.takeItem(this->items[item_id], amount));
+    Response response = character.takeItem(this->items[item_id], amount);
+    _notifyResponse(caller, response);
+
+    if (!response.succeeded)
+        return;
 
     this->map_container[map_id].clearTileItem(x_coord, y_coord);
 
@@ -1215,9 +1219,7 @@ void Game::drop(const InstanceId caller, const uint8_t n_slot,
     } catch (const CouldNotFindFreeTileException& e) {
         // No se pudo efectuar el dropeo. Le devuelvo el item al character.
         character.takeItem(dropped, amount);
-
-        // Propago la excepción.
-        throw e;
+        return;
     }
 
     // Agrego elemento al mapa de dropped items cooldown
@@ -1251,7 +1253,12 @@ void Game::heal(const InstanceId caller, const uint32_t x_coord,
 
     Character& character = this->characters.at(caller);
 
-    _notifyResponse(caller, character.heal());
+    Response response = character.heal();
+
+    _notifyResponse(caller, response);
+
+    if (!response.succeeded)
+        return;
 
     _pushCharacterEvent(caller, HEALED_BY_PRIEST_EV_TYPE);
     _pushCharacterMainEvent(caller, BEHEALED_EV_TYPE);
@@ -1260,7 +1267,12 @@ void Game::heal(const InstanceId caller, const uint32_t x_coord,
 void Game::meditate(const InstanceId caller) {
     Character& character = this->characters.at(caller);
 
-    _notifyResponse(caller, character.meditate());
+    Response response = character.meditate();
+
+    _notifyResponse(caller, response);
+
+    if (!response.succeeded)
+        return;
 
     _pushCharacterEvent(caller, MEDITATE_EV_TYPE);
 }
