@@ -799,9 +799,6 @@ void Game::_notifyResponse(const InstanceId caller, const Response& response) {
     if (!response.msg.length())
         return;
 
-    fprintf(stderr, "Mandamos response %s con message_type: %i \n",
-            response.msg.c_str(), response.message_type);
-
     Notification* reply = new Reply(response.message_type, response.msg);
     active_clients.notify(caller, reply);
 }
