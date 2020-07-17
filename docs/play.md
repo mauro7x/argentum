@@ -7,15 +7,15 @@ description: Requerimientos, descarga, instalación y configuración del juego
 
 # Requerimientos mínimos
 
-Completar requerimientos
+Falta completar requerimientos mínimos.
 
 <!-- ##################################################################### -->
 
 # Descarga
 
-Para comenzar, debes descargar el juego:
-* <a href="{{ site.github.zip_url }}">Descargar en formato .zip</a>.
-* <a href="{{ site.github.tar_url }}">Descargar en formato .tar.gz</a>.
+Para comenzar, debes descargar el juego (incluye ambos aplicativos: cliente y servidor).
+* <a href="{{ site.github.zip_url }}">Descargar en formato .zip (~XX MB)</a>.
+* <a href="{{ site.github.tar_url }}">Descargar en formato .tar.gz (~XX MB)</a>.
 
 <!-- ##################################################################### -->
 
@@ -23,27 +23,35 @@ Para comenzar, debes descargar el juego:
 
 Para instalar el juego se provee del script `installer.sh` que corre en bash. Se debe ejecutar:
 ```bash
-./installer.sh
+$ ./installer.sh
 ```
 
 Si fallan los permisos, se le deberán conceder los mismos ejecutando:
 ```bash
-chmod +x ./installer.sh
+$ chmod +x ./installer.sh
 ```
 
-El script ofrece un menú con múltiples opciones. Para instalar todo, simplemente elegir la opción `a`.
+El script ofrece un menú con múltiples opciones. Para instalar todo, simplemente elegir la opción `a`. Una vez que la instalación haya finalizado, podrás ejecutar
+```bash
+$ argentum
+```
+para abrir el cliente, o
+```bash
+$ ao-server <puerto>
+```
+para abrir un servidor de Argentum Online en el puerto provisto como parámetro.
 
 <!-- ##################################################################### -->
 
 # Configuración <a name="configuracion"></a>
 Se provee de un script de configuración, que permite modificar distintos valores numéricos del juego. Para esto, se debe ejecutar:
 ```bash
-./config.sh
+$ ./config.sh
 ```
 
 Al igual que con el script del instalador, si fallan los permisos, se le deberán conceder los mismos ejecutando:
 ```bash
-chmod +x ./config.sh
+$ chmod +x ./config.sh
 ```
 
 Al abrirlo, podremos seleccionar el archivo que queremos editar, y el mismo se abrirá para su edición utilizando `Vim`.
@@ -51,12 +59,12 @@ Al abrirlo, podremos seleccionar el archivo que queremos editar, y el mismo se a
 ## Scripts <a name="scripts"></a>
 También se provee de un script de *cheats* que permite cargar configuraciones determinadas de manera rápida, como por ejemplo que los jugadores empiecen con objetos, o demás. Para probar los distintos *cheats* disponibles, se debe ejecutar:
 ```bash
-./scripts.sh
+$ ./scripts.sh
 ```
 
 Nuevamente, si fallan los permisos, se le deberán conceder los mismos ejecutando:
 ```bash
-chmod +x ./scripts.sh
+$ chmod +x ./scripts.sh
 ```
 
 <!-- ##################################################################### -->
