@@ -1,7 +1,3 @@
 theme: jekyll-theme-cayman
 title: Argentum
-description: Remake del conocido juego Argentum Online para sistemas operativos basados en Debian
-
-# Saco las descargas hasta la presentación final
-show_downloads: false 
-
+description: Proyecto final de Taller de Programación I
