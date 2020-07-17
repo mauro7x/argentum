@@ -238,10 +238,6 @@ void Map::addItem(const Id item_id, const uint32_t amount, int& x, int& y) {
     tile.item_amount = amount;
 }
 
-const bool Map::isSafeZone(const int x, const int y) const {
-    return this->getTile(x, y).safe_zone;
-}
-
 void Map::clearTileOccupant(const int x, const int y) {
     Tile& tile = this->_getTile(x, y);
     tile.occupant_id = 0;
@@ -273,6 +269,10 @@ int Map::getWidthTiles() const {
 
 int Map::getHeightTiles() const {
     return h;
+}
+
+const bool Map::isSafeZone(const int x, const int y) const {
+    return this->getTile(x, y).safe_zone;
 }
 
 bool Map::_isValid(const int x, const int y) const {

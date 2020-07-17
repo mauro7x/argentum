@@ -22,6 +22,7 @@
 #include "../GameModel/Commands/Command.h"
 #include "../GameModel/Commands/Commands.h"
 #include "../GameModel/InputParser.h"
+#include "../GameModel/ParserReply.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------

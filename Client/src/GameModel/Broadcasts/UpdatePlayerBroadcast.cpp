@@ -23,6 +23,10 @@ void UpdatePlayerBroadcast::exec(MapView& map, Player& player,
 
         characters.clear();
         creatures.clear();
+
+        // Aca se limpia el mapa actual. El mapa
+        // viejo queda con items y ocupantes, que se
+        // van a limpiar cuando viaje a ese mapa.
         map.clear();
     }
 

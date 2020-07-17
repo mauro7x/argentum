@@ -134,9 +134,6 @@ class Map {
      */
     void addItem(const Id item_id, const uint32_t amount, int& x, int& y);
 
-    /* Devuelve si las coordenadas recibidas están dentro de una zona segura */
-    const bool isSafeZone(const int x, const int y) const;
-
     /* Elimina al ocupante de una celda */
     void clearTileOccupant(const int x, const int y);
 
@@ -154,6 +151,9 @@ class Map {
 
     /* Devuelve la altura en tiles */
     int getHeightTiles() const;
+
+    /* Devuelve si las coordenadas recibidas están dentro de una zona segura */
+    const bool isSafeZone(const int x, const int y) const;
 
     /* Obtiene un Tile de solo lectura realizando el chequeo de los bounds */
     const Tile& getTile(const int x, const int y) const;
