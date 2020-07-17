@@ -5,9 +5,15 @@ description: Requerimientos, descarga, instalación y configuración del juego
 
 <!-- ##################################################################### -->
 
-# Requerimientos mínimos
+# Requerimientos mínimos de memoria
 
-Falta completar requerimientos mínimos.
+* Para **descargar e instalar el juego**, se necesitan ~120MB en disco.
+* El **cliente** consume ~40 MB de memoria RAM.
+* El **servidor** consume ~2 MB de memoria RAM.
+
+## Consumo de CPU
+
+El juego por defecto está configurado para correr a **60 fps** *(frames por segundo)*, pero en máquinas con pocos recursos esto puede suponer un gran consumo de CPU. En caso de que sea así, se sugiere bajar los fps como se explicará más adelante, para obtener una mejor performance. Jugando a **30 fps** la experiencia de juego no será tan distinta, pero la ganancia de performance será mucha.
 
 <!-- ##################################################################### -->
 
@@ -31,15 +37,17 @@ Si fallan los permisos, se le deberán conceder los mismos ejecutando:
 $ chmod +x ./installer.sh
 ```
 
-El script ofrece un menú con múltiples opciones. Para instalar todo, simplemente elegir la opción `a`. Una vez que la instalación haya finalizado, podrás ejecutar
+El script ofrece un menú con múltiples opciones. Para instalar el juego sin dependencias, elegir la opción `i`. Para instalar todo, elegir la opción `a`.
+
+Una vez que la instalación haya finalizado, se puede abrir el cliente corriendo:
 ```bash
 $ argentum
 ```
-para abrir el cliente, o
+o abrir un servidor corriendo:
 ```bash
 $ ao-server <puerto>
 ```
-para abrir un servidor de Argentum Online en el puerto provisto como parámetro.
+donde `<puerto>` es un parámetro que representa el puerto en que queremos abrir el servidor.
 
 <!-- ##################################################################### -->
 
