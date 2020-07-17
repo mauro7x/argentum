@@ -17,13 +17,13 @@
 #include "States.h"
 #include "Wearable.h"
 //-----------------------------------------------------------------------------
-#include "../../../Common/includes/MapContainer.h"
 #include "../../../Common/includes/Orientation.h"
 #include "../../../Common/includes/defs.h"
 #include "../../../Common/includes/types.h"
 //-----------------------------------------------------------------------------
 #include "../defs.h"
 #include "config_structs.h"
+#include "LogicMaps.h"
 //-----------------------------------------------------------------------------
 #include "../../../Common/includes/DataStructs.h"
 //-----------------------------------------------------------------------------
@@ -161,7 +161,7 @@ class Character : public Attackable {
     //--------------------------------------------------------------------------
 
     Character(const CharacterCfg& init_data, const RaceCfg& race,
-              const KindCfg& kind, MapContainer& map_container,
+              const KindCfg& kind, LogicMaps& logic_maps,
               const Id init_map, const int init_x_coord, const int init_y_coord,
               ItemsContainer& items_container, Formulas& formulas,
               const int& rate, const unsigned int critical_attack_dmg_modifier,

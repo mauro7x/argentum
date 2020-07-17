@@ -28,6 +28,7 @@
 #include "Formulas.h"
 #include "ItemsContainer.h"
 #include "config_structs.h"
+#include "LogicMaps.h"
 //-----------------------------------------------------------------------------
 
 // Forward declaration
@@ -91,7 +92,7 @@ class Game {
     //--------------------------------------------------------------------------
     // Game entities
     //--------------------------------------------------------------------------
-    MapContainer map_container;
+    LogicMaps logic_maps;
     ItemsContainer items;
 
     std::unordered_map<InstanceId, Character> characters;

@@ -32,10 +32,10 @@ Game::Game(ActiveClients& active_clients, const int& rate, Database& database)
     data_persistence_cooldown = cfg.ms_to_persist_data;
 
     // Cargamos los mapas
-    map_container.loadMaps();
+    logic_maps.loadMedia();
 
     std::vector<Id> maps_id;
-    this->map_container.getMapsId(maps_id);
+    logic_maps.getMapsId(maps_id);
 
     // Por cada mapa, agregamos MapCreaturesInfo
     for (unsigned int i = 0; i < maps_id.size(); ++i) {
@@ -113,7 +113,7 @@ void Game::_establishPriestsPosition(std::vector<Id>& maps_id) {
     std::vector<Id>::iterator it = maps_id.begin();
 
     for (; it != maps_id.end(); ++it) {
-        Map& map = map_container[*it];
+        Map& map = logic_maps.getMap(*it);
         for (int x = 0; x < map.getWidthTiles(); ++x) {
             for (int y = 0; y < map.getHeightTiles(); ++y) {
                 if (!(map.getTile(x, y).npc == priest))
@@ -135,22 +135,21 @@ void Game::_establishCharacterSpawningPosition(const CharacterCfg& init_data,
                                                int& spawning_x_coord,
                                                int& spawning_y_coord) {
     if (init_data.new_created) {
-        this->map_container[spawning_map_id].establishEntitySpawningPosition(
-            spawning_x_coord, spawning_y_coord, false);
+        this->logic_maps.establishEntitySpawningPosition(
+            spawning_map_id, spawning_x_coord, spawning_y_coord, false);
     } else {
         spawning_x_coord = init_data.x_tile;
         spawning_y_coord = init_data.y_tile;
         try {
             // Obtengo free tile próximo a la última posición del jugador
             // persistida.
-            this->map_container[spawning_map_id].getNearestFreeTile(
-                spawning_x_coord, spawning_y_coord, false);
+            this->logic_maps.getNearestFreeTile(
+                spawning_map_id, spawning_x_coord, spawning_y_coord, false);
         } catch (const CouldNotFindFreeTileException& e) {
             // Si no puede spawnear en la posición persistida, asignamos
             // posición aleatoria.
-            this->map_container[spawning_map_id]
-                .establishEntitySpawningPosition(spawning_x_coord,
-                                                 spawning_y_coord, false);
+            this->logic_maps.establishEntitySpawningPosition(
+                spawning_map_id, spawning_x_coord, spawning_y_coord, false);
         }
     }
 }
@@ -176,7 +175,7 @@ void Game::_loadBankAccount(const CharacterCfg& init_data) {
 
 const Id Game::_randomSelectCreature(const Id spawning_map) const {
     const std::vector<Id>& possible_creatures =
-        map_container[spawning_map].getCreatures();
+        logic_maps.getCreatures(spawning_map);
 
     RandomNumberGenerator gen;
     return possible_creatures[gen(0, possible_creatures.size() - 1)];
@@ -224,8 +223,7 @@ Notification* Game::_buildCreatureBroadcast(InstanceId id,
 
 Notification* Game::_buildItemBroadcast(Id map_id, int x_coord, int y_coord,
                                         BroadcastType broadcast_type) {
-    const Tile& tile = this->map_container[map_id].getTile(x_coord, y_coord);
-
+    const Tile& tile = this->logic_maps.getTile(map_id, x_coord, y_coord);
     ItemData data;
 
     data.item_id = tile.item_id;
@@ -397,8 +395,7 @@ const bool Game::_validateBankerPosition(const InstanceId caller, Id& npc_id,
                                          const uint32_t y_coord,
                                          const bool exception_if_invalid) {
     Id map_id = this->characters.at(caller).getMapId();
-
-    if (this->map_container[map_id].getTile(x_coord, y_coord).npc == banker) {
+    if (this->logic_maps.getTile(map_id, x_coord, y_coord).npc == banker) {
         npc_id = banker;
         return true;
     }
@@ -414,8 +411,7 @@ const bool Game::_validatePriestPosition(const InstanceId caller, Id& npc_id,
                                          const uint32_t y_coord,
                                          const bool exception_if_invalid) {
     Id map_id = this->characters.at(caller).getMapId();
-
-    if (this->map_container[map_id].getTile(x_coord, y_coord).npc == priest) {
+    if (this->logic_maps.getTile(map_id, x_coord, y_coord).npc == priest) {
         npc_id = priest;
         return true;
     }
@@ -431,8 +427,7 @@ const bool Game::_validateMerchantPosition(const InstanceId caller, Id& npc_id,
                                            const uint32_t y_coord,
                                            const bool exception_if_invalid) {
     Id map_id = this->characters.at(caller).getMapId();
-    Id npc_tile_id = this->map_container[map_id].getTile(x_coord, y_coord).npc;
-
+    Id npc_tile_id = this->logic_maps.getTile(map_id, x_coord, y_coord).npc;
     for (size_t i = 0; i < merchants.size(); ++i) {
         if (merchants[i] != npc_tile_id)
             continue;
@@ -452,8 +447,7 @@ const bool Game::_validatePortalPosition(const InstanceId caller,
                                          const uint32_t y_coord,
                                          const bool exception_if_invalid) {
     Id map_id = this->characters.at(caller).getMapId();
-
-    if (this->map_container[map_id].getTile(x_coord, y_coord).portal)
+    if (this->logic_maps.getTile(map_id, x_coord, y_coord).portal)
         return true;
 
     if (exception_if_invalid)
@@ -470,7 +464,7 @@ const bool Game::_validatePortalPosition(const InstanceId caller,
 
 void Game::_validatePortalMapId(const InstanceId caller, Id map_id) {
     std::vector<Id> maps_id;
-    this->map_container.getMapsId(maps_id);
+    this->logic_maps.getMapsId(maps_id);
 
     std::vector<Id>::iterator it =
         std::find(maps_id.begin(), maps_id.end(), map_id);
@@ -498,12 +492,12 @@ void Game::_listPortalMaps(std::string& init_msg,
     init_msg = "Posibles mapas para viajar";
 
     std::vector<Id> maps_id;
-    this->map_container.getMapsId(maps_id);
+    this->logic_maps.getMapsId(maps_id);
 
     std::vector<Id>::iterator it = maps_id.begin();
     for (; it != maps_id.end(); ++it) {
         item_list.push_back(std::to_string(*it) + ": " +
-                            this->map_container[*it].getMapName());
+                            this->logic_maps.getMapName(*it));
     }
 }
 
@@ -545,8 +539,8 @@ void Game::_dropAllItems(Attackable* dropper) {
         int y = init_y;  // para no degenerar el dropeo en diagonal
 
         try {
-            this->map_container[map_id].addItem(dropped_items[i].item,
-                                                dropped_items[i].amount, x, y);
+            this->logic_maps.addItem(map_id, dropped_items[i].item,
+                                     dropped_items[i].amount, x, y);
         } catch (const CouldNotFindFreeTileException& e) {
             // No se pudo efectuar el dropeo. Cancelo.
             return;
@@ -616,9 +610,9 @@ void Game::_cooldownResurrect(const InstanceId caller) {
     int respawn_x = info.priest_x_coord;
     int respawn_y = info.priest_y_coord;
 
-    try {
-        this->map_container[map_id].getNearestFreeTile(respawn_x, respawn_y,
-                                                       false);
+    try{
+        this->logic_maps.getNearestFreeTile(map_id, respawn_x, respawn_y,
+                                            false);
     } catch (const CouldNotFindFreeTileException& e) {
         // No puede teletransportarse, entonces se queda en su posición actual.
         _pushCharacterDifferentialBroadcast(caller, UPDATE_BROADCAST, true);
@@ -626,9 +620,9 @@ void Game::_cooldownResurrect(const InstanceId caller) {
         return;
     }
 
-    this->map_container[map_id].clearTileOccupant(
-        character.getPosition().getX(), character.getPosition().getY());
-    this->map_container[map_id].occupyTile(caller, respawn_x, respawn_y);
+    this->logic_maps.clearTileOccupant(map_id, character.getPosition().getX(),
+                                       character.getPosition().getY());
+    this->logic_maps.occupyTile(map_id, caller, respawn_x, respawn_y);
     character.teleport(map_id, respawn_x, respawn_y);
 
     _pushCharacterDifferentialBroadcast(caller, UPDATE_BROADCAST, true);
@@ -808,13 +802,13 @@ const InstanceId Game::newCharacter(const CharacterCfg& init_data) {
     _establishCharacterSpawningPosition(init_data, spawning_map_id,
                                         spawning_x_coord, spawning_y_coord);
 
-    this->map_container[spawning_map_id].occupyTile(
-        new_character_id, spawning_x_coord, spawning_y_coord);
+    this->logic_maps.occupyTile(spawning_map_id, new_character_id,
+                                spawning_x_coord, spawning_y_coord);
 
     this->characters.emplace(
         std::piecewise_construct, std::forward_as_tuple(new_character_id),
         std::forward_as_tuple(init_data, this->races[init_data.race],
-                              this->kinds[init_data.kind], this->map_container,
+                              this->kinds[init_data.kind], logic_maps,
                               spawning_map_id, spawning_x_coord,
                               spawning_y_coord, this->items, formulas, rate,
                               cfg.critical_attack_dmg_modifier,
@@ -835,15 +829,16 @@ void Game::newCreature(const CreatureCfg& init_data, const Id init_map) {
 
     int spawning_x_coord;
     int spawning_y_coord;
-    this->map_container[init_map].establishEntitySpawningPosition(
-        spawning_x_coord, spawning_y_coord, true);
 
-    this->map_container[init_map].occupyTile(new_creature_id, spawning_x_coord,
-                                             spawning_y_coord);
+    this->logic_maps.establishEntitySpawningPosition(init_map, spawning_x_coord,
+                                                     spawning_y_coord, true);
+
+    this->logic_maps.occupyTile(init_map, new_creature_id, spawning_x_coord,
+                                spawning_y_coord);
 
     this->creatures.emplace(
         std::piecewise_construct, std::forward_as_tuple(new_creature_id),
-        std::forward_as_tuple(init_data, map_container, init_map,
+        std::forward_as_tuple(init_data, logic_maps, init_map,
                               spawning_x_coord, spawning_y_coord,
                               init_data.base_health, items, characters, *this,
                               formulas, rate, cfg.random_movement_factor));
@@ -990,7 +985,7 @@ void Game::updateDroppedItemsLifetime(const int it) {
                 // Eliminamos el item del mapa.
                 int x, y;
                 _mapKeyToCoordinates(dropped_items_iterator->first, x, y);
-                this->map_container[map_iterator->first].clearTileItem(x, y);
+                this->logic_maps.clearTileItem(map_iterator->first, x, y);
                 _pushItemDifferentialBroadcast(map_iterator->first, x, y,
                                                DELETE_BROADCAST);
                 dropped_items_iterator =
@@ -1133,10 +1128,10 @@ void Game::teleport(const InstanceId caller, const uint32_t portal_x_coord,
     _pushCharacterDifferentialBroadcast(caller, DELETE_BROADCAST, false);
 
     int spawning_x_coord, spawning_y_coord;
-    this->map_container[map_id].establishEntitySpawningPosition(
-        spawning_x_coord, spawning_y_coord, false);
-    this->map_container[map_id].occupyTile(caller, spawning_x_coord,
-                                           spawning_y_coord);
+    this->logic_maps.establishEntitySpawningPosition(map_id, spawning_x_coord,
+                                                     spawning_y_coord, false);
+    this->logic_maps.occupyTile(map_id, caller, spawning_x_coord,
+                                spawning_y_coord);
 
     character.teleport(map_id, spawning_x_coord, spawning_y_coord);
     active_clients.changeMap(caller, map_id);
@@ -1194,7 +1189,7 @@ void Game::take(const InstanceId caller) {
     int x_coord = character.getPosition().getX();
     int y_coord = character.getPosition().getY();
 
-    const Tile& tile = this->map_container[map_id].getTile(x_coord, y_coord);
+    const Tile& tile = this->logic_maps.getTile(map_id, x_coord, y_coord);
 
     Id item_id = tile.item_id;
     uint32_t amount = tile.item_amount;
@@ -1210,7 +1205,7 @@ void Game::take(const InstanceId caller) {
      */
     character.takeItem(this->items[item_id], amount);
 
-    this->map_container[map_id].clearTileItem(x_coord, y_coord);
+    this->logic_maps.clearTileItem(map_id, x_coord, y_coord);
 
     _pushItemDifferentialBroadcast(map_id, x_coord, y_coord, DELETE_BROADCAST);
 
@@ -1245,7 +1240,7 @@ void Game::drop(const InstanceId caller, const uint8_t n_slot,
     Id map_id = character.getMapId();
 
     try {
-        this->map_container[map_id].addItem(dropped_item_id, amount, x, y);
+        this->logic_maps.addItem(map_id, dropped_item_id, amount, x, y);
     } catch (const CouldNotFindFreeTileException& e) {
         // No se pudo efectuar el dropeo. Le devuelvo el item al character.
         character.takeItem(dropped, amount);

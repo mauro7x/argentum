@@ -10,7 +10,7 @@
 //-----------------------------------------------------------------------------
 #define DEFAULT_MOVING_ORIENTATION DOWN_ORIENTATION
 //-----------------------------------------------------------------------------
-Creature::Creature(const CreatureCfg& data, MapContainer& map_container,
+Creature::Creature(const CreatureCfg& data, LogicMaps& logic_maps,
                    const Id init_map, const int init_x_coord,
                    const int init_y_coord, const uint32_t health,
                    ItemsContainer& items,
@@ -23,11 +23,12 @@ Creature::Creature(const CreatureCfg& data, MapContainer& map_container,
       health(health),
       min_damage(data.min_damage),
       max_damage(data.max_damage),
-      position(init_map, init_x_coord, init_y_coord, map_container),
+      position(init_map, init_x_coord, init_y_coord, logic_maps),
       visible_range(data.visible_range),
       movement_speed(data.movement_speed),
       items(items),
-      map(map_container[init_map]),
+      logic_maps(logic_maps),
+      map_id(init_map),
       characters(characters),
       game(game),
       moving_cooldown(0),
@@ -55,6 +56,7 @@ InstanceId Creature::_getNearestCharacter() {
     const unsigned int y_tile = position.getY();
     int abs_y = 0;
     int abs_x = 0;
+    Map& map = logic_maps.getMap(map_id);
     for (int y = -(int)visible_range; y <= (int)visible_range; y++) {
         abs_y = std::abs(y);
         for (int x = -(int)visible_range + abs_y;
@@ -113,25 +115,25 @@ void Creature::_determinateDirectionAndMove(
     if (abs(position_character.getX() - x) >=
         abs(position_character.getY() - y)) {
         if (position_character.getX() > x) {
-            if (map.isPositionValidForCreature(x + 1, y)) {
+            if (logic_maps.isPositionValidForCreature(map_id, x + 1, y)) {
                 position.changeOrientation(RIGHT_ORIENTATION);
                 return;
             }
         } else {
-            if (map.isPositionValidForCreature(x - 1, y)) {
+            if (logic_maps.isPositionValidForCreature(map_id, x - 1, y)) {
                 position.changeOrientation(LEFT_ORIENTATION);
                 return;
             }
         }
     }
     if (position_character.getY() > y) {
-        if (map.isPositionValidForCreature(x, y + 1)) {
+        if (logic_maps.isPositionValidForCreature(map_id, x, y + 1)) {
             position.changeOrientation(DOWN_ORIENTATION);
             return;
         }
 
     } else {
-        if (map.isPositionValidForCreature(x, y - 1)) {
+        if (logic_maps.isPositionValidForCreature(map_id, x, y - 1)) {
             position.changeOrientation(UP_ORIENTATION);
             return;
         }
