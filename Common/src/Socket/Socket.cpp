@@ -117,22 +117,25 @@ Socket::Socket() : fd(-1), fd_valid(false) {}
 Socket::Socket(const std::string& hostname, const std::string& port) {
     // Método para el cliente. Conectarse a un servidor.
     addrinfo* addresses;
+    _setClientAddresses(hostname, port, &addresses);
+
     try {
-        _setClientAddresses(hostname, port, &addresses);
         _tryToConnectTo(addresses);
-        ::freeaddrinfo(addresses);
     } catch (const Exception& e) {
         ::freeaddrinfo(addresses);
         throw e;
     }
+
+    ::freeaddrinfo(addresses);
 }
 
 Socket::Socket(const std::string& port, const int max_queued_clients) {
     // Método para el servidor. Abrir servidor.
     fd_valid = false;
     addrinfo* address;
+    _setServerAddress(port, &address);
+
     try {
-        _setServerAddress(port, &address);
         _setFd(address);
         _fixTimeWait(address);
         _bind(address);
