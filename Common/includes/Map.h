@@ -71,7 +71,6 @@ class Map {
     /* Devuelve si el tile es válido y es parte del mapa */
     bool _isValid(const int x, const int y) const;
 
-    const bool _moveOccupant(Tile& from_tile, Tile& to_tile, bool is_creature);
 
     //-------------------------------------------------------------------------
 
@@ -105,11 +104,7 @@ class Map {
     /* Devuelve una referencia al PORTAL (gráfico) para escritura */
     TileId& getPortal(int x, int y);
 
-    const bool moveOccupant(const int x, const int y,
-                            const Orientation& orientation, bool is_creature);
 
-    /* Iniciando una posicion para el character*/
-    void establishEntitySpawningPosition(int& x, int& y, bool is_creature);
 
     /* Ocupa una celda con un ocupante */
     void occupyTile(InstanceId id, const int x, const int y);
@@ -117,22 +112,6 @@ class Map {
     /* Pone un item en una celda */
     void setItem(const Id item_id, const uint32_t amount, const int x,
                  const int y);
-
-    /*
-     * Busca el tile libre de item más cercano (en la linea direccional de la
-     * orientacion recibida) al correspondiente a las coordenadas x e y
-     * recibidas
-     *
-     * Agrega dicho item a ese tile libre buscado y cambia
-     * los valores de x e y con las coordenadas del mismo.
-     *
-     * Dicha búsqueda se realiza hasta FREE_TILE_LOOKUP_RANGE tiles aldeaños,
-     * en la línea de orientación recibida.
-     *
-     * Lanza CouldNotFindFreeTileException si no se encuentra tile
-     * libre para que el item lo ocupe dentro del rango FREE_TILE_LOOKUP_RANGE.
-     */
-    void addItem(const Id item_id, const uint32_t amount, int& x, int& y);
 
     /* Elimina al ocupante de una celda */
     void clearTileOccupant(const int x, const int y);
@@ -155,20 +134,15 @@ class Map {
     /* Devuelve si las coordenadas recibidas están dentro de una zona segura */
     const bool isSafeZone(const int x, const int y) const;
 
+    /* Obtiene un Tile que puede modificar realizando el chequeo de los bounds */
+    Tile& getTile(const int x, const int y);
+
     /* Obtiene un Tile de solo lectura realizando el chequeo de los bounds */
     const Tile& getTile(const int x, const int y) const;
 
     /* Obtiene un Tile de solo lectura SIN REALIZAR EL CHEQUEO */
     const Tile& getTileWithoutChecks(const int x, const int y) const;
 
-    /* Chequear si una posicion es valida para la criatura */
-    bool isPositionValidForCreature(const int x, const int y) const;
-
-    /*
-     * Lanza CouldNotFindFreeTileException si no se encuentra tile libre alguno
-     * dentro del rango FREE_TILE_LOOKUP_RANGE.
-     */
-    void getNearestFreeTile(int& x, int& y, const bool is_for_item) const;
 
     /* Obtener el vector de ids de criaturas */
     const std::vector<Id>& getCreatures() const;
