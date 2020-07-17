@@ -1,23 +1,25 @@
 ---
 title: ¡Comienza a jugar!
-description: Descarga, instalación y configuración del juego
+description: Requerimientos, descarga, instalación y configuración del juego
 ---
+
+<!-- ##################################################################### -->
+
+# Requerimientos mínimos
+
+Completar requerimientos
 
 <!-- ##################################################################### -->
 
 # Descarga
 
-Completar descarga. Probando botones:
-<a href="{{ site.github.zip_url }}" class="btn">Descargar .zip</a> <a href="{{ site.github.tar_url }}" class="btn">Descargar .tar.gz</a>
-
-Probando lista:
-* <a href="{{ site.github.zip_url }}">Descargar .zip</a>.
-* <a href="{{ site.github.tar_url }}">Descargar .tar.gz</a>.
+Para comenzar, debes descargar el juego:
+* <a href="{{ site.github.zip_url }}">Descargar en formato .zip</a>.
+* <a href="{{ site.github.tar_url }}">Descargar en formato .tar.gz</a>.
 
 <!-- ##################################################################### -->
 
 # Instalación
-*Esta sección se encuentra más detallada en el [Manual de Usuario](Manual_de_Usuario.pdf), por lo que se recomienda su lectura en caso de necesitarla.*
 
 Para instalar el juego se provee del script `installer.sh` que corre en bash. Se debe ejecutar:
 ```bash
@@ -31,7 +33,9 @@ chmod +x ./installer.sh
 
 El script ofrece un menú con múltiples opciones. Para instalar todo, simplemente elegir la opción `a`.
 
-## Configuración <a name="configuracion"></a>
+<!-- ##################################################################### -->
+
+# Configuración <a name="configuracion"></a>
 Se provee de un script de configuración, que permite modificar distintos valores numéricos del juego. Para esto, se debe ejecutar:
 ```bash
 ./config.sh
@@ -54,5 +58,11 @@ Nuevamente, si fallan los permisos, se le deberán conceder los mismos ejecutand
 ```bash
 chmod +x ./scripts.sh
 ```
+
+<!-- ##################################################################### -->
+
+# Más información
+
+Si tuviste algún problema durante el proceso, en el [Manual de Usuario](Manual_de_Usuario.pdf) se provee una explicación mucho más detallada y con imágenes, por lo que se recomienda su lectura en caso de necesitarla. En este manual también se incluye un pequeño **tutorial** de juego para que comiences tu aventura.
 
 <!-- ##################################################################### -->
