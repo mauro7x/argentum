@@ -5,9 +5,9 @@ description: Requerimientos, descarga, instalación y configuración del juego
 
 <!-- ##################################################################### -->
 
-# Requerimientos mínimos de memoria
+# Requerimientos mínimos
 
-* Para **descargar e instalar el juego**, se necesitan ~120MB en disco.
+* Para **descargar e instalar el juego**, se necesitan ~120MB de espacio en disco.
 * El **cliente** consume ~40 MB de memoria RAM.
 * El **servidor** consume ~2 MB de memoria RAM.
 
