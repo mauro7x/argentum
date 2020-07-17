@@ -62,12 +62,11 @@ class Position {
 
     /*
      * Mueve un tile la posición en la dirección de la orientation.
-     *
-     * Con parametro si es criatura para verificar.
-     * Lanza CollisionWhileMovingException si no se puede mover
+     * 
+     * Retorna false si no se puede mover
      * a causa de una colisión.
      */
-    void move(bool is_creature);
+    const bool move(bool is_creature);
 
     const bool isInSafeZone() const;
 
@@ -85,11 +84,6 @@ class Position {
      * Llena los campos x_tile, y_tile del CharacterCfg.
      */
     void fillPersistenceData(CharacterCfg& data) const;
-};
-
-class CollisionWhileMovingException : public std::exception {
-   public:
-    virtual const char* what() const noexcept;
 };
 
 #endif

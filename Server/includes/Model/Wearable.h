@@ -6,6 +6,7 @@
 #include "../../../Common/includes/types.h"
 //-----------------------------------------------------------------------------
 #include "Item.h"
+#include "Response.h"
 #include "config_structs.h"
 //-----------------------------------------------------------------------------
 /*
@@ -28,13 +29,13 @@ class Wearable : public Item {
      * Double dispatch. Hace que el jugador se equipe
      * del wearable.
      */
-    virtual void equip(Character& equipper);
+    virtual Response equip(Character& equipper);
 
     /*
      * Devuelve los puntos de daño, curación o defensa
      * según el tipo de wearable.
      */
-    virtual const unsigned int use(Character& user) = 0;
+    virtual Response use(Character& user, int& points) = 0;
 
     /* Si es de ataque, devuelve el rango del wearable. */
     virtual const unsigned int getRange() const = 0;

@@ -23,9 +23,9 @@ class Attackable {
 
     virtual const Id getMapId() const = 0;
 
-    virtual const bool recoverHealth(unsigned int& points) = 0;
+    virtual const bool recoverHealth(int& points) = 0;
 
-    virtual void beAttacked() = 0;
+    virtual const bool beAttacked() = 0;
 
     virtual const bool isNewbie() const = 0;
 

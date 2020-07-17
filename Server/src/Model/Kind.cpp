@@ -1,6 +1,7 @@
 #include <string>
-
+//-----------------------------------------------------------------------------
 #include "../../includes/Model/Kind.h"
+//-----------------------------------------------------------------------------
 
 Kind::Kind(const KindCfg& data):
                 id(data.id),
@@ -11,20 +12,18 @@ Kind::Kind(const KindCfg& data):
             
 Kind::~Kind() {}
 
-void Kind::doMagic() const {
+//-----------------------------------------------------------------------------
+
+const bool Kind::doMagic() const {
     if (!max_mana_factor)
-        throw KindCantDoMagicException();
+        return false;
+    return true;
 }
 
-void Kind::meditate() const {
+const bool Kind::meditate() const {
     if (!meditation_factor) 
-        throw KindCantMeditateException();
+        return false;
+    return true;
 }
 
-const char* KindCantDoMagicException::what() const noexcept {
-    return "Tu clase no puede hacer magia.";
-}
-
-const char* KindCantMeditateException::what() const noexcept {
-    return "Tu clase no puede meditar.";
-}
+//-----------------------------------------------------------------------------

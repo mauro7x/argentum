@@ -24,7 +24,7 @@ class Potion : public Item {
     Potion(Potion&&) = delete;
     Potion& operator=(Potion&&) = delete;
 
-    virtual void equip(Character& equipper) = 0;
+    virtual Response equip(Character& equipper) = 0;
 };
 
 //-----------------------------------------------------------------------------
@@ -45,7 +45,7 @@ class HealthPotion : public Potion {
     HealthPotion(const PotionCfg& data);
     ~HealthPotion();
 
-    virtual void equip(Character& equipper) override;
+    virtual Response equip(Character& equipper) override;
 };
 
 //-----------------------------------------------------------------------------
@@ -57,22 +57,12 @@ class ManaPotion : public Potion {
     ManaPotion(const PotionCfg& data);
     ~ManaPotion();
 
-    virtual void equip(Character& equipper) override;
+    virtual Response equip(Character& equipper) override;
 };
 
 //-----------------------------------------------------------------------------
 
 class UnknownPotionTypeException : public std::exception {
-   public:
-    virtual const char* what() const noexcept;
-};
-
-class HealthPotionHasNoPointsToRecoverException : public std::exception {
-   public:
-    virtual const char* what() const noexcept;
-};
-
-class ManaPotionHasNoPointsToRecoverException : public std::exception {
    public:
     virtual const char* what() const noexcept;
 };

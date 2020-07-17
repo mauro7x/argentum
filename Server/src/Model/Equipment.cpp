@@ -26,7 +26,7 @@ Wearable* Equipment::add(Wearable* item) {
 
 Wearable* Equipment::remove(unsigned int n_slot) {
     if (n_slot > this->container.size())
-        throw InvalidEquipmentSlotNumberException();
+        return nullptr;
 
     Wearable* item = this->container[n_slot];
     this->container[n_slot] = nullptr;
@@ -44,11 +44,11 @@ void Equipment::dropAll(std::vector<DroppingSlot>& dropped_items) {
     }
 }
 
-const unsigned int Equipment::useAttackItem(Character& attacker) {
+Response Equipment::useAttackItem(Character& attacker, int& points) {
     if (!this->container[WEAPON])
-        return fist->use(attacker);
+        return fist->use(attacker, points);
 
-    return this->container[WEAPON]->use(attacker);
+    return this->container[WEAPON]->use(attacker, points);
 }
 
 const unsigned int Equipment::getAttackRange() const {
@@ -60,16 +60,18 @@ const unsigned int Equipment::getAttackRange() const {
 
 const unsigned int Equipment::getDefensePoints(Character& defender) {
     unsigned int defense_points = 0;
+    int points = 0;
 
     /* Sumo los puntos de defensa de cada wearables de defensa
-    que lleva puesto,que resultan ser todos menos WEAPON.*/
+    que lleva puesto, que resultan ser todos menos WEAPON. */
     for (unsigned int type = 0; type < N_WEARABLE_ITEMS; ++type) {
-        if (type == WEAPON)
+        if (type == WEAPON || !this->container[type])
             continue;
 
-        if (this->container[type])
-            defense_points += this->container[type]->use(defender);
+        this->container[type]->use(defender, points);
+        defense_points += points;
     }
+
     return defense_points;
 }
 
@@ -96,14 +98,6 @@ void Equipment::fillPersistenceData(CharacterCfg& data) const {
         else
             data.equipment[i] = this->container[i]->getId();
     }
-}
-
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
-
-const char* InvalidEquipmentSlotNumberException::what() const noexcept {
-    return "El numero de slot del equipamiento especificado es inválido.";
 }
 
 //-----------------------------------------------------------------------------

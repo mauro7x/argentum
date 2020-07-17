@@ -14,6 +14,7 @@
 #include "Level.h"
 #include "Position.h"
 #include "Race.h"
+#include "Response.h"
 #include "States.h"
 #include "Wearable.h"
 //-----------------------------------------------------------------------------
@@ -95,7 +96,7 @@ class Character : public Attackable {
      * Actualiza la posición del character según la velocidad de movimiento
      * establecida.
      */
-    void _updateMovement(const unsigned int it);
+    Response _updateMovement(const unsigned int it);
 
     //--------------------------------------------------------------------------
 
@@ -112,9 +113,9 @@ class Character : public Attackable {
      *            - que no estén ni el target ni this en zona segura
      *            - que el target esté dentro del rango del arma
      *
-     * Lanza la excepción correspondiente si no se cumple algun requisito.
+     * Devuelve Response ERROR si no se cumple algun requisito.
      */
-    void _checkPriorToUseWeaponConditions(Attackable* target) const;
+    Response _checkPriorToUseWeaponConditions(Attackable* target) const;
 
     /*
      * Verifican que se cumplan los requisitos para poder usar el arma de
@@ -125,9 +126,9 @@ class Character : public Attackable {
      *            - que el target no sea newbie
      *            - que haya fair play [diferencia de niveles adecuada]
      *
-     * Lanza la excepción correspondiente si no se cumple algun requisito.
+     * Devuelve Response ERROR si no se cumple algun requisito.
      */
-    void _checkPriorToUseAttackWeaponConditions(Attackable* target) const;
+    Response _checkPriorToUseAttackWeaponConditions(Attackable* target) const;
 
     /*
      * Efectúa el uso del arma curativa.
@@ -140,7 +141,7 @@ class Character : public Attackable {
      * Lanza KindCantDoMagicException si el kind del character no puede
      * hacer magia y lanzar hechizos.
      */
-    const bool _useHealingWeapon(Attackable* target, int& damage);
+    Response _useHealingWeapon(Attackable* target, int& damage);
 
     /*
      * Efectúa el uso del arma de ataque.
@@ -153,7 +154,7 @@ class Character : public Attackable {
      * Lanza KindCantDoMagicException si el kind del character no puede
      * hacer magia y lanzar hechizos.
      */
-    const bool _useAttackWeapon(Attackable* target, int& damage);
+    Response _useAttackWeapon(Attackable* target, int& damage, bool& eluded);
 
     //--------------------------------------------------------------------------
 
@@ -190,7 +191,7 @@ class Character : public Attackable {
      * - vida [si tiene margen de recuperación]
      * - maná [si tiene margen de recuperación]
      */
-    void act(const unsigned int it);
+    Response act(const unsigned int it);
 
     /*
      * Actualiza max_health, max_mana, y los limites de oro de los slots
@@ -213,30 +214,30 @@ class Character : public Attackable {
     /*
      * Setea moving en true y la orientación en UP.
      *
-     * Lanza StateCantMoveException si el jugador está resucitando.
+     * Devuelve Response ERROR si el jugador está resucitando.
      */
-    void startMovingUp();
+    Response startMovingUp();
 
     /*
      * Setea moving en true y la orientación en DOWN.
      *
-     * Lanza StateCantMoveException si el jugador está resucitando.
+     * Devuelve Response ERROR si el jugador está resucitando.
      */
-    void startMovingDown();
+    Response startMovingDown();
 
     /*
      * Setea moving en true y la orientación en RIGHT.
      *
-     * Lanza StateCantMoveException si el jugador está resucitando.
+     * Devuelve Response ERROR si el jugador está resucitando.
      */
-    void startMovingRight();
+    Response startMovingRight();
 
     /*
      * Setea moving en true y la orientación en LEFT.
      *
-     * Lanza StateCantMoveException si el jugador está resucitando.
+     * Devuelve Response ERROR si el jugador está resucitando.
      */
-    void startMovingLeft();
+    Response startMovingLeft();
 
     /* Setea moving en false. */
     void stopMoving();
@@ -255,19 +256,16 @@ class Character : public Attackable {
      * que se quiere equipar, y lo equipa.
      * Si no hay item en dicha posicion, no hace nada.
      *
-     * Lanza InvalidInventorySlotNumberException si la posicion
-     * especificada es invalida (fuera de rango).
-     *
-     * Lanza KindCantDoMagicException si el personaje se equipa
+     * Retorna Response ERROR si el personaje se equipa
      * una poción de maná cuando no puede hacer magia.
      */
-    void equip(unsigned int n_slot);
+    Response equip(unsigned int n_slot);
 
     /*
      * Equipa un Wearable al Equipment en su slot, almacenando en el
      * inventario el Wearable anterior.
      */
-    void equip(Wearable* item);
+    Response equip(Wearable* item);
 
     /*
      * Recibe la posición del item en el equipamiento
@@ -275,22 +273,19 @@ class Character : public Attackable {
      *
      * Si no hay item en dicha posición, no hace nada.
      *
-     * Lanza FullInventoryException si no hay espacio en
-     * el inventario para el elemento desequipado, no pudiendo
-     * efectuarse el comando.
+     * Retorna Response ERROR si no hay espacio en el inventario para el
+     * elemento desequipado, no pudiendo efectuarse el comando.
      */
-    void unequip(unsigned int n_slot);
+    Response unequip(unsigned int n_slot);
 
     /*
      * Toma amount items (del mismo tipo) y los agrega al inventario.
      *
-     * Lanza FullInventoryException si el inventario esta lleno
-     * y no pudo agregarse.
-     *
-     *       StateCantTakeItemException si el estado del jugador no permite
-     * tomar items.
+     * Retora Response error si:
+     * - el inventario está lleno y no pudo agregarse.
+     * - el estado del jugador no permite tomar items.
      */
-    void takeItem(Item* item, unsigned int amount = 1);
+    Response takeItem(Item* item, unsigned int amount = 1);
 
     /*
      * Dropa la cantidad especificada del item en la n_slot
@@ -299,35 +294,36 @@ class Character : public Attackable {
      * Si la cantidad de items en el slot es menor que amount,
      * se configura en amount la cantidad real droppeada.
      *
-     * Si no hay un item en dicha posicion, retorna nullptr.
-     *
-     * Lanza InvalidInventorySlotNumberException si la posicion
-     * especificada es invalida (fuera de rango).
+     * Si no hay un item en dicha posicion, o bien la posicion
+     * especificada es invalida (fuera de rango), retorna nullptr.
      */
     Item* dropItem(const unsigned int n_slot, unsigned int& amount);
 
     /*
      * Toma amount de gold del inventario.
      *
-     * Lanza InsufficientGoldException si la cantidad de oro que tiene el
-     * jugador en el inventario es menor a amount.
+     * Devuelve Response ERROR si:
      *
-     *       StateCantGatherGoldException si el jugador no puede usar su oro
-     * para comprar items porque su estado no lo permite.
+     * - la cantidad de oro que tiene el jugador en el inventario es menor a
+     * amount.
+     *
+     *  - el jugador no puede usar su oro para comprar items porque su estado no
+     * lo permite.
      */
-    void gatherGold(const unsigned int amount);
+    Response gatherGold(const unsigned int amount);
 
     /*
      * Agrega amount de gold en el inventario [hasta llegar a la máxima
      * capacidad de oro]. Setea en amount el valor de oro efectivamente
      * agregado.
      *
-     * Lanza GoldMaximumCapacityReachedException si se alcanza el límite máximo
-     * de oro que se puede almacenar.
+     * Retorna Response ERROR si:
      *
-     *       StateCantTakeItemException si el estado no permite recoger oro.
+     * - se alcanza el límite máximo de oro que se puede almacenar.
+     *
+     * - el estado no permite recoger oro.
      */
-    void takeGold(unsigned int& amount);
+    Response takeGold(unsigned int& amount);
 
     /*
      * Se llama a este método cuando el jugador muere.
@@ -363,32 +359,34 @@ class Character : public Attackable {
      *
      * Retorna si aumentó la vida o no.
      */
-    const bool recoverHealth(unsigned int& points) override;
+    const bool recoverHealth(int& points) override;
 
     /*
      * Si hay suficiente mana, consume mana_points de mana.
      *
-     * Lanza InsufficientManaException si no hay suficiente mana.
+     * Retorna true si lo hay, false si no lo hay.
      */
-    void consumeMana(const unsigned int mana_points);
+    const bool consumeMana(const unsigned int mana_points);
 
     /*
      * Lleva la vida y el maná del character a sus máximos.
      *
-     * Lanza StateCantBeHealedException si el estado del character no permite
+     * Devuelve Response ERROR si el estado del character no permite
      * la curación.
      */
-    void heal();
+    Response heal();
 
     /*
      * El character comienza a meditar, acelerando la recuperación de su maná.
      *
      * Ante cualquier acción que afecte su estado, dejará de meditar.
      *
-     * Lanza KindCantMeditateException si su kind no puede meditar.
-     * Lanza StateCantMeditateException si su estado no puede meditar.
+     * Devuelve Response ERROR si:
+     *
+     * - su kind no puede meditar.
+     * - su estado no permite meditar.
      */
-    void meditate();
+    Response meditate();
 
     //--------------------------------------------------------------------------
 
@@ -407,18 +405,16 @@ class Character : public Attackable {
     /*
      * Metodo llamado al usar báculos.
      *
-     * Lanza KindCantDoMagicException si el Kind no puede hacer magia.
+     * Devuelve si el kind del character permite hacer magia o no, como una
+     * Response.
      */
-    void doMagic();
+    Response doMagic() const;
 
     /*
-     * Verifica si dado el estado actual, el character puede
-     * ser atacado.
-     *
-     * Lanza StateOfCharacterCantBeAttackedException si el estado
-     * actual no permite al character ser atacado.
+     * Retorna false si el estado actual no permite al character ser atacado,
+     * true si puede ser atacado.
      */
-    void beAttacked() override;
+    const bool beAttacked() override;
 
     /*
      * Efectúa la recepción del ataque de otro jugador.
@@ -444,40 +440,24 @@ class Character : public Attackable {
      * Retorna si el ataque fue eludido o no. Los usos curativos nunca son
      * eludidos.
      *
-     * Lanza:
-     *       OutOfRangeAttackException si el otro jugador está fuera del rango
-     * del arma.
+     * Retorna Response ERROR si:
      *
-     *       CantAttackWithoutWeapon si no tiene arma equipada para atacar.
-     *
-     *       AttackCooldownTimeNotElapsedException si el cooldown de uso del
-     * arma todavía no pasó.
-     *
-     *       KindCantDoMagicException si la clase del character no puede hacer
-     * magia e intenta usar un hechizo.
-     *
-     *       CantAttackItselfException si quieren lanzar un ataque dañino sobre
-     * sí mismo.
-     *
-     *       TooHighLevelDifferenceOnAttackException si la diferencia de niveles
-     * es más alta de la permitida para un ataque.
-     *
-     *       NewbiesCantBeAttackedException si el jugador al que se quiere
-     * atacar es Newbie.
-     *
-     *       InsufficientManaException si no puede usar el hechizo debido a
-     * déficit de maná.
-     *
-     *       AttackerStateCantAttackException si el jugador no puede atacar
-     * debido a su estado (muerto)
-     *
-     *       AttackedStateCantBeAttackedException si el jugador al que se
-     * quiere atacar no puede atacar debido a su estado (muerto).
+     * - el otro jugador está fuera del rango del arma.
+     * - no tiene arma equipada para atacar.
+     * - el cooldown de uso del arma todavía no pasó.
+     * - la clase del character no puede hacer magia e intenta usar un báculo.
+     * - se quiere lanzar un ataque dañino sobre sí mismo.
+     * - la diferencia de niveles es más alta de la permitida para un ataque.
+     * - el jugador al que se quiere atacar es Newbie.
+     * - no puede usar el hechizo debido a déficit de maná.
+     * - el jugador no puede atacar debido a su estado (muerto)
+     * - el jugador al que se quiere atacar no puede atacar debido a su estado
+     * (muerto).
      */
-    const bool useWeapon(Attackable* target, int& damage);
+    Response useWeapon(Attackable* target, int& damage, bool& eluded);
 
     /*
-     * Devuelve el nickname del caracter;
+     * Devuelve el nickname del caracter.
      */
     std::string getNickname();
 
@@ -487,16 +467,22 @@ class Character : public Attackable {
      */
     void die();
 
-    void resurrect();
+    /*
+     * Si está muerto, resucita al character, volviéndolo al estado Alive y
+     * curándolo.
+     *
+     * Devuelve Response ERROR si no está muerto y quiere resucitar.
+     */
+    Response resurrect();
 
     /*
      * Si el estado del jugador es Dead, cambia el estado a Resurrecting, en el
      * que no podrá realizar ninguna acción, para luego volver a Alive una vez
      * se llame a resurrect().
      *
-     * Lanza StateCantResurrectException si el estado es Alive.
+     * Devuelve Response ERROR si no está muerto y quiere resucitar.
      */
-    void startResurrecting();
+    Response startResurrecting();
 
     //--------------------------------------------------------------------------
 
@@ -565,48 +551,7 @@ class Character : public Attackable {
 
     void debug();
 };
-//-----------------------------------------------------------------------------
 
-//-----------------------------------------------------------------------------
-class InsufficientManaException : public std::exception {
-   public:
-    virtual const char* what() const noexcept;
-};
-
-class CantAttackInSafeZoneException : public std::exception {
-   public:
-    virtual const char* what() const noexcept;
-};
-
-class CantAttackItselfException : public std::exception {
-   public:
-    virtual const char* what() const noexcept;
-};
-
-class OutOfRangeAttackException : public std::exception {
-   public:
-    virtual const char* what() const noexcept;
-};
-
-class NewbiesCantBeAttackedException : public std::exception {
-   public:
-    virtual const char* what() const noexcept;
-};
-
-class NewbiesCantAttackCharactersException : public std::exception {
-   public:
-    virtual const char* what() const noexcept;
-};
-
-class AttackCooldownTimeNotElapsedException : public std::exception {
-   public:
-    virtual const char* what() const noexcept;
-};
-
-class TooHighLevelDifferenceOnAttackException : public std::exception {
-   public:
-    virtual const char* what() const noexcept;
-};
 //-----------------------------------------------------------------------------
 #endif
 //-----------------------------------------------------------------------------

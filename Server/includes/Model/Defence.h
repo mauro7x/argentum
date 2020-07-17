@@ -26,7 +26,7 @@ class Defence : public Wearable {
     Defence& operator=(Defence&&) = delete;
 
     /* Devuelve los puntos de defensa que absorbe. */
-    const unsigned int use(Character& user) override;
+    Response use(Character& user, int& points) override;
 
     /* Lanza excepción. La defensa no tiene rango */
     const unsigned int getRange() const override;

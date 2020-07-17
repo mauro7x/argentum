@@ -163,12 +163,11 @@ void Creature::_updateMovement(const unsigned int it) {
     this->moving_cooldown -= it * rate;
 
     while (this->moving_cooldown <= 0) {
-        try {
-            this->position.move(true);
-        } catch (const CollisionWhileMovingException& e) {
+        if (!this->position.move(true)) {
             moving_cooldown = 0;
             return;
         }
+
         this->broadcast = true;
 
         this->moving_cooldown += 1000 / movement_speed;
@@ -187,12 +186,12 @@ void Creature::_randomMovement(const unsigned int it) {
 
     while (random_moving_cooldown <= 0) {
         _setRandomOrientation();
-        try {
-            this->position.move(true);
-        } catch (const CollisionWhileMovingException& e) {
+        
+        if (!this->position.move(true)) {
             random_moving_cooldown = 0;
             return;
         }
+
         this->broadcast = true;
 
         this->random_moving_cooldown +=
@@ -221,13 +220,15 @@ const bool Creature::receiveAttack(int& damage, const bool eludible) {
     return true;
 }
 
-void Creature::beAttacked() {}
+const bool Creature::beAttacked() {
+    return true;
+}
 
 const bool Creature::isNewbie() const {
     return false;
 }
 
-const bool Creature::recoverHealth(unsigned int& points) {
+const bool Creature::recoverHealth(int& points) {
     throw CantRecoverCreaturesHealthException();
 }
 

@@ -1,11 +1,14 @@
 #ifndef __ITEM_H__
 #define __ITEM_H__
-
+//-----------------------------------------------------------------------------
 #include <string>
-
+//-----------------------------------------------------------------------------
+#include "Response.h"
+//-----------------------------------------------------------------------------
 #include "../../../Common/includes/types.h"
-
+//-----------------------------------------------------------------------------
 class Character;  // Evito dependencias circulares debido a double dispatch
+//-----------------------------------------------------------------------------
 
 /*
  * Define la abstraccion Item.
@@ -22,7 +25,7 @@ class Item {
     Item(const Id id, const std::string name, const unsigned int price);
     virtual ~Item();
 
-    virtual void equip(Character& equipper) = 0;
+    virtual Response equip(Character& equipper) = 0;
 
     virtual const std::string what() const;
 
@@ -31,4 +34,6 @@ class Item {
     const unsigned int getPrice() const;
 };
 
+//-----------------------------------------------------------------------------
 #endif
+//-----------------------------------------------------------------------------

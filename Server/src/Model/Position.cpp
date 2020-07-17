@@ -48,10 +48,10 @@ const unsigned int Position::getRange(const Position& other) const {
     return std::max(abs(this->x - other.getX()), abs(this->y - other.getY()));
 }
 
-void Position::move(bool is_creature) {
+const bool Position::move(bool is_creature) {
     if (!this->map_container[this->map].moveOccupant(
             this->x, this->y, this->orientation, is_creature))
-        throw CollisionWhileMovingException();
+        return false;
 
     switch (this->orientation) {
         case UP_ORIENTATION:
@@ -75,6 +75,7 @@ void Position::move(bool is_creature) {
     }
 
     this->broadcast = true;
+    return true;
 }
 
 void Position::changeOrientation(Orientation orientation) {
@@ -111,8 +112,4 @@ void Position::fillPersistenceData(CharacterCfg& data) const {
     data.map = this->map;
     data.x_tile = this->x;
     data.y_tile = this->y;
-}
-
-const char* CollisionWhileMovingException::what() const noexcept {
-    return "No puedes moverte en esa dirección.";
 }

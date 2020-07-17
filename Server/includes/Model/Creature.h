@@ -141,7 +141,7 @@ class Creature : public Attackable {
     const Position& getPosition() const override;
 
     /* Lanza CantRecoverCreaturesHealthException */
-    const bool recoverHealth(unsigned int& points) override;
+    const bool recoverHealth(int& points) override;
 
     /*
      * Si muere la criatura, se llama a este método.
@@ -167,8 +167,8 @@ class Creature : public Attackable {
     /* Avisa que la criatura es broadcasteada */
     void beBroadcasted();
 
-    /* No hace nada [por ahora..] */
-    void beAttacked();
+    /* Devuelve true. Las criaturas siempre pueden ser atacadas. */
+    const bool beAttacked();
 
     /* Devuelve false. Las criaturas no califican como Newbie. */
     const bool isNewbie() const;

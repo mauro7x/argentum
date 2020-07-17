@@ -12,6 +12,6 @@ const WearableType Wearable::getType() const {
     return this->wearable_type;
 }
 
-void Wearable::equip(Character& character) {
-    character.equip(this);
+Response Wearable::equip(Character& character) {
+    return character.equip(this);
 }

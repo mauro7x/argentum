@@ -14,6 +14,7 @@
 #include "Item.h"
 #include "ItemsContainer.h"
 #include "Level.h"
+#include "Response.h"
 #include "Slot.h"
 #include "config_structs.h"
 //-----------------------------------------------------------------------------
@@ -37,16 +38,14 @@ class Inventory {
     Formulas& formulas;
 
     /*
-     * Devuelve la el indice del menor slot libre del
-     * container del inventario.
+     * Devuelve la el indice del menor slot libre del container del inventario.
      */
     const uint8_t _getNextFreeSlot() const;
 
     /*
-     * Agrega la cantidad de oro especificada en slot_gold,
-     * sin superar el slot_max_gold.
-     * Si la cantidad sobrepasa slot_max_gold, se guarda lo
-     * que se puede, hasta llegar al limite.
+     * Agrega la cantidad de oro especificada en slot_gold, sin superar el
+     * slot_max_gold. Si la cantidad sobrepasa slot_max_gold, se guarda lo que
+     * se puede, hasta llegar al limite.
      *
      * Retorna la cantidad de oro que no se pudo guardar.
      */
@@ -54,8 +53,9 @@ class Inventory {
                           unsigned int& slot_max_gold);
 
     /*
-     * Retira la cantidad de oro especificada de slot_gold,
-     * en caso de haber suficiente.
+     * Retira la cantidad de oro especificada de slot_gold, en caso de haber
+     * suficiente. 
+     * 
      * Si no hay suficiente, retira todo lo que hay.
      *
      * Retorna la cantidad de oro que se pudo retirar.
@@ -76,80 +76,57 @@ class Inventory {
     void updateMaxAmountsOfGold();
 
     /*
-     * Obtiene la cantidad especificada del item en la n_slot
-     * pasada por parámetro.
+     * Obtiene la cantidad especificada del item en la n_slot pasada por
+     * parámetro.
      *
-     * Si la cantidad de items en el slot es menor que amount,
-     * se configura en amount la cantidad real droppeada.
+     * Si la cantidad de items en el slot es menor que amount, se configura en
+     * amount la cantidad real droppeada.
      *
-     * En caso de no haber, retorna nullptr.
-     *
-     * Lanza InvalidInventorySlotNumberException si la posicion
-     * especificada es invalida (fuera de rango).
+     * En caso de no haber item alguno, o bien si la posicion especificada es
+     * inválida (fuera de rango), retorna nullptr.
      */
     Item* gatherItem(const uint8_t n_slot, unsigned int& amount);
 
     /*
      * Obtiene amount de gold del inventario.
      *
-     * Lanza InsufficientGoldException si la cantidad de oro
-     * presente en el inventario es menor a amount.
+     * Devuelve Response ERROR si la cantidad de oro presente en el inventario
+     * es menor a amount.
      */
-    void gatherGold(const uint32_t amount);
+    Response gatherGold(const uint32_t amount);
 
     /*
      * Agrega amount items (del mismo tipo) al inventario.
      *
-     * Lanza FullInventoryException si el inventario esta
-     * lleno y no se puede agregar.
+     * Devuelve Response ERROR si el inventario está lleno y no se puede
+     * agregar.
      */
-    void addItem(Item* item, const unsigned int amount);
+    Response addItem(Item* item, const unsigned int amount);
 
     /*
-     * Agrega amount de gold al inventario, llenando primero
-     * el oro seguro y luego el oro en exceso, hasta llegar
-     * a sus respectivos limites.
+     * Agrega amount de gold al inventario, llenando primero el oro seguro y
+     * luego el oro en exceso, hasta llegar a sus respectivos limites.
      *
      * Setea en amount el oro efectivamente agregado.
      *
-     * Lanza GoldMaximumCapacityReachedException si no se pudo
-     * guardar todo el oro por llegar al limite de capacidad.
+     * Devuelve Responser ERROR si no se pudo guardar todo el oro por llegar al
+     * limite de capacidad.
      */
-    void addGold(uint32_t& amount);
+    Response addGold(uint32_t& amount);
 
     /*
-     * Vacía el inventario, dropeando todos los items en el vector
-     * recibido por parámetro.
+     * Vacía el inventario, dropeando todos los items en el vector recibido por
+     * parámetro.
      */
     void dropAll(std::vector<DroppingSlot>& dropped_items);
 
     /*
-     * Llena los campos safe_gold, excess_gold e
-     * inventory de PlayerData para su broadcast.
+     * Llena los campos safe_gold, excess_gold e inventory de PlayerData para su
+     * broadcast.
      */
     void fillBroadcastData(PlayerData& data) const;
 
     void fillPersistenceData(CharacterCfg& data) const;
-};
-
-class FullInventoryException : public std::exception {
-   public:
-    virtual const char* what() const noexcept;
-};
-
-class InvalidInventorySlotNumberException : public std::exception {
-   public:
-    virtual const char* what() const noexcept;
-};
-
-class InsufficientGoldException : public std::exception {
-   public:
-    virtual const char* what() const noexcept;
-};
-
-class GoldMaximumCapacityReachedException : public std::exception {
-   public:
-    virtual const char* what() const noexcept;
 };
 
 #endif

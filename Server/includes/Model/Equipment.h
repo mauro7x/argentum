@@ -8,6 +8,7 @@
 #include "../../../Common/includes/Inventory.h"
 //-----------------------------------------------------------------------------
 #include "ItemsContainer.h"
+#include "Response.h"
 #include "Wearable.h"
 #include "config_structs.h"
 //-----------------------------------------------------------------------------
@@ -53,10 +54,8 @@ class Equipment {
      * Elimina el wearable en la posición n_slot del container,
      * y lo devuelve.
      *
-     * En caso de no haber wearable en dicha posición, retorna nullptr.
-     *
-     * Lanza InvalidEquipmentSlotNumberException si el n_slot
-     * recibido como argumento es inválido.
+     * En caso de no haber wearable en dicha posición o si n_slot
+     * recibido como argumento es inválido, retorna nullptr.
      */
     Wearable* remove(unsigned int n_slot);
 
@@ -72,10 +71,10 @@ class Equipment {
      *
      * En caso de no tener nada que pueda causar daño, devuelve 0.
      *
-     * Lanza InsufficientManaException si el arma es un hechizo y
-     * el jugador no tiene suficiente maná como para usarlo.
+     * Retorna Response ERROR si el arma es un hechizo y el jugador no tiene
+     * suficiente maná como para usarlo o bien no puede hacer magia.
      */
-    const unsigned int useAttackItem(Character& attacker);
+    Response useAttackItem(Character& attacker, int& points);
 
     /*
      * Devuelve el rango de ataque del arma equipada.
@@ -102,15 +101,6 @@ class Equipment {
 
     /* Llena la estructura de persistencia. */
     void fillPersistenceData(CharacterCfg& data) const;
-};
-
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
-
-class InvalidEquipmentSlotNumberException : public std::exception {
-   public:
-    virtual const char* what() const noexcept;
 };
 
 //-----------------------------------------------------------------------------

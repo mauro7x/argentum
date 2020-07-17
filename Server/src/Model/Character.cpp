@@ -10,7 +10,36 @@
 //-----------------------------------------------------------------------------
 #define DEFAULT_MOVING_ORIENTATION DOWN_ORIENTATION
 //-----------------------------------------------------------------------------
-
+#define NO_ITEM_TO_EQUIP_ERROR_MSG "No tienes ningún item en esa posición."
+#define COLLISION_WHILE_MOVING_ERROR_MSG "No puedes moverte en esa dirección."
+#define KIND_CANT_DO_MAGIC_ERROR_MSG "Tu clase no puede hacer magia."
+#define KIND_CANT_MEDITATE_ERROR_MSG "Tu clase no puede meditar."
+#define STATE_CANT_MOVE_ERROR_MSG "No puedes moverte. Estás resucitando."
+#define STATE_CANT_TAKE_ITEM_ERROR_MSG "No puedes tomar items. Estás muerto."
+#define STATE_CANT_BE_HEALED_ERROR_MSG "No puedes curarte. Estás muerto."
+#define STATE_CANT_MEDITATE_ERROR_MSG "No puedes meditar. Estás muerto."
+#define STATE_CANT_RESURRECT_ERROR_MSG "No puedes resucitar. Ya estás vivo."
+#define STATE_CANT_GATHER_GOLD_ERROR_MSG "No puedes usar tu oro. Estás muerto."
+#define STATE_CANT_ATTACK_ERROR_MSG "No puedes atacar. Estás muerto."
+#define STATE_CANT_BE_ATTACKED_ERROR_MSG \
+    "No puedes atacar a ese jugador. Ya está muerto"
+//-----------------------------------------------------------------------------
+#define CANT_ATTACK_IN_SAFE_ZONE_ERROR_MSG \
+    "No se puede atacar o lanzar hechizos en una zona segura."
+#define CANT_ATTACK_ITSELF_ERROR_MSG "No puedes hacerte daño a ti mismo."
+#define OUT_OF_RANGE_ATTACK_ERROR_MSG \
+    "El objetivo al que quieres atacar está fuera del rango de tu arma."
+#define NEWBIES_CANT_BE_ATTACKED_ERROR_MSG "No puedes atacar a jugador newbie."
+#define NEWBIES_CANT_ATTACK_CHARACTERS_ERROR_MSG \
+    "No puedes atacar a otro jugador. Eres newbie."
+#define ATTACK_COOLDOWN_TIME_NOT_ELAPSED_ERROR_MSG \
+    "No puedes usar el arma tan rápido, la misma está en enfriamiento."
+#define TOO_HIGH_LEVEL_DIFFERENCE_ON_ATTACK_ERROR_MSG \
+    "La diferencia de niveles es mayor a 12."
+//-----------------------------------------------------------------------------
+#define HEALED_SUCCESS_MSG "Has sido curado."
+#define MEDITATING_SUCCESS_MSG \
+    "Has comenzado a meditar. Ante cualquier acción dejarás de hacerlo."
 //-----------------------------------------------------------------------------
 
 Character::Character(const CharacterCfg& init_data, const RaceCfg& race,
@@ -75,19 +104,21 @@ Character::~Character() {
 // Actualización de atributos
 //-----------------------------------------------------------------------------
 
-void Character::act(const unsigned int it) {
-    if (is_moving) {
-        _updateMovement(it);
-    } else {
-        if (moving_cooldown > 0) {
-            moving_cooldown = std::max((int)(moving_cooldown - it * rate), 0);
-        }
-    }
-
+Response Character::act(const unsigned int it) {
     if (attack_cooldown > 0)
         attack_cooldown = std::max((int)(attack_cooldown - it * rate), 0);
 
     _updateTimeDependantAttributes(it);
+
+    if (is_moving)
+        return _updateMovement(it);
+
+    // Si no se está moviendo, igual actualizamos el cooldown.
+    // (Si se está moviendo se actualiza en _updateMovement()).
+    if (moving_cooldown > 0)
+        moving_cooldown = std::max((int)(moving_cooldown - it * rate), 0);
+
+    return Response(true, "", SUCCESS_MSG);
 }
 
 void Character::updateLevelDependantAttributes() {
@@ -108,7 +139,7 @@ void Character::_updateTimeDependantAttributes(const unsigned int it) {
     attribute_update_time_elapsed += it * rate;
 
     while (attribute_update_time_elapsed >= ms_to_update_attributes) {
-        unsigned int health_update = formulas.calculateHealthTimeRecovery(
+        int health_update = formulas.calculateHealthTimeRecovery(
             this->race.health_recovery_factor, ms_to_update_attributes);
 
         unsigned int mana_update = formulas.calculateManaTimeRecovery(
@@ -128,7 +159,7 @@ void Character::_updateTimeDependantAttributes(const unsigned int it) {
     }
 }
 
-void Character::_updateMovement(const unsigned int it) {
+Response Character::_updateMovement(const unsigned int it) {
     this->moving_cooldown -= it * rate;
 
     while (this->moving_cooldown <= 0) {
@@ -136,8 +167,13 @@ void Character::_updateMovement(const unsigned int it) {
 
         this->moving_cooldown += UNIT_TIME_TO_MOVE;
 
-        this->position.move(false);
+        if (!this->position.move(false)) {
+            this->stopMoving();
+            return Response(false, COLLISION_WHILE_MOVING_ERROR_MSG, ERROR_MSG);
+        }
     }
+
+    return Response(true, "", SUCCESS_MSG);
 }
 
 std::string Character::getNickname() {
@@ -150,32 +186,48 @@ std::string Character::getNickname() {
 //  Movimiento
 //-----------------------------------------------------------------------------
 
-void Character::startMovingUp() {
-    this->state->move();
+Response Character::startMovingUp() {
+    if (!this->state->move())
+        return Response(false, STATE_CANT_MOVE_ERROR_MSG, ERROR_MSG);
+
     this->is_meditating = false;
     this->position.changeOrientation(UP_ORIENTATION);
     this->is_moving = true;
+
+    return Response(true, "", SUCCESS_MSG);
 }
 
-void Character::startMovingDown() {
-    this->state->move();
+Response Character::startMovingDown() {
+    if (!this->state->move())
+        return Response(false, STATE_CANT_MOVE_ERROR_MSG, ERROR_MSG);
+
     this->is_meditating = false;
     this->position.changeOrientation(DOWN_ORIENTATION);
     this->is_moving = true;
+
+    return Response(true, "", SUCCESS_MSG);
 }
 
-void Character::startMovingRight() {
-    this->state->move();
+Response Character::startMovingRight() {
+    if (!this->state->move())
+        return Response(false, STATE_CANT_MOVE_ERROR_MSG, ERROR_MSG);
+
     this->is_meditating = false;
     this->position.changeOrientation(RIGHT_ORIENTATION);
     this->is_moving = true;
+
+    return Response(true, "", SUCCESS_MSG);
 }
 
-void Character::startMovingLeft() {
-    this->state->move();
+Response Character::startMovingLeft() {
+    if (!this->state->move())
+        return Response(false, STATE_CANT_MOVE_ERROR_MSG, ERROR_MSG);
+
     this->is_meditating = false;
     this->position.changeOrientation(LEFT_ORIENTATION);
     this->is_moving = true;
+
+    return Response(true, "", SUCCESS_MSG);
 }
 
 void Character::stopMoving() {
@@ -194,7 +246,7 @@ void Character::teleport(const Id map_id, const uint32_t x_coord,
 // Modificación de maná y vida.
 //-----------------------------------------------------------------------------
 
-const bool Character::recoverHealth(unsigned int& points) {
+const bool Character::recoverHealth(int& points) {
     if (!points || !health || this->health == this->max_health) {
         points = 0;
         return false;
@@ -226,26 +278,36 @@ const bool Character::recoverMana(unsigned int& points) {
     return true;
 }
 
-void Character::heal() {
-    this->state->beHealed();
+Response Character::heal() {
+    if (!this->state->beHealed())
+        return Response(false, STATE_CANT_BE_HEALED_ERROR_MSG, ERROR_MSG);
+
     this->health = max_health;
     this->mana = max_mana;
     this->broadcast = true;
+
+    return Response(true, HEALED_SUCCESS_MSG, SUCCESS_MSG);
 }
 
-void Character::consumeMana(const unsigned int points) {
-    if (this->mana < points) {
-        throw InsufficientManaException();
-    }
+const bool Character::consumeMana(const unsigned int points) {
+    if (this->mana < points)
+        return false;
 
     this->mana -= points;
     this->broadcast = true;
+    return true;
 }
 
-void Character::meditate() {
-    this->state->meditate();
-    this->kind.meditate();
+Response Character::meditate() {
+    if (!this->state->meditate())
+        return Response(false, STATE_CANT_MEDITATE_ERROR_MSG, ERROR_MSG);
+
+    if (!this->kind.meditate())
+        return Response(false, KIND_CANT_MEDITATE_ERROR_MSG, ERROR_MSG);
+
     this->is_meditating = true;
+
+    return Response(true, MEDITATING_SUCCESS_MSG, SUCCESS_MSG);
 }
 
 //-----------------------------------------------------------------------------
@@ -254,20 +316,20 @@ void Character::meditate() {
 // Manejo de items.
 //-----------------------------------------------------------------------------
 
-void Character::equip(unsigned int inventory_position) {
+Response Character::equip(unsigned int inventory_position) {
     unsigned int amount = 1;
     Item* item_to_equip =
         this->inventory.gatherItem(inventory_position, amount);
 
     if (!item_to_equip)
-        return;
-
-    item_to_equip->equip(*this);
+        return Response(false, NO_ITEM_TO_EQUIP_ERROR_MSG, ERROR_MSG);
 
     this->broadcast = true;
+
+    return item_to_equip->equip(*this);
 }
 
-void Character::equip(Wearable* item) {
+Response Character::equip(Wearable* item) {
     Wearable* prev_equipped_item = this->equipment.add(item);
     if (prev_equipped_item) {
         // Agrego lo que tenia equipado al inventario.
@@ -275,29 +337,33 @@ void Character::equip(Wearable* item) {
     }
 
     this->broadcast = true;
+    return Response(true, "", SUCCESS_MSG);
 }
 
-void Character::unequip(unsigned int n_slot) {
+Response Character::unequip(unsigned int n_slot) {
     Wearable* unequipped_item = this->equipment.remove(n_slot);
 
     if (!unequipped_item)
-        return;
+        return Response(true, "", SUCCESS_MSG);
 
-    try {
-        this->inventory.addItem((Item*)unequipped_item, 1);
-    } catch (FullInventoryException()) {
+    Response response = this->inventory.addItem((Item*)unequipped_item, 1);
+
+    if (!response.succeeded) {
         // No se pudo agregar al inventario => lo devolvemos al equipment
         this->equipment.add(unequipped_item);
-        throw FullInventoryException();
+    } else {
+        this->broadcast = true;
     }
 
-    this->broadcast = true;
+    return response;
 }
 
-void Character::takeItem(Item* item, unsigned int amount) {
-    this->state->takeItem();
+Response Character::takeItem(Item* item, unsigned int amount) {
+    if (!this->state->takeItem())
+        return Response(false, STATE_CANT_TAKE_ITEM_ERROR_MSG, ERROR_MSG);
+
     this->broadcast = true;
-    this->inventory.addItem(item, amount);
+    return this->inventory.addItem(item, amount);
 }
 
 Item* Character::dropItem(const unsigned int n_slot, unsigned int& amount) {
@@ -309,16 +375,20 @@ Item* Character::dropItem(const unsigned int n_slot, unsigned int& amount) {
     return dropped_item;
 }
 
-void Character::gatherGold(const unsigned int amount) {
-    this->state->gatherGold();
+Response Character::gatherGold(const unsigned int amount) {
+    if (!this->state->gatherGold())
+        return Response(false, STATE_CANT_GATHER_GOLD_ERROR_MSG, ERROR_MSG);
+
     this->broadcast = true;
-    this->inventory.gatherGold(amount);
+    return this->inventory.gatherGold(amount);
 }
 
-void Character::takeGold(unsigned int& amount) {
-    this->state->takeItem();
+Response Character::takeGold(unsigned int& amount) {
+    if (!this->state->takeItem())
+        return Response(false, STATE_CANT_TAKE_ITEM_ERROR_MSG, ERROR_MSG);
+
     this->broadcast = true;
-    this->inventory.addGold(amount);
+    return this->inventory.addGold(amount);
 }
 
 void Character::dropAllItems(std::vector<DroppingSlot>& dropped_items) {
@@ -336,27 +406,32 @@ void Character::setAttackCooldown(const unsigned int cooldown) {
     this->attack_cooldown += cooldown;
 }
 
-void Character::beAttacked() {
+const bool Character::beAttacked() {
     // Delego en mi estado si puedo ser atacado.
-    this->state->beAttacked();
+    return this->state->beAttacked();
 }
 
-void Character::doMagic() {
+Response Character::doMagic() const {
     // Delego en mi kind si puedo hacer magia.
-    this->kind.doMagic();
+    if (!this->kind.doMagic())
+        return Response(false, KIND_CANT_DO_MAGIC_ERROR_MSG, ERROR_MSG);
+
+    return Response(true, "", SUCCESS_MSG);
 }
 
-void Character::_checkPriorToUseWeaponConditions(Attackable* target) const {
+Response Character::_checkPriorToUseWeaponConditions(Attackable* target) const {
     // Delego si puedo atacar en mi estado.
-    this->state->attack();
+    if (!this->state->attack())
+        return Response(false, STATE_CANT_ATTACK_ERROR_MSG, ERROR_MSG);
 
     // Verifico cooldown de arma de ataque.
     if (this->attack_cooldown)
-        throw AttackCooldownTimeNotElapsedException();
+        return Response(false, ATTACK_COOLDOWN_TIME_NOT_ELAPSED_ERROR_MSG,
+                        ERROR_MSG);
 
     // Verifico si alguno atacante o atacado está en zona segura.
     if (this->position.isInSafeZone() || target->getPosition().isInSafeZone())
-        throw CantAttackInSafeZoneException();
+        return Response(false, CANT_ATTACK_IN_SAFE_ZONE_ERROR_MSG, ERROR_MSG);
 
     // Nos fijamos si el atacado está en el rango del arma.
     // Si no lo está, lanzamos excepción.
@@ -365,48 +440,65 @@ void Character::_checkPriorToUseWeaponConditions(Attackable* target) const {
         this->position.getDistance(target->getPosition());
 
     if (distance > weapon_range)
-        throw OutOfRangeAttackException();
+        return Response(false, OUT_OF_RANGE_ATTACK_ERROR_MSG, ERROR_MSG);
+
+    return Response(true, "", SUCCESS_MSG);
 }
 
-void Character::_checkPriorToUseAttackWeaponConditions(
+Response Character::_checkPriorToUseAttackWeaponConditions(
     Attackable* target) const {
     // Verificación de que no se quiera hacer daño a sí mismo
     if (this == target)
-        throw CantAttackItselfException();
+        return Response(false, CANT_ATTACK_ITSELF_ERROR_MSG, ERROR_MSG);
 
     // Verificación si dado el estado del otro jugador se puede atacarlo.
-    target->beAttacked();
+    if (!target->beAttacked())
+        return Response(false, STATE_CANT_BE_ATTACKED_ERROR_MSG, ERROR_MSG);
 
     // Verificación de si el jugador es newbie.
     if (target->isNewbie())
-        throw NewbiesCantBeAttackedException();
+        return Response(false, NEWBIES_CANT_BE_ATTACKED_ERROR_MSG, ERROR_MSG);
 
     if (this->isNewbie() && !target->isCreature())
-        throw NewbiesCantAttackCharactersException();
+        return Response(false, NEWBIES_CANT_ATTACK_CHARACTERS_ERROR_MSG,
+                        ERROR_MSG);
 
     // Verificación de diferencia de niveles entre jugadores.
     const unsigned int target_level = target->getLevel();
 
     if (!target->isCreature() &&
         !(formulas.canAttackByLevel(this->level.getLevel(), target_level)))
-        throw TooHighLevelDifferenceOnAttackException();
+        return Response(false, TOO_HIGH_LEVEL_DIFFERENCE_ON_ATTACK_ERROR_MSG,
+                        ERROR_MSG);
+
+    return Response(true, "", SUCCESS_MSG);
 }
 
-const bool Character::_useHealingWeapon(Attackable* target, int& damage) {
+Response Character::_useHealingWeapon(Attackable* target, int& damage) {
     // Si el arma es curativa, obtengo sus puntos y curo.
-    unsigned int healing_points = this->equipment.useAttackItem(*this);
+    int healing_points;
+
+    Response response = this->equipment.useAttackItem(*this, healing_points);
+    if (!response.succeeded)
+        return response;
+
     target->recoverHealth(healing_points);
 
     // Establezco valor negativo de daño -> puntos curativos.
     damage = -healing_points;
-    return false;
+    return Response(true, "", SUCCESS_MSG);
 }
 
-const bool Character::_useAttackWeapon(Attackable* target, int& damage) {
-    _checkPriorToUseAttackWeaponConditions(target);
+Response Character::_useAttackWeapon(Attackable* target, int& damage,
+                                     bool& eluded) {
+    Response checks_response = _checkPriorToUseAttackWeaponConditions(target);
+    if (!checks_response.succeeded)
+        return checks_response;
 
     // Obtenemos el danio del arma.
-    damage = this->equipment.useAttackItem(*this);
+    Response usage_response = this->equipment.useAttackItem(*this, damage);
+    if (!usage_response.succeeded)
+        return usage_response;
 
     // Se define si el ataque es critico
     bool critical_attack = formulas.isCriticalAttack();
@@ -414,7 +506,7 @@ const bool Character::_useAttackWeapon(Attackable* target, int& damage) {
         damage = damage * critical_attack_dmg_modifier;
 
     // El atacado recibe el daño del ataque.
-    const bool eluded = !target->receiveAttack(damage, critical_attack);
+    eluded = !target->receiveAttack(damage, critical_attack);
 
     // Sumamos exp. de ataque.
     this->level.onAttackUpdate(*this, damage, target->getLevel());
@@ -426,19 +518,23 @@ const bool Character::_useAttackWeapon(Attackable* target, int& damage) {
 
     this->broadcast = true;
 
-    return eluded;
+    return Response(true, "", SUCCESS_MSG);
 }
 
-const bool Character::useWeapon(Attackable* target, int& damage) {
-    _checkPriorToUseWeaponConditions(target);
+Response Character::useWeapon(Attackable* target, int& damage, bool& eluded) {
+    Response response = _checkPriorToUseWeaponConditions(target);
+    if (!response.succeeded)
+        return response;
 
     this->is_meditating = false;
 
-    if (this->equipment.getWeaponType() == HEALING)
+    if (this->equipment.getWeaponType() == HEALING) {
+        eluded = false;
         return _useHealingWeapon(target, damage);
+    }
 
     // Es un arma de ataque.
-    return _useAttackWeapon(target, damage);
+    return _useAttackWeapon(target, damage, eluded);
 }
 
 const bool Character::receiveAttack(int& damage, const bool eludible) {
@@ -473,25 +569,30 @@ void Character::die() {
     this->broadcast = true;
 }
 
-void Character::resurrect() {
-    this->state->resurrect();
+Response Character::resurrect() {
+    if (!this->state->resurrect())
+        return Response(false, STATE_CANT_RESURRECT_ERROR_MSG, ERROR_MSG);
 
     delete this->state;
     this->state = new Alive(this->race.head_id, this->race.body_id);
 
     this->heal();
-
     this->broadcast = true;
+
+    return Response(true, "", SUCCESS_MSG);
 }
 
-void Character::startResurrecting() {
-    this->state->resurrect();
+Response Character::startResurrecting() {
+    if (!this->state->resurrect())
+        return Response(false, STATE_CANT_RESURRECT_ERROR_MSG, ERROR_MSG);
 
     this->stopMoving();
 
     delete this->state;
     this->state =
         new Resurrecting(this->race.dead_head_id, this->race.dead_body_id);
+
+    return Response(true, "", SUCCESS_MSG);
 }
 
 //-----------------------------------------------------------------------------
@@ -599,42 +700,6 @@ void Character::fillPersistenceData(CharacterCfg& data) const {
     data.mana = this->mana;
     data.new_created = false;
 }
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
-
-const char* InsufficientManaException::what() const noexcept {
-    return "No tienes suficiente maná.";
-}
-
-const char* CantAttackInSafeZoneException::what() const noexcept {
-    return "No se puede atacar o lanzar hechizos en una zona segura.";
-}
-
-const char* CantAttackItselfException::what() const noexcept {
-    return "No puedes hacerte daño a ti mismo.";
-}
-
-const char* OutOfRangeAttackException::what() const noexcept {
-    return "El objetivo al que quieres atacar está fuera del rango de tu arma.";
-}
-
-const char* NewbiesCantBeAttackedException::what() const noexcept {
-    return "No puedes atacar a jugador newbie.";
-}
-
-const char* NewbiesCantAttackCharactersException::what() const noexcept {
-    return "No puedes atacar a otro jugador. Eres newbie.";
-}
-
-const char* AttackCooldownTimeNotElapsedException::what() const noexcept {
-    return "No puedes usar el arma tan rápido, la misma está en enfriamiento.";
-}
-
-const char* TooHighLevelDifferenceOnAttackException::what() const noexcept {
-    return "La diferencia de niveles es mayor a 12.";
-}
-
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------

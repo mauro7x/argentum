@@ -32,21 +32,11 @@ class Kind {
     Kind(Kind&&) = delete;
     Kind& operator=(Kind&&) = delete;
 
-    /* Lanza KindCantDoMagicException si el kind no puede hacer magia. */
-    void doMagic() const;
+    /* Devuelve si el kind puede hacer magia o no. */
+    const bool doMagic() const;
 
-    /* Lanza KindCantMeditateException si el kind no puede meditar. */
-    void meditate() const;
-};
-
-class KindCantDoMagicException : public std::exception {
-   public:
-    virtual const char* what() const noexcept;
-};
-
-class KindCantMeditateException : public std::exception {
-   public:
-    virtual const char* what() const noexcept;
+    /* Devuelve si el kind puede meditar o no. */
+    const bool meditate() const;
 };
 
 #endif

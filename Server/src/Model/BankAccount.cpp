@@ -1,24 +1,38 @@
 #include "../../includes/Model/BankAccount.h"
 //-----------------------------------------------------------------------------
+#define FULL_BANK_ACCOUNT_ERROR_MSG \
+    "Cuenta llena. No puedes guardar nuevos items."
+#define NO_GOLD_AVAILABLE_ERROR_MSG "No tienes dinero en la cuenta."
+//-----------------------------------------------------------------------------
 
 BankAccount::BankAccount(ItemsContainer& items) : gold(0), items(items) {}
 
 BankAccount::~BankAccount() {}
 
-void BankAccount::deposit(const Id item, const unsigned int amount) {
+Response BankAccount::deposit(const Id item, const unsigned int amount) {
     if (this->saved_items.size() == N_BANK_ACCOUNT_SLOTS)
-        throw FullBankAccountException();
+        return Response(false, FULL_BANK_ACCOUNT_ERROR_MSG, ERROR_MSG);
 
     this->saved_items[item] += amount;
+
+    std::string reply_msg = "Se ha depositado " + items[item]->what() + " x" +
+                            std::to_string(amount) + " en el banco";
+
+    return Response(true, reply_msg, SUCCESS_MSG);
 }
 
-void BankAccount::depositGold(const unsigned int amount) {
+Response BankAccount::depositGold(const unsigned int amount) {
     gold += amount;
+
+    std::string reply_msg =
+        "Se han depositado " + std::to_string(amount) + " de oro en el banco";
+
+    return Response(true, reply_msg, SUCCESS_MSG);
 }
 
 Item* BankAccount::withdraw(const Id item_id, unsigned int& amount) {
     if (!this->saved_items.count(item_id))
-        throw InvalidItemIdException();
+        return nullptr;
 
     unsigned int& saved_amount = this->saved_items[item_id];
 
@@ -35,16 +49,24 @@ Item* BankAccount::withdraw(const Id item_id, unsigned int& amount) {
     return items[item_id];
 }
 
-void BankAccount::withdrawGold(unsigned int& amount) {
+Response BankAccount::withdrawGold(unsigned int& amount) {
     if (!gold)
-        throw NoMoneyAvailableException();
+        return Response(false, NO_GOLD_AVAILABLE_ERROR_MSG, ERROR_MSG);
+
+    std::string response_msg;
 
     if (gold >= amount) {
         gold -= amount;
     } else {
         amount = gold;
         gold = 0;
+        response_msg += "No tenías tanto oro en la cuenta. ";
     }
+
+    response_msg +=
+        "Se ha extraído " + std::to_string(amount) + " oro del banco.";
+
+    return Response(true, response_msg, SUCCESS_MSG);
 }
 
 void BankAccount::list(std::string& init_msg,
@@ -89,18 +111,4 @@ void BankAccount::fillPersistenceData(CharacterCfg& data) const {
         ++iterator;
     }
 }
-//-----------------------------------------------------------------------------
-
-const char* NoMoneyAvailableException::what() const noexcept {
-    return "No tienes dinero en la cuenta.";
-}
-
-const char* InvalidItemIdException::what() const noexcept {
-    return "No tienes ningún item con ese id en tu cuenta.";
-}
-
-const char* FullBankAccountException::what() const noexcept {
-    return "Cuenta llena. No puedes guardar nuevos items.";
-}
-
 //-----------------------------------------------------------------------------

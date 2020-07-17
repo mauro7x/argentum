@@ -39,7 +39,7 @@ class Wand : public Wearable {
      *       KindCantDoMagicException si el user no puede hacer magia
      * debido a su kind.
      */
-    virtual const unsigned int use(Character& user) override;
+    virtual Response use(Character& user, int& points) override;
 
     /*
      * Devuelve el rango del hechizo.
