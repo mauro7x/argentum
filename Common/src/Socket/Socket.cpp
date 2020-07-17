@@ -22,7 +22,7 @@ void Socket::_setServerAddress(const std::string& port,
     hints.ai_protocol = 0;
 
     if (::getaddrinfo(0, &port[0], &hints, address)) {
-        throw Exception("Error in function: Socket::_setServerAddres()");
+        throw Exception("Error in function: Socket::_setServerAddress()");
     }
 }
 
@@ -77,26 +77,23 @@ void Socket::_listen(const int max_queued_clients) const {
 }
 
 void Socket::_tryToConnectTo(addrinfo* addresses) {
-    bool connected = false;
     addrinfo* ptr;
     try {
-        for (ptr = addresses; ((ptr != NULL) && (connected == false));
+        for (ptr = addresses; ((ptr != NULL) && (fd_valid == false));
              ptr = ptr->ai_next) {
             _setFd(ptr);
             if (::connect(fd, ptr->ai_addr, ptr->ai_addrlen)) {
                 _closeFdIfValid();
-            } else {
-                connected = true;
             }
-        }
-
-        if (!connected) {
-            throw Exception(
-                "Error in function: Socket::_tryToConnectTo(). "
-                "Client ran out of addresses to try.");
         }
     } catch (const Exception& e) {
         throw e;
+    }
+
+    if (!fd_valid) {
+        throw Exception(
+            "Error in function: Socket::_tryToConnectTo(). "
+            "Client ran out of addresses to try.");
     }
 }
 
@@ -114,7 +111,8 @@ void Socket::_closeFdIfValid() {
 
 Socket::Socket() : fd(-1), fd_valid(false) {}
 
-Socket::Socket(const std::string& hostname, const std::string& port) {
+Socket::Socket(const std::string& hostname, const std::string& port)
+    : fd(-1), fd_valid(false) {
     // Método para el cliente. Conectarse a un servidor.
     addrinfo* addresses;
     _setClientAddresses(hostname, port, &addresses);
@@ -129,9 +127,9 @@ Socket::Socket(const std::string& hostname, const std::string& port) {
     ::freeaddrinfo(addresses);
 }
 
-Socket::Socket(const std::string& port, const int max_queued_clients) {
+Socket::Socket(const std::string& port, const int max_queued_clients)
+    : fd(-1), fd_valid(false) {
     // Método para el servidor. Abrir servidor.
-    fd_valid = false;
     addrinfo* address;
     _setServerAddress(port, &address);
 
@@ -139,13 +137,13 @@ Socket::Socket(const std::string& port, const int max_queued_clients) {
         _setFd(address);
         _fixTimeWait(address);
         _bind(address);
-        _listen(max_queued_clients);
     } catch (const Exception& e) {
         ::freeaddrinfo(address);
         throw e;
     }
 
     ::freeaddrinfo(address);
+    _listen(max_queued_clients);
 }
 
 Socket::Socket(Socket&& other) {
@@ -165,7 +163,7 @@ Socket& Socket::operator=(Socket&& other) {
 
 Socket Socket::accept() const {
     if (!fd_valid) {
-        throw Exception("Invalid socket file descriptor.");
+        throw Exception("Invalid socket file descriptor: accept.");
     }
 
     int peer_socket = ::accept(fd, NULL, NULL);
@@ -177,7 +175,7 @@ Socket Socket::accept() const {
 
 size_t Socket::send(const char* source, const size_t len) const {
     if (!fd_valid) {
-        throw Exception("Invalid socket file descriptor.");
+        throw Exception("Invalid socket file descriptor: send.");
     }
 
     size_t total_sent = 0;
@@ -201,7 +199,7 @@ size_t Socket::send(const char* source, const size_t len) const {
 
 size_t Socket::recv(char* buffer, const size_t len) const {
     if (!fd_valid) {
-        throw Exception("Invalid socket file descriptor.");
+        throw Exception("Invalid socket file descriptor: recv.");
     }
 
     size_t total_received = 0;
