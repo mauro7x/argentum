@@ -3,7 +3,24 @@ title: Argentum Online
 description: Juego multijugador online donde los participantes controlan un personaje de rol en un mundo fantástico de magia y lleno de criaturas salvajes.
 ---
 
-# Descripción del proyecto
+<!-- ##################################################################### -->
+
+# Contenidos
+
+1. [Proyecto](#proyecto)
+    * [Detalles administrativos](#detalles)
+    * [Equipo de desarrollo](#equipo)
+    * [Documentación](#documentacion)
+2. [Juego](#juego)
+    * [Trailer](#trailer)
+    * [Capturas de pantalla](#capturas)
+3. [Instalación](#instalacion)
+    * [Configuración](#configuración)
+    * [Scripts](#scripts)
+
+<!-- ##################################################################### -->
+
+# Proyecto
 
 Remake del juego [**Argentum Online**](https://github.com/ao-libre) para sistemas operativos basados en Debian, utilizando programación concurrente orientada a objetos y sockets TCP/IPv4 bloqueantes. Trabajo final de la materia **Taller de Programación I** para la carrera Ingeniería Informática de la Universidad de Buenos Aires.
 
@@ -20,18 +37,34 @@ Remake del juego [**Argentum Online**](https://github.com/ao-libre) para sistema
 | Santiago Klein | 102192 | sklein@fi.uba.ar | [sankle](https://github.com/sankle) |
 | Yuhong Huang | 102146 | yhuang@fi.uba.ar | [tonyhuang07](https://github.com/tonyhuang07) |
 
-## Manuales
+## Documentación
 * [**Manual de usuario**](Manual_de_Usuario.pdf) - *Manual para ambos aplicativos (cliente y servidor), incluyendo requerimientos de hardware, software, instalación, configuración y uso.*
 
-### Documentación en construcción
+### En construcción
 Los siguientes documentos se encuentran en elaboración y se adjunta el link para edición a los mismos en Overleaf:
 * [**Manual de Proyecto**](https://es.overleaf.com/8387857119mbhmdtbrpvnh) - *Organización, cronogramas, división de tareas, y evolución del proyecto.*
 * [**Manual de Referencia**](https://es.overleaf.com/2395968991ysqtxgxxsncs) - *Detalles de implementación y de diseño, estructuras utilizadas, herramientas integradas.*
 
+<!-- ##################################################################### -->
+
+# Juego
+
+Insertar una breve descripción del juego.
+
+## Trailer
+
+Insertar video trailer del juego.
+
+## Capturas de pantalla
+
+Insertar capturas de pantalla del juego.
+
+<!-- ##################################################################### -->
+
 # Instalación
 *(Esta sección se encuentra detallada en el [Manual de Usuario](Manual_de_Usuario.pdf), por lo que se recomienda su lectura.)*
 
-Para instalar el juego se provee de un script `installer.sh` que corre en bash. Se debe ejecutar:
+Para instalar el juego se provee del script `installer.sh` que corre en bash. Se debe ejecutar:
 ```bash
 ./installer.sh
 ```
@@ -56,7 +89,6 @@ chmod +x ./config.sh
 
 Al abrirlo, podremos seleccionar el archivo que queremos editar, y el mismo se abrirá para su edición utilizando `Vim`.
 
-
 ## Scripts
 También se provee de un script de *cheats* que permite cargar configuraciones determinadas de manera rápida, como por ejemplo que los jugadores empiecen con objetos, o demás. Para probar los distintos *cheats* disponibles, se debe ejecutar:
 ```bash
@@ -67,3 +99,5 @@ Nuevamente, si fallan los permisos, se le deberán conceder los mismos ejecutand
 ```bash
 chmod +x ./scripts.sh
 ```
+
+<!-- ##################################################################### -->
