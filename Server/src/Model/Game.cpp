@@ -1,4 +1,3 @@
-#include <cstdio>  // debug
 #include <list>
 #include <string>
 #include <utility>
@@ -618,7 +617,7 @@ void Game::_cooldownResurrect(const InstanceId caller) {
     int respawn_x = info.priest_x_coord;
     int respawn_y = info.priest_y_coord;
 
-    try{
+    try {
         this->logic_maps.getNearestFreeTile(map_id, respawn_x, respawn_y,
                                             false);
     } catch (const CouldNotFindFreeTileException& e) {
@@ -821,12 +820,11 @@ const InstanceId Game::newCharacter(const CharacterCfg& init_data) {
 
     this->characters.emplace(
         std::piecewise_construct, std::forward_as_tuple(new_character_id),
-        std::forward_as_tuple(init_data, this->races[init_data.race],
-                              this->kinds[init_data.kind], logic_maps,
-                              spawning_map_id, spawning_x_coord,
-                              spawning_y_coord, this->items, formulas, rate,
-                              cfg.critical_attack_dmg_modifier,
-                              cfg.ms_to_update_character_attributes));
+        std::forward_as_tuple(
+            init_data, this->races[init_data.race], this->kinds[init_data.kind],
+            logic_maps, spawning_map_id, spawning_x_coord, spawning_y_coord,
+            this->items, formulas, rate, cfg.critical_attack_dmg_modifier,
+            cfg.ms_to_update_character_attributes));
 
     this->nickname_id_map[init_data.nickname] = new_character_id;
 
@@ -852,10 +850,10 @@ void Game::newCreature(const CreatureCfg& init_data, const Id init_map) {
 
     this->creatures.emplace(
         std::piecewise_construct, std::forward_as_tuple(new_creature_id),
-        std::forward_as_tuple(init_data, logic_maps, init_map,
-                              spawning_x_coord, spawning_y_coord,
-                              init_data.base_health, items, characters, *this,
-                              formulas, rate, cfg.random_movement_factor));
+        std::forward_as_tuple(init_data, logic_maps, init_map, spawning_x_coord,
+                              spawning_y_coord, init_data.base_health, items,
+                              characters, *this, formulas, rate,
+                              cfg.random_movement_factor));
 
     _pushCreatureDifferentialBroadcast(new_creature_id, NEW_BROADCAST);
 }
