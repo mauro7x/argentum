@@ -1,0 +1,84 @@
+@startuml
+
+class UnitSpriteContainer {
+-const Renderer* g_renderer
+-std::unordered_map<Id, UnitSprite> content
+-size_t shorter_characters_offset
+-void _loadSpritesFromJson(const json& sprites, const std::string& dirpath)
+
++void loadMedia()
++void loadHeadsMedia()
++void loadBodiesMedia()
++const UnitSprite& get(Id id, bool is_shorter = false) const
++const UnitSprite& operator[](const Id id) const
+}
+
+abstract class Unit {
+#const Renderer* renderer
+#const Camera& camera
+#UnitData data
+#UnitState state
+#float x
+#float y
+#float x_vel
+#flaot y_vel
+#Uint32 last_moved
+#int current_animation_frame
+
+#void _setMovementSpeed(int next_x_tile, int next_y_tile)
+#void _movementFinished()
+#int _calculateSpriteX(const UnitSprite& sprite) const
+#int _calculateSpriteY(const UnitSprite& sprite) const
+#void _render(const UnitSprite& sprite) const
++virtual void act(const int it)
++virtual void render() const
+}
+
+class Player {
+-string nickname;
+-Id head_id, body_id
+-EquipmentData equipment
+-InventoryData inventory
+-uint32_t health, max_health
+-uint32_t mana, max_mana
+-uint32_t safe_gold, excess_gold
+-uint32_t level, exp, levelup_exp, prev_levelup_exp
+
++void init(const PlayerData& init_data)
++void update(const PlayerData& updated_data)
++void addMessage(InstanceId sender_id, const std::string& msg)
++void act(const int it) override
++void render(InstanceId id) const
++void render() const
+}
+
+class Character {
+-string nickname
+-Id head_id, body_id
+-EquipmentData equipment
+-uint32_t level
+    
++void init(const CharacterData& init_data)
++void update(const CharacterData& updated_data)
++void addMessage(const std::string& msg)
++void act(const int it)
++void render() const
+}
+
+class Creature {
+-string name
+-Id creature_id
+-uint32_t health, max_health
+-uint32_t level
+
++void init(const CreatureData& init_data);
++void update(const CreatureData& updated_data)
++void render() const
+}
+
+Unit <|-- Player
+Unit <|-- Character
+Unit <|-- Creature
+Unit *-- UnitSpriteContainer
+
+@enduml

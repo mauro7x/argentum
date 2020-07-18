@@ -1,0 +1,38 @@
+@startuml
+
+class GameView
+
+class EventHandler {
+-unordered_map<SDL_Keycode, Key> keys
+-Key key_pressed
+-bool text_input_enabled
+-Selection current_selection
+
+-void _bindKeycodes()
+-void _clearSelection()
+-Key _getKey(const SDL_Keycode& key)
+-Event _getEvent(const SDL_Event& e)
+-SDL_Point _getClickPos(const SDL_Event& e) const
+-bool _clickInside(const SDL_Rect& rect, const SDL_Event& e) const
+-SDL_Point _clickToTile(const SDL_Event& e) const
++void handleEvent(const SDL_Event& e)
+}
+
+class InputParser {
+-Selection& current_selection
+-unordered_map<std::string, InputCommand> commands
+
+-Command* _parseCommand(const std::string& command_input, InputCommand cmd_id) const
+-Command* _parsePMInput(const std::string& message_input) const
++Command* parse(const std::string& input, ParserReply& reply)
+}
+
+GameView *-- EventHandler
+
+EventHandler ..> HUD
+EventHandler ..> MapView
+EventHandler ..> Camera
+EventHandler *-- InputParser
+EventHandler ..> Mixer
+
+@enduml

@@ -1,0 +1,100 @@
+@startuml
+
+class HUD {
+-const Renderer* renderer
+-const ItemSpriteContainer& item_sprites
+-const Player& g_player
+
++void enableInput();
++void addMessage(const std::string& message, const Color& color)
++void newInputText(const char* text)
++void removeChar()
++string popText()
++void disableInput()
++int8_t getEquipmentSlotClicked(const SDL_Point& click_pos)
++int8_t getInventorySlotClicked(const SDL_Point& click_pos)
++void selectItem(uint8_t inventory_slot)
++void clearSelection()
++void update(const int it)
++void render() const
+}
+
+abstract class HUDComponent {
+#const Renderer* renderer
+#SDL_Rect render_rect
+
+#void _center(SDL_Point& texture_pos, const Texture& texture, const SDL_Rect& rect)
++virtual void init(const json& config)
++virtual void loadMedia()
++virtual void update(const int it)
++virtual void render() const
+}
+
+class ProgressBar {}
+
+class Console {
+-string current_input
+-list<Texture> messages
+
+-void _discardOldMessages()
+-void _renderInputBox() const
+-void _renderOutputBox() const
++void enableInput()
++void append(const char* text)
++void add(const std::string& message, const Color& color)
++void removeChar()
++std::string getInputText()
++void clearInput()
++void disableInput()
++void update(const int it)
++void render() const
+}
+
+class UserInfo {
+-string current_nickname
+-uint32_t current_lvl
+
++void init(const json& config)
++void loadMedia()
++void update(const int it)
++void render() const
+}
+
+class UserInventory {
+-EquipmentData equipment
+-InventoryData inventory
+-int current_safe_gold
+-int current_excess_gold
+
+-void _renderEquipment() const
+-void _renderInventory() const
++void init(const json& config)
++void loadMedia()
++int8_t getEquipmentSlotClicked(const SDL_Point& click_pos)
++int8_t getInventorySlotClicked(const SDL_Point& click_pos)
++void selectItem(uint8_t inventory_slot)
++void clearSelection()
++void update(const int it)
++void render() const
+}
+
+class UserStats {
+
++void init(const json& config)
++void loadMedia()
++void update(const int it)
++void render() const
+}
+
+HUDComponent <|-- Console
+HUDComponent <|-- UserInfo
+HUDComponent <|-- UserInventory
+HUDComponent <|-- UserStats
+HUD *-- Console
+HUD *-- UserInfo
+HUD *-- UserInventory
+HUD *-- UserStats
+UserInfo o-- ProgressBar
+UserStats "2" o-- ProgressBar
+
+@enduml

@@ -1,0 +1,69 @@
+@startuml
+
+abstract class Thread {
+-thread thread
+
++void start()
++bool joinable()
++void join()
++virtual void run()
+}
+
+class NonBlockingQueue<T> {
+-mutex m
+-queue<T> queue
+
++void push(T t)
++T pop()
+}
+
+class BlockingQueue<T> {
+-mutex m
+-queue<T> queue
+-condition_variable cv
+-bool permanently_closed
+
++void push(T t)
++T pop()
+}
+
+class Receiver {
+-const SocketWrapper& socket
+-NonBlockingQueue<Broadcast*>& broadcasts
+-NonBlockingQueue<Message*>& messages
+-NonBlockingQueue<GameEvent*>& events
+
+-void _receiveMessage() const
+-void _receiveBroadcast() const
+-void _receiveEvent() const
+
++void run()
+}
+
+class CommandDispatcher {
+-const SocketWrapper& socket
+-BlockingQueue<Command*>& commands
+
++void run()
+}
+
+class GameView {
+-BlockingQueue<Command*>& commands
+-NonBlockingQueue<Broadcast*>& broadcasts
+-NonBlockingQueue<Message*>& messages
+-NonBlockingQueue<GameEvent*>& events
+}
+
+
+Thread <|-- Receiver
+Thread <|-- CommandDispatcher
+Receiver --> GameView
+Receiver "3" --> NonBlockingQueue
+CommandDispatcher --> GameView
+CommandDispatcher --> BlockingQueue
+GameView --> BlockingQueue
+GameView "3" --> NonBlockingQueue
+
+
+
+@enduml

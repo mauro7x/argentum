@@ -1,0 +1,48 @@
+@startuml
+
+class GameView
+
+class EffectPlayer {
+-const Renderer* renderer
+
++void loadMedia()
++void add(int event_id, const SDL_Point& pos)
++void act(const int it)
++void render() const
+}
+
+class BorderEffect {
+-const Renderer* renderer
+-SDL_Rect render_box
+-size_t total_clips
+-std::unordered_map<size_t, Texture> clips
+-int change_every_n_frames = 1
+-list<ActiveBorderEffect> active_effects
+
++void loadMedia(const json& config)
++void add(const SDL_Point& pos)
++void act(const int it)
++void render() const
+}
+
+class Effect {
+-const Renderer* renderer
+-const Camera& camera
+-size_t total_clips = 0
+-unordered_map<size_t, Texture> clips
+-int change_every_n_frames
+-int x_offset
+-int y_offset
+-list<ActiveEffect> active_effects
+
++void loadMedia(const json& config)
++void add(const SDL_Point& pos)
++void act(const int it)
++void render() const
+}
+
+GameView *-- EffectPlayer
+EffectPlayer "2" *-- BorderEffect
+EffectPlayer "N" *-- Effect
+
+@enduml

@@ -1,0 +1,44 @@
+@startuml
+
+class GameView
+
+class Camera {
+-SDL_Rect box
+-SDL_Point pos
+
++void getVisibleRect(int& x_min, int& x_max, int& y_min, int& y_max) const
++bool isVisible(const SDL_Rect* object) const
++void renderAddingOffset(const Renderer* renderer, SDL_Texture* texture, SDL_Rect& render_quad, const SDL_Rect* clip) const
++void fillQuadAddingOffset(const Renderer* renderer, SDL_Rect& render_quad, const SDL_Color& color) const
++void center(const SDL_Rect object, const int map_width, const int map_height)
+}
+
+GameView *-- Camera
+GameView *-- HUD
+GameView *-- MapView
+GameView *-- Player
+GameView *-- CreatureContainer
+GameView *-- CharacterContainer
+GameView *-- EventHandler
+GameView *-- Stage
+GameView *-- EffectPlayer
+GameView ..> Mixer
+
+CreatureContainer "N" *-- Creature
+CharacterContainer "N" *-- Character
+
+Stage ..> Player
+Stage ..> MapView
+Stage ..> CreatureContainer
+Stage ..> CharacterContainer
+
+EventHandler ..> HUD
+EventHandler ..> MapView
+EventHandler ..> Camera
+EventHandler *-- InputParser
+EventHandler ..> Mixer
+
+MapView ..> Camera
+
+
+@enduml

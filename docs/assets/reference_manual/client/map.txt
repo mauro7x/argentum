@@ -1,0 +1,68 @@
+@startuml
+
+class MapView {
+-const Renderer* renderer
+-const Camera& camera
+-const ItemSpriteContainer& item_sprites
+-int x_min, x_max, y_min, y_max
+-Map* current_map
+-Id current_map_id
+-int w_tiles, h_tiles
+
+-SDL_Rect _getRenderQuad(const Texture& texture, const int x_tile, const int y_tile) const
++void loadMedia()
++void setRenderArea()
++bool selectMap(const Id id)
++void occupyTile(InstanceId id, const int x_tile, const int y_tile)
++void addItem(Id id, uint32_t amount, const int x_tile, const int y_tile)
++void clearTileOccupant(const int x_tile, const int y_tile)
++void clearTileItem(const int x_tile, const int y_tile)
++void clear()
++void renderGround() const
++void renderRow(const int row, std::list<InstanceId>& units_to_render) const
++void renderRoofs() const
++void renderShadowOutdoor() const
++void getRowRange(int& row_min, int& row_max) const
+}
+
+class MapContainer {
+-unordered_map<Id, Map> content
+
++void loadMaps()
++void getMapsId(std::vector<Id>& maps_id) const
++Map& operator[](const Id id)
++const Map& operator[](const Id id) const
+}
+
+class Map {
+-int w, h
+-vector<Tile> tiles
+-vector<Id> creatures
+-string name
+
+-void _fillTiles(const json& map, const json& tilesets)
+-Tile& _getTile(const int x, const int y)
+-Tile& _getTileWithoutChecks(const int x, const int y)
+-bool _isValid(const int x, const int y) const
++void occupyTile(InstanceId id, const int x, const int y)
++void setItem(const Id item_id, const uint32_t amount, const int x, const int y)
++void clearTileOccupant(const int x, const int y)
++void clearTileItem(const int x, const int y)
++void clear()
+}
+
+class TileContainer {
+-const Renderer* g_renderer
+-unordered_map<TileId, Texture> content
+
+-void _loadTextures(const json& tileset)
++void loadMedia()
++const Texture& operator[](const TileId id) const
+}
+
+
+MapView *-- TileContainer
+MapView o-- MapContainer
+MapContainer "N" *-- Map
+
+@enduml
