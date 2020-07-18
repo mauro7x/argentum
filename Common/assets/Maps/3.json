@@ -129,15 +129,15 @@
          "source":"Tilesets\/01-ground_tiles.json"
         }, 
         {
-         "firstgid":166,
+         "firstgid":167,
          "source":"Tilesets\/02-decoration.json"
         }, 
         {
-         "firstgid":344,
+         "firstgid":345,
          "source":"Tilesets\/03-npcs.json"
         }, 
         {
-         "firstgid":352,
+         "firstgid":353,
          "source":"Tilesets\/04-metadata.json"
         }],
  "tilewidth":32,

@@ -16,7 +16,7 @@
  "margin":0,
  "name":"Ground",
  "spacing":0,
- "tilecount":165,
+ "tilecount":166,
  "tiledversion":"2020.05.29",
  "tileheight":256,
  "tiles":[
@@ -1009,6 +1009,12 @@
          "image":"..\/..\/..\/..\/Client\/assets\/Tiles\/Ground\/164.png",
          "imageheight":256,
          "imagewidth":256
+        }, 
+        {
+         "id":165,
+         "image":"..\/..\/..\/..\/Client\/assets\/Tiles\/Ground\/165.png",
+         "imageheight":64,
+         "imagewidth":64
         }],
  "tilewidth":256,
  "type":"tileset",
