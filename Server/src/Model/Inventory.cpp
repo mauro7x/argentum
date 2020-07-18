@@ -1,8 +1,12 @@
 #include "../../includes/Model/Inventory.h"
-
-#include <iostream>  // Para testear
-
+//-----------------------------------------------------------------------------
 #include "../../includes/Model/Formulas.h"
+//-----------------------------------------------------------------------------
+#define FULL_INVENTORY_ERROR_MSG "No puede agregar más elementos al inventario."
+#define MAX_GOLD_LIMIT_REACHED_ERROR_MSG \
+    "No puedes recoger más oro. Límite de capacidad alcanzado."
+#define INSUFFICIENT_GOLD_ERROR_MSG "No tienes suficiente oro en el inventario."
+//-----------------------------------------------------------------------------
 
 Inventory::Inventory(const InventoryData& init_data, uint32_t init_safe_gold,
                      uint32_t init_excess_gold, Level& character_level,
@@ -61,25 +65,24 @@ const uint8_t Inventory::_getNextFreeSlot() const {
     return n_slot;
 }
 
-void Inventory::addItem(Item* item, const unsigned int amount) {
+Response Inventory::addItem(Item* item, const unsigned int amount) {
     uint8_t n_slot;
     const Id item_id = item->getId();
 
     if (item_id == GOLD_BAG_ID) {
         uint32_t gold_amount = amount;
-        addGold(gold_amount);
-        return;
+        return addGold(gold_amount);
     }
 
     // Me fijo si ya hay algún slot de este item.
     if (this->id_slot_map.count(item_id)) {
         n_slot = this->id_slot_map[item_id];
         this->slots[n_slot].addItem(item, amount);
-        return;
+        return Response(true, "", SUCCESS_MSG);
     }
 
     if (this->occupied_slots >= this->slots.size())
-        throw FullInventoryException();
+        return Response(false, FULL_INVENTORY_ERROR_MSG, ERROR_MSG);
 
     // Busco un slot libre y lo agrego.
     n_slot = _getNextFreeSlot();
@@ -88,11 +91,12 @@ void Inventory::addItem(Item* item, const unsigned int amount) {
 
     this->id_slot_map[item_id] = n_slot;
     ++this->occupied_slots;
+    return Response(true, "", SUCCESS_MSG);
 }
 
 Item* Inventory::gatherItem(const uint8_t n_slot, unsigned int& amount) {
     if (n_slot >= N_INVENTORY_SLOTS)
-        throw InvalidInventorySlotNumberException();
+        return nullptr;
 
     Slot& slot = this->slots[n_slot];
 
@@ -143,7 +147,7 @@ unsigned int Inventory::_gatherGold(const uint32_t amount,
     return gathered_gold;
 }
 
-void Inventory::addGold(uint32_t& amount) {
+Response Inventory::addGold(uint32_t& amount) {
     unsigned int remaining =
         _addGold(amount, this->safe_gold, this->max_safe_gold);
 
@@ -151,22 +155,24 @@ void Inventory::addGold(uint32_t& amount) {
     if (remaining > 0) {
         // Se llego al limite de capacidad y no se pudo agregar todo el oro
         amount -= remaining;  // seteo amount con lo que se pudo agregar.
-        throw GoldMaximumCapacityReachedException();
+        return Response(true, MAX_GOLD_LIMIT_REACHED_ERROR_MSG, ERROR_MSG);
     }
+
+    return Response(true, "", SUCCESS_MSG);
 }
 
-void Inventory::gatherGold(const uint32_t amount) {
+Response Inventory::gatherGold(const uint32_t amount) {
     // Los max gold deben estar actualizados.
-    if ((this->safe_gold + this->excess_gold) < amount) {
-        throw InsufficientGoldException();
-    }
+    if ((this->safe_gold + this->excess_gold) < amount)
+        return Response(false, INSUFFICIENT_GOLD_ERROR_MSG, ERROR_MSG);
 
     unsigned int gathered = _gatherGold(amount, this->excess_gold);
     unsigned int remaining = amount - gathered;
 
-    if (remaining) {
+    if (remaining)
         _gatherGold(amount - gathered, this->safe_gold);
-    }
+
+    return Response(true, "", SUCCESS_MSG);
 }
 
 void Inventory::dropAll(std::vector<DroppingSlot>& dropped_items) {
@@ -220,18 +226,4 @@ void Inventory::fillPersistenceData(CharacterCfg& data) const {
     }
 }
 
-const char* FullInventoryException::what() const noexcept {
-    return "No puede agregar más elementos al inventario.";
-}
-
-const char* InvalidInventorySlotNumberException::what() const noexcept {
-    return "El numero de slot del inventario especificado es inválido.";
-}
-
-const char* InsufficientGoldException::what() const noexcept {
-    return "No tienes suficiente oro en el inventario.";
-}
-
-const char* GoldMaximumCapacityReachedException::what() const noexcept {
-    return "No puedes recoger más oro. Límite de capacidad alcanzado.";
-}
+//-----------------------------------------------------------------------------

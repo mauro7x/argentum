@@ -28,37 +28,44 @@ Alive::Alive(const Id head_id, const Id body_id) : State(head_id, body_id) {}
 
 Alive::~Alive() {}
 
-void Alive::attack() const {
+const bool Alive::attack() const {
     // Puede atacar
+    return true;
 }
 
-void Alive::beAttacked() const {
-    // Puede ser atacacdo
+const bool Alive::beAttacked() const {
+    // Puede ser atacado
+    return true;
 }
 
-void Alive::takeItem() const {
+const bool Alive::takeItem() const {
     // Puede tomar items
+    return true;
 }
 
-void Alive::gatherGold() const {
+const bool Alive::gatherGold() const {
     // Puede usar su oro
+    return true;
 }
 
-void Alive::move() const {
+const bool Alive::move() const {
     // Puede moverse
+    return true;
 }
 
-void Alive::beHealed() const {
+const bool Alive::beHealed() const {
     // Puede ser curado
+    return true;
 }
 
-void Alive::resurrect() const {
+const bool Alive::resurrect() const {
     // No puede resucitar. Ya está vivo.
-    throw StateCantResurrectException();
+    return false;
 }
 
-void Alive::meditate() const {
+const bool Alive::meditate() const {
     // Puede meditar
+    return true;
 }
 
 Dead::Dead(const Id dead_head_id, const Id dead_body_id)
@@ -66,42 +73,44 @@ Dead::Dead(const Id dead_head_id, const Id dead_body_id)
 
 Dead::~Dead() {}
 
-void Dead::attack() const {
+const bool Dead::attack() const {
     // No puede atacar
-    throw AttackerStateCantAttackException();
+    return false;
 }
 
-void Dead::beAttacked() const {
+const bool Dead::beAttacked() const {
     // No puede ser atacado
-    throw AttackedStateCantBeAttackedException();
+    return false;
 }
 
-void Dead::takeItem() const {
+const bool Dead::takeItem() const {
     // No puede tomar items
-    throw StateCantTakeItemException();
+    return false;
 }
 
-void Dead::gatherGold() const {
+const bool Dead::gatherGold() const {
     // No puede usar su oro
-    throw StateCantGatherGoldException();
+    return false;
 }
 
-void Dead::move() const {
+const bool Dead::move() const {
     // Puede moverse
+    return true;
 }
 
-void Dead::beHealed() const {
+const bool Dead::beHealed() const {
     // No puede ser curado
-    throw StateCantBeHealedException();
+    return false;
 }
 
-void Dead::resurrect() const {
+const bool Dead::resurrect() const {
     // Puede resucitar
+    return true;
 }
 
-void Dead::meditate() const {
+const bool Dead::meditate() const {
     // No puede meditar
-    throw StateCantMeditateException();
+    return false;
 }
 
 Resurrecting::Resurrecting(const Id dead_head_id, const Id dead_body_id)
@@ -109,73 +118,44 @@ Resurrecting::Resurrecting(const Id dead_head_id, const Id dead_body_id)
 
 Resurrecting::~Resurrecting() {}
 
-void Resurrecting::attack() const {
+const bool Resurrecting::attack() const {
     // No puede atacar
-    throw AttackerStateCantAttackException();
+    return false;
 }
 
-void Resurrecting::beAttacked() const {
+const bool Resurrecting::beAttacked() const {
     // No puede ser atacado
-    throw AttackedStateCantBeAttackedException();
+    return false;
 }
 
-void Resurrecting::takeItem() const {
+const bool Resurrecting::takeItem() const {
     // No puede tomar items
-    throw StateCantTakeItemException();
+    return false;
 }
 
-void Resurrecting::gatherGold() const {
+const bool Resurrecting::gatherGold() const {
     // No puede usar su oro
-    throw StateCantGatherGoldException();
+    return false;
 }
 
-void Resurrecting::move() const {
+const bool Resurrecting::move() const {
     // No puede moverse
-    throw StateCantMoveException();
+    return false;
 }
 
-void Resurrecting::beHealed() const {
+const bool Resurrecting::beHealed() const {
     // No puede ser curado
-    throw StateCantBeHealedException();
+    return false;
 }
 
-void Resurrecting::resurrect() const {
+const bool Resurrecting::resurrect() const {
     // Ya está resucitando
+    return true;
 }
 
-void Resurrecting::meditate() const {
+const bool Resurrecting::meditate() const {
     // No puede meditar
-    throw StateCantMeditateException();
+    return false;
 }
 
-const char* AttackedStateCantBeAttackedException::what() const noexcept {
-    return "No puedes atacar a ese jugador. Ya está muerto";
-}
-
-const char* AttackerStateCantAttackException::what() const noexcept {
-    return "No puedes atacar. Estás muerto.";
-}
-
-const char* StateCantTakeItemException::what() const noexcept {
-    return "No puedes tomar items. Estás muerto.";
-}
-
-const char* StateCantGatherGoldException::what() const noexcept {
-    return "No puedes usar tu oro. Estás muerto.";
-}
-
-const char* StateCantMoveException::what() const noexcept {
-    return "No puedes moverte. Estás resucitando.";
-}
-
-const char* StateCantBeHealedException::what() const noexcept {
-    return "No puedes curarte. Estás muerto.";
-}
-
-const char* StateCantResurrectException::what() const noexcept {
-    return "No puedes resucitar. Ya estás vivo.";
-}
-
-const char* StateCantMeditateException::what() const noexcept {
-    return "No puedes meditar. Estás muerto.";
-}
+//-----------------------------------------------------------------------------

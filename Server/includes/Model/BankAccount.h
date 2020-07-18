@@ -10,6 +10,7 @@
 //-----------------------------------------------------------------------------
 #include "Item.h"
 #include "ItemsContainer.h"
+#include "Response.h"
 #include "config_structs.h"
 //-----------------------------------------------------------------------------
 
@@ -30,13 +31,15 @@ class BankAccount {
 
     /*
      * Deposita la cantidad especificada del item en la cuenta.
+     *
+     * Devuelve Response ERROR si no entran más items en la cuenta.
      */
-    void deposit(const Id item, const unsigned int amount);
+    Response deposit(const Id item, const unsigned int amount);
 
     /*
      * Deposita el oro.
      */
-    void depositGold(const unsigned int amount);
+    Response depositGold(const unsigned int amount);
 
     /*
      * Retira la cantidad especificada de un mismo item de la cuenta.
@@ -48,15 +51,14 @@ class BankAccount {
      *
      * Si no quedan más items, se borra el Id del saved_items.
      *
-     * Lanza InvalidItemIdException si no hay items guardados con el Id
-     * especificado.
+     * Devuelve nullptr si no hay items guardados con el Id especificado.
      */
     Item* withdraw(const Id item, unsigned int& amount);
 
     /*
-     * Retira la cantidad de oro;
+     * Retira la cantidad de oro especificada.
      */
-    void withdrawGold(unsigned int& amount);
+    Response withdrawGold(unsigned int& amount);
 
     /*
      * Escribe en el string recibido los ids de items en la cuenta con su
@@ -68,21 +70,5 @@ class BankAccount {
 };
 
 //-----------------------------------------------------------------------------
-
-class NoMoneyAvailableException : public std::exception {
-   public:
-    const char* what() const noexcept;
-};
-
-class InvalidItemIdException : public std::exception {
-   public:
-    const char* what() const noexcept;
-};
-
-class FullBankAccountException : public std::exception {
-   public:
-    const char* what() const noexcept;
-};
-
 #endif  // __BANK_ACCOUNT_H__
 //-----------------------------------------------------------------------------

@@ -24,14 +24,14 @@ class State {
     State(State&&) = delete;
     State& operator=(State&&) = delete;
 
-    virtual void attack() const = 0;
-    virtual void beAttacked() const = 0;
-    virtual void takeItem() const = 0;
-    virtual void move() const = 0;
-    virtual void beHealed() const = 0;
-    virtual void resurrect() const = 0;
-    virtual void meditate() const = 0;
-    virtual void gatherGold() const = 0;
+    virtual const bool attack() const = 0;
+    virtual const bool beAttacked() const = 0;
+    virtual const bool takeItem() const = 0;
+    virtual const bool move() const = 0;
+    virtual const bool beHealed() const = 0;
+    virtual const bool resurrect() const = 0;
+    virtual const bool meditate() const = 0;
+    virtual const bool gatherGold() const = 0;
 
     void fillBroadcastData(PlayerData& data);
 
@@ -58,14 +58,14 @@ class Alive : public State {
     Alive(Alive&&) = delete;
     Alive& operator=(Alive&&) = delete;
 
-    virtual void attack() const override;
-    virtual void beAttacked() const override;
-    virtual void takeItem() const override;
-    virtual void move() const override;
-    virtual void beHealed() const override;
-    virtual void resurrect() const override;
-    virtual void meditate() const override;
-    virtual void gatherGold() const override;
+    virtual const bool attack() const override;
+    virtual const bool beAttacked() const override;
+    virtual const bool takeItem() const override;
+    virtual const bool move() const override;
+    virtual const bool beHealed() const override;
+    virtual const bool resurrect() const override;
+    virtual const bool meditate() const override;
+    virtual const bool gatherGold() const override;
 };
 
 /*
@@ -83,14 +83,14 @@ class Dead : public State {
     Dead(Dead&&) = delete;
     Dead& operator=(Dead&&) = delete;
 
-    virtual void attack() const override;
-    virtual void beAttacked() const override;
-    virtual void takeItem() const override;
-    virtual void move() const override;
-    virtual void beHealed() const override;
-    virtual void resurrect() const override;
-    virtual void meditate() const override;
-    virtual void gatherGold() const override;
+    virtual const bool attack() const override;
+    virtual const bool beAttacked() const override;
+    virtual const bool takeItem() const override;
+    virtual const bool move() const override;
+    virtual const bool beHealed() const override;
+    virtual const bool resurrect() const override;
+    virtual const bool meditate() const override;
+    virtual const bool gatherGold() const override;
 };
 
 class Resurrecting : public State {
@@ -103,54 +103,14 @@ class Resurrecting : public State {
     Resurrecting(Resurrecting&&) = delete;
     Resurrecting& operator=(Resurrecting&&) = delete;
 
-    virtual void attack() const override;
-    virtual void beAttacked() const override;
-    virtual void takeItem() const override;
-    virtual void move() const override;
-    virtual void beHealed() const override;
-    virtual void resurrect() const override;
-    virtual void meditate() const override;
-    virtual void gatherGold() const override;
-};
-
-class AttackedStateCantBeAttackedException : public std::exception {
-   public:
-    virtual const char* what() const noexcept;
-};
-
-class AttackerStateCantAttackException : public std::exception {
-   public:
-    virtual const char* what() const noexcept;
-};
-
-class StateCantTakeItemException : public std::exception {
-   public:
-    virtual const char* what() const noexcept;
-};
-
-class StateCantGatherGoldException : public std::exception {
-   public:
-    virtual const char* what() const noexcept;
-};
-
-class StateCantMoveException : public std::exception {
-   public:
-    virtual const char* what() const noexcept;
-};
-
-class StateCantBeHealedException : public std::exception {
-   public:
-    virtual const char* what() const noexcept;
-};
-
-class StateCantResurrectException : public std::exception {
-   public:
-    virtual const char* what() const noexcept;
-};
-
-class StateCantMeditateException : public std::exception {
-   public:
-    virtual const char* what() const noexcept;
+    virtual const bool attack() const override;
+    virtual const bool beAttacked() const override;
+    virtual const bool takeItem() const override;
+    virtual const bool move() const override;
+    virtual const bool beHealed() const override;
+    virtual const bool resurrect() const override;
+    virtual const bool meditate() const override;
+    virtual const bool gatherGold() const override;
 };
 
 #endif

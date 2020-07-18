@@ -3,6 +3,8 @@
 #include "../../../Common/includes/RandomNumberGenerator.h"
 #include "../../includes/Model/Character.h"  // Evito circular dependences.
 //-----------------------------------------------------------------------------
+#define INSUFFICIENT_MANA_ERROR_MSG "No tienes suficiente maná."
+//-----------------------------------------------------------------------------
 
 Spell::Spell(const int id, const std::string name,
              const unsigned int mana_usage_cost, const unsigned int range,
@@ -47,15 +49,17 @@ AttackingSpell::AttackingSpell(const SpellCfg& data)
 
 AttackingSpell::~AttackingSpell() {}
 
-const unsigned int AttackingSpell::cast(Character& caster) {
-    // Consume el maná del jugador. Si no tiene suficiente,
-    // consumeMana lanza excepción y no se efectua el hechizo.
-    caster.consumeMana(this->mana_usage_cost);
+Response AttackingSpell::cast(Character& caster, int& points) {
+    // Consume el maná del jugador.
+    if (!caster.consumeMana(this->mana_usage_cost))
+        return Response(false, INSUFFICIENT_MANA_ERROR_MSG, ERROR_MSG);
 
     caster.setAttackCooldown(this->cooldown);
 
     RandomNumberGenerator random_number_generator;
-    return (int)random_number_generator((int)min_damage, (int)max_damage);
+    points = (int)random_number_generator((int)min_damage, (int)max_damage);
+
+    return Response(true, "", SUCCESS_MSG);
 }
 
 //-----------------------------------------------------------------------------
@@ -69,14 +73,15 @@ HealingSpell::HealingSpell(const SpellCfg& data)
 
 HealingSpell::~HealingSpell() {}
 
-const unsigned int HealingSpell::cast(Character& caster) {
-    // Consume el maná del jugador. Si no tiene suficiente,
-    // consumeMana lanza excepción y no se efectua el hechizo.
-    caster.consumeMana(this->mana_usage_cost);
+Response HealingSpell::cast(Character& caster, int& points) {
+    // Consume el maná del jugador.
+    if (!caster.consumeMana(this->mana_usage_cost))
+        return Response(false, INSUFFICIENT_MANA_ERROR_MSG, ERROR_MSG);
 
     caster.setAttackCooldown(this->cooldown);
-    fprintf(stderr, "Devuelvo recovery_points=%i\n", recovery_points);
-    return this->recovery_points;
+    points = this->recovery_points;
+    
+    return Response(true, "", SUCCESS_MSG);
 }
 
 //-----------------------------------------------------------------------------

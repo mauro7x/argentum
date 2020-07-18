@@ -3,6 +3,7 @@
 //-----------------------------------------------------------------------------
 #include <string>
 //-----------------------------------------------------------------------------
+#include "Response.h"
 #include "config_structs.h"
 //-----------------------------------------------------------------------------
 class Character;  // Forward declaration p/ evitar dependencias circulares.
@@ -32,7 +33,7 @@ class Spell {
     virtual ~Spell();
 
     /* Lanzamiento del hechizo. Retorna los puntos de ataque que provoca. */
-    virtual const unsigned int cast(Character& caster) = 0;
+    virtual Response cast(Character& caster, int& points) = 0;
 
     /* Devuelve el tipo de arma del hechizo. */
     const WeaponType getWeaponType() const;
@@ -72,7 +73,7 @@ class AttackingSpell : public Spell {
      *
      * Si no tiene suficiente mana, lanza InsufficientManaException.
      */
-    const unsigned int cast(Character& caster) override;
+    Response cast(Character& caster, int& points) override;
 };
 
 //-----------------------------------------------------------------------------
@@ -93,7 +94,7 @@ class HealingSpell : public Spell {
      *
      * Si no tiene suficiente mana, lanza InsufficientManaException.
      */
-    const unsigned int cast(Character& caster) override;
+    Response cast(Character& caster, int& points) override;
 };
 
 //-----------------------------------------------------------------------------

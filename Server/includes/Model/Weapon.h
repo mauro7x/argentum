@@ -25,7 +25,7 @@ class Weapon: public Wearable {
          * Setea el cooldown de uso de arma en el character
          * y retorna los puntos de daño que causa.
          */
-        const unsigned int use(Character& user) override;
+        Response use(Character& user, int& points) override;
 
         /* Devuelve el rango del arma */
         const unsigned int getRange() const override;

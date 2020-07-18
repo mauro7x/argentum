@@ -13,9 +13,10 @@ Defence::Defence(const DefenceCfg& data)
 
 Defence::~Defence() {}
 
-const unsigned int Defence::use(Character& user) {
+Response Defence::use(Character& user, int& points) {
     RandomNumberGenerator random_number_generator;
-    return (int)random_number_generator((int)min_defence, (int)max_defence);
+    points = (int)random_number_generator((int)min_defence, (int)max_defence);
+    return Response(true, "", SUCCESS_MSG);
 }
 
 const unsigned int Defence::getRange() const {

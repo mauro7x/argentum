@@ -10,9 +10,12 @@ Wand::~Wand() {
     delete spell;
 }
 
-const unsigned int Wand::use(Character& user) {
-    user.doMagic();
-    return spell->cast(user);
+Response Wand::use(Character& user, int& points) {
+    Response response = user.doMagic();
+    if (!response.succeeded)
+        return response;
+
+    return spell->cast(user, points);
 }
 
 const unsigned int Wand::getRange() const {

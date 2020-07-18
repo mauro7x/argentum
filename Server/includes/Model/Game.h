@@ -27,7 +27,9 @@
 #include "Creature.h"
 #include "Formulas.h"
 #include "ItemsContainer.h"
+#include "Response.h"
 #include "config_structs.h"
+#include "LogicMaps.h"
 //-----------------------------------------------------------------------------
 
 // Forward declaration
@@ -91,7 +93,7 @@ class Game {
     //--------------------------------------------------------------------------
     // Game entities
     //--------------------------------------------------------------------------
-    MapContainer map_container;
+    LogicMaps logic_maps;
     ItemsContainer items;
 
     std::unordered_map<InstanceId, Character> characters;
@@ -300,47 +302,31 @@ class Game {
     /*
      * Retorna true si en la posición que corresponde a las coordenadas
      * recibidas se encuentra un banquero, false en caso contrario.
-     *
-     * Si exception_if_invalid es true, se lanza una Exception con un mensaje
-     * indicando la incongruencia.
      */
     const bool _validateBankerPosition(const InstanceId caller, Id& npc_id,
                                        const uint32_t x_coord,
-                                       const uint32_t y_coord,
-                                       const bool exception_if_invalid);
+                                       const uint32_t y_coord);
     /*
      * Retorna true si en la posición que corresponde a las coordenadas
      * recibidas se encuentra un sacerdote, false en caso contrario.
-     *
-     * Si exception_if_invalid es true, se lanza una Exception con un mensaje
-     * indicando la incongruencia.
      */
     const bool _validatePriestPosition(const InstanceId caller, Id& npc_id,
                                        const uint32_t x_coord,
-                                       const uint32_t y_coord,
-                                       const bool exception_if_invalid);
+                                       const uint32_t y_coord);
     /*
      * Retorna true si en la posición que corresponde a las coordenadas
      * recibidas se encuentra un mercader, false en caso contrario.
-     *
-     * Si exception_if_invalid es true, se lanza una Exception con un mensaje
-     * indicando la incongruencia.
      */
     const bool _validateMerchantPosition(const InstanceId caller, Id& npc_id,
                                          const uint32_t x_coord,
-                                         const uint32_t y_coord,
-                                         const bool exception_if_invalid);
+                                         const uint32_t y_coord);
     /*
      * Retorna true si en la posición que corresponde a las coordenadas
      * recibidas se encuentra un portal, false en caso contrario.
-     *
-     * Si exception_if_invalid es true, se lanza una Exception con un mensaje
-     * indicando la incongruencia.
      */
     const bool _validatePortalPosition(const InstanceId caller,
                                        const uint32_t x_coord,
-                                       const uint32_t y_coord,
-                                       const bool exception_if_invalid);
+                                       const uint32_t y_coord);
 
     //--------------------------------------------------------------------------
 
@@ -351,19 +337,14 @@ class Game {
     /*
      * Valida si el map_id especificado corresponde a un mapa al cual un
      * portal puede teletransportar.
-     *
-     * Lanza Exception si no.
      */
-    void _validatePortalMapId(const InstanceId caller, Id map_id);
+    const bool _validatePortalMapId(const Id map_id);
 
     /*
      * Valida si el item_id especificado corresponde a un item que el NPC puede
      * comercializar.
-     *
-     * Lanza Exception si no.
      */
-    void _validateIfNPCMarketsItem(const InstanceId caller, const Id npc_id,
-                                   const Id item_id);
+    const bool _validateIfNPCMarketsItem(const Id npc_id, const Id item_id);
 
     /*
      * Lista los mapas posibles a los cuales un portal puede teletransportar.
@@ -454,6 +435,12 @@ class Game {
      * Envía los mensajes y eventos pertinentes tras una resurrección.
      */
     void _notifyResurrection(const InstanceId caller);
+
+    /*
+     * Envía un Reply al caller con el mensaje de notificación de una Response
+     * al ejecutar un comando.
+     */
+    void _notifyResponse(const InstanceId caller, const Response& response);
 
     //--------------------------------------------------------------------------
 
@@ -572,9 +559,11 @@ class Game {
      *                                COMANDOS                                *
      **************************************************************************/
 
-    //  Todos los comandos lanzan Exception si el caller es inválido.
-    //  En todos los comandos se notifica a los clientes de los
-    // broadcasts/eventos correspondientes.
+    //  * Todos los comandos lanzan out_of_range exception si el caller no
+    //  corresponde a un jugador conectado.
+
+    //  * En todos los comandos se notifica a los clientes de los
+    //  broadcasts/eventos correspondientes.
 
     /**************************************************************************/
 
@@ -584,29 +573,21 @@ class Game {
 
     /*
      * El personaje comienza a moverse hacia arriba.
-     *
-     * Propaga excepción StateCantMoveException.
      */
     void startMovingUp(const InstanceId caller);
 
     /*
      * El personaje comienza a moverse hacia abajo.
-     *
-     * Propaga excepción StateCantMoveException.
      */
     void startMovingDown(const InstanceId caller);
 
     /*
      * El personaje comienza a moverse hacia la izquierda.
-     *
-     * Propaga excepción StateCantMoveException.
      */
     void startMovingLeft(const InstanceId caller);
 
     /*
      * El personaje comienza a moverse hacia la derecha.
-     *
-     * Propaga excepción StateCantMoveException.
      */
     void startMovingRight(const InstanceId caller);
 
@@ -616,10 +597,8 @@ class Game {
     void stopMoving(const InstanceId caller);
 
     /*
-     * El personaje usa el porta en las coordenadas indicadas y se
+     * El personaje usa el portal en las coordenadas indicadas y se
      * teletransporta hacia el mapa indicado.
-     *
-     * Lanza Exception si no se puede realizar la acción.
      */
     void teleport(const InstanceId caller, const uint32_t portal_x_coord,
                   const uint32_t portal_y_coord, const Id map_id);
@@ -632,29 +611,18 @@ class Game {
 
     /*
      * El jugador agrega a su equipamiento el item en el n_slot del inventario.
-     *
-     * Propaga InvalidInventorySlotNumberException,
-     *         KindCantDoMagicException,
-     *         PotionHasNoPointsToRecoverException.
      */
     void equip(const InstanceId caller, const uint8_t n_slot);
 
     /*
      * El jugador quita de su equipamiento el item en el n_slot del
      * equipamiento, y lo devuelve al inventario.
-     *
-     * Propaga FullInventoryException,
-     *         InvalidEquipmentSlotNumberException.
      */
     void unequip(const InstanceId caller, const uint8_t n_slot);
 
     /*
      * El jugador toma el item que se encuenta dropeado en el tile
      * correspondiente a su posición actual.
-     *
-     * Propaga FullInventoryException,
-     *         StateCantTakeItemException,
-     *         GoldMaximumCapacityReached.
      */
     void take(const InstanceId caller);
 
@@ -662,7 +630,7 @@ class Game {
      * El jugador dropea la cantidad especificada del item en el n_slot del
      * inventario.
      *
-     * Propaga InvalidInventorySlotNumberException,
+     * Propaga
      *         CouldNotFindFreeTileException.
      */
     void drop(const InstanceId caller, const uint8_t n_slot, uint32_t amount);
@@ -676,9 +644,6 @@ class Game {
     /*
      * El jugador es curado por el sacerdote en la posición correspondiente a
      * las coordenadas indicadas.
-     *
-     * Propaga Exception,
-     *         StateCantBeHealedException.
      */
     void heal(const InstanceId caller, const uint32_t x_coord,
               const uint32_t y_coord);
@@ -687,8 +652,6 @@ class Game {
      * El jugador comienza a meditar, estado en el cual recupera su maná más
      * rápido. Ante cualquier acción (causada por él o algún tercero), deja de
      * meditar.
-     *
-     * Propaga KindCantMeditateException.
      */
     void meditate(const InstanceId caller);
 
@@ -699,8 +662,6 @@ class Game {
      * (y, por consiguiente, no pudiendo realizar acción alguna) por un tiempo
      * proporcional a la distancia con respecto al susodicho, y
      * teletransportándose a su alrededor una vez es resucitado.
-     *
-     * Propaga StateCantResurrectException.
      */
     void resurrect(const InstanceId caller);
 
@@ -709,9 +670,6 @@ class Game {
      *
      * El jugador es resucitado instanáneamente por el sacerdote ubicado en las
      * posición correspondiente a las coordenadas especificadas.
-     *
-     * Propaga Exception,
-     *         StateCantResurrectException.
      */
     void resurrect(const InstanceId caller, const uint32_t x_coord,
                    const uint32_t y_coord);
@@ -726,14 +684,6 @@ class Game {
      * Efectúa el uso del arma por parte del caller, sobre el target.
      *
      * Puede tener efecto dañino o curativo, según el arma equipada.
-     *
-     * Propaga:
-     *
-     * Exception, OutOfRangeAttackException, CantAttackWithoutWeaponException,
-     * KindCantDoMagicException, TooHighLevelDifferenceOnAttackException,
-     * NewbiesCantBeAttackedException, InsufficientManaException,
-     * AttackedActualStateCantBeAttackedException,
-     * AttackCooldownTimeNotElapsedException, CantAttackItselfException
      */
     void useWeapon(const InstanceId caller, const InstanceId target);
 
@@ -746,10 +696,6 @@ class Game {
     /*
      * Deposita en el banco la cantidad especificada del item en el n_slot del
      * inventario.
-     *
-     * Propaga Exception,
-     *         InvalidInventorySlotNumberException,
-     *         FullBankAccountException.
      */
     void depositItemOnBank(const InstanceId caller, const uint32_t x_coord,
                            const uint32_t y_coord, const uint8_t n_slot,
@@ -758,11 +704,6 @@ class Game {
     /*
      * Retira del banco la cantidad especificada del item guardado en la cuenta,
      * y lo dispone en el inventario.
-     *
-     * Propaga Exception,
-     *         InvalidItemIdException,
-     *         StateCantTakeItemsException,
-     *         FullInventoryException.
      */
     void withdrawItemFromBank(const InstanceId caller, const uint32_t x_coord,
                               const uint32_t y_coord, const uint32_t item_id,
@@ -770,19 +711,12 @@ class Game {
 
     /*
      * Deposita en el banco la cantidad especificada de oro.
-     *
-     * Propaga Exception,
-     *         InsufficientGoldException,
-     *         StateCantGatherGoldException.
      */
     void depositGoldOnBank(const InstanceId caller, const uint32_t x_coord,
                            const uint32_t y_coord, const uint32_t amount);
 
     /*
      * Retira del cuenta bancaria la cantidad especificada de oro.
-     *
-     * Propaga Exception,
-     *         NoMoneyAvailableException.
      */
     void withdrawGoldFromBank(const InstanceId caller, const uint32_t x_coord,
                               const uint32_t y_coord, uint32_t amount);
@@ -796,10 +730,6 @@ class Game {
     /*
      * Compra al mercader/sacerdote la cantidad del item especificado, y lo
      * almacena en el inventario.
-     *
-     * Propaga Exception,
-     *         InsufficientGoldException,
-     *         StateCantGatherGoldException
      */
     void buyItem(const InstanceId caller, const uint32_t x_coord,
                  const uint32_t y_coord, const uint32_t item_id,
@@ -808,10 +738,6 @@ class Game {
     /*
      * Vende al mercader/sacerdote la cantidad del item en el n_slot del
      * inventario, y recibe el oro correspondiente.
-     *
-     * Propaga Exception,
-     *         InvalidInventorySlotNumberException,
-     *         GoldMaximumCapacityReachedException.
      */
     void sellItem(const InstanceId caller, const uint32_t x_coord,
                   const uint32_t y_coord, const uint8_t n_slot,
@@ -827,8 +753,6 @@ class Game {
      * [Chat privado]
      *
      * Envia un mensaje privado al jugador con el nickname especificado.
-     *
-     * Propaga Exception.
      */
     void sendPrivateMessage(const InstanceId caller,
                             const std::string to_nickname,
@@ -838,7 +762,6 @@ class Game {
      * [Chat general]
      *
      * Envia un mensaje a todos los jugadores conectados al servidor.
-     *
      */
     void sendGeneralMessage(const InstanceId caller, const std::string message);
 

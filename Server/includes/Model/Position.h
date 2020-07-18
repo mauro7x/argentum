@@ -4,22 +4,22 @@
 #include <exception>
 
 #include "../../../Common/includes/DataStructs.h"
-#include "../../../Common/includes/MapContainer.h"
 #include "../../../Common/includes/Orientation.h"
 #include "../../../Common/includes/types.h"
 #include "config_structs.h"
+#include "LogicMaps.h"
 
 class Position {
    private:
     Id map;
     int x, y;
     Orientation orientation;
-    MapContainer& map_container;
+    LogicMaps& logic_maps;
     bool broadcast;
 
    public:
     Position(const Id map, const int init_x_coord, const int init_y_coord,
-             MapContainer& map_container);
+             LogicMaps& logic_maps);
     ~Position();
 
     Position(const Position&) = delete;
@@ -62,12 +62,11 @@ class Position {
 
     /*
      * Mueve un tile la posición en la dirección de la orientation.
-     *
-     * Con parametro si es criatura para verificar.
-     * Lanza CollisionWhileMovingException si no se puede mover
+     * 
+     * Retorna false si no se puede mover
      * a causa de una colisión.
      */
-    void move(bool is_creature);
+    const bool move(bool is_creature);
 
     const bool isInSafeZone() const;
 
@@ -85,11 +84,6 @@ class Position {
      * Llena los campos x_tile, y_tile del CharacterCfg.
      */
     void fillPersistenceData(CharacterCfg& data) const;
-};
-
-class CollisionWhileMovingException : public std::exception {
-   public:
-    virtual const char* what() const noexcept;
 };
 
 #endif

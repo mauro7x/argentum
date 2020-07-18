@@ -4,7 +4,6 @@
 #include <exception>
 //-----------------------------------------------------------------------------
 #include "../../../Common/includes/DataStructs.h"
-#include "../../../Common/includes/MapContainer.h"
 #include "../../../Common/includes/Orientation.h"
 #include "../../../Common/includes/types.h"
 //-----------------------------------------------------------------------------
@@ -14,6 +13,7 @@
 #include "ItemsContainer.h"
 #include "Position.h"
 #include "config_structs.h"
+#include "LogicMaps.h"
 //-----------------------------------------------------------------------------
 class Game;
 //-----------------------------------------------------------------------------
@@ -31,7 +31,8 @@ class Creature : public Attackable {
     int movement_speed;
 
     ItemsContainer& items;
-    Map& map;
+    LogicMaps& logic_maps;
+    Id map_id;
     std::unordered_map<InstanceId, Character>& characters;
     std::array<Orientation, N_ORIENTATIONS> posibles_orientations;
     Game& game;
@@ -99,7 +100,7 @@ class Creature : public Attackable {
     //-----------------------------------------------------------------------------
 
     /* Constructor */
-    Creature(const CreatureCfg& data, MapContainer& map_container,
+    Creature(const CreatureCfg& data, LogicMaps& logic_maps,
              const Id init_map, const int init_x_coord, const int init_y_coord,
              const uint32_t health, ItemsContainer& items,
              std::unordered_map<InstanceId, Character>& characters, Game& game,
@@ -141,7 +142,7 @@ class Creature : public Attackable {
     const Position& getPosition() const override;
 
     /* Lanza CantRecoverCreaturesHealthException */
-    const bool recoverHealth(unsigned int& points) override;
+    const bool recoverHealth(int& points) override;
 
     /*
      * Si muere la criatura, se llama a este método.
@@ -167,8 +168,8 @@ class Creature : public Attackable {
     /* Avisa que la criatura es broadcasteada */
     void beBroadcasted();
 
-    /* No hace nada [por ahora..] */
-    void beAttacked();
+    /* Devuelve true. Las criaturas siempre pueden ser atacadas. */
+    const bool beAttacked();
 
     /* Devuelve false. Las criaturas no califican como Newbie. */
     const bool isNewbie() const;

@@ -12,12 +12,13 @@ Weapon::Weapon(const WeaponCfg& data)
       weapon_type(data.weapon_type) {}
 Weapon::~Weapon() {}
 
-const unsigned int Weapon::use(Character& user) {
+Response Weapon::use(Character& user, int& points) {
     user.setAttackCooldown(this->cooldown);
 
     RandomNumberGenerator random_number_generator;
-    return (int)random_number_generator((int)this->min_damage,
+    points = (int)random_number_generator((int)this->min_damage,
                                         (int)this->max_damage);
+    return Response(true, "", SUCCESS_MSG);
 }
 
 const unsigned int Weapon::getRange() const {

@@ -3,6 +3,9 @@
 #include "../../includes/Model/Character.h"
 #include "../../includes/Model/Kind.h"
 //-----------------------------------------------------------------------------
+#define NO_HEALTH_POINTS_TO_RECOVER_MSG "Ya tienes la barra de vida llena."
+#define NO_MANA_POINTS_TO_RECOVER_MSG "Ya tienes la barra de maná llena."
+//-----------------------------------------------------------------------------
 
 Potion::Potion(const Id id, std::string name, const unsigned int price,
                const unsigned int recovery_points)
@@ -32,13 +35,17 @@ HealthPotion::HealthPotion(const PotionCfg& data)
     : Potion(data.id, data.name, data.price, data.recovery_points) {}
 HealthPotion::~HealthPotion() {}
 
-void HealthPotion::equip(Character& equipper) {
-    unsigned int points = this->recovery_points;
+Response HealthPotion::equip(Character& equipper) {
+    int points = this->recovery_points;
 
     if (!equipper.recoverHealth(points)) {
-        equipper.takeItem((Item*) this);
-        throw HealthPotionHasNoPointsToRecoverException();
-    };
+        equipper.takeItem((Item*)this);
+        return Response(false, NO_HEALTH_POINTS_TO_RECOVER_MSG, ERROR_MSG);
+    }
+
+    std::string recovery_msg =
+        "Te has curado " + std::to_string(points) + " de vida.";
+    return Response(true, recovery_msg, SUCCESS_MSG);
 }
 
 //-----------------------------------------------------------------------------
@@ -49,20 +56,23 @@ ManaPotion::ManaPotion(const PotionCfg& data)
     : Potion(data.id, data.name, data.price, data.recovery_points) {}
 ManaPotion::~ManaPotion() {}
 
-void ManaPotion::equip(Character& equipper) {
-    try {
-        equipper.doMagic();
-    } catch (const KindCantDoMagicException& e) {
+Response ManaPotion::equip(Character& equipper) {
+    Response response = equipper.doMagic();
+    if (!response.succeeded) {
         equipper.takeItem((Item*)this);
-        throw e;
+        return response;
     }
 
     unsigned int points = this->recovery_points;
-    
+
     if (!equipper.recoverMana(points)) {
-        equipper.takeItem((Item*) this);
-        throw ManaPotionHasNoPointsToRecoverException();
-    };
+        equipper.takeItem((Item*)this);
+        return Response(false, NO_MANA_POINTS_TO_RECOVER_MSG, ERROR_MSG);
+    }
+
+    std::string recovery_msg =
+        "Te has curado " + std::to_string(points) + " de maná.";
+    return Response(true, recovery_msg, SUCCESS_MSG);
 }
 
 //-----------------------------------------------------------------------------
@@ -71,14 +81,6 @@ void ManaPotion::equip(Character& equipper) {
 
 const char* UnknownPotionTypeException::what() const noexcept {
     return "El tipo de poción especificado en PotionCfg es inválido.";
-}
-
-const char* HealthPotionHasNoPointsToRecoverException::what() const noexcept {
-    return "Ya tienes la barra de vida llena.";
-}
-
-const char* ManaPotionHasNoPointsToRecoverException::what() const noexcept {
-    return "Ya tienes la barra de maná llena.";
 }
 
 //-----------------------------------------------------------------------------
