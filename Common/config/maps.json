@@ -27,7 +27,7 @@
     "tilesets": {
         "ground": {
             "first_gid": 1,
-            "next_first_gid": 79,
+            "next_first_gid": 147,
             "filepath": "common/assets/Maps/Tilesets/01-ground_tiles.json",
             "src": {
                 "dirpath": "client/assets/Tiles/Ground/",
@@ -42,8 +42,8 @@
             }
         },
         "decoration": {
-            "first_gid": 79,
-            "next_first_gid": 243,
+            "first_gid": 147,
+            "next_first_gid": 325,
             "filepath": "common/assets/Maps/Tilesets/02-decoration.json",
             "src": {
                 "dirpath": "client/assets/Tiles/Decoration/",
@@ -58,8 +58,8 @@
             }
         },
         "npcs": {
-            "first_gid": 243,
-            "next_first_gid": 251,
+            "first_gid": 325,
+            "next_first_gid": 333,
             "filepath": "common/assets/Maps/Tilesets/03-npcs.json",
             "src": {
                 "dirpath": "client/assets/Tiles/NPCs/",
@@ -74,8 +74,8 @@
             }
         },
         "metadata": {
-            "first_gid": 251,
-            "next_first_gid": 255,
+            "first_gid": 333,
+            "next_first_gid": 337,
             "filepath": "common/assets/Maps/Tilesets/04-metadata.json",
             "src": {
                 "dirpath": "client/assets/Tiles/Metadata/",

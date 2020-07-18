@@ -1,4 +1,12 @@
 { "columns":0,
+ "editorsettings":
+    {
+     "export":
+        {
+         "format":"",
+         "target":"."
+        }
+    },
  "grid":
     {
      "height":1,
@@ -8,9 +16,9 @@
  "margin":0,
  "name":"Decoration",
  "spacing":0,
- "tilecount":164,
+ "tilecount":178,
  "tiledversion":"2020.05.29",
- "tileheight":474,
+ "tileheight":512,
  "tiles":[
         {
          "id":0,
@@ -201,8 +209,8 @@
         {
          "id":31,
          "image":"..\/..\/..\/..\/Client\/assets\/Tiles\/Decoration\/31.png",
-         "imageheight":256,
-         "imagewidth":256
+         "imageheight":261,
+         "imagewidth":239
         }, 
         {
          "id":32,
@@ -867,8 +875,8 @@
         {
          "id":142,
          "image":"..\/..\/..\/..\/Client\/assets\/Tiles\/Decoration\/142.png",
-         "imageheight":474,
-         "imagewidth":384
+         "imageheight":512,
+         "imagewidth":512
         }, 
         {
          "id":143,
@@ -995,8 +1003,92 @@
          "image":"..\/..\/..\/..\/Client\/assets\/Tiles\/Decoration\/163.png",
          "imageheight":146,
          "imagewidth":160
+        }, 
+        {
+         "id":164,
+         "image":"..\/..\/..\/..\/Client\/assets\/Tiles\/Decoration\/164.png",
+         "imageheight":74,
+         "imagewidth":128
+        }, 
+        {
+         "id":165,
+         "image":"..\/..\/..\/..\/Client\/assets\/Tiles\/Decoration\/165.png",
+         "imageheight":70,
+         "imagewidth":128
+        }, 
+        {
+         "id":166,
+         "image":"..\/..\/..\/..\/Client\/assets\/Tiles\/Decoration\/166.png",
+         "imageheight":74,
+         "imagewidth":128
+        }, 
+        {
+         "id":167,
+         "image":"..\/..\/..\/..\/Client\/assets\/Tiles\/Decoration\/167.png",
+         "imageheight":74,
+         "imagewidth":128
+        }, 
+        {
+         "id":168,
+         "image":"..\/..\/..\/..\/Client\/assets\/Tiles\/Decoration\/168.png",
+         "imageheight":74,
+         "imagewidth":128
+        }, 
+        {
+         "id":169,
+         "image":"..\/..\/..\/..\/Client\/assets\/Tiles\/Decoration\/169.png",
+         "imageheight":261,
+         "imagewidth":242
+        }, 
+        {
+         "id":170,
+         "image":"..\/..\/..\/..\/Client\/assets\/Tiles\/Decoration\/170.png",
+         "imageheight":261,
+         "imagewidth":268
+        }, 
+        {
+         "id":171,
+         "image":"..\/..\/..\/..\/Client\/assets\/Tiles\/Decoration\/171.png",
+         "imageheight":261,
+         "imagewidth":229
+        }, 
+        {
+         "id":172,
+         "image":"..\/..\/..\/..\/Client\/assets\/Tiles\/Decoration\/172.png",
+         "imageheight":300,
+         "imagewidth":229
+        }, 
+        {
+         "id":173,
+         "image":"..\/..\/..\/..\/Client\/assets\/Tiles\/Decoration\/173.png",
+         "imageheight":300,
+         "imagewidth":238
+        }, 
+        {
+         "id":174,
+         "image":"..\/..\/..\/..\/Client\/assets\/Tiles\/Decoration\/174.png",
+         "imageheight":52,
+         "imagewidth":64
+        }, 
+        {
+         "id":175,
+         "image":"..\/..\/..\/..\/Client\/assets\/Tiles\/Decoration\/175.png",
+         "imageheight":58,
+         "imagewidth":68
+        }, 
+        {
+         "id":176,
+         "image":"..\/..\/..\/..\/Client\/assets\/Tiles\/Decoration\/176.png",
+         "imageheight":64,
+         "imagewidth":64
+        }, 
+        {
+         "id":177,
+         "image":"..\/..\/..\/..\/Client\/assets\/Tiles\/Decoration\/177.png",
+         "imageheight":128,
+         "imagewidth":32
         }],
- "tilewidth":384,
+ "tilewidth":512,
  "type":"tileset",
  "version":1.2
 }
