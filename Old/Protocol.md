@@ -1,10 +1,6 @@
 # Protocolo de comunicación
 
-Hacer una descripción...
-
 ## Estructura
-
-Cada mensaje que  .. .. . .
 
 *Cuando se utilice ... significará que dependerá de cada caso particular.*
 

@@ -14,8 +14,6 @@ En este archivo se listan ideas que se fueron teniendo a lo largo del desarrollo
 
 * Realizar el movimiento de las unidades utilizando los ticks de la iteración de acten vez del tiempo interno que haya pasado. -Mau, 21/06.
 
-* Optimizar el renderizado del mapa utilizando estructuras más complejas.
-
 * Indicador que diga la posición actual en una esquina.
 
 * Separar config.json en varios. (homeview_config.json, etc...).
