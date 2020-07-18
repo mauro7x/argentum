@@ -43,7 +43,7 @@
 //-----------------------------------------------------------------------------
 
 Character::Character(const CharacterCfg& init_data, const RaceCfg& race,
-                     const KindCfg& kind, MapContainer& map_container,
+                     const KindCfg& kind, LogicMaps& logic_maps,
                      const Id init_map, const int init_x_coord,
                      const int init_y_coord, ItemsContainer& items_container,
                      Formulas& formulas, const int& rate,
@@ -67,7 +67,7 @@ Character::Character(const CharacterCfg& init_data, const RaceCfg& race,
                 this->level, items_container, formulas),
       equipment(init_data.equipment, items_container),
 
-      position(init_map, init_x_coord, init_y_coord, map_container),
+      position(init_map, init_x_coord, init_y_coord, logic_maps),
 
       is_meditating(false),
 

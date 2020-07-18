@@ -4,22 +4,22 @@
 #include <exception>
 
 #include "../../../Common/includes/DataStructs.h"
-#include "../../../Common/includes/MapContainer.h"
 #include "../../../Common/includes/Orientation.h"
 #include "../../../Common/includes/types.h"
 #include "config_structs.h"
+#include "LogicMaps.h"
 
 class Position {
    private:
     Id map;
     int x, y;
     Orientation orientation;
-    MapContainer& map_container;
+    LogicMaps& logic_maps;
     bool broadcast;
 
    public:
     Position(const Id map, const int init_x_coord, const int init_y_coord,
-             MapContainer& map_container);
+             LogicMaps& logic_maps);
     ~Position();
 
     Position(const Position&) = delete;

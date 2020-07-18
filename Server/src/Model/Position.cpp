@@ -7,16 +7,16 @@
 #define DEFAULT_ORIENTATION DOWN_ORIENTATION
 
 Position::Position(const Id map, const int init_x_coord, const int init_y_coord,
-                   MapContainer& map_container)
+                   LogicMaps& logic_maps)
     : map(map),
       x(init_x_coord),
       y(init_y_coord),
       orientation(DEFAULT_ORIENTATION),
-      map_container(map_container),
+      logic_maps(logic_maps),
       broadcast(false) {}
 
 Position::~Position() {
-    map_container[map].clearTileOccupant(x, y);
+    logic_maps.clearTileOccupant(map, x, y);
 }
 
 const int Position::getX() const {
@@ -49,8 +49,8 @@ const unsigned int Position::getRange(const Position& other) const {
 }
 
 const bool Position::move(bool is_creature) {
-    if (!this->map_container[this->map].moveOccupant(
-            this->x, this->y, this->orientation, is_creature))
+    if (!logic_maps.moveOccupant(this->map, this->x, this->y, this->orientation,
+                                 is_creature))
         return false;
 
     switch (this->orientation) {
@@ -83,14 +83,14 @@ void Position::changeOrientation(Orientation orientation) {
 }
 
 void Position::teleport(const Id map_id, const uint32_t x_coord,
-                  const uint32_t y_coord) {
+                        const uint32_t y_coord) {
     this->map = map_id;
     this->x = x_coord;
     this->y = y_coord;
 }
 
 const bool Position::isInSafeZone() const {
-    return map_container[map].isSafeZone(x, y);
+    return logic_maps.isSafeZone(map, x, y);
 }
 
 const bool Position::mustBeBroadcasted() const {
