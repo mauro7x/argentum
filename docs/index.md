@@ -29,6 +29,14 @@ Insertar video trailer del juego.
 
 # Capturas de pantalla <a name="capturas"></a>
 
-Insertar capturas de pantalla del juego.
+![screenshot](assets/screenshots/0.png)
+![screenshot](assets/screenshots/1.png)
+![screenshot](assets/screenshots/2.png)
+
+![screenshot](assets/screenshots/3.png)
+
+![screenshot](assets/screenshots/4.png)
+
+![screenshot](assets/screenshots/5.png)
 
 <!-- ##################################################################### -->
