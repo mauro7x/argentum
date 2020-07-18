@@ -3,12 +3,6 @@
 //-----------------------------------------------------------------------------
 // Métodos privados
 
-void UserInventory::_center(SDL_Point& texture_pos, const Texture& texture,
-                            const SDL_Rect& rect) {
-    texture_pos.x = rect.x + (rect.w - texture.getWidth()) / 2;
-    texture_pos.y = rect.y + (rect.h - texture.getHeight()) / 2;
-}
-
 void UserInventory::_renderEquipment() const {
     SDL_Rect render_quad;
 
