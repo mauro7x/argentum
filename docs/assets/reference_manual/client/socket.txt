@@ -1,0 +1,41 @@
+@startuml
+
+class Socket{
+#int fd
+#bool fd_valid
+
+#explicit Socket(const int fd)
++Socket()
++Socket(const std::string& hostname, const std::string& port)
++Socket(const std::string& port, const int max_queued_clients)
+-void _setServerAddress(const std::string& port, addrinfo** address) const
+-void _setClientAddresses(const std::string& hostname, const std::string& port, addrinfo** addresses) const
+-void _setFd(addrinfo* address)
+-void _fixTimeWait(addrinfo* address) const
+-void _bind(addrinfo* address) const
+-void _listen(const int max_queued_clients) const
+-void _tryToConnectTo(addrinfo* addresses)
+-void _closeFdIfValid()
++Socket accept()
++size_t send(const char* source, const size_t len) const
++size_t recv(char* buffer, const size_t len) const
++void shutdown(const int& channel = SHUT_RDWR) const
++void close()
+}
+
+class SocketWrapper{
++size_t operator<<(char c) const
++size_t operator>>(char& c) const
++size_t operator<<(const uint8_t& n) const
++size_t operator>>(uint8_t& n) const
++size_t operator<<(const uint32_t& n) const
++size_t operator>>(uint32_t& n) const
++size_t operator<<(const std::string& s) const
++size_t operator>>(std::string& s) const
++size_t operator<<(const std::vector<uint8_t>& v) const
++size_t operator>>(std::vector<uint8_t>& v) const
+}
+
+Socket <|-- SocketWrapper
+
+@enduml

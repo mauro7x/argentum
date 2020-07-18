@@ -1,0 +1,18 @@
+@startuml
+
+[*] --> HomeView
+HomeView --> TutorialView
+HomeView --> ConnectionView
+TutorialView --> HomeView
+ConnectionView --> GameView
+ConnectionView --> SignUpView
+SignUpView --> ConnectionView
+GameView --> [*]
+
+HomeView : Conexión con el servidor
+TutorialView : Manual de uso
+ConnectionView : Ingreso al juego con un personaje
+SignUpView : Creación de personaje
+GameView : Juego (estado terminal)
+
+@enduml

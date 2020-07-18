@@ -17,14 +17,13 @@ void Console::_setInputPos() {
 
 void Console::_discardOldMessages() {
     int offset = output_box.h;
-
     for (auto it = messages.begin(); it != messages.end();) {
         if (offset < 0) {
             it = messages.erase(it);
         } else {
+            offset -= it->getHeight();
             it++;
         }
-        offset -= it->getHeight();
     }
 }
 

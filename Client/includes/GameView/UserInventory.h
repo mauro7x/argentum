@@ -75,10 +75,6 @@ class UserInventory : public HUDComponent {
     int16_t current_animate_slot = 0;
     SDL_Point animate_slot_pos = {0};
 
-    /* Centra una textura en un rectangulo */
-    void _center(SDL_Point& texture_pos, const Texture& texture,
-                 const SDL_Rect& rect);
-
     /* Renderiza el equipamiento del jugador */
     void _renderEquipment() const;
 

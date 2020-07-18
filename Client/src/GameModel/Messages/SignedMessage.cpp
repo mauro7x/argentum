@@ -28,9 +28,6 @@ void SignedMessage::update(HUD& hud, Player& player,
 
         case PRIVATE_SIGNED_MSG: {
             hud.addMessage("[" + sender + ": " + content + "]", color);
-            fprintf(stderr,
-                    "se recibio el mensaje privado con el senderid = %u\n",
-                    sender_id);
             break;
         }
 

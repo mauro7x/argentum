@@ -1,0 +1,73 @@
+@startuml
+
+abstract class ConstantRateFunc {
+  #uint16_t rate
+  #atomic_bool exit
+  #virtual void _func(const int it)
+  +void run()
+  +void quit()
+}
+
+class HomeView {
+-const Renderer& renderer;
+-SocketWrapper& socket
+
+-void _init()
+-void _loadMedia()
+-void _processSDLEvents()
+-void _render() const
+-void _func(const int it)
+}
+
+class TutorialView {
+-const Renderer& renderer;
+
+-void _init()
+-void _loadMedia()
+-void _processSDLEvents()
+-void _render() const
+-void _func(const int it)
+}
+
+class ConnectionView {
+-const Renderer& renderer;
+-SocketWrapper& socket
+
+-void _init()
+-void _loadMedia()
+-void _processSDLEvents()
+-void _render() const
+-void _func(const int it)
+}
+
+class SignUpView {
+-const Renderer& renderer;
+-SocketWrapper& socket
+
+-void _init()
+-void _loadPreviewData()
+-void _loadMedia()
+-void _processSDLEvents()
+-void _render() const
+-void _func(const int it)
+}
+
+class GameView {
+-const Renderer& renderer;
+
+-void _init()
+-void _loadMedia()
+-void _processSDLEvents()
+-void _processMessages();
+-void _processBroadcasts();
+-void _processEvents();
+-void _func(const int it)
+}
+
+ConstantRateFunc <|-- HomeView
+ConstantRateFunc <|-- TutorialView
+ConstantRateFunc <|-- ConnectionView
+ConstantRateFunc <|-- SignUpView
+ConstantRateFunc <|-- GameView
+
+@enduml

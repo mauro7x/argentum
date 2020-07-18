@@ -1,6 +1,6 @@
 ---
 title: Información del Proyecto
-description: Detalles administrativos, equipo de desarrollo y documentación
+description: Detalles administrativos, equipo de desarrollo, documentación, extensiones
 ---
 
 <!-- ##################################################################### -->
@@ -27,12 +27,28 @@ Remake del juego [**Argentum Online**](https://github.com/ao-libre) para sistema
 <!-- ##################################################################### -->
 
 # Documentación
-* [**Manual de usuario** (pre-entrega)](Manual_de_Usuario.pdf) - *Manual para ambos aplicativos (cliente y servidor), incluyendo requerimientos de hardware, software, instalación, configuración y uso.*
+* [**Manual de Usuario** (pre-entrega)](Manual_de_Usuario.pdf) - *Manual para ambos aplicativos (cliente y servidor), incluyendo requerimientos de hardware, software, instalación, configuración y uso.*
 
 ### En construcción
 Los siguientes documentos se encuentran en elaboración y se adjunta el link para edición a los mismos en Overleaf:
-* [**Manual de usuario**](https://es.overleaf.com/project/5f03991f67f43b00016cbe50) - *Manual para ambos aplicativos (cliente y servidor), incluyendo requerimientos de hardware, software, instalación, configuración y uso.*
+* [**Manual de Usuario**](https://es.overleaf.com/project/5f03991f67f43b00016cbe50) - *Manual para ambos aplicativos (cliente y servidor), incluyendo requerimientos de hardware, software, instalación, configuración y uso.*
 * [**Manual de Proyecto**](https://es.overleaf.com/8387857119mbhmdtbrpvnh) - *Organización, cronogramas, división de tareas, y evolución del proyecto.*
 * [**Manual de Referencia**](https://es.overleaf.com/2395968991ysqtxgxxsncs) - *Detalles de implementación y de diseño, estructuras utilizadas, herramientas integradas.*
+
+<!-- ##################################################################### -->
+
+# Features a agregar
+
+Si bien se intentó agregar la mayor cantidad de features al juego, por una cuestión de tiempo no pudimos llegar a implementar todas las ideas que teníamos en mente, por lo que tuvimos que priorizar algunas por sobre otras. Se listan a continuación posibles mejoras para realizar en un futuro:
+
+## Modelo
+* **Refactorizar el sistema de movimiento en el cliente.** Actualmente, se utilizó un sistema basado en tiempo real para determinar cuántos pixeles debe avanzar una unidad. Si bien funciona correctamente, en caso de que la función para obtener el tiempo tenga algún tipo de delay, esto podría notarse. Para optimizar el mismo, se propone utilizar las iteraciones del cliente como medida de tiempo transcurrido para avanzar la posición de la unidad en el mapa.
+
+* **Dividir algunos archivos de configuración.** Por ejemplo, el archivo de configuración del cliente (`config.json`) es demasiado grande y tiene mucha información. Se podría separar el mismo en distintos sub-archivos para cada parte del cliente.
+
+## Jugabilidad
+* **Indicador que diga la posición actual en una esquina.** No está bueno estar perdido en un mapa de 200x200 tiles. Bah depende.
+
+* **Información de los objetos.** Algo muy importante que nos gustaría implementar cuanto antes, para que se pueda clicker sobre un objeto y saber sus estadísticas, precio, etcétera.
 
 <!-- ##################################################################### -->

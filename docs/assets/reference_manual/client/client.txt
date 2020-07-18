@@ -1,0 +1,59 @@
+@startuml
+
+class Window {
+-SDL_Window* window
+-int w
+-int h
+-SDL_Surface* window_icon
+
++void init(bool fullscreen, int w, int h, const char* title)
++SDL_Window* getWindow()
+}
+
+class Renderer {
+-SDL_Renderer* renderer
+-float scale_factor_w
+-float scale_factor_h
+-SDL_Color draw_color
+
+-void resize(SDL_Rect* render_quad) const
++void init(bool vsync, float scale_factor_w, float scale_factor_h)
++void clearScreen() const
++void presentScreen() const
++SDL_Texture* createTextureFromSurface(SDL_Surface* surface) const
++void render(SDL_Texture* texture, SDL_Rect* render_quad, const SDL_Rect* clip) const
++void fillQuad(SDL_Rect* quad, SDL_Color color) const
+}
+
+class SocketWrapper{
++size_t operator<<(char c) const
++size_t operator>>(char& c) const
++size_t operator<<(const uint8_t& n) const
++size_t operator>>(uint8_t& n) const
++size_t operator<<(const uint32_t& n) const
++size_t operator>>(uint32_t& n) const
++size_t operator<<(const std::string& s) const
++size_t operator>>(std::string& s) const
++size_t operator<<(const std::vector<uint8_t>& v) const
++size_t operator>>(std::vector<uint8_t>& v) const
+}
+
+class Client {
+-void _initSDL()
+-void _initComponents()
+-void _launchHomeCtx()
+-void _launchTutorialCtx()
+-void _launchConnectionCtx()
+-void _launchSignUpCtx()
+-void _launchGameCtx()
+-void _quitSDL()
++void launch()
+}
+
+Client o-- Window
+Client o-- Renderer
+Client o-- SocketWrapper
+Renderer --> Window
+
+
+@enduml
