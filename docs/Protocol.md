@@ -89,7 +89,7 @@ Identificas el mensaje con el primer byte recibido (opcode), y para cada caso se
 | 11 | Evadir ataque |
 | 12 | Daño |
 | 13 | Hechizo de fuego |
-| 14 | Hechizo de rayo laser |
+| 14 | Hechizo de rayo |
 | 128 | Recibir daño |
 | 129 | Recibir curación |
 
@@ -131,7 +131,7 @@ Identificas el mensaje con el primer byte recibido (opcode), y para cada caso se
 | 22 | Listar jugadores conectados | `` |
 | 23 | Mensaje general | `CONTENT_LENGTH (4) + CONTENT (LENGTH)` |
 | 24 | Mensaje privado | `NICK_LENGTH (4) + NICKNAME (NICK_LENGTH) + CONTENT_LENGTH (4) + CONTENT (LENGTH)` |
-| 25 | Teletransportar | `POS` + MAP_ID(4) |
+| 25 | Teletransportar | `POS + MAP_ID(4)` |
 
 * `POS` = `X (4) + Y (4)`
 
