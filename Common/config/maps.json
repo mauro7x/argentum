@@ -41,6 +41,15 @@
             "creatures": [
                 308
             ]
+        },
+        {
+            "id": 4,
+            "name": "Desierto",
+            "filepath": "common/assets/Maps/4.json",
+            "creatures": [
+                304,
+                308
+            ]
         }
     ],
     "tilesets": {
