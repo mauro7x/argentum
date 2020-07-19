@@ -28,7 +28,6 @@
             "name": "Bosque Nevado",
             "filepath": "common/assets/Maps/2.json",
             "creatures": [
-                305,
                 306,
                 311,
                 312
@@ -39,7 +38,7 @@
             "name": "Costa",
             "filepath": "common/assets/Maps/3.json",
             "creatures": [
-                308
+                305
             ]
         },
         {
