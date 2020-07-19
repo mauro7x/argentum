@@ -1126,6 +1126,10 @@ void Game::teleport(const InstanceId caller, const uint32_t portal_x_coord,
     this->logic_maps.occupyTile(map_id, caller, spawning_x_coord,
                                 spawning_y_coord);
 
+    this->logic_maps.clearTileOccupant(character.getMapId(),
+                                       character.getPosition().getX(),
+                                       character.getPosition().getY());
+
     character.teleport(map_id, spawning_x_coord, spawning_y_coord);
     active_clients.changeMap(caller, map_id);
 
