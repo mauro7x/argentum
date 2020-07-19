@@ -22,6 +22,17 @@
                 307,
                 309
             ]
+        },
+        {
+            "id": 2,
+            "name": "Bosque Nevado",
+            "filepath": "common/assets/Maps/2.json",
+            "creatures": [
+                305,
+                306,
+                311,
+                312
+            ]
         }
     ],
     "tilesets": {
