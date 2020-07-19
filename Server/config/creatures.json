@@ -31,7 +31,7 @@
         "min_damage": 15,
         "max_damage": 20,
         "base_health": 250,
-        "visible_range": 3,
+        "visible_range": 4,
         "movement_speed": 2,
         "attack_cooldown": 3000
     },
@@ -66,8 +66,8 @@
         "max_level": 24,
         "min_damage": 10,
         "max_damage": 15,
-        "base_health": 250,
-        "visible_range": 4,
+        "base_health": 600,
+        "visible_range": 5,
         "movement_speed": 4,
         "attack_cooldown": 2000
     },
@@ -78,8 +78,8 @@
         "max_level": 34,
         "min_damage": 25,
         "max_damage": 30,
-        "base_health": 400,
-        "visible_range": 3,
+        "base_health": 1000,
+        "visible_range": 5,
         "movement_speed": 4,
         "attack_cooldown": 2000
     },
@@ -91,7 +91,7 @@
         "min_damage": 20,
         "max_damage": 25,
         "base_health": 300,
-        "visible_range": 3,
+        "visible_range": 4,
         "movement_speed": 3,
         "attack_cooldown": 2000
     },
@@ -127,7 +127,7 @@
         "min_damage": 8,
         "max_damage": 10,
         "base_health": 200,
-        "visible_range": 5,
+        "visible_range": 6,
         "movement_speed": 4,
         "attack_cooldown": 1600
     },
@@ -138,8 +138,8 @@
         "max_level": 15,
         "min_damage": 12,
         "max_damage": 15,
-        "base_health": 300,
-        "visible_range": 5,
+        "base_health": 500,
+        "visible_range": 6,
         "movement_speed": 4,
         "attack_cooldown": 1500
     },
