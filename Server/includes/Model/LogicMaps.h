@@ -43,6 +43,9 @@ class LogicMaps {
     /* Agrega a maps_id los ids de los mapas existentes. */
     void getMapsId(std::vector<Id>& maps_id) const;
 
+    /* devuelve la cantidad de maps */
+    uint32_t getMapsSize() const;
+
     /* Obtiene el mapa correspondiente modificable */
     Map& getMap(const Id id);
 

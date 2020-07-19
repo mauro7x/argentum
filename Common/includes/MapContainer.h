@@ -44,7 +44,10 @@ class MapContainer {
     /* Carga los mapas parseando los json correspondiente */
     void loadMaps();
 
-    /* Agrega a maps_id los ids de los mapas existentes. */
+    /* devuelve el tamanio del map */
+    uint32_t getMapsSize() const;
+
+     /* Agrega a maps_id los ids de los mapas existentes. */
     void getMapsId(std::vector<Id>& maps_id) const;
 
     /* Obtiene el mapa correspondiente modificable */
