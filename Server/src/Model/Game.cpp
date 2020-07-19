@@ -505,13 +505,11 @@ void Game::_listPortalMaps(std::string& init_msg,
                            std::list<std::string>& item_list) {
     init_msg = "Posibles mapas para viajar";
 
-    std::vector<Id> maps_id;
-    this->logic_maps.getMapsId(maps_id);
+    uint32_t size = this->logic_maps.getMapsSize();
 
-    std::vector<Id>::iterator it = maps_id.begin();
-    for (; it != maps_id.end(); ++it) {
-        item_list.push_back(std::to_string(*it) + ": " +
-                            this->logic_maps.getMapName(*it));
+    for (Id id = 0; id < size; ++id) {
+        item_list.push_back(std::to_string(id) + ": " +
+                            this->logic_maps.getMapName(id));
     }
 }
 

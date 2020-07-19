@@ -59,6 +59,10 @@ void MapContainer::getMapsId(std::vector<Id>& maps_id) const {
     }
 }
 
+uint32_t MapContainer::getMapsSize() const {
+    return (uint32_t)content.size();
+}
+
 MapContainer::~MapContainer() {}
 
 //-----------------------------------------------------------------------------

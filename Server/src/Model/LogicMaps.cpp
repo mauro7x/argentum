@@ -38,6 +38,10 @@ void LogicMaps::getMapsId(std::vector<Id>& maps_id) const {
     return maps.getMapsId(maps_id);
 }
 
+uint32_t LogicMaps::getMapsSize() const {
+    return maps.getMapsSize();
+}
+
 Map& LogicMaps::getMap(const Id id) {
     return maps[id];
 }
