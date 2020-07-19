@@ -33,6 +33,14 @@
                 311,
                 312
             ]
+        },
+        {
+            "id": 3,
+            "name": "Costa",
+            "filepath": "common/assets/Maps/3.json",
+            "creatures": [
+                308
+            ]
         }
     ],
     "tilesets": {
