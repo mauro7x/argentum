@@ -7,9 +7,9 @@ description: Requerimientos, descarga, instalación y configuración del juego
 
 # Requerimientos mínimos
 
-* Para **descargar e instalar el juego**, se necesitan ~120MB de espacio en disco.
-* El **cliente** consume ~40 MB de memoria RAM.
-* El **servidor** consume ~2 MB de memoria RAM.
+* Para **descargar e instalar el juego**, se necesitan ~130MB de espacio en disco.
+* El **cliente** consume ~50 MB de memoria RAM.
+* El **servidor** consume ~5 MB de memoria RAM.
 
 ## Consumo de CPU
 
@@ -20,8 +20,9 @@ El juego por defecto está configurado para correr a **60 fps** *(frames por seg
 # Descarga
 
 Para comenzar, debes descargar el juego (incluye ambos aplicativos: cliente y servidor).
-* <a href="{{ site.github.zip_url }}">Descargar en formato .zip (~XX MB)</a>.
-* <a href="{{ site.github.tar_url }}">Descargar en formato .tar.gz (~XX MB)</a>.
+* <a href="">Descargar en formato .zip (~XX MB)</a>.
+* <a href="">Descargar en formato .tar.gz (~XX MB)</a>.
+* <a href="">Descargar en formato .tar.xz (~XX MB)</a>.
 
 <!-- ##################################################################### -->
 
@@ -51,7 +52,7 @@ donde `<puerto>` es un parámetro que representa el puerto en que queremos abrir
 
 <!-- ##################################################################### -->
 
-# Configuración <a name="configuracion"></a>
+# Configuración
 Se provee de un script de configuración, que permite modificar distintos valores numéricos del juego. Para esto, se debe ejecutar:
 ```bash
 $ ./config.sh
@@ -64,7 +65,7 @@ $ chmod +x ./config.sh
 
 Al abrirlo, podremos seleccionar el archivo que queremos editar, y el mismo se abrirá para su edición utilizando `Vim`.
 
-## Scripts <a name="scripts"></a>
+## Scripts
 También se provee de un script de *cheats* que permite cargar configuraciones determinadas de manera rápida, como por ejemplo que los jugadores empiecen con objetos, o demás. Para probar los distintos *cheats* disponibles, se debe ejecutar:
 ```bash
 $ ./scripts.sh
