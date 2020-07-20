@@ -1,0 +1,75 @@
+@startuml
+
+class Server{
+-Database Database
+-NonBlockingQueue<NewConnection*> new_connections
+-Accepter accepter
+-Engine engine
+
++Server(const std::string& port, const int max_clients_queued)
++void run()
+}
+
+class Database {
+-Config<RaceCfg> races
+-Config<KindCfg> kinds
+-size_t file_pointer
+-std::mutex m
+-std::unordered_map<std::string, DataIndex> data_index
+-CharacterCfg new_player_data
+
+-void _loadFiles()
+-void _fillInfo()
+-void _loadNewPlayerData()
+-void _getPlayerData(const std::string& username,CharacterCfg& character_data)
+-void _persistPlayerInfo(const std::string& username)
+-void _createInitialData(const std::string& username, ...,CharacterCfg& character_data)
+-bool _checkHeadId(Id race, Id head_id)
+-bool _checkBodyId(Id race, Id body_id)
++Database()
++ConnectionAckType signIn(const std::string& username,const std::string& password,CharacterCfg& character_data)
++ConnectionAckType signUp(const std::string& username,const std::string& password,...,CharacterCfg& character_data)
++void persistPlayerData(CharacterCfg& data, bool disconnected = false)
+}
+
+class Accepter{
+-SocketWrapper socket
+-Database& database
+-NonBlockingQueue<NewConnection*>& new_connections
+-std::atomic_bool keep_accepting
+-std::list<ClientLogin> client_logins 
+
+-void _acceptClient()
+-void _joinFinishedLogins()
+-void _joinLogins()
++Accepter(const std::string& port,...,NonBlockingQueue<NewConnection*>& new_connections)
++void run() override
++void stop()
+
+}
+
+class Engine {
+-std::atomic_bool keep_executing
+-Database& database
+-int rate
+-NonBlockingQueue<InstanceId*> finished_connections
+-NonBlockingQueue<Command*> commands
+-ActiveClients active_clients
+-Game game
+
+-void _processFinishedConnections()
+-void _processCommands()
+-void _processNewConnections()
+-void _sendDifferentialBroadcasts()
+-void _freeQueues()
+-void _loopIteration(int it)
++Engine(Database& database,NonBlockingQueue<NewConnection*>& new_connections)
++void run() override
++void stop()
+}
+
+Server o-- Engine
+Server o-- Accepter
+Server o-- Database
+
+@enduml

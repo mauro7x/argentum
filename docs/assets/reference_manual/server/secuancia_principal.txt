@@ -1,0 +1,15 @@
+@startuml
+
+Server -> Engine :run()
+Server -> Accepter :run()
+Accepter -> ClientLogin : start()
+ClientLogin -> ClientLogin: push(new_connection)
+ClientLogin -> Accepter :new_connections
+Accepter -> Engine: new_connections
+Engine -> ActiveClients : add(id, map, (*new_connection).peer)
+ActiveClients -> ClientConnection : start()
+ClientConnection -> ClientConnection: push(finished_connection)
+ClientConnection -> Engine: finished_connections
+Engine -> Engine : _processFinishedConnections()
+
+@enduml

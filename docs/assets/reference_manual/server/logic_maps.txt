@@ -1,0 +1,67 @@
+@startuml
+
+class LogicMaps {
+-MapContainer maps
+
+-const bool _moveOccupant(Tile& from_tile, Tile& to_tile, bool is_creature)
++LogicMaps()
++void loadMedia()
++void getMapsId(std::vector<Id>& maps_id) const
++uint32_t getMapsSize() const
++Map& getMap(const Id id)
++const Map& getMap(const Id id) const
++void establishEntitySpawningPosition(const Id& map_id, int& x, int& y,bool is_creature)
++void getNearestFreeTile(const Id& map_id, int& x, int& y,const bool is_for_item) const
++const std::vector<Id>& getCreatures(const Id& map_id) const
++const Tile& getTile(const Id& map_id, const int x, const int y) const
++const std::string& getMapName(const Id& map_id) const
++void addItem(const Id& map_id, const Id item_id, const uint32_t amount,int& x, int& y)
++void clearTileOccupant(const Id& map_id, const int x, const int y)
++void occupyTile(const Id& map_id, InstanceId id, const int x, const int y)
++void clearTileItem(const Id& map_id, const int x, const int y)
++const bool moveOccupant(const Id& map_id, const int x, const int y, const Orientation& orientation, bool is_creature)
++const bool isSafeZone(const Id& map_id, const int x, const int y) const
++bool isPositionValidForCreature(const Id& map_id, const int x, const int y) const
+}
+
+class MapContainer {
+-unordered_map<Id, Map> content
+
++void loadMaps()
++void getMapsId(std::vector<Id>& maps_id) const
++Map& operator[](const Id id)
++const Map& operator[](const Id id) const
+}
+
+class Map {
+-int w, h
+-vector<Tile> tiles
+-vector<Id> creatures
+-string name
+
+-void _fillTiles(const json& map, const json& tilesets)
+-Tile& _getTile(const int x, const int y)
+-Tile& _getTileWithoutChecks(const int x, const int y)
+-bool _isValid(const int x, const int y) const
++void occupyTile(InstanceId id, const int x, const int y)
++void setItem(const Id item_id, const uint32_t amount, const int x, const int y)
++void clearTileOccupant(const int x, const int y)
++void clearTileItem(const int x, const int y)
++void clear()
+}
+
+class TileContainer {
+-const Renderer* g_renderer
+-unordered_map<TileId, Texture> content
+
+-void _loadTextures(const json& tileset)
++void loadMedia()
++const Texture& operator[](const TileId id) const
+}
+
+
+LogicMaps *-- TileContainer
+LogicMaps o-- MapContainer
+MapContainer "N" *-- Map
+
+@enduml

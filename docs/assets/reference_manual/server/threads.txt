@@ -1,0 +1,99 @@
+@startuml
+
+abstract class Thread {
+-thread thread
+
++void start()
++bool joinable()
++void join()
++virtual void run()
+}
+
+class Engine {
+-std::atomic_bool keep_executing
+-Database& database
+-int rate
+-NonBlockingQueue<InstanceId*> finished_connections
+-NonBlockingQueue<Command*> commands
+-ActiveClients active_clients
+-Game game
+
+-void _processFinishedConnections()
+-void _processCommands()
+-void _processNewConnections()
+-void _sendDifferentialBroadcasts()
+-void _freeQueues()
+-void _loopIteration(int it)
++Engine(Database& database,NonBlockingQueue<NewConnection*>& new_connections)
++void run() override
++void stop()
+}
+
+class ClientLogin{
+-std::atomic_bool is_running
+-SocketWrapper peer
+-Database& database
+-NonBlockingQueue<NewConnection*>& new_connections
+
+-CharacterCfg _login()
++ClientLogin(SocketWrapper& peer, Database& database,NonBlockingQueue<NewConnection*>& new_connections)
++void run() override
++bool isRunning() const
++void stop()
+}
+
+class ClientConnection {
+-InstanceId id
+-std::atomic<Id> map
+-SocketWrapper peer
+-NonBlockingQueue<InstanceId*>& finished_connections
+-std::mutex m
+-int finished_threads
+-std::thread sender
+-BlockingQueue<Notification*> notifications
+-std::thread receiver
+-NonBlockingQueue<Command*>& commands
+
+-void _finishThread()
+-void _freeNotifications()
+-void _sender()
+-void _receiver()
+-void _receiveCommand()
+
++ClientConnection(const InstanceId id, const Id map,...)
++void start()
++void push(Notification* notification)
++void changeMap(Id map)
++void join()
++void stop()
+}
+
+class NonBlockingQueue<T> {
+-mutex m
+-queue<T> queue
+
++void push(T t)
++T pop()
+}
+
+class BlockingQueue<T> {
+-mutex m
+-queue<T> queue
+-condition_variable cv
+-bool permanently_closed
+
++void push(T t)
++T pop()
+}
+
+Thread <|-- Engine
+Thread <|-- ClientLogin
+ClientConnection "2" --> Thread
+ClientConnection "2" --> NonBlockingQueue
+ClientConnection --> BlockingQueue
+ClientLogin --> NonBlockingQueue
+Engine "3" --> NonBlockingQueue
+
+
+
+@enduml

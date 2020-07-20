@@ -1,0 +1,22 @@
+@startuml
+
+Attackable <|-- Character
+Attackable <|-- Creature
+Game *--"0..*" Character
+Game *--"1..*"Creature
+Game *-- Bank
+Game *-- LogicMaps
+Character *-- Formulas
+Character *-- State
+Character *-- Level
+Character *-- Inventory
+Character *-- Equipment
+Character *-- Position
+Creature *-- Position
+Creature *-- Formulas
+Creature *-- ItemsContainer
+LogicMaps *-- TileContainer
+LogicMaps o-- MapContainer
+MapContainer "N" *-- Map
+
+@enduml
