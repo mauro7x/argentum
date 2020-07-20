@@ -23,6 +23,7 @@ void SignedMessage::update(HUD& hud, Player& player,
         case GENERAL_SIGNED_MSG: {
             player.addMessage(sender_id, content);
             characters.addMessage(sender_id, content);
+            hud.addMessage("(Chat general) " + sender + ": " + content, color);
             break;
         }
 
