@@ -15,7 +15,6 @@ Character *-- Position
 Creature *-- Position
 Creature *-- Formulas
 Creature *-- ItemsContainer
-LogicMaps *-- TileContainer
 LogicMaps o-- MapContainer
 MapContainer "N" *-- Map
 

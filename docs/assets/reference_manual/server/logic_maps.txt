@@ -50,17 +50,8 @@ class Map {
 +void clear()
 }
 
-class TileContainer {
--const Renderer* g_renderer
--unordered_map<TileId, Texture> content
-
--void _loadTextures(const json& tileset)
-+void loadMedia()
-+const Texture& operator[](const TileId id) const
-}
 
 
-LogicMaps *-- TileContainer
 LogicMaps o-- MapContainer
 MapContainer "N" *-- Map
 
