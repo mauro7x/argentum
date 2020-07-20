@@ -51,7 +51,7 @@ donde `<puerto>` es un parámetro que representa el puerto en que queremos abrir
 
 <!-- ##################################################################### -->
 
-# Configuración <a name="configuracion"></a>
+# Configuración
 Se provee de un script de configuración, que permite modificar distintos valores numéricos del juego. Para esto, se debe ejecutar:
 ```bash
 $ ./config.sh
@@ -64,7 +64,7 @@ $ chmod +x ./config.sh
 
 Al abrirlo, podremos seleccionar el archivo que queremos editar, y el mismo se abrirá para su edición utilizando `Vim`.
 
-## Scripts <a name="scripts"></a>
+## Scripts
 También se provee de un script de *cheats* que permite cargar configuraciones determinadas de manera rápida, como por ejemplo que los jugadores empiecen con objetos, o demás. Para probar los distintos *cheats* disponibles, se debe ejecutar:
 ```bash
 $ ./scripts.sh

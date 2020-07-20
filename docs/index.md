@@ -5,7 +5,7 @@ description: Juego multijugador online donde los participantes controlan un pers
 
 <!-- ##################################################################### -->
 
-# Descripción <a name="juego"></a>
+# Descripción
 
 **Argentum Online** es un juego de rol multijugador, donde controlarás a tu personaje en un mundo lleno de criaturas salvajes, de magia, y de mucha diversión. Sus tierras son muy variadas, y puedes encontrar desde **largos y llanos desiertos** hasta **escalofriantes cementerios**. También, al cambiar de tierras encontrarás nuevas criaturas que las habitan, y ten cuidado porque **no dudarán en atacarte**.
 
@@ -21,7 +21,7 @@ Cuando llegues al nivel 20, podrás comenzar tu largo camino peleando contra otr
 
 <!-- ##################################################################### -->
 
-# Trailer <a name="tailer"></a>
+# Trailer
 
 <iframe src="https://www.youtube.com/embed/okrdMPxOTbg" 
     width="560" 
@@ -32,7 +32,7 @@ Cuando llegues al nivel 20, podrás comenzar tu largo camino peleando contra otr
 
 <!-- ##################################################################### -->
 
-# Capturas de pantalla <a name="capturas"></a>
+# Capturas de pantalla
 
 ![screenshot](assets/screenshots/0.png)
 ![screenshot](assets/screenshots/1.png)

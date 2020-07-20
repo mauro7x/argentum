@@ -11,12 +11,12 @@ Remake del juego [**Argentum Online**](https://github.com/ao-libre) para sistema
 
 <!-- ##################################################################### -->
 
-# Detalles administrativos <a name="detalles"></a>
+# Detalles administrativos
 * **Materia:** Taller de Programación I
 * **Año y cuatrimestre:** 1°C 2020
 * **Tutor:** Martín Di Paola
 
-## Equipo de desarrollo <a name="equipo"></a>
+## Equipo de desarrollo
 
 | Nombre y apellido | Padrón | Mail | GitHub |
 |-------------------|--------|------|--------|
