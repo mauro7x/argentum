@@ -122,14 +122,18 @@ Response Character::act(const unsigned int it) {
 }
 
 void Character::updateLevelDependantAttributes() {
+    unsigned int health_diference, mana_diference;
+    health_diference = this->max_health - this->health;
+    mana_diference = this->max_mana - this->mana;
     this->max_health = formulas.calculateMaxHealth(
         this->constitution, this->kind.max_health_factor,
         this->race.max_health_factor, this->level.getLevel());
+    this->health = this->max_health - health_diference;
 
     this->max_mana = formulas.calculateMaxMana(
         this->intelligence, this->kind.max_mana_factor,
         this->race.max_mana_factor, this->level.getLevel());
-
+    this->mana = this->max_mana - mana_diference;
     this->inventory.updateMaxAmountsOfGold();
 
     this->broadcast = true;
