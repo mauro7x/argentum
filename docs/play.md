@@ -7,6 +7,7 @@ description: Requerimientos, descarga, instalación y configuración del juego
 
 # Requerimientos mínimos
 
+* Es necesario un sistema operativo **basado en Debian** *(próximamente soporte para Windows)*.
 * Para **descargar e instalar el juego**, se necesitan ~130MB de espacio en disco.
 * El **cliente** consume ~50 MB de memoria RAM.
 * El **servidor** consume ~5 MB de memoria RAM.
