@@ -30,7 +30,7 @@ Cuando llegues al nivel 20, podrás comenzar tu largo camino peleando contra otr
     allowfullscreen>
 </iframe>
 
-<iframe src="assets/test.mp4" 
+<iframe src="assets/trailer.mp4" 
     width="960" 
     height="540"
     frameborder="0" 
