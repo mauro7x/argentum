@@ -244,7 +244,7 @@ void Creature::dropAllItems(std::vector<DroppingSlot>& dropped_items) {
     switch (formulas.calculateDroppingItem()) {
         case DROP_NOTHING: {
             // fprintf(stderr, "DEBUG: Creature::drop: NOTHING\n");
-            // break;
+            break;
         }
 
         case DROP_GOLD: {

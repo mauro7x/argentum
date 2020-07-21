@@ -173,7 +173,6 @@ const unsigned int Formulas::calculateGoldDroppingAmount(
 const Drop Formulas::calculateDroppingItem() const {
     RandomNumberGenerator gen;
     float prob = gen((float)0, (float)1);
-
     float acum = cfg.creature_drop_nothing_prob;
 
     if (prob < acum)
@@ -183,7 +182,7 @@ const Drop Formulas::calculateDroppingItem() const {
 
     if (prob < acum)
         return DROP_GOLD;
-
+    
     acum += cfg.creature_drop_potion_prob;
     
     if (prob < acum)
