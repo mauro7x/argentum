@@ -93,6 +93,11 @@ class Dead : public State {
     virtual const bool gatherGold() const override;
 };
 
+/*
+ * Representa al estado resucitando del personaje.
+ * Define las acciones que pueden/no pueden ejecutarse
+ * en dicho estado.
+ */
 class Resurrecting : public State {
    public:
     Resurrecting(const Id dead_head_id, const Id dead_body_id);

@@ -31,9 +31,7 @@ class Defence : public Wearable {
     /* Lanza excepción. La defensa no tiene rango */
     const unsigned int getRange() const override;
 
-    /*
-     * Lanza excepción. La no es un arma.
-     */
+    /* Lanza excepción. La defensa no es un arma. */
     const WeaponType getWeaponType() const override;
 };
 

@@ -31,13 +31,11 @@ class Wand : public Wearable {
     /*
      * Castea el spell.
      *
-     * Retorna los puntos de ataque/curación que provoca el hechizo.
+     * Setea en points los puntos de ataque/curación que provoca el hechizo.
      *
-     * Lanza InsufficientManaException si el user no tiene
-     * suficiente mana para castearlo.
-     *
-     *       KindCantDoMagicException si el user no puede hacer magia
-     * debido a su kind.
+     * Retorna Response ERROR si:
+     * - el user no tiene suficiente mana para castearlo.
+     * - el user no puede hacer magia debido a su kind.
      */
     virtual Response use(Character& user, int& points) override;
 
