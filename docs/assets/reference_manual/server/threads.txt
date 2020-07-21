@@ -68,6 +68,20 @@ class ClientConnection {
 +void stop()
 }
 
+class Acepter{
+-SocketWrapper socket
+-Database& database
+-NonBlockingQueue<NewConnection*>& new_connections
+-std::atomic_bool keep_accepting
+-std::list<ClientLogin> client_logins
+
+-void _acceptClient()
+-void _joinFinishedLogins()
+-void _joinLogins()
++void run() override
++void stop()
+}
+
 class NonBlockingQueue<T> {
 -mutex m
 -queue<T> queue
@@ -88,11 +102,13 @@ class BlockingQueue<T> {
 
 Thread <|-- Engine
 Thread <|-- ClientLogin
+Thread <|-- Acepter
 ClientConnection "2" --> Thread
 ClientConnection "2" --> NonBlockingQueue
 ClientConnection --> BlockingQueue
 ClientLogin --> NonBlockingQueue
 Engine "3" --> NonBlockingQueue
+Acepter -- NonBlockingQueue
 
 
 

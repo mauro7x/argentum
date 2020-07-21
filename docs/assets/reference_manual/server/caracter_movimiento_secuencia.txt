@@ -1,12 +1,12 @@
 @startuml
 Engine -> Game : actCharacters(it)
 Game -> Character: act(it)
-Game -> Game : _notifyResponse(caller, response)
-Game -> Game :_pushCharacterDifferentialBroadcast()
 Character -> Character : _updateMovement(it)
 Character -> Postion : move(false)
 Postion -> LogicMaps : moveOccupant(map_id, x, y, orientation, is_creature)
 LogicMaps -> Postion : bool
 Postion -> Character : bool
+Game -> Game : _notifyResponse(caller, response)
+Game -> Game :_pushCharacterDifferentialBroadcast()
 
 @enduml

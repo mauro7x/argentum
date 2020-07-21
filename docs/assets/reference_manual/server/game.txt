@@ -6,15 +6,17 @@ Game *--"0..*" Character
 Game *--"1..*"Creature
 Game *-- Bank
 Game *-- LogicMaps
-Character *-- Formulas
+Game *-- Formulas
+Game *-- ItemsContainer
+Character o-- Formulas
 Character *-- State
 Character *-- Level
 Character *-- Inventory
 Character *-- Equipment
 Character *-- Position
 Creature *-- Position
-Creature *-- Formulas
-Creature *-- ItemsContainer
+Creature o-- Formulas
+Creature o-- ItemsContainer
 LogicMaps o-- MapContainer
 MapContainer "N" *-- Map
 
