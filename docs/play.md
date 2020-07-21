@@ -23,7 +23,7 @@ El juego por defecto está configurado para correr a **60 fps** *(frames por seg
 Para comenzar, debes descargar el juego (incluye ambos aplicativos: cliente y servidor).
 * <a href="releases/AOL_v_1_0.zip">Descargar en formato .zip (~72 MB)</a>.
 * <a href="releases/AOL_v_1_0.tar.gz">Descargar en formato .tar.gz (~71 MB)</a>.
-* <a href="">Descargar en formato .tar.xz (~XX MB)</a>.
+* <a href="releases/AOL_v_1_0.tar.xz">Descargar en formato .tar.xz (~67 MB)</a>.
 
 <!-- ##################################################################### -->
 
