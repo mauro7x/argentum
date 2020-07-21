@@ -51,22 +51,12 @@ void Accepter::run() {
         }
 
     } catch (const ClosedSocketException& e) {
-        // Orden de cerrar el accepter del server
-        _joinLogins();
-
     } catch (const std::exception& e) {
-        // Error grave
-        _joinLogins();
-
         fprintf(stderr, "%s\n", e.what());
     } catch (...) {
-        // Error desconocido
-        _joinLogins();
-
         fprintf(stderr, "Unknown error.\n");
     }
 
-    // Just in case
     _joinLogins();
 }
 
