@@ -6,24 +6,19 @@
 void Engine::_processNewConnections() {
     NewConnection* new_connection = nullptr;
     while ((new_connection = new_connections.pop())) {
-        fprintf(stderr, "ENGINE: Procesando una nueva conexión... (1/2).\n");
-
         InstanceId id = this->game.newCharacter((*new_connection).data);
         Id map = this->game.getMapId(id);
         active_clients.add(id, map, (*new_connection).peer);
         this->game.broadcastNewCharacter(id);
-
         delete new_connection;
 
-        fprintf(stderr, "ENGINE: Nueva conexión agregada (2/2).\n");
+        fprintf(stderr, "Se ha conectado un jugador.\n");
     }
 }
 
 void Engine::_processCommands() {
     Command* cmd = nullptr;
     while ((cmd = commands.pop())) {
-        fprintf(stderr, "ENGINE: Ejecutando comando (1/2).\n");
-
         try {
             cmd->exec(game);
         } catch (const std::exception& e) {
@@ -32,23 +27,18 @@ void Engine::_processCommands() {
         }
 
         delete cmd;
-
-        fprintf(stderr, "ENGINE: Comando ejecutado (2/2).\n");
     }
 }
 
 void Engine::_processFinishedConnections() {
     InstanceId* finished_connection = nullptr;
     while ((finished_connection = finished_connections.pop())) {
-        fprintf(stderr,
-                "ENGINE: Eliminando una conexión terminada... (1/2).\n");
-
         game.deleteCharacter(*finished_connection, database);
         active_clients.remove(*finished_connection);
 
         delete finished_connection;
 
-        fprintf(stderr, "ENGINE: Conexión eliminada (2/2).\n");
+        fprintf(stderr, "Se ha desconectado un jugador.\n");
     }
 }
 
@@ -113,7 +103,7 @@ Engine::Engine(Database& database,
 }
 
 void Engine::run() {
-    fprintf(stderr, "DEBUG: Comienza la ejecución del engine.\n");
+    fprintf(stderr, "ENGINE: Empezando ejecución.\n");
 
     // Variables para controlar el frame-rate
     auto t1 = std::chrono::steady_clock::now();
@@ -135,7 +125,7 @@ void Engine::run() {
         rest = rate - std::ceil(diff.count());
 
         if (rest < 0) {
-            fprintf(stderr, "\n\n=== PÉRDIDA DE FRAME/S ===\n\n\n");
+            fprintf(stderr, ">> Ciclo principal: pérdida de frame/s.\n");
             behind = -rest;
             lost = rate + (behind - behind % rate);
             rest = rate - behind % rate;
@@ -159,7 +149,7 @@ void Engine::run() {
     // Vaciamos las colas para no perder memoria:
     _freeQueues();
 
-    fprintf(stderr, "DEBUG: Termina la ejecución del engine.\n");
+    fprintf(stderr, "ENGINE: Terminando ejecución.\n");
 }
 
 void Engine::stop() {

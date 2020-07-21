@@ -707,15 +707,3 @@ void Character::fillPersistenceData(CharacterCfg& data) const {
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-
-void Character::debug() {
-    std::cout << "**Character debug:**" << std::endl;
-    // this->inventory.debug();
-    // this->equipment.debug();
-    std::cout << "health: " << this->health << std::endl;
-    std::cout << "mana: " << this->mana << std::endl;
-    std::cout << "position: x = " << this->position.getX()
-              << " y = " << this->position.getY() << std::endl;
-}
-
-//-----------------------------------------------------------------------------

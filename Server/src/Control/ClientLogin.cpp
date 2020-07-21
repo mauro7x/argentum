@@ -124,7 +124,7 @@ void ClientLogin::run() {
 
     try {
         // Comienza la ejecución del clientlogin
-        fprintf(stderr, "Inicia la ejecución del clientlogin.\n");
+        // fprintf(stderr, "Inicia la ejecución del clientlogin.\n");
 
         CharacterCfg init_data = _login();
 
@@ -134,7 +134,7 @@ void ClientLogin::run() {
         new_connections.push(new NewConnection(peer, init_data));
 
         // Finaliza la ejecución
-        fprintf(stderr, "Finaliza la ejecución del clientlogin.\n");
+        // fprintf(stderr, "Finaliza la ejecución del clientlogin.\n");
     } catch (const std::exception& e) {
         // Error grave
         try {

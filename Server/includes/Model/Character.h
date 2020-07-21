@@ -548,8 +548,6 @@ class Character : public Attackable {
      * Recibe una referencia de characterCfg , y llenar los datos.
      */
     void fillPersistenceData(CharacterCfg& data) const;
-
-    void debug();
 };
 
 //-----------------------------------------------------------------------------

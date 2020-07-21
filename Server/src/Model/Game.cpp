@@ -826,8 +826,6 @@ const InstanceId Game::newCharacter(const CharacterCfg& init_data) {
 
     this->nickname_id_map[init_data.nickname] = new_character_id;
 
-    this->characters.at(new_character_id).debug();
-
     _loadBankAccount(init_data);
 
     return new_character_id;

@@ -45,10 +45,6 @@ EntityBroadcast& EntityBroadcast::operator=(
 bool EntityBroadcast::send(const InstanceId sender,
                                  const SocketWrapper& peer) {
     Serialized serialized = json::to_msgpack(j);
-
-    // fprintf(stderr, "Envio broadcast tipo %i, entity %i\n",
-    // this->broadcast_type, this->entity_type);
-
     if (sender == this->id) {
         this->entity_type = PLAYER_TYPE;
     }

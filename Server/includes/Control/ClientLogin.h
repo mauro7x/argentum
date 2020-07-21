@@ -2,7 +2,7 @@
 #define __CLIENT_LOGIN_H__
 
 //-----------------------------------------------------------------------------
-#include <stdio.h>  // para debug
+#include <stdio.h> 
 
 #include <atomic>
 #include <exception>

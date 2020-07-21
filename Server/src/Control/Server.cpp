@@ -15,8 +15,6 @@ Server::Server(const std::string& port, const int max_clients_queued)
       engine(database, new_connections) {}
 
 void Server::run() {
-    fprintf(stderr, "DEBUG: Comienza la ejecución del servidor.\n");
-
     // Iniciamos la ejecución del motor
     engine.start();
 
@@ -44,8 +42,6 @@ void Server::run() {
     fprintf(stderr, "DEBUG: Joineando al engine.\n");
     engine.join();
     fprintf(stderr, "DEBUG: Engine joineado.\n");
-
-    fprintf(stderr, "DEBUG: Termina la ejecución del servidor.\n");
 }
 
 Server::~Server() {}

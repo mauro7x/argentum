@@ -4,12 +4,12 @@
 
 void ClientConnection::_finishThread() {
     std::unique_lock<std::mutex> l(m);
-    fprintf(stderr, "CLIENTE %i: se llamó a _finishThread.\n", id);
+    // fprintf(stderr, "CLIENTE %i: se llamó a _finishThread.\n", id);
     if ((++finished_threads) == 2) {
-        fprintf(
-            stderr,
-            "CLIENTE %i: _finishThread agrega conexión terminada a la cola.\n",
-            id);
+        //fprintf(
+            //stderr,
+            //"CLIENTE %i: _finishThread agrega conexión terminada a la cola.\n",
+            //id);
         finished_connections.push(new InstanceId(id));
     }
 }
@@ -24,7 +24,7 @@ void ClientConnection::_freeNotifications() {
 
 void ClientConnection::_sender() {
     // ejecución del sender loop
-    fprintf(stderr, "CLIENTE %i: Sender finaliza su ejecución.\n", id);
+    // fprintf(stderr, "CLIENTE %i: Sender finaliza su ejecución.\n", id);
 
     try {
         Notification* notification = nullptr;
@@ -63,12 +63,12 @@ void ClientConnection::_sender() {
 
     // Avisamos que terminamos
     _finishThread();
-    fprintf(stderr, "CLIENTE %i: Sender finaliza su ejecución.\n", id);
+    // fprintf(stderr, "CLIENTE %i: Sender finaliza su ejecución.\n", id);
 }
 
 void ClientConnection::_receiver() {
     // ejecución del receiver loop
-    fprintf(stderr, "CLIENTE %i: Receiver comienza su ejecución.\n", id);
+    // fprintf(stderr, "CLIENTE %i: Receiver comienza su ejecución.\n", id);
 
     try {
         uint8_t opcode;
@@ -98,7 +98,7 @@ void ClientConnection::_receiver() {
     // Avisamos que terminamos
     this->notifications.close();
     _finishThread();
-    fprintf(stderr, "CLIENTE %i: Receiver finaliza su ejecución.\n", id);
+    // fprintf(stderr, "CLIENTE %i: Receiver finaliza su ejecución.\n", id);
 }
 
 void ClientConnection::_receiveCommand() {
