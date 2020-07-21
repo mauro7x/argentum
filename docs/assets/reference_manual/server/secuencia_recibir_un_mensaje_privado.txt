@@ -1,0 +1,18 @@
+@startuml
+
+ClientConnection -> ClientConnection:_receiveCommand()
+ClientConnection -> CommandFactory:newCommand(id, opcode_cmd, peer)
+CommandFactory -> ClientConnection:PrivateMessageCommand()
+ClientConnection -> ClientConnection:
+ClientConnection -> Engine : commands
+Engine -> Engine: _processCommands()
+Engine -> PrivateMessageCommand: exec(game)
+PrivateMessageCommand -> Game : sendPrivateMessage
+Game -> ActiveClients : notify(destinatary_id, receiver_notification)
+ActiveClients -> ActiveClients:
+ActiveClients -> ClientConnection: receiver_notification
+ClientConnection -> Message: send(this->id, peer)
+
+
+
+@enduml
