@@ -1,0 +1,17 @@
+@startuml
+
+Game -> Character:equip(n_slot)
+Character -> Inventory:gatherItem(n_slot, amount)
+Inventory -> Character : weapon
+Character -> Weapon : equip(*this)
+Weapon -> Character: equip(this)
+Character -> Equipment: add(weapon)
+Equipment ->Weapon : getType()
+Weapon -> Equipment: WEAPON  
+Equipment -> Equipment: 
+Equipment -> Character: prev_equipped_item
+Character -> Character: takeItem(prev_equipped_item)
+Character -> Game : response
+Game -> Game : _notifyResponse(caller, response)
+
+@enduml

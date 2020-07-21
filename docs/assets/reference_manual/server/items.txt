@@ -1,0 +1,107 @@
+@startuml
+
+interface Item{
+#const Id id
+#const std::string name
+#const unsigned int price
+
++virtual Response equip(Character& equipper) = 0
++virtual const std::string what() const
++const Id getId() const
++const unsigned int getPrice() const
+
+}
+
+abstract class Potion{
+#const unsigned int recovery_points
+
++ virtual Response equip(Character& equipper) = 0
+}
+
+class HealthPotion{
+
++virtual Response equip(Character& equipper) override
+}
+
+class ManaPotion{
+
++virtual Response equip(Character& equipper) override
+}
+
+Interface Wearable{
+#WearableType wearable_type
+
++virtual Response equip(Character& equipper)
++virtual Response use(Character& user, int& points) = 0
++virtual const unsigned int getRange() const = 0
++virtual const WeaponType getWeaponType() const = 0
++const WearableType getType() const
+}
+
+class Wand{
+
++virtual Response use(Character& user, int& points) override
++const unsigned int getRange() const override
++const WeaponType getWeaponType() const override
+}
+
+class Weapon{
+-const unsigned int range
+-const unsigned int min_damage
+-const unsigned int max_damage
+-const unsigned int cooldown
+-const WeaponType weapon_type
+
++Response use(Character& user, int& points) override
++const unsigned int getRange() const override
++const WeaponType getWeaponType() const override
+}
+
+class Defence{
+-unsigned int min_defence
+-unsigned int max_defence
+
++Response use(Character& user, int& points) override
++const unsigned int getRange() const override
++const WeaponType getWeaponType() const override
+}
+
+abstract class Spell{
+#const unsigned int mana_usage_cost
+#const unsigned int range
+#const unsigned int cooldown
+#WeaponType weapon_type
+
++virtual Response cast(Character& caster, int& points) = 0
++const WeaponType getWeaponType() const
++const unsigned int getRange() const
+}
+
+
+class AttackingSpell{
+-const unsigned int min_damage
+-const unsigned intmax_damage
+
++Response cast(Character& caster, int& points) override
+}
+
+class HealingSpell{
+-const unsigned int recovery_points
+
++Response cast(Character& caster, int& points) override
+}
+
+Item <|-- Potion
+Item <|-- Wearable
+Potion <|-- HealthPotion
+Potion <|-- ManaPotion
+Wearable <|-- Defence
+Wearable <|-- Wand
+Wearable <|-- Weapon
+Wand *-- Spell
+Spell <|-- HealingSpell
+Spell <|-- AttackingSpell
+
+
+
+@enduml
