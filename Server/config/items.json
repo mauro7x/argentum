@@ -142,22 +142,22 @@
             "id": 1300,
             "name": "Capucha",
             "price": 50,
-            "min_defence": 2,
-            "max_defence": 6
+            "min_defence": 1,
+            "max_defence": 3
         },
         {
             "id": 1301,
             "name": "Casco de Hierro",
             "price": 150,
-            "min_defence": 6,
-            "max_defence": 14
+            "min_defence": 3,
+            "max_defence": 6
         },
         {
             "id": 1302,
             "name": "Sombrero Mágico",
             "price": 300,
-            "min_defence": 14,
-            "max_defence": 24
+            "min_defence": 8,
+            "max_defence": 10
         }
     ],
     "armours": [
@@ -165,22 +165,22 @@
             "id": 1400,
             "name": "Armadura de cuero",
             "price": 50,
-            "min_defence": 6,
-            "max_defence": 10
+            "min_defence": 2,
+            "max_defence": 4
         },
         {
             "id": 1401,
             "name": "Armadura de placas",
             "price": 150,
-            "min_defence": 10,
-            "max_defence": 14
+            "min_defence": 4,
+            "max_defence": 6
         },
         {
             "id": 1402,
             "name": "Túnica azul",
             "price": 300,
-            "min_defence": 14,
-            "max_defence": 20
+            "min_defence": 8,
+            "max_defence": 10
         }
     ],
     "shields": [
@@ -189,14 +189,14 @@
             "name": "Escudo de tortuga",
             "price": 50,
             "min_defence": 2,
-            "max_defence": 6
+            "max_defence": 4
         },
         {
             "id": 1501,
             "name": "Escudo de hierro",
             "price": 200,
-            "min_defence": 10,
-            "max_defence": 20
+            "min_defence": 5,
+            "max_defence": 10
         }
     ],
     "potions": [
