@@ -53,4 +53,6 @@ Si bien se intentó agregar la mayor cantidad de features al juego, por una cues
     
 * **Globo de mensajes generales.** Según el mapa, se pueden encontrar fondos que dificulten la lectura de los mensajes. Se propone para solucionar este problema, el uso de globos que contengan los mensajes y contraste con los mismos para facilitar la misma en cualquier contexto.
 
+* **Mejoras en el balance.** Si bien intentamos balancear el juego lo mejor posible, manejamos la mayoría de valores como absolutos, como es el caso por ejemplo de las pociones de vida (curan 100 puntos de vida). Una mejora a realizar sería convertir estas restauraciones en relativas según la vida máxima, así como agregar escalados de daño según el nivel a los personajes, y demás.
+
 <!-- ##################################################################### -->
