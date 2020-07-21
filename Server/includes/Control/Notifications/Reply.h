@@ -24,11 +24,14 @@ class Reply : public Notification {
     std::string reply;
 
    public:
-    /* Constructor por defult */
-    Reply();
-
     /* Constructor */
     Reply(const uint8_t message_type, const std::string& reply);
+
+    /* Habilitamos el constructor por copia. */
+    Reply(const Reply& other);
+
+    /* Habilitamos el operador= para copia.*/
+    Reply& operator=(const Reply& other);
 
     //-----------------------------------------------------------------------------
 

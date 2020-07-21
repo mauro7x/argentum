@@ -58,6 +58,9 @@ class ActiveClients {
     /* Notifica a un cliente en particular */
     void notify(const InstanceId id, Notification* notification);
 
+    /* Notifica a todos los clientes */
+    void notifyAll(Reply* reply);
+
     /* Cambia el mapa de un cliente */
     void changeMap(const InstanceId id, const Id new_map);
 

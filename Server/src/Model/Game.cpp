@@ -393,6 +393,7 @@ void Game::_pushFullBroadcast(InstanceId receiver, bool is_new_connection) {
 void Game::broadcastNewCharacter(InstanceId id) {
     _pushFullBroadcast(id, true);
     _pushCharacterDifferentialBroadcast(id, NEW_BROADCAST, false);
+    this->listConnectedPlayers(id);
 }
 
 //-----------------------------------------------------------------------------
@@ -828,6 +829,11 @@ const InstanceId Game::newCharacter(const CharacterCfg& init_data) {
 
     _loadBankAccount(init_data);
 
+    std::string msg = "Se ha conectado ";
+    msg += init_data.nickname;
+    msg += ". ¡Bienvenido!";
+    this->active_clients.notifyAll(new Reply(SUCCESS_MSG, msg));
+
     return new_character_id;
 }
 
@@ -869,6 +875,11 @@ void Game::deleteCharacter(const InstanceId id, Database& database) {
     this->nickname_id_map.erase(character.getNickname());
 
     this->bank.removeAccount(character.getNickname());
+
+    std::string msg = "Se ha desconectado ";
+    msg += character.getNickname();
+    msg += ". ¡Esperamos verte pronto!";
+    this->active_clients.notifyAll(new Reply(INFO_MSG, msg));
 
     this->characters.erase(id);
 }

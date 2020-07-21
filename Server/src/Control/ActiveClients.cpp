@@ -40,6 +40,20 @@ void ActiveClients::notify(const InstanceId id, Notification* notification) {
     content.at(id).push(notification);
 }
 
+void ActiveClients::notifyAll(Reply* reply) {
+    auto it = content.begin();
+
+    Reply* reply_copy;
+
+    while (it != this->content.end()) {
+        reply_copy = new Reply(*((Reply*)reply));
+        it->second.push(reply_copy);
+        ++it;
+    }
+
+    delete reply;
+}
+
 void ActiveClients::changeMap(const InstanceId id, const Id new_map) {
     this->content.at(id).changeMap(new_map);
 }
