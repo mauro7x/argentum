@@ -29,7 +29,7 @@ Remake del juego [**Argentum Online**](https://github.com/ao-libre) para sistema
 # Documentación
 * [**Manual de Usuario**](Manual_de_Usuario.pdf) - *Manual para ambos aplicativos (cliente y servidor), incluyendo requerimientos de hardware, software, instalación, configuración y uso.*
 * [**Manual de Proyecto**](Manual_de_Proyecto.pdf) - *Organización, cronogramas, división de tareas, y evolución del proyecto.*
-* [**Manual de Referencia**]() - *Detalles de implementación y de diseño, estructuras utilizadas, herramientas integradas.*
+* [**Manual de Referencia**](Manual_de_Referencia.pdf) - *Detalles de implementación y de diseño, estructuras utilizadas, herramientas integradas.*
 
 <!-- ##################################################################### -->
 
