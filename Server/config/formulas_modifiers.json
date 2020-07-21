@@ -25,11 +25,11 @@
     "creature_gold_drop_min_rand_modifier": 0.01,
     "creature_gold_drop_max_rand_modifier": 0.2,
 
-    "creature_drop_nothing_prob": 0.4,
-    "creature_drop_gold_prob": 0.2,
-    "creature_drop_potion_prob": 0.1,
-    "creature_drop_weapon_prob": 0.1,
-    "creature_drop_wand_prob": 0.1,
-    "creature_drop_defence_prob": 0.1
+    "creature_drop_nothing_prob": 0.5,
+    "creature_drop_gold_prob": 0.3,
+    "creature_drop_potion_prob": 0.11,
+    "creature_drop_weapon_prob": 0.03,
+    "creature_drop_wand_prob": 0.03,
+    "creature_drop_defence_prob": 0.03
 }
 

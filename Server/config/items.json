@@ -3,51 +3,51 @@
         {
             "id": 1000,
             "name": "Espada",
-            "price": 100,
+            "price": 50,
             "range": 1,
             "min_damage": 20,
-            "max_damage": 50,
-            "cooldown": 1000,
+            "max_damage": 40,
+            "cooldown": 500,
             "weapon_type": 0
         },
         {
             "id": 1001,
             "name": "Hacha",
-            "price": 100,
+            "price": 150,
             "range": 1,
             "min_damage": 40,
-            "max_damage": 50,
-            "cooldown": 1000,
+            "max_damage": 80,
+            "cooldown": 800,
             "weapon_type": 0
         },
         {
             "id": 1002,
             "name": "Martillo",
-            "price": 100,
+            "price": 300,
             "range": 1,
-            "min_damage": 10,
-            "max_damage": 90,
+            "min_damage": 100,
+            "max_damage": 120,
             "cooldown": 1000,
             "weapon_type": 0
         },
         {
             "id": 1003,
             "name": "Arco simple",
-            "price": 100,
-            "range": 5,
-            "min_damage": 10,
-            "max_damage": 40,
-            "cooldown": 2000,
+            "price": 50,
+            "range": 6,
+            "min_damage": 20,
+            "max_damage": 30,
+            "cooldown": 1000,
             "weapon_type": 1
         },
         {
             "id": 1004,
             "name": "Arco compuesto",
-            "price": 100,
-            "range": 5,
-            "min_damage": 40,
-            "max_damage": 80,
-            "cooldown": 2000,
+            "price": 300,
+            "range": 8,
+            "min_damage": 60,
+            "max_damage": 100,
+            "cooldown": 1500,
             "weapon_type": 1
         },
         {
@@ -66,7 +66,7 @@
             "id": 1100,
             "name": "Vara de fresno",
             "spell_id": 1200,
-            "price": 100
+            "price": 50
         },
         {
             "id": 1101,
@@ -78,33 +78,33 @@
             "id": 1102,
             "name": "Bastón nudoso",
             "spell_id": 1202,
-            "price": 100
+            "price": 150
         },
         {
             "id": 1103,
             "name": "Báculo engarzado",
             "spell_id": 1203,
-            "price": 100
+            "price": 300
         }
     ],
     "spells": [
         {
             "id": 1200,
-            "name": "Flecha de Fuego",
+            "name": "Bola de Fuego",
             "spell_type": 0,
-            "mana_usage_cost": 15,
+            "mana_usage_cost": 50,
             "range": 5,
-            "min_damage": 20,
-            "max_damage": 60,
+            "min_damage": 50,
+            "max_damage": 70,
             "recovery_points": 0,
-            "cooldown": 2000,
+            "cooldown": 2500,
             "weapon_type": 4
         },
         {
             "id": 1201,
             "name": "Curar",
             "spell_type": 1,
-            "mana_usage_cost": 100,
+            "mana_usage_cost": 200,
             "range": 5,
             "min_damage": 0,
             "max_damage": 0,
@@ -116,10 +116,10 @@
             "id": 1202,
             "name": "Rayo",
             "spell_type": 0,
-            "mana_usage_cost": 30,
+            "mana_usage_cost": 100,
             "range": 5,
-            "min_damage": 40,
-            "max_damage": 80,
+            "min_damage": 120,
+            "max_damage": 140,
             "recovery_points": 0,
             "cooldown": 2500,
             "weapon_type": 5
@@ -128,10 +128,10 @@
             "id": 1203,
             "name": "Explosión",
             "spell_type": 0,
-            "mana_usage_cost": 50,
+            "mana_usage_cost": 150,
             "range": 5,
-            "min_damage": 80,
-            "max_damage": 200,
+            "min_damage": 200,
+            "max_damage": 300,
             "recovery_points": 0,
             "cooldown": 3000,
             "weapon_type": 3
@@ -141,62 +141,62 @@
         {
             "id": 1300,
             "name": "Capucha",
-            "price": 100,
-            "min_defence": 10,
-            "max_defence": 20
+            "price": 50,
+            "min_defence": 2,
+            "max_defence": 6
         },
         {
             "id": 1301,
             "name": "Casco de Hierro",
-            "price": 100,
-            "min_defence": 10,
-            "max_defence": 20
+            "price": 150,
+            "min_defence": 6,
+            "max_defence": 14
         },
         {
             "id": 1302,
             "name": "Sombrero Mágico",
-            "price": 100,
-            "min_defence": 10,
-            "max_defence": 20
+            "price": 300,
+            "min_defence": 14,
+            "max_defence": 24
         }
     ],
     "armours": [
         {
             "id": 1400,
             "name": "Armadura de cuero",
-            "price": 100,
-            "min_defence": 30,
-            "max_defence": 40
+            "price": 50,
+            "min_defence": 6,
+            "max_defence": 10
         },
         {
             "id": 1401,
             "name": "Armadura de placas",
-            "price": 100,
-            "min_defence": 30,
-            "max_defence": 40
+            "price": 150,
+            "min_defence": 10,
+            "max_defence": 14
         },
         {
             "id": 1402,
             "name": "Túnica azul",
-            "price": 100,
-            "min_defence": 30,
-            "max_defence": 40
+            "price": 300,
+            "min_defence": 14,
+            "max_defence": 20
         }
     ],
     "shields": [
         {
             "id": 1500,
             "name": "Escudo de tortuga",
-            "price": 100,
-            "min_defence": 15,
-            "max_defence": 25
+            "price": 50,
+            "min_defence": 2,
+            "max_defence": 6
         },
         {
             "id": 1501,
             "name": "Escudo de hierro",
-            "price": 100,
-            "min_defence": 15,
-            "max_defence": 25
+            "price": 200,
+            "min_defence": 10,
+            "max_defence": 20
         }
     ],
     "potions": [
@@ -204,14 +204,14 @@
             "id": 1600,
             "name": "Poción de vida",
             "potion_type": 0,
-            "price": 50,
+            "price": 10,
             "recovery_points": 100
         },
         {
             "id": 1601,
             "name": "Poción de maná",
             "potion_type": 1,
-            "price": 50,
+            "price": 10,
             "recovery_points": 100
         }
     ],

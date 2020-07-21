@@ -2,34 +2,34 @@
     {
         "id": 200,
         "name": "Mago",
-        "max_health_factor": 10,
+        "max_health_factor": 4,
         "meditation_factor": 10,
         "max_mana_factor": 10,
-        "intelligence": 4,
+        "intelligence": 5,
         "constitution": 1,
         "strength": 1,
-        "agility": 3
+        "agility": 2
     },
     {
         "id": 201,
         "name": "Clérigo",
-        "max_health_factor": 10,
-        "meditation_factor": 10,
-        "max_mana_factor": 10,
-        "intelligence": 4,
-        "constitution": 1,
+        "max_health_factor": 6,
+        "meditation_factor": 8,
+        "max_mana_factor": 8,
+        "intelligence": 3,
+        "constitution": 2,
         "strength": 1,
         "agility": 3
     },
     {
         "id": 202,
         "name": "Paladín",
-        "max_health_factor": 10,
-        "meditation_factor": 10,
-        "max_mana_factor": 10,
-        "intelligence": 4,
-        "constitution": 1,
-        "strength": 1,
+        "max_health_factor": 8,
+        "meditation_factor": 6,
+        "max_mana_factor": 6,
+        "intelligence": 2,
+        "constitution": 2,
+        "strength": 2,
         "agility": 3
     },
     {

@@ -3,9 +3,9 @@
     "game": {
         "critical_attack_dmg_modifier": 2,
         "random_movement_factor": 20,
-        "max_creatures_per_map": 15,
+        "max_creatures_per_map": 20,
         "ms_to_update_character_attributes": 500,
-        "ms_to_spawn_creature": 5000,
+        "ms_to_spawn_creature": 3000,
         "ms_to_disappear_dropped_item": 25000,
         "ms_to_persist_data": 60000
     }
